@@ -1,0 +1,52 @@
+{
+  "name": "Cliniverse AI",
+  "short_name": "Cliniverse",
+  "description": "Clinical Intelligence — AI-powered medical simulation for healthcare professionals",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0015",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait",
+  "categories": ["medical", "education", "health"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Clinical Cases",
+      "url": "/?tab=hub",
+      "description": "Start a clinical simulation"
+    },
+    {
+      "name": "SBAR Generator",
+      "url": "/?tab=workshop",
+      "description": "Generate SBAR handover"
+    },
+    {
+      "name": "MCQ Practice",
+      "url": "/?tab=mcq",
+      "description": "Practice exam questions"
+    }
+  ],
+  "prefer_related_applications": false
+}
