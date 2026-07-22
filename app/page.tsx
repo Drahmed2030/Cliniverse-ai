@@ -1211,7 +1211,14 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               ))}
             </div>
 
-                        {/* ACHIEVEMENTS — Apple Health 2026 */}
+                        
+          <div onClick={()=>setShowGuide(true)} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(10,132,255,0.08)",borderRadius:16,padding:14,marginBottom:12,border:"1px solid rgba(10,132,255,0.2)",cursor:"pointer"}}>
+            <span style={{fontSize:22}}>📖</span>
+            <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"white"}}>How to Use Cliniverse AI</div><div style={{fontSize:12,color:"rgba(255,255,255,0.4)",marginTop:2}}>Quick guide to all features</div></div>
+            <span style={{fontSize:20,color:"rgba(255,255,255,0.3)"}}>›</span>
+          </div>
+          {showGuide&&<div style={{position:"fixed",inset:0,zIndex:400,overflowY:"auto",background:"#0a0015"}}><UserGuide onClose={()=>setShowGuide(false)} onUpgrade={()=>{setShowGuide(false);setShowUpgrade(true)}}/></div>}
+          {/* ACHIEVEMENTS — Apple Health 2026 */}
             <div style={{...glassCard,padding:16}}>
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
                 <div>
