@@ -671,7 +671,7 @@ export default function Home() {
 
       {/* BOTTOM NAV */}
       <div style={{position:'fixed',bottom:0,left:0,right:0,background:'rgba(255,255,255,0.95)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',borderTop:'0.5px solid #E5E5EA',display:'flex',padding:'8px 0 28px',zIndex:200}}>
-        {[['home','🏠','Home'],['departments','🏥','Cases'],['reference','📋','Reference'],['leaderboard','🏆','Ranks'],['profile','👤','Profile']].map(([id,icon,label])=>(
+        {[['home','🏠','Home'],['departments','🏥','Cases'],['tools','🛠️','Tools'],['leaderboard','🏆','Ranks'],['profile','👤','Profile']].map(([id,icon,label])=>(
           <div key={String(id)} onClick={()=>setTab(String(id))} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:3,cursor:'pointer',padding:'4px 0'}}>
             <span style={{fontSize:22}}>{icon}</span>
             <span style={{fontSize:10,fontWeight:tab===id?600:400,color:tab===id?'#007AFF':'#888'}}>{label}</span>
