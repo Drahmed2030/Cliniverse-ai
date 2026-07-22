@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import AICaseGenerator from './components/AICaseGenerator'
 
 export default function Home() {
   const [screen, setScreen] = useState('ob')
@@ -18,6 +19,7 @@ export default function Home() {
   const [dailyDone, setDailyDone] = useState(false)
   const [countdown, setCountdown] = useState('')
   const [streakAnim, setStreakAnim] = useState(false)
+  const [showAIGen, setShowAIGen] = useState(false)
 
   useEffect(() => {
     const t = () => {
@@ -653,6 +655,17 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* AI CASE GENERATOR OVERLAY */}
+      {showAIGen && (
+        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'#F2F2F7',zIndex:300,overflowY:'auto'}}>
+          <div style={{display:'flex',alignItems:'center',padding:'56px 16px 16px',background:'#fff',borderBottom:'0.5px solid #E5E5EA'}}>
+            <button onClick={()=>setShowAIGen(false)} style={{background:'none',border:'none',fontSize:16,color:'#007AFF',cursor:'pointer',marginRight:12}}>← Back</button>
+            <h2 style={{margin:0,fontSize:18,fontWeight:600}}>🤖 AI Case Generator</h2>
+          </div>
+          <AICaseGenerator onXP={(xp)=>console.log('XP:',xp)} />
         </div>
       )}
 
