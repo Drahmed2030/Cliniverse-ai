@@ -1,4 +1,6 @@
-'use client'
+import os
+
+code = r"""'use client'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -665,3 +667,9 @@ export default function Home() {
     </div>
   )
 }
+"""
+
+target = os.path.expanduser('~/cliniverse-ai/app/page.tsx')
+with open(target, 'w', encoding='utf-8') as f:
+    f.write(code)
+print(f'Done! Written {len(code)} chars to {target}')
