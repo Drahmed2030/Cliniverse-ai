@@ -126,20 +126,20 @@ Return ONLY this JSON structure:
 }`
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('/api/generate-case', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 2000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: userPrompt }]
+          specialty: selectedSpec?.label || 'Emergency Medicine',
+          difficulty,
+          department: 'ED',
+          systemPrompt,
+          userPrompt
         })
       })
       const data = await res.json()
-      const text = data.content?.[0]?.text || ''
-      const clean = text.replace(/```json|```/g, '').trim()
-      const parsed = JSON.parse(clean) as GeneratedCase
+      if (!data.success) throw new Error(data.error || 'Generation failed')
+      const parsed = data.case as GeneratedCase
       setGenerated(parsed)
       setView('preview')
       onXP && onXP(10)
