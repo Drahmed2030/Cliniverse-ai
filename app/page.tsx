@@ -27,6 +27,11 @@ const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), 
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
 const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
+const RapidFire = dynamic(() => import('./components/RapidFire'), { ssr: false })
+const CardiacSurgeryAI = dynamic(() => import('./components/CardiacSurgeryAI'), { ssr: false })
+const NeuroSurgeryAI = dynamic(() => import('./components/NeuroSurgeryAI'), { ssr: false })
+const GeneralSurgeryAI = dynamic(() => import('./components/GeneralSurgeryAI'), { ssr: false })
+const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
 import { useLiveCases } from './components/LiveCasesSystem'
 
 const RANKS = [
@@ -1088,6 +1093,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3v11l-5 5h16l-5-5V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 3h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
                 {id:'radiology', label:'X-Ray', color:'#ffd60a', glow:'rgba(255,214,10,0.6)',
                   svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+                {id:'nexus', label:'Nexus', color:'#ffd60a', glow:'rgba(255,214,10,0.8)', svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5.64 5.64l2.83 2.83M15.54 15.54l2.83 2.83M5.64 18.36l2.83-2.83M15.54 8.46l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+                {id:'rapid', label:'Rapid', color:'#ff453a', glow:'rgba(255,69,58,0.7)', svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
+                {id:'cardiac', label:'Cardiac', color:'#ff453a', glow:'rgba(255,69,58,0.7)', svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" strokeWidth="2"/></svg>},
+                {id:'neuro', label:'Neuro', color:'#bf5af2', glow:'rgba(191,90,242,0.7)', svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7c0 2-1 4-2 5l1 8H6l1-8c-1-1-2-3-2-5a7 7 0 017-7z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'general_surg', label:'Surgery', color:'#ff9f0a', glow:'rgba(255,159,10,0.7)', svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/></svg>},
                 {id:'aigen', label:'AI Gen', color:'#ffd60a', glow:'rgba(255,214,10,0.7)',
                   svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/></svg>},
                 {id:'insights', label:'Stats', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
@@ -1126,6 +1136,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             {toolTab==='nursing'&&<NursingModule onXP={addXP}/>}
             {toolTab==='lab'&&<LabModule onXP={addXP}/>}
             {toolTab==='radiology'&&<RadiologyModule onXP={addXP}/>}
+                        {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
+            {toolTab==='rapid'&&<RapidFire onXP={addXP}/>}
+            {toolTab==='cardiac'&&<CardiacSurgeryAI onXP={addXP}/>}
+            {toolTab==='neuro'&&<NeuroSurgeryAI onXP={addXP}/>}
+            {toolTab==='general_surg'&&<GeneralSurgeryAI onXP={addXP}/>}
             {toolTab==='aigen'&&<AICaseGenerator onXP={addXP}/>}
             {toolTab==='insights'&&<HealthInsights xp={xp} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} mcqTotal={mcqTotal} streak={streak}/>}
           </div>
