@@ -58,7 +58,7 @@ export default function Home() {
             <div style={{fontSize:12,opacity:0.
 
 
-75,marginTop:8}}>1,340 / 2,000 XP</div>
+75,marginTop:8}}>1340 of 2000 XP</div>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,margin:'0 20px 20px'}}>
             {[['28','Cases','#007AFF'],['87%','Accuracy','#34C759'],['5','Streak','#FF9500']].map(([v,l,c])=>(
