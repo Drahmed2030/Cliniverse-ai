@@ -143,7 +143,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
   }
 
   const handleInstall = async () => {
-    if (isIOS) { setShowIOSModal(true); return }
+    if (isIOS) { onComplete(); return }
     if (deferredPrompt) {
       setInstalling(true)
       try {
