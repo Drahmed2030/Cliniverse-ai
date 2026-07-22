@@ -168,6 +168,14 @@ export default function OnboardingFunnel({ onComplete }: Props) {
     // 0 — HERO
     <div key="s0" style={{height:'100%',display:'flex',flexDirection:'column'}}>
       <div style={{flex:1,display:'flex',flexDirection:'column',justifyContent:'center',padding:'0 28px',gap:14}}>
+        <div style={{width:'100%',height:200,borderRadius:24,overflow:'hidden',marginBottom:16,position:'relative',boxShadow:'0 12px 40px rgba(0,0,0,0.4)'}}>
+            <img src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" alt="" style={{width:'100%',height:'100%',objectFit:'cover'}} onError={(e)=>{(e.target as HTMLImageElement).style.display='none'}}/>
+            <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,transparent 40%,rgba(10,0,21,0.95))'}}/>
+            <div style={{position:'absolute',bottom:16,left:16}}>
+              <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',letterSpacing:2,marginBottom:4}}>CLINICAL INTELLIGENCE</div>
+              <div style={{fontSize:24,fontWeight:900,color:'white',letterSpacing:-0.5}}>Clini<span style={{color:'#a78bfa'}}>verse</span> AI</div>
+            </div>
+          </div>
         {[
           {file:'cardiology.ts',imp:'import',name:'Cardiology Cases',comment:'// 150+ Clinical Scenarios',c:'#ff453a'},
           {file:'emergency.ts',imp:'import',name:'Acute Care',comment:'// 90+ ECG & ER Cases',c:'#ff9f0a'},
