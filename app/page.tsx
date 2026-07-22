@@ -26,7 +26,7 @@ const SocialHub = dynamic(() => import('./components/SocialHub'), { ssr: false }
 const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), { ssr: false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
-const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
+const UserGuide = dynamic(() => import("./components/UserGuide"), { ssr: false })nconst DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
 const RapidFire = dynamic(() => import('./components/RapidFire'), { ssr: false })
 const CardiacSurgeryAI = dynamic(() => import('./components/CardiacSurgeryAI'), { ssr: false })
 const NeuroSurgeryAI = dynamic(() => import('./components/NeuroSurgeryAI'), { ssr: false })
