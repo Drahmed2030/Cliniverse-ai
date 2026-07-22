@@ -146,10 +146,11 @@ export default function OnboardingFunnel({ onComplete }: Props) {
     if (isIOS) { setShowIOSModal(true); return }
     if (deferredPrompt) {
       setInstalling(true)
-      await deferredPrompt.prompt()
-      const { outcome } = await deferredPrompt.userChoice
-      setInstalling(false)
-      if (outcome === 'accepted') { onComplete(); return }
+      try {
+        await deferredPrompt.prompt()
+        await deferredPrompt.userChoice
+        setInstalling(false)
+      } catch(e) { setInstalling(false) }
     }
     onComplete()
   }
