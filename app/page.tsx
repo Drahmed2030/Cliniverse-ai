@@ -1,4 +1,5 @@
-'use client'nimport STEMICase from './components/STEMICase'
+'use client'
+import STEMICase from './components/STEMICase'
 import { useState, useEffect } from 'react'
 export default function Home() {
   const [screen, setScreen] = useState('ob')
