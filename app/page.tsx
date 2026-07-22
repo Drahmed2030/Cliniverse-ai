@@ -168,7 +168,7 @@ export default function Home() {
   const [mcqTotal, setMcqTotal] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string|null>('critical')
   const [showWelcome, setShowWelcome] = useState(true)
-  const [dark] = useState(true)
+  const [dark, setDark] = useState(true)
   const [showAI, setShowAI] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiResponse, setAiResponse] = useState('')
@@ -182,6 +182,13 @@ export default function Home() {
   const T = dark ? darkTheme : lightTheme
 
   // Show onboarding for first-time visitors
+  useEffect(() => {
+    const theme = localStorage.getItem('cliniverse-theme')
+    if (theme === 'light') setDark(false)
+    else if (theme === 'midnight') setDark(false) // use light base for midnight
+    else setDark(true) // default dark
+  }, [])
+
   useEffect(() => {
     const seen = localStorage.getItem('cliniverse-onboarded')
     if (seen) setShowOnboarding(false)

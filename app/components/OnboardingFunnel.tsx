@@ -25,7 +25,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
   const rafRef = useRef<number>(0)
   const lastTimeRef = useRef(0)
   const screenRef = useRef(0)
-  const TOTAL = 6
+  const TOTAL = 7
 
   screenRef.current = screen
 
