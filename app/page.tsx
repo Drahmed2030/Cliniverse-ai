@@ -146,16 +146,20 @@ export default function Home() {
   // ONBOARDING
   if (screen === 'ob') {
     const slides = [
-      { icon:'🏥', bg:'#007AFF', title:'Welcome to Cliniverse AI', sub:'The clinical companion built by a physician, for physicians worldwide.' },
-      { icon:'⚡', bg:'#FF3B30', title:'Daily Case Challenge', sub:'One new case every 24 hours. Compete with doctors globally.' },
-      { icon:'📋', bg:'#34C759', title:'Quick Reference at Your Fingertips', sub:'Sepsis criteria, STEMI protocols, AKI staging — in seconds.' },
-      { icon:'🏆', bg:'#FF9500', title:'Climb the Global Ranks', sub:'Earn XP, unlock badges, and reach Chief of Medicine.' },
+      { icon:'🏥', bg:'#007AFF', title:'Welcome to Cliniverse AI', sub:'The clinical companion built by a physician, for physicians worldwide.', img:'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=400&q=80' },
+      { icon:'⚡', bg:'#FF3B30', title:'Daily Case Challenge', sub:'One new case every 24 hours. Compete with doctors globally.', img:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80' },
+      { icon:'📋', bg:'#34C759', title:'Quick Reference at Your Fingertips', sub:'Sepsis criteria, STEMI protocols, AKI staging — in seconds.', img:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80' },
+      { icon:'🏆', bg:'#FF9500', title:'Climb the Global Ranks', sub:'Earn XP, unlock badges, and reach Chief of Medicine.', img:'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80' },
     ]
     const sl = slides[obIndex]
     return (
       <div style={{fontFamily:'Inter,system-ui,sans-serif',background:'#fff',minHeight:'100vh',display:'flex',flexDirection:'column'}}>
         <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'60px 32px 40px',textAlign:'center'}}>
-          <div style={{width:130,height:130,borderRadius:34,background:sl.bg,display:'flex',alignItems:'center',justifyContent:'center',fontSize:58,marginBottom:36,boxShadow:`0 12px 40px ${sl.bg}50`}}>{sl.icon}</div>
+          <div style={{width:'100%',height:220,borderRadius:24,overflow:'hidden',marginBottom:28,position:'relative',boxShadow:`0 12px 40px ${sl.bg}40`}}>
+            <img src={sl.img} alt="" style={{width:'100%',height:'100%',objectFit:'cover'}} onError={(e)=>{(e.target as HTMLImageElement).style.display='none'}}/>
+            <div style={{position:'absolute',inset:0,background:`linear-gradient(to bottom, transparent 40%, ${sl.bg}dd)`}}/>
+            <div style={{position:'absolute',bottom:16,left:16,fontSize:44}}>{sl.icon}</div>
+          </div>
           <div style={{fontSize:26,fontWeight:700,marginBottom:14,letterSpacing:-0.5,lineHeight:1.2}}>{sl.title}</div>
           <div style={{fontSize:16,color:'#888',lineHeight:1.7,maxWidth:300}}>{sl.sub}</div>
         </div>
