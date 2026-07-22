@@ -180,7 +180,7 @@ export default function Home() {
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
-  const [isPro] = useState(false) // set true after payment
+  const [isPro, setIsPro] = useState(false) // set true after payment
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [showGuide, setShowGuide] = useState(false)
   const [showAdmin, setShowAdmin] = useState(false)
