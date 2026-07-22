@@ -1,65 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import { NextRequest, NextResponse } from 'next/server'
+import Anthropic from '@anthropic-ai/sdk'
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(request: NextRequest) {
   try {
-    const { specialty, difficulty, department } = await request.json();
-
-    const prompt = `Generate a detailed medical simulation case for ${specialty  'Emergency Medicine'} - ${department  'ED'} department, difficulty: ${difficulty || 'intermediate'}.
-
-Return ONLY valid JSON in this exact format:
-{
-  "title": "Case title",
-  "specialty": "${specialty || 'Emergency Medicine'}",
-  "difficulty": "${difficulty || 'intermediate'}",
-  "department": "${department || 'ED'}",
-  "patient": {
-    "age": 55,
-    "gender": "Male",
-    "chiefComplaint": "Chief complaint here"
-  },
-  "vitals": {
-    "bp": "140/90",
-    "hr": 95,
-    "rr": 18,
-    "temp": 37.2,
-    "spo2": 96
-  },
-  "history": "Brief patient history",
-  "physicalExam": "Key physical findings",
-  "questions": [
-    {
-      "question": "What is your first action?",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correct": 0,
-      "explanation": "Why this is correct"
-    }
-  ],
-  "diagnosis": "Final diagnosis",
-  "management": "Key management steps",
-  "keyLearning": "Main teaching point",
-  "xp": 75
-}`;
+    const body = await request.json()
+    const specialty = body.specialty || 'Emergency Medicine'
+    const difficulty = body.difficulty || 'Intermediate'
+    const sysPrompt = body.systemPrompt || 'You are an expert medical educator.'
+    const userPrompt = body.userPrompt || 'Generate a clinical case.'
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }],
-    });
+      max_tokens: 2000,
+      system: sysPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    })
 
-    const text = message.content[0].type === 'text' ? message.content[0].text : '';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found');
-    
-    const caseData = JSON.parse(jsonMatch[0]);
-    return NextResponse.json({ success: true, case: caseData });
-
-  } catch (error: any) {
-    console.error('Generate case error:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const text = message.content[0].type === 'text' ? message.content[0].text : ''
+    const match = text.match(/\{[\s\S]*\}/)
+    if (!match) throw new Error('No JSON')
+    return NextResponse.json({ success: true, case: JSON.parse(match[0]) })
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'Error'
+    return NextResponse.json({ success: false, error: msg }, { status: 500 })
   }
 }
