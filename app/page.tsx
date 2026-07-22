@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 export default function Home() {
   const [screen, setScreen] = useState('ob')
   const [obIndex, setObIndex] = useState(0)
-  const [tab, setTab] = useState('home')n  const [activeCase, setActiveCase] = useState('')
+  const [tab, setTab] = useState('home')
+  const [activeCase, setActiveCase] = useState('')
   const [time, setTime] = useState('')
   const [hr, setHr] = useState(72)
   const [spo2, setSpo2] = useState(98)
