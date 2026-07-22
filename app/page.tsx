@@ -19,7 +19,7 @@ export default function Home() {
     const colors = ['#007AFF','#FF3B30','#34C759','#FF9500']
     const icons = ['H','R','A','T']
     return (
-      <div style={{fontFamily:'system-ui',background:'#fff',minHeight:'100vh',display:'flex',flexDirection:'column'}}>
+      <div style={{fontFamily:'Inter,system-ui,sans-serif',background:'#fff',minHeight:'100vh',display:'flex',flexDirection:'column'}}>
         <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'60px 32px 40px',textAlign:'center'}}>
           <div style={{width:120,height:120,borderRadius:30,background:colors[obIndex],display:'flex',alignItems:'center',justifyContent:'center',fontSize:40,marginBottom:32,color:'#fff',fontWeight:700}}>{icons[obIndex]}</div>
           <div style={{fontSize:28,fontWeight:700,marginBottom:14}}>{titles[obIndex]}</div>
@@ -37,7 +37,7 @@ export default function Home() {
     )
   }
   return (
-    <div style={{fontFamily:'system-ui',background:'#F2F2F7',minHeight:'100vh',paddingBottom:90}}>
+    <div style={{fontFamily:'Inter,system-ui,sans-serif',background:'#F2F2F7',minHeight:'100vh',paddingBottom:90}}>
       <div style={{background:'#fff',padding:'0 20px',height:50,display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'0.5px solid #ccc',position:'sticky',top:0,zIndex:100}}>
         <span style={{fontWeight:600}}>{time}</span>
         <span>OK</span>
