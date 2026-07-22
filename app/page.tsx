@@ -188,7 +188,7 @@ export default function Home() {
         <div>
           <div style={{padding:'16px 20px'}}><div style={{fontSize:28,fontWeight:700}}>Profile</div></div>
           <div style={{background:'#fff',borderRadius:22,margin:'0 20px 12px',padding:24,display:'flex',alignItems:'center',gap:16,boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
-            <div style={{width:72,height:72,borderRadius:'50%',background:'linear-gradient(135deg,#007AFF,#5856D6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,color:'#fff',fontWeight:700,boxShadow:'0 4px 20px #007AFF60'}}>A</div>
+            <div style={{width:72,height:72,borderRadius:'50%',background:'linear-gradient(135deg,#007AFF,#5856D6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,color:'#fff',fontWeight:700,boxShadow:'0 0 0 3px #fff, 0 0 0 5px #007AFF, 0 0 25px #007AFF'}}>A</div>
             <div>
               <div style={{fontSize:20,fontWeight:700}}>Dr. Ahmed Osman</div>
               <div style={{fontSize:13,color:'#007AFF',fontWeight:600,marginTop:2}}>⭐ Senior Resident</div>
