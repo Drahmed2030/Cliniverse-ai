@@ -132,7 +132,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      {tab==='departments' && (
+      {activeCase==='stemi' ? <STEMICase onBack={() => setActiveCase('')} /> : tab==='departments' && (
         <div>
           <div style={{padding:'16px 20px'}}><div style={{fontSize:28,fontWeight:700}}>Departments</div></div>
           <div style={{background:'#fff',borderRadius:16,margin:'0 20px',overflow:'hidden',boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
