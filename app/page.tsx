@@ -181,7 +181,8 @@ export default function Home() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
   const [isPro] = useState(false) // set true after payment
-  const [showUpgrade, setShowUpgrade] = useState(false)n  const [showGuide, setShowGuide] = useState(false)
+  const [showUpgrade, setShowUpgrade] = useState(false)
+  const [showGuide, setShowGuide] = useState(false)
   const [showAdmin, setShowAdmin] = useState(false)
   const { newCount: liveCount, markSeen: markLiveSeen } = useLiveCases()
 
