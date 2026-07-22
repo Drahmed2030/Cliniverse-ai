@@ -17,7 +17,7 @@ export default function Home() {
   if (screen === 'ob') {
     const titles = ['Welcome to Cliniverse AI','Real Cases. Real Decisions.','AI Consult On Demand','Compete and Level Up']
     const colors = ['#007AFF','#FF3B30','#34C759','#FF9500']
-    const icons = ['H','R','A','T']
+    const icons = ['🏥','❤️','🤖','🏆']
     return (
       <div style={{fontFamily:'Inter,system-ui,sans-serif',background:'#fff',minHeight:'100vh',display:'flex',flexDirection:'column'}}>
         <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'60px 32px 40px',textAlign:'center'}}>
