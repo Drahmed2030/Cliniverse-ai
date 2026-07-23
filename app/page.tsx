@@ -179,7 +179,7 @@ export default function Home() {
   const [mcqTotal, setMcqTotal] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string|null>('critical')
   const [showWelcome, setShowWelcome] = useState(true)
-  const [dark] = useState(true)
+  const [dark, setDark] = useState(true)
   const [showAI, setShowAI] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiResponse, setAiResponse] = useState('')
