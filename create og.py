@@ -1,0 +1,85 @@
+# Create a simple OG image using PIL if available, or create SVG
+import os
+
+svg = '''<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a0015"/>
+      <stop offset="100%" stop-color="#1a0533"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#0a84ff"/>
+    </linearGradient>
+  </defs>
+  <!-- Glow circles -->
+  <circle cx="600" cy="315" r="300" fill="rgba(139,92,246,0.08)"/>
+  <circle cx="200" cy="100" r="150" fill="rgba(10,132,255,0.06)"/>
+  <!-- ECG line -->
+  <path d="M100 315 L250 315 L290 180 L330 450 L370 240 L410 360 L440 315 L1100 315" stroke="#8b5cf6" stroke-width="3" fill="none" opacity="0.4"/>
+  <!-- Title -->
+  <text x="600" y="240" font-family="system-ui" font-size="80" font-weight="900" fill="white" text-anchor="middle" letter-spacing="-2">Cliniverse AI</text>
+  <!-- Subtitle -->
+  <text x="600" y="310" font-family="system-ui" font-size="28" fill="rgba(255,255,255,0.55)" text-anchor="middle">Clinical Training Platform · Built by a Physician</text>
+  <!-- Tags -->
+  <rect x="180" y="370" width="160" height="44" rx="22" fill="rgba(255,69,58,0.2)" stroke="rgba(255,69,58,0.4)" stroke-width="1"/>
+  <text x="260" y="397" font-family="system-ui" font-size="18" fill="#ff453a" text-anchor="middle" font-weight="700">25+ Cases</text>
+  <rect x="360" y="370" width="180" height="44" rx="22" fill="rgba(48,209,88,0.2)" stroke="rgba(48,209,88,0.4)" stroke-width="1"/>
+  <text x="450" y="397" font-family="system-ui" font-size="18" fill="#30d158" text-anchor="middle" font-weight="700">Surgical AI</text>
+  <rect x="560" y="370" width="200" height="44" rx="22" fill="rgba(255,214,10,0.2)" stroke="rgba(255,214,10,0.4)" stroke-width="1"/>
+  <text x="660" y="397" font-family="system-ui" font-size="18" fill="#ffd60a" text-anchor="middle" font-weight="700">Global Nexus</text>
+  <rect x="780" y="370" width="180" height="44" rx="22" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.4)" stroke-width="1"/>
+  <text x="870" y="397" font-family="system-ui" font-size="18" fill="#8b5cf6" text-anchor="middle" font-weight="700">Free to Start</text>
+  <!-- URL -->
+  <text x="600" y="560" font-family="system-ui" font-size="22" fill="rgba(255,255,255,0.3)" text-anchor="middle">cliniverse-ai-xmev.vercel.app</text>
+</svg>'''
+
+public_dir = os.path.expanduser('~/cliniverse-ai/public')
+os.makedirs(public_dir, exist_ok=True)
+
+with open(f'{public_dir}/og-image.svg', 'w') as f:
+    f.write(svg)
+print('SVG created!')
+
+# Update layout.tsx with static image
+layout = '''import type { Metadata } from "next"
+import "./globals.css"
+import ThemeProvider from "./components/ThemeProvider"
+
+export const metadata: Metadata = {
+  title: "Cliniverse AI",
+  description: "Clinical training platform built by a physician. 25+ cases, AI Generator, Global Competition, Surgical AI.",
+  manifest: "/manifest.json",
+  openGraph: {
+    title: "Cliniverse AI — Train Like a Consultant",
+    description: "Join 1,000+ physicians. AI-powered clinical cases, Rapid Fire, Surgical protocols. Free to start.",
+    url: "https://cliniverse-ai-xmev.vercel.app",
+    siteName: "Cliniverse AI",
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "Cliniverse AI" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cliniverse AI",
+    description: "AI-powered clinical training platform.",
+    images: ["/og-image.svg"],
+  },
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  )
+}
+'''
+
+layout_path = os.path.expanduser('~/cliniverse-ai/app/layout.tsx')
+with open(layout_path, 'w') as f:
+    f.write(layout)
+print('layout.tsx updated!')
+print('Run: cd ~/cliniverse-ai && git add . && git commit -m "add static OG image" && git push')
