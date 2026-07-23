@@ -1112,62 +1112,36 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <p style={{color:'rgba(255,255,255,0.4)',fontSize:13,margin:0}}>Simulators & calculators</p>
             </div>
 
-            {/* Tools segment — dark cosmic */}
-            <div style={{display:'flex',gap:6,marginBottom:16,background:'rgba(255,255,255,0.04)',borderRadius:20,padding:6,border:'1px solid rgba(139,92,246,0.2)',overflowX:'auto'}}>
-              {[
-                {id:'codeblue', label:'Code Blue', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M2 12L22 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'ecg', label:'ECG', color:'#30d158', glow:'rgba(48,209,88,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12h3l3-7 4 14 3-7h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'bls', label:'BLS/ACLS', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'tele', label:'Tele', color:'#0a84ff', glow:'rgba(10,132,255,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'oncall', label:'On-Call', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'live', label:'Live', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M6.3 6.3a8 8 0 000 11.4M17.7 6.3a8 8 0 010 11.4M3.5 3.5a13 13 0 000 17M20.5 3.5a13 13 0 010 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'calc', label:'Calc', color:'#ff9f0a', glow:'rgba(255,159,10,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="3" stroke="currentColor" strokeWidth="1.8"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'duels', label:'Duels', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.5 17.5L3 6M3 3h6M3 3v6M9.5 6.5L18 15M18 21h-6M18 21v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'detective', label:'Detective', color:'#bf5af2', glow:'rgba(191,90,242,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8"/><path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M11 8v3l2 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'autopsy', label:'Autopsy', color:'#ff6b35', glow:'rgba(255,107,53,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'nightshift', label:'Night', color:'#8b5cf6', glow:'rgba(139,92,246,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'pharmacy', label:'Pharma', color:'#30d158', glow:'rgba(48,209,88,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'nursing', label:'Nursing', color:'#64d2ff', glow:'rgba(100,210,255,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 100 14A7 7 0 0012 2zM12 8v4M10 10h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M8.21 15.89A7 7 0 0120 19H4a7 7 0 014.21-3.11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'lab', label:'Lab', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3v11l-5 5h16l-5-5V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 3h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'radiology', label:'X-Ray', color:'#ffd60a', glow:'rgba(255,214,10,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'aigen', label:'AI Gen', color:'#ffd60a', glow:'rgba(255,214,10,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/></svg>},
-                {id:'insights', label:'Stats', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-              ].map(t=>{
-                const active = toolTab===t.id
-                return (
-                  <button key={t.id} onClick={()=>setToolTab(t.id)} style={{
-                    flex:1, padding:'10px 6px', borderRadius:14, border:'none', cursor:'pointer',
-                    background:active?`linear-gradient(135deg,${t.color}25,${t.color}10)`:'transparent',
-                    boxShadow:active?`0 4px 16px ${t.glow},0 0 0 1px ${t.color}30`:'none',
-                    transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
-                    transform:active?'translateY(-1px)':'none',
-                    whiteSpace:'nowrap', minWidth:0,
-                  }}>
-                    <div style={{color:active?t.color:'rgba(255,255,255,0.3)',display:'flex',justifyContent:'center',marginBottom:4,transition:'color 0.2s'}}>{t.svg}</div>
-                    <div style={{fontSize:9,fontWeight:active?800:500,color:active?t.color:'rgba(255,255,255,0.3)',letterSpacing:active?0.3:0,transition:'all 0.2s'}}>{t.label}</div>
-                    {active&&<div style={{width:16,height:2,borderRadius:1,background:t.color,margin:'4px auto 0',boxShadow:`0 0 6px ${t.color}`}}/>}
-                  </button>
-                )
-              })}
-            </div>
+            {toolTab==='hub_tools'&&(
+              <div style={{padding:'0 16px 20px'}}>
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>🌍 Global & Competition</div>
+                {[{id:'nexus',icon:'🌍',name:'Clinical Nexus',sub:'1,000+ doctors · same case · real-time',color:'#ffd60a',xp:200,live:true},{id:'rapid',icon:'⚡',name:'Rapid Fire',sub:'30 questions · 3 minutes · global rank',color:'#ff453a',xp:105,live:false}].map(t=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:`linear-gradient(135deg,${t.color}10,rgba(0,0,0,0.3))`,borderRadius:20,padding:16,marginBottom:10,border:`1px solid ${t.color}25`,cursor:'pointer',display:'flex',alignItems:'center',gap:14}}>
+                    <div style={{width:48,height:48,borderRadius:14,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}><div style={{display:'flex',alignItems:'center',gap:8,marginBottom:2}}><div style={{fontSize:15,fontWeight:800,color:'white'}}>{t.name}</div>{t.live&&<div style={{fontSize:8,padding:'2px 7px',borderRadius:10,background:'rgba(255,69,58,0.2)',color:'#ff453a',fontWeight:800}}>LIVE</div>}</div><div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div></div>
+                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
+                  </div>
+                ))}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🔬 Surgical AI</div>
+                {[{id:'cardiac',icon:'🫀',name:'Cardiac Surgery AI',sub:'CABG · TAVI · Valve',color:'#ff453a',xp:150},{id:'neuro',icon:'🧠',name:'Neurosurgery AI',sub:'GBM · Aneurysm · Spine',color:'#bf5af2',xp:180},{id:'general_surg',icon:'🔪',name:'General Surgery AI',sub:'Laparoscopic · Colorectal',color:'#ff9f0a',xp:140}].map(t=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'13px 16px',marginBottom:8,border:`1px solid ${t.color}20`,cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
+                    <div style={{width:44,height:44,borderRadius:13,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:'white',marginBottom:2}}>{t.name}</div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div></div>
+                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
+                  </div>
+                ))}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🛠️ Clinical Tools</div>
 
+
+{[{id:'codeblue',icon:'💔',name:'Code Blue',sub:'Emergency · 10 scenarios'},{id:'ecg',icon:'📈',name:'ECG Challenge',sub:'Read & interpret ECGs'},{id:'bls',icon:'🫀',name:'BLS / ACLS',sub:'Resuscitation protocols'},{id:'calc',icon:'🧮',name:'Med Calculators',sub:'GCS · Wells · CURB-65'},{id:'duels',icon:'⚔️',name:'Clinical Duels',sub:'Challenge other doctors'},{id:'detective',icon:'🔍',name:'Diagnostic Detective',sub:'Find the diagnosis'},{id:'aigen',icon:'🤖',name:'AI Case Generator',sub:'Unlimited · Claude AI'},{id:'ghost',icon:'👻',name:'Ghost Consultant',sub:'AI challenges your decisions'}].map((t,i,arr)=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.03)',borderRadius:16,padding:'12px 14px',marginBottom:i<arr.length-1?6:0,border:'1px solid rgba(255,255,255,0.06)',cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
+                    <div style={{width:38,height:38,borderRadius:11,background:'rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'white'}}>{t.name}</div><div style={{fontSize:11,color:'rgba(255,255,255,0.35)',marginTop:1}}>{t.sub}</div></div>
+                    <span style={{color:'rgba(255,255,255,0.2)',fontSize:18}}>›</span>
+                  </div>
+                ))}
+              </div>
+            )}
             {toolTab==='codeblue'&&<CodeBlue onXP={addXP}/>}
             {toolTab==='ecg'&&<EcgChallenge onXP={addXP}/>}
             {toolTab==='bls'&&<BLSACLSModule onXP={addXP}/>}
