@@ -165,7 +165,7 @@ export default function Home() {
   const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
-  const [showOnboarding, setShowOnboarding] = useState(true)
+  const [showOnboarding, setShowOnboarding] = useState(true) // FORCE SHOW
   const [tab, setTab] = useState('hub')
   const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
@@ -206,7 +206,7 @@ export default function Home() {
           if (rows.length > 0 && rows[0].onboarded) { seen = '1'; localStorage.setItem('cliniverse-onboarded', '1') }
         } catch(e) {}
       }
-      if (seen) setShowOnboarding(false)
+      // if (seen) setShowOnboarding(false) // DISABLED FOR TESTING
     }
     check()
   }, [])
