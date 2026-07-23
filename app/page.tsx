@@ -162,7 +162,7 @@ export default function Home() {
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [tab, setTab] = useState('hub')
-  const [toolTab, setToolTab] = useState('codeblue')
+  const [toolTab, setToolTab] = useState('hub_tools')
   const [activeCase, setActiveCase] = useState<string|null>(null)
   const [activeRad, setActiveRad] = useState<string|null>(null)
   const [mcqIndex, setMcqIndex] = useState(0)
@@ -1139,7 +1139,84 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             {toolTab==='nursing'&&<NursingModule onXP={addXP}/>}
             {toolTab==='lab'&&<LabModule onXP={addXP}/>}
             {toolTab==='radiology'&&<RadiologyModule onXP={addXP}/>}
-                        {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
+                        {toolTab==='hub_tools'&&(
+              <div style={{padding:'0 16px 20px'}}>
+
+                {/* SECTION 1 — GLOBAL */}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>🌍 Global & Competition</div>
+                {[
+                  {id:'nexus',icon:'🌍',name:'Clinical Nexus',sub:'Global Medical Room · 1,000+ doctors live',color:'#ffd60a',xp:200,badge:'LIVE'},
+                  {id:'rapid',icon:'⚡',name:'Rapid Fire',sub:'30 questions · 3 minutes · Share score',color:'#ff453a',xp:105,badge:null},
+                ].map(t=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:`linear-gradient(135deg,${t.color}10,rgba(0,0,0,0.3))`,borderRadius:20,padding:16,marginBottom:10,border:`1px solid ${t.color}25`,cursor:'pointer',display:'flex',alignItems:'center',gap:14}}>
+                    <div style={{width:48,height:48,borderRadius:14,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}>
+                      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:2}}>
+                        <div style={{fontSize:15,fontWeight:800,color:'white'}}>{t.name}</div>
+                        {t.badge&&<div style={{fontSize:8,padding:'2px 7px',borderRadius:10,background:'rgba(255,69,58,0.2)',color:'#ff453a',fontWeight:800,border:'1px solid rgba(255,69,58,0.3)'}}>{t.badge}</div>}
+                      </div>
+                      <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div>
+                    </div>
+                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
+                  </div>
+                ))}
+
+                {/* SECTION 2 — SURGICAL AI */}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🔬 Surgical AI</div>
+                {[
+                  {id:'cardiac',icon:'🫀',name:'Cardiac Surgery AI',sub:'CABG · TAVI vs SAVR · Valve',color:'#ff453a',xp:150},
+                  {id:'neuro',icon:'🧠',name:'Neurosurgery AI',sub:'GBM · Awake Craniotomy · Aneurysm',color:'#bf5af2',xp:180},
+                  {id:'general_surg',icon:'🔪',name:'General Surgery AI',sub:'Laparoscopic · TME · Acute Abdomen',color:'#ff9f0a',xp:140},
+                ].map(t=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'13px 16px',marginBottom:8,border:`1px solid ${t.color}20`,cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
+                    <div style={{width:44,height:44,borderRadius:13,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:14,fontWeight:700,color:'white',marginBottom:2}}>{t.name}</div>
+                      <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div>
+                    </div>
+                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
+                  </div>
+                ))}
+
+                {/* SECTION 3 — CLINICAL TOOLS */}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🛠️ Clinical Tools</div>
+                {[
+                  {id:'codeblue',icon:'💔',name:'Code Blue',sub:'Emergency resuscitation · 10 scenarios',color:'#ff453a'},
+
+
+{id:'ecg',icon:'📈',name:'ECG Challenge',sub:'Read & interpret · Expert level',color:'#30d158'},
+                  {id:'bls',icon:'🫀',name:'BLS / ACLS',sub:'Resuscitation protocols',color:'#0a84ff'},
+                  {id:'calc',icon:'🧮',name:'Med Calculators',sub:'GCS · Wells · CURB-65 · eGFR',color:'#30d158'},
+                  {id:'duels',icon:'⚔️',name:'Clinical Duels',sub:'Challenge other doctors',color:'#ff9f0a'},
+                  {id:'detective',icon:'🔍',name:'Diagnostic Detective',sub:'Find the diagnosis',color:'#bf5af2'},
+                  {id:'autopsy',icon:'🔬',name:'Error Autopsy',sub:'Learn from mistakes',color:'#ff453a'},
+                  {id:'nightshift',icon:'🌙',name:'Night Shift Survival',sub:'On-call scenarios',color:'#0a84ff'},
+                  {id:'aigen',icon:'🤖',name:'AI Case Generator',sub:'Unlimited custom cases · Claude AI',color:'#8b5cf6'},
+                ].map((t,i,arr)=>(
+                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.03)',borderRadius:16,padding:'12px 14px',marginBottom:i<arr.length-1?6:0,border:'1px solid rgba(255,255,255,0.06)',cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
+                    <div style={{width:38,height:38,borderRadius:11,background:`${t.color}12`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>{t.icon}</div>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:14,fontWeight:600,color:'white'}}>{t.name}</div>
+                      <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',marginTop:1}}>{t.sub}</div>
+                    </div>
+                    <span style={{color:'rgba(255,255,255,0.2)',fontSize:18}}>›</span>
+                  </div>
+                ))}
+
+                {/* SECTION 4 — COMING SOON */}
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>✨ Coming Soon</div>
+                <div style={{background:'rgba(139,92,246,0.06)',borderRadius:18,padding:'14px 16px',border:'1px solid rgba(139,92,246,0.15)',display:'flex',alignItems:'center',gap:12,opacity:0.7}}>
+                  <div style={{width:44,height:44,borderRadius:13,background:'rgba(139,92,246,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>👻</div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:14,fontWeight:700,color:'white'}}>Ghost Consultant</div>
+                    <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',marginTop:1}}>AI that challenges your clinical decisions in real-time</div>
+                  </div>
+                  <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:'rgba(139,92,246,0.15)',color:'#8b5cf6',fontWeight:700,border:'1px solid rgba(139,92,246,0.2)',flexShrink:0}}>Soon</span>
+                </div>
+
+              </div>
+            )}
+            {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
             {toolTab==='rapid'&&<RapidFire onXP={addXP}/>}
             {toolTab==='cardiac'&&<CardiacSurgeryAI onXP={addXP}/>}
             {toolTab==='neuro'&&<NeuroSurgeryAI onXP={addXP}/>}
