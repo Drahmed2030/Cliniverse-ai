@@ -548,3 +548,4 @@ const CTA_STYLE: React.CSSProperties = {
 const Spinner = () => (
   <div style={{width:20,height:20,borderRadius:'50%',border:'2.5px solid rgba(255,255,255,0.2)',borderTop:'2.5px solid white',animation:'spin 0.8s linear infinite',flexShrink:0}}/>
 )
+// force rebuild Thu Jul 23 03:13:00 +03 2026
