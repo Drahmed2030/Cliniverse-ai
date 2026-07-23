@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cliniverse AI",
     description: "AI-powered clinical training platform.",
-    images: ["/og-image.svg"],
+    images: ["https://cliniverse-ai-xmev.vercel.app/og.jpg"],
   },
 }
 
