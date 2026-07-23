@@ -367,7 +367,7 @@ export default function Home() {
 
   useEffect(() => {
     if(screen!=='launch')return
-    const prog=setInterval(()=>{setProgress(p=>{if(p>=100){clearInterval(prog);setTimeout(()=>setScreen('welcome'),400);return 100}return p+1.2})},30)
+    const prog=setInterval(()=>{setProgress(p=>{if(p>=100){clearInterval(prog);setTimeout(()=>setScreen('app'),400);return 100}return p+1.2})},30)
     const tag=setInterval(()=>setTagline(t=>(t+1)%taglines.length),2200)
     return ()=>{clearInterval(prog);clearInterval(tag)}
   },[screen])
