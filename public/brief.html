@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CliniBrief — Daily Clinical Case</title>
+<meta name="description" content="One clinical case. Every day. Join 1,000+ physicians making the same decision right now.">
+<meta property="og:title" content="CliniBrief — Today's Clinical Case">
+<meta property="og:description" content="One clinical case. Every day. What's your decision?">
+<meta property="og:image" content="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=1200&q=80">
+<meta property="og:url" content="https://clinibrief.netlify.app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=1200&q=80">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif;
+    background: #000000;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .glow {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(10,132,255,0.15) 0%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 60px 24px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0a84ff, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: #0a84ff; }
+
+  .live-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,69,58,0.12);
+    border: 1px solid rgba(255,69,58,0.25);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ff453a;
+    letter-spacing: 1px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff453a;
+    box-shadow: 0 0 8px #ff453a;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .date-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0a84ff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .case-title {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .vitals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .vital {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .vital-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .vital-value {
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .case-body {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .question {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .option {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .option:hover { border-color: rgba(10,132,255,0.4); background: rgba(10,132,255,0.06); }
+  .option.correct { background: rgba(48,209,88,0.12); border-color: rgba(48,209,88,0.5); color: #30d158; }
+  .option.wrong { background: rgba(255,69,58,0.12); border-color: rgba(255,69,58,0.5); color: #ff453a; }
+
+  .option-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+
+  .explanation {
+    background: rgba(10,132,255,0.08);
+    border: 1px solid rgba(10,132,255,0.2);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  .explanation.show { display: block; }
+
+  .explanation-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #0a84ff;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .explanation-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+  }
+
+  .cta {
+    background: linear-gradient(135deg, #0a84ff, #8b5cf6);
+    border: none;
+    border-radius: 16px;
+    padding: 18px;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: -0.3px;
+    box-shadow: 0 8px 32px rgba(10,132,255,0.3);
+    margin-bottom: 12px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+  }
+
+  .cta-sub {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 32px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+
+  .stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    line-height: 1.6;
+  }
+
+  .footer a { color: #0a84ff; text-decoration: none; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<div class="container">
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-icon">🩺</div>
+    <div class="logo-text">Clini<span>Brief</span></div>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      LIVE
+    </div>
+  </div>
+
+  <!-- Date -->
+  <div class="date-tag" id="dateTag">TODAY'S CASE</div>
+
+  <!-- Title -->
+  <div class="case-title">67M · Rapid AF<br>Haemodynamic Instability</div>
+
+  <!-- Vitals -->
+  <div class="vitals">
+    <div class="vital">
+      <div class="vital-label">HR</div>
+      <div class="vital-value" style="color:#ff453a">142</div>
+    </div>
+    <div class="vital">
+      <div class="vital-label">BP</div>
+      <div class="vital-value" style="color:#0a84ff">88/60</div>
+    </div>
+    <div class="vital">
+      <div class="vital-label">SpO2</div>
+      <div class="vital-value" style="color:#30d158">94%</div>
+    </div>
+    <div class="vital">
+      <div class="vital-label">RR</div>
+      <div class="vital-value" style="color:#ff9f0a">24</div>
+    </div>
+  </div>
+
+  <!-- Case body -->
+  <div class="case-body">
+    67-year-old male with known AF presents with 2 hours of palpitations and worsening dyspnoea. 
+    BP 88/60, HR 142 irregular. ECG confirms rapid AF. No chest pain. Troponin pending.
+    Previously on warfarin — last INR 1.4.
+  </div>
+
+  <!-- Question -->
+  <div class="question">What is your IMMEDIATE management priority?</div>
+
+  <!-- Options -->
+  <div class="options" id="options">
+    <button class="option" onclick="answer(this, false)">
+      <span class="option-letter">A</span>
+      IV Amiodarone 300mg over 1 hour
+    </button>
+    <button class="option" onclick="answer(this, true)">
+      <span class="option-letter">B</span>
+      DC Cardioversion — synchronised shock
+    </button>
+    <button class="option" onclick="answer(this, false)">
+      <span class="option-letter">C</span>
+      Rate control with IV Metoprolol
+    </button>
+    <button class="option" onclick="answer(this, false)">
+      <span class="option-letter">D</span>
+      Anticoagulate and reassess in 4 hours
+    </button>
+  </div>
+
+  <!-- Explanation -->
+  <div class="explanation" id="explanation">
+    <div class="explanation-label">💡 CLINICAL REASONING</div>
+    <div class="explanation-text">
+      Haemodynamically unstable AF (BP 88/60) requires <strong>immediate DC cardioversion</strong> 
+      regardless of anticoagulation status. This is a class I indication. 
+      Rate or rhythm control pharmacologically is inappropriate when the patient is in shock. 
+      <br><br>
+      <em>Reference: ESC Guidelines 2020 — AF Management</em>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">🌍 <span id="doctorCount">1,247</span> doctors answered today</div>
+    <div class="stat">📅 Daily case at 07:00</div>
+  </div>
+
+  <!-- CTA -->
+  <a href="https://cliniverse-ai-xmev.vercel.app" class="cta">
+    🏥 Train More on Cliniverse AI →
+  </a>
+  <div class="cta-sub">25+ cases · Surgical AI · Global Competition · Free to start</div>
+
+  <!-- Footer -->
+  <div class="footer">
+    CliniBrief is powered by <a href="https://cliniverse-ai-xmev.vercel.app">Cliniverse AI</a><br>
+    Built by a physician, for physicians worldwide.<br><br>
+    <a href="https://cliniverse-ai-xmev.vercel.app">cliniverse-ai-xmev.vercel.app</a>
+  </div>
+</div>
+
+<script>
+  // Set date
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const now = new Date()
+  document.getElementById('dateTag').textContent = 
+    days[now.getDay()].toUpperCase() + ' · ' + months[now.getMonth()] + ' ' + now.getDate()
+
+  // Animate doctor count
+  let count = 1100
+  const target = 1247
+  const el = document.getElementById('doctorCount')
+  const interval = setInterval(() => {
+    count += Math.floor(Math.random() * 8) + 2
+    if (count >= target) { count = target; clearInterval(interval) }
+    el.textContent = count.toLocaleString()
+  }, 30)
+
+  // Answer function
+  let answered = false
+  function answer(btn, correct) {
+    if (answered) return
+    answered = true
+    const options = document.querySelectorAll('.option')
+    options.forEach(o => {
+      o.style.pointerEvents = 'none'
+      if (o === btn) o.classList.add(correct ? 'correct' : 'wrong')
+    })
+    // Show correct answer
+    options[1].classList.add('correct')
+    document.getElementById('explanation').classList.add('show')
+  }
+</script>
+</body>
+</html>

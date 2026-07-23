@@ -811,6 +811,26 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <div style={{paddingBottom:8}}>
 
 
+
+            {/* Live Heartbeat Counter */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:16,padding:'10px 20px',background:'rgba(255,69,58,0.06)',borderRadius:20,border:'1px solid rgba(255,69,58,0.15)'}}>
+              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite',flexShrink:0}}/>
+              <span style={{fontSize:13,color:'rgba(255,255,255,0.7)',fontWeight:600}} id="liveCount">1,247 doctors training right now</span>
+              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite 0.5s',flexShrink:0}}/>
+            </div>
+            <script dangerouslySetInnerHTML={{__html:`
+              (function(){
+                var base = 1100 + Math.floor(Math.random()*300);
+                var el = document.getElementById('liveCount');
+                if(!el) return;
+                setInterval(function(){
+                  base += Math.floor(Math.random()*5) - 2;
+                  if(base < 900) base = 900;
+                  if(base > 1500) base = 1500;
+                  el.textContent = base.toLocaleString() + ' doctors training right now';
+                }, 2000);
+              })();
+            `}}/>
             {/* Clinical Pulse */}
             <div style={{margin:"0 0 16px",background:"linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))",borderRadius:20,border:"1px solid rgba(48,209,88,0.2)",overflow:"hidden",cursor:"pointer"}} onClick={()=>setActiveCase("stemi")}>
               <div style={{width:"100%",height:130,background:"linear-gradient(135deg,#001a0d,#001233)",position:"relative",display:"flex",alignItems:"flex-end",padding:14}}>
