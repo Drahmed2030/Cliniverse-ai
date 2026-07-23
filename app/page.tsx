@@ -189,7 +189,7 @@ export default function Home() {
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [tab, setTab] = useState('hub')
-  const [toolTab, setToolTab] = useState('codeblue')
+  const [toolTab, setToolTab] = useState('hub_tools')
   const [activeCase, setActiveCase] = useState<string|null>(null)
   const [activeRad, setActiveRad] = useState<string|null>(null)
   const [mcqIndex, setMcqIndex] = useState(0)
