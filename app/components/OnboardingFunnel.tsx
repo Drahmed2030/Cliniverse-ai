@@ -455,7 +455,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
       onTouchEnd={onTouchEnd}
       style={{
         position:'fixed',inset:0,
-        background:'radial-gradient(ellipse at 30% 15%, #1e0840 0%, #0d0020 45%, #000508 100%)',
+        background:'linear-gradient(180deg, #000000 0%, #0a0a1a 40%, #000d1f 100%)',
         zIndex:9999,
         display:'flex',flexDirection:'column',
         fontFamily:'-apple-system,SF Pro Rounded,SF Pro Display,BlinkMacSystemFont,"Inter var",Inter,sans-serif',
@@ -505,7 +505,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
       </div>
 
       {/* Tap zones hint — first screen only */}
-      {screen === 0 && (
+      {screen === 0 && false && (
         <div style={{position:'absolute',bottom:160,left:0,right:0,display:'flex',justifyContent:'center',pointerEvents:'none',opacity:0.4,animation:'fadeHint 3s ease 2s forwards'}}>
           <div style={{fontSize:11,color:'white',letterSpacing:1,fontWeight:500}}>TAP ← → TO NAVIGATE · HOLD TO PAUSE</div>
         </div>
