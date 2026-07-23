@@ -183,7 +183,7 @@ export default function Home() {
 
   // Show onboarding for first-time visitors
   useEffect(() => {
-    const seen = localStorage.getItem('cliniverse-onboarded')
+    const seen = localStorage.getItem('cliniverse-onboarded') || document.cookie.includes('cliniverse-onboarded=1')
     if (seen) setShowOnboarding(false)
   }, [])
 
@@ -447,7 +447,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   // LAUNCH
   if(showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
-      localStorage.setItem('cliniverse-onboarded','1')
+      localStorage.setItem('cliniverse-onboarded','1'); document.cookie='cliniverse-onboarded=1;max-age=31536000;path=/;SameSite=Lax'
       setShowOnboarding(false)
     }}/>
   )
