@@ -11,14 +11,14 @@ export const metadata: Metadata = {
     description: "Join 1,000+ physicians. AI-powered clinical cases, Rapid Fire, Surgical protocols. Free to start.",
     url: "https://cliniverse-ai-xmev.vercel.app",
     siteName: "Cliniverse AI",
-    images: [{ url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&h=630&fit=crop&q=80", width: 1200, height: 630, alt: "Cliniverse AI" }],
+    images: [{ url: "https://cliniverse-ai-xmev.vercel.app/og.png", width: 1200, height: 630, alt: "Cliniverse AI" }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Cliniverse AI",
     description: "AI-powered clinical training platform.",
-    images: ["https://cliniverse-ai-xmev.vercel.app/og.jpg"],
+    images: ["https://cliniverse-ai-xmev.vercel.app/og.png"],
   },
 }
 
