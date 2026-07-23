@@ -462,6 +462,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   if(showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
       localStorage.setItem('cliniverse-onboarded','1')
+      setScreen('welcome')
       setShowOnboarding(false)
     }}/>
   )
