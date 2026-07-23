@@ -1,16 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-
-// Device ID for persistent onboarding
-function getDeviceId() {
-  if (typeof window === 'undefined') return 'server'
-  let id = localStorage.getItem('cliniverse-device-id')
-  if (!id) {
-    id = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
-    localStorage.setItem('cliniverse-device-id', id)
-  }
-  return id
-}
 import dynamic from 'next/dynamic'
 
 const EcgChallenge = dynamic(() => import('./components/EcgChallenge'), { ssr: false })
@@ -165,7 +154,7 @@ export default function Home() {
   const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
-  const [showOnboarding, setShowOnboarding] = useState(true) // FORCE SHOW
+  const [showOnboarding, setShowOnboarding] = useState(true)
   const [tab, setTab] = useState('hub')
   const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
@@ -179,7 +168,7 @@ export default function Home() {
   const [mcqTotal, setMcqTotal] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string|null>('critical')
   const [showWelcome, setShowWelcome] = useState(true)
-  const [dark, setDark] = useState(true)
+  const [dark] = useState(true)
   const [showAI, setShowAI] = useState(false)
   const [aiQuestion, setAiQuestion] = useState('')
   const [aiResponse, setAiResponse] = useState('')
@@ -194,21 +183,8 @@ export default function Home() {
 
   // Show onboarding for first-time visitors
   useEffect(() => {
-    const check = async () => {
-      const deviceId = getDeviceId()
-      let seen = localStorage.getItem('cliniverse-onboarded')
-      if (!seen) {
-        try {
-          const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || '') + '/rest/v1/device_settings?device_id=eq.' + deviceId
-          const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-          const res = await fetch(url, { headers: { apikey: key, Authorization: 'Bearer ' + key } })
-          const rows = await res.json()
-          if (rows.length > 0 && rows[0].onboarded) { seen = '1'; localStorage.setItem('cliniverse-onboarded', '1') }
-        } catch(e) {}
-      }
-      // if (seen) setShowOnboarding(false) // DISABLED FOR TESTING
-    }
-    check()
+    const seen = localStorage.getItem('cliniverse-onboarded')
+    if (seen) setShowOnboarding(false)
   }, [])
 
   const taglines = ['Where medicine meets precision.','Train on real emergencies.','Think like a consultant.','AI-powered clinical intelligence.']
@@ -472,14 +448,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   if(showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
       localStorage.setItem('cliniverse-onboarded','1')
-      const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      const deviceId = getDeviceId()
-      fetch(SUPABASE_URL + '/rest/v1/device_settings', {
-        method: 'POST',
-        headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
-        body: JSON.stringify({ device_id: deviceId, onboarded: true })
-      }); document.cookie='cliniverse-onboarded=1;max-age=31536000;path=/;SameSite=Lax'
       setShowOnboarding(false)
     }}/>
   )
