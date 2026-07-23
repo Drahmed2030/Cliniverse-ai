@@ -194,15 +194,21 @@ export default function Home() {
 
   // Show onboarding for first-time visitors
   useEffect(() => {
-    const deviceId = getDeviceId()
-    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    const res = await fetch(SUPABASE_URL + '/rest/v1/device_settings?device_id=eq.' + deviceId, {
-      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
-    })
-    const rows = await res.json()
-    const seen = rows.length > 0 && rows[0].onboarded || document.cookie.includes('cliniverse-onboarded=1')
-    if (seen) setShowOnboarding(false)
+    const check = async () => {
+      const deviceId = getDeviceId()
+      let seen = localStorage.getItem('cliniverse-onboarded')
+      if (!seen) {
+        try {
+          const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || '') + '/rest/v1/device_settings?device_id=eq.' + deviceId
+          const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+          const res = await fetch(url, { headers: { apikey: key, Authorization: 'Bearer ' + key } })
+          const rows = await res.json()
+          if (rows.length > 0 && rows[0].onboarded) { seen = '1'; localStorage.setItem('cliniverse-onboarded', '1') }
+        } catch(e) {}
+      }
+      if (seen) setShowOnboarding(false)
+    }
+    check()
   }, [])
 
   const taglines = ['Where medicine meets precision.','Train on real emergencies.','Think like a consultant.','AI-powered clinical intelligence.']
