@@ -18,7 +18,7 @@
   --accent-gold: #ffd60a;
   --nav-bg: rgba(10,0,21,0.95);
   --nav-border: rgba(139,92,246,0.2);
-  --font: 'Inter', -apple-system, system-ui, sans-serif;
+  --font: -apple-system, 'SF Pro Display', 'SF Pro Text', Inter, system-ui, sans-serif;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 22px;
@@ -67,7 +67,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  font-family: var(--font);
+  font-family: var(--font); -webkit-font-smoothing: antialiased;
   background: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -106,7 +106,7 @@ html, body {
   font-weight: 700;
   cursor: pointer;
   width: 100%;
-  font-family: var(--font);
+  font-family: var(--font); -webkit-font-smoothing: antialiased;
 }
 .btn-secondary {
   background: var(--bg-card);
@@ -117,7 +117,7 @@ html, body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  font-family: var(--font);
+  font-family: var(--font); -webkit-font-smoothing: antialiased;
 }
 
 /* ── ANIMATIONS ── */
