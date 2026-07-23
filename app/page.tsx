@@ -1471,11 +1471,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,SF Pro Text,sans-serif',
         }}>
           {[
-            {id:'hub',label:'HUB',color:'#ff453a',glow:'rgba(255,69,58,0.7)'},
-            {id:'tools',label:'TOOLS',color:'#ffd60a',glow:'rgba(255,214,10,0.7)'},
-            {id:'mcq',label:'MCQ',color:'#ff9f0a',glow:'rgba(255,159,10,0.7)'},
-            {id:'workshop',label:'WORK',color:'#0a84ff',glow:'rgba(10,132,255,0.7)'},
-            {id:'profile',label:'ME',color:'#64d2ff',glow:'rgba(100,210,255,0.7)'},
+            {id:'hub',label:'Home',icon:'🏥',color:'#ff453a',glow:'rgba(255,69,58,0.7)'},
+            {id:'tools',label:'Tools',icon:'⚡',color:'#ffd60a',glow:'rgba(255,214,10,0.7)'},
+            {id:'mcq',label:'Board',icon:'📝',color:'#ff9f0a',glow:'rgba(255,159,10,0.7)'},
+            {id:'workshop',label:'Work',icon:'💼',color:'#0a84ff',glow:'rgba(10,132,255,0.7)'},
+            {id:'profile',label:'Me',icon:'👤',color:'#64d2ff',glow:'rgba(100,210,255,0.7)'},
           ].map(t=>{
             const active = tab===t.id
             return(
@@ -1492,7 +1492,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   animation:'pillGlow 2s ease-in-out infinite',
                 }}/>}
                 <div style={{
-                  width:active?36:28,height:active?36:28,
+                  width:active?38:30,height:active?38:30,
                   borderRadius:active?13:9,
                   background:active?`linear-gradient(135deg,${t.color}30,${t.color}10)`:'transparent',
                   display:'flex',alignItems:'center',justifyContent:'center',
@@ -1509,8 +1509,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   )}
                 </div>
                 <span style={{
-                  fontSize:7,fontWeight:active?700:400,
-                  color:active?t.color:dark?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.28)',
+                  fontSize:10,fontWeight:active?800:600,
+                  color:active?t.color:dark?'rgba(255,255,255,0.75)':'rgba(0,0,0,0.55)',
                   transition:'all 0.2s',letterSpacing:active?0.5:0.2,
                   textTransform:'uppercase',position:'relative',zIndex:1,
                   fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,sans-serif',
