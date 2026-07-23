@@ -792,6 +792,34 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         {tab==='hub'&&(
           <div style={{paddingBottom:8}}>
 
+            {/* Clinical Pulse — Morning Brief */}
+            <div style={{marginBottom:16}}>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10,padding:'0 2px'}}>
+                <div style={{display:'flex',alignItems:'center',gap:8}}>
+                  <div style={{width:8,height:8,borderRadius:'50%',background:'#30d158',boxShadow:'0 0 8px #30d158'}}/>
+                  <span style={{fontSize:11,color:'#30d158',fontWeight:800,letterSpacing:2}}>MORNING BRIEF</span>
+                </div>
+                <span style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>Daily · 07:00 AM</span>
+              </div>
+              <div onClick={()=>setActiveCase('stemi')} style={{background:'linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))',borderRadius:20,border:'1px solid rgba(48,209,88,0.2)',overflow:'hidden',cursor:'pointer'}}>
+                <div style={{width:'100%',height:140,position:'relative',overflow:'hidden'}}>
+                  <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80" alt="" style={{width:'100%',height:'100%',objectFit:'cover'}} onError={(e)=>{(e.target as HTMLImageElement).style.display='none'}}/>
+                  <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(0,0,0,0.1),rgba(0,0,0,0.7))'}}/>
+                  <div style={{position:'absolute',bottom:10,left:14,right:14}}>
+                    <div style={{fontSize:10,color:'rgba(255,255,255,0.6)',letterSpacing:1,marginBottom:3}}>CARDIOLOGY · TODAY</div>
+                    <div style={{fontSize:16,fontWeight:800,color:'white',lineHeight:1.2}}>67M with Rapid AF & Haemodynamic Instability</div>
+                  </div>
+                </div>
+                <div style={{padding:'12px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                  <div>
+                    <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',marginBottom:2}}>🌍 1,247 doctors deciding now</div>
+                    <div style={{fontSize:11,color:'rgba(255,255,255,0.3)'}}>Tap to join the global decision</div>
+                  </div>
+                  <div style={{background:'rgba(48,209,88,0.15)',border:'1px solid rgba(48,209,88,0.3)',borderRadius:12,padding:'8px 14px',fontSize:12,fontWeight:700,color:'#30d158',flexShrink:0}}>Start →</div>
+                </div>
+              </div>
+            </div>
+
             {/* Featured Case */}
             <div onClick={()=>setActiveCase('stemi')} style={{background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',borderRadius:22,padding:22,marginBottom:16,color:'white',cursor:'pointer',boxShadow:'0 8px 40px rgba(10,132,255,0.4)',border:'1px solid rgba(255,255,255,0.12)',position:'relative',overflow:'hidden'}}>
               <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'rgba(255,255,255,0.06)',pointerEvents:'none'}}/>
