@@ -1,5 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
+
+// Device ID for persistent onboarding
+function getDeviceId() {
+  if (typeof window === 'undefined') return 'server'
+  let id = localStorage.getItem('cliniverse-device-id')
+  if (!id) {
+    id = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+    localStorage.setItem('cliniverse-device-id', id)
+  }
+  return id
+}
 import dynamic from 'next/dynamic'
 
 const EcgChallenge = dynamic(() => import('./components/EcgChallenge'), { ssr: false })
@@ -183,7 +194,14 @@ export default function Home() {
 
   // Show onboarding for first-time visitors
   useEffect(() => {
-    const seen = localStorage.getItem('cliniverse-onboarded') || document.cookie.includes('cliniverse-onboarded=1')
+    const deviceId = getDeviceId()
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const res = await fetch(SUPABASE_URL + '/rest/v1/device_settings?device_id=eq.' + deviceId, {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    })
+    const rows = await res.json()
+    const seen = rows.length > 0 && rows[0].onboarded || document.cookie.includes('cliniverse-onboarded=1')
     if (seen) setShowOnboarding(false)
   }, [])
 
@@ -447,7 +465,15 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   // LAUNCH
   if(showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
-      localStorage.setItem('cliniverse-onboarded','1'); document.cookie='cliniverse-onboarded=1;max-age=31536000;path=/;SameSite=Lax'
+      localStorage.setItem('cliniverse-onboarded','1')
+      const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      const deviceId = getDeviceId()
+      fetch(SUPABASE_URL + '/rest/v1/device_settings', {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates' },
+        body: JSON.stringify({ device_id: deviceId, onboarded: true })
+      }); document.cookie='cliniverse-onboarded=1;max-age=31536000;path=/;SameSite=Lax'
       setShowOnboarding(false)
     }}/>
   )
