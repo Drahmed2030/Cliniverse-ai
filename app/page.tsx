@@ -195,6 +195,20 @@ const GhostConsultant = ({onXP}:{onXP:(n:number)=>void}) => {
     }
   }
 export default function Home() {
+  const enableNotifications = async () => {
+    if (typeof window !== "undefined" && "Notification" in window) {
+      const perm = await Notification.requestPermission()
+      if (perm === "granted") {
+        if ("serviceWorker" in navigator) {
+          await navigator.serviceWorker.register("/sw.js")
+        }
+        alert("Notifications enabled!")
+      } else {
+        alert("Please allow notifications in your browser settings.")
+      }
+    }
+  }
+
   const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
