@@ -29,6 +29,11 @@ const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), 
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
 const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
+const CardiacSurgeryAI = dynamic(() => import('./components/CardiacSurgeryAI'), { ssr: false })
+const NeuroSurgeryAI = dynamic(() => import('./components/NeuroSurgeryAI'), { ssr: false })
+const GeneralSurgeryAI = dynamic(() => import('./components/GeneralSurgeryAI'), { ssr: false })
+const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
+const RapidFire = dynamic(() => import('./components/RapidFire'), { ssr: false })
 import { useLiveCases } from './components/LiveCasesSystem'
 
 const RANKS = [
@@ -1256,6 +1261,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             {toolTab==='nursing'&&<NursingModule onXP={addXP}/>}
             {toolTab==='lab'&&<LabModule onXP={addXP}/>}
             {toolTab==='radiology'&&<RadiologyModule onXP={addXP}/>}
+            {toolTab==='cardiac'&&<CardiacSurgeryAI onXP={addXP}/>}
+            {toolTab==='neuro'&&<NeuroSurgeryAI onXP={addXP}/>}
+            {toolTab==='general_surg'&&<GeneralSurgeryAI onXP={addXP}/>}
+            {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
+            {toolTab==='rapid'&&<RapidFire onXP={addXP}/>}
             {toolTab==='aigen'&&<AICaseGenerator onXP={addXP}/>}
             {toolTab==='insights'&&<HealthInsights xp={xp} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} mcqTotal={mcqTotal} streak={streak}/>}
           </div>
