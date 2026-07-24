@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <ErrorBoundary><ThemeProvider>{children}</ThemeProvider></ErrorBoundary>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
