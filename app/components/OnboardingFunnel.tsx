@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 
-interface Props { onComplete: () => void }
+interface Props { onComplete: (email?: string, password?: string, name?: string) => void }
 
 const SLIDES = [
   {
@@ -171,8 +171,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
     setLoading(true)
     await new Promise(r => setTimeout(r, 900))
     setLoading(false)
-    localStorage.setItem('cliniverse-onboarded', '1')
-    onComplete()
+    onComplete(email, password, name)
   }
 
   const s = SLIDES[slide]
