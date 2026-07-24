@@ -1582,7 +1582,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                 </div>
                 <span style={{
                   fontSize:11,fontWeight:active?800:600,
-                  color:active?t.color:dark?'rgba(255,255,255,0.7)':'rgba(0,0,0,0.5)',
+                  color:active?t.color:dark?'rgba(255,255,255,0.92)':'rgba(0,0,0,0.7)',
                   transition:'all 0.2s',letterSpacing:active?0.5:0.2,
                   textTransform:'uppercase',position:'relative',zIndex:1,
                   fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,sans-serif',
