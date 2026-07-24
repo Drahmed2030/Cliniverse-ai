@@ -203,7 +203,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
         )}
         <div>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',fontWeight:700,letterSpacing:1.5,marginBottom:8,textTransform:'uppercase'}}>Email</div>
-          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="doctor@hospital.com"
+          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com"
             style={{width:'100%',padding:'16px 18px',borderRadius:14,border:'1.5px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:16,outline:'none',boxSizing:'border-box',fontFamily:'inherit'}}/>
         </div>
         <div>
