@@ -1248,6 +1248,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                 <div style={{fontSize:12,color:T.textSub,marginBottom:8}}>Standard Access Tier</div>
                 <span style={{fontSize:10,fontWeight:700,padding:'3px 12px',borderRadius:12,background:'rgba(10,132,255,0.12)',color:'#0a84ff',border:'1px solid rgba(10,132,255,0.2)'}}>FREE TIER</span>
               </div>
+              <div onClick={enableNotifications} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(10,132,255,0.08)",borderRadius:16,padding:14,marginBottom:12,border:"1px solid rgba(10,132,255,0.2)",cursor:"pointer"}}><span style={{fontSize:22}}>🔔</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"white"}}>Enable Daily Notifications</div><div style={{fontSize:12,color:"rgba(255,255,255,0.4)",marginTop:2}}>Get daily clinical case alerts</div></div></div>
               {/* Admin button - hidden, only for admin */}
               <div onClick={()=>setShowAdmin(true)} style={{width:32,height:32,borderRadius:'50%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:12,opacity:0.3}}>⚙️</div>
             </div>
