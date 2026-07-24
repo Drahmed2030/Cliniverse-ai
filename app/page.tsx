@@ -463,13 +463,49 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           ))}
         </div>
         <button
-          onClick={()=>{window.open('https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d','_blank');setIsPro(true);setShowUpgrade(false)}}
+          onClick={()=>{(()=>{
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)';
+  const sheet=document.createElement('div');
+  sheet.style.cssText='width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)';
+  const handle=document.createElement('div');
+  handle.style.cssText='width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:12px auto 0';
+  const iframe=document.createElement('iframe');
+  iframe.src='https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1';
+  iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:0 0 0 0';
+  iframe.allow='payment';
+  const close=document.createElement('button');
+  close.textContent='✕ Close';
+  close.style.cssText='width:calc(100% - 48px);margin:12px 24px;padding:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;font-family:inherit';
+  close.onclick=()=>{document.body.removeChild(overlay);setIsPro(true)};
+  overlay.onclick=(e)=>{if(e.target===overlay){document.body.removeChild(overlay)}};
+  sheet.appendChild(handle);sheet.appendChild(iframe);sheet.appendChild(close);
+  overlay.appendChild(sheet);document.body.appendChild(overlay);
+})()}}
           style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:16,fontWeight:800,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10}}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Pay with Apple Pay · $9.99/mo
         </button>
         <button
-          onClick={()=>{window.open('https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d','_blank');setIsPro(true);setShowUpgrade(false)}}
+          onClick={()=>{(()=>{
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)';
+  const sheet=document.createElement('div');
+  sheet.style.cssText='width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)';
+  const handle=document.createElement('div');
+  handle.style.cssText='width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:12px auto 0';
+  const iframe=document.createElement('iframe');
+  iframe.src='https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1';
+  iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:0 0 0 0';
+  iframe.allow='payment';
+  const close=document.createElement('button');
+  close.textContent='✕ Close';
+  close.style.cssText='width:calc(100% - 48px);margin:12px 24px;padding:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;font-family:inherit';
+  close.onclick=()=>{document.body.removeChild(overlay);setIsPro(true)};
+  overlay.onclick=(e)=>{if(e.target===overlay){document.body.removeChild(overlay)}};
+  sheet.appendChild(handle);sheet.appendChild(iframe);sheet.appendChild(close);
+  overlay.appendChild(sheet);document.body.appendChild(overlay);
+})()}}
           style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(139,92,246,0.4)',background:'transparent',color:'#c4b5fd',fontSize:14,fontWeight:600,cursor:'pointer'}}>
           💳 Pay with Card
         </button>
