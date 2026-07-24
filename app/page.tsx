@@ -184,6 +184,16 @@ const GhostConsultant = ({onXP}:{onXP:(n:number)=>void}) => {
   )
 }
 
+
+  const enableNotifications = async () => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      const reg = await navigator.serviceWorker.register('/sw.js')
+      const perm = await Notification.requestPermission()
+      if (perm === 'granted') {
+        alert('Notifications enabled! You will receive daily case alerts.')
+      }
+    }
+  }
 export default function Home() {
   const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
   const [progress, setProgress] = useState(0)
