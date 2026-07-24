@@ -1,4 +1,5 @@
 'use client'
+import { supabase } from './supabase'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
@@ -215,6 +216,15 @@ export default function Home() {
   const T = dark ? darkTheme : lightTheme
 
   // Show onboarding for first-time visitors
+  useEffect(() => {
+    // Load saved XP
+    const deviceId = localStorage.getItem('cliniverse-device-id')
+    if (deviceId) {
+      supabase.from('user_progress').select('xp').eq('device_id', deviceId).single()
+        .then(({ data }) => { if (data?.xp) setXp(data.xp) })
+    }
+  }, [])
+
   useEffect(() => {
     const seen = localStorage.getItem('cliniverse-onboarded')
     if (seen) setShowOnboarding(false)
