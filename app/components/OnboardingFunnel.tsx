@@ -227,10 +227,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
           style={{width:'100%',padding:'18px',borderRadius:16,border:'none',background:loading?'rgba(10,132,255,0.4)':'#0A84FF',color:'white',fontSize:17,fontWeight:700,cursor:'pointer',marginBottom:12,fontFamily:'inherit',display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'all 0.2s'}}>
           {loading?'⏳  Setting up your account...':authMode==='signup'?'Create Account & Enter →':'Sign In & Continue →'}
         </button>
-        <button onClick={onComplete}
-          style={{width:'100%',padding:'14px',borderRadius:14,border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'rgba(255,255,255,0.3)',fontSize:14,cursor:'pointer',fontFamily:'inherit'}}>
-          Continue without account
-        </button>
+
         <p style={{textAlign:'center',fontSize:11,color:'rgba(255,255,255,0.15)',marginTop:14,lineHeight:1.5}}>
           By continuing, you agree to our Terms & Privacy Policy.
         </p>
