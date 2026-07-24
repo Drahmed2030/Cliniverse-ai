@@ -549,7 +549,16 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
   // LAUNCH
   if(showOnboarding) return (
-    <OnboardingFunnel onComplete={()=>{
+    <OnboardingFunnel onComplete={async (email, password, name) => {
+      try {
+        if (email && password) {
+          const { error } = await supabase.auth.signUp({
+            email, password,
+            options: { data: { full_name: name || 'Doctor' } }
+          })
+          if (error) console.log('Auth error:', error.message)
+        }
+      } catch(e) { console.log('Auth skip:', e) }
       localStorage.setItem('cliniverse-onboarded','1')
       setShowOnboarding(false)
     }}/>
