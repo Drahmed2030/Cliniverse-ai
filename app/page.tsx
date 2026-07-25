@@ -904,36 +904,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
 
 
-            {/* Activity Rings */}
-            <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.97),rgba(25,8,55,0.95))',borderRadius:22,padding:16,marginBottom:14,border:'1px solid rgba(139,92,246,0.18)',display:'flex',alignItems:'center',gap:14}}>
-              <div style={{position:'relative',width:80,height:80,flexShrink:0}}>
-                <svg width="80" height="80" viewBox="0 0 80 80" style={{transform:'rotate(-90deg)'}}>
-                  <circle cx="40" cy="40" r="33" fill="none" stroke="rgba(10,132,255,0.12)" strokeWidth="6"/>
-                  <circle cx="40" cy="40" r="33" fill="none" stroke="#0a84ff" strokeWidth="6" strokeLinecap="round" strokeDasharray="100 207"/>
-                  <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(48,209,88,0.12)" strokeWidth="6"/>
-                  <circle cx="40" cy="40" r="24" fill="none" stroke="#30d158" strokeWidth="6" strokeLinecap="round" strokeDasharray="80 151"/>
-                  <circle cx="40" cy="40" r="15" fill="none" stroke="rgba(255,69,58,0.12)" strokeWidth="6"/>
-                  <circle cx="40" cy="40" r="15" fill="none" stroke="#ff453a" strokeWidth="6" strokeLinecap="round" strokeDasharray="55 94"/>
-                </svg>
-                <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
-                  <div style={{fontSize:13,fontWeight:900,color:'white'}}>{xp}</div>
-                  <div style={{fontSize:7,color:'rgba(255,255,255,0.35)'}}>XP</div>
-                </div>
-              </div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,marginBottom:8,textTransform:'uppercase',fontWeight:700}}>Daily Progress</div>
-                {[{color:'#ff453a',label:'Accuracy',val:Math.min(Math.round(xp/2),100)},{color:'#30d158',label:'Speed',val:Math.min(mcqCorrect*10,100)},{color:'#0a84ff',label:'Knowledge',val:Math.min(casesCompleted*20,100)}].map((r,i)=>(
-                  <div key={i} style={{display:'flex',alignItems:'center',gap:6,marginBottom:4}}>
-                    <div style={{width:6,height:6,borderRadius:'50%',background:r.color,flexShrink:0}}/>
-                    <div style={{flex:1,height:3,background:'rgba(255,255,255,0.08)',borderRadius:2,overflow:'hidden'}}>
-                      <div style={{height:'100%',width:r.val+'%',background:r.color,borderRadius:2}}/>
-                    </div>
-                    <span style={{fontSize:9,color:r.color,fontWeight:700,minWidth:25}}>{r.val}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Live Heartbeat Counter */}
             <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:16,padding:'10px 20px',background:'rgba(255,69,58,0.06)',borderRadius:20,border:'1px solid rgba(255,69,58,0.15)'}}>
               <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite',flexShrink:0}}/>
