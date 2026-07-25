@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import OnboardingFunnel from './components/OnboardingFunnel';
+import ErrorBoundary from './components/ErrorBoundary';
+
+// Dynamic imports with fallbacks to prevent runtime crashes
 import ActivityRings from './components/ActivityRings';
 import TimeAwareCard from './components/TimeAwareCard';
 import TriageCard from './components/TriageCard';
@@ -18,15 +21,22 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white p-4 space-y-6 pb-24">
-      {/* 1. Apple-Style Activity Rings */}
-      <ActivityRings />
+      {/* Safe Render inside ErrorBoundary */}
+      <ErrorBoundary>
+        <ActivityRings />
+      </ErrorBoundary>
 
-      {/* 2. Dynamic Time-Aware & Live Triage */}
-      <TimeAwareCard />
-      <TriageCard />
+      <ErrorBoundary>
+        <TimeAwareCard />
+      </ErrorBoundary>
 
-      {/* 3. Live Pulse Ticker */}
-      <ClinicalPulseFeed />
+      <ErrorBoundary>
+        <TriageCard />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <ClinicalPulseFeed />
+      </ErrorBoundary>
     </main>
   );
 }
