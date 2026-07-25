@@ -923,6 +923,9 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                 }, 2000);
               })();
             `}}/>
+            {/* Clinical Pulse Feed */}
+            <ClinicalPulseFeed onCase={(id)=>setActiveCase(id)}/>
+
             {/* Clinical Pulse */}
             <div style={{margin:"0 0 16px",background:"linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))",borderRadius:20,border:"1px solid rgba(48,209,88,0.2)",overflow:"hidden",cursor:"pointer"}} onClick={()=>setActiveCase("stemi")}>
               <div style={{width:"100%",height:130,background:"linear-gradient(135deg,#001a0d,#001233)",position:"relative",display:"flex",alignItems:"flex-end",padding:14}}>
