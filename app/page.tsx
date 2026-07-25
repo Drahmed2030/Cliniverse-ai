@@ -1570,6 +1570,33 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
       </main>
 
+
+  {showEmailCapture && (
+    <div style={{position:'fixed',inset:0,zIndex:500,display:'flex',alignItems:'flex-end',justifyContent:'center',background:'rgba(0,0,0,0.7)',backdropFilter:'blur(8px)'}}>
+      <div style={{width:'100%',maxWidth:480,background:'linear-gradient(145deg,#12002a,#0a0015)',borderRadius:'24px 24px 0 0',padding:'24px 24px 40px',border:'1px solid rgba(139,92,246,0.3)'}}>
+        <div style={{width:40,height:4,background:'rgba(255,255,255,0.2)',borderRadius:2,margin:'0 auto 20px'}}/>
+        <div style={{fontSize:24,fontWeight:900,color:'white',marginBottom:8}}>Stay Updated 📬</div>
+        <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:20,lineHeight:1.6}}>Get notified about new cases, features and clinical updates.</div>
+        <input value={captureEmail} onChange={e=>setCaptureEmail(e.target.value)}
+          placeholder="your@email.com"
+          style={{width:'100%',padding:'14px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box',marginBottom:12,fontFamily:'inherit'}}/>
+        <button onClick={async()=>{
+          if(captureEmail.includes('@')){
+            await supabase.from('email_list').upsert({email:captureEmail,created_at:new Date().toISOString()})
+            localStorage.setItem('cliniverse-email-captured','1')
+          }
+          setShowEmailCapture(false)
+        }} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:10,fontFamily:'inherit'}}>
+          Subscribe — It is Free
+        </button>
+        <button onClick={()=>{setShowEmailCapture(false);localStorage.setItem('cliniverse-email-captured','1')}}
+          style={{width:'100%',padding:'12px',borderRadius:14,border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'rgba(255,255,255,0.3)',fontSize:13,cursor:'pointer',fontFamily:'inherit'}}>
+          Maybe later
+        </button>
+      </div>
+    </div>
+  )}
+
       {/* BOTTOM NAV — Apple Health 2026 */}
       <div style={{position:'fixed',bottom:12,left:'50%',transform:'translateX(-50%)',zIndex:200,width:'calc(100% - 32px)',maxWidth:420}}>
         {/* Strong ambient glow underneath */}
