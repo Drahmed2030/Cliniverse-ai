@@ -44,6 +44,22 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
   const [filter, setFilter] = useState<'global'|'weekly'|'specialty'>('global')
   const [myRank, setMyRank] = useState<number | null>(null)
 
+  useEffect(() => {
+    // Real-time updates
+    const channel = supabase
+      .channel('leaderboard_changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'user_progress'
+      }, () => {
+        fetchLeaderboard()
+      })
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [])
+
   useEffect(() => { fetchLeaderboard() }, [])
 
   useEffect(() => {
