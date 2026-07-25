@@ -1275,8 +1275,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
             {toolTab==='rapid'&&<RapidFire onXP={addXP}/>}
             {toolTab==='aigen'&&<AICaseGenerator onXP={addXP}/>}
-            {toolTab==='ghost'&&<GhostConsultant onXP={addXP}/>}
-            {toolTab==='clinicalpulse'&&<ClinicalPulseFeed onCase={(id)=>setActiveCase(id)}/>}
             {toolTab==='insights'&&<HealthInsights xp={xp} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} mcqTotal={mcqTotal} streak={streak}/>}
           </div>
         )}
