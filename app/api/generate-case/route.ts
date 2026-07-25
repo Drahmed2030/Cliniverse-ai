@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { createClient } from '@supabase/supabase-js'
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,8 +14,21 @@ export async function POST(request: NextRequest) {
     const specialty = body.specialty || 'Emergency Medicine'
     const difficulty = body.difficulty || 'Intermediate'
     const userPrompt = body.userPrompt || ('Generate a ' + difficulty + ' level ' + specialty + ' case.')
-    const systemPrompt = body.systemPrompt || 'You are an expert medical educator. Respond with valid JSON only.'
+    const systemPrompt = body.systemPrompt || 'You are an expert medical educator. Return ONLY a JSON object.'
 
+    // Check cache first
+    const cacheKey = specialty + '_' + difficulty + '_' + Math.floor(Date.now() / 3600000)
+    const { data: cached } = await supabase
+      .from('case_cache')
+      .select('case_data')
+      .eq('cache_key', cacheKey)
+      .single()
+
+    if (cached?.case_data) {
+      return NextResponse.json({ success: true, case: cached.case_data, cached: true })
+    }
+
+    // Generate new case
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 2000,
@@ -22,16 +40,19 @@ export async function POST(request: NextRequest) {
     const clean = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim()
     const match = clean.match(/\{[\s\S]*\}/)
 
-    if (!match) {
-      return NextResponse.json({ success: true, case: { management: [clean], keyLearning: [clean] } })
+    let caseData = { management: [clean], keyLearning: [clean] }
+    if (match) {
+      try { caseData = JSON.parse(match[0]) } catch {}
     }
 
-    try {
-      const caseData = JSON.parse(match[0])
-      return NextResponse.json({ success: true, case: caseData })
-    } catch {
-      return NextResponse.json({ success: true, case: { management: [clean], keyLearning: [clean] } })
-    }
+    // Save to cache
+    await supabase.from('case_cache').upsert({
+      cache_key: cacheKey,
+      case_data: caseData,
+      created_at: new Date().toISOString()
+    })
+
+    return NextResponse.json({ success: true, case: caseData })
 
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : 'Unknown error'
