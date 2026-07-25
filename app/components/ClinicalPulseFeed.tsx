@@ -27,7 +27,29 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
 
   const current = FEED[tick % FEED.length]
 
-  const generateSBAR = (c: typeof FEED[0]) => {
+  const generateSBAR = (item: typeof FEED[0]) => {
+    const lines = [
+      'SBAR — ' + item.case,
+      '',
+      'S (Situation):',
+      'Patient: ' + item.case + '. ' + item.detail,
+      '',
+      'B (Background):',
+      'See clinical notes.',
+      '',
+      'A (Assessment):',
+      'Level: ' + item.level + '. Immediate intervention required.',
+      '',
+      'R (Recommendation):',
+      item.detail,
+      '',
+      '— Generated via Cliniverse AI'
+    ]
+    const s = lines.join('\n')
+    setSbarText(s)
+    setSbarCase(item)
+  }
+  const _unused = (c: typeof FEED[0]) => {
     const s = SBAR — ${c.case}\n\nS (Situation):\nPatient presenting with ${c.case.split('—')[1]?.trim()}. ${c.detail}\n\nB (Background):\nSee clinical notes. Relevant history pending.\n\nA (Assessment):\nLevel: ${c.level}. Immediate intervention required.\n\nR (Recommendation):\n${c.detail}\n\n— Generated via Cliniverse AI
     setSbarText(s)
     setSbarCase(c)
