@@ -900,239 +900,163 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
         {/* HUB */}
         {tab==='hub'&&(
-          <div style={{paddingBottom:8}}>
+          <div style={{paddingBottom:100}}>
 
+            {/* ── HEADER CARD ── */}
+            <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.98),rgba(20,5,50,0.96))',borderRadius:24,padding:20,marginBottom:14,border:'1px solid rgba(139,92,246,0.18)',position:'relative',overflow:'hidden'}}>
+              <div style={{position:'absolute',top:-40,right:-40,width:180,height:180,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.2),transparent 70%)',pointerEvents:'none'}}/>
 
-
-            {/* Live Heartbeat Counter */}
-            <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:16,padding:'10px 20px',background:'rgba(255,69,58,0.06)',borderRadius:20,border:'1px solid rgba(255,69,58,0.15)'}}>
-              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite',flexShrink:0}}/>
-              <span style={{fontSize:13,color:'rgba(255,255,255,0.7)',fontWeight:600}} id="liveCount">1,247 doctors training right now</span>
-              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite 0.5s',flexShrink:0}}/>
-            </div>
-            <script dangerouslySetInnerHTML={{__html:`
-              (function(){
-                var base = 1100 + Math.floor(Math.random()*300);
-                var el = document.getElementById('liveCount');
-                if(!el) return;
-                setInterval(function(){
-                  base += Math.floor(Math.random()*5) - 2;
-                  if(base < 900) base = 900;
-                  if(base > 1500) base = 1500;
-                  el.textContent = base.toLocaleString() + ' doctors training right now';
-                }, 2000);
-              })();
-            `}}/>
-            {/* Clinical Pulse */}
-            <div style={{margin:"0 0 16px",background:"linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))",borderRadius:20,border:"1px solid rgba(48,209,88,0.2)",overflow:"hidden",cursor:"pointer"}} onClick={()=>setActiveCase("stemi")}>
-              <div style={{width:"100%",height:130,background:"linear-gradient(135deg,#001a0d,#001233)",position:"relative",display:"flex",alignItems:"flex-end",padding:14}}>
-                <div style={{position:"absolute",top:12,left:14,display:"flex",alignItems:"center",gap:6}}>
-                  <div style={{width:7,height:7,borderRadius:"50%",background:"#30d158",boxShadow:"0 0 8px #30d158"}}/>
-                  <span style={{fontSize:10,color:"#30d158",fontWeight:800,letterSpacing:2}}>MORNING BRIEF</span>
-                </div>
-                <div style={{fontSize:50,position:"absolute",right:16,top:"50%",transform:"translateY(-50%)",opacity:0.12}}>🫀</div>
-                <div>
-                  <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",marginBottom:4}}>CARDIOLOGY · TODAY</div>
-                  <div style={{fontSize:15,fontWeight:800,color:"white",lineHeight:1.2}}>67M with Rapid AF and Haemodynamic Instability</div>
-                </div>
-              </div>
-              <div style={{padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <div style={{fontSize:12,color:"rgba(255,255,255,0.4)"}}>🌍 1,247 doctors deciding now</div>
-                <div style={{background:"rgba(48,209,88,0.15)",border:"1px solid rgba(48,209,88,0.3)",borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:700,color:"#30d158"}}>Join →</div>
-              </div>
-            </div>
-            {/* Featured Case */}
-            <div onClick={()=>setActiveCase('stemi')} style={{background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',borderRadius:22,padding:22,marginBottom:16,color:'white',cursor:'pointer',boxShadow:'0 8px 40px rgba(10,132,255,0.4)',border:'1px solid rgba(255,255,255,0.12)',position:'relative',overflow:'hidden'}}>
-              <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'rgba(255,255,255,0.06)',pointerEvents:'none'}}/>
-              <div style={{position:'absolute',bottom:-20,left:-10,width:80,height:80,borderRadius:'50%',background:'rgba(255,255,255,0.04)',pointerEvents:'none'}}/>
-              <p style={{fontSize:10,opacity:0.7,margin:'0 0 6px',letterSpacing:2,textTransform:'uppercase'}}>TODAY'S FEATURED CASE</p>
-              <h3 style={{fontSize:20,fontWeight:900,margin:'0 0 6px',letterSpacing:-0.5}}>🫀 STEMI Protocol</h3>
-              <p style={{fontSize:13,opacity:0.7,margin:'0 0 16px'}}>Master door-to-balloon · +80 XP</p>
-              <button style={{background:'rgba(255,255,255,0.2)',backdropFilter:'blur(10px)',border:'1px solid rgba(255,255,255,0.3)',color:'white',padding:'10px 22px',borderRadius:12,fontSize:13,fontWeight:700,cursor:'pointer'}}>Start Case →</button>
-            </div>
-
-            {/* ── CASE SECTIONS ── */}
-            <div style={{fontSize:10,color:'rgba(255,255,255,0.25)',letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:10}}>Clinical Cases</div>
-
-            {[
-              {key:'critical',icon:'🏥',title:'Critical Care',sub:'ED · ICU · CCU · Neuro',color:'#ff453a',badge:null,badgeColor:'',cases:criticalCases},
-              {key:'sports',icon:'⚽',title:'Sports Medicine',sub:'FIFA 2026 · 4 cases',color:'#30d158',badge:'NEW',badgeColor:'#30d158',cases:sportsCases},
-              {key:'peds',icon:'🧸',title:'Pediatrics',sub:'2 cases · Vaccinations',color:'#8b5cf6',badge:'NEW',badgeColor:'#8b5cf6',cases:pedsCases},
-            ].map(section=>(
-              <div key={section.key} style={{marginBottom:12}}>
-                {/* Section header */}
-                <div onClick={()=>setOpenAccordion(openAccordion===section.key?null:section.key)}
-                  style={{display:'flex',alignItems:'center',gap:10,marginBottom:8,cursor:'pointer',padding:'10px 14px',background:'rgba(255,255,255,0.03)',borderRadius:16,border:`1px solid ${section.color}18`}}>
-                  <div style={{width:36,height:36,borderRadius:11,background:`${section.color}18`,border:`1px solid ${section.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{section.icon}</div>
-                  <div style={{flex:1}}>
-                    <div style={{fontSize:14,fontWeight:800,color:'white'}}>{section.title}</div>
-                    <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{section.sub}</div>
+              {/* Brand row */}
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  <div style={{width:40,height:40,borderRadius:13,background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>⚕</div>
+                  <div>
+                    <div style={{fontSize:17,fontWeight:900,color:'white',letterSpacing:-0.5}}>Clini<span style={{background:'linear-gradient(135deg,#a78bfa,#38bdf8)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>verse</span> AI</div>
+                    <div style={{fontSize:9,color:'rgba(255,255,255,0.3)',letterSpacing:1.5,textTransform:'uppercase'}}>Clinical Intelligence</div>
                   </div>
-                  {section.badge&&<span style={{fontSize:9,padding:'2px 8px',borderRadius:8,background:`${section.badgeColor}18`,color:section.badgeColor,fontWeight:800,border:`1px solid ${section.badgeColor}30`}}>{section.badge}</span>}
-                  <div style={{fontSize:11,color:`${section.color}80`,fontWeight:700,transform:openAccordion===section.key?'rotate(90deg)':'none',transition:'transform 0.2s'}}>›</div>
                 </div>
+                <div style={{display:'flex',alignItems:'center',gap:5,background:'rgba(48,209,88,0.1)',border:'1px solid rgba(48,209,88,0.25)',borderRadius:20,padding:'4px 10px'}}>
+                  <div style={{width:5,height:5,borderRadius:'50%',background:'#30d158',boxShadow:'0 0 6px #30d158',animation:'pulse 2s infinite'}}/>
+                  <span style={{fontSize:10,color:'#30d158',fontWeight:700}}>LIVE</span>
+                </div>
+              </div>
 
-                {/* Cases — horizontal scroll */}
-                {openAccordion===section.key&&(
-                  <div style={{display:'flex',gap:10,overflowX:'auto',paddingBottom:6,paddingLeft:2,scrollbarWidth:'none'}}>
-                    {section.cases.map((c:any)=>(
-                      <div key={c.id} onClick={()=>{
-                        if(!c.free && !isPro){setShowUpgrade(true);return}
-                        setActiveCase(c.id)
-                      }} style={{flexShrink:0,width:160,background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'14px',border:`1px solid ${c.color}25`,cursor:'pointer',position:'relative',overflow:'hidden',opacity:!c.free&&!isPro?0.7:1,boxShadow:`0 4px 16px ${c.color}10`}}>
-                        <div style={{position:'absolute',top:-10,right:-10,width:50,height:50,borderRadius:'50%',background:`${c.color}12`,filter:'blur(10px)',pointerEvents:'none'}}/>
-                        {/* Icon */}
-                        <div style={{width:44,height:44,borderRadius:13,background:`${c.color}18`,border:`1px solid ${c.color}30`,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:10,boxShadow:`0 4px 12px ${c.color}20`}}>
-                          {c.id==='stemi'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke={c.color} strokeWidth="2"/><path d="M2 12h4l2-4 3 8 2-4 2 2h7" stroke={c.color} strokeWidth="1.5" strokeLinecap="round"/></svg>}
-                          {c.id==='pe'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="10" ry="6" stroke={c.color} strokeWidth="1.8"/><path d="M12 6v12M6 9l6 3 6-3" stroke={c.color} strokeWidth="1.5" strokeLinecap="round"/></svg>}
-                          {c.id==='sepsis'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke={c.color} strokeWidth="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5.64 5.64l2.83 2.83M15.54 15.54l2.83 2.83" stroke={c.color} strokeWidth="1.8" strokeLinecap="round"/></svg>}
-                          {c.id==='anaphylaxis'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke={c.color} strokeWidth="1.8"/><path d="M12 9v4M12 17h.01" stroke={c.color} strokeWidth="2" strokeLinecap="round"/></svg>}
-                          {c.id==='heartblock'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M2 12h3l2-5 3 10 2-5 2 3h8" stroke={c.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                          {c.id==='stroke'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 100 14A7 7 0 0012 2z" stroke={c.color} strokeWidth="1.8"/><path d="M8.21 15.89A7 7 0 0120 19H4a7 7 0 014.21-3.11" stroke={c.color} strokeWidth="1.8" strokeLinecap="round"/></svg>}
-                          {c.id==='nstemi'&&<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke={c.color} strokeWidth="1.8"/></svg>}
-                          {!['stemi','pe','sepsis','anaphylaxis','heartblock','stroke','nstemi'].includes(c.id)&&<span style={{fontSize:22}}>{c.icon}</span>}
-                        </div>
-                        <div style={{fontSize:12,fontWeight:700,color:'white',marginBottom:3,lineHeight:1.3}}>{c.title}</div>
-                        <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginBottom:8}}>{c.sub}</div>
-                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                          {'dept' in c&&<span style={{fontSize:9,padding:'2px 7px',borderRadius:6,background:`${c.color}20`,color:c.color,fontWeight:800,border:`1px solid ${c.color}30`}}>{(c as any).dept}</span>}
-                          {!c.free&&!isPro&&<span style={{fontSize:8,padding:'2px 6px',borderRadius:5,background:'rgba(255,149,0,0.15)',color:'#ff9500',fontWeight:700,border:'1px solid rgba(255,149,0,0.25)'}}>PRO</span>}
-                          {c.free&&<div style={{width:16,height:6,borderRadius:3,background:'linear-gradient(90deg,#30d158,#34d399)',boxShadow:'0 0 6px rgba(48,209,88,0.5)'}}/>}
-                        </div>
+              {/* Activity Rings + Stats */}
+              <div style={{display:'flex',alignItems:'center',gap:16}}>
+                <div style={{position:'relative',width:90,height:90,flexShrink:0}}>
+                  <svg width="90" height="90" viewBox="0 0 90 90" style={{transform:'rotate(-90deg)'}}>
+                    <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(10,132,255,0.12)" strokeWidth="7"/>
+                    <circle cx="45" cy="45" r="38" fill="none" stroke="#0a84ff" strokeWidth="7" strokeLinecap="round" strokeDasharray="120 239" style={{filter:'drop-shadow(0 0 4px #0a84ff)'}}/>
+                    <circle cx="45" cy="45" r="28" fill="none" stroke="rgba(48,209,88,0.12)" strokeWidth="7"/>
+                    <circle cx="45" cy="45" r="28" fill="none" stroke="#30d158" strokeWidth="7" strokeLinecap="round" strokeDasharray="90 176" style={{filter:'drop-shadow(0 0 4px #30d158)'}}/>
+                    <circle cx="45" cy="45" r="18" fill="none" stroke="rgba(255,69,58,0.12)" strokeWidth="7"/>
+                    <circle cx="45" cy="45" r="18" fill="none" stroke="#ff453a" strokeWidth="7" strokeLinecap="round" strokeDasharray="60 113" style={{filter:'drop-shadow(0 0 4px #ff453a)'}}/>
+                  </svg>
+                  <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+                    <div style={{fontSize:16,fontWeight:900,color:'white',lineHeight:1}}>{xp}</div>
+                    <div style={{fontSize:8,color:'rgba(255,255,255,0.35)',letterSpacing:1}}>XP</div>
+                  </div>
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,color:'rgba(255,255,255,0.9)',fontWeight:700,marginBottom:2}}>Good {new Date().getHours()<12?'morning':new Date().getHours()<18?'afternoon':'evening'}, Doctor 👋</div>
+                  <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginBottom:12}}>Ready to train? <span style={{color:'#ffd60a',fontWeight:700}}>{streak}-day streak 🔥</span></div>
+                  <div style={{display:'flex',gap:6}}>
+                    {[{v:xp,l:'XP',c:'#8b5cf6'},{v:casesCompleted,l:'Cases',c:'#30d158'},{v:mcqCorrect,l:'MCQ',c:'#0a84ff'}].map((s,i)=>(
+                      <div key={i} style={{flex:1,background:'rgba(255,255,255,0.05)',borderRadius:10,padding:'6px 4px',textAlign:'center',border:'1px solid rgba(255,255,255,0.06)'}}>
+                        <div style={{fontSize:14,fontWeight:900,color:s.c}}>{s.v}</div>
+                        <div style={{fontSize:8,color:'rgba(255,255,255,0.3)',letterSpacing:0.5}}>{s.l}</div>
                       </div>
                     ))}
                   </div>
-                )}
+                </div>
               </div>
-            ))}
-
-            {/* AI-Powered Cases Banner */}
-            <div onClick={()=>{setTab('tools');setToolTab('aigen')}}
-              style={{background:'linear-gradient(135deg,rgba(139,92,246,0.15),rgba(255,214,10,0.08))',borderRadius:20,padding:'16px 18px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',cursor:'pointer',display:'flex',alignItems:'center',gap:14,boxShadow:'0 4px 24px rgba(139,92,246,0.15)'}}>
-              <div style={{width:50,height:50,borderRadius:16,background:'linear-gradient(135deg,rgba(139,92,246,0.3),rgba(255,214,10,0.2))',border:'1px solid rgba(139,92,246,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0}}>🤖</div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:15,fontWeight:800,color:'white',marginBottom:3}}>AI Case Generator</div>
-                <div style={{fontSize:11,color:'rgba(255,255,255,0.5)'}}>Unlimited cases · Any specialty · Arabic + English</div>
-              </div>
-              <div style={{fontSize:22,color:'rgba(139,92,246,0.5)'}}>›</div>
             </div>
 
-            {/* Specialties Hub */}
-            <div style={{marginBottom:16}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}>
-                <div>
-                  <div style={{fontSize:17,fontWeight:900,color:'white',letterSpacing:-0.5}}>🎓 Specialties Hub</div>
-                  <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:2}}>Pharmacy · Nursing · Lab · Radiology</div>
+            {/* ── TIME-AWARE CARD ── */}
+            {(()=>{
+              const h=new Date().getHours()
+              const isMorn=h>=5&&h<12,isEve=h>=18||h<5
+              const cfg=isMorn?{icon:'🌅',title:'Morning Brief',sub:'MCQ review to start your day',color:'#ffd60a',tool:'aigen'}:isEve?{icon:'🌙',title:'Night Shift Mode',sub:'Complex emergency cases',color:'#0a84ff',tool:'codeblue'}:{icon:'☀️',title:'Afternoon Challenge',sub:'Rapid Fire is live now',color:'#30d158',tool:'rapid'}
+              return(
+                <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:14,marginBottom:14,border:'1px solid rgba(255,255,255,0.07)',display:'flex',alignItems:'center',gap:12}}>
+                  <span style={{fontSize:26,flexShrink:0}}>{cfg.icon}</span>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:800,color:'white',marginBottom:2}}>{cfg.title}</div>
+                    <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{cfg.sub}</div>
+                  </div>
+                  <button onClick={()=>{setTab('tools');setToolTab(cfg.tool)}}
+                    style={{background:cfg.color+'20',border:'1px solid '+cfg.color+'40',borderRadius:12,padding:'7px 14px',fontSize:12,fontWeight:700,color:cfg.color,cursor:'pointer',flexShrink:0,fontFamily:'inherit'}}>
+                    Go →
+                  </button>
                 </div>
-                <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.2),rgba(10,132,255,0.15))',border:'1px solid rgba(139,92,246,0.3)',borderRadius:20,padding:'4px 12px'}}>
-                  <span style={{fontSize:10,color:'#c4b5fd',fontWeight:700}}>4 modules</span>
-                </div>
-              </div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+              )
+            })()}
+
+            {/* ── LIVE HEARTBEAT ── */}
+            <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:14,padding:'9px 20px',background:'rgba(255,69,58,0.06)',borderRadius:18,border:'1px solid rgba(255,69,58,0.12)'}}>
+              <div style={{width:7,height:7,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 10px #ff453a',animation:'pulse 1s ease-in-out infinite',flexShrink:0}}/>
+              <span style={{fontSize:13,color:'rgba(255,255,255,0.7)',fontWeight:600}} id="liveCount">1,247 doctors training right now</span>
+              <div style={{width:7,height:7,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 10px #ff453a',animation:'pulse 1s ease-in-out infinite 0.5s',flexShrink:0}}/>
+            </div>
+
+            {/* ── QUICK ACCESS ── */}
+            <div style={{marginBottom:14}}>
+              <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,letterSpacing:1.5,marginBottom:8,textTransform:'uppercase'}}>Quick Access</div>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
                 {[
-                  {id:'pharmacy', label:'Pharmacy', sub:'Drug interactions · Dosing', color:'#30d158',
-                    svg:<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#30d158" strokeWidth="1.8"/><path d="M8 12h8M12 8v8" stroke="#30d158" strokeWidth="2" strokeLinecap="round"/></svg>},
-                  {id:'nursing', label:'Nursing', sub:'Vitals · Skills · NEWS2', color:'#64d2ff',
-                    svg:<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2a5 5 0 100 10A5 5 0 0012 2z" stroke="#64d2ff" strokeWidth="1.8"/><path d="M3 21c0-4.418 4.03-8 9-8s9 3.582 9 8" stroke="#64d2ff" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 8v4M10 10h4" stroke="#64d2ff" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                  {id:'lab', label:'Laboratory', sub:'5 panels · Critical values', color:'#bf5af2',
-                    svg:<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 3v11l-5 5h16l-5-5V3" stroke="#bf5af2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 3h12" stroke="#bf5af2" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="17" r="1.5" fill="#bf5af2"/></svg>},
-                  {id:'radiology', label:'Radiology', sub:'CXR · CT patterns', color:'#ffd60a',
-                    svg:<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="#ffd60a" strokeWidth="1.8"/><path d="M12 7v10M7 12h10" stroke="#ffd60a" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="12" r="3" stroke="#ffd60a" strokeWidth="1.5"/></svg>},
-                ].map(s=>(
-                  <div key={s.id} onClick={()=>{setTab('tools');setToolTab(s.id)}}
-                    style={{background:`${s.color}10`,borderRadius:20,padding:'16px 14px',border:`1px solid ${s.color}25`,cursor:'pointer',position:'relative',overflow:'hidden'}}>
-                    <div style={{position:'absolute',top:-15,right:-15,width:60,height:60,borderRadius:'50%',background:`${s.color}12`,filter:'blur(12px)',pointerEvents:'none'}}/>
-                    <div style={{marginBottom:10,filter:`drop-shadow(0 0 8px ${s.color}60)`}}>{s.svg}</div>
-                    <div style={{fontSize:14,fontWeight:800,color:'white',marginBottom:4}}>{s.label}</div>
-                    <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',lineHeight:1.5,marginBottom:10}}>{s.sub}</div>
-                    <div style={{display:'flex',alignItems:'center',gap:6}}>
-                      <div style={{height:2,flex:1,borderRadius:1,background:`${s.color}30`}}/>
-                      <div style={{fontSize:10,color:s.color,fontWeight:700}}>Open →</div>
-                    </div>
+                  {icon:'📋',label:'SBAR',color:'#0a84ff',action:()=>setTab('workshop')},
+                  {icon:'⚡',label:'Rapid',color:'#ff453a',action:()=>{setTab('tools');setToolTab('rapid')}},
+                  {icon:'📈',label:'ECG',color:'#30d158',action:()=>{setTab('tools');setToolTab('ecg')}},
+                  {icon:'🧮',label:'Calc',color:'#ff9f0a',action:()=>{setTab('tools');setToolTab('calc')}},
+                ].map((q,i)=>(
+                  <div key={i} onClick={q.action}
+                    style={{background:q.color+'12',border:'1px solid '+q.color+'20',borderRadius:14,padding:'11px 6px',textAlign:'center',cursor:'pointer'}}>
+                    <div style={{fontSize:22,marginBottom:3}}>{q.icon}</div>
+                    <div style={{fontSize:10,fontWeight:700,color:'white'}}>{q.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* ── EXPLORE SECTIONS ── */}
-            <div style={{fontSize:10,color:'rgba(255,255,255,0.25)',letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>Explore</div>
+            {/* ── CLINICAL PULSE FEED ── */}
+            <div style={{marginBottom:14}}>
+              <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,letterSpacing:1.5,marginBottom:8,textTransform:'uppercase'}}>🌍 Global Clinical Feed</div>
+              <ClinicalPulseFeed onCase={(id)=>setActiveCase(id)}/>
+            </div>
 
-            {/* Row 1: Specialties + Gaming */}
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
-
-              {/* Specialties Hub */}
-              <div style={{background:'rgba(48,209,88,0.08)',borderRadius:20,padding:'14px',border:'1px solid rgba(48,209,88,0.18)',cursor:'pointer',position:'relative',overflow:'hidden'}}
-                onClick={()=>{setTab('tools');setToolTab('pharmacy')}}>
-                <div style={{position:'absolute',top:-10,right:-10,width:50,height:50,borderRadius:'50%',background:'rgba(48,209,88,0.1)',filter:'blur(10px)',pointerEvents:'none'}}/>
-                <div style={{fontSize:11,color:'#30d158',fontWeight:800,marginBottom:8}}>🎓 Specialties</div>
-                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:4}}>
-                  {[{icon:'💊',l:'Pharma',id:'pharmacy',c:'#30d158'},{icon:'🩺',l:'Nursing',id:'nursing',c:'#64d2ff'},{icon:'🔬',l:'Lab',id:'lab',c:'#bf5af2'},{icon:'🩻',l:'X-Ray',id:'radiology',c:'#ffd60a'}].map(s=>(
-                    <div key={s.id} onClick={e=>{e.stopPropagation();setTab('tools');setToolTab(s.id)}}
-                      style={{background:`${s.c}10`,borderRadius:10,padding:'6px',border:`1px solid ${s.c}20`,textAlign:'center',cursor:'pointer'}}>
-                      <div style={{fontSize:16,marginBottom:2}}>{s.icon}</div>
-                      <div style={{fontSize:8,color:s.c,fontWeight:700}}>{s.l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Gaming Modes */}
-              <div style={{background:'rgba(255,69,58,0.08)',borderRadius:20,padding:'14px',border:'1px solid rgba(255,69,58,0.18)',position:'relative',overflow:'hidden'}}>
-                <div style={{position:'absolute',top:-10,right:-10,width:50,height:50,borderRadius:'50%',background:'rgba(255,69,58,0.1)',filter:'blur(10px)',pointerEvents:'none'}}/>
-                <div style={{fontSize:11,color:'#ff453a',fontWeight:800,marginBottom:8}}>⚔️ Gaming</div>
-                <div style={{display:'flex',flexDirection:'column',gap:4}}>
-                  {[{id:'duels',l:'Clinical Duels',c:'#ff453a'},{id:'detective',l:'Detective',c:'#bf5af2'},{id:'nightshift',l:'Night Shift',c:'#8b5cf6'},{id:'autopsy',l:'Error Autopsy',c:'#ff6b35'}].map(g=>(
-                    <div key={g.id} onClick={()=>{setTab('tools');setToolTab(g.id)}}
-                      style={{background:`${g.c}10`,borderRadius:8,padding:'5px 8px',border:`1px solid ${g.c}20`,cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
-                      <div style={{width:6,height:6,borderRadius:'50%',background:g.c,boxShadow:`0 0 6px ${g.c}`,flexShrink:0}}/>
-                      <div style={{fontSize:10,color:'rgba(255,255,255,0.7)',fontWeight:600}}>{g.l}</div>
-                    </div>
-                  ))}
-                </div>
+            {/* ── FEATURED CASE ── */}
+            <div style={{marginBottom:14}}>
+              <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,letterSpacing:1.5,marginBottom:8,textTransform:'uppercase'}}>⭐ Featured Case</div>
+              <div onClick={()=>setActiveCase('stemi')} style={{background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',borderRadius:20,padding:20,color:'white',cursor:'pointer',boxShadow:'0 8px 32px rgba(10,132,255,0.35)',border:'1px solid rgba(255,255,255,0.1)',position:'relative',overflow:'hidden'}}>
+                <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'rgba(255,255,255,0.05)',pointerEvents:'none'}}/>
+                <div style={{fontSize:10,opacity:0.7,marginBottom:5,letterSpacing:2,textTransform:'uppercase'}}>TODAY\'S CASE</div>
+                <div style={{fontSize:19,fontWeight:900,marginBottom:5,letterSpacing:-0.5}}>🫀 STEMI Protocol</div>
+                <div style={{fontSize:13,opacity:0.75,marginBottom:14,lineHeight:1.5}}>Master door-to-balloon · +80 XP</div>
+                <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(255,255,255,0.18)',borderRadius:20,padding:'7px 16px',fontSize:13,fontWeight:700}}>Start Case →</div>
               </div>
             </div>
 
-            {/* Row 2: Workshop + Social */}
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
-
-              {/* Workshop */}
-              <div onClick={()=>setTab('workshop')}
-                style={{background:'rgba(10,132,255,0.08)',borderRadius:20,padding:'14px',border:'1px solid rgba(10,132,255,0.18)',cursor:'pointer',position:'relative',overflow:'hidden'}}>
-                <div style={{position:'absolute',top:-10,right:-10,width:50,height:50,borderRadius:'50%',background:'rgba(10,132,255,0.1)',filter:'blur(10px)',pointerEvents:'none'}}/>
-                <div style={{fontSize:11,color:'#0a84ff',fontWeight:800,marginBottom:8}}>🔧 Workshop</div>
-                <div style={{display:'flex',flexDirection:'column',gap:4}}>
-                  {['SBAR Generator','Discharge Writer','Portfolio AI','Conversations'].map((l,i)=>(
-                    <div key={i} style={{background:'rgba(10,132,255,0.08)',borderRadius:8,padding:'5px 8px',border:'1px solid rgba(10,132,255,0.15)',display:'flex',alignItems:'center',gap:6}}>
-                      <div style={{width:6,height:6,borderRadius:'50%',background:'#0a84ff',boxShadow:'0 0 6px #0a84ff',flexShrink:0}}/>
-                      <div style={{fontSize:10,color:'rgba(255,255,255,0.7)',fontWeight:600}}>{l}</div>
+            {/* ── CLINICAL CASES ── */}
+            <div>
+              <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,letterSpacing:1.5,marginBottom:10,textTransform:'uppercase'}}>Clinical Cases</div>
+              {[
+                {key:'critical',icon:'🏥',title:'Critical Care',sub:'ED · ICU · CCU · Neuro',color:'#ff453a',badge:null,badgeColor:'',cases:criticalCases},
+                {key:'sports',icon:'⚽',title:'Sports Medicine',sub:'FIFA 2026 · 4 cases',color:'#30d158',badge:'NEW',badgeColor:'#30d158',cases:sportsCases},
+                {key:'peds',icon:'🧸',title:'Pediatrics',sub:'2 cases · Vaccinations',color:'#8b5cf6',badge:'NEW',badgeColor:'#8b5cf6',cases:pedsCases},
+              ].map(section=>(
+                <div key={section.key} style={{marginBottom:10}}>
+                  <div onClick={()=>setOpenAccordion(openAccordion===section.key?null:section.key)}
+                    style={{display:'flex',alignItems:'center',gap:10,marginBottom:8,cursor:'pointer',padding:'10px 14px',background:'rgba(255,255,255,0.03)',borderRadius:16,border:'1px solid '+section.color+'15'}}>
+                    <div style={{width:36,height:36,borderRadius:11,background:section.color+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{section.icon}</div>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:14,fontWeight:800,color:'white'}}>{section.title}</div>
+                      <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{section.sub}</div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Social */}
-              <div style={{background:'rgba(48,209,88,0.06)',borderRadius:20,padding:'14px',border:'1px solid rgba(48,209,88,0.15)',position:'relative',overflow:'hidden'}}>
-                <div style={{fontSize:11,color:'#30d158',fontWeight:800,marginBottom:8}}>🌍 Social</div>
-                <div style={{display:'flex',flexDirection:'column',gap:4}}>
-                  {[{l:'Grand Rounds',c:'#ff453a',tab:'grand_rounds'},{l:'Patient Journey',c:'#30d158',tab:'patient_journey'},{l:'Crossover',c:'#ffd60a',tab:'crossover'}].map(s=>(
-                    <div key={s.l} onClick={()=>setTab('social')}
-                      style={{background:`${s.c}08`,borderRadius:8,padding:'5px 8px',border:`1px solid ${s.c}15`,cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
-                      <div style={{width:6,height:6,borderRadius:'50%',background:s.c,boxShadow:`0 0 6px ${s.c}`,flexShrink:0}}/>
-                      <div style={{fontSize:10,color:'rgba(255,255,255,0.7)',fontWeight:600}}>{s.l}</div>
-                    </div>
-                  ))}
-                  <div onClick={()=>{setTab('tools');setToolTab('aigen')}}
-                    style={{background:'rgba(255,214,10,0.08)',borderRadius:8,padding:'5px 8px',border:'1px solid rgba(255,214,10,0.15)',cursor:'pointer',display:'flex',alignItems:'center',gap:6}}>
-                    <div style={{width:6,height:6,borderRadius:'50%',background:'#ffd60a',boxShadow:'0 0 6px #ffd60a',flexShrink:0}}/>
-                    <div style={{fontSize:10,color:'rgba(255,255,255,0.7)',fontWeight:600}}>AI Generator</div>
+                    {section.badge&&<span style={{fontSize:9,padding:'2px 8px',borderRadius:8,background:section.badgeColor+'18',color:section.badgeColor,fontWeight:800}}>{section.badge}</span>}
+                    <span style={{color:'rgba(255,255,255,0.3)',fontSize:16,transition:'transform 0.2s',transform:openAccordion===section.key?'rotate(90deg)':'none'}}>›</span>
                   </div>
+                  {openAccordion===section.key&&(
+                    <div style={{display:'flex',gap:10,overflowX:'auto',paddingBottom:6,scrollbarWidth:'none'}}>
+                      {section.cases.map((cas:any)=>(
+                        <div key={cas.id} onClick={()=>{if(!cas.free&&!isPro){setShowUpgrade(true);return}setActiveCase(cas.id)}}
+                          style={{flexShrink:0,width:155,background:'rgba(255,255,255,0.04)',borderRadius:18,padding:14,border:'1px solid '+cas.color+'20',cursor:'pointer',opacity:!cas.free&&!isPro?0.7:1}}>
+                          <div style={{fontSize:26,marginBottom:8}}>{cas.icon}</div>
+                          <div style={{fontSize:13,fontWeight:700,color:'white',marginBottom:3,lineHeight:1.3}}>{cas.title}</div>
+                          <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginBottom:8}}>{cas.dept}</div>
+                          <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
+                            <span style={{fontSize:10,padding:'2px 7px',borderRadius:8,background:cas.color+'15',color:cas.color,fontWeight:700}}>+{cas.xpReward} XP</span>
+                            {!cas.free&&!isPro&&<span style={{fontSize:8,padding:'2px 6px',borderRadius:5,background:'rgba(255,149,0,0.15)',color:'#ff9500',fontWeight:700}}>PRO</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
+              ))}
             </div>
 
           </div>
         )}
-
         {/* WORKSHOP */}
         {tab==='workshop'&&(
           <div><ClinicalWorkshop onXP={addXP}/></div>
