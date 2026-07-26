@@ -152,7 +152,7 @@ const darkTheme = {
 }
 
 export default function Home() {
-  const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
+  const [screen, setScreen] = useState<'app'>('app')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
