@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
+import ProfilePage from './components/ProfilePage'
 import ToolsPage from './components/ToolsPage'
 
 const EcgChallenge = dynamic(() => import('./components/EcgChallenge'), { ssr: false })
@@ -877,212 +878,15 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         )}
 
         {tab==='profile'&&(
-          <div>
-            <div style={{...glassCard,padding:18,display:'flex',alignItems:'center',gap:14}}>
-              <div style={{width:62,height:62,borderRadius:'50%',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,flexShrink:0,boxShadow:'0 4px 20px rgba(139,92,246,0.6)'}}>👨‍⚕️</div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:18,fontWeight:700,color:T.text,marginBottom:3}}>Physician Member</div>
-                <div style={{fontSize:12,color:T.textSub,marginBottom:8}}>Standard Access Tier</div>
-                <span style={{fontSize:10,fontWeight:700,padding:'3px 12px',borderRadius:12,background:'rgba(10,132,255,0.12)',color:'#0a84ff',border:'1px solid rgba(10,132,255,0.2)'}}>FREE TIER</span>
-              </div>
-              {/* Admin button - hidden, only for admin */}
-              <div onClick={()=>setShowAdmin(true)} style={{width:32,height:32,borderRadius:'50%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:12,opacity:0.3}}>⚙️</div>
-            </div>
-
-            {/* XP RANK CARD */}
-            <div style={{background:dark?'linear-gradient(145deg,rgba(15,23,42,0.97),rgba(10,15,30,0.99))':'linear-gradient(145deg,#1a1a2e,#16213e)',backdropFilter:'blur(40px)',borderRadius:22,padding:20,marginBottom:12,border:'1px solid rgba(139,92,246,0.15)',boxShadow:dark?'0 8px 40px rgba(139,92,246,0.2)':'0 8px 40px rgba(0,0,0,0.3)',position:'relative',overflow:'hidden'}}>
-              <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 80% 60% at 70% 20%,rgba(139,92,246,0.1),transparent)',pointerEvents:'none'}}/>
-              <div style={{display:'flex',gap:16,alignItems:'flex-start',marginBottom:16}}>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:4}}>Clinical Intelligence Score</div>
-                  <div style={{fontSize:52,fontWeight:900,color:'white',letterSpacing:-3,lineHeight:1}}>{xp}</div>
-                  <div style={{fontSize:12,color:'rgba(48,209,88,0.9)',marginTop:6,fontWeight:600}}>{xp>0?`+${xp} XP earned`:'Complete a case to start'}</div>
-                </div>
-                <div style={{position:'relative',width:100,height:100,flexShrink:0}}>
-                  <svg viewBox="0 0 100 100" width={100} height={100} style={{transform:'rotate(-90deg)'}}>
-                    <circle cx={50} cy={50} r={40} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={10}/>
-                    <circle cx={50} cy={50} r={40} fill="none" stroke={rank.color} strokeWidth={10} strokeLinecap="round" strokeDasharray="251" strokeDashoffset={251-(251*rankPct/100)} style={{transition:'stroke-dashoffset 1.5s cubic-bezier(.2,.9,.3,1)',filter:`drop-shadow(0 0 12px ${rank.color})`,animation:'ringGlow 3s ease-in-out infinite'}}/>
-                  </svg>
-                  <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
-                    <div style={{fontSize:24,animation:'iconPulse 2s ease-in-out infinite'}}>{rank.icon}</div>
-                    <div style={{fontSize:11,fontWeight:800,color:'white',marginTop:2}}>{rankPct}%</div>
-                  </div>
-                </div>
-              </div>
-              <div style={{fontSize:17,fontWeight:800,color:'white',textAlign:'center',marginBottom:4}}>{rank.name}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.4)',textAlign:'center',marginBottom:14}}>{nextRank?`${nextRank.xpNeeded-xp} XP to ${nextRank.name}`:'Maximum rank! 🌟'}</div>
-              <div style={{height:4,background:'rgba(255,255,255,0.07)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
-                <div style={{height:'100%',background:`linear-gradient(90deg,${rank.color},#0a84ff)`,width:`${rankPct}%`,transition:'width 1.5s ease',borderRadius:2,boxShadow:`0 0 10px ${rank.color}99`}}/>
-              </div>
-              <div style={{display:'flex',gap:10}}>
-                <div style={{background:'rgba(255,150,0,0.1)',border:'1px solid rgba(255,150,0,0.2)',borderRadius:14,padding:'12px 16px',flexShrink:0}}>
-                  <div style={{fontSize:26,fontWeight:900,color:'#ff9f0a',lineHeight:1}}>{streak}</div>
-                  <div style={{fontSize:10,color:'rgba(255,150,0,0.8)',fontWeight:700,lineHeight:1.3,marginTop:2}}>day<br/>streak 🔥</div>
-                </div>
-                <div style={{flex:1,background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:14,padding:'12px 14px'}}>
-                  <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',textTransform:'uppercase',letterSpacing:0.5,marginBottom:3}}>Next rank</div>
-                  <div style={{fontSize:15,fontWeight:800,color:'white',marginBottom:6}}>{nextRank?nextRank.name:'MAX RANK 🌟'}</div>
-                  <div style={{height:3,background:'rgba(255,255,255,0.07)',borderRadius:2,overflow:'hidden'}}>
-                    <div style={{height:'100%',background:'linear-gradient(90deg,#0a84ff,#30d158)',width:`${rankPct}%`,transition:'width 1.5s ease',borderRadius:2}}/>
-                  </div>
-                  <div style={{fontSize:10,color:'rgba(255,255,255,0.25)',marginTop:4}}>{nextRank?`${nextRank.xpNeeded-xp} XP needed`:''}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* STATS */}
-            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:12}}>
-              {[{num:casesCompleted,lbl:'CASES DONE',color:'#0a84ff'},{num:mcqTotal>0?Math.round((mcqCorrect/mcqTotal)*100)+'%':'—',lbl:'ACCURACY',color:'#30d158'},{num:xp,lbl:'TOTAL XP',color:'#8b5cf6'}].map(s=>(
-                <div key={s.lbl} style={{...glassCard,padding:'16px 10px',textAlign:'center',marginBottom:0}}>
-                  <div style={{fontSize:24,fontWeight:900,color:s.color,marginBottom:4}}>{s.num}</div>
-                  <div style={{fontSize:9,color:T.textMuted,fontWeight:700,letterSpacing:0.5}}>{s.lbl}</div>
-                </div>
-              ))}
-            </div>
-
-                        {/* ACHIEVEMENTS — Apple Health 2026 */}
-            <div style={{...glassCard,padding:16}}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
-                <div>
-                  <div style={{fontSize:15,fontWeight:800,color:T.text}}>Achievements</div>
-                  <div style={{fontSize:11,color:T.textMuted,marginTop:1}}>Unlock by completing cases</div>
-                </div>
-                <div style={{background:'rgba(255,214,10,0.15)',border:'1px solid rgba(255,214,10,0.3)',borderRadius:20,padding:'4px 12px',fontSize:11,fontWeight:800,color:'#ffd60a'}}>{casesCompleted>0?2:0}/{BADGES.length}</div>
-              </div>
-              <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
-                {BADGES.map(b=>{
-                  const earned=(b.id==='first_case'&&casesCompleted>0)||(b.id==='stemi'&&casesCompleted>0)
-                  return(
-                    <div key={b.id} style={{
-                      display:'flex',flexDirection:'column',alignItems:'center',gap:4,
-                      padding:'14px 4px 10px',borderRadius:18,
-                      background:earned
-                        ? dark ? `linear-gradient(145deg,${b.color}18,${b.color}06)` : `linear-gradient(145deg,${b.color}12,${b.color}04)`
-                        : dark?'rgba(255,255,255,0.03)':'rgba(0,0,0,0.03)',
-                      border:earned ? `1px solid ${b.color}35` : dark?'1px solid rgba(255,255,255,0.05)':'1px solid rgba(0,0,0,0.05)',
-                      opacity:earned?1:0.3,
-                      boxShadow:earned&&dark?`0 4px 20px ${b.color}15`:'none',
-                      position:'relative',overflow:'hidden',transition:'all 0.3s',
-                    }}>
-                      {earned&&<div style={{position:'absolute',top:6,left:'50%',transform:'translateX(-50%)',width:28,height:28,borderRadius:'50%',background:b.color,filter:'blur(14px)',opacity:0.2,pointerEvents:'none'}}/>}
-                      <div style={{
-                        width:40,height:40,borderRadius:13,
-                        background:earned?`linear-gradient(135deg,${b.color}28,${b.color}10)`:'rgba(255,255,255,0.04)',
-                        border:earned?`1px solid ${b.color}30`:'1px solid rgba(255,255,255,0.06)',
-                        display:'flex',alignItems:'center',justifyContent:'center',
-                        fontSize:21,position:'relative',zIndex:1,
-                        boxShadow:earned&&dark?`0 0 14px ${b.color}25`:'none',
-                        animation:earned?'iconPulse 3s ease-in-out infinite':'none',
-                      }}>{b.icon}</div>
-                      <div style={{fontSize:8,fontWeight:800,color:earned?b.color:T.textMuted,textAlign:'center',lineHeight:1.3,position:'relative',zIndex:1,letterSpacing:0.2}}>{b.name}</div>
-                      {earned&&<div style={{width:14,height:2,borderRadius:1,background:b.color,boxShadow:`0 0 5px ${b.color}`,opacity:0.9}}/>}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* FACE SWAP */}
-            <div style={{...glassCard,padding:16,marginTop:2}}>
-              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
-                <div style={{background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',borderRadius:8,padding:'4px 10px',fontSize:11,fontWeight:700,color:'white'}}>AI</div>
-                <div>
-                  <div style={{fontSize:15,fontWeight:700,color:T.text}}>Face-Swap Video</div>
-                  <div style={{fontSize:12,color:T.textSub}}>Become the lead physician</div>
-                </div>
-              </div>
-              <div style={{background:'rgba(255,255,255,0.03)',borderRadius:14,padding:20,textAlign:'center',border:'1.5px dashed rgba(255,255,255,0.1)',marginBottom:10,cursor:'pointer'}}>
-                <div style={{fontSize:34,marginBottom:6}}>🤳</div>
-                <div style={{fontSize:13,color:T.textSub}}>Tap to upload photo</div>
-                <div style={{fontSize:11,color:T.textMuted,marginTop:2}}>JPG · PNG · Front-facing</div>
-              </div>
-              <button style={{width:'100%',padding:'14px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 24px rgba(139,92,246,0.5)'}}>🎬 Generate My Video — PRO</button>
-            </div>
-
-            {/* ── SUBSCRIPTION CARD — Apple 2026 ── */}
-            <div style={{borderRadius:28,overflow:'hidden',marginTop:4,marginBottom:10,boxShadow:'0 16px 60px rgba(139,92,246,0.35)'}}>
-
-              {/* Top gradient hero */}
-              <div style={{background:'linear-gradient(145deg,#2d0a6e 0%,#0d0030 60%,#001030 100%)',padding:'28px 20px 24px',position:'relative',overflow:'hidden'}}>
-                <div style={{position:'absolute',top:-40,right:-40,width:180,height:180,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
-                <div style={{position:'absolute',bottom:-30,left:-20,width:140,height:140,borderRadius:'50%',background:'radial-gradient(circle,rgba(10,132,255,0.2),transparent 70%)',pointerEvents:'none'}}/>
-
-                {/* Badge */}
-                <div style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(255,214,10,0.15)',border:'1px solid rgba(255,214,10,0.3)',borderRadius:20,padding:'4px 12px',marginBottom:14}}>
-                  <span style={{fontSize:12}}>⭐</span>
-                  <span style={{fontSize:11,fontWeight:800,color:'#ffd60a',letterSpacing:1}}>CLINIVERSE PRO</span>
-                </div>
-
-                <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',marginBottom:6}}>Unlock the full virtual hospital</div>
-
-                {/* Price display */}
-                <div style={{display:'flex',alignItems:'flex-end',gap:4,marginBottom:20}}>
-                  <span style={{fontSize:48,fontWeight:900,color:'white',letterSpacing:-2,lineHeight:1}}>$9</span>
-                  <span style={{fontSize:24,fontWeight:900,color:'white',lineHeight:1,marginBottom:4}}>.99</span>
-                  <span style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:6,marginLeft:2}}>/month</span>
-                </div>
-
-                {/* Apple Pay button */}
-                <button
-                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
-                  style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:17,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10,letterSpacing:-0.3}}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                  </svg>
-                  Pay with Apple Pay
-                </button>
-
-                {/* Credit card button */}
-                <button
-                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
-                  style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.15)',background:'rgba(255,255,255,0.07)',color:'white',fontSize:15,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
-                  💳 Credit / Debit Card
-                </button>
-              </div>
-
-              {/* Features list */}
-              <div style={{background:'rgba(255,255,255,0.03)',borderTop:'1px solid rgba(255,255,255,0.07)',padding:'16px 20px'}}>
-                {[
-                  ['🏥','30+ Emergency Cases','ED · CCU · ICU · Neuro · Peds'],
-                  ['🤖','AI Clinical Consultant','Powered by Claude AI'],
-                  ['🧬','500+ MCQ Bank','With detailed explanations'],
-                  ['📜','PDF Certificates','Per completed case'],
-                  ['🎥','Face-Swap Videos','Become the lead physician'],
-                  ['📊','Global Leaderboard','Compete worldwide'],
-                ].map(([icon,title,sub])=>(
-                  <div key={title as string} style={{display:'flex',alignItems:'center',gap:12,paddingBottom:12,marginBottom:12,borderBottom:'1px solid rgba(255,255,255,0.05)'}}>
-                    <div style={{width:36,height:36,borderRadius:10,background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{icon}</div>
-                    <div style={{flex:1}}>
-                      <div style={{fontSize:14,fontWeight:700,color:'white'}}>{title}</div>
-                      <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:1}}>{sub}</div>
-                    </div>
-                    <div style={{color:'#30d158',fontSize:16}}>✓</div>
-                  </div>
-                ))}
-
-                {/* Yearly option */}
-                <div style={{background:'linear-gradient(135deg,rgba(48,209,88,0.1),rgba(10,132,255,0.08))',borderRadius:16,padding:'14px 16px',border:'1px solid rgba(48,209,88,0.2)',display:'flex',alignItems:'center',justifyContent:'space-between',cursor:'pointer',marginBottom:12}}
-                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-yearly?embed=1&dark=1')}>
-                  <div>
-                    <div style={{fontSize:13,fontWeight:800,color:'white'}}>Switch to Yearly</div>
-                    <div style={{fontSize:11,color:'rgba(48,209,88,0.9)',marginTop:2}}>Save 34% — only $6.58/mo</div>
-                  </div>
-                  <div style={{textAlign:'right'}}>
-                    <div style={{fontSize:22,fontWeight:900,color:'#ffd60a'}}>$79</div>
-                    <div style={{fontSize:10,color:'rgba(255,255,255,0.4)'}}>/year</div>
-                  </div>
-                </div>
-
-                <div style={{textAlign:'center',fontSize:11,color:'rgba(255,255,255,0.25)',lineHeight:1.7}}>
-                  Secure payment · Cancel anytime<br/>
-                  <span style={{color:'rgba(255,255,255,0.15)'}}>Powered by Lemon Squeezy 🍋</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ProfilePage
+            xp={xp} streak={streak} casesCompleted={casesCompleted}
+            mcqCorrect={mcqCorrect} isPro={isPro}
+            name={userName}
+            onUpgrade={()=>setShowUpgrade(true)}
+            onReset={()=>{localStorage.removeItem('onboarding_completed');setShowOnboarding(true)}}
+          />
         )}
 
-        {/* BOARD */}
         {tab==='board'&&(
           <div><BoardExam onXP={addXP}/></div>
         )}
