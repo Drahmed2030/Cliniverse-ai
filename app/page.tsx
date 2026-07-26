@@ -925,7 +925,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                     whiteSpace:'nowrap', minWidth:0,
                   }}>
                     <div style={{color:active?t.color:'rgba(255,255,255,0.3)',display:'flex',justifyContent:'center',marginBottom:4,transition:'color 0.2s'}}>{t.svg}</div>
-                    <div style={{fontSize:9,fontWeight:active?800:500,color:active?t.color:'rgba(255,255,255,0.3)',letterSpacing:active?0.3:0,transition:'all 0.2s'}}>{t.label}</div>
+                    <div style={{fontSize:11,fontWeight:active?800:600,color:active?t.color:'rgba(255,255,255,0.55)',letterSpacing:active?0.3:0,transition:'all 0.2s'}}>{t.label}</div>
                     {active&&<div style={{width:16,height:2,borderRadius:1,background:t.color,margin:'4px auto 0',boxShadow:`0 0 6px ${t.color}`}}/>}
                   </button>
                 )

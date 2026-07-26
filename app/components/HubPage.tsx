@@ -6,19 +6,18 @@ const ActivityRings = dynamic(() => import('./ActivityRings'), { ssr: false })
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#080812',
-  card: 'rgba(255,255,255,0.03)',
-  cardBorder: 'rgba(255,255,255,0.07)',
+  bg: '#0a0f1e',
+  card: 'rgba(255,255,255,0.04)',
+  cardBorder: 'rgba(255,255,255,0.08)',
   text: '#ffffff',
-  sub: 'rgba(255,255,255,0.42)',
-  muted: 'rgba(255,255,255,0.18)',
-  // Accent palette — teal/amber/rose instead of default purple/blue
-  teal: '#00d4aa',
-  amber: '#f5a623',
-  rose: '#ff4d6d',
-  indigo: '#7c6cff',
-  green: '#30d158',
-  F: '-apple-system, "SF Pro Display", "Inter", sans-serif',
+  sub: 'rgba(255,255,255,0.45)',
+  muted: 'rgba(255,255,255,0.20)',
+  teal: '#06b6d4',
+  amber: '#f59e0b',
+  rose: '#ef4444',
+  indigo: '#3b82f6',
+  green: '#10b981',
+  F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
 }
 
 interface Props {

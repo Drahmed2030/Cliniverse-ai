@@ -1,5 +1,5 @@
 /* Cliniverse AI — Theme System */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 /* ── DARK COSMIC (default) ── */
 :root {
@@ -18,7 +18,24 @@
   --accent-gold: #ffd60a;
   --nav-bg: rgba(10,0,21,0.95);
   --nav-border: rgba(139,92,246,0.2);
-  --font: 'Inter', -apple-system, system-ui, sans-serif;
+  --font: "Inter", -apple-system, "SF Pro Display", "SF Pro Text", sans-serif;
+  --bg: #0a0f1e;
+  --card: rgba(255,255,255,0.04);
+  --text: #ffffff;
+  --sub: rgba(255,255,255,0.45);
+  --muted: rgba(255,255,255,0.20);
+  --teal: #06b6d4;
+  --amber: #f59e0b;
+  --rose: #ef4444;
+  --indigo: #3b82f6;
+  --green: #10b981;
+  --emergency: #ef4444;
+  --cardiac: #3b82f6;
+  --respiratory: #06b6d4;
+  --neuro: #8b5cf6;
+  --pharmacy: #10b981;
+  --radiology: #f59e0b;
+  --pediatrics: #ec4899;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 22px;
