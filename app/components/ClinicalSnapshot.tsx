@@ -34,9 +34,9 @@ export default function ClinicalSnapshot({ onCaseClick }: { onCaseClick?: () => 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#ff6b6b', boxShadow: '0 0 8px #ff6b6b' }}/>
-          <span style={{ fontSize: 11, fontWeight: 800, color: '#e8f4f8', letterSpacing: 1.5, textTransform: 'uppercase' as const, fontFamily: F }}>Live Clinical Feed</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: '#f0f0f0', letterSpacing: 1.5, textTransform: 'uppercase' as const, fontFamily: F }}>Live Clinical Feed</span>
         </div>
-        <span style={{ fontSize: 10, color: 'rgba(126,184,212,0.5)', fontFamily: F }}>{CASES.length} active</span>
+        <span style={{ fontSize: 10, color: 'rgba(138,138,154,0.5)', fontFamily: F }}>{CASES.length} active</span>
       </div>
       <div
         style={{ overflow: 'hidden', position: 'relative' }}
@@ -60,13 +60,13 @@ export default function ClinicalSnapshot({ onCaseClick }: { onCaseClick?: () => 
               <div style={{ position: 'absolute', top: -20, right: -20, width: 60, height: 60, borderRadius: '50%', background: c.color + '15', filter: 'blur(12px)', pointerEvents: 'none' as const }}/>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                 <div style={{ fontSize: 8, fontWeight: 800, color: c.level === 'CRITICAL' ? '#ff6b6b' : '#ffd43b', background: c.level === 'CRITICAL' ? 'rgba(255,107,107,0.12)' : 'rgba(255,212,59,0.12)', padding: '2px 7px', borderRadius: 6, fontFamily: F }}>{c.level}</div>
-                <span style={{ fontSize: 10, color: 'rgba(126,184,212,0.45)', fontFamily: F }}>{c.city}</span>
+                <span style={{ fontSize: 10, color: 'rgba(138,138,154,0.45)', fontFamily: F }}>{c.city}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                 <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: c.color + '15', border: '1px solid ' + c.color + '25', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{c.icon}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#e8f4f8', marginBottom: 3, lineHeight: 1.2, fontFamily: F }}>{c.title}</div>
-                  <div style={{ fontSize: 10, color: 'rgba(126,184,212,0.6)', lineHeight: 1.3, fontFamily: F }}>{c.detail}</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: '#f0f0f0', marginBottom: 3, lineHeight: 1.2, fontFamily: F }}>{c.title}</div>
+                  <div style={{ fontSize: 10, color: 'rgba(138,138,154,0.6)', lineHeight: 1.3, fontFamily: F }}>{c.detail}</div>
                 </div>
               </div>
               <div style={{ marginTop: 8, display: 'flex', gap: 5 }}>
