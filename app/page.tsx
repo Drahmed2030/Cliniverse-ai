@@ -42,7 +42,7 @@ const NeuroSurgeryAI = dynamic(() => import('./components/NeuroSurgeryAI'), { ss
 const GeneralSurgeryAI = dynamic(() => import('./components/GeneralSurgeryAI'), { ssr: false })
 const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
 const RapidFire = dynamic(() => import('./components/RapidFire'), { ssr: false })
-import { useLiveCases } from './components/LiveCasesSystem'
+// removed: useLiveCases direct import
 
 const RANKS = [
   { name:'Clinical Clerk', icon:'🩺', color:'#64748b', xpNeeded:0 },
