@@ -90,7 +90,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.2px;
   font-family: var(--font);
-  background: var(--bg-primary);
+  background: #080f20;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
