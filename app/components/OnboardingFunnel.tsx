@@ -40,7 +40,7 @@ const SLIDES = [
     tag: 'CLINICAL AI · USMLE · MRCP',
     title: 'Train Like\na Consultant.',
     sub: 'The AI-powered clinical platform trusted by physicians preparing for USMLE and MRCP worldwide.',
-    accent: '#00d4ff',
+    accent: '#38bdf8',
     glow: 'rgba(0,212,255,0.2)',
     grad: 'linear-gradient(135deg, #00d4ff, #0066ff)',
     svgContent: `
@@ -79,7 +79,7 @@ const SLIDES = [
     tag: 'AI-POWERED · REAL PRESSURE',
     title: 'Real Cases.\nReal Decisions.',
     sub: 'STEMI. Sepsis. Stroke. PE — designed by consultants to simulate the pressure of real clinical decisions.',
-    accent: '#7c3aed',
+    accent: '#a78bfa',
     glow: 'rgba(124,58,237,0.2)',
     grad: 'linear-gradient(135deg, #7c3aed, #0066ff)',
     svgContent: `
@@ -121,7 +121,7 @@ const SLIDES = [
     tag: 'GLOBAL · LIVE · 24/7',
     title: 'You vs\n1,000+\nPhysicians.',
     sub: 'Real-time clinical duels with physicians from London, Dubai, Toronto and Riyadh.',
-    accent: '#f59e0b',
+    accent: '#fbbf24',
     glow: 'rgba(245,158,11,0.2)',
     grad: 'linear-gradient(135deg, #f59e0b, #ef4444)',
     svgContent: `
@@ -153,7 +153,7 @@ const SLIDES = [
     tag: 'YOUR JOURNEY BEGINS NOW',
     title: 'Built by\na Doctor.\nFor Doctors.',
     sub: 'Join the fastest-growing clinical AI platform. Free to start. No credit card needed.',
-    accent: '#00d4ff',
+    accent: '#38bdf8',
     glow: 'rgba(0,212,255,0.2)',
     grad: 'linear-gradient(135deg, #00d4ff, #7c3aed)',
     svgContent: `

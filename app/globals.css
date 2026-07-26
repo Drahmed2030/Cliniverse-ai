@@ -1,41 +1,41 @@
-/* Cliniverse AI — Obsidian Clinical System */
+/* Cliniverse AI — Clinical Slate System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-/* ── OBSIDIAN CLINICAL (default) ── */
+/* ── CLINICAL SLATE (default) ── */
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
+  --bg-primary: #0f1117;
+  --bg-secondary: #1c1e26;
   --bg-card: rgba(255,255,255,0.04);
-  --bg-card-border: rgba(255,215,0,0.1);
-  --text-primary: #f0f0f0;
-  --text-secondary: #8a8a9a;
-  --text-muted: rgba(138,138,154,0.5);
-  --accent: #4fc3f7;
-  --accent-blue: #4fc3f7;
-  --accent-green: #69f0ae;
-  --accent-red: #ff5252;
-  --accent-orange: #ffa94d;
-  --accent-gold: #ffd700;
-  --nav-bg: rgba(10,10,15,0.97);
-  --nav-border: rgba(255,215,0,0.12);
+  --bg-card-border: rgba(56,189,248,0.12);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: rgba(148,163,184,0.5);
+  --accent: #38bdf8;
+  --accent-blue: #38bdf8;
+  --accent-green: #4ade80;
+  --accent-red: #f87171;
+  --accent-orange: #fb923c;
+  --accent-gold: #fbbf24;
+  --nav-bg: rgba(15,17,23,0.97);
+  --nav-border: rgba(56,189,248,0.15);
   --font: "Inter", -apple-system, "SF Pro Display", "SF Pro Text", sans-serif;
-  --bg: #0a0a0f;
+  --bg: #0f1117;
   --card: rgba(255,255,255,0.04);
-  --text: #f0f0f0;
-  --sub: rgba(240,240,240,0.5);
-  --muted: rgba(138,138,154,0.35);
-  --teal: #4fc3f7;
-  --amber: #ffd700;
-  --rose: #ff5252;
-  --indigo: #7c4dff;
-  --green: #69f0ae;
-  --emergency: #ff5252;
-  --cardiac: #4fc3f7;
-  --respiratory: #80deea;
-  --neuro: #ce93d8;
-  --pharmacy: #69f0ae;
-  --radiology: #ffd700;
-  --pediatrics: #f48fb1;
+  --text: #ffffff;
+  --sub: rgba(148,163,184,0.8);
+  --muted: rgba(148,163,184,0.35);
+  --teal: #38bdf8;
+  --amber: #fbbf24;
+  --rose: #f87171;
+  --indigo: #a78bfa;
+  --green: #4ade80;
+  --emergency: #f87171;
+  --cardiac: #38bdf8;
+  --respiratory: #67e8f9;
+  --neuro: #a78bfa;
+  --pharmacy: #4ade80;
+  --radiology: #fbbf24;
+  --pediatrics: #f9a8d4;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 22px;
@@ -90,7 +90,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: -0.2px;
   font-family: var(--font);
-  background: #0a0a0f;
+  background: #0f1117;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;

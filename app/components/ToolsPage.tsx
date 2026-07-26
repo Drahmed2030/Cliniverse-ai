@@ -37,63 +37,63 @@ const T = {
 
 const SECTIONS = [
   {
-    id: 'emergency', label: 'Emergency & Critical', icon: '🚨', color: '#ff5252',
+    id: 'emergency', label: 'Emergency & Critical', icon: '🚨', color: '#f87171',
     desc: 'Code Blue · BLS/ACLS · Rapid Fire',
     tools: [
-      { id: 'codeblue', label: 'Code Blue', icon: '🔴', desc: 'Resuscitation protocols', color: '#ff5252' },
-      { id: 'rapid', label: 'Rapid Fire', icon: '⚡', desc: 'Quick-fire clinical cases', color: '#ffd700' },
-      { id: 'bls', label: 'BLS / ACLS', icon: '💊', desc: 'Life support algorithms', color: '#ff5252' },
-      { id: 'oncall', label: 'On-Call', icon: '📞', desc: 'Night shift call system', color: '#8b5cf6' },
-      { id: 'nightshift', label: 'Night Shift', icon: '🌙', desc: 'Survival mode · Triage', color: '#8b5cf6' },
+      { id: 'codeblue', label: 'Code Blue', icon: '🔴', desc: 'Resuscitation protocols', color: '#f87171' },
+      { id: 'rapid', label: 'Rapid Fire', icon: '⚡', desc: 'Quick-fire clinical cases', color: '#fbbf24' },
+      { id: 'bls', label: 'BLS / ACLS', icon: '💊', desc: 'Life support algorithms', color: '#f87171' },
+      { id: 'oncall', label: 'On-Call', icon: '📞', desc: 'Night shift call system', color: '#a78bfa' },
+      { id: 'nightshift', label: 'Night Shift', icon: '🌙', desc: 'Survival mode · Triage', color: '#a78bfa' },
     ]
   },
   {
-    id: 'cardiac', label: 'Cardiac & Neuro', icon: '🫀', color: '#4fc3f7',
+    id: 'cardiac', label: 'Cardiac & Neuro', icon: '🫀', color: '#38bdf8',
     desc: 'ECG · Cardiac Surgery · Neuro AI',
     tools: [
-      { id: 'ecg', label: 'ECG Challenge', icon: '📈', desc: 'Interpret real ECGs', color: '#4fc3f7' },
-      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#ff5252' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#8b5cf6' },
-      { id: 'nexus', label: 'Clinical Nexus', icon: '🔗', desc: 'AI clinical reasoning', color: '#4fc3f7' },
+      { id: 'ecg', label: 'ECG Challenge', icon: '📈', desc: 'Interpret real ECGs', color: '#38bdf8' },
+      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#f87171' },
+      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#a78bfa' },
+      { id: 'nexus', label: 'Clinical Nexus', icon: '🔗', desc: 'AI clinical reasoning', color: '#38bdf8' },
     ]
   },
   {
-    id: 'surgical', label: 'Surgical AI', icon: '🔪', color: '#4fc3f7',
+    id: 'surgical', label: 'Surgical AI', icon: '🔪', color: '#38bdf8',
     desc: 'General · Cardiac · Neuro Surgery',
     tools: [
-      { id: 'general', label: 'General Surgery AI', icon: '🔪', desc: 'Appendix · Cholecyst · Hernia', color: '#4fc3f7' },
-      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#ff5252' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#8b5cf6' },
+      { id: 'general', label: 'General Surgery AI', icon: '🔪', desc: 'Appendix · Cholecyst · Hernia', color: '#38bdf8' },
+      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#f87171' },
+      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#a78bfa' },
     ]
   },
   {
-    id: 'specialties', label: 'Specialties', icon: '🎓', color: '#69f0ae',
+    id: 'specialties', label: 'Specialties', icon: '🎓', color: '#4ade80',
     desc: 'Pharmacy · Nursing · Lab · Radiology',
     tools: [
-      { id: 'pharmacy', label: 'Pharmacy', icon: '💊', desc: 'Drug interactions · Dosing', color: '#69f0ae' },
+      { id: 'pharmacy', label: 'Pharmacy', icon: '💊', desc: 'Drug interactions · Dosing', color: '#4ade80' },
       { id: 'nursing', label: 'Nursing', icon: '🩺', desc: 'Vitals · NEWS2 · Skills', color: '#64d2ff' },
-      { id: 'lab', label: 'Laboratory', icon: '🔬', desc: '5 panels · Critical values', color: '#8b5cf6' },
-      { id: 'radiology', label: 'Radiology', icon: '🩻', desc: 'CXR · CT patterns · Echo', color: '#ffd700' },
+      { id: 'lab', label: 'Laboratory', icon: '🔬', desc: '5 panels · Critical values', color: '#a78bfa' },
+      { id: 'radiology', label: 'Radiology', icon: '🩻', desc: 'CXR · CT patterns · Echo', color: '#fbbf24' },
     ]
   },
   {
-    id: 'reference', label: 'Clinical Reference', icon: '📚', color: '#ffd700',
+    id: 'reference', label: 'Clinical Reference', icon: '📚', color: '#fbbf24',
     desc: 'Guidelines · Labs · Medications · Calculators',
     tools: [
-      { id: 'guidelines', label: 'Guidelines', icon: '📋', desc: 'ESC · NICE · AHA 2024', color: '#ffd700' },
-      { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#8b5cf6' },
-      { id: 'medications', label: 'Medications', icon: '💉', desc: 'Drug database · Doses', color: '#69f0ae' },
-      { id: 'calc', label: 'Calculators', icon: '🧮', desc: 'GFR · BMI · Scores', color: '#4fc3f7' },
+      { id: 'guidelines', label: 'Guidelines', icon: '📋', desc: 'ESC · NICE · AHA 2024', color: '#fbbf24' },
+      { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#a78bfa' },
+      { id: 'medications', label: 'Medications', icon: '💉', desc: 'Drug database · Doses', color: '#4ade80' },
+      { id: 'calc', label: 'Calculators', icon: '🧮', desc: 'GFR · BMI · Scores', color: '#38bdf8' },
     ]
   },
   {
     id: 'gaming', label: 'AI & Gaming', icon: '⚔️', color: '#bf5af2',
     desc: 'Duels · Detective · AI Generator',
     tools: [
-      { id: 'aigen', label: 'AI Case Generator', icon: '🤖', desc: 'Unlimited AI cases', color: '#4fc3f7' },
-      { id: 'duels', label: 'Clinical Duels', icon: '⚔️', desc: 'Compete globally', color: '#ff5252' },
+      { id: 'aigen', label: 'AI Case Generator', icon: '🤖', desc: 'Unlimited AI cases', color: '#38bdf8' },
+      { id: 'duels', label: 'Clinical Duels', icon: '⚔️', desc: 'Compete globally', color: '#f87171' },
       { id: 'detective', label: 'Diagnostic Detective', icon: '🔍', desc: 'Mystery cases', color: '#bf5af2' },
-      { id: 'autopsy', label: 'Error Autopsy', icon: '⚠️', desc: 'Learn from errors', color: '#ffd700' },
+      { id: 'autopsy', label: 'Error Autopsy', icon: '⚠️', desc: 'Learn from errors', color: '#fbbf24' },
       { id: 'insights', label: 'Health Insights', icon: '📊', desc: 'Your stats & progress', color: '#bf5af2' },
     ]
   },
@@ -161,7 +161,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
     <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5, marginBottom: 4 }}>
-          Clinical <span style={{ color: '#4fc3f7' }}>Tools</span>
+          Clinical <span style={{ color: '#38bdf8' }}>Tools</span>
         </div>
         <div style={{ fontSize: 12, color: T.sub }}>6 categories · 24+ tools</div>
       </div>

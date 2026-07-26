@@ -5,28 +5,28 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#0a0a0f',
+  bg: '#0f1117',
   card: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.07)',
   borderBlue: 'rgba(0,212,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.18)',
-  teal: '#00d4ff',
+  teal: '#38bdf8',
   blue: '#0066ff',
-  purple: '#7c3aed',
-  green: '#69f0ae',
-  amber: '#ffd700',
-  rose: '#ff5252',
+  purple: '#a78bfa',
+  green: '#4ade80',
+  amber: '#fbbf24',
+  rose: '#f87171',
 }
 
 // ── TIER SYSTEM ──
 const TIERS = [
   { min: 0,    max: 100,  id: 'intern',     label: 'Intern',     color: '#64748b', shape: '○' },
-  { min: 100,  max: 500,  id: 'resident',   label: 'Resident',   color: '#4fc3f7', shape: '◇' },
-  { min: 500,  max: 1500, id: 'fellow',     label: 'Fellow',     color: '#8b5cf6', shape: '⬡' },
-  { min: 1500, max: 3000, id: 'specialist', label: 'Specialist', color: '#00d4ff', shape: '◈' },
-  { min: 3000, max: 9999, id: 'consultant', label: 'Consultant', color: '#ffd700', shape: '✦' },
+  { min: 100,  max: 500,  id: 'resident',   label: 'Resident',   color: '#38bdf8', shape: '◇' },
+  { min: 500,  max: 1500, id: 'fellow',     label: 'Fellow',     color: '#a78bfa', shape: '⬡' },
+  { min: 1500, max: 3000, id: 'specialist', label: 'Specialist', color: '#38bdf8', shape: '◈' },
+  { min: 3000, max: 9999, id: 'consultant', label: 'Consultant', color: '#fbbf24', shape: '✦' },
 ]
 
 function getTier(xp: number) {
