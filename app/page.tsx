@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
+import ToolsPage from './components/ToolsPage'
 
 const EcgChallenge = dynamic(() => import('./components/EcgChallenge'), { ssr: false })
 const MedCalculators = dynamic(() => import('./components/MedCalculators'), { ssr: false })
@@ -176,6 +177,8 @@ export default function Home() {
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
   const [isPro] = useState(false) // set true after payment
   const [showUpgrade, setShowUpgrade] = useState(false)
+  const [checkoutUrl, setCheckoutUrl] = useState('')
+  const openCheckout = (url: string) => setCheckoutUrl(url)
   const [showAdmin, setShowAdmin] = useState(false)
   const liveCount = 0; const markLiveSeen = () => {}
 
@@ -430,13 +433,13 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           ))}
         </div>
         <button
-          onClick={()=>{window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank');setShowUpgrade(false)}}
+          onClick={()=>{openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1');setShowUpgrade(false)}}
           style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:16,fontWeight:800,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10}}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Pay with Apple Pay · $9.99/mo
         </button>
         <button
-          onClick={()=>{window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank');setShowUpgrade(false)}}
+          onClick={()=>{openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1');setShowUpgrade(false)}}
           style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(139,92,246,0.4)',background:'transparent',color:'#c4b5fd',fontSize:14,fontWeight:600,cursor:'pointer'}}>
           💳 Pay with Card
         </button>
@@ -870,89 +873,9 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
         {/* TOOLS TAB */}
         {tab==='tools'&&(
-          <div>
-            <div style={{marginBottom:14}}>
-              <h1 style={{color:'white',fontSize:24,fontWeight:900,margin:'0 0 4px',letterSpacing:-0.5}}>Clinical Tools</h1>
-              <p style={{color:'rgba(255,255,255,0.4)',fontSize:13,margin:0}}>Simulators & calculators</p>
-            </div>
-
-            {/* Tools segment — dark cosmic */}
-            <div style={{display:'flex',gap:6,marginBottom:16,background:'rgba(255,255,255,0.04)',borderRadius:20,padding:6,border:'1px solid rgba(139,92,246,0.2)',overflowX:'auto'}}>
-              {[
-                {id:'codeblue', label:'Code Blue', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M2 12L22 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'ecg', label:'ECG', color:'#30d158', glow:'rgba(48,209,88,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12h3l3-7 4 14 3-7h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'bls', label:'BLS/ACLS', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'tele', label:'Tele', color:'#0a84ff', glow:'rgba(10,132,255,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'oncall', label:'On-Call', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.8"/></svg>},
-                {id:'live', label:'Live', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M6.3 6.3a8 8 0 000 11.4M17.7 6.3a8 8 0 010 11.4M3.5 3.5a13 13 0 000 17M20.5 3.5a13 13 0 010 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'calc', label:'Calc', color:'#ff9f0a', glow:'rgba(255,159,10,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="3" stroke="currentColor" strokeWidth="1.8"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'duels', label:'Duels', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.5 17.5L3 6M3 3h6M3 3v6M9.5 6.5L18 15M18 21h-6M18 21v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'detective', label:'Detective', color:'#bf5af2', glow:'rgba(191,90,242,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8"/><path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M11 8v3l2 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'autopsy', label:'Autopsy', color:'#ff6b35', glow:'rgba(255,107,53,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'nightshift', label:'Night', color:'#8b5cf6', glow:'rgba(139,92,246,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
-                {id:'pharmacy', label:'Pharma', color:'#30d158', glow:'rgba(48,209,88,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'nursing', label:'Nursing', color:'#64d2ff', glow:'rgba(100,210,255,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 100 14A7 7 0 0012 2zM12 8v4M10 10h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M8.21 15.89A7 7 0 0120 19H4a7 7 0 014.21-3.11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'lab', label:'Lab', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3v11l-5 5h16l-5-5V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 3h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
-                {id:'radiology', label:'X-Ray', color:'#ffd60a', glow:'rgba(255,214,10,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-                {id:'aigen', label:'AI Gen', color:'#ffd60a', glow:'rgba(255,214,10,0.7)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/></svg>},
-                {id:'insights', label:'Stats', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
-                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
-              ].map(t=>{
-                const active = toolTab===t.id
-                return (
-                  <button key={t.id} onClick={()=>setToolTab(t.id)} style={{
-                    flex:1, padding:'10px 6px', borderRadius:14, border:'none', cursor:'pointer',
-                    background:active?`linear-gradient(135deg,${t.color}25,${t.color}10)`:'transparent',
-                    boxShadow:active?`0 4px 16px ${t.glow},0 0 0 1px ${t.color}30`:'none',
-                    transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
-                    transform:active?'translateY(-1px)':'none',
-                    whiteSpace:'nowrap', minWidth:0,
-                  }}>
-                    <div style={{color:active?t.color:'rgba(255,255,255,0.3)',display:'flex',justifyContent:'center',marginBottom:4,transition:'color 0.2s'}}>{t.svg}</div>
-                    <div style={{fontSize:11,fontWeight:active?800:600,color:active?t.color:'rgba(255,255,255,0.55)',letterSpacing:active?0.3:0,transition:'all 0.2s'}}>{t.label}</div>
-                    {active&&<div style={{width:16,height:2,borderRadius:1,background:t.color,margin:'4px auto 0',boxShadow:`0 0 6px ${t.color}`}}/>}
-                  </button>
-                )
-              })}
-            </div>
-
-            {toolTab==='codeblue'&&<CodeBlue onXP={addXP}/>}
-            {toolTab==='ecg'&&<EcgChallenge onXP={addXP}/>}
-            {toolTab==='bls'&&<BLSACLSModule onXP={addXP}/>}
-            {toolTab==='tele'&&<TeleconsultModule onXP={addXP}/>}
-            {toolTab==='oncall'&&<OnCallSystem onXP={addXP}/>}
-            {toolTab==='live'&&<LiveCasesSystem onXP={addXP}/>}
-            {toolTab==='calc'&&<MedCalculators/>}
-            {toolTab==='duels'&&<ClinicalDuels onXP={addXP}/>}
-            {toolTab==='detective'&&<DiagnosticDetective onXP={addXP}/>}
-            {toolTab==='autopsy'&&<ErrorAutopsy onXP={addXP}/>}
-            {toolTab==='nightshift'&&<NightShiftSurvival onXP={addXP}/>}
-            {toolTab==='pharmacy'&&<PharmacyModule onXP={addXP}/>}
-            {toolTab==='nursing'&&<NursingModule onXP={addXP}/>}
-            {toolTab==='lab'&&<LabModule onXP={addXP}/>}
-            {toolTab==='radiology'&&<RadiologyModule onXP={addXP}/>}
-            {toolTab==='aigen'&&<AICaseGenerator onXP={addXP}/>}
-            {toolTab==='insights'&&<HealthInsights xp={xp} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} mcqTotal={mcqTotal} streak={streak}/>}
-          </div>
+          <ToolsPage onXP={addXP} />
         )}
 
-        {/* PROFILE */}
         {tab==='profile'&&(
           <div>
             <div style={{...glassCard,padding:18,display:'flex',alignItems:'center',gap:14}}>
@@ -1101,7 +1024,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
                 {/* Apple Pay button */}
                 <button
-                  onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
+                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
                   style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:17,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10,letterSpacing:-0.3}}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
@@ -1111,7 +1034,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
                 {/* Credit card button */}
                 <button
-                  onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
+                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
                   style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.15)',background:'rgba(255,255,255,0.07)',color:'white',fontSize:15,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
                   💳 Credit / Debit Card
                 </button>
@@ -1139,7 +1062,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
                 {/* Yearly option */}
                 <div style={{background:'linear-gradient(135deg,rgba(48,209,88,0.1),rgba(10,132,255,0.08))',borderRadius:16,padding:'14px 16px',border:'1px solid rgba(48,209,88,0.2)',display:'flex',alignItems:'center',justifyContent:'space-between',cursor:'pointer',marginBottom:12}}
-                  onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-yearly','_blank')}>
+                  onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-yearly?embed=1&dark=1')}>
                   <div>
                     <div style={{fontSize:13,fontWeight:800,color:'white'}}>Switch to Yearly</div>
                     <div style={{fontSize:11,color:'rgba(48,209,88,0.9)',marginTop:2}}>Save 34% — only $6.58/mo</div>
@@ -1196,7 +1119,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               </div>
 
               <button
-                onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
+                onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
                 style={{background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',border:'none',borderRadius:18,padding:'18px 40px',fontSize:17,fontWeight:800,color:'white',cursor:'pointer',width:'100%',boxShadow:'0 8px 40px rgba(139,92,246,0.5)',letterSpacing:-0.3}}>
                 🚀 Upgrade to PRO — $9.99/mo
               </button>
