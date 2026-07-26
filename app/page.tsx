@@ -248,7 +248,7 @@ export default function Home() {
   const [isPro, setIsPro] = useState(false)
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [showAdmin, setShowAdmin] = useState(false)
-  const { newCount: liveCount, markSeen: markLiveSeen } = useLiveCases()
+  const liveCount = 0; const markLiveSeen = () => {};
 
   const T = dark ? darkTheme : lightTheme
 
