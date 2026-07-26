@@ -157,6 +157,7 @@ export default function Home() {
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
+  const [userName, setUserName] = useState('')
   const [tab, setTab] = useState('hub')
   const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
