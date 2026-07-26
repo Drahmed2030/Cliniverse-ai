@@ -1,5 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+const TimeAwareCard = dynamic(() => import('./TimeAwareCard'), { ssr: false })
+const ActivityRings = dynamic(() => import('./ActivityRings'), { ssr: false })
 
 // ── DESIGN TOKENS ──
 const T = {
@@ -228,6 +231,14 @@ export default function HubPage({
           <span style={{ color: T.text, fontWeight: 800 }}>{liveCount.toLocaleString()}</span> doctors training right now
         </span>
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: T.rose, boxShadow: `0 0 10px ${T.rose}`, flexShrink: 0 }} />
+      </div>
+
+            {/* Time Aware */}
+      <TimeAwareCard />
+
+      {/* Activity Rings */}
+      <div style={{marginBottom:16}}>
+        <ActivityRings accuracy={accuracy} speed={Math.min(streak*10,100)} knowledge={Math.min(casesCompleted*10,100)} />
       </div>
 
       {/* ── FEATURED CASE ── */}

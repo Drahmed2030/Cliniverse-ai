@@ -699,11 +699,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         {tab==='hub'&&(
           <div style={{marginBottom:16}}>
 
-            <TimeAwareCard />
-            <ActivityRings accuracy={75} speed={75} knowledge={75} />
-            <QuickAccess onNavigate={(tool) => { setTab('tools'); setToolTab(tool); }} />
-            <TriageCard />
-            <ClinicalPulseFeed />
 
             {/* Logo Card */}
             <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.95),rgba(25,8,55,0.9))',borderRadius:26,padding:'20px 20px 16px',marginBottom:14,border:'1px solid rgba(139,92,246,0.2)',position:'relative',overflow:'hidden',boxShadow:'0 12px 48px rgba(0,0,0,0.5)'}}>
