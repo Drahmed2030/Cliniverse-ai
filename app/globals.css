@@ -1,41 +1,41 @@
-/* Cliniverse AI — Theme System */
+/* Cliniverse AI — Clinical Deep Blue System */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-/* ── DARK COSMIC (default) ── */
+/* ── CLINICAL DEEP BLUE (default) ── */
 :root {
-  --bg-primary: #0a0015;
-  --bg-secondary: #12002a;
-  --bg-card: rgba(255,255,255,0.04);
-  --bg-card-border: rgba(255,255,255,0.08);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.55);
-  --text-muted: rgba(255,255,255,0.3);
-  --accent: #8b5cf6;
-  --accent-blue: #0a84ff;
-  --accent-green: #30d158;
-  --accent-red: #ff453a;
-  --accent-orange: #ff9f0a;
-  --accent-gold: #ffd60a;
-  --nav-bg: rgba(10,0,21,0.95);
-  --nav-border: rgba(139,92,246,0.2);
+  --bg-primary: #0d1b2a;
+  --bg-secondary: #1a2840;
+  --bg-card: rgba(255,255,255,0.05);
+  --bg-card-border: rgba(74,158,210,0.15);
+  --text-primary: #e8f4f8;
+  --text-secondary: #7eb8d4;
+  --text-muted: rgba(126,184,212,0.5);
+  --accent: #4dabf7;
+  --accent-blue: #4dabf7;
+  --accent-green: #51cf66;
+  --accent-red: #ff6b6b;
+  --accent-orange: #ffa94d;
+  --accent-gold: #ffd43b;
+  --nav-bg: rgba(13,27,42,0.97);
+  --nav-border: rgba(77,171,247,0.2);
   --font: "Inter", -apple-system, "SF Pro Display", "SF Pro Text", sans-serif;
-  --bg: #0a0f1e;
-  --card: rgba(255,255,255,0.04);
-  --text: #ffffff;
-  --sub: rgba(255,255,255,0.45);
-  --muted: rgba(255,255,255,0.20);
-  --teal: #06b6d4;
-  --amber: #f59e0b;
-  --rose: #ef4444;
-  --indigo: #3b82f6;
-  --green: #10b981;
-  --emergency: #ef4444;
-  --cardiac: #3b82f6;
-  --respiratory: #06b6d4;
-  --neuro: #8b5cf6;
-  --pharmacy: #10b981;
-  --radiology: #f59e0b;
-  --pediatrics: #ec4899;
+  --bg: #0d1b2a;
+  --card: rgba(255,255,255,0.05);
+  --text: #e8f4f8;
+  --sub: rgba(126,184,212,0.7);
+  --muted: rgba(126,184,212,0.35);
+  --teal: #4dabf7;
+  --amber: #ffd43b;
+  --rose: #ff6b6b;
+  --indigo: #748ffc;
+  --green: #51cf66;
+  --emergency: #ff6b6b;
+  --cardiac: #4dabf7;
+  --respiratory: #74c0fc;
+  --neuro: #cc5de8;
+  --pharmacy: #51cf66;
+  --radiology: #ffd43b;
+  --pediatrics: #f783ac;
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 22px;
