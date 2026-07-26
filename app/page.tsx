@@ -1,6 +1,4 @@
 'use client'
-import { supabase } from './supabase'
-import React from 'react'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
@@ -29,20 +27,6 @@ const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), 
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
 const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
-const ActivityRings = dynamic(() => import('./components/ActivityRings'), { ssr: false })
-const TimeAwareCard = dynamic(() => import('./components/TimeAwareCard'), { ssr: false })
-const QuickAccess = dynamic(() => import('./components/QuickAccess'), { ssr: false })
-const TriageCard = dynamic(() => import('./components/TriageCard'), { ssr: false })
-const ClinicalPulseFeed = dynamic(() => import('./components/ClinicalPulseFeed'), { ssr: false })
-const LabsReference = dynamic(() => import('./components/LabsReference'), { ssr: false })
-const Guidelines = dynamic(() => import('./components/Guidelines'), { ssr: false })
-const Medications = dynamic(() => import('./components/Medications'), { ssr: false })
-const CardiacSurgeryAI = dynamic(() => import('./components/CardiacSurgeryAI'), { ssr: false })
-const NeuroSurgeryAI = dynamic(() => import('./components/NeuroSurgeryAI'), { ssr: false })
-const GeneralSurgeryAI = dynamic(() => import('./components/GeneralSurgeryAI'), { ssr: false })
-const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
-const RapidFire = dynamic(() => import('./components/RapidFire'), { ssr: false })
-// removed: useLiveCases direct import
 
 const RANKS = [
   { name:'Clinical Clerk', icon:'🩺', color:'#64748b', xpNeeded:0 },
@@ -165,69 +149,13 @@ const darkTheme = {
   caseBg: 'rgba(28,14,50,0.9)',
 }
 
-
-const GhostConsultant = ({onXP}:{onXP:(n:number)=>void}) => {
-  const [q, setQ] = React.useState("")
-  const [a, setA] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const ask = async () => {
-    if (!q.trim()) return
-    setLoading(true)
-    try {
-      const r = await fetch("/api/generate-case",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({systemPrompt:"You are a senior physician ghost consultant. Challenge the user clinically in 2-3 sentences. Be direct and evidence-based.",userPrompt:q,specialty:"Internal Medicine",difficulty:"Advanced"})})
-      const d = await r.json()
-      setA(d.case?.keyLearning?.[0] || d.case?.management?.[0] || "Consider the evidence carefully.")
-      onXP(25)
-    } catch { setA("Unable to connect. Try again.") }
-    setLoading(false)
-  }
-  return (
-    <div style={{padding:"0 16px"}}>
-      <div style={{background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(10,132,255,0.08))",borderRadius:22,padding:20,marginBottom:16,border:"1px solid rgba(139,92,246,0.25)"}}>
-        <div style={{fontSize:40,marginBottom:12,textAlign:"center"}}>👻</div>
-        <div style={{fontSize:20,fontWeight:900,color:"white",marginBottom:6,textAlign:"center"}}>Ghost Consultant</div>
-        <div style={{fontSize:13,color:"rgba(255,255,255,0.5)",textAlign:"center",lineHeight:1.6,marginBottom:20}}>Ask any clinical question. The Ghost challenges your thinking with evidence-based medicine.</div>
-        {a && <div style={{background:"rgba(139,92,246,0.1)",borderRadius:16,padding:14,marginBottom:14,border:"1px solid rgba(139,92,246,0.2)"}}><div style={{fontSize:10,color:"#8b5cf6",fontWeight:800,letterSpacing:1,marginBottom:6}}>👻 GHOST SAYS</div><div style={{fontSize:14,color:"rgba(255,255,255,0.85)",lineHeight:1.7}}>{a}</div></div>}
-        <div style={{display:"flex",gap:10}}>
-          <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&ask()} placeholder="Ask a clinical question..." style={{flex:1,padding:"13px 16px",borderRadius:14,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.06)",color:"white",fontSize:14,outline:"none"}}/>
-          <button onClick={ask} disabled={loading||!q.trim()} style={{width:48,height:48,borderRadius:14,border:"none",background:loading?"rgba(255,255,255,0.1)":"linear-gradient(135deg,#8b5cf6,#0a84ff)",color:"white",fontSize:20,cursor:"pointer",flexShrink:0}}>{loading?"⏳":"→"}</button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-
-  const enableNotifications = async () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      const reg = await navigator.serviceWorker.register('/sw.js')
-      const perm = await Notification.requestPermission()
-      if (perm === 'granted') {
-        alert('Notifications enabled! You will receive daily case alerts.')
-      }
-    }
-  }
 export default function Home() {
-  const enableNotifications = async () => {
-    if (typeof window !== "undefined" && "Notification" in window) {
-      const perm = await Notification.requestPermission()
-      if (perm === "granted") {
-        if ("serviceWorker" in navigator) {
-          await navigator.serviceWorker.register("/sw.js")
-        }
-        alert("Notifications enabled!")
-      } else {
-        alert("Please allow notifications in your browser settings.")
-      }
-    }
-  }
-
   const [screen, setScreen] = useState<'launch'|'welcome'|'signin'|'app'>('launch')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [tab, setTab] = useState('hub')
-  const [toolTab, setToolTab] = useState('hub_tools')
+  const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
   const [activeRad, setActiveRad] = useState<string|null>(null)
   const [mcqIndex, setMcqIndex] = useState(0)
@@ -245,23 +173,14 @@ export default function Home() {
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
-  const [isPro, setIsPro] = useState(false)
+  const [isPro] = useState(false) // set true after payment
   const [showUpgrade, setShowUpgrade] = useState(false)
   const [showAdmin, setShowAdmin] = useState(false)
-  const liveCount = 0; const markLiveSeen = () => {};
+  const liveCount = 0; const markLiveSeen = () => {}
 
   const T = dark ? darkTheme : lightTheme
 
   // Show onboarding for first-time visitors
-  useEffect(() => {
-    // Load saved XP
-    const deviceId = localStorage.getItem('cliniverse-device-id')
-    if (deviceId) {
-      supabase.from('user_progress').select('xp').eq('device_id', deviceId).single()
-        .then(({ data }) => { if (data?.xp) setXp(data.xp) })
-    }
-  }, [])
-
   useEffect(() => {
     const seen = localStorage.getItem('cliniverse-onboarded')
     if (seen) setShowOnboarding(false)
@@ -510,49 +429,13 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           ))}
         </div>
         <button
-          onClick={()=>{(()=>{
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)';
-  const sheet=document.createElement('div');
-  sheet.style.cssText='width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)';
-  const handle=document.createElement('div');
-  handle.style.cssText='width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:12px auto 0';
-  const iframe=document.createElement('iframe');
-  iframe.src='https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1';
-  iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:0 0 0 0';
-  iframe.allow='payment';
-  const close=document.createElement('button');
-  close.textContent='✕ Close';
-  close.style.cssText='width:calc(100% - 48px);margin:12px 24px;padding:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;font-family:inherit';
-  close.onclick=()=>{document.body.removeChild(overlay);setIsPro(true)};
-  overlay.onclick=(e)=>{if(e.target===overlay){document.body.removeChild(overlay)}};
-  sheet.appendChild(handle);sheet.appendChild(iframe);sheet.appendChild(close);
-  overlay.appendChild(sheet);document.body.appendChild(overlay);
-})()}}
+          onClick={()=>{window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank');setShowUpgrade(false)}}
           style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:16,fontWeight:800,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10}}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           Pay with Apple Pay · $9.99/mo
         </button>
         <button
-          onClick={()=>{(()=>{
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)';
-  const sheet=document.createElement('div');
-  sheet.style.cssText='width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)';
-  const handle=document.createElement('div');
-  handle.style.cssText='width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;margin:12px auto 0';
-  const iframe=document.createElement('iframe');
-  iframe.src='https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1';
-  iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:0 0 0 0';
-  iframe.allow='payment';
-  const close=document.createElement('button');
-  close.textContent='✕ Close';
-  close.style.cssText='width:calc(100% - 48px);margin:12px 24px;padding:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;font-family:inherit';
-  close.onclick=()=>{document.body.removeChild(overlay);setIsPro(true)};
-  overlay.onclick=(e)=>{if(e.target===overlay){document.body.removeChild(overlay)}};
-  sheet.appendChild(handle);sheet.appendChild(iframe);sheet.appendChild(close);
-  overlay.appendChild(sheet);document.body.appendChild(overlay);
-})()}}
+          onClick={()=>{window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank');setShowUpgrade(false)}}
           style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(139,92,246,0.4)',background:'transparent',color:'#c4b5fd',fontSize:14,fontWeight:600,cursor:'pointer'}}>
           💳 Pay with Card
         </button>
@@ -562,16 +445,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
   // LAUNCH
   if(showOnboarding) return (
-    <OnboardingFunnel onComplete={async (email, password, name) => {
-      try {
-        if (email && password) {
-          const { error } = await supabase.auth.signUp({
-            email, password,
-            options: { data: { full_name: name || 'Doctor' } }
-          })
-          if (error) console.log('Auth error:', error.message)
-        }
-      } catch(e) { console.log('Auth skip:', e) }
+    <OnboardingFunnel onComplete={()=>{
       localStorage.setItem('cliniverse-onboarded','1')
       setShowOnboarding(false)
     }}/>
@@ -902,45 +776,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         {tab==='hub'&&(
           <div style={{paddingBottom:8}}>
 
-
-
-            {/* Live Heartbeat Counter */}
-            <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:16,padding:'10px 20px',background:'rgba(255,69,58,0.06)',borderRadius:20,border:'1px solid rgba(255,69,58,0.15)'}}>
-              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite',flexShrink:0}}/>
-              <span style={{fontSize:13,color:'rgba(255,255,255,0.7)',fontWeight:600}} id="liveCount">1,247 doctors training right now</span>
-              <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 12px #ff453a',animation:'pulse 1s ease-in-out infinite 0.5s',flexShrink:0}}/>
-            </div>
-            <script dangerouslySetInnerHTML={{__html:`
-              (function(){
-                var base = 1100 + Math.floor(Math.random()*300);
-                var el = document.getElementById('liveCount');
-                if(!el) return;
-                setInterval(function(){
-                  base += Math.floor(Math.random()*5) - 2;
-                  if(base < 900) base = 900;
-                  if(base > 1500) base = 1500;
-                  el.textContent = base.toLocaleString() + ' doctors training right now';
-                }, 2000);
-              })();
-            `}}/>
-            {/* Clinical Pulse */}
-            <div style={{margin:"0 0 16px",background:"linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))",borderRadius:20,border:"1px solid rgba(48,209,88,0.2)",overflow:"hidden",cursor:"pointer"}} onClick={()=>setActiveCase("stemi")}>
-              <div style={{width:"100%",height:130,background:"linear-gradient(135deg,#001a0d,#001233)",position:"relative",display:"flex",alignItems:"flex-end",padding:14}}>
-                <div style={{position:"absolute",top:12,left:14,display:"flex",alignItems:"center",gap:6}}>
-                  <div style={{width:7,height:7,borderRadius:"50%",background:"#30d158",boxShadow:"0 0 8px #30d158"}}/>
-                  <span style={{fontSize:10,color:"#30d158",fontWeight:800,letterSpacing:2}}>MORNING BRIEF</span>
-                </div>
-                <div style={{fontSize:50,position:"absolute",right:16,top:"50%",transform:"translateY(-50%)",opacity:0.12}}>🫀</div>
-                <div>
-                  <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",marginBottom:4}}>CARDIOLOGY · TODAY</div>
-                  <div style={{fontSize:15,fontWeight:800,color:"white",lineHeight:1.2}}>67M with Rapid AF and Haemodynamic Instability</div>
-                </div>
-              </div>
-              <div style={{padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                <div style={{fontSize:12,color:"rgba(255,255,255,0.4)"}}>🌍 1,247 doctors deciding now</div>
-                <div style={{background:"rgba(48,209,88,0.15)",border:"1px solid rgba(48,209,88,0.3)",borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:700,color:"#30d158"}}>Join →</div>
-              </div>
-            </div>
             {/* Featured Case */}
             <div onClick={()=>setActiveCase('stemi')} style={{background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',borderRadius:22,padding:22,marginBottom:16,color:'white',cursor:'pointer',boxShadow:'0 8px 40px rgba(10,132,255,0.4)',border:'1px solid rgba(255,255,255,0.12)',position:'relative',overflow:'hidden'}}>
               <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'rgba(255,255,255,0.06)',pointerEvents:'none'}}/>
@@ -1224,36 +1059,62 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <p style={{color:'rgba(255,255,255,0.4)',fontSize:13,margin:0}}>Simulators & calculators</p>
             </div>
 
-            {toolTab==='hub_tools'&&(
-              <div style={{padding:'0 16px 20px'}}>
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,marginBottom:10,textTransform:'uppercase'}}>🌍 Global & Competition</div>
-                {[{id:'nexus',icon:'🌍',name:'Clinical Nexus',sub:'1,000+ doctors · same case · real-time',color:'#ffd60a',xp:200,live:true},{id:'rapid',icon:'⚡',name:'Rapid Fire',sub:'30 questions · 3 minutes · global rank',color:'#ff453a',xp:105,live:false}].map(t=>(
-                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:`linear-gradient(135deg,${t.color}10,rgba(0,0,0,0.3))`,borderRadius:20,padding:16,marginBottom:10,border:`1px solid ${t.color}25`,cursor:'pointer',display:'flex',alignItems:'center',gap:14}}>
-                    <div style={{width:48,height:48,borderRadius:14,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,flexShrink:0}}>{t.icon}</div>
-                    <div style={{flex:1}}><div style={{display:'flex',alignItems:'center',gap:8,marginBottom:2}}><div style={{fontSize:15,fontWeight:800,color:'white'}}>{t.name}</div>{t.live&&<div style={{fontSize:8,padding:'2px 7px',borderRadius:10,background:'rgba(255,69,58,0.2)',color:'#ff453a',fontWeight:800}}>LIVE</div>}</div><div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div></div>
-                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
-                  </div>
-                ))}
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🔬 Surgical AI</div>
-                {[{id:'cardiac',icon:'🫀',name:'Cardiac Surgery AI',sub:'CABG · TAVI · Valve',color:'#ff453a',xp:150},{id:'neuro',icon:'🧠',name:'Neurosurgery AI',sub:'GBM · Aneurysm · Spine',color:'#bf5af2',xp:180},{id:'general_surg',icon:'🔪',name:'General Surgery AI',sub:'Laparoscopic · Colorectal',color:'#ff9f0a',xp:140}].map(t=>(
-                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'13px 16px',marginBottom:8,border:`1px solid ${t.color}20`,cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
-                    <div style={{width:44,height:44,borderRadius:13,background:`${t.color}15`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{t.icon}</div>
-                    <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:'white',marginBottom:2}}>{t.name}</div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{t.sub}</div></div>
-                    <span style={{fontSize:11,padding:'3px 10px',borderRadius:20,background:`${t.color}15`,color:t.color,fontWeight:700,flexShrink:0}}>+{t.xp} XP</span>
-                  </div>
-                ))}
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',fontWeight:700,letterSpacing:2,margin:'16px 0 10px',textTransform:'uppercase'}}>🛠️ Clinical Tools</div>
+            {/* Tools segment — dark cosmic */}
+            <div style={{display:'flex',gap:6,marginBottom:16,background:'rgba(255,255,255,0.04)',borderRadius:20,padding:6,border:'1px solid rgba(139,92,246,0.2)',overflowX:'auto'}}>
+              {[
+                {id:'codeblue', label:'Code Blue', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M2 12L22 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/></svg>},
+                {id:'ecg', label:'ECG', color:'#30d158', glow:'rgba(48,209,88,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12h3l3-7 4 14 3-7h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
+                {id:'bls', label:'BLS/ACLS', color:'#ff453a', glow:'rgba(255,69,58,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+                {id:'tele', label:'Tele', color:'#0a84ff', glow:'rgba(10,132,255,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="1.8"/></svg>},
+                {id:'oncall', label:'On-Call', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.8"/></svg>},
+                {id:'live', label:'Live', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M6.3 6.3a8 8 0 000 11.4M17.7 6.3a8 8 0 010 11.4M3.5 3.5a13 13 0 000 17M20.5 3.5a13 13 0 010 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'calc', label:'Calc', color:'#ff9f0a', glow:'rgba(255,159,10,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="3" stroke="currentColor" strokeWidth="1.8"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+                {id:'duels', label:'Duels', color:'#ff453a', glow:'rgba(255,69,58,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14.5 17.5L3 6M3 3h6M3 3v6M9.5 6.5L18 15M18 21h-6M18 21v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>},
+                {id:'detective', label:'Detective', color:'#bf5af2', glow:'rgba(191,90,242,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8"/><path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M11 8v3l2 2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'autopsy', label:'Autopsy', color:'#ff6b35', glow:'rgba(255,107,53,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
+                {id:'nightshift', label:'Night', color:'#8b5cf6', glow:'rgba(139,92,246,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>},
+                {id:'pharmacy', label:'Pharma', color:'#30d158', glow:'rgba(48,209,88,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'nursing', label:'Nursing', color:'#64d2ff', glow:'rgba(100,210,255,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a7 7 0 100 14A7 7 0 0012 2zM12 8v4M10 10h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M8.21 15.89A7 7 0 0120 19H4a7 7 0 014.21-3.11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'lab', label:'Lab', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3v11l-5 5h16l-5-5V3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M6 3h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>},
+                {id:'radiology', label:'X-Ray', color:'#ffd60a', glow:'rgba(255,214,10,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+                {id:'aigen', label:'AI Gen', color:'#ffd60a', glow:'rgba(255,214,10,0.7)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/></svg>},
+                {id:'insights', label:'Stats', color:'#bf5af2', glow:'rgba(191,90,242,0.6)',
+                  svg:<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>},
+              ].map(t=>{
+                const active = toolTab===t.id
+                return (
+                  <button key={t.id} onClick={()=>setToolTab(t.id)} style={{
+                    flex:1, padding:'10px 6px', borderRadius:14, border:'none', cursor:'pointer',
+                    background:active?`linear-gradient(135deg,${t.color}25,${t.color}10)`:'transparent',
+                    boxShadow:active?`0 4px 16px ${t.glow},0 0 0 1px ${t.color}30`:'none',
+                    transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
+                    transform:active?'translateY(-1px)':'none',
+                    whiteSpace:'nowrap', minWidth:0,
+                  }}>
+                    <div style={{color:active?t.color:'rgba(255,255,255,0.3)',display:'flex',justifyContent:'center',marginBottom:4,transition:'color 0.2s'}}>{t.svg}</div>
+                    <div style={{fontSize:9,fontWeight:active?800:500,color:active?t.color:'rgba(255,255,255,0.3)',letterSpacing:active?0.3:0,transition:'all 0.2s'}}>{t.label}</div>
+                    {active&&<div style={{width:16,height:2,borderRadius:1,background:t.color,margin:'4px auto 0',boxShadow:`0 0 6px ${t.color}`}}/>}
+                  </button>
+                )
+              })}
+            </div>
 
-
-{[{id:'codeblue',icon:'💔',name:'Code Blue',sub:'Emergency · 10 scenarios'},{id:'ecg',icon:'📈',name:'ECG Challenge',sub:'Read & interpret ECGs'},{id:'bls',icon:'🫀',name:'BLS / ACLS',sub:'Resuscitation protocols'},{id:'calc',icon:'🧮',name:'Med Calculators',sub:'GCS · Wells · CURB-65'},{id:'duels',icon:'⚔️',name:'Clinical Duels',sub:'Challenge other doctors'},{id:'detective',icon:'🔍',name:'Diagnostic Detective',sub:'Find the diagnosis'},{id:'aigen',icon:'🤖',name:'AI Case Generator',sub:'Unlimited · Claude AI'},{id:'ghost',icon:'👻',name:'Ghost Consultant',sub:'AI challenges your decisions'}].map((t,i,arr)=>(
-                  <div key={t.id} onClick={()=>setToolTab(t.id)} style={{background:'rgba(255,255,255,0.03)',borderRadius:16,padding:'12px 14px',marginBottom:i<arr.length-1?6:0,border:'1px solid rgba(255,255,255,0.06)',cursor:'pointer',display:'flex',alignItems:'center',gap:12}}>
-                    <div style={{width:38,height:38,borderRadius:11,background:'rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>{t.icon}</div>
-                    <div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'white'}}>{t.name}</div><div style={{fontSize:11,color:'rgba(255,255,255,0.35)',marginTop:1}}>{t.sub}</div></div>
-                    <span style={{color:'rgba(255,255,255,0.2)',fontSize:18}}>›</span>
-                  </div>
-                ))}
-              </div>
-            )}
             {toolTab==='codeblue'&&<CodeBlue onXP={addXP}/>}
             {toolTab==='ecg'&&<EcgChallenge onXP={addXP}/>}
             {toolTab==='bls'&&<BLSACLSModule onXP={addXP}/>}
@@ -1269,11 +1130,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             {toolTab==='nursing'&&<NursingModule onXP={addXP}/>}
             {toolTab==='lab'&&<LabModule onXP={addXP}/>}
             {toolTab==='radiology'&&<RadiologyModule onXP={addXP}/>}
-            {toolTab==='cardiac'&&<CardiacSurgeryAI onXP={addXP}/>}
-            {toolTab==='neuro'&&<NeuroSurgeryAI onXP={addXP}/>}
-            {toolTab==='general_surg'&&<GeneralSurgeryAI onXP={addXP}/>}
-            {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}
-            {toolTab==='rapid'&&<RapidFire onXP={addXP}/>}
             {toolTab==='aigen'&&<AICaseGenerator onXP={addXP}/>}
             {toolTab==='insights'&&<HealthInsights xp={xp} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} mcqTotal={mcqTotal} streak={streak}/>}
           </div>
@@ -1289,8 +1145,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                 <div style={{fontSize:12,color:T.textSub,marginBottom:8}}>Standard Access Tier</div>
                 <span style={{fontSize:10,fontWeight:700,padding:'3px 12px',borderRadius:12,background:'rgba(10,132,255,0.12)',color:'#0a84ff',border:'1px solid rgba(10,132,255,0.2)'}}>FREE TIER</span>
               </div>
-              <div onClick={enableNotifications} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(10,132,255,0.08)",borderRadius:16,padding:14,marginBottom:12,border:"1px solid rgba(10,132,255,0.2)",cursor:"pointer"}}><span style={{fontSize:22}}>🔔</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"white"}}>Enable Daily Notifications</div><div style={{fontSize:12,color:"rgba(255,255,255,0.4)",marginTop:2}}>Get daily clinical case alerts</div></div></div>
-              <div onClick={enableNotifications} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(10,132,255,0.08)",borderRadius:16,padding:14,marginBottom:12,border:"1px solid rgba(10,132,255,0.2)",cursor:"pointer"}}><span style={{fontSize:22}}>🔔</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"white"}}>Enable Daily Notifications</div><div style={{fontSize:12,color:"rgba(255,255,255,0.4)",marginTop:2}}>Get daily clinical case alerts</div></div></div>
               {/* Admin button - hidden, only for admin */}
               <div onClick={()=>setShowAdmin(true)} style={{width:32,height:32,borderRadius:'50%',background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.06)',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:12,opacity:0.3}}>⚙️</div>
             </div>
@@ -1430,7 +1284,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
                 {/* Apple Pay button */}
                 <button
-                  onClick={()=>(()=>{const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)";const s=document.createElement("div");s.style.cssText="width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)";const f=document.createElement("iframe");f.src="https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1";f.style.cssText="width:100%;height:72vh;border:none";f.allow="payment";const b=document.createElement("button");b.textContent="Close";b.style.cssText="width:calc(100% - 48px);margin:10px 24px;padding:13px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer";b.onclick=()=>document.body.removeChild(o);o.onclick=(e)=>{if(e.target===o)document.body.removeChild(o)};s.appendChild(f);s.appendChild(b);o.appendChild(s);document.body.appendChild(o)})()}
+                  onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
                   style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:17,fontWeight:700,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10,letterSpacing:-0.3}}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
@@ -1440,7 +1294,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
                 {/* Credit card button */}
                 <button
-                  onClick={()=>(()=>{const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)";const s=document.createElement("div");s.style.cssText="width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)";const f=document.createElement("iframe");f.src="https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1";f.style.cssText="width:100%;height:72vh;border:none";f.allow="payment";const b=document.createElement("button");b.textContent="Close";b.style.cssText="width:calc(100% - 48px);margin:10px 24px;padding:13px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer";b.onclick=()=>document.body.removeChild(o);o.onclick=(e)=>{if(e.target===o)document.body.removeChild(o)};s.appendChild(f);s.appendChild(b);o.appendChild(s);document.body.appendChild(o)})()}
+                  onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
                   style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.15)',background:'rgba(255,255,255,0.07)',color:'white',fontSize:15,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
                   💳 Credit / Debit Card
                 </button>
@@ -1525,7 +1379,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               </div>
 
               <button
-                onClick={()=>(()=>{const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(10px)";const s=document.createElement("div");s.style.cssText="width:100%;max-width:480px;background:#1a0533;border-radius:28px 28px 0 0;padding:8px 0 0;border-top:1px solid rgba(139,92,246,0.4)";const f=document.createElement("iframe");f.src="https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d?embed=1&dark=1";f.style.cssText="width:100%;height:72vh;border:none";f.allow="payment";const b=document.createElement("button");b.textContent="Close";b.style.cssText="width:calc(100% - 48px);margin:10px 24px;padding:13px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer";b.onclick=()=>document.body.removeChild(o);o.onclick=(e)=>{if(e.target===o)document.body.removeChild(o)};s.appendChild(f);s.appendChild(b);o.appendChild(s);document.body.appendChild(o)})()}
+                onClick={()=>window.open('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly','_blank')}
                 style={{background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',border:'none',borderRadius:18,padding:'18px 40px',fontSize:17,fontWeight:800,color:'white',cursor:'pointer',width:'100%',boxShadow:'0 8px 40px rgba(139,92,246,0.5)',letterSpacing:-0.3}}>
                 🚀 Upgrade to PRO — $9.99/mo
               </button>
@@ -1577,33 +1431,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         )}
 
       </main>
-
-
-  {showEmailCapture && (
-    <div style={{position:'fixed',inset:0,zIndex:500,display:'flex',alignItems:'flex-end',justifyContent:'center',background:'rgba(0,0,0,0.7)',backdropFilter:'blur(8px)'}}>
-      <div style={{width:'100%',maxWidth:480,background:'linear-gradient(145deg,#12002a,#0a0015)',borderRadius:'24px 24px 0 0',padding:'24px 24px 40px',border:'1px solid rgba(139,92,246,0.3)'}}>
-        <div style={{width:40,height:4,background:'rgba(255,255,255,0.2)',borderRadius:2,margin:'0 auto 20px'}}/>
-        <div style={{fontSize:24,fontWeight:900,color:'white',marginBottom:8}}>Stay Updated 📬</div>
-        <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:20,lineHeight:1.6}}>Get notified about new cases, features and clinical updates.</div>
-        <input value={captureEmail} onChange={e=>setCaptureEmail(e.target.value)}
-          placeholder="your@email.com"
-          style={{width:'100%',padding:'14px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box',marginBottom:12,fontFamily:'inherit'}}/>
-        <button onClick={async()=>{
-          if(captureEmail.includes('@')){
-            await supabase.from('email_list').upsert({email:captureEmail,created_at:new Date().toISOString()})
-            localStorage.setItem('cliniverse-email-captured','1')
-          }
-          setShowEmailCapture(false)
-        }} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:10,fontFamily:'inherit'}}>
-          Subscribe — It is Free
-        </button>
-        <button onClick={()=>{setShowEmailCapture(false);localStorage.setItem('cliniverse-email-captured','1')}}
-          style={{width:'100%',padding:'12px',borderRadius:14,border:'1px solid rgba(255,255,255,0.08)',background:'transparent',color:'rgba(255,255,255,0.3)',fontSize:13,cursor:'pointer',fontFamily:'inherit'}}>
-          Maybe later
-        </button>
-      </div>
-    </div>
-  )}
 
       {/* BOTTOM NAV — Apple Health 2026 */}
       <div style={{position:'fixed',bottom:12,left:'50%',transform:'translateX(-50%)',zIndex:200,width:'calc(100% - 32px)',maxWidth:420}}>
@@ -1661,8 +1488,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   )}
                 </div>
                 <span style={{
-                  fontSize:11,fontWeight:active?800:600,
-                  color:active?t.color:dark?'rgba(255,255,255,0.92)':'rgba(0,0,0,0.7)',
+                  fontSize:7,fontWeight:active?700:400,
+                  color:active?t.color:dark?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.28)',
                   transition:'all 0.2s',letterSpacing:active?0.5:0.2,
                   textTransform:'uppercase',position:'relative',zIndex:1,
                   fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,sans-serif',
