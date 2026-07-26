@@ -25,6 +25,7 @@ const Guidelines = dynamic(() => import('./Guidelines'), { ssr: false })
 const Medications = dynamic(() => import('./Medications'), { ssr: false })
 const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
 const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
+const GrandRoundsAI = dynamic(() => import('./GrandRoundsAI'), { ssr: false })
 
 const T = {
   card: 'rgba(255,255,255,0.04)',
@@ -105,6 +106,7 @@ function ToolRenderer({ toolId, onXP }: { toolId: string, onXP: (n: number) => v
     rapid: <RapidFire onXP={onXP} />,
     bls: <BLSACLSModule onXP={onXP} />,
     oncall: <OnCallSystem />,
+    grandrounds: <GrandRoundsAI onXP={onXP} />,
     nightshift: <NightShiftSurvival onXP={onXP} />,
     ecg: <EcgChallenge onXP={onXP} />,
     cardiac: <CardiacSurgeryAI onXP={onXP} />,
