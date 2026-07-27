@@ -692,7 +692,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             mcqCorrect={mcqCorrect} isPro={isPro}
             criticalCases={criticalCases} sportsCases={sportsCases} pedsCases={pedsCases}
             setActiveCase={setActiveCase} setShowUpgrade={setShowUpgrade}
-            setTab={setTab} setToolTab={setToolTab}
+            setTab={setTab} setToolTab={setToolTab} onXP={addXP}
           />
         )}
 
