@@ -153,7 +153,7 @@ const darkTheme = {
 }
 
 export default function Home() {
-  const [screen, setScreen] = useState<'app'>('app')
+  const [screen, setScreen] = useState('hub')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showOnboarding, setShowOnboarding] = useState(true)
