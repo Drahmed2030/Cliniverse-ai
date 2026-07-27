@@ -606,8 +606,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
       <main style={{flex:1,padding:'14px 16px',paddingBottom:90,maxWidth:700,margin:'0 auto',width:'100%',boxSizing:'border-box',position:'relative',zIndex:1}}>
 
-        {/* ── CLINIVERSE AI HEADER — 2026 ── */}
-        {tab==='hub'&&(
+        {tab==='hub'&&false&&(
           <div style={{marginBottom:16}}>
 
 
