@@ -984,4 +984,4 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       <PWAInstall/>
     </div>
   )
-}// Mon Jul 27 05:29:55 +03 2026
+}
