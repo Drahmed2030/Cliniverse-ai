@@ -68,7 +68,7 @@ const XPRing = ({ xp, tier }: { xp: number, tier: typeof TIERS[0] }) => {
       }}>
         <div style={{ fontSize: 22, color: tier.color, fontWeight: 900, lineHeight: 1 }}>{tier.shape}</div>
         <div style={{ fontSize: 18, fontWeight: 900, color: T.text, lineHeight: 1.1 }}>{xp}</div>
-        <div style={{ fontSize: 9, color: T.sub, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>XP</div>
+        <div style={{ fontSize: 11, color: T.sub, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>XP</div>
       </div>
     </div>
   )
@@ -95,7 +95,7 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
     }}>{icon}</div>
     <div style={{ flex: 1 }}>
       <div style={{ fontSize: 13, fontWeight: 800, color: unlocked ? T.text : T.muted, marginBottom: 2 }}>{label}</div>
-      <div style={{ fontSize: 10, color: T.muted }}>{desc}</div>
+      <div style={{ fontSize: 12, color: T.muted }}>{desc}</div>
     </div>
     {unlocked && <div style={{
       width: 8, height: 8, borderRadius: '50%', background: color,
@@ -113,7 +113,7 @@ const StatCard = ({ label, value, color, icon }: { label: string, value: string 
   }}>
     <div style={{ fontSize: 18, marginBottom: 6 }}>{icon}</div>
     <div style={{ fontSize: 22, fontWeight: 900, color, lineHeight: 1 }}>{value}</div>
-    <div style={{ fontSize: 9, color: T.muted, fontWeight: 700, marginTop: 4, letterSpacing: 0.8, textTransform: 'uppercase' }}>{label}</div>
+    <div style={{ fontSize: 11, color: T.muted, fontWeight: 700, marginTop: 4, letterSpacing: 0.8, textTransform: 'uppercase' }}>{label}</div>
   </div>
 )
 
@@ -173,7 +173,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
               borderRadius: 10, padding: '4px 10px', marginBottom: 8,
             }}>
               <span style={{ fontSize: 12, color: tier.color }}>{tier.shape}</span>
-              <span style={{ fontSize: 10, fontWeight: 800, color: tier.color, letterSpacing: 1.5, textTransform: 'uppercase' }}>{tier.label}</span>
+              <span style={{ fontSize: 12, fontWeight: 800, color: tier.color, letterSpacing: 1.5, textTransform: 'uppercase' }}>{tier.label}</span>
             </div>
 
             <div style={{ fontSize: 20, fontWeight: 900, color: T.text, letterSpacing: -0.5, marginBottom: 4, lineHeight: 1.1 }}>
@@ -188,8 +188,8 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
             {nextTier && (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                  <span style={{ fontSize: 9, color: T.muted, fontWeight: 700 }}>NEXT: {nextTier.label.toUpperCase()}</span>
-                  <span style={{ fontSize: 9, color: tier.color, fontWeight: 700 }}>{nextTier.min - xp} XP away</span>
+                  <span style={{ fontSize: 11, color: T.muted, fontWeight: 700 }}>NEXT: {nextTier.label.toUpperCase()}</span>
+                  <span style={{ fontSize: 11, color: tier.color, fontWeight: 700 }}>{nextTier.min - xp} XP away</span>
                 </div>
                 <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
                   <div style={{
@@ -258,7 +258,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
             position: 'relative', overflow: 'hidden',
           }}>
             <CVWatermark />
-            <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 }}>Tier Progression</div>
+            <div style={{ fontSize: 12, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 14 }}>Tier Progression</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {TIERS.map((t, i) => {
                 const isActive = t.id === tier.id
@@ -277,9 +277,9 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                       <div style={{ fontSize: 13, fontWeight: isActive ? 800 : 600, color: isActive ? T.text : isPast ? T.sub : T.muted }}>
                         {t.label}
                       </div>
-                      <div style={{ fontSize: 10, color: T.muted }}>{t.min}–{t.max === 9999 ? '∞' : t.max} XP</div>
+                      <div style={{ fontSize: 12, color: T.muted }}>{t.min}–{t.max === 9999 ? '∞' : t.max} XP</div>
                     </div>
-                    {isActive && <div style={{ fontSize: 10, color: t.color, fontWeight: 800, background: `${t.color}15`, padding: '3px 8px', borderRadius: 8 }}>CURRENT</div>}
+                    {isActive && <div style={{ fontSize: 12, color: t.color, fontWeight: 800, background: `${t.color}15`, padding: '3px 8px', borderRadius: 8 }}>CURRENT</div>}
                     {isPast && <div style={{ fontSize: 14, color: t.color }}>✓</div>}
                   </div>
                 )
@@ -295,7 +295,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
               cursor: 'pointer', position: 'relative', overflow: 'hidden',
             }}>
               <CVWatermark />
-              <div style={{ fontSize: 10, color: T.teal, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Unlock Everything</div>
+              <div style={{ fontSize: 12, color: T.teal, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Unlock Everything</div>
               <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 6 }}>Upgrade to PRO 👑</div>
               <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Unlimited cases · AI Generator · All specialties</div>
               <div style={{
@@ -311,7 +311,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
       {/* ── ACHIEVEMENTS TAB ── */}
       {activeTab === 'achievements' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 4 }}>
+          <div style={{ fontSize: 12, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 4 }}>
             {ACHIEVEMENTS.filter(a => a.unlocked).length}/{ACHIEVEMENTS.length} Unlocked
           </div>
           {ACHIEVEMENTS.map((a, i) => (

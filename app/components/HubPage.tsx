@@ -67,7 +67,7 @@ function SectionModal({ section, onClose, onCase, isPro, setShowUpgrade }: {
           }}>{section.icon}</div>
           <div>
             <div style={{ fontSize: 18, fontWeight: 800, color: T.text, fontFamily: T.F }}>{section.title}</div>
-            <div style={{ fontSize: 12, color: T.sub }}>{section.cases?.length || 0} cases available</div>
+            <div style={{ fontSize: 14, color: T.sub }}>{section.cases?.length || 0} cases available</div>
           </div>
         </div>
 
@@ -89,10 +89,10 @@ function SectionModal({ section, onClose, onCase, isPro, setShowUpgrade }: {
               }}>{c.icon || '🏥'}</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 2 }}>{c.title}</div>
-                <div style={{ fontSize: 11, color: T.sub }}>{c.sub}</div>
+                <div style={{ fontSize: 15, color: T.sub }}>{c.sub}</div>
               </div>
               {!c.free && !isPro
-                ? <span style={{ fontSize: 9, padding: '3px 8px', borderRadius: 8, background: 'rgba(255,149,0,0.15)', color: '#ff9500', fontWeight: 800, border: '1px solid rgba(255,149,0,0.25)' }}>PRO</span>
+                ? <span style={{ fontSize: 15, padding: '3px 8px', borderRadius: 8, background: 'rgba(255,149,0,0.15)', color: '#ff9500', fontWeight: 800, border: '1px solid rgba(255,149,0,0.25)' }}>PRO</span>
                 : <span style={{ fontSize: 18, color: T.muted }}>›</span>
               }
             </div>
@@ -183,22 +183,22 @@ export default function HubPage({
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, position: 'relative', zIndex: 1 }}>
           <div>
-            <div style={{ fontSize: 11, color: T.teal, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 4 }}>Clinical Intelligence</div>
+            <div style={{ fontSize: 15, color: T.teal, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 4 }}>Clinical Intelligence</div>
             <div style={{ fontSize: 26, fontWeight: 900, color: T.text, letterSpacing: -0.8, lineHeight: 1 }}>
               Clini<span style={{ color: T.teal }}>verse</span>
             </div>
-            <div style={{ fontSize: 11, color: T.sub, marginTop: 4 }}>{rank} · {xp} XP</div>
+            <div style={{ fontSize: 15, color: T.sub, marginTop: 4 }}>{rank} · {xp} XP</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             {isPro && (
               <div style={{ background: 'linear-gradient(135deg,rgba(245,166,35,0.2),rgba(245,166,35,0.05))', border: '1px solid rgba(245,166,35,0.3)', borderRadius: 12, padding: '4px 12px', marginBottom: 8, display: 'inline-block' }}>
-                <span style={{ fontSize: 11, color: T.amber, fontWeight: 800 }}>👑 PRO</span>
+                <span style={{ fontSize: 15, color: T.amber, fontWeight: 800 }}>👑 PRO</span>
               </div>
             )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'flex-end' }}>
               <span style={{ fontSize: 16 }}>🔥</span>
               <span style={{ fontSize: 18, fontWeight: 900, color: T.amber }}>{streak}</span>
-              <span style={{ fontSize: 11, color: T.sub }}>day streak</span>
+              <span style={{ fontSize: 15, color: T.sub }}>day streak</span>
             </div>
           </div>
         </div>
@@ -215,7 +215,7 @@ export default function HubPage({
               border: `1px solid ${s.color}18`, textAlign: 'center'
             }}>
               <div style={{ fontSize: 18, fontWeight: 900, color: s.color, lineHeight: 1 }}>{s.value}</div>
-              <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginTop: 3, letterSpacing: 0.5, textTransform: 'uppercase' }}>{s.label}</div>
+              <div style={{ fontSize: 15, color: T.muted, fontWeight: 600, marginTop: 3, letterSpacing: 0.5, textTransform: 'uppercase' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -231,7 +231,7 @@ export default function HubPage({
         border: '1px solid rgba(255,77,109,0.12)'
       }}>
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: T.rose, boxShadow: `0 0 10px ${T.rose}`, flexShrink: 0 }} />
-        <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>
+        <span style={{ fontSize: 14, color: T.sub, fontWeight: 600 }}>
           <span style={{ color: T.text, fontWeight: 800 }}>{liveCount.toLocaleString()}</span> doctors training right now
         </span>
         <div style={{ width: 7, height: 7, borderRadius: '50%', background: T.rose, boxShadow: `0 0 10px ${T.rose}`, flexShrink: 0 }} />
@@ -253,19 +253,19 @@ export default function HubPage({
         boxShadow: `0 8px 32px ${T.rose}30`
       }}>
         <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
-        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6, fontWeight: 700 }}>Today's Featured Case</div>
+        <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6, fontWeight: 700 }}>Today's Featured Case</div>
         <div style={{ fontSize: 22, fontWeight: 900, color: '#fff', marginBottom: 6, letterSpacing: -0.5 }}>🫀 STEMI Protocol</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 16 }}>Master door-to-balloon · +80 XP</div>
+        <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', marginBottom: 16 }}>Master door-to-balloon · +80 XP</div>
         <div style={{
           display: 'inline-block', background: 'rgba(255,255,255,0.18)',
           backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)',
-          color: '#fff', padding: '9px 20px', borderRadius: 12, fontSize: 13, fontWeight: 700
+          color: '#fff', padding: '9px 20px', borderRadius: 12, fontSize: 15, fontWeight: 700
         }}>Start Case →</div>
       </div>
 
       {/* ── QUICK TOOLS ── */}
       <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 10, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>Quick Access</div>
+        <div style={{ fontSize: 14, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>Quick Access</div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>
           {quickTools.map(t => (
             <div key={t.label} onClick={() => { setTab(t.tab); if (t.tool) setToolTab(t.tool) }} style={{
@@ -273,7 +273,7 @@ export default function HubPage({
               border: `1px solid ${t.color}20`, cursor: 'pointer', textAlign: 'center'
             }}>
               <div style={{ fontSize: 22, marginBottom: 6 }}>{t.icon}</div>
-              <div style={{ fontSize: 10, color: t.color, fontWeight: 700 }}>{t.label}</div>
+              <div style={{ fontSize: 14, color: t.color, fontWeight: 700 }}>{t.label}</div>
             </div>
           ))}
         </div>
@@ -285,7 +285,7 @@ export default function HubPage({
       {/* ── CLINICAL CASES (hidden) ── */}
       {false &&
       <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 10, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>Clinical Cases</div>
+        <div style={{ fontSize: 14, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>Clinical Cases</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {sections.map(s => (
             <div key={s.key} onClick={() => setOpenSection(s)} style={{
@@ -302,9 +302,9 @@ export default function HubPage({
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                   <span style={{ fontSize: 15, fontWeight: 800, color: T.text }}>{s.title}</span>
-                  {s.badge && <span style={{ fontSize: 9, padding: '2px 7px', borderRadius: 7, background: `${s.color}18`, color: s.color, fontWeight: 800, border: `1px solid ${s.color}30` }}>{s.badge}</span>}
+                  {s.badge && <span style={{ fontSize: 15, padding: '2px 7px', borderRadius: 7, background: `${s.color}18`, color: s.color, fontWeight: 800, border: `1px solid ${s.color}30` }}>{s.badge}</span>}
                 </div>
-                <div style={{ fontSize: 11, color: T.sub }}>{s.sub}</div>
+                <div style={{ fontSize: 15, color: T.sub }}>{s.sub}</div>
               </div>
               <div style={{ fontSize: 20, color: `${s.color}60`, fontWeight: 700 }}>›</div>
             </div>
@@ -328,7 +328,7 @@ export default function HubPage({
         }}>🤖</div>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 3 }}>AI Case Generator</div>
-          <div style={{ fontSize: 11, color: T.sub }}>Unlimited · Any specialty · Arabic + English</div>
+          <div style={{ fontSize: 15, color: T.sub }}>Unlimited · Any specialty · Arabic + English</div>
         </div>
         <div style={{ fontSize: 20, color: `${T.teal}60` }}>›</div>
       </div>
@@ -336,8 +336,8 @@ export default function HubPage({
       {/* ── ADVANCED MODULES GRID ── */}
       <div style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <div style={{ fontSize: 10, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>Advanced Modules</div>
-          <span style={{ fontSize: 10, color: T.teal, fontWeight: 700 }}>{modules.length} modules</span>
+          <div style={{ fontSize: 14, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700 }}>Advanced Modules</div>
+          <span style={{ fontSize: 14, color: T.teal, fontWeight: 700 }}>{modules.length} modules</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8 }}>
           {modules.map(m => (
@@ -348,7 +348,7 @@ export default function HubPage({
             }}>
               <div style={{ position: 'absolute', top: -8, right: -8, width: 30, height: 30, borderRadius: '50%', background: `${m.color}12`, filter: 'blur(8px)', pointerEvents: 'none' }} />
               <div style={{ fontSize: 20, marginBottom: 6 }}>{m.icon}</div>
-              <div style={{ fontSize: 9, color: m.color, fontWeight: 700, letterSpacing: 0.3 }}>{m.label}</div>
+              <div style={{ fontSize: 15, color: m.color, fontWeight: 700, letterSpacing: 0.3 }}>{m.label}</div>
             </div>
           ))}
         </div>

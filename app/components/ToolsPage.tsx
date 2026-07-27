@@ -226,7 +226,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 3 }}>{s.label}</div>
                 <div style={{ fontSize: 11, color: T.sub }}>{s.desc}</div>
-                <div style={{ fontSize: 10, color: `${s.color}90`, fontWeight: 700, marginTop: 4 }}>{s.tools.length} tools</div>
+                <div style={{ fontSize: 12, color: `${s.color}90`, fontWeight: 700, marginTop: 4 }}>{s.tools.length} tools</div>
               </div>
               <div style={{ fontSize: 22, color: `${s.color}50` }}>›</div>
             </div>
