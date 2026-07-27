@@ -278,7 +278,11 @@ export default function HubPage({
         </div>
       </div>
 
-      {/* ── CLINICAL CASES ── */}
+      {/* ── LIVE AI CASE ── */}
+      <LiveCaseViewer specialty='Emergency Medicine' difficulty='Intermediate' onXP={onXP} />
+
+      {/* ── CLINICAL CASES (hidden) ── */}
+      {false &&
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontSize: 10, color: T.muted, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>Clinical Cases</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -306,6 +310,8 @@ export default function HubPage({
           ))}
         </div>
       </div>
+
+      }{/* end false */}
 
       {/* ── AI CASE GENERATOR ── */}
       <div onClick={() => { setTab('tools'); setToolTab('aigen') }} style={{
