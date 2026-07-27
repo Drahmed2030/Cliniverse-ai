@@ -2,7 +2,11 @@
 import { useState } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
-import { T, G, S } from '../theme'
+const T = {
+  card: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.08)',
+  text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
+  teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#a78bfa',
+}
 
 export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }) {
   const [patients, setPatients] = useState('')

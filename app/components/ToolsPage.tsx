@@ -27,7 +27,14 @@ const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
 const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 const GrandRoundsAI = dynamic(() => import('./GrandRoundsAI'), { ssr: false })
 
-import { T, G, S } from '../theme'
+const T = {
+  card: 'rgba(255,255,255,0.04)',
+  border: 'rgba(255,255,255,0.08)',
+  text: '#ffffff',
+  sub: 'rgba(255,255,255,0.45)',
+  muted: 'rgba(255,255,255,0.18)',
+  F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
+}
 
 const SECTIONS = [
   {
