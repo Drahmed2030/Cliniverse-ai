@@ -5,9 +5,9 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#1a2535',
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(255,255,255,0.07)',
+  bg: '#1e2d40',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(255,255,255,0.11)',
   borderBlue: 'rgba(0,212,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
@@ -56,7 +56,7 @@ const XPRing = ({ xp, tier }: { xp: number, tier: typeof TIERS[0] }) => {
   return (
     <div style={{ position: 'relative', width: 130, height: 130, flexShrink: 0 }}>
       <svg width="130" height="130" viewBox="0 0 130 130">
-        <circle cx="65" cy="65" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+        <circle cx="65" cy="65" r={r} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="8"/>
         <circle cx="65" cy="65" r={r} fill="none" stroke={tier.color} strokeWidth="8"
           strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ * 0.25}
           strokeLinecap="round" style={{ filter: `drop-shadow(0 0 8px ${tier.color})` }}/>
@@ -88,8 +88,8 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
   }}>
     <div style={{
       width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.07)',
-      border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.12)'}`,
+      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.11)',
+      border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.18)'}`,
       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
       boxShadow: unlocked ? `0 0 16px ${color}20` : 'none',
     }}>{icon}</div>
@@ -191,7 +191,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                   <span style={{ fontSize: 11, color: T.muted, fontWeight: 700 }}>NEXT: {nextTier.label.toUpperCase()}</span>
                   <span style={{ fontSize: 11, color: tier.color, fontWeight: 700 }}>{nextTier.min - xp} XP away</span>
                 </div>
-                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.06)' }}>
+                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }}>
                   <div style={{
                     height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${tier.color}, ${nextTier.color})`,
                     width: `${Math.min(((xp - tier.min) / (nextTier.min - tier.min)) * 100, 100)}%`,
@@ -215,7 +215,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
           <span style={{ fontSize: 18 }}>🔥</span>
           <span style={{ fontSize: 15, fontWeight: 900, color: T.amber }}>{streak}</span>
           <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>day streak</span>
-          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.12)', margin: '0 8px' }}/>
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.18)', margin: '0 8px' }}/>
           <span style={{ fontSize: 12, color: T.sub }}>{casesCompleted} cases · {accuracy}% accuracy</span>
         </div>
       </div>
@@ -268,7 +268,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                     <div style={{
                       width: 32, height: 32, borderRadius: 10, flexShrink: 0,
                       background: isActive ? `${t.color}20` : isPast ? `${t.color}10` : 'rgba(255,255,255,0.03)',
-                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(255,255,255,0.06)'}`,
+                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(255,255,255,0.15)'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 14, color: isActive || isPast ? t.color : T.muted,
                       boxShadow: isActive ? `0 0 12px ${t.color}30` : 'none',

@@ -165,8 +165,8 @@ const CASES: AutopsyCase[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -200,7 +200,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7}}>Analyse real medical errors. Find what went wrong. Learn without blame. Prevent future harm.</div>
         <div style={{display:'flex',gap:8,marginTop:12}}>
           {['🔍 Analyse','⚠️ No Blame','🛡️ Prevent'].map(t=>(
-            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.12)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
+            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
           ))}
         </div>
       </div>
@@ -234,7 +234,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
   if (phase === 'timeline') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setPhase('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setPhase('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:800,color:C.text}}>{c.icon} {c.title}</div>
           <div style={{fontSize:11,color:C.sub}}>{c.specialty}</div>
@@ -263,7 +263,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div>
           <div style={{fontSize:10,color:C.muted,letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>Tap events to explore</div>
           <div style={{position:'relative'}}>
-            <div style={{position:'absolute',left:20,top:0,bottom:0,width:2,background:'linear-gradient(180deg,rgba(255,69,58,0.4),rgba(139,92,246,0.2))',borderRadius:1}}/>
+            <div style={{position:'absolute',left:20,top:0,bottom:0,width:2,background:'linear-gradient(180deg,rgba(255,69,58,0.4),rgba(139,92,246,0.3))',borderRadius:1}}/>
             {c.timeline.map((ev,i)=>(
               <div key={ev.id} onClick={()=>setExpandedEvent(expandedEvent===ev.id?null:ev.id)}
                 style={{display:'flex',gap:14,marginBottom:12,cursor:'pointer',position:'relative'}}>
@@ -363,14 +363,14 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
+          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:800,color:C.text}}>🧠 Knowledge Check</div>
             <div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{c.questions.length} · Score: {score}</div>
           </div>
         </div>
 
-        <div style={{height:4,background:'rgba(255,255,255,0.06)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:4,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/c.questions.length)*100}%`,background:`linear-gradient(90deg,${c.color},${c.color}bb)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${c.color}88`}}/>
         </div>
 
@@ -388,7 +388,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}

@@ -80,7 +80,7 @@ export default function PWAInstall() {
           {step:'3', icon:'✅', text:'Tap "Add" — Cliniverse AI will appear like an app'},
         ].map(s=>(
           <div key={s.step} style={{display:'flex',gap:14,marginBottom:16,alignItems:'center'}}>
-            <div style={{width:36,height:36,borderRadius:11,background:'rgba(139,92,246,0.2)',border:'1px solid rgba(139,92,246,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{s.icon}</div>
+            <div style={{width:36,height:36,borderRadius:11,background:'rgba(139,92,246,0.3)',border:'1px solid rgba(139,92,246,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{s.icon}</div>
             <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.5}}>{s.text}</div>
           </div>
         ))}
@@ -95,7 +95,7 @@ export default function PWAInstall() {
   // Install Banner
   return (
     <div style={{position:'fixed',bottom:90,left:'50%',transform:'translateX(-50%)',zIndex:1000,width:'calc(100% - 32px)',maxWidth:420,fontFamily:'-apple-system,sans-serif',animation:'slideUp 0.4s cubic-bezier(.34,1.56,.64,1)'}}>
-      <div style={{background:'linear-gradient(135deg,rgba(28,8,58,0.97),rgba(12,4,32,0.99))',borderRadius:22,padding:'16px 18px',border:'1.5px solid rgba(139,92,246,0.4)',boxShadow:'0 8px 40px rgba(0,0,0,0.6), 0 0 60px rgba(139,92,246,0.2)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(28,8,58,0.97),rgba(12,4,32,0.99))',borderRadius:22,padding:'16px 18px',border:'1.5px solid rgba(139,92,246,0.4)',boxShadow:'0 8px 40px rgba(0,0,0,0.6), 0 0 60px rgba(139,92,246,0.3)',position:'relative',overflow:'hidden'}}>
         {/* Glow */}
         <div style={{position:'absolute',top:-20,left:'20%',width:200,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',filter:'blur(20px)',pointerEvents:'none'}}/>
         <div style={{display:'flex',alignItems:'center',gap:14,position:'relative',zIndex:1}}>

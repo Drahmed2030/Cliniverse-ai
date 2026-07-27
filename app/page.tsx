@@ -136,19 +136,19 @@ const lightTheme = {
 const darkTheme = {
   bg: 'radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0a0015 40%, #000510 100%)',
   headerBg: 'rgba(10,0,21,0.85)',
-  headerBorder: 'rgba(139,92,246,0.15)',
-  cardBg: 'rgba(255,255,255,0.04)',
-  cardBorder: 'rgba(139,92,246,0.15)',
+  headerBorder: 'rgba(139,92,246,0.25)',
+  cardBg: 'rgba(255,255,255,0.15)',
+  cardBorder: 'rgba(139,92,246,0.25)',
   text: '#ffffff',
   textSub: 'rgba(255,255,255,0.6)',
   textMuted: 'rgba(255,255,255,0.35)',
   navBg: 'rgba(10,0,21,0.95)',
-  navBorder: 'rgba(139,92,246,0.2)',
+  navBorder: 'rgba(139,92,246,0.3)',
   navActiveColor: '#0a84ff',
   navInactiveColor: 'rgba(255,255,255,0.3)',
-  inputBg: 'rgba(255,255,255,0.08)',
+  inputBg: 'rgba(255,255,255,0.15)',
   accent: '#8b5cf6',
-  segmentBg: 'rgba(255,255,255,0.06)',
+  segmentBg: 'rgba(255,255,255,0.15)',
   caseBg: 'rgba(28,14,50,0.9)',
 }
 
@@ -365,11 +365,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
   if(screen==='launch') return (
     <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0a0015 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',overflow:'hidden',position:'relative'}}>
-      <div style={{position:'absolute',width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%)',top:-150,left:-150,filter:'blur(60px)'}}/>
+      <div style={{position:'absolute',width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.25) 0%,transparent 70%)',top:-150,left:-150,filter:'blur(60px)'}}/>
       <div style={{position:'absolute',width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(10,132,255,0.12) 0%,transparent 70%)',bottom:-100,right:-100,filter:'blur(60px)'}}/>
       <div style={{marginBottom:28,position:'relative'}}>
         <svg width={130} height={130} viewBox="0 0 120 120">
-          <circle cx={60} cy={60} r={55} fill="none" stroke="rgba(139,92,246,0.2)" strokeWidth={1}/>
+          <circle cx={60} cy={60} r={55} fill="none" stroke="rgba(139,92,246,0.3)" strokeWidth={1}/>
           <circle cx={60} cy={60} r={55} fill="none" stroke="url(#grad)" strokeWidth={2} strokeDasharray="345" strokeDashoffset={345-(345*progress/100)} strokeLinecap="round" transform="rotate(-90 60 60)" style={{transition:'stroke-dashoffset 0.1s'}}/>
           <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#8b5cf6"/><stop offset="50%" stopColor="#0a84ff"/><stop offset="100%" stopColor="#30d158"/></linearGradient></defs>
           <path d="M18 60 L34 60 L42 32 L52 88 L62 60 L70 60 L77 44 L84 76 L91 60 L102 60" fill="none" stroke="white" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"/>
@@ -382,14 +382,14 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       </div>
       <div style={{fontSize:10,color:'rgba(255,255,255,0.2)',letterSpacing:4,textTransform:'uppercase',marginBottom:10}}>Virtual Hospital Hub</div>
       <div style={{display:'flex',gap:8,marginBottom:24}}>
-        <span style={{fontSize:12,fontWeight:700,padding:'4px 14px',borderRadius:20,background:'rgba(139,92,246,0.2)',border:'1px solid rgba(139,92,246,0.4)',color:'#c4b5fd'}}>⚕ 21 Cases</span>
+        <span style={{fontSize:12,fontWeight:700,padding:'4px 14px',borderRadius:20,background:'rgba(139,92,246,0.3)',border:'1px solid rgba(139,92,246,0.4)',color:'#c4b5fd'}}>⚕ 21 Cases</span>
         <span style={{fontSize:12,fontWeight:700,padding:'4px 14px',borderRadius:20,background:'rgba(245,158,11,0.2)',border:'1px solid rgba(245,158,11,0.4)',color:'#fbbf24'}}>◈ 164 MCQs</span>
         <span style={{fontSize:12,fontWeight:700,padding:'4px 14px',borderRadius:20,background:'rgba(255,59,48,0.2)',border:'1px solid rgba(255,59,48,0.4)',color:'#fca5a5'}}>🚨 10 Simulations</span>
       </div>
       <div style={{height:22,marginBottom:28,overflow:'hidden',width:300,textAlign:'center'}}>
         <p key={tagline} style={{fontSize:13,color:'rgba(255,255,255,0.5)',margin:0,animation:'slideUp 0.6s ease'}}>{taglines[tagline]}</p>
       </div>
-      <div style={{width:220,height:2,background:'rgba(255,255,255,0.06)',borderRadius:1,marginBottom:12,overflow:'hidden'}}>
+      <div style={{width:220,height:2,background:'rgba(255,255,255,0.15)',borderRadius:1,marginBottom:12,overflow:'hidden'}}>
         <div style={{height:'100%',background:'linear-gradient(90deg,#8b5cf6,#0a84ff,#30d158)',width:`${progress}%`,transition:'width 0.1s'}}/>
       </div>
       <p style={{fontSize:10,color:'rgba(255,255,255,0.15)',letterSpacing:2}}>v5.0 · SECURE · Built by a Physician</p>
@@ -421,16 +421,16 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <p style={{fontSize:14,color:'rgba(255,255,255,0.35)',marginBottom:36}}>Access your clinical dashboard</p>
         <div style={{marginBottom:14}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Email / Medical ID</label>
-          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
         <div style={{marginBottom:28}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Password</label>
-          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
         <button onClick={()=>setScreen('app')} style={{width:'100%',padding:'17px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:16,fontWeight:700,boxShadow:'0 8px 32px rgba(139,92,246,0.4)',marginBottom:14}}>Access Hospital →</button>
         <div style={{display:'flex',gap:10,marginBottom:24}}>
-          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
-          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.04)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
+          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
+          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
         </div>
         <p style={{textAlign:'center',fontSize:13,color:'rgba(255,255,255,0.25)'}}>New physician? <span style={{color:'#8b5cf6',cursor:'pointer'}} onClick={()=>setScreen('app')}>Request Access</span></p>
       </div>
@@ -445,8 +445,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     return(
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0a0015 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
-        <div style={{background:`linear-gradient(160deg,${c.color}22,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(139,92,246,0.15)',position:'relative',zIndex:1}}>
-          <button onClick={()=>setActiveCase(null)} style={{background:'rgba(139,92,246,0.15)',backdropFilter:'blur(10px)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
+        <div style={{background:`linear-gradient(160deg,${c.color}22,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(139,92,246,0.25)',position:'relative',zIndex:1}}>
+          <button onClick={()=>setActiveCase(null)} style={{background:'rgba(139,92,246,0.25)',backdropFilter:'blur(10px)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
           <div style={{fontSize:50,marginBottom:8}}>{c.icon}</div>
           <h1 style={{fontSize:28,fontWeight:800,margin:'0 0 4px',color:T.text}}>{c.title}</h1>
           <p style={{color:T.textSub,fontSize:13,margin:0}}>{c.sub}</p>
@@ -487,7 +487,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           </button>
 
           {showAI&&(
-            <div style={{background:'linear-gradient(145deg,rgba(15,23,42,0.97),rgba(10,15,30,0.99))',borderRadius:20,padding:18,marginBottom:14,border:'1px solid rgba(139,92,246,0.2)',boxShadow:'0 8px 40px rgba(139,92,246,0.2)'}}>
+            <div style={{background:'linear-gradient(145deg,rgba(15,23,42,0.97),rgba(10,15,30,0.99))',borderRadius:20,padding:18,marginBottom:14,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 8px 40px rgba(139,92,246,0.3)'}}>
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                 <div style={{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>🤖</div>
                 <div>
@@ -507,7 +507,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                       `What are the contraindications in this case?`,
                       `When should I consider ICU admission?`,
                     ].map(q=>(
-                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
+                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.15)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
                     ))}
                   </div>
                 </div>
@@ -516,7 +516,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               {/* Chat history */}
               {aiHistory.map((item,i)=>(
                 <div key={i} style={{marginBottom:12}}>
-                  <div style={{background:'rgba(139,92,246,0.12)',border:'1px solid rgba(139,92,246,0.2)',borderRadius:12,padding:'10px 14px',marginBottom:6}}>
+                  <div style={{background:'rgba(139,92,246,0.12)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,padding:'10px 14px',marginBottom:6}}>
                     <div style={{fontSize:10,color:'rgba(139,92,246,0.8)',marginBottom:4,fontWeight:700}}>YOU</div>
                     <div style={{fontSize:13,color:'rgba(255,255,255,0.8)'}}>{item.q}</div>
                   </div>
@@ -542,7 +542,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   onChange={e=>setAiQuestion(e.target.value)}
                   onKeyDown={e=>e.key==='Enter'&&askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%`)}
                   placeholder="Ask a clinical question..."
-                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:13,outline:'none'}}
+                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:13,outline:'none'}}
                 />
                 <button
                   onClick={()=>askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%. ECG: ${c.ecg}`)}
@@ -563,8 +563,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     return(
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0a0015 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
-        <div style={{background:`linear-gradient(160deg,${r.color}18,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(139,92,246,0.15)',position:'relative',zIndex:1}}>
-          <button onClick={()=>setActiveRad(null)} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
+        <div style={{background:`linear-gradient(160deg,${r.color}18,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(139,92,246,0.25)',position:'relative',zIndex:1}}>
+          <button onClick={()=>setActiveRad(null)} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
           <div style={{fontSize:50,marginBottom:8}}>{r.icon}</div>
           <h1 style={{fontSize:26,fontWeight:800,margin:'0 0 4px',color:T.text}}>{r.title}</h1>
           <p style={{color:T.textSub,fontSize:13,margin:0}}>{r.sub}</p>
@@ -744,7 +744,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <div style={{fontSize:28,fontWeight:900,color:'white',lineHeight:1}}>$9.99</div>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',marginTop:2}}>/month</div>
                 </div>
-                <div style={{background:'rgba(255,255,255,0.06)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'1px solid rgba(139,92,246,0.3)'}}>
+                <div style={{background:'rgba(255,255,255,0.15)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'1px solid rgba(139,92,246,0.3)'}}>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',fontWeight:600,marginBottom:4}}>Yearly</div>
                   <div style={{fontSize:28,fontWeight:900,color:'#ffd60a',lineHeight:1}}>$79</div>
                   <div style={{fontSize:11,color:'rgba(48,209,88,0.9)',marginTop:2}}>Save 34% 🎉</div>
@@ -773,7 +773,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   {icon:'🔔',title:'On-Call Alerts',sub:'Smart reminders',color:'#64d2ff'},
                   {icon:'📱',title:'Mobile App',sub:'iOS & Android soon',color:'#ff6b35'},
                 ].map(f=>(
-                  <div key={f.title} style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(255,255,255,0.07)',display:'flex',flexDirection:'column',gap:6}}>
+                  <div key={f.title} style={{background:'rgba(255,255,255,0.15)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(255,255,255,0.11)',display:'flex',flexDirection:'column',gap:6}}>
                     <div style={{width:38,height:38,borderRadius:12,background:`${f.color}20`,border:`1px solid ${f.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
                       {f.icon}
                     </div>
@@ -813,10 +813,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       {/* Checkout Modal */}
       {checkoutUrl && (
         <div onClick={()=>setCheckoutUrl('')} style={{position:'fixed',inset:0,zIndex:99999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-          <div onClick={e=>e.stopPropagation()} style={{background:'#1a2535',borderRadius:'28px 28px 0 0',border:'1px solid rgba(255,255,255,0.08)',height:'90vh',overflow:'hidden'}}>
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:'#1e2d40',borderRadius:'28px 28px 0 0',border:'1px solid rgba(255,255,255,0.15)',height:'90vh',overflow:'hidden'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.15)'}}>
               <span style={{fontSize:15,fontWeight:800,color:'white',fontFamily:'"Inter",sans-serif'}}>Complete Purchase</span>
-              <button onClick={()=>setCheckoutUrl('')} style={{background:'rgba(255,255,255,0.08)',border:'none',color:'white',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:18}}>×</button>
+              <button onClick={()=>setCheckoutUrl('')} style={{background:'rgba(255,255,255,0.15)',border:'none',color:'white',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:18}}>×</button>
             </div>
             <iframe src={checkoutUrl} style={{width:'100%',height:'calc(90vh - 60px)',border:'none'}} allow="payment"/>
           </div>
@@ -833,8 +833,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             backdropFilter:'blur(28px)',
             WebkitBackdropFilter:'blur(28px)',
             borderRadius:28,
-            border:'1px solid rgba(255,255,255,0.07)',
-            boxShadow:'0 8px 40px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(255,255,255,0.04)',
+            border:'1px solid rgba(255,255,255,0.11)',
+            boxShadow:'0 8px 40px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(255,255,255,0.15)',
             display:'flex',
             padding:'10px 6px 12px',
             gap:2,

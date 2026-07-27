@@ -3,7 +3,7 @@ import { useState, useRef } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 const T = {
-  bg: '#1a2535', card: 'rgba(255,255,255,0.07)', border: 'rgba(255,255,255,0.12)',
+  bg: '#1e2d40', card: 'rgba(255,255,255,0.11)', border: 'rgba(255,255,255,0.18)',
   text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
   teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#a78bfa',
 }
@@ -145,7 +145,7 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
         </div>
         <button onClick={() => ask(input)} disabled={loading || !input.trim()} style={{
           width: 46, height: 46, borderRadius: 14, border: 'none', flexShrink: 0,
-          background: loading || !input.trim() ? 'rgba(255,255,255,0.06)' : 'linear-gradient(135deg, #a78bfa, #38bdf8)',
+          background: loading || !input.trim() ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg, #a78bfa, #38bdf8)',
           cursor: loading || !input.trim() ? 'default' : 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
           boxShadow: loading || !input.trim() ? 'none' : '0 4px 16px rgba(167,139,250,0.3)',

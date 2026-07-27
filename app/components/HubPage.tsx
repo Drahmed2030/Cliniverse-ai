@@ -6,8 +6,8 @@ const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const F = '"Inter", -apple-system, sans-serif'
 
 const T = {
-  bg: '#1a2535',
-  card: 'rgba(255,255,255,0.06)',
+  bg: '#1e2d40',
+  card: 'rgba(255,255,255,0.15)',
   border: 'rgba(255,255,255,0.1)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.85)',
@@ -64,7 +64,7 @@ function SectionModal({ section, onClose, onCase, isPro, setShowUpgrade }: any) 
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {(section.cases||[]).map((c:any)=>(
-            <div key={c.id} onClick={()=>{ if(!c.free&&!isPro){setShowUpgrade(true);return} onCase(c.id);onClose() }} style={{ background:'rgba(255,255,255,0.06)', borderRadius:18, padding:'14px 16px', border:`1px solid ${c.color||section.color}25`, cursor:'pointer', display:'flex', alignItems:'center', gap:12 }}>
+            <div key={c.id} onClick={()=>{ if(!c.free&&!isPro){setShowUpgrade(true);return} onCase(c.id);onClose() }} style={{ background:'rgba(255,255,255,0.15)', borderRadius:18, padding:'14px 16px', border:`1px solid ${c.color||section.color}25`, cursor:'pointer', display:'flex', alignItems:'center', gap:12 }}>
               <div style={{ width:44, height:44, borderRadius:13, flexShrink:0, background:`${c.color||section.color}18`, border:`1px solid ${c.color||section.color}30`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>{c.icon||'🏥'}</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:15, fontWeight:700, color:'#fff', marginBottom:2 }}>{c.title}</div>
@@ -158,7 +158,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               { city:'Dubai', tag:'URGENT', title:'67F — Acute HF', sub:'BNP 4200 · BiPAP started', color:'#fbbf24' },
               { city:'London', tag:'CRITICAL', title:'19M — DKA', sub:'pH 7.1 · Insulin infusion', color:'#f87171' },
             ].map((c,i)=>(
-              <div key={i} onClick={()=>setShowLive(true)} style={{ minWidth:200, background:'rgba(255,255,255,0.04)', borderRadius:18, padding:'14px', border:`1px solid ${c.color}25`, cursor:'pointer', flexShrink:0 }}>
+              <div key={i} onClick={()=>setShowLive(true)} style={{ minWidth:200, background:'rgba(255,255,255,0.15)', borderRadius:18, padding:'14px', border:`1px solid ${c.color}25`, cursor:'pointer', flexShrink:0 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
                   <span style={{ fontSize:10, color:T.muted, fontWeight:600 }}>{c.city}</span>
                   <span style={{ fontSize:9, fontWeight:800, color:c.color, background:`${c.color}15`, padding:'2px 8px', borderRadius:6 }}>{c.tag}</span>

@@ -2,8 +2,8 @@
 import { useState, useRef, useEffect } from 'react'
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -229,7 +229,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:10}}>Practise the hardest clinical conversations with an AI patient. Get real-time feedback on your communication skills.</div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {['SPIKES','REMAP','HEARD','MCA','Being Open'].map(p=>(
-            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)',fontWeight:700}}>{p}</span>
+            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.15)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{p}</span>
           ))}
         </div>
       </div>
@@ -251,7 +251,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
               <div style={{fontSize:9,color:C.muted,fontWeight:600}}>{s.protocol}</div>
             </div>
           </div>
-          <div style={{background:'rgba(255,255,255,0.03)',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{background:'rgba(255,255,255,0.03)',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.15)'}}>
             <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{s.context.slice(0,120)}...</div>
           </div>
         </div>
@@ -265,7 +265,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>{s.icon} {s.title}</div><div style={{fontSize:11,color:C.sub}}>{s.protocol}</div></div>
         </div>
 
@@ -305,10 +305,10 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
       <div style={{fontFamily:'-apple-system,sans-serif',display:'flex',flexDirection:'column',height:'calc(100vh - 160px)',minHeight:500}}>
         {/* Header */}
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,flexShrink:0}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>⏹ End</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>⏹ End</button>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:800,color:C.text}}>{s.icon} {s.title}</div>
-            <div style={{height:3,background:'rgba(255,255,255,0.06)',borderRadius:2,overflow:'hidden',marginTop:4}}>
+            <div style={{height:3,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginTop:4}}>
               <div style={{height:'100%',width:`${progress}%`,background:`linear-gradient(90deg,${s.color},${s.color}aa)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${s.color}88`}}/>
             </div>
           </div>
@@ -335,7 +335,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
               {msg.role==='doctor'&&(
                 <div style={{maxWidth:'80%'}}>
                   <div style={{fontSize:9,color:C.muted,marginBottom:3,marginRight:4,textAlign:'right'}}>You (Doctor) · {msg.timestamp}</div>
-                  <div style={{background:'rgba(139,92,246,0.15)',borderRadius:'18px 18px 4px 18px',padding:'12px 14px',border:'1px solid rgba(139,92,246,0.25)'}}>
+                  <div style={{background:'rgba(139,92,246,0.25)',borderRadius:'18px 18px 4px 18px',padding:'12px 14px',border:'1px solid rgba(139,92,246,0.25)'}}>
                     <div style={{fontSize:13,color:'white',lineHeight:1.7}}>{msg.content}</div>
                   </div>
                 </div>
@@ -364,7 +364,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
             rows={2}
             style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'white',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
           <button onClick={sendMessage} disabled={loading||!input.trim()}
-            style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.2)':'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
+            style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
         </div>
         <style>{`@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}} textarea::placeholder{color:rgba(255,255,255,0.2)}`}</style>
       </div>
@@ -384,7 +384,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
         </div>
 
         {feedback&&(
-          <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.1),rgba(10,132,255,0.06))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.2)'}}>
+          <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.1),rgba(10,132,255,0.06))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)'}}>
             <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 AI FEEDBACK ON YOUR COMMUNICATION</div>
             <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.85,whiteSpace:'pre-line'}}>{feedback}</div>
           </div>

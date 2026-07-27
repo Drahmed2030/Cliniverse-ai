@@ -15,7 +15,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
   const c1 = 2 * Math.PI * r1, c2 = 2 * Math.PI * r2, c3 = 2 * Math.PI * r3
 
   return (
-    <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.97),rgba(25,8,55,0.95))',borderRadius:24,padding:18,marginBottom:14,border:'1px solid rgba(139,92,246,0.2)'}}>
+    <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.97),rgba(25,8,55,0.95))',borderRadius:24,padding:18,marginBottom:14,border:'1px solid rgba(139,92,246,0.3)'}}>
       <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',letterSpacing:2,marginBottom:12,fontWeight:700}}>DAILY PROGRESS</div>
       <div style={{display:'flex',alignItems:'center',gap:16}}>
         <div style={{position:'relative',width:90,height:90,flexShrink:0}}>
@@ -46,7 +46,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
                 <span style={{fontSize:10,color:'white',fontWeight:600}}>{r.label}</span>
                 <span style={{fontSize:10,color:r.color,fontWeight:700}}>{r.val}%</span>
               </div>
-              <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden'}}>
+              <div style={{height:3,background:'rgba(255,255,255,0.18)',borderRadius:2,overflow:'hidden'}}>
                 <div style={{height:'100%',width:r.val+'%',background:r.color,borderRadius:2,transition:'width 1s ease'}}/>
               </div>
             </div>

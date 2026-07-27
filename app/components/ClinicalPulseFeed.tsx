@@ -55,7 +55,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         <span style={{fontSize:10,color:'rgba(255,255,255,0.3)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
       </div>
 
-      <div style={{background:'rgba(255,255,255,0.03)',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(255,255,255,0.06)'}}>
+      <div style={{background:'rgba(255,255,255,0.03)',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(255,255,255,0.15)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{width:8,height:8,borderRadius:'50%',background:current.color,boxShadow:'0 0 8px '+current.color,flexShrink:0}}/>
           <span style={{fontSize:12,color:current.color,fontWeight:700,flexShrink:0}}>{current.flag} {current.city}</span>
@@ -75,7 +75,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
               <span style={{fontSize:9,padding:'2px 7px',borderRadius:8,background:f.color+'15',color:f.color,fontWeight:700,flexShrink:0}}>{f.level}</span>
             </div>
             {active===f.id&&(
-              <div style={{marginTop:8,paddingTop:8,borderTop:'1px solid rgba(255,255,255,0.06)'}}>
+              <div style={{marginTop:8,paddingTop:8,borderTop:'1px solid rgba(255,255,255,0.15)'}}>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',marginBottom:8}}>{f.detail}</div>
                 <div style={{display:'flex',gap:6}}>
                   <button onClick={e=>{e.stopPropagation();makeSBAR(f)}}

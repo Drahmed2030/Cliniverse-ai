@@ -111,10 +111,10 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
   // PIN SCREEN
   if(!authed) return (
     <div style={{position:'fixed',inset:0,zIndex:1000,background:'radial-gradient(ellipse at 30% 20%,#1a0533 0%,#0a0015 40%,#000510 100%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',fontFamily:'-apple-system,sans-serif'}}>
-      <div style={{position:'absolute',top:-100,left:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.2),transparent 70%)',filter:'blur(40px)',pointerEvents:'none'}}/>
+      <div style={{position:'absolute',top:-100,left:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',filter:'blur(40px)',pointerEvents:'none'}}/>
       <div style={{position:'absolute',bottom:-100,right:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(10,132,255,0.15),transparent 70%)',filter:'blur(40px)',pointerEvents:'none'}}/>
 
-      <button onClick={onClose} style={{position:'absolute',top:20,left:20,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,color:'rgba(255,255,255,0.6)',padding:'8px 16px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+      <button onClick={onClose} style={{position:'absolute',top:20,left:20,background:'rgba(255,255,255,0.18)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:12,color:'rgba(255,255,255,0.6)',padding:'8px 16px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
 
       <div style={{textAlign:'center',marginBottom:40}}>
         <div style={{fontSize:52,marginBottom:12,filter:'drop-shadow(0 0 20px rgba(139,92,246,0.6))'}}>🔐</div>
@@ -143,7 +143,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
             disabled={locked||!d}
             style={{
               height:64,borderRadius:18,border:'1px solid rgba(255,255,255,0.1)',
-              background:d?'rgba(255,255,255,0.06)':'transparent',
+              background:d?'rgba(255,255,255,0.15)':'transparent',
               color:'white',fontSize:d==='⌫'?20:22,fontWeight:600,cursor:d?'pointer':'default',
               boxShadow:'0 2px 8px rgba(0,0,0,0.3)',
               transition:'all 0.15s',opacity:locked?0.4:1,
@@ -176,11 +176,11 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
       overflowY: 'auto',
     }}>
       {/* Ambient glows */}
-      <div style={{position:'fixed',top:-100,left:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.15),transparent 70%)',pointerEvents:'none',filter:'blur(40px)'}}/>
+      <div style={{position:'fixed',top:-100,left:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.25),transparent 70%)',pointerEvents:'none',filter:'blur(40px)'}}/>
       <div style={{position:'fixed',bottom:-100,right:-100,width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(10,132,255,0.1),transparent 70%)',pointerEvents:'none',filter:'blur(40px)'}}/>
 
       {/* HEADER */}
-      <div style={{background:'rgba(10,0,21,0.9)',backdropFilter:'blur(40px)',borderBottom:'1px solid rgba(139,92,246,0.2)',padding:'0 20px',height:52,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+      <div style={{background:'rgba(10,0,21,0.9)',backdropFilter:'blur(40px)',borderBottom:'1px solid rgba(139,92,246,0.3)',padding:'0 20px',height:52,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{width:30,height:30,borderRadius:9,background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15}}>⚙️</div>
           <div>
@@ -190,7 +190,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
         </div>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{fontSize:11,color:'rgba(48,209,88,0.9)',background:'rgba(48,209,88,0.1)',border:'1px solid rgba(48,209,88,0.3)',borderRadius:10,padding:'3px 10px',fontWeight:700}}>● LIVE</div>
-          <button onClick={onClose} style={{background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:10,color:'rgba(255,255,255,0.7)',padding:'6px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={onClose} style={{background:'rgba(255,255,255,0.18)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:10,color:'rgba(255,255,255,0.7)',padding:'6px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         </div>
       </div>
 
@@ -208,7 +208,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
             color:activeTab===t.id?'#c4b5fd':'rgba(255,255,255,0.4)',
             fontSize:13,fontWeight:700,
             border:activeTab===t.id?'1px solid rgba(139,92,246,0.35)':'1px solid transparent',
-            boxShadow:activeTab===t.id?'0 4px 16px rgba(139,92,246,0.2)':'none',
+            boxShadow:activeTab===t.id?'0 4px 16px rgba(139,92,246,0.3)':'none',
             whiteSpace:'nowrap',transition:'all 0.2s',
           }}>
             {t.icon} {t.label}
@@ -229,7 +229,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
                 {label:'Revenue',value:`$${stats.revenue.toFixed(2)}`,icon:'💰',color:'#30d158',trend:'+$29.97 today',data:weeklyRevenue},
                 {label:'Cases Done',value:stats.casesCompleted.toLocaleString(),icon:'🏥',color:'#ff453a',trend:'+87 today',data:weeklyCases},
               ].map(k=>(
-                <div key={k.label} style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:'16px 16px 12px',border:'1px solid rgba(255,255,255,0.07)',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',position:'relative',overflow:'hidden'}}>
+                <div key={k.label} style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:'16px 16px 12px',border:'1px solid rgba(255,255,255,0.11)',boxShadow:'0 4px 24px rgba(0,0,0,0.3)',position:'relative',overflow:'hidden'}}>
                   <div style={{position:'absolute',top:-20,right:-20,width:80,height:80,borderRadius:'50%',background:`${k.color}12`,filter:'blur(20px)',pointerEvents:'none'}}/>
                   <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
                     <div style={{width:36,height:36,borderRadius:11,background:`${k.color}18`,border:`1px solid ${k.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>{k.icon}</div>
@@ -244,15 +244,15 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
 
             {/* Conversion + MCQ row */}
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
-              <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:16,border:'1px solid rgba(255,255,255,0.07)'}}>
+              <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:16,border:'1px solid rgba(255,255,255,0.11)'}}>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginBottom:8,fontWeight:700,letterSpacing:0.5}}>CONVERSION RATE</div>
                 <div style={{fontSize:32,fontWeight:900,color:'#30d158',letterSpacing:-1}}>{convRate}%</div>
-                <div style={{height:4,background:'rgba(255,255,255,0.06)',borderRadius:2,overflow:'hidden',marginTop:10}}>
+                <div style={{height:4,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginTop:10}}>
                   <div style={{height:'100%',width:`${convRate}%`,background:'linear-gradient(90deg,#30d158,#0a84ff)',borderRadius:2,boxShadow:'0 0 8px rgba(48,209,88,0.5)'}}/>
                 </div>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.3)',marginTop:6}}>{stats.proUsers} PRO / {stats.totalUsers} total</div>
               </div>
-              <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:16,border:'1px solid rgba(255,255,255,0.07)'}}>
+              <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:16,border:'1px solid rgba(255,255,255,0.11)'}}>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginBottom:8,fontWeight:700,letterSpacing:0.5}}>MCQ ANSWERED</div>
                 <div style={{fontSize:32,fontWeight:900,color:'#ff9f0a',letterSpacing:-1}}>{stats.mcqAnswered.toLocaleString()}</div>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.3)',marginTop:10}}>Avg {Math.round(stats.mcqAnswered/stats.totalUsers)} per user</div>
@@ -261,7 +261,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Revenue breakdown */}
-            <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:18,border:'1px solid rgba(255,255,255,0.07)',marginBottom:14}}>
+            <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:18,border:'1px solid rgba(255,255,255,0.11)',marginBottom:14}}>
               <div style={{fontSize:13,fontWeight:800,color:'white',marginBottom:14}}>💳 Revenue Breakdown</div>
               {[
                 {label:'Monthly PRO ($9.99)',count:38,amount:379.62,color:'#8b5cf6'},
@@ -275,7 +275,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
                       <span style={{fontSize:12,color:'rgba(255,255,255,0.7)',fontWeight:600}}>{r.label}</span>
                       <span style={{fontSize:12,fontWeight:800,color:r.color}}>${r.amount.toFixed(2)}</span>
                     </div>
-                    <div style={{height:3,background:'rgba(255,255,255,0.06)',borderRadius:2,overflow:'hidden'}}>
+                    <div style={{height:3,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden'}}>
                       <div style={{height:'100%',width:`${r.amount>0?(r.amount/1090.62)*100:0}%`,background:r.color,borderRadius:2}}/>
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* Quick actions */}
-            <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:18,border:'1px solid rgba(255,255,255,0.07)'}}>
+            <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:18,border:'1px solid rgba(255,255,255,0.11)'}}>
               <div style={{fontSize:13,fontWeight:800,color:'white',marginBottom:12}}>⚡ Quick Actions</div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
                 {[
@@ -312,7 +312,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
                 value={searchQuery}
                 onChange={e=>setSearchQuery(e.target.value)}
                 placeholder="Search by name, email, specialty..."
-                style={{width:'100%',padding:'12px 16px 12px 40px',borderRadius:16,border:'1px solid rgba(139,92,246,0.2)',background:'rgba(255,255,255,0.06)',color:'white',fontSize:14,outline:'none',boxSizing:'border-box'}}
+                style={{width:'100%',padding:'12px 16px 12px 40px',borderRadius:16,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:14,outline:'none',boxSizing:'border-box'}}
               />
               <span style={{position:'absolute',left:14,top:'50%',transform:'translateY(-50%)',fontSize:16,opacity:0.5}}>🔍</span>
             </div>
@@ -324,7 +324,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
                 {label:'PRO',value:stats.proUsers,color:'#ffd60a'},
                 {label:'Free',value:stats.totalUsers-stats.proUsers,color:'rgba(255,255,255,0.4)'},
               ].map(s=>(
-                <div key={s.label} style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:14,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.07)',textAlign:'center'}}>
+                <div key={s.label} style={{flex:1,background:'rgba(255,255,255,0.11)',borderRadius:14,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.11)',textAlign:'center'}}>
                   <div style={{fontSize:20,fontWeight:900,color:s.color}}>{s.value}</div>
                   <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',fontWeight:700}}>{s.label}</div>
                 </div>
@@ -333,8 +333,8 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
 
             {/* User list */}
             {filteredUsers.map(u=>(
-              <div key={u.id} style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:'1px solid rgba(255,255,255,0.07)',display:'flex',alignItems:'center',gap:12}}>
-                <div style={{width:42,height:42,borderRadius:13,background:u.is_pro?'linear-gradient(135deg,#8b5cf6,#0a84ff)':'rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>
+              <div key={u.id} style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:'1px solid rgba(255,255,255,0.11)',display:'flex',alignItems:'center',gap:12}}>
+                <div style={{width:42,height:42,borderRadius:13,background:u.is_pro?'linear-gradient(135deg,#8b5cf6,#0a84ff)':'rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>
                   {u.is_pro?'⭐':'👤'}
                 </div>
                 <div style={{flex:1,minWidth:0}}>
@@ -370,7 +370,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
             </div>
 
             {errors.map(e=>(
-              <div key={e.id} style={{background:e.resolved?'rgba(255,255,255,0.03)':'rgba(255,69,58,0.06)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:e.resolved?'1px solid rgba(255,255,255,0.06)':'1px solid rgba(255,69,58,0.2)'}}>
+              <div key={e.id} style={{background:e.resolved?'rgba(255,255,255,0.03)':'rgba(255,69,58,0.06)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:e.resolved?'1px solid rgba(255,255,255,0.15)':'1px solid rgba(255,69,58,0.2)'}}>
                 <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
                   <div style={{fontSize:13,fontWeight:700,color:e.resolved?'rgba(255,255,255,0.5)':'white',flex:1,marginRight:8}}>{e.error_message}</div>
                   <span style={{fontSize:9,padding:'2px 8px',borderRadius:8,background:e.resolved?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)',color:e.resolved?'#30d158':'#ff453a',fontWeight:800,flexShrink:0,border:`1px solid ${e.resolved?'rgba(48,209,88,0.3)':'rgba(255,69,58,0.3)'}`}}>
@@ -406,7 +406,7 @@ export default function AdminDashboard({ onClose }: { onClose: () => void }) {
               {section:'Radiology',cases:5,free:5,pro:0,color:'#0a84ff',icon:'🩻'},
               {section:'MCQ Bank',cases:10,free:10,pro:0,color:'#ff9f0a',icon:'🧬'},
             ].map(s=>(
-              <div key={s.section} style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:'1px solid rgba(255,255,255,0.07)'}}>
+              <div key={s.section} style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:'1px solid rgba(255,255,255,0.11)'}}>
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
                   <div style={{width:36,height:36,borderRadius:11,background:`${s.color}18`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>{s.icon}</div>
                   <div style={{flex:1}}>

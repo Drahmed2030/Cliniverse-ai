@@ -5,8 +5,8 @@ type View = 'menu' | 'grand_rounds' | 'patient_journey' | 'crossover'
 type JourneyPhase = 'symptoms' | 'decision' | 'arrival' | 'diagnosis' | 'treatment' | 'outcome'
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -335,7 +335,7 @@ const CROSSOVER_CASES = [
 
 // ── COMPONENTS ──
 const BackBtn = ({onBack}:{onBack:()=>void}) => (
-  <button onClick={onBack} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+  <button onClick={onBack} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
 )
 
 export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
@@ -357,7 +357,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
   // ── MENU ──
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.15),rgba(10,132,255,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.25),rgba(10,132,255,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-25,right:-25,width:110,height:110,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.25),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🌍 SOCIAL FEATURES</div>
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>Social Hub</div>
@@ -438,7 +438,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:12,color:C.sub,lineHeight:1.6,marginBottom:10}}>{gr.patient}</div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
             {gr.keyFindings.slice(0,3).map((f,i)=>(
-              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)'}}>{f}</span>
+              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)'}}>{f}</span>
             ))}
           </div>
         </div>
@@ -483,14 +483,14 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           {gr.ddx.map((dx,i)=>(
             <div key={i} onClick={()=>setSelectedDx(i)}
               style={{background:selectedDx===i?`${gr.color}15`:C.card,borderRadius:16,padding:'16px',border:selectedDx===i?`2px solid ${gr.color}`:`1px solid ${C.border}`,cursor:'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-              <div style={{width:30,height:30,borderRadius:9,background:selectedDx===i?`${gr.color}25`:'rgba(255,255,255,0.06)',border:`1px solid ${selectedDx===i?gr.color:'rgba(255,255,255,0.1)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:selectedDx===i?gr.color:C.muted,flexShrink:0}}>{i+1}</div>
+              <div style={{width:30,height:30,borderRadius:9,background:selectedDx===i?`${gr.color}25`:'rgba(255,255,255,0.15)',border:`1px solid ${selectedDx===i?gr.color:'rgba(255,255,255,0.1)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:selectedDx===i?gr.color:C.muted,flexShrink:0}}>{i+1}</div>
               <div style={{fontSize:14,fontWeight:600,color:selectedDx===i?C.text:C.sub,flex:1}}>{dx}</div>
               {selectedDx===i&&<span style={{color:gr.color,fontSize:18}}>◉</span>}
             </div>
           ))}
         </div>
         <button onClick={()=>setGrPhase('analysis')} disabled={selectedDx===null}
-          style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:selectedDx!==null?`linear-gradient(135deg,${gr.color},${gr.color}bb)`:'rgba(255,255,255,0.06)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',opacity:selectedDx!==null?1:0.5}}>
+          style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:selectedDx!==null?`linear-gradient(135deg,${gr.color},${gr.color}bb)`:'rgba(255,255,255,0.15)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',opacity:selectedDx!==null?1:0.5}}>
           🤖 Get AI Analysis →
         </button>
       </div>
@@ -503,12 +503,12 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🤖 AI Analysis</div></div>
           <div style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:selectedDx===gr.correctDx?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)',color:selectedDx===gr.correctDx?'#30d158':'#ff453a',fontWeight:800,border:`1px solid ${selectedDx===gr.correctDx?'rgba(48,209,88,0.3)':'rgba(255,69,58,0.3)'}`}}>{selectedDx===gr.correctDx?'✅ Correct':'❌ Incorrect'}</div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.12)'}}>
+        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.18)'}}>
           <div style={{fontSize:10,color:'rgba(139,92,246,0.8)',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 CORRECT DIAGNOSIS</div>
           <div style={{fontSize:18,fontWeight:900,color:C.text,marginBottom:4}}>{gr.hiddenDx}</div>
           <div style={{fontSize:12,color:C.sub}}>Your answer: <span style={{color:selectedDx===gr.correctDx?'#30d158':'#ff453a',fontWeight:700}}>{gr.ddx[selectedDx!]}</span></div>
         </div>
-        <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.08),rgba(10,132,255,0.05))',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(139,92,246,0.15)'}}>
+        <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.08),rgba(10,132,255,0.05))',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(139,92,246,0.25)'}}>
           <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 CLAUDE AI ANALYSIS</div>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.85,whiteSpace:'pre-line'}}>{gr.aiAnalysis}</div>
         </div>
@@ -551,7 +551,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
               return (
                 <div key={i} onClick={()=>{if(grAns!==null)return;setGrAns(i);if(i===q.correct)setGrScore(s=>s+1)}}
                   style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:grAns===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                  <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                  <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                   <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                   {grAns!==null&&i===q.correct&&<span>✅</span>}
                   {grAns!==null&&i===grAns&&i!==q.correct&&<span>❌</span>}
@@ -629,7 +629,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <BackBtn onBack={()=>setActiveJourney(null)}/>
           <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.text}}>👤 {j.title}</div><div style={{fontSize:11,color:C.sub}}>Phase {journeyPhaseIdx+1}/{j.phases.length}</div></div>
         </div>
-        <div style={{height:4,background:'rgba(255,255,255,0.06)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:4,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(journeyPhaseIdx/j.phases.length)*100}%`,background:`linear-gradient(90deg,${j.color},${j.color}aa)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${j.color}88`}}/>
         </div>
         <div style={{background:`${j.color}10`,borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${j.color}25`}}>
@@ -651,7 +651,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(done)return;setJourneyAns(i);if(ch.correct)setJourneyScore(s=>s+1);else setJourneyMistakes(m=>m+1)}}
                 style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!ch.correct&&!isSelected?0.4:1}}>
-                <div style={{width:32,height:32,borderRadius:10,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+                <div style={{width:32,height:32,borderRadius:10,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                   {done?(ch.correct?'✅':isSelected?'❌':'○'):'▷'}
                 </div>
                 <div style={{fontSize:13,color:tc,fontWeight:600,flex:1,lineHeight:1.4}}>{ch.label}</div>
@@ -688,7 +688,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           style={{background:C.card,borderRadius:20,padding:'18px',marginBottom:12,border:`1px solid ${cc.color}25`,cursor:'pointer',position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:-15,right:-15,width:70,height:70,borderRadius:'50%',background:`${cc.color}10`,filter:'blur(15px)',pointerEvents:'none'}}/>
           <div style={{fontSize:16,fontWeight:800,color:C.text,marginBottom:8}}>{cc.title}</div>
-          <div style={{background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px 12px',marginBottom:10,border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px 12px',marginBottom:10,border:'1px solid rgba(255,255,255,0.15)'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',lineHeight:1.6}}>{cc.patient}</div>
           </div>
           <div style={{display:'flex',gap:8}}>
@@ -714,7 +714,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.text}}>{cc.title}</div></div>
         </div>
         {/* Patient card */}
-        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:`1px solid ${C.border}`}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:4}}>THE PATIENT</div>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{cc.patient}</div>
         </div>
@@ -742,12 +742,12 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>MY ACTIONS</div>
           {p.actions.map((action,i)=>(
-            <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<p.actions.length-1?'1px solid rgba(255,255,255,0.07)':'none'}}>
+            <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<p.actions.length-1?'1px solid rgba(255,255,255,0.11)':'none'}}>
               <div style={{width:22,height:22,borderRadius:7,background:`${p.color}18`,border:`1px solid ${p.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:p.color,flexShrink:0}}>{i+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{action}</div>
             </div>
           ))}
-          <div style={{background:'rgba(255,255,255,0.07)',borderRadius:14,padding:'12px 14px',marginTop:10,border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{background:'rgba(255,255,255,0.11)',borderRadius:14,padding:'12px 14px',marginTop:10,border:'1px solid rgba(255,255,255,0.15)'}}>
             <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💬 MY PERSPECTIVE</div>
             <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.7,fontStyle:'italic'}}>"{p.insight}"</div>
           </div>

@@ -159,7 +159,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
       background: 'linear-gradient(180deg,#000510 0%,#05001a 50%,#000510 100%)',
       fontFamily: F, overflowY: 'auto', display: 'flex', flexDirection: 'column',
     }}>
-      <div style={{ position:'absolute', top:-80, left:'50%', transform:'translateX(-50%)', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.2) 0%,transparent 70%)', pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', top:-80, left:'50%', transform:'translateX(-50%)', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%)', pointerEvents:'none' }}/>
       <div style={{ flex:1, padding:'56px 24px 32px', display:'flex', flexDirection:'column', position:'relative', zIndex:2 }}>
 
         <div style={{ display:'flex', justifyContent:'center', marginBottom:20 }}>
@@ -198,7 +198,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         {/* Features */}
         <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:24 }}>
           {features.map((f,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(255,255,255,0.03)', borderRadius:14, border:'1px solid rgba(255,255,255,0.06)' }}>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(255,255,255,0.03)', borderRadius:14, border:'1px solid rgba(255,255,255,0.15)' }}>
               <span style={{ fontSize:20 }}>{f.icon}</span>
               <span style={{ fontSize:14, color:'rgba(255,255,255,0.8)', fontWeight:600 }}>{f.text}</span>
               <span style={{ marginLeft:'auto', color:'#34d399', fontSize:16 }}>✓</span>
@@ -218,7 +218,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
 
         <button onClick={onSkip} style={{
           width:'100%', padding:'14px', background:'transparent',
-          border:'1px solid rgba(255,255,255,0.12)', borderRadius:14,
+          border:'1px solid rgba(255,255,255,0.18)', borderRadius:14,
           color:'rgba(255,255,255,0.25)', fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:F, marginBottom:16,
         }}>
           Continue with Free (1 case)
@@ -353,7 +353,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
             {isLast ? 'See Plans →' : 'Continue →'}
           </button>
           <button onClick={e=>{ e.stopPropagation(); setShowPaywall(true) }} style={{
-            padding:'17px 18px', background:'rgba(255,255,255,0.06)',
+            padding:'17px 18px', background:'rgba(255,255,255,0.15)',
             border:'1px solid rgba(255,255,255,0.1)', borderRadius:18,
             color:'rgba(255,255,255,0.35)', fontSize:13, fontWeight:700,
             cursor:'pointer', fontFamily:F,

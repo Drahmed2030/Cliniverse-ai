@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic'
 const DifficultConversations = dynamic(() => import('./DifficultConversations'), { ssr: false })
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -82,13 +82,13 @@ Generate a complete professional SBAR handover ready for verbal or written commu
   if (mode === 'result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>✅ SBAR Generated</div></div>
         <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(48,209,88,0.2)':'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
-      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.08),rgba(10,132,255,0.05))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.2)'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.08),rgba(10,132,255,0.05))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)'}}>
         <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 AI SBAR HANDOVER</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
       </div>
@@ -137,7 +137,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
       </div>
 
       {/* A — Assessment */}
-      <div style={{background:'rgba(139,92,246,0.06)',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(139,92,246,0.15)'}}>
+      <div style={{background:'rgba(139,92,246,0.06)',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(139,92,246,0.25)'}}>
         <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>A — ASSESSMENT (Vitals)</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:10}}>
           {[{l:'BP',k:'bp',p:'120/80'},{l:'HR',k:'hr',p:'88'},{l:'SpO2',k:'o2',p:'96'},{l:'Temp°C',k:'temp',p:'37.2'},{l:'RR',k:'rr',p:'18'},{l:'GCS',k:'gcs',p:'15'}].map(v=>(
@@ -224,7 +224,7 @@ Be warm, reassuring and clear.`
   if (mode === 'result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>📄 Discharge Summary</div><div style={{fontSize:11,color:C.sub}}>{form.language} · Patient-friendly</div></div>
         <button onClick={()=>{navigator.clipboard.writeText(result);setCopied(true);setTimeout(()=>setCopied(false),2000)}} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(48,209,88,0.2)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -333,7 +333,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
   if (mode==='result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>📓 Reflective Log</div><div style={{fontSize:11,color:C.sub}}>GMC/RCPI Portfolio Ready</div></div>
         <button onClick={()=>{navigator.clipboard.writeText(result);setCopied(true);setTimeout(()=>setCopied(false),2000)}} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(191,90,242,0.2)':'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -363,7 +363,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
         ))}
       </div>
 
-      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
         <TextArea label="CASE TYPE / CLINICAL SCENARIO" k="caseType" rows={2}/>
         <TextArea label="YOUR ROLE IN THE CASE" k="role" rows={1}/>
         <TextArea label="PATIENT OUTCOME" k="outcome" rows={1}/>
@@ -429,7 +429,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setTool('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setTool('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:C.text}}>{t.label}</div>
             <div style={{fontSize:11,color:C.sub}}>{t.sub}</div>
@@ -454,7 +454,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
         <div style={{fontSize:13,color:C.sub,lineHeight:1.6}}>AI-powered tools for your daily clinical workflow — SBAR, discharge letters, portfolio</div>
         <div style={{display:'flex',gap:6,marginTop:12,flexWrap:'wrap'}}>
           {['NHS','HSE Ireland','KSA','ACGME','GMC'].map(b=>(
-            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)',fontWeight:700}}>{b}</span>
+            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.15)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{b}</span>
           ))}
         </div>
       </div>

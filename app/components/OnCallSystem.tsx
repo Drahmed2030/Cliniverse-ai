@@ -50,8 +50,8 @@ const TIPS = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -107,8 +107,8 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
 
       {/* Header */}
-      <div style={{background:'linear-gradient(135deg,rgba(15,5,35,0.9),rgba(10,0,21,0.95))',borderRadius:22,padding:'18px 18px 14px',marginBottom:14,border:'1px solid rgba(139,92,246,0.2)',boxShadow:'0 8px 32px rgba(0,0,0,0.4)',position:'relative',overflow:'hidden'}}>
-        <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.2),transparent 70%)',pointerEvents:'none'}}/>
+      <div style={{background:'linear-gradient(135deg,rgba(15,5,35,0.9),rgba(10,0,21,0.95))',borderRadius:22,padding:'18px 18px 14px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 8px 32px rgba(0,0,0,0.4)',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
           <div>
             <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:4}}>
@@ -124,7 +124,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
         </div>
         {/* Rotating tip */}
-        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(255,255,255,0.06)'}}>
+        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(255,255,255,0.15)'}}>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           {/* Day selector */}
           <div style={{display:'flex',gap:6,marginBottom:10,overflowX:'auto',paddingBottom:4}}>
             {DAYS.map((d,i)=>(
-              <button key={d} onClick={()=>setSelectedDay(i)} style={{flexShrink:0,padding:'8px 12px',borderRadius:12,border:selectedDay===i?'2px solid #8b5cf6':'1px solid rgba(139,92,246,0.15)',background:selectedDay===i?'rgba(139,92,246,0.2)':C.card,color:selectedDay===i?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>
+              <button key={d} onClick={()=>setSelectedDay(i)} style={{flexShrink:0,padding:'8px 12px',borderRadius:12,border:selectedDay===i?'2px solid #8b5cf6':'1px solid rgba(139,92,246,0.25)',background:selectedDay===i?'rgba(139,92,246,0.3)':C.card,color:selectedDay===i?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>
                 {d}
               </button>
             ))}
@@ -167,7 +167,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             <div style={{background:C.card,borderRadius:14,padding:'12px',border:`1px solid ${C.border}`}}>
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>TIME</div>
               {['08:00','14:00','20:00','22:00','00:00'].map(t=>(
-                <button key={t} onClick={()=>setSelectedTime(t)} style={{display:'block',width:'100%',padding:'6px 10px',borderRadius:10,border:selectedTime===t?'2px solid #8b5cf6':'1px solid rgba(255,255,255,0.06)',background:selectedTime===t?'rgba(139,92,246,0.2)':C.card,color:selectedTime===t?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:4,textAlign:'left'}}>
+                <button key={t} onClick={()=>setSelectedTime(t)} style={{display:'block',width:'100%',padding:'6px 10px',borderRadius:10,border:selectedTime===t?'2px solid #8b5cf6':'1px solid rgba(255,255,255,0.15)',background:selectedTime===t?'rgba(139,92,246,0.3)':C.card,color:selectedTime===t?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:4,textAlign:'left'}}>
                   {t} {t>='20:00'||t<'08:00'?'🌙':'☀️'}
                 </button>
               ))}

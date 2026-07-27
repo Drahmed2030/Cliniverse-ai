@@ -49,8 +49,8 @@ const DIFFICULTIES = [
 const AUDIENCES = ['Medical Students','Junior Residents','Senior Residents','Consultants','Nurses','Pharmacists','Lab Technicians','All Healthcare']
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -195,7 +195,7 @@ Return ONLY this JSON structure:
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
 
       {/* Header */}
-      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.15),rgba(10,132,255,0.1))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.25),rgba(10,132,255,0.1))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🤖 Powered by Claude AI</div>
         <div style={{fontSize:22,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>AI Case Generator</div>
@@ -231,7 +231,7 @@ Return ONLY this JSON structure:
       <div style={{fontSize:10,color:C.muted,letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:8}}>Target Audience</div>
       <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:16}}>
         {AUDIENCES.map(a=>(
-          <button key={a} onClick={()=>setAudience(prev=>prev.includes(a)?prev.filter(x=>x!==a):[...prev,a])} style={{padding:'6px 12px',borderRadius:10,border:audience.includes(a)?'2px solid #8b5cf6':`1px solid ${C.border}`,background:audience.includes(a)?'rgba(139,92,246,0.2)':C.card,color:audience.includes(a)?'#c4b5fd':C.sub,fontSize:11,fontWeight:700,cursor:'pointer'}}>
+          <button key={a} onClick={()=>setAudience(prev=>prev.includes(a)?prev.filter(x=>x!==a):[...prev,a])} style={{padding:'6px 12px',borderRadius:10,border:audience.includes(a)?'2px solid #8b5cf6':`1px solid ${C.border}`,background:audience.includes(a)?'rgba(139,92,246,0.3)':C.card,color:audience.includes(a)?'#c4b5fd':C.sub,fontSize:11,fontWeight:700,cursor:'pointer'}}>
             {a}
           </button>
         ))}
@@ -241,7 +241,7 @@ Return ONLY this JSON structure:
       <div style={{fontSize:10,color:C.muted,letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:8}}>Language</div>
       <div style={{display:'flex',gap:8,marginBottom:16}}>
         {(['English','Arabic'] as const).map(l=>(
-          <button key={l} onClick={()=>setLanguage(l)} style={{flex:1,padding:'12px',borderRadius:14,border:language===l?'2px solid #8b5cf6':`1px solid ${C.border}`,background:language===l?'rgba(139,92,246,0.2)':C.card,color:language===l?'#c4b5fd':C.sub,fontSize:13,fontWeight:700,cursor:'pointer'}}>
+          <button key={l} onClick={()=>setLanguage(l)} style={{flex:1,padding:'12px',borderRadius:14,border:language===l?'2px solid #8b5cf6':`1px solid ${C.border}`,background:language===l?'rgba(139,92,246,0.3)':C.card,color:language===l?'#c4b5fd':C.sub,fontSize:13,fontWeight:700,cursor:'pointer'}}>
             {l==='English'?'🇬🇧 English':'🇸🇦 العربية'}
           </button>
         ))}
@@ -281,7 +281,7 @@ Return ONLY this JSON structure:
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('generator')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('generator')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:C.text}}>Generated Case Preview</div>
             <div style={{fontSize:11,color:C.sub}}>{g.specialty} · {g.difficulty}</div>
@@ -375,7 +375,7 @@ Return ONLY this JSON structure:
   if (view === 'library') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('generator')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('generator')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:C.text}}>📚 Case Library</div>
           <div style={{fontSize:11,color:C.sub}}>AI-generated cases · {library.length} saved</div>
@@ -384,7 +384,7 @@ Return ONLY this JSON structure:
 
       {loadingLib ? (
         <div style={{textAlign:'center',padding:'40px'}}>
-          <div style={{width:32,height:32,borderRadius:'50%',border:'3px solid rgba(139,92,246,0.2)',borderTop:'3px solid #8b5cf6',animation:'spin 1s linear infinite',margin:'0 auto 12px'}}/>
+          <div style={{width:32,height:32,borderRadius:'50%',border:'3px solid rgba(139,92,246,0.3)',borderTop:'3px solid #8b5cf6',animation:'spin 1s linear infinite',margin:'0 auto 12px'}}/>
           <div style={{fontSize:13,color:C.sub}}>Loading library...</div>
         </div>
       ) : library.length === 0 ? (
@@ -401,7 +401,7 @@ Return ONLY this JSON structure:
               <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:2}}>{c.title}</div>
               <div style={{fontSize:11,color:C.sub,marginBottom:4}}>{c.subtitle}</div>
               <div style={{display:'flex',gap:6}}>
-                <span style={{fontSize:9,padding:'2px 8px',borderRadius:6,background:'rgba(139,92,246,0.15)',color:'#c4b5fd',fontWeight:700}}>{c.specialty}</span>
+                <span style={{fontSize:9,padding:'2px 8px',borderRadius:6,background:'rgba(139,92,246,0.25)',color:'#c4b5fd',fontWeight:700}}>{c.specialty}</span>
                 <span style={{fontSize:9,padding:'2px 8px',borderRadius:6,background:'rgba(255,214,10,0.15)',color:'#ffd60a',fontWeight:700}}>{c.difficulty}</span>
                 {c.is_approved&&<span style={{fontSize:9,padding:'2px 8px',borderRadius:6,background:'rgba(48,209,88,0.15)',color:'#30d158',fontWeight:700}}>✓ Approved</span>}
               </div>

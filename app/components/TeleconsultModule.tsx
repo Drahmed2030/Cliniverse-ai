@@ -272,8 +272,8 @@ const GUIDELINES = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.28)',
@@ -376,7 +376,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
   if(view==='guidelines') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:C.text}}>📚 Guidelines</div>
           <div style={{fontSize:11,color:C.sub}}>Teleconsultation standards</div>
@@ -410,7 +410,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         {/* Header */}
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← End</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← End</button>
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:800,color:C.text}}>{c.icon} {c.title}</div>
             <div style={{fontSize:11,color:C.sub}}>{c.specialty} · {c.urgency}</div>
@@ -425,7 +425,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
         <div style={{marginBottom:14}}>
           <div style={{display:'flex',gap:4,marginBottom:8}}>
             {PHASES.map((p,i)=>(
-              <div key={p} style={{flex:1,height:4,borderRadius:2,background:i<=phaseProgress?phaseColors[p]:'rgba(255,255,255,0.12)',boxShadow:i===phaseProgress?`0 0 8px ${phaseColors[p]}88`:'none',transition:'all 0.3s'}}/>
+              <div key={p} style={{flex:1,height:4,borderRadius:2,background:i<=phaseProgress?phaseColors[p]:'rgba(255,255,255,0.18)',boxShadow:i===phaseProgress?`0 0 8px ${phaseColors[p]}88`:'none',transition:'all 0.3s'}}/>
             ))}
           </div>
           <div style={{display:'flex',justifyContent:'space-between'}}>

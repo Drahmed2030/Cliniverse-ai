@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 const T = {
-  card: 'rgba(255,255,255,0.07)', border: 'rgba(255,255,255,0.12)',
+  card: 'rgba(255,255,255,0.11)', border: 'rgba(255,255,255,0.18)',
   text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
   teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#a78bfa',
 }
@@ -112,7 +112,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
       {/* Check Button */}
       <button onClick={check} disabled={loading || !drug1.trim() || !drug2.trim()} style={{
         width: '100%', padding: '15px', border: 'none', borderRadius: 16,
-        background: loading || !drug1.trim() || !drug2.trim() ? 'rgba(255,255,255,0.06)' : 'linear-gradient(135deg, #f87171, #fbbf24)',
+        background: loading || !drug1.trim() || !drug2.trim() ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg, #f87171, #fbbf24)',
         color: '#fff', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
         fontFamily: F, marginBottom: 16,
         boxShadow: loading ? 'none' : '0 6px 24px rgba(248,113,113,0.25)',

@@ -165,7 +165,7 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
       </div>
 
       {/* Daily Challenge Card */}
-      <div style={{ background:'linear-gradient(135deg,#1a0533,#0a0f1e)', borderRadius:22, padding:20, marginBottom:16, color:'white', border:'1px solid rgba(139,92,246,0.3)', boxShadow:'0 8px 32px rgba(139,92,246,0.2)', position:'relative', overflow:'hidden' }}>
+      <div style={{ background:'linear-gradient(135deg,#1a0533,#0a0f1e)', borderRadius:22, padding:20, marginBottom:16, color:'white', border:'1px solid rgba(139,92,246,0.3)', boxShadow:'0 8px 32px rgba(139,92,246,0.3)', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-20, right:-20, width:120, height:120, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent)', pointerEvents:'none' }}/>
         <div style={{ fontSize:11, color:'rgba(139,92,246,0.8)', fontWeight:700, letterSpacing:2, textTransform:'uppercase', marginBottom:8 }}>🔥 TODAY'S CHALLENGE</div>
         <h3 style={{ fontSize:18, fontWeight:800, margin:'0 0 6px' }}>{DAILY_CHALLENGE_CASES[dailyIdx].title}</h3>
@@ -284,11 +284,11 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
   if (mode === 'daily') {
     if (dailyDone) return (
       <div style={{ fontFamily:'-apple-system,sans-serif' }}>
-        <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(20px)', borderRadius:22, padding:28, textAlign:'center', border:'1px solid rgba(139,92,246,0.2)', color:'white', animation:'fadeIn 0.5s ease' }}>
+        <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(20px)', borderRadius:22, padding:28, textAlign:'center', border:'1px solid rgba(139,92,246,0.3)', color:'white', animation:'fadeIn 0.5s ease' }}>
           <div style={{ fontSize:64, marginBottom:12 }}>🏆</div>
           <h3 style={{ fontSize:22, fontWeight:800, marginBottom:8 }}>Daily Challenge Complete!</h3>
           <p style={{ fontSize:14, color:'rgba(255,255,255,0.6)', marginBottom:20 }}>{dailyCorrect}/{dailyCase.questions.length} correct · Come back tomorrow for a new challenge!</p>
-          <div style={{ background:'rgba(139,92,246,0.15)', borderRadius:14, padding:14, marginBottom:20, border:'1px solid rgba(139,92,246,0.25)' }}>
+          <div style={{ background:'rgba(139,92,246,0.25)', borderRadius:14, padding:14, marginBottom:20, border:'1px solid rgba(139,92,246,0.25)' }}>
             <div style={{ fontSize:28, fontWeight:900, color:'#c4b5fd' }}>+{dailyCase.xp} XP</div>
             <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', marginTop:4 }}>Daily bonus earned</div>
           </div>

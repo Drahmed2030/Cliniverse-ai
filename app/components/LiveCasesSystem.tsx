@@ -23,8 +23,8 @@ const DEPT_COLORS: Record<string, string> = {
 }
 
 const C = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(139,92,246,0.15)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(139,92,246,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -92,7 +92,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-          <button onClick={()=>setSelectedCase(null)} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setSelectedCase(null)} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:16,fontWeight:800,color:C.text}}>{c.icon} {c.title}</div>
             <div style={{fontSize:11,color:C.sub}}>{c.dept} · {c.urgency}</div>
@@ -106,7 +106,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:18,fontWeight:800,color:C.text,textAlign:'center',marginBottom:4}}>{c.title}</div>
           <div style={{fontSize:13,color:C.sub,textAlign:'center',marginBottom:14}}>{c.patient}</div>
           {c.details&&(
-            <div style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.12)'}}>
+            <div style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.18)'}}>
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 CLINICAL NOTE</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7}}>{c.details}</div>
             </div>
@@ -114,7 +114,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
 
         {/* Action */}
-        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${c.color}25`}}>
+        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${c.color}25`}}>
           <div style={{fontSize:10,color:c.color,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>⚡ IMMEDIATE ACTION</div>
           <div style={{fontSize:16,fontWeight:800,color:C.text,lineHeight:1.5}}>{c.action}</div>
         </div>
@@ -164,7 +164,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{fontSize:9,color:'rgba(255,69,58,0.7)',fontWeight:800}}>STAT</div>
               </div>
             )}
-            <button onClick={refetch} style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,color:C.sub,padding:'6px 12px',fontSize:11,cursor:'pointer',fontWeight:600}}>
+            <button onClick={refetch} style={{background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,color:C.sub,padding:'6px 12px',fontSize:11,cursor:'pointer',fontWeight:600}}>
               🔄 Refresh
             </button>
           </div>
@@ -174,7 +174,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Dept filter */}
       <div style={{display:'flex',gap:6,overflowX:'auto',paddingBottom:6,marginBottom:14,scrollbarWidth:'none'}}>
         {depts.map(d=>(
-          <button key={d} onClick={()=>setFilter(d)} style={{flexShrink:0,padding:'7px 14px',borderRadius:12,border:filter===d?`2px solid ${DEPT_COLORS[d]||'#8b5cf6'}`:'1px solid rgba(139,92,246,0.15)',background:filter===d?`${DEPT_COLORS[d]||'#8b5cf6'}18`:C.card,color:filter===d?DEPT_COLORS[d]||'#c4b5fd':C.sub,fontSize:11,fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
+          <button key={d} onClick={()=>setFilter(d)} style={{flexShrink:0,padding:'7px 14px',borderRadius:12,border:filter===d?`2px solid ${DEPT_COLORS[d]||'#8b5cf6'}`:'1px solid rgba(139,92,246,0.25)',background:filter===d?`${DEPT_COLORS[d]||'#8b5cf6'}18`:C.card,color:filter===d?DEPT_COLORS[d]||'#c4b5fd':C.sub,fontSize:11,fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
             {d}
             {d!=='All'&&cases.filter(c=>c.dept===d&&!handled.includes(c.id)).length>0&&(
               <span style={{marginLeft:6,background:'rgba(255,69,58,0.3)',borderRadius:6,padding:'1px 5px',fontSize:9,color:'#ff453a',fontWeight:900}}>
@@ -188,7 +188,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Cases list */}
       {loading ? (
         <div style={{textAlign:'center',padding:'40px 0'}}>
-          <div style={{width:32,height:32,borderRadius:'50%',border:'3px solid rgba(139,92,246,0.2)',borderTop:'3px solid #8b5cf6',animation:'spin 1s linear infinite',margin:'0 auto 12px'}}/>
+          <div style={{width:32,height:32,borderRadius:'50%',border:'3px solid rgba(139,92,246,0.3)',borderTop:'3px solid #8b5cf6',animation:'spin 1s linear infinite',margin:'0 auto 12px'}}/>
           <div style={{fontSize:13,color:C.sub}}>Loading live cases...</div>
         </div>
       ) : filtered.length === 0 ? (
@@ -212,7 +212,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:3}}>
                   <span style={{fontSize:14,fontWeight:800,color:isHandled?'rgba(255,255,255,0.4)':C.text}}>{c.title}</span>
                   {!isHandled&&<span style={{fontSize:9,padding:'2px 7px',borderRadius:6,background:c.urgency==='Stat'?'rgba(255,69,58,0.2)':'rgba(255,159,10,0.15)',color:c.urgency==='Stat'?'#ff453a':'#ff9f0a',fontWeight:800,border:`1px solid ${c.urgency==='Stat'?'rgba(255,69,58,0.3)':'rgba(255,159,10,0.3)'}`}}>{c.urgency}</span>}
-                  {isNew&&!isHandled&&<span style={{fontSize:9,padding:'2px 7px',borderRadius:6,background:'rgba(139,92,246,0.2)',color:'#c4b5fd',fontWeight:800}}>NEW</span>}
+                  {isNew&&!isHandled&&<span style={{fontSize:9,padding:'2px 7px',borderRadius:6,background:'rgba(139,92,246,0.3)',color:'#c4b5fd',fontWeight:800}}>NEW</span>}
                 </div>
                 <div style={{fontSize:11,color:C.sub,marginBottom:2}}>{c.patient}</div>
                 <div style={{fontSize:11,color:isHandled?'rgba(255,255,255,0.3)':c.color,fontWeight:600}}>→ {c.action}</div>

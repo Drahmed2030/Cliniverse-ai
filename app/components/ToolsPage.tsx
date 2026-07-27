@@ -28,8 +28,8 @@ const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 const GrandRoundsAI = dynamic(() => import('./GrandRoundsAI'), { ssr: false })
 
 const T = {
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(255,255,255,0.12)',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.18)',
@@ -239,7 +239,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
   if (view === 'section' && activeSection) return (
     <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-        <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
+        <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.15)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
         <div>
           <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>{activeSection.icon} {activeSection.label}</div>
           <div style={{ fontSize: 11, color: T.sub }}>{activeSection.tools.length} tools</div>
@@ -267,7 +267,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
 
   return (
     <div style={{ fontFamily: T.F }}>
-      <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
+      <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.15)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
       <ToolRenderer toolId={activeTool} onXP={onXP} />
     </div>
   )

@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
-  bg: '#1a2535',
-  card: 'rgba(255,255,255,0.07)',
-  border: 'rgba(255,255,255,0.12)',
+  bg: '#1e2d40',
+  card: 'rgba(255,255,255,0.11)',
+  border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
   muted: 'rgba(148,163,184,0.4)',
@@ -148,7 +148,7 @@ export default function LiveCaseViewer({ specialty = 'Emergency Medicine', diffi
               flex: 1, padding: '9px 4px', border: 'none', cursor: 'pointer',
               borderRadius: 12, fontFamily: F, fontWeight: 700, fontSize: 10,
               background: active ? T.teal : done ? 'rgba(56,189,248,0.1)' : T.card,
-              color: active ? '#1a2535' : done ? T.teal : T.muted,
+              color: active ? '#1e2d40' : done ? T.teal : T.muted,
               border: '1px solid ' + (active ? T.teal : done ? 'rgba(56,189,248,0.2)' : T.border),
               boxShadow: active ? '0 4px 16px rgba(56,189,248,0.3)' : 'none',
             }}>
@@ -260,7 +260,7 @@ export default function LiveCaseViewer({ specialty = 'Emergency Medicine', diffi
               return (
                 <div key={o.id} onClick={() => handleAnswer(o.id)} style={{ background: bg, border: '1px solid ' + bdr, borderRadius: 18, padding: '14px 16px', cursor: selected ? 'default' : 'pointer', transition: 'all 0.3s' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: T.sub }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: T.sub }}>
                       {showResult && isSelected ? (isCorrect ? '✓' : '✗') : o.id.toUpperCase()}
                     </div>
                     <span style={{ fontSize: 13, fontWeight: 600, color: T.text, flex: 1, lineHeight: 1.4 }}>{o.text}</span>
