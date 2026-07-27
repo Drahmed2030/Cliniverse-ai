@@ -5,7 +5,7 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#0a1628',
+  bg: '#0f1e2e',
   card: 'rgba(255,255,255,0.07)',
   border: 'rgba(255,255,255,0.07)',
   borderBlue: 'rgba(0,212,255,0.18)',
