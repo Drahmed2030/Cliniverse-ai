@@ -135,7 +135,7 @@ const lightTheme = {
 
 const darkTheme = {
   bg: 'radial-gradient(ellipse at 30% 20%, #1a0533 0%, #0a0015 40%, #000510 100%)',
-  headerBg: 'rgba(10,0,21,0.85)',
+  headerBg: 'rgba(26,37,53,0.92)',
   headerBorder: 'rgba(139,92,246,0.25)',
   cardBg: 'rgba(255,255,255,0.15)',
   cardBorder: 'rgba(139,92,246,0.25)',
