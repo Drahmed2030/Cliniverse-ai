@@ -78,6 +78,19 @@ const SECTIONS = [
     ]
   },
   {
+    id: 'aitools',
+    label: 'AI Clinical Tools',
+    icon: '🧠',
+    color: '#a78bfa',
+    desc: 'Pocket Consultant · Drug Checker · Handover AI',
+    tools: [
+      { id: 'pocket', label: 'Pocket Consultant', icon: '🧠', desc: 'Ask any clinical question', color: '#a78bfa' },
+      { id: 'drugcheck', label: 'Drug Interaction AI', icon: '💊', desc: 'Check drug interactions instantly', color: '#f87171' },
+      { id: 'handover', label: 'Shift Handover AI', icon: '📋', desc: 'Generate SBAR handover report', color: '#4ade80' },
+      { id: 'grandrounds', label: 'Grand Rounds AI', icon: '🎓', desc: 'Multidisciplinary complex cases', color: '#a78bfa' },
+    ]
+  },
+  {
     id: 'reference', label: 'Clinical Reference', icon: '📚', color: '#fbbf24',
     desc: 'Guidelines · Labs · Medications · Calculators',
     tools: [
