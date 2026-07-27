@@ -886,78 +886,78 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       {/* BOTTOM NAV — Apple Health 2026 */}
       <div style={{position:'fixed',bottom:12,left:'50%',transform:'translateX(-50%)',zIndex:200,width:'calc(100% - 32px)',maxWidth:420}}>
         {/* Strong ambient glow underneath */}
-        <div style={{position:'absolute',inset:-24,borderRadius:40,background:'radial-gradient(ellipse,rgba(139,92,246,0.45) 0%,rgba(10,132,255,0.2) 50%,transparent 75%)',filter:'blur(24px)',pointerEvents:'none'}}/>
-        <nav style={{
-          background:'linear-gradient(135deg,rgba(28,8,58,0.98),rgba(12,4,32,0.99))',
-          backdropFilter:'blur(60px) saturate(200%)',
-          WebkitBackdropFilter:'blur(60px) saturate(200%)',
-          borderRadius:30,
-          border:'1.5px solid rgba(139,92,246,0.4)',
-          boxShadow:'0 0 0 1px rgba(139,92,246,0.15), 0 12px 48px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 0 40px rgba(139,92,246,0.08), 0 0 60px rgba(139,92,246,0.15)',
-          display:'grid',
-          gridTemplateColumns:'repeat(5,1fr)',
-          padding:'10px 8px 14px',
-          position:'relative',
-          fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,SF Pro Text,sans-serif',
+
+        {/* FLOATING TAB BAR */}
+        <div style={{
+          position:'fixed', bottom:20, left:'50%', transform:'translateX(-50%)',
+          zIndex:9998, width:'calc(100% - 32px)', maxWidth:420,
         }}>
-          {[
-            {id:'hub',label:'HUB',color:'#ff453a',glow:'rgba(255,69,58,0.7)'},
-            {id:'tools',label:'TOOLS',color:'#ffd60a',glow:'rgba(255,214,10,0.7)'},
-            {id:'mcq',label:'MCQ',color:'#ff9f0a',glow:'rgba(255,159,10,0.7)'},
-            {id:'workshop',label:'WORK',color:'#0a84ff',glow:'rgba(10,132,255,0.7)'},
-            {id:'profile',label:'ME',color:'#64d2ff',glow:'rgba(100,210,255,0.7)'},
-          ].map(t=>{
-            const active = tab===t.id
-            return(
-              <button key={t.id} onClick={()=>{ setTab(t.id); if(t.id==='tools'){markLiveSeen()} }} style={{
-                background:'none',border:'none',cursor:'pointer',
-                display:'flex',flexDirection:'column',alignItems:'center',
-                gap:1,padding:'2px 1px',position:'relative',
-              }}>
-                {active&&<div style={{
-                  position:'absolute',inset:-4,borderRadius:16,
-                  background:`linear-gradient(135deg,${t.color}20,${t.color}08)`,
-                  boxShadow:`0 0 20px ${t.glow}, 0 0 40px ${t.color}30`,
-                  border:`1px solid ${t.color}40`,
-                  animation:'pillGlow 2s ease-in-out infinite',
-                }}/>}
-                <div style={{
-                  width:active?36:28,height:active?36:28,
-                  borderRadius:active?13:9,
-                  background:active?`linear-gradient(135deg,${t.color}30,${t.color}10)`:'transparent',
-                  display:'flex',alignItems:'center',justifyContent:'center',
-                  transform:active?'translateY(-3px)':'none',
-                  transition:'all 0.3s cubic-bezier(.34,1.56,.64,1)',
-                  boxShadow:active?`0 6px 20px ${t.glow},0 0 0 1px ${t.color}30`:'none',
-                  position:'relative',zIndex:1,
+          <nav style={{
+            background:'rgba(15,17,23,0.88)',
+            backdropFilter:'blur(28px)',
+            WebkitBackdropFilter:'blur(28px)',
+            borderRadius:28,
+            border:'1px solid rgba(255,255,255,0.07)',
+            boxShadow:'0 8px 40px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(255,255,255,0.04)',
+            display:'flex',
+            padding:'10px 6px 12px',
+            gap:2,
+          }}>
+            {[
+              {id:'hub', label:'Hub', color:'#38bdf8',
+                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M17.5 14v7M14 17.5h7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              },
+              {id:'tools', label:'Tools', color:'#f87171',
+                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              },
+              {id:'mcq', label:'MCQ', color:'#fbbf24',
+                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3 8-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              },
+              {id:'workshop', label:'Work', color:'#4ade80',
+                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              },
+              {id:'profile', label:'Me', color:'#a78bfa',
+                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              },
+            ].map(t=>{
+              const active = tab===t.id
+              return(
+                <button key={t.id} onClick={()=>setTab(t.id)} style={{
+                  flex:1, border:'none', cursor:'pointer',
+                  display:'flex', flexDirection:'column', alignItems:'center', gap:5,
+                  padding:'8px 4px', borderRadius:22,
+                  background:active ? t.color + '15' : 'transparent',
+                  transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
+                  position:'relative',
                 }}>
-                  <NavIcon id={t.id} active={active} color={t.color}/>
-                  {t.id==='tools'&&liveCount>0&&!active&&(
-                    <div style={{position:'absolute',top:-2,right:-2,width:14,height:14,borderRadius:'50%',background:'#ff453a',border:'2px solid rgba(15,5,35,1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:8,fontWeight:900,color:'white',boxShadow:'0 0 8px rgba(255,69,58,0.8)',animation:'pulse 1.5s infinite'}}>
-                      {liveCount > 9 ? '9+' : liveCount}
-                    </div>
-                  )}
-                </div>
-                <span style={{
-                  fontSize:7,fontWeight:active?700:400,
-                  color:active?t.color:dark?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.28)',
-                  transition:'all 0.2s',letterSpacing:active?0.5:0.2,
-                  textTransform:'uppercase',position:'relative',zIndex:1,
-                  fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Rounded,sans-serif',
-                }}>{t.label}</span>
-                {active&&<div style={{
-                  width:3,height:3,borderRadius:'50%',marginTop:1,
-                  background:t.color,
-                  boxShadow:`0 0 6px ${t.color},0 0 10px ${t.glow}`,
-                  animation:'liveDot 1.5s ease-in-out infinite',
-                  position:'relative',zIndex:1,
-                }}/>}
-              </button>
-            )
-          })}
-        </nav>
+                  {active && <div style={{
+                    position:'absolute', top:0, left:'50%', transform:'translateX(-50%)',
+                    width:28, height:2.5, borderRadius:2,
+                    background:t.color,
+                    boxShadow:'0 0 10px ' + t.color + ', 0 0 20px ' + t.color + '60',
+                  }}/>}
+                  <div style={{
+                    color: active ? t.color : 'rgba(148,163,184,0.45)',
+                    transform: active ? 'scale(1.12) translateY(1px)' : 'scale(1)',
+                    transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
+                    filter: active ? 'drop-shadow(0 0 8px ' + t.color + ')' : 'none',
+                    marginTop: 4,
+                  }}>{t.svg}</div>
+                  <span style={{
+                    fontSize:9, fontWeight: active ? 800 : 500,
+                    color: active ? t.color : 'rgba(148,163,184,0.35)',
+                    letterSpacing:0.8, textTransform:'uppercase',
+                    fontFamily:'"Inter",-apple-system,sans-serif',
+                    transition:'all 0.2s',
+                  }}>{t.label}</span>
+                </button>
+              )
+            })}
+          </nav>
+        </div>
+        <div style={{height:110}}/>
       </div>
-      <div style={{height:72}}/>
+
       <style>{`
         @keyframes iconPulse{0%,to{transform:scale(1)}50%{transform:scale(1.1)}}
         @keyframes rankPulse{0%,to{opacity:1}50%{opacity:0.7}}
