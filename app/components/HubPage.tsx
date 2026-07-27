@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 import ClinicalSnapshot from './ClinicalSnapshot'
 const TimeAwareCard = dynamic(() => import('./TimeAwareCard'), { ssr: false })
 const ActivityRings = dynamic(() => import('./ActivityRings'), { ssr: false })

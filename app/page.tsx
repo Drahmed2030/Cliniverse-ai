@@ -194,107 +194,13 @@ export default function Home() {
 
   const taglines = ['Where medicine meets precision.','Train on real emergencies.','Think like a consultant.','AI-powered clinical intelligence.']
 
-  const criticalCases = [
-    { id:'stemi', icon:'🫀', title:'STEMI', sub:'Anterior MI · 58M', color:'#ff3b30', dept:'ED', free:true, xpReward:80,
-      vitals:{bp:'90/60',hr:'110',o2:'92',temp:'37.1',rr:'22',gcs:'15'},
-      ecg:'ST elevation 3mm V1-V4. Reciprocal ST depression II/III/aVF. Hyperacute T waves V2-V4. Sinus tachycardia 110 bpm.',
-      presentation:'Severe crushing chest pain 9/10, radiating to left arm. Onset 45 min. Diaphoretic, pale. Troponin I: 2.4↑. BNP: 380.',
-      management:['Aspirin 300mg PO + Ticagrelor 180mg PO','Heparin 5000u IV bolus','Activate Cath Lab — door-to-balloon < 90 min','Avoid GTN if SBP < 90 mmHg','O2 only if SpO2 < 94%','Morphine 2-4mg IV for pain'] },
-    { id:'pe', icon:'🫁', title:'Pulmonary Embolism', sub:'Massive PE · 44F', color:'#ff9500', dept:'ED', free:true, xpReward:90,
-      vitals:{bp:'88/54',hr:'128',o2:'85',temp:'37.4',rr:'32',gcs:'14'},
-      ecg:'S1Q3T3 pattern. Sinus tachycardia. New RBBB. Right heart strain.',
-      presentation:'Sudden dyspnea after 12h flight. Right calf swelling. Wells 6. D-dimer > 5000. CT-PA: saddle PE.',
-      management:['UFH 80u/kg IV bolus immediately','Alteplase 100mg IV/2h if haemodynamically unstable','Avoid excessive IVF — RV sensitive','High-flow O2','ICU admission','Repeat echo RV function'] },
-    { id:'sepsis', icon:'🦠', title:'Septic Shock', sub:'CAP source · 67M', color:'#ff6b35', dept:'ICU', free:true, xpReward:100,
-      vitals:{bp:'72/40',hr:'138',o2:'88',temp:'39.8',rr:'28',gcs:'13'},
-      ecg:'Sinus tachycardia.',
-      presentation:'Fever, confusion, hypotension. CAP — bilateral CXR infiltrates. Lactate 4.8. WBC 24k. Unresponsive to 2L IVF.',
-      management:['Blood cultures x2 BEFORE antibiotics','Pip/Taz 4.5g IV + Azithromycin 500mg','Norepinephrine — target MAP > 65','Hydrocortisone 200mg/day if refractory','Lactate remeasure at 2h','ICU — SOFA scoring'] },
-    { id:'anaphylaxis', icon:'🚨', title:'Anaphylaxis', sub:'Drug reaction · 28F', color:'#ff3b30', dept:'ED', free:true, xpReward:90,
-      vitals:{bp:'70/40',hr:'142',o2:'88',temp:'37.0',rr:'30',gcs:'13'},
-      ecg:'Sinus tachycardia.',
-      presentation:'Collapse 5 min after IV contrast. Urticaria, angioedema, stridor. Known shellfish allergy.',
-      management:['Adrenaline 0.5mg IM outer thigh STAT','Lay flat, legs elevated','High-flow O2','IV saline 500-1000ml rapid','Chlorphenamine 10mg IV','Hydrocortisone 200mg IV','Repeat adrenaline at 5 min'] },
-    { id:'heartblock', icon:'⚡', title:'Complete Heart Block', sub:'3rd Degree · 72M', color:'#8b5cf6', dept:'CCU', free:false, xpReward:120,
-      vitals:{bp:'88/58',hr:'32',o2:'94',temp:'36.9',rr:'16',gcs:'14'},
-      ecg:'Complete AV dissociation. P rate 75/min, QRS rate 32/min. Wide QRS escape.',
-      presentation:'Syncope at rest. History of inferior MI 2yr ago. Bradycardic — atropine failed.',
-      management:['Transcutaneous pacing — immediate','Atropine 0.5mg IV (often ineffective)','Avoid negative chronotropes','Transvenous pacing if TCP fails','Permanent pacemaker','Urgent cardiology consult'] },
-    { id:'stroke', icon:'🧠', title:'Acute Ischaemic Stroke', sub:'Large vessel · 61F', color:'#0a84ff', dept:'Neuro', free:false, xpReward:110,
-      vitals:{bp:'188/104',hr:'88',o2:'96',temp:'37.2',rr:'18',gcs:'13'},
-      ecg:'AF — possible cardioembolic source.',
-      presentation:'Sudden left hemiplegia + facial droop. NIHSS 18. Last seen normal 90 min ago. CT: no haemorrhage. ASPECTS 8.',
-      management:['IV tPA 0.9mg/kg within 4.5h','Mechanical thrombectomy — LVO','BP < 185/110 before tPA','Avoid hypotension and hypoglycaemia','Swallowing assessment before oral','Stroke unit admission'] },
-    { id:'acs', icon:'💊', title:'NSTEMI / ACS', sub:'High-risk · 55M', color:'#30d158', dept:'CCU', free:false, xpReward:85,
-      vitals:{bp:'142/88',hr:'96',o2:'97',temp:'37.0',rr:'16',gcs:'15'},
-      ecg:'ST depression V4-V6. T-wave inversion lateral leads.',
-      presentation:'Exertional chest tightness 3h. Troponin: 0.8→2.1. TIMI 5. Prev angio: 70% LAD stenosis.',
-      management:['Aspirin 300mg + Ticagrelor 180mg','Enoxaparin 1mg/kg SC','Early invasive: angio within 24h','Atorvastatin 80mg','Beta-blocker if no contraindication','GTN for symptom relief'] },
-    { id:'hyperkalemia', icon:'⚗️', title:'Severe Hyperkalaemia', sub:'K+ 7.2 · Renal failure · 64M', color:'#ff9500', dept:'ED', free:false, xpReward:95,
-      vitals:{bp:'158/92',hr:'52',o2:'96',temp:'37.0',rr:'16',gcs:'15'},
-      ecg:'Peaked T waves V2-V5. Widened QRS 140ms. Sine wave pattern emerging.',
-      presentation:'CKD stage 4. Missed dialysis 3 days. K+ 7.2. ECG changes. Weak, nauseous. On ACEi + spironolactone.',
-      management:['Calcium gluconate 10ml 10% IV STAT — membrane stabilisation','Insulin 10u + Dextrose 50% 50ml IV','Salbutamol 10mg nebulised','Stop ACEi + K+-sparing diuretics','Dialysis if refractory','Repeat ECG + K+ at 1h'] },
-    { id:'tamponade', icon:'🫀', title:'Cardiac Tamponade', sub:'Post-viral · 38F', color:'#bf5af2', dept:'CCU', free:false, xpReward:130,
-      vitals:{bp:'82/70',hr:'124',o2:'94',temp:'37.3',rr:'22',gcs:'15'},
-      ecg:'Low voltage. Electrical alternans. Sinus tachycardia.',
-      presentation:'Viral illness 2 weeks ago. Progressive dyspnea, JVP elevated, muffled heart sounds. Beck\'s triad. Echo: 2cm circumferential effusion.',
-      management:['Pericardiocentesis — urgent','IV fluids — cautious 250ml bolus','Avoid positive pressure ventilation','Echo-guided drainage preferred','Pericardial drain leave in situ','Send fluid: culture, cytology, protein'] },
-  ]
+  const criticalCases: any[] = []
 
-  const sportsCases = [
-    { id:'concussion', icon:'🧠', title:'Pitch-Side Concussion', sub:'SCAT6 · FIFA 2026', color:'#0a84ff', dept:'Sports', free:true, xpReward:70,
-      vitals:{bp:'120/78',hr:'92',o2:'99',temp:'37.0',rr:'16',gcs:'15'},
-      ecg:'N/A — neurological assessment priority.',
-      presentation:'Head collision. SCAT6: headache 6/10, confusion, failed balance test.',
-      management:['NO same-day return to play — EVER','SCAT6 full assessment pitchside','Rule out C-spine injury','Graduated RTP: 6 steps over 6 days','Neuroimaging if red flags','Document and report'] },
-    { id:'cardiacarrest_sports', icon:'💔', title:'Sudden Cardiac Arrest', sub:'On-field · FIFA 2026', color:'#ff3b30', dept:'Sports', free:false, xpReward:100,
-      vitals:{bp:'0/0',hr:'0',o2:'0',temp:'37.0',rr:'0',gcs:'3'},
-      ecg:'VF — shockable rhythm.',
-      presentation:'Player collapses suddenly. No pulse. AED pitchside. Age 22.',
-      management:['CPR immediately — 30:2','AED deploy — shock if shockable','Call emergency services','< 10s interruptions','Post-ROSC: 12-lead, echo, ICU','Consider HCM / commotio cordis'] },
-    { id:'heatstroke', icon:'🌡️', title:'Exertional Heat Stroke', sub:'World Cup · FIFA 2026', color:'#ff9500', dept:'Sports', free:false, xpReward:70,
-      vitals:{bp:'90/60',hr:'135',o2:'95',temp:'41.2',rr:'24',gcs:'12'},
-      ecg:'Sinus tachycardia.',
-      presentation:'Core temp 41.2°C after 80 min in 38°C heat. Anhidrotic. GCS 12.',
-      management:['Remove — cool immediately','Cold water immersion → < 39°C in 30 min','IV cold saline 0.9%','Monitor for seizures','Avoid antipyretics','Hospital when stable'] },
-    { id:'kneeankle', icon:'🦴', title:'Acute Knee & Ankle Trauma', sub:'Ottawa rules · FIFA 2026', color:'#30d158', dept:'Sports', free:false, xpReward:60,
-      vitals:{bp:'128/80',hr:'98',o2:'98',temp:'37.0',rr:'16',gcs:'15'},
-      ecg:'N/A.',
-      presentation:'Twisting right knee. Immediate pain + swelling. Ottawa Knee Rules positive.',
-      management:['Ottawa Rules: X-ray if criteria met','RICE — Rest Ice Compression Elevation','Lachman + McMurray tests','Neurovascular check distal','MRI if ACL/meniscus suspected','Orthopaedic referral'] },
-  ]
+  const sportsCases: any[] = []
 
-  const pedsCases = [
-    { id:'febrileseizure', icon:'🌡️', title:'Febrile Seizure', sub:'18-month-old', color:'#ff9500', dept:'Peds', free:false, xpReward:70,
-      vitals:{bp:'90/60',hr:'148',o2:'98',temp:'39.6',rr:'28',gcs:'15'},
-      ecg:'N/A.',
-      presentation:'18-month-old post-ictal. Seizure 2 min generalised. Temp 39.6°C. No prior seizures.',
-      management:['Reassurance — benign in majority','Treat fever: paracetamol 15mg/kg','Investigate fever source','LP if < 12 months or meningism','No prophylactic anticonvulsants','Parent education'] },
-    { id:'needlephobia', icon:'💉', title:'Needle Phobia — Vaccination', sub:'4-year-old', color:'#8b5cf6', dept:'Peds', free:false, xpReward:50,
-      vitals:{bp:'95/60',hr:'120',o2:'99',temp:'37.1',rr:'20',gcs:'15'},
-      ecg:'N/A.',
-      presentation:'4yr refusing MMR booster. Extreme distress. Overdue.',
-      management:['Comfort: parent lap forward','EMLA cream 45-60 min before','Distraction: bubbles, screen','Buzzy bee vibration','Rapid injection technique','Post-procedure positive reinforcement'] },
-    { id:'bronchiolitis', icon:'🫁', title:'Severe Bronchiolitis', sub:'RSV · 3-month-old', color:'#0a84ff', dept:'Peds', free:false, xpReward:90,
-      vitals:{bp:'80/50',hr:'168',o2:'86',temp:'38.2',rr:'72',gcs:'15'},
-      ecg:'N/A.',
-      presentation:'3-month-old, 3-day wheeze + poor feeding. O2 86%. Nasal flaring, subcostal recession. RSV positive.',
-      management:['High-flow O2 — target SpO2 > 92%','Nasogastric feeds if poor oral intake','High-flow nasal cannula (HFNC)','No bronchodilators or steroids (RSV)','Strict infection control','PICU if worsening'] },
-  ]
+  const pedsCases: any[] = []
 
-  const radCases = [
-    { id:'ecg_rad', icon:'ecg', title:'ECG Interpretation', sub:'12-lead · 8 cases', color:'#ff3b30',
-      report:'STEMI: ST elevation 3mm V1-V4. Reciprocal changes II/III/aVF. Rate 110 sinus tachycardia. QTc 420ms.\n\nConclusion: Anterior STEMI. Activate Cath Lab immediately.' },
-    { id:'cxr', icon:'cxr', title:'Chest X-Ray', sub:'PA & lateral · 12 cases', color:'#0a84ff',
-      report:'Bilateral perihilar haziness. Kerley B lines. Cardiomegaly CTR 0.58. Bilateral effusions. Upper lobe diversion.\n\nConclusion: Acute pulmonary oedema. IV diuresis indicated.' },
-    { id:'ctpa', icon:'ctpa', title:'CT Pulmonary Angiography', sub:'PE protocol · 5 cases', color:'#8b5cf6',
-      report:'Saddle embolus right main PA extending bilateral. RV:LV 1.4. D-sign present.\n\nConclusion: Massive bilateral PE with RV strain. Consider thrombolysis. ICU.' },
-    { id:'echo_rad', icon:'echo', title:'Echocardiogram', sub:'TTE findings · 6 cases', color:'#30d158',
-      report:'EF 25%. Global hypokinesia. LVEDD 65mm. Moderate MR. RVSP 58mmHg.\n\nConclusion: Severe dilated cardiomyopathy. Optimise GDMT. ICD assessment.' },
-    { id:'ctbrain', icon:'ctbrain', title:'CT Brain — Stroke', sub:'Stroke & bleed · 10 cases', color:'#ff9500',
-      report:'Hyperdense MCA sign right. No haemorrhage. ASPECTS 8. Sulcal effacement right MCA.\n\nConclusion: Right MCA occlusion. IV thrombolysis + thrombectomy urgent.' },
-  ]
+  const radCases: any[] = []
 
   const RadIcon = ({id, color}:{id:string,color:string}) => {
     const s = {stroke:color, strokeWidth:1.8, strokeLinecap:'round' as const, strokeLinejoin:'round' as const}
