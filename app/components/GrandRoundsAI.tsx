@@ -4,9 +4,9 @@ import { useState } from 'react'
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
+  bg: '#080c14',
+  card: 'rgba(255,255,255,0.07)',
+  border: 'rgba(255,255,255,0.12)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
   muted: 'rgba(148,163,184,0.4)',

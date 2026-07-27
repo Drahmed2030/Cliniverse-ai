@@ -93,7 +93,7 @@ export default function RapidFire({ onXP }:Props) {
         <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:20,lineHeight:1.6}}>30 clinical questions · 3 minutes<br/>No second chances</div>
         <div style={{display:'flex',gap:10,justifyContent:'center',marginBottom:24}}>
           {[['30','Questions'],['3 min','Time'],['⚡','XP']].map(([v,l])=>(
-            <div key={l} style={{background:'rgba(255,255,255,0.06)',borderRadius:14,padding:'12px 16px',border:'1px solid rgba(255,255,255,0.08)'}}>
+            <div key={l} style={{background:'rgba(255,255,255,0.06)',borderRadius:14,padding:'12px 16px',border:'1px solid rgba(255,255,255,0.12)'}}>
               <div style={{fontSize:18,fontWeight:900,color:'white'}}>{v}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginTop:2}}>{l}</div>
             </div>
@@ -137,7 +137,7 @@ export default function RapidFire({ onXP }:Props) {
   return(
     <div style={{padding:'0 4px',position:'relative'}}>
       {showStreak&&<div style={{position:'fixed',top:'20%',left:'50%',transform:'translateX(-50%)',zIndex:999,background:'linear-gradient(135deg,#ff9f0a,#ff6b35)',borderRadius:20,padding:'12px 24px',fontSize:18,fontWeight:900,color:'white',boxShadow:'0 8px 32px rgba(255,159,10,0.5)'}}>🔥 {streak} STREAK!</div>}
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14,background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'10px 14px',border:'1px solid rgba(255,255,255,0.06)'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14,background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'10px 14px',border:'1px solid rgba(255,255,255,0.06)'}}>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:timerColor,fontFamily:'monospace'}}>{mins}:{secs.toString().padStart(2,'0')}</div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>TIME</div></div>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:'white'}}>{qIndex+1}<span style={{fontSize:12,color:'rgba(255,255,255,0.3)'}}>/30</span></div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>Q</div></div>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:'#30d158'}}>{score}</div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>CORRECT</div></div>
@@ -146,11 +146,11 @@ export default function RapidFire({ onXP }:Props) {
       <div style={{height:3,background:'rgba(255,255,255,0.06)',borderRadius:2,marginBottom:8,overflow:'hidden'}}><div style={{height:'100%',background:'linear-gradient(90deg,#ff453a,#ff9f0a)',width:`${(qIndex/30)*100}%`,borderRadius:2}}/></div>
       <div style={{height:3,background:'rgba(255,255,255,0.06)',borderRadius:2,marginBottom:14,overflow:'hidden'}}><div style={{height:'100%',background:timerColor,width:`${(qTime/6)*100}%`,borderRadius:2,transition:'width 1s linear'}}/></div>
       <div style={{display:'inline-block',fontSize:10,padding:'3px 10px',borderRadius:10,background:'rgba(139,92,246,0.15)',color:'#c4b5fd',border:'1px solid rgba(139,92,246,0.25)',fontWeight:700,marginBottom:12}}>{q.cat}</div>
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:20,padding:'18px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.07)',minHeight:80,display:'flex',alignItems:'center'}}><div style={{fontSize:16,fontWeight:700,color:'white',lineHeight:1.6}}>{q.q}</div></div>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:'18px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.07)',minHeight:80,display:'flex',alignItems:'center'}}><div style={{fontSize:16,fontWeight:700,color:'white',lineHeight:1.6}}>{q.q}</div></div>
       <div style={{display:'flex',flexDirection:'column',gap:10}}>
         {q.opts.map((opt,i)=>{
           const isCorrect=i===q.a,isSelected=i===selected
-          let bg='rgba(255,255,255,0.04)',border='1px solid rgba(255,255,255,0.08)',color='rgba(255,255,255,0.85)'
+          let bg='rgba(255,255,255,0.07)',border='1px solid rgba(255,255,255,0.12)',color='rgba(255,255,255,0.85)'
           if(selected!==null){if(isCorrect){bg='rgba(48,209,88,0.15)';border='1.5px solid rgba(48,209,88,0.5)';color='#30d158'}else if(isSelected){bg='rgba(255,69,58,0.15)';border='1.5px solid rgba(255,69,58,0.5)';color='#ff453a'}}
           return(
             <button key={i} onClick={()=>handleAnswer(i)} disabled={selected!==null} style={{background:bg,border,borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color,textAlign:'left',cursor:selected!==null?'default':'pointer',display:'flex',alignItems:'center',gap:10,transition:'all 0.2s'}}>

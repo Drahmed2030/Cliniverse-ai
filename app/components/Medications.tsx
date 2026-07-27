@@ -53,7 +53,7 @@ export default function Medications() {
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(m=>(
             <div key={m.id} onClick={()=>setExpanded(expanded===m.id?null:m.id)}
-              style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:16,border:'1px solid rgba(48,209,88,0.15)',cursor:'pointer'}}>
+              style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:16,border:'1px solid rgba(48,209,88,0.15)',cursor:'pointer'}}>
               <div style={{display:'flex',alignItems:'center',gap:12}}>
                 <div style={{width:44,height:44,borderRadius:13,background:'rgba(48,209,88,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>💊</div>
                 <div style={{flex:1}}>

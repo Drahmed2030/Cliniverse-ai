@@ -272,7 +272,7 @@ const GUIDELINES = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -425,7 +425,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
         <div style={{marginBottom:14}}>
           <div style={{display:'flex',gap:4,marginBottom:8}}>
             {PHASES.map((p,i)=>(
-              <div key={p} style={{flex:1,height:4,borderRadius:2,background:i<=phaseProgress?phaseColors[p]:'rgba(255,255,255,0.08)',boxShadow:i===phaseProgress?`0 0 8px ${phaseColors[p]}88`:'none',transition:'all 0.3s'}}/>
+              <div key={p} style={{flex:1,height:4,borderRadius:2,background:i<=phaseProgress?phaseColors[p]:'rgba(255,255,255,0.12)',boxShadow:i===phaseProgress?`0 0 8px ${phaseColors[p]}88`:'none',transition:'all 0.3s'}}/>
             ))}
           </div>
           <div style={{display:'flex',justifyContent:'space-between'}}>

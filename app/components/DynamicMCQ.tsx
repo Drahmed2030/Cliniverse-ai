@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const C = {
-  card:'rgba(255,255,255,0.04)', border:'rgba(139,92,246,0.15)',
+  card:'rgba(255,255,255,0.07)', border:'rgba(139,92,246,0.15)',
   text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)',
 }
 
@@ -209,7 +209,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
         ))}
       </div>
 
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'12px 14px',marginBottom:20,border:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between'}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'12px 14px',marginBottom:20,border:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between'}}>
         <div style={{textAlign:'center'}}>
           <div style={{fontSize:18,fontWeight:900,color:'white'}}>{SESSION_LENGTH}</div>
           <div style={{fontSize:10,color:C.muted}}>Questions</div>
@@ -274,7 +274,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
       )}
 
       {/* Vignette */}
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:20,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`,position:'relative',overflow:'hidden'}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:0,left:0,width:'100%',height:3,background:'linear-gradient(90deg,#ff9f0a,#ff6b35)'}}/>
         <div style={{fontSize:10,color:'#ff9f0a',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>📋 CLINICAL VIGNETTE</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.85}}>{question.vignette}</div>

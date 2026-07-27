@@ -227,7 +227,7 @@ const SCENARIOS: ShiftScenario[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -323,7 +323,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Survive a full on-call shift. Manage your energy. Make the right calls. One wrong decision can cost a life — or your career.</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
           {[{icon:'⚡',label:'Energy System'},{icon:'⏱️',label:'Time Pressure'},{icon:'🏆',label:'Survival Score'}].map(t=>(
-            <div key={t.label} style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.06)',textAlign:'center'}}>
+            <div key={t.label} style={{background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.06)',textAlign:'center'}}>
               <div style={{fontSize:20,marginBottom:4}}>{t.icon}</div>
               <div style={{fontSize:9,color:C.muted,fontWeight:700}}>{t.label}</div>
             </div>
@@ -390,7 +390,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <div style={{fontSize:11,color:C.sub}}>{cc.dept} · {cc.patient}</div>
           </div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.04)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.06)'}}>
+        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.06)'}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 SITUATION</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{cc.presentation}</div>
         </div>
@@ -470,7 +470,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           return (
             <div key={action.id} onClick={()=>!done&&handleAction(action)}
               style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!action.correct&&!isSelected?0.4:1}}>
-              <div style={{width:36,height:36,borderRadius:11,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+              <div style={{width:36,height:36,borderRadius:11,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                 {done?(action.correct?'✅':isSelected?'❌':'○'):'▷'}
               </div>
               <div style={{flex:1}}>

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.04)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(255,255,255,0.07)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const VITALS_RANGES = [
   { param:'Heart Rate', normal:'60-100 bpm', concern:'< 50 or > 120', critical:'< 40 or > 150', icon:'❤️', color:'#ff453a', action:'Assess rhythm, check BP, escalate if symptomatic' },
@@ -110,7 +110,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
             <div style={{fontSize:16,color:`${s.color}60`}}>{expandedSkill===i?'▲':'▼'}</div>
           </div>
           {expandedSkill===i&&s.steps.map((step,j)=>(
-            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<s.steps.length-1?`1px solid rgba(255,255,255,0.04)`:'none'}}>
+            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<s.steps.length-1?`1px solid rgba(255,255,255,0.07)`:'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:`${s.color}20`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:s.color,flexShrink:0}}>{j+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{step}</div>
             </div>
@@ -126,7 +126,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
         <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.15)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>📊 NEWS2 Score</div>
       </div>
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
         {NEWS2_TABLE.map((row,i)=>(
           <div key={i} style={{marginBottom:i<NEWS2_TABLE.length-1?12:0,paddingBottom:i<NEWS2_TABLE.length-1?12:0,borderBottom:i<NEWS2_TABLE.length-1?'1px solid rgba(255,255,255,0.05)':'none'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',fontWeight:700,marginBottom:6}}>{row.param}</div>

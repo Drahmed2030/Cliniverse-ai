@@ -218,7 +218,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
 
         <button onClick={onSkip} style={{
           width:'100%', padding:'14px', background:'transparent',
-          border:'1px solid rgba(255,255,255,0.08)', borderRadius:14,
+          border:'1px solid rgba(255,255,255,0.12)', borderRadius:14,
           color:'rgba(255,255,255,0.25)', fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:F, marginBottom:16,
         }}>
           Continue with Free (1 case)

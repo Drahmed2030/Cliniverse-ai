@@ -46,7 +46,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
                 <span style={{fontSize:10,color:'white',fontWeight:600}}>{r.label}</span>
                 <span style={{fontSize:10,color:r.color,fontWeight:700}}>{r.val}%</span>
               </div>
-              <div style={{height:3,background:'rgba(255,255,255,0.08)',borderRadius:2,overflow:'hidden'}}>
+              <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden'}}>
                 <div style={{height:'100%',width:r.val+'%',background:r.color,borderRadius:2,transition:'width 1s ease'}}/>
               </div>
             </div>

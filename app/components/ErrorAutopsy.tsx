@@ -165,7 +165,7 @@ const CASES: AutopsyCase[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -200,7 +200,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7}}>Analyse real medical errors. Find what went wrong. Learn without blame. Prevent future harm.</div>
         <div style={{display:'flex',gap:8,marginTop:12}}>
           {['🔍 Analyse','⚠️ No Blame','🛡️ Prevent'].map(t=>(
-            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.08)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
+            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.12)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
           ))}
         </div>
       </div>

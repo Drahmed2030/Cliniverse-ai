@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 const DifficultConversations = dynamic(() => import('./DifficultConversations'), { ssr: false })
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -363,7 +363,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
         ))}
       </div>
 
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
         <TextArea label="CASE TYPE / CLINICAL SCENARIO" k="caseType" rows={2}/>
         <TextArea label="YOUR ROLE IN THE CASE" k="role" rows={1}/>
         <TextArea label="PATIENT OUTCOME" k="outcome" rows={1}/>
@@ -454,7 +454,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
         <div style={{fontSize:13,color:C.sub,lineHeight:1.6}}>AI-powered tools for your daily clinical workflow — SBAR, discharge letters, portfolio</div>
         <div style={{display:'flex',gap:6,marginTop:12,flexWrap:'wrap'}}>
           {['NHS','HSE Ireland','KSA','ACGME','GMC'].map(b=>(
-            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.08)',fontWeight:700}}>{b}</span>
+            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)',fontWeight:700}}>{b}</span>
           ))}
         </div>
       </div>

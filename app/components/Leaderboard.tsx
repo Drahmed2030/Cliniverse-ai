@@ -87,7 +87,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
     if (i === 0) return { bg: 'linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,180,0,0.05))', border: '1px solid rgba(255,215,0,0.35)', shadow: '0 8px 32px rgba(255,215,0,0.2)' }
     if (i === 1) return { bg: 'linear-gradient(135deg,rgba(192,192,192,0.12),rgba(150,150,150,0.05))', border: '1px solid rgba(192,192,192,0.3)', shadow: '0 4px 16px rgba(192,192,192,0.1)' }
     if (i === 2) return { bg: 'linear-gradient(135deg,rgba(205,127,50,0.12),rgba(160,100,30,0.05))', border: '1px solid rgba(205,127,50,0.3)', shadow: '0 4px 16px rgba(205,127,50,0.1)' }
-    return { bg: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.1)', shadow: 'none' }
+    return { bg: 'rgba(255,255,255,0.07)', border: '1px solid rgba(139,92,246,0.1)', shadow: 'none' }
   }
 
   return (

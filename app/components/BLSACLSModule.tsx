@@ -123,7 +123,7 @@ const QUIZ = [
 ]
 
 // ── STYLES ──
-const card = {background:'rgba(255,255,255,0.04)', borderRadius:20, border:'1px solid rgba(139,92,246,0.15)', padding:'14px 16px', marginBottom:10}
+const card = {background:'rgba(255,255,255,0.07)', borderRadius:20, border:'1px solid rgba(139,92,246,0.15)', padding:'14px 16px', marginBottom:10}
 const glow = (color:string) => ({background:`${color}18`, border:`1px solid ${color}30`, boxShadow:`0 4px 20px ${color}15`})
 
 export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
@@ -223,7 +223,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         </div>
 
         {/* Current Step Card */}
-        <div style={{background:s.critical?`linear-gradient(145deg,${algo.color}18,${algo.color}06)`:'rgba(255,255,255,0.04)',borderRadius:22,padding:'20px 18px',marginBottom:12,border:`1.5px solid ${s.critical?algo.color+'50':'rgba(255,255,255,0.08)'}`,boxShadow:s.critical?`0 8px 32px ${algo.color}25`:'0 4px 20px rgba(0,0,0,0.3)'}}>
+        <div style={{background:s.critical?`linear-gradient(145deg,${algo.color}18,${algo.color}06)`:'rgba(255,255,255,0.07)',borderRadius:22,padding:'20px 18px',marginBottom:12,border:`1.5px solid ${s.critical?algo.color+'50':'rgba(255,255,255,0.12)'}`,boxShadow:s.critical?`0 8px 32px ${algo.color}25`:'0 4px 20px rgba(0,0,0,0.3)'}}>
           {s.critical&&(
             <div style={{display:'inline-flex',alignItems:'center',gap:6,background:`${algo.color}20`,border:`1px solid ${algo.color}40`,borderRadius:10,padding:'3px 10px',marginBottom:10}}>
               <span style={{fontSize:10}}>⚠️</span>
@@ -254,7 +254,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         {/* Step pills */}
         <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:14}}>
           {algo.steps.map((_,i)=>(
-            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(255,255,255,0.05)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.08)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(255,255,255,0.25)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
+            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(255,255,255,0.05)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.12)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(255,255,255,0.25)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
               {i<step?'✓':i+1}
             </div>
           ))}
@@ -281,7 +281,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Reversible causes of cardiac arrest</div>
         </div>
       </div>
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'12px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.07)'}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'12px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.07)'}}>
         <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',lineHeight:1.75}}>Always consider during arrest. Treat simultaneously with CPR. Finding and fixing these = best chance of ROSC.</div>
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
@@ -318,7 +318,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         </div>
       </div>
       {DRUGS.map(d=>(
-        <div key={d.name} style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:`1px solid ${d.color}20`,boxShadow:`0 4px 16px ${d.color}08`}}>
+        <div key={d.name} style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:`1px solid ${d.color}20`,boxShadow:`0 4px 16px ${d.color}08`}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
             <div style={{width:10,height:10,borderRadius:'50%',background:d.color,boxShadow:`0 0 10px ${d.color}`,flexShrink:0}}/>
             <div style={{fontSize:15,fontWeight:800,color:'white'}}>{d.name}</div>
@@ -366,13 +366,13 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           <div style={{height:'100%',width:`${(qIdx/QUIZ.length)*100}%`,background:'linear-gradient(90deg,#ffd60a,#ff9f0a)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(255,214,10,0.5)'}}/>
         </div>
 
-        <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'18px 16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.08)'}}>
+        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'18px 16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.12)'}}>
           <div style={{fontSize:15,fontWeight:700,color:'white',lineHeight:1.7}}>{q.q}</div>
         </div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
           {q.opts.map((o,i)=>{
-            let bg='rgba(255,255,255,0.04)',border='1px solid rgba(255,255,255,0.08)',tc='rgba(255,255,255,0.8)'
+            let bg='rgba(255,255,255,0.07)',border='1px solid rgba(255,255,255,0.12)',tc='rgba(255,255,255,0.8)'
             if(ans!==null){
               if(i===q.correct){bg='rgba(48,209,88,0.15)';border='2px solid #30d158';tc='#86efac'}
               else if(i===ans){bg='rgba(255,69,58,0.15)';border='2px solid #ff453a';tc='#fca5a5'}

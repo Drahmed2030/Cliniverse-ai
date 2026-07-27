@@ -49,7 +49,7 @@ export default function Guidelines() {
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:16,paddingBottom:4,scrollbarWidth:'none'}}>
         {SPECS.map(s=>(
           <button key={s} onClick={()=>setSpec(s)}
-            style={{flexShrink:0,padding:'6px 14px',borderRadius:20,border:spec===s?'1px solid rgba(139,92,246,0.5)':'1px solid rgba(255,255,255,0.08)',background:spec===s?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.06)',color:spec===s?'white':'rgba(255,255,255,0.5)',fontSize:12,fontWeight:spec===s?700:400,cursor:'pointer',fontFamily:'inherit'}}>
+            style={{flexShrink:0,padding:'6px 14px',borderRadius:20,border:spec===s?'1px solid rgba(139,92,246,0.5)':'1px solid rgba(255,255,255,0.12)',background:spec===s?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.06)',color:spec===s?'white':'rgba(255,255,255,0.5)',fontSize:12,fontWeight:spec===s?700:400,cursor:'pointer',fontFamily:'inherit'}}>
             {s}
           </button>
         ))}
@@ -61,7 +61,7 @@ export default function Guidelines() {
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(g=>(
             <div key={g.id} onClick={()=>setExpanded(expanded===g.id?null:g.id)}
-              style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:16,border:'1px solid '+(COLORS[g.specialty]||'#8b5cf6')+'20',cursor:'pointer',transition:'all 0.2s'}}>
+              style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:16,border:'1px solid '+(COLORS[g.specialty]||'#8b5cf6')+'20',cursor:'pointer',transition:'all 0.2s'}}>
               <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
                 <div style={{width:44,height:44,borderRadius:13,background:(COLORS[g.specialty]||'#8b5cf6')+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>
                   {g.specialty==='Cardiology'?'🫀':g.specialty==='Critical Care'?'🏥':g.specialty==='Respiratory'?'🫁':g.specialty==='Endocrine'?'💉':g.specialty==='Neurology'?'🧠':'⚕️'}

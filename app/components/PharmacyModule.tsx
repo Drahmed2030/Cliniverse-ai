@@ -4,7 +4,7 @@ import { useState } from 'react'
 type View = 'menu' | 'interactions' | 'dosing' | 'quiz' | 'counselling'
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -158,7 +158,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
             <div style={{fontSize:15,fontWeight:800,color:C.text}}>{c.drug}</div>
           </div>
           {c.points.map((p,j)=>(
-            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<c.points.length-1?`1px solid rgba(255,255,255,0.04)`:'none'}}>
+            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<c.points.length-1?`1px solid rgba(255,255,255,0.07)`:'none'}}>
               <div style={{width:22,height:22,borderRadius:7,background:`${c.color}18`,border:`1px solid ${c.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:c.color,flexShrink:0}}>{j+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{p}</div>
             </div>

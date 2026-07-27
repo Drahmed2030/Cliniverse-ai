@@ -136,7 +136,7 @@ const CASES: DetectiveCase[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -188,15 +188,15 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Order investigations wisely. Every test costs money. Diagnose accurately with the least spend to maximise your score.</div>
         <div style={{display:'flex',gap:8}}>
-          <div style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.12)',textAlign:'center'}}>
             <div style={{fontSize:18}}>💰</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Budget System</div>
           </div>
-          <div style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.12)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🔬</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Order Tests</div>
           </div>
-          <div style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.08)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.12)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🏆</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Diagnose</div>
           </div>
@@ -304,7 +304,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
                 const canAfford = budget >= inv.cost
                 return (
                   <div key={inv.id} onClick={()=>!done&&canAfford&&orderTest(inv)}
-                    style={{background:done?`${c.color}08`:C.card,borderRadius:14,padding:'12px 14px',border:done?`1px solid ${c.color}30`:canAfford?`1px solid ${C.border}`:'1px solid rgba(255,255,255,0.04)',cursor:done||!canAfford?'default':'pointer',opacity:done?0.7:canAfford?1:0.4,display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
+                    style={{background:done?`${c.color}08`:C.card,borderRadius:14,padding:'12px 14px',border:done?`1px solid ${c.color}30`:canAfford?`1px solid ${C.border}`:'1px solid rgba(255,255,255,0.07)',cursor:done||!canAfford?'default':'pointer',opacity:done?0.7:canAfford?1:0.4,display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
                     <span style={{fontSize:20,flexShrink:0}}>{inv.icon}</span>
                     <div style={{flex:1}}>
                       <div style={{fontSize:13,fontWeight:700,color:done?c.color:C.text}}>{inv.label}</div>
@@ -322,7 +322,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         ))}
 
         <button onClick={()=>setPhase('diagnose')} disabled={ordered.length<2}
-          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:ordered.length>=2?`linear-gradient(135deg,${c.color},${c.color}bb)`:'rgba(255,255,255,0.08)',color:'white',fontSize:15,fontWeight:800,cursor:ordered.length>=2?'pointer':'not-allowed',boxShadow:ordered.length>=2?`0 6px 24px ${c.color}44`:'none',opacity:ordered.length>=2?1:0.5}}>
+          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:ordered.length>=2?`linear-gradient(135deg,${c.color},${c.color}bb)`:'rgba(255,255,255,0.12)',color:'white',fontSize:15,fontWeight:800,cursor:ordered.length>=2?'pointer':'not-allowed',boxShadow:ordered.length>=2?`0 6px 24px ${c.color}44`:'none',opacity:ordered.length>=2?1:0.5}}>
           🩺 Make Diagnosis ({ordered.length} tests done)
         </button>
       </div>

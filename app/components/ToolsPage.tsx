@@ -28,8 +28,8 @@ const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 const GrandRoundsAI = dynamic(() => import('./GrandRoundsAI'), { ssr: false })
 
 const T = {
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
+  card: 'rgba(255,255,255,0.07)',
+  border: 'rgba(255,255,255,0.12)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.18)',

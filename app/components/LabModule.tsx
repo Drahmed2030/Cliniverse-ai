@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.04)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(255,255,255,0.07)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const LAB_PANELS = [
   {

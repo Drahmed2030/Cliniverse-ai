@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.04)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(255,255,255,0.07)', border:'rgba(139,92,246,0.15)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const CXR_FINDINGS = [
   { finding:'Cardiomegaly', criteria:'Cardiothoracic ratio > 0.5 on PA film', causes:'Heart failure, cardiomyopathy, pericardial effusion', icon:'🫀', color:'#ff453a', nextStep:'Echo, BNP, cardiology review' },
@@ -58,7 +58,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
         ))}
       </div>
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
         <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 SYSTEMATIC CXR APPROACH</div>
         {['A — Airway: trachea midline?','B — Breathing: lung fields symmetric?','C — Cardiac: CTR, borders, shape','D — Diaphragm: right higher, no free air','E — Everything else: bones, soft tissue, lines'].map((s,i)=>(
           <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
@@ -86,7 +86,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCXR===i&&(
             <div style={{borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.04)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.06)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f.causes}</div></div>
+              <div style={{background:'rgba(255,255,255,0.07)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.06)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f.causes}</div></div>
               <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
             </div>
           )}
@@ -116,7 +116,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCT===i&&(
             <div style={{borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.04)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.06)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{p.meaning}</div></div>
+              <div style={{background:'rgba(255,255,255,0.07)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.06)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{p.meaning}</div></div>
               <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
             </div>
           )}

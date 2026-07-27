@@ -58,7 +58,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         </div>
       </div>
       {CASES.map(c=>(
-        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(255,255,255,0.04)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
+        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:48,height:48,borderRadius:15,background:`${c.color}18`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26}}>{c.icon}</div>
             <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:'white'}}>{c.title}</div><div style={{fontSize:12,color:'rgba(255,255,255,0.4)',marginTop:2}}>{c.sub}</div></div>
@@ -93,10 +93,10 @@ export default function CardiacSurgeryAI({onXP}:Props){
       </div>
       <div style={{display:'flex',gap:6,marginBottom:14,overflowX:'auto'}}>
         {active.steps.map((_,i)=>(
-          <div key={i} onClick={()=>{setStep(i);setDetail(false)}} style={{flexShrink:0,width:36,height:36,borderRadius:12,background:i===step?`${active.color}30`:i<step?'rgba(48,209,88,0.2)':'rgba(255,255,255,0.05)',border:`1.5px solid ${i===step?active.color:i<step?'rgba(48,209,88,0.5)':'rgba(255,255,255,0.08)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,cursor:'pointer',color:'white'}}>{i<step?'✓':i+1}</div>
+          <div key={i} onClick={()=>{setStep(i);setDetail(false)}} style={{flexShrink:0,width:36,height:36,borderRadius:12,background:i===step?`${active.color}30`:i<step?'rgba(48,209,88,0.2)':'rgba(255,255,255,0.05)',border:`1.5px solid ${i===step?active.color:i<step?'rgba(48,209,88,0.5)':'rgba(255,255,255,0.12)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,cursor:'pointer',color:'white'}}>{i<step?'✓':i+1}</div>
         ))}
       </div>
-      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
+      <div style={{background:'rgba(255,255,255,0.07)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
           <div style={{width:36,height:36,borderRadius:11,background:`${active.color}20`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{s.icon}</div>
           <div style={{fontSize:15,fontWeight:800,color:'white'}}>{s.title}</div>

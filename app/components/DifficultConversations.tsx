@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -229,7 +229,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:10}}>Practise the hardest clinical conversations with an AI patient. Get real-time feedback on your communication skills.</div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {['SPIKES','REMAP','HEARD','MCA','Being Open'].map(p=>(
-            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.08)',fontWeight:700}}>{p}</span>
+            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.06)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)',fontWeight:700}}>{p}</span>
           ))}
         </div>
       </div>

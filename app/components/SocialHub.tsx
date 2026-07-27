@@ -5,7 +5,7 @@ type View = 'menu' | 'grand_rounds' | 'patient_journey' | 'crossover'
 type JourneyPhase = 'symptoms' | 'decision' | 'arrival' | 'diagnosis' | 'treatment' | 'outcome'
 
 const C = {
-  card: 'rgba(255,255,255,0.04)',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -438,7 +438,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:12,color:C.sub,lineHeight:1.6,marginBottom:10}}>{gr.patient}</div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
             {gr.keyFindings.slice(0,3).map((f,i)=>(
-              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,border:'1px solid rgba(255,255,255,0.08)'}}>{f}</span>
+              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,border:'1px solid rgba(255,255,255,0.12)'}}>{f}</span>
             ))}
           </div>
         </div>
@@ -503,7 +503,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🤖 AI Analysis</div></div>
           <div style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:selectedDx===gr.correctDx?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)',color:selectedDx===gr.correctDx?'#30d158':'#ff453a',fontWeight:800,border:`1px solid ${selectedDx===gr.correctDx?'rgba(48,209,88,0.3)':'rgba(255,69,58,0.3)'}`}}>{selectedDx===gr.correctDx?'✅ Correct':'❌ Incorrect'}</div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.08)'}}>
+        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:'16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.12)'}}>
           <div style={{fontSize:10,color:'rgba(139,92,246,0.8)',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 CORRECT DIAGNOSIS</div>
           <div style={{fontSize:18,fontWeight:900,color:C.text,marginBottom:4}}>{gr.hiddenDx}</div>
           <div style={{fontSize:12,color:C.sub}}>Your answer: <span style={{color:selectedDx===gr.correctDx?'#30d158':'#ff453a',fontWeight:700}}>{gr.ddx[selectedDx!]}</span></div>
@@ -651,7 +651,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(done)return;setJourneyAns(i);if(ch.correct)setJourneyScore(s=>s+1);else setJourneyMistakes(m=>m+1)}}
                 style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!ch.correct&&!isSelected?0.4:1}}>
-                <div style={{width:32,height:32,borderRadius:10,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.08)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+                <div style={{width:32,height:32,borderRadius:10,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                   {done?(ch.correct?'✅':isSelected?'❌':'○'):'▷'}
                 </div>
                 <div style={{fontSize:13,color:tc,fontWeight:600,flex:1,lineHeight:1.4}}>{ch.label}</div>
@@ -688,7 +688,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           style={{background:C.card,borderRadius:20,padding:'18px',marginBottom:12,border:`1px solid ${cc.color}25`,cursor:'pointer',position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:-15,right:-15,width:70,height:70,borderRadius:'50%',background:`${cc.color}10`,filter:'blur(15px)',pointerEvents:'none'}}/>
           <div style={{fontSize:16,fontWeight:800,color:C.text,marginBottom:8}}>{cc.title}</div>
-          <div style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px 12px',marginBottom:10,border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{background:'rgba(255,255,255,0.07)',borderRadius:12,padding:'10px 12px',marginBottom:10,border:'1px solid rgba(255,255,255,0.06)'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',lineHeight:1.6}}>{cc.patient}</div>
           </div>
           <div style={{display:'flex',gap:8}}>
@@ -714,7 +714,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.text}}>{cc.title}</div></div>
         </div>
         {/* Patient card */}
-        <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+        <div style={{background:'rgba(255,255,255,0.07)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:`1px solid ${C.border}`}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:4}}>THE PATIENT</div>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{cc.patient}</div>
         </div>
@@ -742,12 +742,12 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>MY ACTIONS</div>
           {p.actions.map((action,i)=>(
-            <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<p.actions.length-1?'1px solid rgba(255,255,255,0.04)':'none'}}>
+            <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<p.actions.length-1?'1px solid rgba(255,255,255,0.07)':'none'}}>
               <div style={{width:22,height:22,borderRadius:7,background:`${p.color}18`,border:`1px solid ${p.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:p.color,flexShrink:0}}>{i+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{action}</div>
             </div>
           ))}
-          <div style={{background:'rgba(255,255,255,0.04)',borderRadius:14,padding:'12px 14px',marginTop:10,border:'1px solid rgba(255,255,255,0.06)'}}>
+          <div style={{background:'rgba(255,255,255,0.07)',borderRadius:14,padding:'12px 14px',marginTop:10,border:'1px solid rgba(255,255,255,0.06)'}}>
             <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💬 MY PERSPECTIVE</div>
             <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.7,fontStyle:'italic'}}>"{p.insight}"</div>
           </div>

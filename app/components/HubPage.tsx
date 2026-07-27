@@ -8,9 +8,9 @@ const ActivityRings = dynamic(() => import('./ActivityRings'), { ssr: false })
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  cardBorder: 'rgba(255,255,255,0.08)',
+  bg: '#080c14',
+  card: 'rgba(255,255,255,0.07)',
+  cardBorder: 'rgba(255,255,255,0.12)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.20)',

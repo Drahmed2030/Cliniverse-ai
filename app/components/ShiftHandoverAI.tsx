@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 const T = {
-  card: 'rgba(255,255,255,0.04)', border: 'rgba(255,255,255,0.08)',
+  card: 'rgba(255,255,255,0.07)', border: 'rgba(255,255,255,0.12)',
   text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
   teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#a78bfa',
 }
@@ -76,7 +76,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
               padding: '7px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
               fontFamily: F, fontWeight: 700, fontSize: 12,
               background: ward === w ? T.green : T.card,
-              color: ward === w ? '#0f1117' : T.muted,
+              color: ward === w ? '#080c14' : T.muted,
               border: '1px solid ' + (ward === w ? T.green : T.border),
               boxShadow: ward === w ? '0 4px 12px rgba(74,222,128,0.25)' : 'none',
             }}>{w}</button>
@@ -105,7 +105,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
       <button onClick={generate} disabled={loading || !patients.trim()} style={{
         width: '100%', padding: '15px', border: 'none', borderRadius: 16,
         background: loading || !patients.trim() ? 'rgba(255,255,255,0.06)' : 'linear-gradient(135deg, #4ade80, #38bdf8)',
-        color: '#0f1117', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
+        color: '#080c14', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
         fontFamily: F, marginBottom: 16,
         boxShadow: loading ? 'none' : '0 6px 24px rgba(74,222,128,0.25)',
       }}>

@@ -113,7 +113,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       </div>
 
       {/* Tab Toggle */}
-      <div style={{ display:'flex', gap:8, marginBottom:16, background:'rgba(255,255,255,0.04)', backdropFilter:'blur(12px)', borderRadius:16, padding:5, border:'1px solid rgba(139,92,246,0.15)' }}>
+      <div style={{ display:'flex', gap:8, marginBottom:16, background:'rgba(255,255,255,0.07)', backdropFilter:'blur(12px)', borderRadius:16, padding:5, border:'1px solid rgba(139,92,246,0.15)' }}>
         {[{id:'insights',icon:'📊',label:'Weekly Insights'},{id:'drugs',icon:'💊',label:'Drug Checker'}].map(t=>(
           <button key={t.id} onClick={()=>setActiveTab(t.id as any)} style={{ flex:1, padding:'10px 8px', borderRadius:12, border:'none', background:activeTab===t.id?'rgba(139,92,246,0.2)':'transparent', cursor:'pointer', fontSize:13, fontWeight:700, color:activeTab===t.id?'#0a84ff':'rgba(255,255,255,0.35)', boxShadow:activeTab===t.id?'0 2px 8px rgba(0,0,0,0.08)':'none', transition:'all 0.2s' }}>
             {t.icon} {t.label}
@@ -125,7 +125,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {activeTab === 'insights' && (
         <div>
           {/* Activity Rings — Apple Health Style */}
-          <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.08)', color:'white', overflow:'hidden', position:'relative' }}>
+          <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.12)', color:'white', overflow:'hidden', position:'relative' }}>
             <div style={{ position:'absolute', top:-30, right:-30, width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.08),transparent)', pointerEvents:'none' }}/>
             <div style={{ fontSize:11, color:'rgba(255,255,255,0.35)', letterSpacing:2, textTransform:'uppercase', marginBottom:16, fontWeight:700 }}>This Week's Activity</div>
             <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', marginBottom:18 }}>
@@ -148,7 +148,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 {label:'XP Earned', value:weeklyXP, unit:'', color:'#30d158', goal:`/${weeklyGoal} goal`},
                 {label:'MCQ Accuracy', value:`${accuracy}`, unit:'%', color:'#0a84ff', goal:`${mcqTotal} answered`},
               ].map(s=>(
-                <div key={s.label} style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
+                <div key={s.label} style={{ background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.06)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
                   <div style={{ fontSize:22, fontWeight:900, color:s.color, letterSpacing:-1 }}>{s.value}{s.unit}</div>
                   <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
                   <div style={{ fontSize:9, color:'rgba(255,255,255,0.2)', marginTop:2 }}>{s.goal}</div>
@@ -159,7 +159,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
           {/* Streak + Rank Progress */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:14 }}>
-            <div style={{ background:'rgba(255,255,255,0.04)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
+            <div style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#ff9500', lineHeight:1 }}>{streak}</div>
               <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>days in a row 🔥</div>
@@ -168,7 +168,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
               </div>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', marginTop:4 }}>Goal: 7-day streak</div>
             </div>
-            <div style={{ background:'rgba(255,255,255,0.04)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
+            <div style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#8b5cf6', lineHeight:1 }}>{xp}</div>
               <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>clinical points</div>
@@ -180,7 +180,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           </div>
 
           {/* Weekly Performance Chart */}
-          <div style={{ background:'rgba(255,255,255,0.04)', backdropFilter:'blur(20px)', borderRadius:18, padding:18, marginBottom:14, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
+          <div style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(20px)', borderRadius:18, padding:18, marginBottom:14, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:14 }}>Weekly Activity</div>
             <div style={{ display:'flex', gap:6, alignItems:'flex-end', height:60 }}>
               {['M','T','W','T','F','S','S'].map((day,i)=>{
@@ -209,7 +209,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {/* ── DRUG INTERACTION CHECKER ── */}
       {activeTab === 'drugs' && (
         <div>
-          <div style={{ background:'rgba(255,255,255,0.04)', backdropFilter:'blur(20px)', borderRadius:20, padding:18, marginBottom:14, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
+          <div style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(20px)', borderRadius:20, padding:18, marginBottom:14, border:'1px solid rgba(139,92,246,0.15)', boxShadow:'none' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:14 }}>💊 Drug Interaction Checker</div>
 
             {/* Drug 1 */}
@@ -281,7 +281,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           )}
 
           {/* Common Dangerous Interactions */}
-          <div style={{ background:'rgba(255,255,255,0.04)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)' }}>
+          <div style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(139,92,246,0.15)' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:12 }}>⚠️ High-Risk Combinations</div>
             {[
               {combo:'Warfarin + Fluconazole', sev:'CONTRAINDICATED', color:'#dc2626'},
@@ -298,7 +298,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 const key1=`${parts[0]}+${parts[1]}`, key2=`${parts[1]}+${parts[0]}`
                 const result = INTERACTIONS[key1]||INTERACTIONS[key2]
                 if(result){setInteraction(result);setNoInteraction(false)}
-              }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:12, background:'rgba(255,255,255,0.04)', marginBottom:6, cursor:'pointer', border:'1px solid rgba(0,0,0,0.05)' }}>
+              }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:12, background:'rgba(255,255,255,0.07)', marginBottom:6, cursor:'pointer', border:'1px solid rgba(0,0,0,0.05)' }}>
                 <div style={{ width:8, height:8, borderRadius:'50%', background:item.color, flexShrink:0 }}/>
                 <div style={{ flex:1, fontSize:13, fontWeight:600, color:'white' }}>{item.combo}</div>
                 <div style={{ fontSize:9, padding:'2px 8px', borderRadius:8, background:`${item.color}15`, color:item.color, fontWeight:800 }}>{item.sev}</div>

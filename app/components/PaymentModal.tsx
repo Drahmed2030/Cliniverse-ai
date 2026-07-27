@@ -52,7 +52,7 @@ export default function PaymentModal({ onClose }: Props) {
           </div>
 
           {/* Plan toggle */}
-          <div style={{display:'flex',background:'rgba(255,255,255,0.06)',borderRadius:16,padding:4,marginBottom:20,border:'1px solid rgba(255,255,255,0.08)'}}>
+          <div style={{display:'flex',background:'rgba(255,255,255,0.06)',borderRadius:16,padding:4,marginBottom:20,border:'1px solid rgba(255,255,255,0.12)'}}>
             {(['monthly','yearly'] as const).map(pl=>(
               <button key={pl} onClick={()=>setPlan(pl)}
                 style={{flex:1,padding:'10px',borderRadius:13,border:'none',background:plan===pl?'rgba(139,92,246,0.3)':'transparent',color:plan===pl?'white':'rgba(255,255,255,0.4)',fontWeight:700,fontSize:14,cursor:'pointer',position:'relative',transition:'all 0.2s'}}>
@@ -70,7 +70,7 @@ export default function PaymentModal({ onClose }: Props) {
           </div>
 
           {/* Features */}
-          <div style={{background:'rgba(255,255,255,0.04)',borderRadius:18,padding:16,marginBottom:20,border:'1px solid rgba(255,255,255,0.07)'}}>
+          <div style={{background:'rgba(255,255,255,0.07)',borderRadius:18,padding:16,marginBottom:20,border:'1px solid rgba(255,255,255,0.07)'}}>
             {p.features.map(f=>(
               <div key={f} style={{display:'flex',gap:10,alignItems:'center',marginBottom:10}}>
                 <div style={{width:20,height:20,borderRadius:'50%',background:'rgba(48,209,88,0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,color:'#30d158',flexShrink:0}}>✓</div>

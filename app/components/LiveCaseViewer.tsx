@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
+  bg: '#080c14',
+  card: 'rgba(255,255,255,0.07)',
+  border: 'rgba(255,255,255,0.12)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
   muted: 'rgba(148,163,184,0.4)',
@@ -148,7 +148,7 @@ export default function LiveCaseViewer({ specialty = 'Emergency Medicine', diffi
               flex: 1, padding: '9px 4px', border: 'none', cursor: 'pointer',
               borderRadius: 12, fontFamily: F, fontWeight: 700, fontSize: 10,
               background: active ? T.teal : done ? 'rgba(56,189,248,0.1)' : T.card,
-              color: active ? '#0f1117' : done ? T.teal : T.muted,
+              color: active ? '#080c14' : done ? T.teal : T.muted,
               border: '1px solid ' + (active ? T.teal : done ? 'rgba(56,189,248,0.2)' : T.border),
               boxShadow: active ? '0 4px 16px rgba(56,189,248,0.3)' : 'none',
             }}>

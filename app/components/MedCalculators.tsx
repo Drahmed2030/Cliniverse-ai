@@ -47,7 +47,7 @@ function AscvdCalc() {
       <SliderRow label="HDL Cholesterol (mg/dL)" val={hdl} min={20} max={100} onChange={setHdl} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 16 }}>
         {[{ label: '🚬 Smoker', val: smoker, set: setSmoker }, { label: '🍬 Diabetic', val: diabetic, set: setDiabetic }, { label: '💊 HTN Rx', val: htn, set: setHtn }].map(b => (
-          <button key={b.label} onClick={() => b.set(!b.val)} style={{ padding: '10px 6px', borderRadius: 12, border: b.val ? '2px solid #0a84ff' : '1px solid rgba(139,92,246,0.15)', background: b.val ? 'rgba(10,132,255,0.1)' : 'rgba(255,255,255,0.04)', fontSize: 11, fontWeight: 700, color: b.val ? '#0a84ff' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>{b.label}</button>
+          <button key={b.label} onClick={() => b.set(!b.val)} style={{ padding: '10px 6px', borderRadius: 12, border: b.val ? '2px solid #0a84ff' : '1px solid rgba(139,92,246,0.15)', background: b.val ? 'rgba(10,132,255,0.1)' : 'rgba(255,255,255,0.07)', fontSize: 11, fontWeight: 700, color: b.val ? '#0a84ff' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>{b.label}</button>
         ))}
       </div>
       <div style={{ background: riskLevel.bg, borderRadius: 16, padding: 16, textAlign: 'center', border: `2px solid ${riskLevel.color}33` }}>
@@ -84,7 +84,7 @@ function ChadsCalc() {
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
         {items_list.map(item => (
-          <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(10,132,255,0.1)' : 'rgba(255,255,255,0.04)', border: (items as any)[item.key] ? '1.5px solid #0a84ff' : '1px solid rgba(139,92,246,0.15)', cursor: 'pointer' }}>
+          <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(10,132,255,0.1)' : 'rgba(255,255,255,0.07)', border: (items as any)[item.key] ? '1.5px solid #0a84ff' : '1px solid rgba(139,92,246,0.15)', cursor: 'pointer' }}>
             <div style={{ width: 20, height: 20, borderRadius: 6, background: (items as any)[item.key] ? '#0a84ff' : 'transparent', border: (items as any)[item.key] ? 'none' : '2px solid rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               {(items as any)[item.key] && <span style={{ color: 'white', fontSize: 12 }}>✓</span>}
             </div>
@@ -93,7 +93,7 @@ function ChadsCalc() {
           </div>
         ))}
       </div>
-      <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(139,92,246,0.15)' }}>
+      <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(139,92,246,0.15)' }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: '#8b5cf6', lineHeight: 1 }}>{score}</div>
         <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginBottom: 8 }}>Annual stroke risk: {risk}%</div>
         <div style={{ fontSize: 13, fontWeight: 700, color: anticoagColor, padding: '8px 12px', background: `${anticoagColor}15`, borderRadius: 10, border: `1px solid ${anticoagColor}30` }}>{anticoag}</div>
@@ -134,10 +134,10 @@ function CrClCalc() {
         </div>
         <input type="range" min={0.4} max={15} step={0.1} value={creatinine} onChange={e => setCreatinine(+e.target.value)} style={{ width: '100%', accentColor: '#0a84ff' }} />
       </div>
-      <button onClick={() => setFemale(!female)} style={{ width: '100%', padding: '10px', borderRadius: 12, border: female ? '2px solid #8b5cf6' : '1px solid rgba(139,92,246,0.15)', background: female ? 'rgba(139,92,246,0.1)' : 'rgba(255,255,255,0.04)', fontSize: 13, fontWeight: 700, color: female ? '#8b5cf6' : 'rgba(255,255,255,0.45)', cursor: 'pointer', marginBottom: 16 }}>
+      <button onClick={() => setFemale(!female)} style={{ width: '100%', padding: '10px', borderRadius: 12, border: female ? '2px solid #8b5cf6' : '1px solid rgba(139,92,246,0.15)', background: female ? 'rgba(139,92,246,0.1)' : 'rgba(255,255,255,0.07)', fontSize: 13, fontWeight: 700, color: female ? '#8b5cf6' : 'rgba(255,255,255,0.45)', cursor: 'pointer', marginBottom: 16 }}>
         {female ? '♀ Female (×0.85)' : '♂ Male'}
       </button>
-      <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(139,92,246,0.15)' }}>
+      <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(139,92,246,0.15)' }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: stage.color, lineHeight: 1 }}>{crcl}</div>
         <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)' }}>mL/min — CrCl (Cockcroft-Gault)</div>
         <div style={{ fontSize: 12, fontWeight: 700, color: stage.color, marginTop: 8 }}>{stage.label}</div>
@@ -165,7 +165,7 @@ function Curb65Calc() {
         { key: 'bp', label: 'B — BP < 90/60 mmHg' },
         { key: 'age65', label: '65 — Age ≥ 65 years' },
       ].map(item => (
-        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(255,59,48,0.08)' : 'rgba(255,255,255,0.04)', border: (items as any)[item.key] ? '1.5px solid #ff3b30' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 8 }}>
+        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(255,59,48,0.08)' : 'rgba(255,255,255,0.07)', border: (items as any)[item.key] ? '1.5px solid #ff3b30' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 8 }}>
           <div style={{ width: 20, height: 20, borderRadius: 6, background: (items as any)[item.key] ? '#ff3b30' : 'transparent', border: (items as any)[item.key] ? 'none' : '2px solid rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {(items as any)[item.key] && <span style={{ color: 'white', fontSize: 12 }}>✓</span>}
           </div>
@@ -202,7 +202,7 @@ function TimiCalc() {
         { key: 'angina2', label: '≥ 2 anginal episodes in 24h' },
         { key: 'stenosis', label: 'Prior stenosis ≥ 50%' },
       ].map(item => (
-        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(48,209,88,0.08)' : 'rgba(255,255,255,0.04)', border: (items as any)[item.key] ? '1.5px solid #30d158' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 6 }}>
+        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(48,209,88,0.08)' : 'rgba(255,255,255,0.07)', border: (items as any)[item.key] ? '1.5px solid #30d158' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 6 }}>
           <div style={{ width: 20, height: 20, borderRadius: 6, background: (items as any)[item.key] ? '#30d158' : 'transparent', border: (items as any)[item.key] ? 'none' : '2px solid rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {(items as any)[item.key] && <span style={{ color: 'white', fontSize: 12 }}>✓</span>}
           </div>
@@ -239,7 +239,7 @@ function WellsCalc() {
         { key: 'hemoptysis', label: 'Haemoptysis', pts: 1 },
         { key: 'malignancy', label: 'Active malignancy', pts: 1 },
       ].map(item => (
-        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(255,107,53,0.08)' : 'rgba(255,255,255,0.04)', border: (items as any)[item.key] ? '1.5px solid #ff6b35' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 6 }}>
+        <div key={item.key} onClick={() => toggle(item.key as any)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: (items as any)[item.key] ? 'rgba(255,107,53,0.08)' : 'rgba(255,255,255,0.07)', border: (items as any)[item.key] ? '1.5px solid #ff6b35' : '1px solid rgba(139,92,246,0.12)', cursor: 'pointer', marginBottom: 6 }}>
           <div style={{ width: 20, height: 20, borderRadius: 6, background: (items as any)[item.key] ? '#ff6b35' : 'transparent', border: (items as any)[item.key] ? 'none' : '2px solid rgba(0,0,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {(items as any)[item.key] && <span style={{ color: 'white', fontSize: 12 }}>✓</span>}
           </div>
@@ -270,7 +270,7 @@ export default function MedCalculators() {
       {!active ? (
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {CALCS.map(c => (
-            <div key={c.id} onClick={() => setActive(c.id)} style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', borderRadius: 18, padding: 16, border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 4px 16px rgba(0,0,0,0.06)', cursor: 'pointer', transition: 'all 0.2s' }}>
+            <div key={c.id} onClick={() => setActive(c.id)} style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: 18, padding: 16, border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 4px 16px rgba(0,0,0,0.06)', cursor: 'pointer', transition: 'all 0.2s' }}>
               <div style={{ fontSize: 28, marginBottom: 8 }}>{c.icon}</div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'white', marginBottom: 4, lineHeight: 1.3 }}>{c.name}</div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{c.desc}</div>
@@ -283,7 +283,7 @@ export default function MedCalculators() {
       ) : (
         <div>
           <button onClick={() => setActive(null)} style={{ background: 'rgba(139,92,246,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(139,92,246,0.3)', color: '#c4b5fd', padding: '8px 18px', borderRadius: 20, fontSize: 13, cursor: 'pointer', marginBottom: 16, fontWeight: 600 }}>← Back</button>
-          <div style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 18, border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}>
+          <div style={{ background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)', borderRadius: 20, padding: 18, border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}>
             <div style={{ fontSize: 18, fontWeight: 800, color: 'white', marginBottom: 16, letterSpacing: -0.3 }}>
               {CALCS.find(c => c.id === active)?.icon} {CALCS.find(c => c.id === active)?.name}
             </div>

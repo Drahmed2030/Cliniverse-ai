@@ -5,8 +5,8 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 // ── DESIGN TOKENS ──
 const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
+  bg: '#080c14',
+  card: 'rgba(255,255,255,0.07)',
   border: 'rgba(255,255,255,0.07)',
   borderBlue: 'rgba(0,212,255,0.18)',
   text: '#ffffff',
@@ -88,8 +88,8 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
   }}>
     <div style={{
       width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.04)',
-      border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.08)'}`,
+      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.07)',
+      border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.12)'}`,
       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
       boxShadow: unlocked ? `0 0 16px ${color}20` : 'none',
     }}>{icon}</div>
@@ -215,7 +215,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
           <span style={{ fontSize: 18 }}>🔥</span>
           <span style={{ fontSize: 15, fontWeight: 900, color: T.amber }}>{streak}</span>
           <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>day streak</span>
-          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.08)', margin: '0 8px' }}/>
+          <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.12)', margin: '0 8px' }}/>
           <span style={{ fontSize: 12, color: T.sub }}>{casesCompleted} cases · {accuracy}% accuracy</span>
         </div>
       </div>
