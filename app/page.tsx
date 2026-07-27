@@ -890,7 +890,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       {/* Checkout Modal */}
       {checkoutUrl && (
         <div onClick={()=>setCheckoutUrl('')} style={{position:'fixed',inset:0,zIndex:99999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-          <div onClick={e=>e.stopPropagation()} style={{background:'#0f1117',borderRadius:'28px 28px 0 0',border:'1px solid rgba(255,255,255,0.08)',height:'90vh',overflow:'hidden'}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:'#0a1628',borderRadius:'28px 28px 0 0',border:'1px solid rgba(255,255,255,0.08)',height:'90vh',overflow:'hidden'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
               <span style={{fontSize:15,fontWeight:800,color:'white',fontFamily:'"Inter",sans-serif'}}>Complete Purchase</span>
               <button onClick={()=>setCheckoutUrl('')} style={{background:'rgba(255,255,255,0.08)',border:'none',color:'white',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:18}}>×</button>

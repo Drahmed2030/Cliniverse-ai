@@ -6,7 +6,7 @@ const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const F = '"Inter", -apple-system, sans-serif'
 
 const T = {
-  bg: '#060b14',
+  bg: '#0a1628',
   card: 'rgba(255,255,255,0.06)',
   border: 'rgba(255,255,255,0.1)',
   text: '#ffffff',
