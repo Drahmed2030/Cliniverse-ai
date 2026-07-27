@@ -6,7 +6,7 @@ const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const F = '"Inter", -apple-system, sans-serif'
 
 const T = {
-  bg: '#0f1e2e',
+  bg: '#1a2535',
   card: 'rgba(255,255,255,0.06)',
   border: 'rgba(255,255,255,0.1)',
   text: '#ffffff',
@@ -26,6 +26,18 @@ interface Props {
   setActiveCase: (id: string) => void; setShowUpgrade: (v: boolean) => void
   setTab: (t: string) => void; setToolTab: (t: string) => void; onXP: (n: number) => void
 }
+
+const StethoscopeBg = () => (
+  <svg style={{ position:'fixed', right:-80, top:'50%', transform:'translateY(-50%)', width:400, height:400, opacity:0.04, pointerEvents:'none', zIndex:0 }} viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="60" r="30" stroke="#38bdf8" strokeWidth="4"/>
+    <path d="M70 60 C70 60 40 60 40 100 C40 140 70 160 100 160 C130 160 160 140 160 100 C160 60 130 60 130 60" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round"/>
+    <circle cx="100" cy="165" r="18" stroke="#38bdf8" strokeWidth="4"/>
+    <circle cx="100" cy="165" r="8" fill="#38bdf8" opacity="0.5"/>
+    <path d="M85 45 L85 30 M115 45 L115 30" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round"/>
+    <circle cx="85" cy="27" r="5" fill="#38bdf8" opacity="0.7"/>
+    <circle cx="115" cy="27" r="5" fill="#38bdf8" opacity="0.7"/>
+  </svg>
+)
 
 const HexBg = () => (
   <svg style={{ position:'absolute', inset:0, width:'100%', height:'100%', opacity:0.045, pointerEvents:'none', zIndex:0 }}>
@@ -98,6 +110,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
   return (
     <div style={{ minHeight:'100vh', background:T.bg, fontFamily:F, overflowX:'hidden', position:'relative' }}>
       <HexBg/>
+      <StethoscopeBg/>
       <div style={{ position:'fixed', top:-200, left:-100, width:500, height:500, borderRadius:'50%', background:'radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)', pointerEvents:'none', zIndex:0 }}/>
       <div style={{ position:'fixed', bottom:-200, right:-100, width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%)', pointerEvents:'none', zIndex:0 }}/>
 
@@ -124,29 +137,6 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             {[{label:'CASES',value:'25+',color:T.rose},{label:'MODULES',value:'15+',color:T.amber},{label:'FREE',value:'5',color:T.green}].map((s,i)=>(
               <div key={i} style={{ background:'rgba(0,0,0,0.3)', borderRadius:14, padding:'12px 8px', textAlign:'center', border:`1px solid ${s.color}20` }}>
                 <div style={{ fontSize:20, fontWeight:900, color:s.color }}>{s.value}</div>
-                <div style={{ fontSize:10, fontWeight:700, color:T.muted, letterSpacing:1 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* RANK */}
-        <div style={{ background:'linear-gradient(135deg, rgba(167,139,250,0.1), rgba(56,189,248,0.06))', border:'1px solid rgba(167,139,250,0.2)', borderRadius:20, padding:'16px 18px', marginBottom:16 }}>
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10 }}>
-            <div>
-              <div style={{ fontSize:10, fontWeight:800, letterSpacing:2, color:T.purple, marginBottom:2 }}>CLINICAL INTELLIGENCE</div>
-              <div style={{ fontSize:24, fontWeight:900, color:T.text, letterSpacing:-0.5 }}>Clini<span style={{ color:T.teal }}>verse</span></div>
-              <div style={{ fontSize:12, color:T.sub }}>{rank} · {xp} XP</div>
-            </div>
-            <div style={{ textAlign:'right' }}>
-              <div style={{ fontSize:22 }}>🔥</div>
-              <div style={{ fontSize:13, fontWeight:800, color:T.amber }}>{streak} day streak</div>
-            </div>
-          </div>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:8 }}>
-            {[{label:'CASES',value:casesCompleted,color:T.teal},{label:'ACCURACY',value:`${accuracy}%`,color:T.green},{label:'XP',value:xp,color:T.purple}].map((s,i)=>(
-              <div key={i} style={{ background:'rgba(0,0,0,0.2)', borderRadius:12, padding:'10px 8px', textAlign:'center' }}>
-                <div style={{ fontSize:18, fontWeight:900, color:s.color }}>{s.value}</div>
                 <div style={{ fontSize:10, fontWeight:700, color:T.muted, letterSpacing:1 }}>{s.label}</div>
               </div>
             ))}

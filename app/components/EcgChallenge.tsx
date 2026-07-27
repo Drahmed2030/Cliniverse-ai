@@ -194,7 +194,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
         </div>
 
         {/* ECG Strip — Animated */}
-        <div style={{ background: '#0f1e2e', borderRadius: 14, padding: '12px 8px', marginBottom: 4, overflow: 'hidden', position: 'relative' }}>
+        <div style={{ background: '#1a2535', borderRadius: 14, padding: '12px 8px', marginBottom: 4, overflow: 'hidden', position: 'relative' }}>
           {/* Grid */}
           <svg style={{ position: 'absolute', inset: 0, opacity: 0.15 }} width="100%" height="100%">
             <defs>

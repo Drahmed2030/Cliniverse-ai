@@ -76,7 +76,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
               padding: '7px 14px', borderRadius: 12, border: 'none', cursor: 'pointer',
               fontFamily: F, fontWeight: 700, fontSize: 12,
               background: ward === w ? T.green : T.card,
-              color: ward === w ? '#080c14' : T.muted,
+              color: ward === w ? '#1a2535' : T.muted,
               border: '1px solid ' + (ward === w ? T.green : T.border),
               boxShadow: ward === w ? '0 4px 12px rgba(74,222,128,0.25)' : 'none',
             }}>{w}</button>
@@ -105,7 +105,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
       <button onClick={generate} disabled={loading || !patients.trim()} style={{
         width: '100%', padding: '15px', border: 'none', borderRadius: 16,
         background: loading || !patients.trim() ? 'rgba(255,255,255,0.06)' : 'linear-gradient(135deg, #4ade80, #38bdf8)',
-        color: '#080c14', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
+        color: '#1a2535', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
         fontFamily: F, marginBottom: 16,
         boxShadow: loading ? 'none' : '0 6px 24px rgba(74,222,128,0.25)',
       }}>
