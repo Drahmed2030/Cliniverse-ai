@@ -773,7 +773,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   {icon:'🔔',title:'On-Call Alerts',sub:'Smart reminders',color:'#64d2ff'},
                   {icon:'📱',title:'Mobile App',sub:'iOS & Android soon',color:'#ff6b35'},
                 ].map(f=>(
-                  <div key={f.title} style={{background:'rgba(255,255,255,0.15)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(255,255,255,0.11)',display:'flex',flexDirection:'column',gap:6}}>
+                  <div key={f.title} style={{background:'rgba(255,255,255,0.15)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(56,189,248,0.2)',display:'flex',flexDirection:'column',gap:6}}>
                     <div style={{width:38,height:38,borderRadius:12,background:`${f.color}20`,border:`1px solid ${f.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
                       {f.icon}
                     </div>
@@ -829,11 +829,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           zIndex:9998, width:'calc(100% - 32px)', maxWidth:420,
         }}>
           <nav style={{
-            background:'rgba(15,17,23,0.88)',
+            background:'rgba(26,37,53,0.95)',
             backdropFilter:'blur(28px)',
             WebkitBackdropFilter:'blur(28px)',
             borderRadius:28,
-            border:'1px solid rgba(255,255,255,0.11)',
+            border:'1px solid rgba(56,189,248,0.2)',
             boxShadow:'0 8px 40px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(255,255,255,0.15)',
             display:'flex',
             padding:'10px 6px 12px',
