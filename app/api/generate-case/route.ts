@@ -116,3 +116,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: msg }, { status: 500 })
   }
 }
+export const maxDuration = 60
