@@ -186,7 +186,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           </div>
         </div>
 
-        {/* QUICK TOOLS */}
+        {/* QUICK TOOLS - HIDDEN */}{false&&
         <div style={{ marginBottom:16 }}>
           <div style={{ fontSize:11, fontWeight:800, letterSpacing:2, color:T.muted, marginBottom:10 }}>QUICK ACCESS</div>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr', gap:10 }}>
@@ -199,7 +199,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           </div>
         </div>
 
-        {/* CASE LIBRARY */}
+}{/* CASE LIBRARY */}
         <div style={{ marginBottom:16 }}>
           <div style={{ fontSize:11, fontWeight:800, letterSpacing:2, color:T.muted, marginBottom:10 }}>CASE LIBRARY</div>
           <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
