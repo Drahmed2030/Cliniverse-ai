@@ -4,21 +4,7 @@ import React, { useState } from 'react'
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 // ── DESIGN TOKENS ──
-const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.07)',
-  borderBlue: 'rgba(0,212,255,0.18)',
-  text: '#ffffff',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.18)',
-  teal: '#38bdf8',
-  blue: '#0066ff',
-  purple: '#a78bfa',
-  green: '#4ade80',
-  amber: '#fbbf24',
-  rose: '#f87171',
-}
+import { T, G, S } from '../theme'
 
 // ── TIER SYSTEM ──
 const TIERS = [

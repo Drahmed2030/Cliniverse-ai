@@ -7,20 +7,7 @@ const TimeAwareCard = dynamic(() => import('./TimeAwareCard'), { ssr: false })
 const ActivityRings = dynamic(() => import('./ActivityRings'), { ssr: false })
 
 // ── DESIGN TOKENS ──
-const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  cardBorder: 'rgba(255,255,255,0.08)',
-  text: '#ffffff',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.20)',
-  teal: '#38bdf8',
-  amber: '#fbbf24',
-  rose: '#f87171',
-  indigo: '#38bdf8',
-  green: '#4ade80',
-  F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
-}
+import { T, G, S } from '../theme'
 
 interface Props {
   xp: number

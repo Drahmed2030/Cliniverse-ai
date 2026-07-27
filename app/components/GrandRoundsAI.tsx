@@ -3,19 +3,7 @@ import { useState } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
-const T = {
-  bg: '#0f1117',
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
-  text: '#ffffff',
-  sub: 'rgba(148,163,184,0.8)',
-  muted: 'rgba(148,163,184,0.4)',
-  teal: '#38bdf8',
-  amber: '#fbbf24',
-  rose: '#f87171',
-  green: '#4ade80',
-  purple: '#a78bfa',
-}
+import { T, G, S, card as cardStyle, badge as badgeStyle } from '../theme'
 
 const CASE = {
   id: 'gr001',
