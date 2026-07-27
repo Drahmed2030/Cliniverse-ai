@@ -35,6 +35,7 @@ interface Props {
   setShowUpgrade: (v: boolean) => void
   setTab: (t: string) => void
   setToolTab: (t: string) => void
+  onXP: (n: number) => void
 }
 
 // ── SECTION MODAL ──
@@ -106,7 +107,7 @@ function SectionModal({ section, onClose, onCase, isPro, setShowUpgrade }: {
 export default function HubPage({
   xp, streak, casesCompleted, mcqCorrect, isPro,
   criticalCases, sportsCases, pedsCases,
-  setActiveCase, setShowUpgrade, setTab, setToolTab
+  setActiveCase, setShowUpgrade, setTab, setToolTab, onXP
 }: Props) {
 
   const [openSection, setOpenSection] = useState<any>(null)
