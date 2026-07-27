@@ -214,7 +214,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
   }
 
   return (
-    <div onClick={advance} style={{
+    <div onClick={advance} onTouchStart={advance} style={{
       position: 'fixed', inset: 0, zIndex: 9999,
       background: BG, fontFamily: F,
       display: 'flex', flexDirection: 'column',
