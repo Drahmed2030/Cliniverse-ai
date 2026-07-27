@@ -188,7 +188,7 @@ export default function Home() {
 
   // Show onboarding for first-time visitors
   useEffect(() => {
-    const seen = localStorage.getItem('cliniverse-onboarded')
+    const seen = localStorage.getItem('onboarding_completed')
     if (seen) setShowOnboarding(false)
   }, [])
 
@@ -358,7 +358,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   // LAUNCH
   if(showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
-      localStorage.setItem('cliniverse-onboarded','1')
+      localStorage.setItem('onboarding_completed','1')
       setShowOnboarding(false)
     }}/>
   )
