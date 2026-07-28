@@ -60,7 +60,7 @@ const BADGES = [
 
 // ── SVG ICONS — Apple Health 2026 ──
 const NavIcon = ({id, active, color}: {id:string, active:boolean, color:string}) => {
-  const c = active ? color : 'rgba(255,255,255,0.45)'
+  const c = active ? color : 'rgba(238,246,250,0.60)'
   const w = 1.6
   const icons: Record<string,JSX.Element> = {
     hub: <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -70,8 +70,8 @@ const NavIcon = ({id, active, color}: {id:string, active:boolean, color:string})
     lab: <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M9 3v8.5L4.5 18A2 2 0 006.3 21h11.4a2 2 0 001.8-3L15 11.5V3" stroke={c} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M9 3h6M7 15h10" stroke={c} strokeWidth={w} strokeLinecap="round"/>
-      <circle cx="10" cy="17.5" r="1" fill={active ? color : 'rgba(255,255,255,0.45)'}/>
-      <circle cx="14" cy="16" r="0.8" fill={active ? color : 'rgba(255,255,255,0.45)'}/>
+      <circle cx="10" cy="17.5" r="1" fill={active ? color : 'rgba(238,246,250,0.60)'}/>
+      <circle cx="14" cy="16" r="0.8" fill={active ? color : 'rgba(238,246,250,0.60)'}/>
     </svg>,
     rad: <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <rect x="3" y="3" width="18" height="18" rx="3" stroke={c} strokeWidth={w}/>
@@ -81,7 +81,7 @@ const NavIcon = ({id, active, color}: {id:string, active:boolean, color:string})
     mcq: <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke={c} strokeWidth={w}/>
       <path d="M9.5 9.5a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 3.5" stroke={c} strokeWidth={w} strokeLinecap="round"/>
-      <circle cx="12" cy="16.5" r="0.8" fill={active ? color : 'rgba(255,255,255,0.45)'}/>
+      <circle cx="12" cy="16.5" r="0.8" fill={active ? color : 'rgba(238,246,250,0.60)'}/>
     </svg>,
     tools: <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path d="M14.7 6.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-1-1a1 1 0 010-1.4l8-8a1 1 0 011.4 0l1 1z" stroke={c} strokeWidth={w} strokeLinejoin="round"/>
@@ -808,7 +808,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                 <div style={{fontSize:32}}>🏛️</div>
                 <div>
                   <div style={{fontSize:16,fontWeight:800,color:'white'}}>Institution Plan</div>
-                  <div style={{fontSize:12,color:'rgba(255,255,255,0.45)'}}>For hospitals & medical colleges</div>
+                  <div style={{fontSize:12,color:'rgba(238,246,250,0.60)'}}>For hospitals & medical colleges</div>
                 </div>
                 <div style={{marginLeft:'auto',fontSize:18,fontWeight:900,color:'#00C4B4'}}>$49<span style={{fontSize:11,fontWeight:500,color:'rgba(255,255,255,0.4)'}}>/mo</span></div>
               </div>
