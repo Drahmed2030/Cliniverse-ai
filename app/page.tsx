@@ -313,14 +313,12 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   }
 
   // ── DARK MODE AMBIENT GLOW ──
-  const ambientGlow = (
+    const ambientGlow = (
     <>
-      <div style={{position:'fixed',top:-200,left:-200,width:600,height:600,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.18) 0%,transparent 70%)',pointerEvents:'none',zIndex:0,filter:'blur(40px)'}}/>
-      <div style={{position:'fixed',top:'30%',right:-150,width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.12) 0%,transparent 70%)',pointerEvents:'none',zIndex:0,filter:'blur(40px)'}}/>
-      <div style={{position:'fixed',bottom:-100,left:'20%',width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.1) 0%,transparent 70%)',pointerEvents:'none',zIndex:0,filter:'blur(40px)'}}/>
+      <div style={{position:'fixed',top:-80,left:'50%',transform:'translateX(-50%)',width:500,height:300,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.08) 0%,transparent 70%)',pointerEvents:'none',zIndex:0,filter:'blur(60px)'}}/>
+      <div style={{position:'fixed',bottom:-80,right:-60,width:350,height:350,borderRadius:'50%',background:'radial-gradient(circle,rgba(212,168,71,0.06) 0%,transparent 70%)',pointerEvents:'none',zIndex:0,filter:'blur(60px)'}}/>
     </>
   )
-
   // ADMIN DASHBOARD
   if(showAdmin) return <AdminDashboard onClose={()=>setShowAdmin(false)}/>
 
