@@ -447,7 +447,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
       {/* ── WATERMARK ── */}
-      <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',pointerEvents:'none',zIndex:9,opacity:0.06,width:500,height:500}}>
+      <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',pointerEvents:'none',zIndex:9999,opacity:0.08,width:500,height:500}}>
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
           <rect x="5" y="5" width="90" height="90" rx="23" fill="rgba(255,213,79,0.15)" stroke="rgba(255,213,79,0.9)" strokeWidth="2"/>
           <path d="M69 32C63 25 55 21 46 21C30 21 17 34 17 50C17 66 30 79 46 79C55 79 63 75 69 68" stroke="rgba(255,213,79,1)" strokeWidth="9" strokeLinecap="round" fill="none"/>
