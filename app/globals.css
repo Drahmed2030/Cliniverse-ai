@@ -1,166 +1,72 @@
-/* Cliniverse AI — Clinical Slate System */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-/* ── CLINICAL SLATE (default) ── */
 :root {
-  --bg-primary: #0f1117;
-  --bg-secondary: #1c1e26;
-  --bg-card: rgba(255,255,255,0.04);
-  --bg-card-border: rgba(56,189,248,0.12);
-  --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
-  --text-muted: rgba(148,163,184,0.5);
-  --accent: #38bdf8;
-  --accent-blue: #38bdf8;
-  --accent-green: #4ade80;
-  --accent-red: #f87171;
-  --accent-orange: #fb923c;
-  --accent-gold: #fbbf24;
-  --nav-bg: rgba(15,17,23,0.97);
-  --nav-border: rgba(56,189,248,0.15);
-  --font: "Inter", -apple-system, "SF Pro Display", "SF Pro Text", sans-serif;
-  --bg: #0f1117;
-  --card: rgba(255,255,255,0.04);
-  --text: #ffffff;
-  --sub: rgba(148,163,184,0.8);
-  --muted: rgba(148,163,184,0.35);
-  --teal: #38bdf8;
-  --amber: #fbbf24;
-  --rose: #f87171;
-  --indigo: #a78bfa;
-  --green: #4ade80;
-  --emergency: #f87171;
-  --cardiac: #38bdf8;
-  --respiratory: #67e8f9;
-  --neuro: #a78bfa;
-  --pharmacy: #4ade80;
-  --radiology: #fbbf24;
-  --pediatrics: #f9a8d4;
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
-  --radius-xl: 28px;
+  --bg-base:        #1e3d52;
+  --bg-deep:        #162e3e;
+  --bg-card:        #243f52;
+  --bg-card-2:      #2a4a60;
+  --bg-glass:       rgba(36, 63, 82, 0.80);
+  --bg-glass-2:     rgba(255, 255, 255, 0.06);
+  --gold:           #D4A847;
+  --gold-light:     #E8C060;
+  --gold-glow:      rgba(212, 168, 71, 0.22);
+  --gold-border:    rgba(212, 168, 71, 0.32);
+  --teal:           #00C4B4;
+  --teal-light:     #00DFD0;
+  --teal-glow:      rgba(0, 196, 180, 0.20);
+  --teal-border:    rgba(0, 196, 180, 0.30);
+  --amber:          #E8821A;
+  --amber-glow:     rgba(232, 130, 26, 0.20);
+  --blue:           #5AB4D6;
+  --blue-glow:      rgba(90, 180, 214, 0.20);
+  --purple:         #A07EE8;
+  --purple-glow:    rgba(160, 126, 232, 0.20);
+  --green:          #3ED6A0;
+  --green-glow:     rgba(62, 214, 160, 0.20);
+  --red:            #E06060;
+  --red-glow:       rgba(224, 96, 96, 0.18);
+  --danger:         #E06060;
+  --danger-glow:    rgba(224, 96, 96, 0.20);
+  --success:        #3ED6A0;
+  --success-glow:   rgba(62, 214, 160, 0.20);
+  --warning:        #E8821A;
+  --warning-glow:   rgba(232, 130, 26, 0.20);
+  --text:           #EEF6FA;
+  --text-dim:       rgba(238, 246, 250, 0.65);
+  --text-muted:     rgba(238, 246, 250, 0.40);
+  --nav-bg:         rgba(22, 46, 62, 0.97);
+  --nav-border:     rgba(0, 196, 180, 0.30);
+  --nav-active:     #00C4B4;
+  --border:         rgba(255, 255, 255, 0.10);
+  --border-gold:    rgba(212, 168, 71, 0.32);
+  --border-teal:    rgba(0, 196, 180, 0.30);
+  --radius-sm:      10px;
+  --radius-md:      14px;
+  --radius-lg:      20px;
+  --radius-xl:      28px;
+  --shadow-gold:    0 0 28px rgba(212, 168, 71, 0.24);
+  --shadow-teal:    0 0 28px rgba(0, 196, 180, 0.22);
+  --shadow-card:    0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-/* ── CLINICAL WHITE ── */
-[data-theme="light"] {
-  --bg-primary: #F2F2F7;
-  --bg-secondary: #ffffff;
-  --bg-card: #ffffff;
-  --bg-card-border: rgba(0,0,0,0.06);
-  --text-primary: #1C1C1E;
-  --text-secondary: #3C3C43;
-  --text-muted: #8E8E93;
-  --accent: #007AFF;
-  --accent-blue: #007AFF;
-  --accent-green: #34C759;
-  --accent-red: #FF3B30;
-  --accent-orange: #FF9500;
-  --accent-gold: #FF9500;
-  --nav-bg: rgba(255,255,255,0.95);
-  --nav-border: rgba(0,0,0,0.1);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
-
-/* ── MIDNIGHT BLUE ── */
-[data-theme="midnight"] {
-  --bg-primary: #001433;
-  --bg-secondary: #002055;
-  --bg-card: rgba(255,255,255,0.06);
-  --bg-card-border: rgba(10,132,255,0.2);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.65);
-  --text-muted: rgba(255,255,255,0.35);
-  --accent: #0a84ff;
-  --accent-blue: #0a84ff;
-  --accent-green: #30d158;
-  --accent-red: #ff453a;
-  --accent-orange: #ff9f0a;
-  --accent-gold: #ffd60a;
-  --nav-bg: rgba(0,20,51,0.97);
-  --nav-border: rgba(10,132,255,0.3);
-}
-
-/* ── BASE STYLES ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 
 html, body {
-  font-family: -apple-system, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.2px;
-  font-family: var(--font);
-  background: #0f1117;
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
+  background: var(--bg-base);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'Segoe UI', system-ui, sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse at 15% 15%, rgba(0,196,180,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(212,168,71,0.08) 0%, transparent 55%);
+  background-attachment: fixed;
 }
 
-/* ── TYPOGRAPHY — Medical Professional ── */
-.heading-xl { font-size: clamp(24px,6vw,32px); font-weight: 900; letter-spacing: -0.8px; line-height: 1.1; }
-.heading-lg { font-size: clamp(18px,5vw,24px); font-weight: 800; letter-spacing: -0.5px; }
-.heading-md { font-size: clamp(15px,4vw,18px); font-weight: 700; }
-.body-lg    { font-size: 16px; font-weight: 400; line-height: 1.7; }
-.body-md    { font-size: 14px; font-weight: 400; line-height: 1.6; }
-.body-sm    { font-size: 12px; font-weight: 400; line-height: 1.5; }
-.label      { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.mono       { font-family: 'SF Mono', 'Fira Code', monospace; }
-
-/* ── CARDS ── */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-lg);
-  padding: 18px;
-  transition: transform 0.15s ease;
-}
-.card:active { transform: scale(0.98); }
-
-/* ── BUTTONS ── */
-.btn-primary {
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 15px 24px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  width: 100%;
-  font-family: var(--font);
-}
-.btn-secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--bg-card-border);
-  border-radius: var(--radius-md);
-  padding: 13px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: var(--font);
-}
-
-/* ── ANIMATIONS ── */
-@keyframes rise { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
-@keyframes pulse { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:0.5; transform:scale(1.15) } }
-@keyframes spin { from { transform:rotate(0) } to { transform:rotate(360deg) } }
-@keyframes glow { 0%,100% { box-shadow: 0 0 20px var(--accent) } 50% { box-shadow: 0 0 40px var(--accent) } }
-@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
-@keyframes slideUp { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 0; }
-
-/* ── SAFE AREAS ── */
-.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
-.safe-top { padding-top: env(safe-area-inset-top, 44px); }
-
-/* ── VITALS GLOW ── */
-.vital-red   { color: var(--accent-red);    text-shadow: 0 0 10px var(--accent-red); }
-.vital-green { color: var(--accent-green);  text-shadow: 0 0 10px var(--accent-green); }
-.vital-blue  { color: var(--accent-blue);   text-shadow: 0 0 10px var(--accent-blue); }
-
-/* ── THEME TRANSITION ── */
-body { transition: background 0.3s ease, color 0.3s ease; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--teal-border); border-radius: 4px; }
