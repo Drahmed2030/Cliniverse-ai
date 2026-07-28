@@ -54,7 +54,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes"/>
         <script src="/register-sw.js" defer/>
       </head>
-      <body>
+      <body style={{position:'relative',minHeight:'100vh'}}>
+        {/* ── Logo Watermark ── */}
+        <div style={{
+          position:'fixed',
+          inset:0,
+          display:'flex',
+          alignItems:'center',
+          justifyContent:'center',
+          pointerEvents:'none',
+          zIndex:0,
+          overflow:'hidden',
+          opacity:0.07,
+        }}>
+          <svg width="520" height="520" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="5" width="90" height="90" rx="23" fill="rgba(255,213,79,0.15)" stroke="rgba(255,213,79,0.8)" strokeWidth="2"/>
+            <path d="M69 32C63 25 55 21 46 21C30 21 17 34 17 50C17 66 30 79 46 79C55 79 63 75 69 68" stroke="rgba(255,213,79,1)" strokeWidth="9" strokeLinecap="round" fill="none"/>
+            <path d="M36 50L46 63L70 36" stroke="rgba(0,229,255,1)" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="69" cy="32" r="5" fill="rgba(255,213,79,1)"/>
+            <circle cx="69" cy="68" r="5" fill="rgba(255,213,79,1)"/>
+          </svg>
+        </div>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
