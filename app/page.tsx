@@ -446,6 +446,42 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     return(
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
+      {/* ── C AI BACKGROUND PATTERN ── */}
+      <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.04}}>
+        <svg width="100%" height="100%" viewBox="0 0 400 800" fill="none">
+          {/* Large C+AI watermark center */}
+          <text x="200" y="350" textAnchor="middle" fontSize="220" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" letterSpacing="-10">C</text>
+          <text x="320" y="350" textAnchor="middle" fontSize="220" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif">AI</text>
+          {/* Small logo pattern repeating */}
+          <rect x="20" y="20" width="40" height="40" rx="10" fill="none" stroke="#007AFF" strokeWidth="1.5"/>
+          <rect x="340" y="60" width="30" height="30" rx="8" fill="none" stroke="#007AFF" strokeWidth="1"/>
+          <rect x="20" y="700" width="35" height="35" rx="9" fill="none" stroke="#D4A847" strokeWidth="1.5"/>
+          <rect x="350" y="720" width="28" height="28" rx="7" fill="none" stroke="#D4A847" strokeWidth="1"/>
+          {/* C letter small repeating */}
+          <text x="30" y="150" fontSize="40" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.5">C</text>
+          <text x="340" y="550" fontSize="40" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif" opacity="0.5">AI</text>
+          <text x="20" y="450" fontSize="30" fontWeight="900" fill="#D4A847" fontFamily="-apple-system,sans-serif" opacity="0.4">C</text>
+          <text x="350" y="200" fontSize="30" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.3">AI</text>
+        </svg>
+      </div>
+      {/* ── C AI BACKGROUND PATTERN ── */}
+      <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.04}}>
+        <svg width="100%" height="100%" viewBox="0 0 400 800" fill="none">
+          {/* Large C+AI watermark center */}
+          <text x="200" y="350" textAnchor="middle" fontSize="220" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" letterSpacing="-10">C</text>
+          <text x="320" y="350" textAnchor="middle" fontSize="220" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif">AI</text>
+          {/* Small logo pattern repeating */}
+          <rect x="20" y="20" width="40" height="40" rx="10" fill="none" stroke="#007AFF" strokeWidth="1.5"/>
+          <rect x="340" y="60" width="30" height="30" rx="8" fill="none" stroke="#007AFF" strokeWidth="1"/>
+          <rect x="20" y="700" width="35" height="35" rx="9" fill="none" stroke="#D4A847" strokeWidth="1.5"/>
+          <rect x="350" y="720" width="28" height="28" rx="7" fill="none" stroke="#D4A847" strokeWidth="1"/>
+          {/* C letter small repeating */}
+          <text x="30" y="150" fontSize="40" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.5">C</text>
+          <text x="340" y="550" fontSize="40" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif" opacity="0.5">AI</text>
+          <text x="20" y="450" fontSize="30" fontWeight="900" fill="#D4A847" fontFamily="-apple-system,sans-serif" opacity="0.4">C</text>
+          <text x="350" y="200" fontSize="30" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.3">AI</text>
+        </svg>
+      </div>
       {/* ── WATERMARK ── */}
       <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',pointerEvents:'none',zIndex:9999,opacity:0.08,width:500,height:500}}>
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
