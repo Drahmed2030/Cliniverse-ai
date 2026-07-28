@@ -446,6 +446,16 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     return(
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
+      {/* ── WATERMARK ── */}
+      <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',pointerEvents:'none',zIndex:9,opacity:0.06,width:500,height:500}}>
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+          <rect x="5" y="5" width="90" height="90" rx="23" fill="rgba(255,213,79,0.15)" stroke="rgba(255,213,79,0.9)" strokeWidth="2"/>
+          <path d="M69 32C63 25 55 21 46 21C30 21 17 34 17 50C17 66 30 79 46 79C55 79 63 75 69 68" stroke="rgba(255,213,79,1)" strokeWidth="9" strokeLinecap="round" fill="none"/>
+          <path d="M36 50L46 63L70 36" stroke="rgba(0,229,255,1)" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="69" cy="32" r="5" fill="rgba(255,213,79,1)"/>
+          <circle cx="69" cy="68" r="5" fill="rgba(255,213,79,1)"/>
+        </svg>
+      </div>
       <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.045}}>
         <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:1,overflow:'hidden'}}>
           <div style={{opacity:0.08,transform:'scale(1.2)'}}>
