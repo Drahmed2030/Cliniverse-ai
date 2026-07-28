@@ -34,7 +34,7 @@ const SLIDES = [
     headline: ['12,000 doctors', 'trained here.', 'Why not you?'],
     sub: 'Join physicians from Riyadh, Dubai, London and Toronto competing in real-time clinical simulations.',
     accent: '#fbbf24',
-    bg: ['#0f2030', '#1a3545'],
+    bg: ['#1e3d52', '#2a4a60'],
     glow: 'rgba(251,191,36,0.15)',
     btnGrad: 'linear-gradient(135deg, #f59e0b, #ef4444)',
     visual: 'globe',
@@ -278,7 +278,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         </button>
 
         <button onClick={onSkip} style={{
-          width:'100%', padding:'14px', background:'transparent',
+          width:'100%', padding:'14px', background:'rgba(255,255,255,0.04)',
           border:'1px solid rgba(255,255,255,0.18)', borderRadius:14,
           color:'rgba(255,255,255,0.25)', fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:F, marginBottom:16,
         }}>
