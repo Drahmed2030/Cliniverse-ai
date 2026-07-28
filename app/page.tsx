@@ -33,7 +33,7 @@ const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false
 
 const RANKS = [
   { name:'Clinical Clerk', icon:'🩺', color:'#64748b', xpNeeded:0 },
-  { name:'Junior Resident', icon:'📋', color:'#0a84ff', xpNeeded:100 },
+  { name:'Junior Resident', icon:'📋', color:'#00C4B4', xpNeeded:100 },
   { name:'Senior Resident', icon:'🔬', color:'#30d158', xpNeeded:300 },
   { name:'Registrar', icon:'⚕️', color:'#ff9500', xpNeeded:600 },
   { name:'Specialist', icon:'🏥', color:'#00C4B4', xpNeeded:1000 },
@@ -52,7 +52,7 @@ const BADGES = [
   { id:'sepsis', icon:'🦠', name:'Sepsis Hero', color:'#ff9500' },
   { id:'sports', icon:'⚽', name:'FIFA Medic', color:'#30d158' },
   { id:'peds', icon:'🧸', name:'Pediatrician', color:'#bf5af2' },
-  { id:'lab100', icon:'🔬', name:'Lab Expert', color:'#0a84ff' },
+  { id:'lab100', icon:'🔬', name:'Lab Expert', color:'#00C4B4' },
   { id:'rad', icon:'🩻', name:'Radiologist', color:'#64d2ff' },
   { id:'pro', icon:'👑', name:'PRO Member', color:'#ffd60a' },
 ]
@@ -326,7 +326,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   // UPGRADE MODAL
   if(showUpgrade) return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(20px)',zIndex:999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
-      <div style={{background:'linear-gradient(145deg,#2d0a6e,#0d0030)',borderRadius:28,padding:32,maxWidth:380,width:'100%',border:'1px solid rgba(0,196,180,0.4)',boxShadow:'0 20px 80px rgba(0,196,180,0.4)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#0d3347,#162e3e)',borderRadius:28,padding:32,maxWidth:380,width:'100%',border:'1px solid rgba(0,196,180,0.4)',boxShadow:'0 20px 80px rgba(0,196,180,0.4)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-40,right:-40,width:160,height:160,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <button onClick={()=>setShowUpgrade(false)} style={{position:'absolute',top:16,right:16,background:'rgba(255,255,255,0.1)',border:'none',borderRadius:'50%',width:32,height:32,color:'white',fontSize:16,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
         <div style={{fontSize:52,textAlign:'center',marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.5))'}}>🔒</div>
@@ -689,7 +689,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.5,marginBottom:12}}>Your daily clinical brief — trending cases, drug alerts & decision challenges.</div>
               <div style={{display:'flex',gap:8}}>
                 <div onClick={()=>{setTab('tools');setToolTab('insights')}} style={{flex:1,background:'rgba(255,214,10,0.12)',borderRadius:12,padding:'9px 14px',fontSize:12,fontWeight:700,color:'#ffd60a',border:'1px solid rgba(255,214,10,0.25)',cursor:'pointer',textAlign:'center'}}>📊 My Stats</div>
-                <div onClick={()=>setActiveCase('stemi')} style={{flex:1,background:'rgba(10,132,255,0.1)',borderRadius:12,padding:'9px 14px',fontSize:12,fontWeight:700,color:'#0a84ff',border:'1px solid rgba(10,132,255,0.2)',cursor:'pointer',textAlign:'center'}}>🫀 Today's Case</div>
+                <div onClick={()=>setActiveCase('stemi')} style={{flex:1,background:'rgba(0,196,180,0.1)',borderRadius:12,padding:'9px 14px',fontSize:12,fontWeight:700,color:'#00C4B4',border:'1px solid rgba(0,196,180,0.25)',cursor:'pointer',textAlign:'center'}}>🫀 Today's Case</div>
               </div>
             </div>
 
@@ -729,7 +729,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         {tab==='pro'&&(
           <div>
             {/* Hero */}
-            <div style={{background:'linear-gradient(145deg,#2d0a6e,#0d0030)',borderRadius:28,padding:'32px 24px 28px',marginBottom:16,textAlign:'center',border:'1px solid rgba(0,196,180,0.35)',boxShadow:'0 12px 60px rgba(0,196,180,0.3)',position:'relative',overflow:'hidden'}}>
+            <div style={{background:'linear-gradient(145deg,#0d3347,#162e3e)',borderRadius:28,padding:'32px 24px 28px',marginBottom:16,textAlign:'center',border:'1px solid rgba(0,196,180,0.35)',boxShadow:'0 12px 60px rgba(0,196,180,0.3)',position:'relative',overflow:'hidden'}}>
               <div style={{position:'absolute',top:-60,left:'50%',transform:'translateX(-50%)',width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.3),transparent 70%)',pointerEvents:'none'}}/>
               <div style={{fontSize:64,marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.6))'}}>⭐</div>
               <div style={{fontSize:11,letterSpacing:3,color:'rgba(191,90,242,0.9)',fontWeight:700,textTransform:'uppercase',marginBottom:8}}>Cliniverse</div>
@@ -765,7 +765,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
                 {[
                   {icon:'🏥',title:'30+ Cases',sub:'ED, CCU, ICU, Neuro, Peds',color:'#ff453a'},
-                  {icon:'🤖',title:'AI Consultant',sub:'Powered by Claude AI',color:'#0a84ff'},
+                  {icon:'🤖',title:'AI Consultant',sub:'Powered by Claude AI',color:'#00C4B4'},
                   {icon:'📜',title:'Certificates',sub:'PDF per case',color:'#ffd60a'},
                   {icon:'🧬',title:'MCQ Bank',sub:'500+ clinical questions',color:'#30d158'},
                   {icon:'🎥',title:'Face-Swap',sub:'Become the lead doctor',color:'#bf5af2'},
@@ -792,7 +792,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <div style={{fontSize:16,fontWeight:800,color:'white'}}>Institution Plan</div>
                   <div style={{fontSize:12,color:'rgba(255,255,255,0.45)'}}>For hospitals & medical colleges</div>
                 </div>
-                <div style={{marginLeft:'auto',fontSize:18,fontWeight:900,color:'#0a84ff'}}>$49<span style={{fontSize:11,fontWeight:500,color:'rgba(255,255,255,0.4)'}}>/mo</span></div>
+                <div style={{marginLeft:'auto',fontSize:18,fontWeight:900,color:'#00C4B4'}}>$49<span style={{fontSize:11,fontWeight:500,color:'rgba(255,255,255,0.4)'}}>/mo</span></div>
               </div>
               <button
                 onClick={()=>window.open('mailto:cliniverse@gmail.com?subject=Institution Plan','_blank')}
