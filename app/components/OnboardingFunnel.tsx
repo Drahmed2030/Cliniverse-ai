@@ -11,8 +11,8 @@ const F = '"Inter", -apple-system, sans-serif'
 const SLIDES = [
   {
     tag: 'CLINICAL AI',
-    headline: ['Your patient', 'is crashing.', 'What do you do?'],
-    sub: 'Cliniverse puts you inside real emergencies. STEMI. Sepsis. Stroke. Make the call.',
+    headline: ['Your next patient', 'could change', 'everything.'],
+    sub: 'Cliniverse AI puts you inside real emergencies — STEMI, Sepsis, Stroke. Make the call before it is too late.',
     accent: '#00C4B4',
     bg: ['#0d2535', '#1e3d52'],
     glow: 'rgba(0,196,180,0.18)',
@@ -21,18 +21,18 @@ const SLIDES = [
   },
   {
     tag: 'AI-POWERED',
-    headline: ['Train with', 'AI that thinks', 'like a consultant.'],
-    sub: 'Every case built on AHA, ESC, and MRCP guidelines. Instant AI feedback on every decision.',
+    headline: ['AI that challenges', 'you like your', 'toughest attending.'],
+    sub: 'Every case built on AHA, ESC, and MRCP guidelines. Instant AI feedback on every decision you make.',
     accent: '#00DFD0',
     bg: ['#0a1f2e', '#162e3e'],
     glow: 'rgba(0,180,166,0.18)',
-    btnGrad: 'linear-gradient(135deg, #D4A847, #E8821A)',
+    btnGrad: 'linear-gradient(135deg, #D4A847, #FF9500)',
     visual: 'brain',
   },
   {
     tag: 'GLOBAL · LIVE',
-    headline: ['Doctors in', 'London are', 'training now.'],
-    sub: 'Join 1,000+ physicians from Riyadh, Dubai, Toronto and London competing in real-time.',
+    headline: ['12,000 doctors', 'trained here.', 'Why not you?'],
+    sub: 'Join physicians from Riyadh, Dubai, London and Toronto competing in real-time clinical simulations.',
     accent: '#fbbf24',
     bg: ['#0f2030', '#1a3545'],
     glow: 'rgba(251,191,36,0.15)',
@@ -41,12 +41,12 @@ const SLIDES = [
   },
   {
     tag: 'YOUR MOMENT',
-    headline: ['Built by a', 'Doctor.', 'For Doctors.'],
-    sub: 'The clinical platform that grows with your career — from intern to consultant.',
+    headline: ['From intern', 'to consultant —', 'one platform.'],
+    sub: 'The clinical platform that grows with your career. Built by a physician, for physicians worldwide.',
     accent: '#3ED6A0',
     bg: ['#0d2535', '#162e3e'],
     glow: 'rgba(62,214,160,0.15)',
-    btnGrad: 'linear-gradient(135deg, #3ED6A0, #00C4B4)',
+    btnGrad: 'linear-gradient(135deg, #34C759, #00C4B4)',
     visual: 'shield',
   },
 ]
@@ -269,7 +269,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
 
         <button onClick={onPay} style={{
           width:'100%', padding:'18px',
-          background:'linear-gradient(135deg,#00C4B4,#D4A847)',
+          background:'linear-gradient(135deg,#00C4B4,#007AFF)',
           border:'none', borderRadius:18, color:'#fff',
           fontSize:17, fontWeight:900, cursor:'pointer', fontFamily:F,
           boxShadow:'0 8px 32px rgba(0,180,166,0.5)', marginBottom:12,
