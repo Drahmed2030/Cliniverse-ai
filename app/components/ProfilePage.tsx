@@ -13,7 +13,7 @@ const T = {
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.18)',
   teal: '#38bdf8',
-  blue: '#0066ff',
+  blue: '#007AFF',
   purple: '#00DFD0',
   green: '#4ade80',
   amber: '#fbbf24',
@@ -151,14 +151,14 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
 
       {/* ── HERO CARD ── */}
       <div style={{
-        background: 'linear-gradient(145deg, rgba(0,20,50,0.95), rgba(0,10,30,0.98))',
+        background: 'linear-gradient(145deg, rgba(13,37,53,0.98), rgba(22,46,62,0.96))',
         borderRadius: 24, padding: '22px 20px', marginBottom: 14,
         border: `1px solid ${T.borderBlue}`,
         position: 'relative', overflow: 'hidden',
         boxShadow: '0 12px 48px rgba(0,0,0,0.5)',
       }}>
         {/* Ambient glows */}
-        <div style={{ position: 'absolute', top: -50, left: -20, width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,212,255,0.1),transparent 70%)', pointerEvents: 'none' }}/>
+        <div style={{ position: 'absolute', top: -50, left: -20, width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,196,180,0.10),transparent 70%)', pointerEvents: 'none' }}/>
         <div style={{ position: 'absolute', bottom: -40, right: -20, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,180,166,0.1),transparent 70%)', pointerEvents: 'none' }}/>
         <CVWatermark />
 
@@ -291,7 +291,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
           {!isPro && (
             <div onClick={onUpgrade} style={{
               background: 'linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,180,166,0.08))',
-              border: '1px solid rgba(0,212,255,0.2)', borderRadius: 20, padding: '18px',
+              border: '1px solid rgba(0,196,180,0.28)', borderRadius: 20, padding: '18px',
               cursor: 'pointer', position: 'relative', overflow: 'hidden',
             }}>
               <CVWatermark />
@@ -299,10 +299,10 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
               <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 6 }}>Upgrade to PRO 👑</div>
               <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>Unlimited cases · AI Generator · All specialties</div>
               <div style={{
-                display: 'inline-block', background: 'linear-gradient(135deg, #00d4ff, #0066ff)',
+                display: 'inline-block', background: 'linear-gradient(135deg, #00C4B4, #007AFF)',
                 borderRadius: 12, padding: '10px 20px', fontSize: 13, fontWeight: 800, color: '#fff',
                 boxShadow: '0 6px 20px rgba(0,180,255,0.3)',
-              }}>Start PRO — $9.99/mo →</div>
+              }}>Start PRO — $14.99/mo →</div>
             </div>
           )}
         </div>
@@ -327,7 +327,9 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
             { icon: '🔔', label: 'Daily Reminders', desc: 'Get notified to train daily', color: T.teal },
             { icon: '🌐', label: 'Language', desc: 'English · العربية', color: T.blue },
             { icon: '📊', label: 'Export Progress', desc: 'Download your clinical logbook', color: T.green },
-            { icon: '🔒', label: 'Privacy', desc: 'Control your data', color: T.purple },
+            { icon: '🔒', label: 'Privacy Policy', desc: 'How we handle your data', color: T.purple, onClick: ()=>window.open('/privacy-policy.html','_blank') },
+            { icon: '📋', label: 'Terms of Service', desc: 'Terms and conditions', color: T.purple },
+            { icon: '📊', label: 'Export My Data', desc: 'Download your progress', color: T.green },
           ].map((s, i) => (
             <div key={i} style={{
               background: T.card, border: `1px solid ${T.border}`,
