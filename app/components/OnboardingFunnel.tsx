@@ -160,18 +160,21 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
       background: 'linear-gradient(180deg,#0a1f2e 0%,#162e3e 50%,#0a1f2e 100%)',
       fontFamily: F, overflowY: 'auto', display: 'flex', flexDirection: 'column',
     }}>
-      <div style={{ position:'absolute', top:-80, left:'50%', transform:'translateX(-50%)', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%)', pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', top:-80, left:'50%', transform:'translateX(-50%)', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.2) 0%,transparent 70%)', pointerEvents:'none' }}/>
       <div style={{ flex:1, padding:'56px 24px 32px', display:'flex', flexDirection:'column', position:'relative', zIndex:2 }}>
 
+        <div style={{display:'flex',justifyContent:'center',marginBottom:14}}>
+          <CliniverseLogo size={72}/>
+        </div>
         <div style={{ display:'flex', justifyContent:'center', marginBottom:20 }}>
-          <div style={{ padding:'6px 18px', background:'rgba(212,168,71,0.15)', border:'1px solid rgba(251,191,36,0.3)', borderRadius:20, fontSize:11, fontWeight:800, color:'#D4A847', letterSpacing:1.5 }}>
+          <div style={{ padding:'6px 18px', background:'rgba(212,168,71,0.15)', border:'1px solid rgba(212,168,71,0.35)', borderRadius:20, fontSize:11, fontWeight:800, color:'#D4A847', letterSpacing:1.5 }}>
             👑 CLINIVERSE PRO
           </div>
         </div>
 
         <h1 style={{ fontSize:36, fontWeight:900, color:'#fff', textAlign:'center', lineHeight:1.1, letterSpacing:-1, margin:'0 0 8px' }}>
           Train at the<br/>
-          <span style={{ background:'linear-gradient(135deg,#a78bfa,#00d4ff)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
+          <span style={{ background:'linear-gradient(135deg,#D4A847,#00C4B4)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
             highest level.
           </span>
         </h1>
@@ -184,7 +187,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
           {([['annual','Annual','$99/yr','Save 45%'],['monthly','Monthly','$14.99/mo','']] as const).map(([key,label,price,save]) => (
             <button key={key} onClick={() => setPlan(key)} style={{
               flex:1, padding:'12px 8px', borderRadius:13, border:'none', cursor:'pointer', fontFamily:F,
-              background: plan===key ? 'linear-gradient(135deg,#7c3aed,#4f46e5)' : 'transparent',
+              background: plan===key ? 'linear-gradient(135deg,#00C4B4,#D4A847)' : 'transparent',
               color: plan===key ? '#fff' : 'rgba(255,255,255,0.4)',
               transition:'all 0.3s',
               boxShadow: plan===key ? '0 4px 20px rgba(0,180,166,0.4)' : 'none',
@@ -310,9 +313,11 @@ export default function OnboardingFunnel({ onComplete }: Props) {
 
       {/* Tag + counter */}
       <div style={{ padding:'14px 24px 0', display:'flex', alignItems:'center', justifyContent:'space-between', position:'relative', zIndex:2 }}>
-        <span style={{ fontSize:9, fontWeight:900, letterSpacing:3, color:current.accent, textTransform:'uppercase' as const, opacity:0.9 }}>
-          {current.tag}
-        </span>
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <CliniverseLogo size={26}/>
+          <span style={{ fontSize:9, fontWeight:900, letterSpacing:3, color:current.accent, textTransform:'uppercase' as const, opacity:0.9 }}>
+          {current.tag}</span>
+        </div>
         <div style={{ fontSize:10, fontWeight:800, color:'rgba(0,196,180,0.25)', letterSpacing:1 }}>
           {slide+1}/{SLIDES.length}
         </div>
