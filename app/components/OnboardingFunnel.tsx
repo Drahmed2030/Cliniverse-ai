@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import CliniverseLogo from './Logo'
 
 interface Props {
   onComplete: (email?: string, password?: string, name?: string) => void
@@ -12,10 +13,10 @@ const SLIDES = [
     tag: 'CLINICAL AI',
     headline: ['Your patient', 'is crashing.', 'What do you do?'],
     sub: 'Cliniverse puts you inside real emergencies. STEMI. Sepsis. Stroke. Make the call.',
-    accent: '#00d4ff',
-    bg: ['#000d1a', '#001a2e'],
-    glow: 'rgba(0,212,255,0.15)',
-    btnGrad: 'linear-gradient(135deg, #00d4ff, #0066ff)',
+    accent: '#00C4B4',
+    bg: ['#0d2535', '#1e3d52'],
+    glow: 'rgba(0,196,180,0.18)',
+    btnGrad: 'linear-gradient(135deg, #00C4B4, #0066cc)',
     visual: 'ecg',
   },
   {
@@ -23,9 +24,9 @@ const SLIDES = [
     headline: ['Train with', 'AI that thinks', 'like a consultant.'],
     sub: 'Every case built on AHA, ESC, and MRCP guidelines. Instant AI feedback on every decision.',
     accent: '#00DFD0',
-    bg: ['#0d0014', '#140020'],
+    bg: ['#0a1f2e', '#162e3e'],
     glow: 'rgba(0,180,166,0.18)',
-    btnGrad: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
+    btnGrad: 'linear-gradient(135deg, #D4A847, #E8821A)',
     visual: 'brain',
   },
   {
@@ -33,7 +34,7 @@ const SLIDES = [
     headline: ['Doctors in', 'London are', 'training now.'],
     sub: 'Join 1,000+ physicians from Riyadh, Dubai, Toronto and London competing in real-time.',
     accent: '#fbbf24',
-    bg: ['#0f0a00', '#1a1000'],
+    bg: ['#0f2030', '#1a3545'],
     glow: 'rgba(251,191,36,0.15)',
     btnGrad: 'linear-gradient(135deg, #f59e0b, #ef4444)',
     visual: 'globe',
@@ -42,10 +43,10 @@ const SLIDES = [
     tag: 'YOUR MOMENT',
     headline: ['Built by a', 'Doctor.', 'For Doctors.'],
     sub: 'The clinical platform that grows with your career — from intern to consultant.',
-    accent: '#34d399',
-    bg: ['#001a0d', '#001408'],
-    glow: 'rgba(52,211,153,0.15)',
-    btnGrad: 'linear-gradient(135deg, #10b981, #0066ff)',
+    accent: '#3ED6A0',
+    bg: ['#0d2535', '#162e3e'],
+    glow: 'rgba(62,214,160,0.15)',
+    btnGrad: 'linear-gradient(135deg, #3ED6A0, #00C4B4)',
     visual: 'shield',
   },
 ]
@@ -156,14 +157,14 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
-      background: 'linear-gradient(180deg,#000510 0%,#05001a 50%,#000510 100%)',
+      background: 'linear-gradient(180deg,#0a1f2e 0%,#162e3e 50%,#0a1f2e 100%)',
       fontFamily: F, overflowY: 'auto', display: 'flex', flexDirection: 'column',
     }}>
       <div style={{ position:'absolute', top:-80, left:'50%', transform:'translateX(-50%)', width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%)', pointerEvents:'none' }}/>
       <div style={{ flex:1, padding:'56px 24px 32px', display:'flex', flexDirection:'column', position:'relative', zIndex:2 }}>
 
         <div style={{ display:'flex', justifyContent:'center', marginBottom:20 }}>
-          <div style={{ padding:'6px 18px', background:'rgba(251,191,36,0.12)', border:'1px solid rgba(251,191,36,0.3)', borderRadius:20, fontSize:11, fontWeight:800, color:'#fbbf24', letterSpacing:1.5 }}>
+          <div style={{ padding:'6px 18px', background:'rgba(212,168,71,0.15)', border:'1px solid rgba(251,191,36,0.3)', borderRadius:20, fontSize:11, fontWeight:800, color:'#D4A847', letterSpacing:1.5 }}>
             👑 CLINIVERSE PRO
           </div>
         </div>
@@ -190,7 +191,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
             }}>
               <div style={{ fontSize:12, fontWeight:800 }}>{label}</div>
               <div style={{ fontSize:14, fontWeight:900, marginTop:2 }}>{price}</div>
-              {save && <div style={{ fontSize:9, fontWeight:800, color:'#fbbf24', marginTop:2 }}>{save}</div>}
+              {save && <div style={{ fontSize:9, fontWeight:800, color:'#D4A847', marginTop:2 }}>{save}</div>}
             </button>
           ))}
         </div>
@@ -208,7 +209,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
 
         <button onClick={onPay} style={{
           width:'100%', padding:'18px',
-          background:'linear-gradient(135deg,#7c3aed,#00d4ff)',
+          background:'linear-gradient(135deg,#00C4B4,#D4A847)',
           border:'none', borderRadius:18, color:'#fff',
           fontSize:17, fontWeight:900, cursor:'pointer', fontFamily:F,
           boxShadow:'0 8px 32px rgba(0,180,166,0.5)', marginBottom:12,
