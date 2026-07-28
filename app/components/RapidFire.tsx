@@ -93,7 +93,7 @@ export default function RapidFire({ onXP }:Props) {
         <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:20,lineHeight:1.6}}>30 clinical questions · 3 minutes<br/>No second chances</div>
         <div style={{display:'flex',gap:10,justifyContent:'center',marginBottom:24}}>
           {[['30','Questions'],['3 min','Time'],['⚡','XP']].map(([v,l])=>(
-            <div key={l} style={{background:'rgba(255,255,255,0.15)',borderRadius:14,padding:'12px 16px',border:'1px solid rgba(255,255,255,0.18)'}}>
+            <div key={l} style={{background:'rgba(36,63,82,0.65)',borderRadius:14,padding:'12px 16px',border:'1px solid rgba(255,255,255,0.18)'}}>
               <div style={{fontSize:18,fontWeight:900,color:'white'}}>{v}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginTop:2}}>{l}</div>
             </div>
@@ -105,7 +105,7 @@ export default function RapidFire({ onXP }:Props) {
   )
 
   if(phase==='result'){
-    const grade=score>=27?{l:'CONSULTANT',c:'#ffd60a',e:'🌟'}:score>=22?{l:'REGISTRAR',c:'#ff9f0a',e:'🏆'}:score>=15?{l:'SENIOR RESIDENT',c:'#30d158',e:'💪'}:{l:'JUNIOR RESIDENT',c:'#0a84ff',e:'📚'}
+    const grade=score>=27?{l:'CONSULTANT',c:'#ffd60a',e:'🌟'}:score>=22?{l:'REGISTRAR',c:'#ff9f0a',e:'🏆'}:score>=15?{l:'SENIOR RESIDENT',c:'#30d158',e:'💪'}:{l:'JUNIOR RESIDENT',c:'#00C4B4',e:'📚'}
     const xp=Math.round(score*3.5)
     const weakCats=Object.entries(cats).filter(([,v])=>v.t>0&&v.c/v.t<0.6).map(([k])=>k)
     const shareText=`🏥 Cliniverse AI — Rapid Fire\n⚡ ${score}/30 · ${accuracy}% accuracy\n🔥 Best streak: ${maxStreak}\n🏅 ${grade.l}\n\ncliniverse-ai-xmev.vercel.app`
@@ -117,7 +117,7 @@ export default function RapidFire({ onXP }:Props) {
           <div style={{fontSize:24,fontWeight:900,color:grade.c,marginBottom:16}}>{grade.l}</div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:20}}>
             {[[`${score}/30`,'Score','#ffd60a'],[`${accuracy}%`,'Accuracy','#30d158'],[`${maxStreak}x`,'Streak','#ff9f0a']].map(([v,l,c])=>(
-              <div key={l} style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'14px 8px',border:'1px solid rgba(255,255,255,0.11)'}}>
+              <div key={l} style={{background:'rgba(36,63,82,0.50)',borderRadius:14,padding:'14px 8px',border:'1px solid rgba(36,63,82,0.60)'}}>
                 <div style={{fontSize:22,fontWeight:900,color:c as string}}>{v}</div>
                 <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginTop:3}}>{l}</div>
               </div>
@@ -128,7 +128,7 @@ export default function RapidFire({ onXP }:Props) {
           </div>
           {weakCats.length>0&&<div style={{background:'rgba(255,69,58,0.08)',borderRadius:14,padding:12,marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',textAlign:'left'}}><div style={{fontSize:11,color:'#ff453a',fontWeight:700,marginBottom:6}}>📚 REVIEW</div><div style={{display:'flex',flexWrap:'wrap',gap:6}}>{weakCats.map(c=><span key={c} style={{fontSize:11,padding:'3px 10px',borderRadius:10,background:'rgba(255,69,58,0.15)',color:'#ff453a',border:'1px solid rgba(255,69,58,0.2)',fontWeight:600}}>{c}</span>)}</div></div>}
           <button onClick={()=>navigator.share?navigator.share({text:shareText}):navigator.clipboard.writeText(shareText)} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#25D366,#128C7E)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer',marginBottom:10}}>📱 Share Score</button>
-          <button onClick={()=>{setPhase('intro');setQIndex(0);setSelected(null);setScore(0);setTimeLeft(TOTAL_TIME);setQTime(6);setStreak(0);setMaxStreak(0);setCats({})}} style={{width:'100%',padding:'13px',borderRadius:16,border:'1px solid rgba(255,255,255,0.1)',background:'transparent',color:'rgba(255,255,255,0.6)',fontSize:14,fontWeight:600,cursor:'pointer'}}>Try Again ⚡</button>
+          <button onClick={()=>{setPhase('intro');setQIndex(0);setSelected(null);setScore(0);setTimeLeft(TOTAL_TIME);setQTime(6);setStreak(0);setMaxStreak(0);setCats({})}} style={{width:'100%',padding:'13px',borderRadius:16,border:'1px solid rgba(0,196,180,0.20)',background:'transparent',color:'rgba(255,255,255,0.6)',fontSize:14,fontWeight:600,cursor:'pointer'}}>Try Again ⚡</button>
         </div>
       </div>
     )
@@ -137,24 +137,24 @@ export default function RapidFire({ onXP }:Props) {
   return(
     <div style={{padding:'0 4px',position:'relative'}}>
       {showStreak&&<div style={{position:'fixed',top:'20%',left:'50%',transform:'translateX(-50%)',zIndex:999,background:'linear-gradient(135deg,#ff9f0a,#ff6b35)',borderRadius:20,padding:'12px 24px',fontSize:18,fontWeight:900,color:'white',boxShadow:'0 8px 32px rgba(255,159,10,0.5)'}}>🔥 {streak} STREAK!</div>}
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14,background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'10px 14px',border:'1px solid rgba(255,255,255,0.15)'}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14,background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'10px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:timerColor,fontFamily:'monospace'}}>{mins}:{secs.toString().padStart(2,'0')}</div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>TIME</div></div>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:'white'}}>{qIndex+1}<span style={{fontSize:12,color:'rgba(255,255,255,0.3)'}}>/30</span></div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>Q</div></div>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:'#30d158'}}>{score}</div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>CORRECT</div></div>
         <div style={{textAlign:'center'}}><div style={{fontSize:18,fontWeight:900,color:'#ff9f0a'}}>{streak>0?`🔥${streak}`:'-'}</div><div style={{fontSize:9,color:'rgba(255,255,255,0.3)'}}>STREAK</div></div>
       </div>
-      <div style={{height:3,background:'rgba(255,255,255,0.15)',borderRadius:2,marginBottom:8,overflow:'hidden'}}><div style={{height:'100%',background:'linear-gradient(90deg,#ff453a,#ff9f0a)',width:`${(qIndex/30)*100}%`,borderRadius:2}}/></div>
-      <div style={{height:3,background:'rgba(255,255,255,0.15)',borderRadius:2,marginBottom:14,overflow:'hidden'}}><div style={{height:'100%',background:timerColor,width:`${(qTime/6)*100}%`,borderRadius:2,transition:'width 1s linear'}}/></div>
-      <div style={{display:'inline-block',fontSize:10,padding:'3px 10px',borderRadius:10,background:'rgba(139,92,246,0.25)',color:'#c4b5fd',border:'1px solid rgba(139,92,246,0.25)',fontWeight:700,marginBottom:12}}>{q.cat}</div>
-      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:'18px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.11)',minHeight:80,display:'flex',alignItems:'center'}}><div style={{fontSize:16,fontWeight:700,color:'white',lineHeight:1.6}}>{q.q}</div></div>
+      <div style={{height:3,background:'rgba(36,63,82,0.65)',borderRadius:2,marginBottom:8,overflow:'hidden'}}><div style={{height:'100%',background:'linear-gradient(90deg,#ff453a,#ff9f0a)',width:`${(qIndex/30)*100}%`,borderRadius:2}}/></div>
+      <div style={{height:3,background:'rgba(36,63,82,0.65)',borderRadius:2,marginBottom:14,overflow:'hidden'}}><div style={{height:'100%',background:timerColor,width:`${(qTime/6)*100}%`,borderRadius:2,transition:'width 1s linear'}}/></div>
+      <div style={{display:'inline-block',fontSize:10,padding:'3px 10px',borderRadius:10,background:'rgba(0,196,180,0.25)',color:'#6ee7e1',border:'1px solid rgba(0,196,180,0.25)',fontWeight:700,marginBottom:12}}>{q.cat}</div>
+      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:'18px 16px',marginBottom:14,border:'1px solid rgba(36,63,82,0.60)',minHeight:80,display:'flex',alignItems:'center'}}><div style={{fontSize:16,fontWeight:700,color:'white',lineHeight:1.6}}>{q.q}</div></div>
       <div style={{display:'flex',flexDirection:'column',gap:10}}>
         {q.opts.map((opt,i)=>{
           const isCorrect=i===q.a,isSelected=i===selected
-          let bg='rgba(255,255,255,0.11)',border='1px solid rgba(255,255,255,0.18)',color='rgba(255,255,255,0.85)'
+          let bg='rgba(36,63,82,0.60)',border='1px solid rgba(255,255,255,0.18)',color='rgba(255,255,255,0.85)'
           if(selected!==null){if(isCorrect){bg='rgba(48,209,88,0.15)';border='1.5px solid rgba(48,209,88,0.5)';color='#30d158'}else if(isSelected){bg='rgba(255,69,58,0.15)';border='1.5px solid rgba(255,69,58,0.5)';color='#ff453a'}}
           return(
             <button key={i} onClick={()=>handleAnswer(i)} disabled={selected!==null} style={{background:bg,border,borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color,textAlign:'left',cursor:selected!==null?'default':'pointer',display:'flex',alignItems:'center',gap:10,transition:'all 0.2s'}}>
-              <div style={{width:26,height:26,borderRadius:'50%',background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,flexShrink:0,color:'rgba(255,255,255,0.4)'}}>{String.fromCharCode(65+i)}</div>
+              <div style={{width:26,height:26,borderRadius:'50%',background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,flexShrink:0,color:'rgba(255,255,255,0.4)'}}>{String.fromCharCode(65+i)}</div>
               {opt}
               {selected!==null&&isCorrect&&<span style={{marginLeft:'auto'}}>✅</span>}
               {selected!==null&&isSelected&&!isCorrect&&<span style={{marginLeft:'auto'}}>❌</span>}

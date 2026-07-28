@@ -4,10 +4,10 @@ import { supabase } from '../supabase'
 
 const RANKS = [
   { name:'Clinical Clerk', icon:'🩺', color:'#64748b' },
-  { name:'Junior Resident', icon:'📋', color:'#0a84ff' },
+  { name:'Junior Resident', icon:'📋', color:'#00C4B4' },
   { name:'Senior Resident', icon:'🔬', color:'#30d158' },
   { name:'Registrar', icon:'⚕️', color:'#ff9500' },
-  { name:'Specialist', icon:'🏥', color:'#8b5cf6' },
+  { name:'Specialist', icon:'🏥', color:'#00C4B4' },
   { name:'Consultant', icon:'👨‍⚕️', color:'#ff3b30' },
   { name:'Senior Consultant', icon:'🎓', color:'#ffd60a' },
   { name:'Chief of Medicine', icon:'🌟', color:'#ff6b35' },
@@ -87,7 +87,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
     if (i === 0) return { bg: 'linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,180,0,0.05))', border: '1px solid rgba(255,215,0,0.35)', shadow: '0 8px 32px rgba(255,215,0,0.2)' }
     if (i === 1) return { bg: 'linear-gradient(135deg,rgba(192,192,192,0.12),rgba(150,150,150,0.05))', border: '1px solid rgba(192,192,192,0.3)', shadow: '0 4px 16px rgba(192,192,192,0.1)' }
     if (i === 2) return { bg: 'linear-gradient(135deg,rgba(205,127,50,0.12),rgba(160,100,30,0.05))', border: '1px solid rgba(205,127,50,0.3)', shadow: '0 4px 16px rgba(205,127,50,0.1)' }
-    return { bg: 'rgba(255,255,255,0.11)', border: '1px solid rgba(139,92,246,0.1)', shadow: 'none' }
+    return { bg: 'rgba(36,63,82,0.60)', border: '1px solid rgba(139,92,246,0.1)', shadow: 'none' }
   }
 
   return (
@@ -100,9 +100,9 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
       </div>
 
       {/* My Position Card */}
-      <div style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.3),rgba(10,132,255,0.12))', backdropFilter: 'blur(20px)', borderRadius: 18, padding: 16, marginBottom: 16, border: '1px solid rgba(139,92,246,0.3)', boxShadow: '0 4px 24px rgba(139,92,246,0.25)' }}>
+      <div style={{ background: 'linear-gradient(135deg,rgba(0,196,180,0.3),rgba(0,196,180,0.12))', backdropFilter: 'blur(20px)', borderRadius: 18, padding: 16, marginBottom: 16, border: '1px solid rgba(139,92,246,0.3)', boxShadow: '0 4px 24px rgba(0,196,180,0.25)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#8b5cf6,#0a84ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0, boxShadow: '0 4px 16px rgba(139,92,246,0.5)' }}>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(135deg,#00C4B4,#0a84ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0, boxShadow: '0 4px 16px rgba(139,92,246,0.5)' }}>
             {getRankIcon(currentRank)}
           </div>
           <div style={{ flex: 1 }}>
@@ -117,9 +117,9 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
       </div>
 
       {/* Filter Tabs */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 14, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: 5, border: '1px solid rgba(139,92,246,0.25)' }}>
+      <div style={{ display: 'flex', gap: 6, marginBottom: 14, background: 'rgba(36,63,82,0.65)', backdropFilter: 'blur(12px)', borderRadius: 16, padding: 5, border: '1px solid rgba(0,196,180,0.25)' }}>
         {[{id:'global',label:'🌍 Global'},{id:'weekly',label:'📅 Weekly'},{id:'specialty',label:'🏥 Specialty'}].map(f=>(
-          <button key={f.id} onClick={()=>setFilter(f.id as any)} style={{ flex: 1, padding: '9px 6px', borderRadius: 12, border: 'none', background: filter===f.id ? 'linear-gradient(135deg,rgba(139,92,246,0.3),rgba(10,132,255,0.2))' : 'transparent', cursor: 'pointer', fontSize: 12, fontWeight: 700, color: filter===f.id ? '#c4b5fd' : 'rgba(255,255,255,0.35)', boxShadow: filter===f.id ? '0 2px 12px rgba(139,92,246,0.3)' : 'none', border: filter===f.id ? '1px solid rgba(139,92,246,0.3)' : '1px solid transparent', transition: 'all 0.2s' }}>
+          <button key={f.id} onClick={()=>setFilter(f.id as any)} style={{ flex: 1, padding: '9px 6px', borderRadius: 12, border: 'none', background: filter===f.id ? 'linear-gradient(135deg,rgba(0,196,180,0.3),rgba(0,196,180,0.20))' : 'transparent', cursor: 'pointer', fontSize: 12, fontWeight: 700, color: filter===f.id ? '#6ee7e1' : 'rgba(255,255,255,0.35)', boxShadow: filter===f.id ? '0 2px 12px rgba(139,92,246,0.3)' : 'none', border: filter===f.id ? '1px solid rgba(139,92,246,0.3)' : '1px solid transparent', transition: 'all 0.2s' }}>
             {f.label}
           </button>
         ))}
@@ -169,7 +169,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
       </div>
 
       {/* Join message */}
-      <div style={{ background: 'linear-gradient(135deg,rgba(139,92,246,0.12),rgba(10,132,255,0.08))', backdropFilter: 'blur(12px)', borderRadius: 16, padding: 16, marginTop: 16, border: '1px solid rgba(139,92,246,0.3)', textAlign: 'center' }}>
+      <div style={{ background: 'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(10,132,255,0.08))', backdropFilter: 'blur(12px)', borderRadius: 16, padding: 16, marginTop: 16, border: '1px solid rgba(139,92,246,0.3)', textAlign: 'center' }}>
         <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, lineHeight: 1.6 }}>
           Complete cases to earn XP and climb the global leaderboard! 🚀
         </div>

@@ -20,7 +20,7 @@ export default function TimeAwareCard({ onAction }: Props) {
     icon: '🌙',
     title: 'Night Shift Mode',
     sub: 'Complex emergency cases for on-call',
-    color: '#0a84ff',
+    color: '#00C4B4',
     tool: 'codeblue',
     btn: 'Go'
   } : {
@@ -33,7 +33,7 @@ export default function TimeAwareCard({ onAction }: Props) {
   }
 
   return (
-    <div style={{background:'rgba(255,255,255,0.11)',borderRadius:20,padding:14,marginBottom:14,border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',gap:12}}>
+    <div style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:14,marginBottom:14,border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',gap:12}}>
       <span style={{fontSize:26,flexShrink:0}}>{config.icon}</span>
       <div style={{flex:1}}>
         <div style={{fontSize:13,fontWeight:800,color:'white',marginBottom:2}}>{config.title}</div>

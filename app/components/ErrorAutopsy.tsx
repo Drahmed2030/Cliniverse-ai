@@ -57,7 +57,7 @@ const CASES: AutopsyCase[] = [
       { type: 'Identification Error', description: 'Wristband not checked before medication administration', color: '#ff453a' },
       { type: 'Communication Failure', description: 'Bed change not documented or communicated to nursing staff', color: '#ff9f0a' },
       { type: 'Environmental Factor', description: 'Adjacent beds with similar patients — high confusion risk', color: '#bf5af2' },
-      { type: 'System Failure', description: 'No mandatory barcode scanning for insulin administration', color: '#0a84ff' },
+      { type: 'System Failure', description: 'No mandatory barcode scanning for insulin administration', color: '#00C4B4' },
     ],
     rootCause: 'Failure to verify patient identity using two identifiers (name + DOB/MRN) before medication administration, compounded by undocumented bed change.',
     contributingFactors: ['Night shift fatigue', 'High patient load', 'No barcode medication system', 'Beds changed without documentation', 'Verbal-only handover'],
@@ -100,7 +100,7 @@ const CASES: AutopsyCase[] = [
       { type: 'Recognition Failure', description: 'Sepsis not identified at triage despite meeting 2+ SIRS criteria', color: '#ff453a' },
       { type: 'Assessment Error', description: 'Junior doctor did not order lactate or blood cultures', color: '#ff9f0a' },
       { type: 'Treatment Delay', description: 'IV antibiotics not started within 1 hour of sepsis recognition', color: '#bf5af2' },
-      { type: 'Supervision Gap', description: 'Senior review not sought for deteriorating elderly patient', color: '#0a84ff' },
+      { type: 'Supervision Gap', description: 'Senior review not sought for deteriorating elderly patient', color: '#00C4B4' },
     ],
     rootCause: 'Failure to recognise sepsis at point of triage using validated screening tool (qSOFA/NEWS), leading to delayed treatment bundle activation.',
     contributingFactors: ['Busy ED with high patient volume', 'Junior doctor working unsupervised', 'No mandatory sepsis screening tool at triage', 'Atypical presentation in elderly (confusion without classic fever sensation)'],
@@ -143,7 +143,7 @@ const CASES: AutopsyCase[] = [
       { type: 'Allergy Override', description: 'GP overrode documented allergy alert without clinical justification', color: '#ff453a' },
       { type: 'Alert Fatigue', description: 'Pharmacist dismissed allergy alert due to over-alerting normalisation', color: '#ff9f0a' },
       { type: 'Cross-Reactivity Ignorance', description: 'Amoxicillin is a penicillin — same class, not an alternative', color: '#bf5af2' },
-      { type: 'Documentation Failure', description: 'No reason documented for allergy override', color: '#0a84ff' },
+      { type: 'Documentation Failure', description: 'No reason documented for allergy override', color: '#00C4B4' },
     ],
     rootCause: 'Alert fatigue due to excessive clinical decision support alerts causing dismissal of critical allergy warnings, combined with prescriber error in drug class recognition.',
     contributingFactors: ['High volume of clinical alerts causing fatigue', 'Incomplete allergy documentation (no severity recorded)', 'Time pressure in GP clinic', 'Pharmacist alert dismissed without patient consultation'],
@@ -165,8 +165,8 @@ const CASES: AutopsyCase[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.11)',
-  border: 'rgba(139,92,246,0.25)',
+  card: 'rgba(36,63,82,0.60)',
+  border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -193,14 +193,14 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
   // ── MENU ──
   if (phase === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(255,69,58,0.12),rgba(139,92,246,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(255,69,58,0.12),rgba(0,196,180,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,69,58,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(255,69,58,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>💀 NEW MODE</div>
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Error Autopsy</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7}}>Analyse real medical errors. Find what went wrong. Learn without blame. Prevent future harm.</div>
         <div style={{display:'flex',gap:8,marginTop:12}}>
           {['🔍 Analyse','⚠️ No Blame','🛡️ Prevent'].map(t=>(
-            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
+            <div key={t} style={{flex:1,background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
           ))}
         </div>
       </div>
@@ -234,7 +234,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
   if (phase === 'timeline') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setPhase('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setPhase('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:800,color:C.text}}>{c.icon} {c.title}</div>
           <div style={{fontSize:11,color:C.sub}}>{c.specialty}</div>
@@ -315,8 +315,8 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
               <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f}</div>
             </div>
           ))}
-          <div style={{background:'rgba(10,132,255,0.08)',borderRadius:16,padding:'14px',marginTop:12,border:'1px solid rgba(10,132,255,0.2)'}}>
-            <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>🔧 SYSTEM CHANGE</div>
+          <div style={{background:'rgba(10,132,255,0.08)',borderRadius:16,padding:'14px',marginTop:12,border:'1px solid rgba(0,196,180,0.20)'}}>
+            <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>🔧 SYSTEM CHANGE</div>
             <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{c.systemChange}</div>
           </div>
         </div>
@@ -363,14 +363,14 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
+          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:800,color:C.text}}>🧠 Knowledge Check</div>
             <div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{c.questions.length} · Score: {score}</div>
           </div>
         </div>
 
-        <div style={{height:4,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:4,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/c.questions.length)*100}%`,background:`linear-gradient(90deg,${c.color},${c.color}bb)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${c.color}88`}}/>
         </div>
 
@@ -388,7 +388,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -399,8 +399,8 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
 
         {ans!==null&&(
           <div>
-            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(10,132,255,0.2)'}}>
-              <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
+            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
+              <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}}

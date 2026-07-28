@@ -1,96 +1,120 @@
-import os
+import os, re
 
-path = os.path.expanduser('~/cliniverse-ai/app/page.tsx')
-with open(path, 'r') as f:
-    c = f.read()
+# كل الألوان القديمة → الجديدة
+REPLACEMENTS = [
+    # Backgrounds
+    ("'#0a0015'",           "'#1e3d52'"),
+    ('"#0a0015"',           '"#1e3d52"'),
+    ("'#0d0118'",           "'#162e3e'"),
+    ('"#0d0118"',           '"#162e3e"'),
+    ("'#1a0533'",           "'#1e3d52'"),
+    ('"#1a0533"',           '"#1e3d52"'),
+    ("'#13002a'",           "'#162e3e'"),
+    ('"#13002a"',           '"#162e3e"'),
+    ("'#0f0a1e'",           "'#1e3d52'"),
+    ('"#0f0a1e"',           '"#1e3d52"'),
+    ("'#160028'",           "'#162e3e'"),
+    ('"#160028"',           '"#162e3e"'),
+    ("'#1c0040'",           "'#243f52'"),
+    ('"#1c0040"',           '"#243f52"'),
+    ("'#0d0030'",           "'#162e3e'"),
+    ('"#0d0030"',           '"#162e3e"'),
+    ("'#2d0a6e'",           "'#1e3d52'"),
+    ('"#2d0a6e"',           '"#1e3d52"'),
 
-# 1. Clinical Pulse
-pulse = (
-    '\n            {/* Clinical Pulse */}\n'
-    '            <div style={{margin:"0 0 16px",background:"linear-gradient(135deg,rgba(48,209,88,0.08),rgba(10,132,255,0.06))",borderRadius:20,border:"1px solid rgba(48,209,88,0.2)",overflow:"hidden",cursor:"pointer"}} onClick={()=>setActiveCase("stemi")}>\n'
-    '              <div style={{width:"100%",height:130,background:"linear-gradient(135deg,#001a0d,#001233)",position:"relative",display:"flex",alignItems:"flex-end",padding:14}}>\n'
-    '                <div style={{position:"absolute",top:12,left:14,display:"flex",alignItems:"center",gap:6}}>\n'
-    '                  <div style={{width:7,height:7,borderRadius:"50%",background:"#30d158",boxShadow:"0 0 8px #30d158"}}/>\n'
-    '                  <span style={{fontSize:10,color:"#30d158",fontWeight:800,letterSpacing:2}}>MORNING BRIEF</span>\n'
-    '                </div>\n'
-    '                <div style={{fontSize:50,position:"absolute",right:16,top:"50%",transform:"translateY(-50%)",opacity:0.12}}>🫀</div>\n'
-    '                <div>\n'
-    '                  <div style={{fontSize:11,color:"rgba(255,255,255,0.4)",marginBottom:4}}>CARDIOLOGY · TODAY</div>\n'
-    '                  <div style={{fontSize:15,fontWeight:800,color:"white",lineHeight:1.2}}>67M with Rapid AF and Haemodynamic Instability</div>\n'
-    '                </div>\n'
-    '              </div>\n'
-    '              <div style={{padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>\n'
-    '                <div style={{fontSize:12,color:"rgba(255,255,255,0.4)"}}>🌍 1,247 doctors deciding now</div>\n'
-    '                <div style={{background:"rgba(48,209,88,0.15)",border:"1px solid rgba(48,209,88,0.3)",borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:700,color:"#30d158"}}>Join →</div>\n'
-    '              </div>\n'
-    '            </div>\n'
-)
+    # Purple → Teal
+    ("'#8b5cf6'",           "'#00C4B4'"),
+    ('"#8b5cf6"',           '"#00C4B4"'),
+    ("'#7c3aed'",           "'#00B4A6'"),
+    ('"#7c3aed"',           '"#00B4A6"'),
+    ("'#6d28d9'",           "'#009e90'"),
+    ('"#6d28d9"',           '"#009e90"'),
+    ("'#a78bfa'",           "'#00DFD0'"),
+    ('"#a78bfa"',           '"#00DFD0"'),
+    ("'#c4b5fd'",           "'#6ee7e1'"),
+    ('"#c4b5fd"',           '"#6ee7e1"'),
+    ("'#9f7aea'",           "'#00CFC0'"),
+    ('"#9f7aea"',           '"#00CFC0"'),
 
-old = '            {/* Featured Case */}'
-if old in c:
-    c = c.replace(old, pulse + old, 1)
-    print('Pulse: added')
-else:
-    print('Pulse: pattern not found')
+    # Purple rgba → Teal rgba
+    ("rgba(139,92,246,0.05)",  "rgba(0,196,180,0.05)"),
+    ("rgba(139,92,246,0.08)",  "rgba(0,196,180,0.08)"),
+    ("rgba(139,92,246,0.10)",  "rgba(0,196,180,0.10)"),
+    ("rgba(139,92,246,0.12)",  "rgba(0,196,180,0.12)"),
+    ("rgba(139,92,246,0.15)",  "rgba(0,196,180,0.15)"),
+    ("rgba(139,92,246,0.18)",  "rgba(0,196,180,0.18)"),
+    ("rgba(139,92,246,0.20)",  "rgba(0,196,180,0.20)"),
+    ("rgba(139,92,246,0.25)",  "rgba(0,196,180,0.25)"),
+    ("rgba(139,92,246,0.30)",  "rgba(0,196,180,0.30)"),
+    ("rgba(139,92,246,0.35)",  "rgba(0,196,180,0.35)"),
+    ("rgba(139,92,246,0.40)",  "rgba(0,196,180,0.40)"),
+    ("rgba(139, 92, 246,",     "rgba(0, 196, 180,"),
+    ("rgba(124,58,237,",       "rgba(0,180,166,"),
+    ("rgba(109,40,217,",       "rgba(0,158,144,"),
+    ("rgba(167,139,250,",      "rgba(0,223,208,"),
+    ("rgba(191,90,242,",       "rgba(0,196,180,"),
 
-# 2. Ghost Consultant component
-ghost = '''
-const GhostConsultant = ({onXP}:{onXP:(n:number)=>void}) => {
-  const [q, setQ] = React.useState("")
-  const [a, setA] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const ask = async () => {
-    if (!q.trim()) return
-    setLoading(true)
-    try {
-      const r = await fetch("/api/generate-case",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({systemPrompt:"You are a senior physician ghost consultant. Challenge the user clinically in 2-3 sentences. Be direct and evidence-based.",userPrompt:q,specialty:"Internal Medicine",difficulty:"Advanced"})})
-      const d = await r.json()
-      setA(d.case?.keyLearning?.[0] || d.case?.management?.[0] || "Consider the evidence carefully.")
-      onXP(25)
-    } catch { setA("Unable to connect. Try again.") }
-    setLoading(false)
-  }
-  return (
-    <div style={{padding:"0 16px"}}>
-      <div style={{background:"linear-gradient(135deg,rgba(139,92,246,0.12),rgba(10,132,255,0.08))",borderRadius:22,padding:20,marginBottom:16,border:"1px solid rgba(139,92,246,0.25)"}}>
-        <div style={{fontSize:40,marginBottom:12,textAlign:"center"}}>👻</div>
-        <div style={{fontSize:20,fontWeight:900,color:"white",marginBottom:6,textAlign:"center"}}>Ghost Consultant</div>
-        <div style={{fontSize:13,color:"rgba(255,255,255,0.5)",textAlign:"center",lineHeight:1.6,marginBottom:20}}>Ask any clinical question. The Ghost challenges your thinking with evidence-based medicine.</div>
-        {a && <div style={{background:"rgba(139,92,246,0.1)",borderRadius:16,padding:14,marginBottom:14,border:"1px solid rgba(139,92,246,0.2)"}}><div style={{fontSize:10,color:"#8b5cf6",fontWeight:800,letterSpacing:1,marginBottom:6}}>👻 GHOST SAYS</div><div style={{fontSize:14,color:"rgba(255,255,255,0.85)",lineHeight:1.7}}>{a}</div></div>}
-        <div style={{display:"flex",gap:10}}>
-          <input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&ask()} placeholder="Ask a clinical question..." style={{flex:1,padding:"13px 16px",borderRadius:14,border:"1px solid rgba(255,255,255,0.1)",background:"rgba(255,255,255,0.06)",color:"white",fontSize:14,outline:"none"}}/>
-          <button onClick={ask} disabled={loading||!q.trim()} style={{width:48,height:48,borderRadius:14,border:"none",background:loading?"rgba(255,255,255,0.1)":"linear-gradient(135deg,#8b5cf6,#0a84ff)",color:"white",fontSize:20,cursor:"pointer",flexShrink:0}}>{loading?"⏳":"→"}</button>
-        </div>
-      </div>
-    </div>
-  )
-}
-'''
+    # Old glass cards → Teal glass
+    ("rgba(255,255,255,0.03)", "rgba(36,63,82,0.40)"),
+    ("rgba(255,255,255,0.04)", "rgba(36,63,82,0.45)"),
+    ("rgba(255,255,255,0.05)", "rgba(36,63,82,0.50)"),
+    ("rgba(255,255,255,0.06)", "rgba(36,63,82,0.55)"),
+    ("rgba(255,255,255,0.07)", "rgba(36,63,82,0.55)"),
+    ("rgba(255,255,255,0.08)", "rgba(36,63,82,0.55)"),
+    ("rgba(255,255,255,0.10)", "rgba(36,63,82,0.60)"),
+    ("rgba(255,255,255,0.11)", "rgba(36,63,82,0.60)"),
+    ("rgba(255,255,255,0.12)", "rgba(36,63,82,0.65)"),
+    ("rgba(255,255,255,0.15)", "rgba(36,63,82,0.65)"),
 
-if 'GhostConsultant' not in c:
-    c = c.replace("export default function Home()", ghost + "\nexport default function Home()")
-    print("Ghost: added")
-else:
-    print("Ghost: already exists")
+    # Blue iOS → Teal
+    ("'#0a84ff'",           "'#00C4B4'"),
+    ('"#0a84ff"',           '"#00C4B4"'),
+    ("rgba(10,132,255,0.1)","rgba(0,196,180,0.10)"),
+    ("rgba(10,132,255,0.12)","rgba(0,196,180,0.12)"),
+    ("rgba(10,132,255,0.15)","rgba(0,196,180,0.15)"),
+    ("rgba(10,132,255,0.2)","rgba(0,196,180,0.20)"),
+    ("rgba(10,132,255,0.25)","rgba(0,196,180,0.25)"),
+    ("rgba(10,132,255,0.3)","rgba(0,196,180,0.30)"),
 
-# Add React import
-if "import React" not in c:
-    c = c.replace("'use client'", "'use client'\nimport React from 'react'")
+    # Borders white → teal
+    ("rgba(255,255,255,0.1)'", "rgba(0,196,180,0.20)'"),
+    ("rgba(255,255,255,0.15)'","rgba(0,196,180,0.25)'"),
+    ("rgba(255,255,255,0.2)'", "rgba(0,196,180,0.25)'"),
 
-# Add Ghost render
-if "toolTab===\"ghost\"" not in c and "toolTab==='ghost'" not in c:
-    c = c.replace(
-        "{toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}",
-        "{toolTab==='ghost'&&<GhostConsultant onXP={addXP}/>}\n            {toolTab==='nexus'&&<ClinicalNexus onXP={addXP}/>}"
-    )
-    print("Ghost render: added")
+    # Gradient purples
+    ("linear-gradient(135deg,rgba(139,92,246,", "linear-gradient(135deg,rgba(0,196,180,"),
+    ("linear-gradient(135deg,#8b5cf6,",         "linear-gradient(135deg,#00C4B4,"),
+    ("linear-gradient(135deg,#6d28d9,",         "linear-gradient(135deg,#009e90,"),
+    ("linear-gradient(145deg,#2d0a6e,#0d0030)", "linear-gradient(145deg,#0d3347,#162e3e)"),
+    ("linear-gradient(135deg,#0a0015,",         "linear-gradient(135deg,#162e3e,"),
+]
 
-# Make Ghost clickable in TOOLS hub
-c = c.replace(
-    "<div style={{background:'rgba(139,92,246,0.06)',borderRadius:18,padding:'14px 16px',border:'1px solid rgba(139,92,246,0.15)',display:'flex',alignItems:'center',gap:12,opacity:0.7}}>",
-    "<div onClick={()=>setToolTab('ghost')} style={{background:'rgba(139,92,246,0.06)',borderRadius:18,padding:'14px 16px',border:'1px solid rgba(139,92,246,0.2)',display:'flex',alignItems:'center',gap:12,cursor:'pointer'}}>"
-)
+# Process all tsx/ts files
+root = '/Users/macbook/cliniverse-ai/app'
+total_files = 0
 
-with open(path, 'w') as f:
-    f.write(c)
-print("All done!")
+
+total_changes = 0
+
+for dirpath, _, files in os.walk(root):
+    for fname in files:
+        if fname.endswith(('.tsx', '.ts', '.css')):
+            fpath = os.path.join(dirpath, fname)
+            try:
+                original = open(fpath, 'r', encoding='utf-8').read()
+                modified = original
+                file_changes = 0
+                for old, new in REPLACEMENTS:
+                    if old in modified:
+                        count = modified.count(old)
+                        modified = modified.replace(old, new)
+                        file_changes += count
+                if modified != original:
+                    open(fpath, 'w', encoding='utf-8').write(modified)
+                    print(f"✅ {fname}: {file_changes} changes")
+                    total_files += 1
+                    total_changes += file_changes
+            except Exception as e:
+                print(f"❌ {fname}: {e}")
+
+print(f"\n🎨 Done! {total_files} files, {total_changes} total changes")

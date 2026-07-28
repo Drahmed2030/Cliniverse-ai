@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.11)', border:'rgba(139,92,246,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(36,63,82,0.60)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const CXR_FINDINGS = [
   { finding:'Cardiomegaly', criteria:'Cardiothoracic ratio > 0.5 on PA film', causes:'Heart failure, cardiomyopathy, pericardial effusion', icon:'🫀', color:'#ff453a', nextStep:'Echo, BNP, cardiology review' },
-  { finding:'Pulmonary Oedema', criteria:'Bat-wing shadowing, Kerley B lines, pleural effusions', causes:'Left ventricular failure, ARDS, fluid overload', icon:'💧', color:'#0a84ff', nextStep:'Furosemide, O2, BNP, echo' },
+  { finding:'Pulmonary Oedema', criteria:'Bat-wing shadowing, Kerley B lines, pleural effusions', causes:'Left ventricular failure, ARDS, fluid overload', icon:'💧', color:'#00C4B4', nextStep:'Furosemide, O2, BNP, echo' },
   { finding:'Consolidation', criteria:'Opacification with air bronchograms', causes:'Pneumonia, haemorrhage, infarction, aspiration', icon:'🫁', color:'#ff9f0a', nextStep:'Antibiotics if infective, CT if atypical' },
   { finding:'Pneumothorax', criteria:'Visible lung edge + absent lung markings peripherally', causes:'Spontaneous, trauma, iatrogenic', icon:'⚡', color:'#ff453a', nextStep:'Size determines: observe vs needle vs chest drain' },
   { finding:'Pleural Effusion', criteria:'Blunted costophrenic angle, meniscus sign', causes:'Heart failure, malignancy, infection, PE', icon:'💧', color:'#64d2ff', nextStep:'Aspirate if large/diagnostic, Light\'s criteria on fluid' },
@@ -58,7 +58,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
         ))}
       </div>
-      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
         <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 SYSTEMATIC CXR APPROACH</div>
         {['A — Airway: trachea midline?','B — Breathing: lung fields symmetric?','C — Cardiac: CTR, borders, shape','D — Diaphragm: right higher, no free air','E — Everything else: bones, soft tissue, lines'].map((s,i)=>(
           <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
@@ -73,7 +73,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'cxr') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>🩻 CXR Findings</div>
       </div>
       {CXR_FINDINGS.map((f,i)=>(
@@ -85,8 +85,8 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
             <div style={{fontSize:16,color:`${f.color}60`}}>{expandedCXR===i?'▲':'▼'}</div>
           </div>
           {expandedCXR===i&&(
-            <div style={{borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.11)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.15)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f.causes}</div></div>
+            <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
+              <div style={{background:'rgba(36,63,82,0.60)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f.causes}</div></div>
               <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
             </div>
           )}
@@ -98,7 +98,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'ct') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>🔬 CT Patterns</div>
       </div>
       {CT_PATTERNS.map((p,i)=>(
@@ -115,8 +115,8 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
             </div>
           </div>
           {expandedCT===i&&(
-            <div style={{borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.11)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,255,255,0.15)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{p.meaning}</div></div>
+            <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
+              <div style={{background:'rgba(36,63,82,0.60)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{p.meaning}</div></div>
               <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
             </div>
           )}
@@ -144,7 +144,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🩻 Radiology Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length}</div></div>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
@@ -157,7 +157,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -167,8 +167,8 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
         </div>
         {ans!==null&&(
           <div>
-            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(10,132,255,0.2)'}}>
-              <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
+            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
+              <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:14,fontWeight:800,cursor:'pointer'}}>

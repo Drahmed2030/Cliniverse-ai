@@ -56,7 +56,7 @@ const VF_PVT: Algorithm = {
 }
 
 const PEA_ASYSTOLE: Algorithm = {
-  id:'pea', title:'PEA / Asystole', subtitle:'Non-Shockable — ACLS', color:'#8b5cf6', icon:'📉',
+  id:'pea', title:'PEA / Asystole', subtitle:'Non-Shockable — ACLS', color:'#00C4B4', icon:'📉',
   rhythm:'Asystole — flat line. PEA — organised rhythm without pulse.',
   steps:[
     {id:1, action:'Confirm No Pulse', detail:'Asystole or PEA? Confirm in 2 leads. Start CPR. Do NOT defibrillate.', critical:true},
@@ -70,7 +70,7 @@ const PEA_ASYSTOLE: Algorithm = {
 }
 
 const BRADYCARDIA: Algorithm = {
-  id:'brady', title:'Symptomatic Bradycardia', subtitle:'HR < 50 with symptoms', color:'#0a84ff', icon:'🐢',
+  id:'brady', title:'Symptomatic Bradycardia', subtitle:'HR < 50 with symptoms', color:'#00C4B4', icon:'🐢',
   rhythm:'Sinus bradycardia, AV block, or junctional < 50 bpm',
   steps:[
     {id:1, action:'Monitor & Identify', detail:'12-lead ECG. SpO2, BP, IV access. Stable or unstable?', critical:true},
@@ -102,9 +102,9 @@ const T5 = ['Tension Pneumothorax','Tamponade (Cardiac)','Toxins','Thrombosis �
 
 const DRUGS = [
   {name:'Epinephrine', dose:'1mg IV/IO q3-5min', ind:'All cardiac arrest rhythms', color:'#ff453a'},
-  {name:'Amiodarone', dose:'300mg IV (1st), 150mg (2nd)', ind:'VF/pVT after 2nd shock', color:'#8b5cf6'},
+  {name:'Amiodarone', dose:'300mg IV (1st), 150mg (2nd)', ind:'VF/pVT after 2nd shock', color:'#00C4B4'},
   {name:'Lidocaine', dose:'1-1.5mg/kg IV', ind:'VF/pVT (alt to amiodarone)', color:'#ff9f0a'},
-  {name:'Atropine', dose:'1mg IV q3-5min (max 3mg)', ind:'Symptomatic bradycardia', color:'#0a84ff'},
+  {name:'Atropine', dose:'1mg IV q3-5min (max 3mg)', ind:'Symptomatic bradycardia', color:'#00C4B4'},
   {name:'Adenosine', dose:'6mg rapid IV push', ind:'Regular narrow SVT', color:'#30d158'},
   {name:'Dopamine', dose:'2-20 mcg/kg/min', ind:'Bradycardia/hypotension', color:'#ffd60a'},
   {name:'Magnesium', dose:'1-2g IV over 15 min', ind:'Torsades de Pointes', color:'#64d2ff'},
@@ -123,7 +123,7 @@ const QUIZ = [
 ]
 
 // ── STYLES ──
-const card = {background:'rgba(255,255,255,0.11)', borderRadius:20, border:'1px solid rgba(139,92,246,0.25)', padding:'14px 16px', marginBottom:10}
+const card = {background:'rgba(36,63,82,0.60)', borderRadius:20, border:'1px solid rgba(0,196,180,0.25)', padding:'14px 16px', marginBottom:10}
 const glow = (color:string) => ({background:`${color}18`, border:`1px solid ${color}30`, boxShadow:`0 4px 20px ${color}15`})
 
 export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
@@ -168,12 +168,12 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
       {/* Quick Reference */}
       <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',letterSpacing:2,textTransform:'uppercase',fontWeight:700,margin:'16px 0 10px'}}>Quick Reference</div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
-        <div onClick={()=>setView('h5t5')} style={{background:'linear-gradient(145deg,rgba(255,69,58,0.12),rgba(139,92,246,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,69,58,0.2)',cursor:'pointer',boxShadow:'0 4px 20px rgba(255,69,58,0.1)'}}>
+        <div onClick={()=>setView('h5t5')} style={{background:'linear-gradient(145deg,rgba(255,69,58,0.12),rgba(0,196,180,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,69,58,0.2)',cursor:'pointer',boxShadow:'0 4px 20px rgba(255,69,58,0.1)'}}>
           <div style={{fontSize:32,marginBottom:8}}>🔍</div>
           <div style={{fontSize:15,fontWeight:800,color:'white'}}>5H · 5T</div>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:3}}>Reversible causes of arrest</div>
         </div>
-        <div onClick={()=>setView('drugs')} style={{background:'linear-gradient(145deg,rgba(10,132,255,0.12),rgba(48,209,88,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(10,132,255,0.2)',cursor:'pointer',boxShadow:'0 4px 20px rgba(10,132,255,0.1)'}}>
+        <div onClick={()=>setView('drugs')} style={{background:'linear-gradient(145deg,rgba(0,196,180,0.12),rgba(48,209,88,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(0,196,180,0.20)',cursor:'pointer',boxShadow:'0 4px 20px rgba(0,196,180,0.10)'}}>
           <div style={{fontSize:32,marginBottom:8}}>💊</div>
           <div style={{fontSize:15,fontWeight:800,color:'white'}}>Drug Doses</div>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)',marginTop:3}}>8 ACLS drugs & doses</div>
@@ -198,7 +198,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:16,fontWeight:800,color:'white'}}>{algo.icon} {algo.title}</div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{algo.subtitle}</div>
@@ -217,13 +217,13 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
             <span style={{fontSize:12,color:'rgba(255,255,255,0.35)'}}>Step {step+1} / {algo.steps.length}</span>
             <span style={{fontSize:12,color:algo.color,fontWeight:700}}>{Math.round(pct)}% complete</span>
           </div>
-          <div style={{height:4,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden'}}>
+          <div style={{height:4,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden'}}>
             <div style={{height:'100%',width:`${pct}%`,background:`linear-gradient(90deg,${algo.color},${algo.color}aa)`,borderRadius:2,transition:'width 0.4s ease',boxShadow:`0 0 10px ${algo.color}88`}}/>
           </div>
         </div>
 
         {/* Current Step Card */}
-        <div style={{background:s.critical?`linear-gradient(145deg,${algo.color}18,${algo.color}06)`:'rgba(255,255,255,0.11)',borderRadius:22,padding:'20px 18px',marginBottom:12,border:`1.5px solid ${s.critical?algo.color+'50':'rgba(255,255,255,0.18)'}`,boxShadow:s.critical?`0 8px 32px ${algo.color}25`:'0 4px 20px rgba(0,0,0,0.3)'}}>
+        <div style={{background:s.critical?`linear-gradient(145deg,${algo.color}18,${algo.color}06)`:'rgba(36,63,82,0.60)',borderRadius:22,padding:'20px 18px',marginBottom:12,border:`1.5px solid ${s.critical?algo.color+'50':'rgba(255,255,255,0.18)'}`,boxShadow:s.critical?`0 8px 32px ${algo.color}25`:'0 4px 20px rgba(0,0,0,0.3)'}}>
           {s.critical&&(
             <div style={{display:'inline-flex',alignItems:'center',gap:6,background:`${algo.color}20`,border:`1px solid ${algo.color}40`,borderRadius:10,padding:'3px 10px',marginBottom:10}}>
               <span style={{fontSize:10}}>⚠️</span>
@@ -254,14 +254,14 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         {/* Step pills */}
         <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:14}}>
           {algo.steps.map((_,i)=>(
-            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(255,255,255,0.05)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(255,255,255,0.25)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
+            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(36,63,82,0.50)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(255,255,255,0.25)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
               {i<step?'✓':i+1}
             </div>
           ))}
         </div>
 
         <div style={{display:'flex',gap:10}}>
-          <button onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.5)',fontSize:14,fontWeight:700,cursor:'pointer',opacity:step===0?0.3:1}}>← Prev</button>
+          <button onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.50)',color:'rgba(255,255,255,0.5)',fontSize:14,fontWeight:700,cursor:'pointer',opacity:step===0?0.3:1}}>← Prev</button>
           {step<algo.steps.length-1
             ? <button onClick={()=>setStep(s=>s+1)} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${algo.color},${algo.color}bb)`,color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${algo.color}44`}}>Next Step →</button>
             : <button onClick={()=>{onXP&&onXP(60);setView('menu')}} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>✅ Complete +60 XP</button>
@@ -275,29 +275,29 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
   if(view==='h5t5') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:'white'}}>🔍 5H · 5T</div>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Reversible causes of cardiac arrest</div>
         </div>
       </div>
-      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'12px 16px',marginBottom:14,border:'1px solid rgba(255,255,255,0.11)'}}>
+      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'12px 16px',marginBottom:14,border:'1px solid rgba(36,63,82,0.60)'}}>
         <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',lineHeight:1.75}}>Always consider during arrest. Treat simultaneously with CPR. Finding and fixing these = best chance of ROSC.</div>
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
         <div style={{background:'linear-gradient(145deg,rgba(255,69,58,0.1),rgba(255,69,58,0.03))',borderRadius:22,padding:16,border:'1px solid rgba(255,69,58,0.2)',boxShadow:'0 4px 20px rgba(255,69,58,0.08)'}}>
           <div style={{fontSize:16,fontWeight:900,color:'#ff453a',marginBottom:14,letterSpacing:0.5}}>5H</div>
           {H5.map((h,i)=>(
-            <div key={h} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(255,255,255,0.05)':'none'}}>
+            <div key={h} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:'rgba(255,69,58,0.2)',border:'1px solid rgba(255,69,58,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:'#ff453a',flexShrink:0}}>{i+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',fontWeight:600,lineHeight:1.4}}>{h}</div>
             </div>
           ))}
         </div>
-        <div style={{background:'linear-gradient(145deg,rgba(139,92,246,0.1),rgba(139,92,246,0.03))',borderRadius:22,padding:16,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 4px 20px rgba(139,92,246,0.08)'}}>
+        <div style={{background:'linear-gradient(145deg,rgba(139,92,246,0.1),rgba(139,92,246,0.03))',borderRadius:22,padding:16,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 4px 20px rgba(0,196,180,0.08)'}}>
           <div style={{fontSize:16,fontWeight:900,color:'#bf5af2',marginBottom:14,letterSpacing:0.5}}>5T</div>
           {T5.map((t,i)=>(
-            <div key={t} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(255,255,255,0.05)':'none'}}>
+            <div key={t} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:'rgba(139,92,246,0.3)',border:'1px solid rgba(139,92,246,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:'#bf5af2',flexShrink:0}}>{i+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',fontWeight:600,lineHeight:1.4}}>{t}</div>
             </div>
@@ -311,14 +311,14 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
   if(view==='drugs') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:'white'}}>💊 ACLS Drug Reference</div>
           <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Doses & indications</div>
         </div>
       </div>
       {DRUGS.map(d=>(
-        <div key={d.name} style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:`1px solid ${d.color}20`,boxShadow:`0 4px 16px ${d.color}08`}}>
+        <div key={d.name} style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:`1px solid ${d.color}20`,boxShadow:`0 4px 16px ${d.color}08`}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
             <div style={{width:10,height:10,borderRadius:'50%',background:d.color,boxShadow:`0 0 10px ${d.color}`,flexShrink:0}}/>
             <div style={{fontSize:15,fontWeight:800,color:'white'}}>{d.name}</div>
@@ -344,7 +344,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         </div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginBottom:28}}>{score*10} XP earned</div>
         <div style={{display:'flex',gap:10}}>
-          <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
+          <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(36,63,82,0.65)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
           <button onClick={()=>{onXP&&onXP(score*10);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,214,10,0.4)'}}>+{score*10} XP ✓</button>
         </div>
       </div>
@@ -354,7 +354,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:'white'}}>🧠 ACLS Quiz</div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Q {qIdx+1}/{QUIZ.length} · Score: {score}</div>
@@ -362,17 +362,17 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           <div style={{fontSize:13,fontWeight:700,color:'#ffd60a'}}>{score*10} XP</div>
         </div>
 
-        <div style={{height:3,background:'rgba(255,255,255,0.15)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:3,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/QUIZ.length)*100}%`,background:'linear-gradient(90deg,#ffd60a,#ff9f0a)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(255,214,10,0.5)'}}/>
         </div>
 
-        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'18px 16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.18)'}}>
+        <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'18px 16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.18)'}}>
           <div style={{fontSize:15,fontWeight:700,color:'white',lineHeight:1.7}}>{q.q}</div>
         </div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
           {q.opts.map((o,i)=>{
-            let bg='rgba(255,255,255,0.11)',border='1px solid rgba(255,255,255,0.18)',tc='rgba(255,255,255,0.8)'
+            let bg='rgba(36,63,82,0.60)',border='1px solid rgba(255,255,255,0.18)',tc='rgba(255,255,255,0.8)'
             if(ans!==null){
               if(i===q.correct){bg='rgba(48,209,88,0.15)';border='2px solid #30d158';tc='#86efac'}
               else if(i===ans){bg='rgba(255,69,58,0.15)';border='2px solid #ff453a';tc='#fca5a5'}
@@ -380,7 +380,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(255,255,255,0.11)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(36,63,82,0.60)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1,lineHeight:1.5}}>{o}</div>
                 {ans!==null&&i===q.correct&&<span style={{fontSize:16}}>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span style={{fontSize:16}}>❌</span>}
@@ -391,8 +391,8 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
 
         {ans!==null&&(
           <div>
-            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px 16px',marginBottom:10,border:'1px solid rgba(10,132,255,0.2)',boxShadow:'0 4px 16px rgba(10,132,255,0.08)'}}>
-              <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
+            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px 16px',marginBottom:10,border:'1px solid rgba(0,196,180,0.20)',boxShadow:'0 4px 16px rgba(10,132,255,0.08)'}}>
+              <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,214,10,0.35)'}}>

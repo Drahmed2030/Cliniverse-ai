@@ -22,9 +22,9 @@ const SLIDES = [
     tag: 'AI-POWERED',
     headline: ['Train with', 'AI that thinks', 'like a consultant.'],
     sub: 'Every case built on AHA, ESC, and MRCP guidelines. Instant AI feedback on every decision.',
-    accent: '#a78bfa',
+    accent: '#00DFD0',
     bg: ['#0d0014', '#140020'],
-    glow: 'rgba(124,58,237,0.18)',
+    glow: 'rgba(0,180,166,0.18)',
     btnGrad: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
     visual: 'brain',
   },
@@ -179,14 +179,14 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         </p>
 
         {/* Plan toggle */}
-        <div style={{ display:'flex', background:'rgba(255,255,255,0.05)', borderRadius:16, padding:4, marginBottom:20, gap:4 }}>
+        <div style={{ display:'flex', background:'rgba(36,63,82,0.50)', borderRadius:16, padding:4, marginBottom:20, gap:4 }}>
           {([['annual','Annual','$99/yr','Save 45%'],['monthly','Monthly','$14.99/mo','']] as const).map(([key,label,price,save]) => (
             <button key={key} onClick={() => setPlan(key)} style={{
               flex:1, padding:'12px 8px', borderRadius:13, border:'none', cursor:'pointer', fontFamily:F,
               background: plan===key ? 'linear-gradient(135deg,#7c3aed,#4f46e5)' : 'transparent',
               color: plan===key ? '#fff' : 'rgba(255,255,255,0.4)',
               transition:'all 0.3s',
-              boxShadow: plan===key ? '0 4px 20px rgba(124,58,237,0.4)' : 'none',
+              boxShadow: plan===key ? '0 4px 20px rgba(0,180,166,0.4)' : 'none',
             }}>
               <div style={{ fontSize:12, fontWeight:800 }}>{label}</div>
               <div style={{ fontSize:14, fontWeight:900, marginTop:2 }}>{price}</div>
@@ -198,7 +198,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         {/* Features */}
         <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:24 }}>
           {features.map((f,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(255,255,255,0.03)', borderRadius:14, border:'1px solid rgba(255,255,255,0.15)' }}>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(36,63,82,0.40)', borderRadius:14, border:'1px solid rgba(36,63,82,0.65)' }}>
               <span style={{ fontSize:20 }}>{f.icon}</span>
               <span style={{ fontSize:14, color:'rgba(255,255,255,0.8)', fontWeight:600 }}>{f.text}</span>
               <span style={{ marginLeft:'auto', color:'#34d399', fontSize:16 }}>✓</span>
@@ -211,7 +211,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
           background:'linear-gradient(135deg,#7c3aed,#00d4ff)',
           border:'none', borderRadius:18, color:'#fff',
           fontSize:17, fontWeight:900, cursor:'pointer', fontFamily:F,
-          boxShadow:'0 8px 32px rgba(124,58,237,0.5)', marginBottom:12,
+          boxShadow:'0 8px 32px rgba(0,180,166,0.5)', marginBottom:12,
         }}>
           {plan==='annual' ? 'Start PRO — $99/year' : 'Start PRO — $14.99/month'}
         </button>
@@ -224,7 +224,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
           Continue with Free (1 case)
         </button>
 
-        <p style={{ textAlign:'center', fontSize:11, color:'rgba(255,255,255,0.15)', margin:0, lineHeight:1.8 }}>
+        <p style={{ textAlign:'center', fontSize:11, color:'rgba(36,63,82,0.65)', margin:0, lineHeight:1.8 }}>
           Cancel anytime · Secure payment · 7-day free trial
         </p>
       </div>
@@ -296,7 +296,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
       {/* Stories progress bars */}
       <div style={{ padding:'52px 20px 0', display:'flex', gap:5, position:'relative', zIndex:2 }}>
         {SLIDES.map((_,i) => (
-          <div key={i} style={{ flex:1, height:3, borderRadius:2, background:'rgba(255,255,255,0.15)', overflow:'hidden' }}>
+          <div key={i} style={{ flex:1, height:3, borderRadius:2, background:'rgba(36,63,82,0.65)', overflow:'hidden' }}>
             <div style={{
               height:'100%', borderRadius:2,
               background: i < slide ? SLIDES[i].accent : i === slide ? current.accent : 'transparent',
@@ -312,7 +312,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
         <span style={{ fontSize:9, fontWeight:900, letterSpacing:3, color:current.accent, textTransform:'uppercase' as const, opacity:0.9 }}>
           {current.tag}
         </span>
-        <div style={{ fontSize:10, fontWeight:800, color:'rgba(255,255,255,0.2)', letterSpacing:1 }}>
+        <div style={{ fontSize:10, fontWeight:800, color:'rgba(0,196,180,0.25)', letterSpacing:1 }}>
           {slide+1}/{SLIDES.length}
         </div>
       </div>
@@ -353,8 +353,8 @@ export default function OnboardingFunnel({ onComplete }: Props) {
             {isLast ? 'See Plans →' : 'Continue →'}
           </button>
           <button onClick={e=>{ e.stopPropagation(); setShowPaywall(true) }} style={{
-            padding:'17px 18px', background:'rgba(255,255,255,0.15)',
-            border:'1px solid rgba(255,255,255,0.1)', borderRadius:18,
+            padding:'17px 18px', background:'rgba(36,63,82,0.65)',
+            border:'1px solid rgba(0,196,180,0.20)', borderRadius:18,
             color:'rgba(255,255,255,0.35)', fontSize:13, fontWeight:700,
             cursor:'pointer', fontFamily:F,
           }}>Skip</button>

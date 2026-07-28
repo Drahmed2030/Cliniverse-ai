@@ -45,7 +45,7 @@ const SCENARIOS: ShiftScenario[] = [
     id: 'night_general',
     title: 'General Night Shift',
     subtitle: '8 hours on-call — General Medicine Ward',
-    color: '#8b5cf6',
+    color: '#00C4B4',
     icon: '🌙',
     duration: '22:00 → 06:00',
     difficulty: 'Intern',
@@ -90,7 +90,7 @@ const SCENARIOS: ShiftScenario[] = [
       },
       {
         id: 'n4', time: '03:45', dept: 'ED', title: 'Referral — Chest Pain',
-        patient: '55M — ED requesting admission', urgency: 'Routine', color: '#0a84ff', icon: '📞',
+        patient: '55M — ED requesting admission', urgency: 'Routine', color: '#00C4B4', icon: '📞',
         presentation: 'ED calls. 55M, chest pain, troponin pending. ECG normal. Vitals stable. Want admission for observation.',
         timeLimit: 20, xp: 50,
         actions: [
@@ -139,7 +139,7 @@ const SCENARIOS: ShiftScenario[] = [
       },
       {
         id: 'e2', time: '23:00', dept: 'ED Majors', title: 'Stroke Alert',
-        patient: '58F — sudden right hemiplegia', urgency: 'Stat', color: '#0a84ff', icon: '🧠',
+        patient: '58F — sudden right hemiplegia', urgency: 'Stat', color: '#00C4B4', icon: '🧠',
         presentation: 'NIHSS 12. Last seen well 2 hours ago. Daughter reports no prior stroke. BP 188/104.',
         timeLimit: 25, xp: 100,
         actions: [
@@ -212,7 +212,7 @@ const SCENARIOS: ShiftScenario[] = [
       },
       {
         id: 'i3', time: '03:00', dept: 'ICU Bed 1', title: 'Brain Death Protocol',
-        patient: '24M — severe TBI after RTA', urgency: 'Routine', color: '#8b5cf6', icon: '🧠',
+        patient: '24M — severe TBI after RTA', urgency: 'Routine', color: '#00C4B4', icon: '🧠',
         presentation: 'GCS 3 for 72h. CT: massive diffuse injury. Family present. Consultant requests brain death testing.',
         timeLimit: 40, xp: 120,
         actions: [
@@ -227,8 +227,8 @@ const SCENARIOS: ShiftScenario[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.11)',
-  border: 'rgba(139,92,246,0.25)',
+  card: 'rgba(36,63,82,0.60)',
+  border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -316,14 +316,14 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
   // ── MENU ──
   if (phase === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.25),rgba(15,5,35,0.9))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(139,92,246,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.25),rgba(15,5,35,0.9))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🌙 SURVIVAL MODE</div>
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Night Shift Survival</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Survive a full on-call shift. Manage your energy. Make the right calls. One wrong decision can cost a life — or your career.</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
           {[{icon:'⚡',label:'Energy System'},{icon:'⏱️',label:'Time Pressure'},{icon:'🏆',label:'Survival Score'}].map(t=>(
-            <div key={t.label} style={{background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.15)',textAlign:'center'}}>
+            <div key={t.label} style={{background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(36,63,82,0.65)',textAlign:'center'}}>
               <div style={{fontSize:20,marginBottom:4}}>{t.icon}</div>
               <div style={{fontSize:9,color:C.muted,fontWeight:700}}>{t.label}</div>
             </div>
@@ -350,7 +350,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           </div>
           <div style={{display:'flex',gap:6}}>
             <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:`${s.color}12`,color:s.color,fontWeight:700,border:`1px solid ${s.color}20`}}>{s.cases.length} cases</span>
-            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
+            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(36,63,82,0.50)',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
           </div>
         </div>
       ))}
@@ -370,7 +370,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           <span style={{fontSize:12,color:C.sub,fontWeight:600}}>⚡ Energy</span>
           <span style={{fontSize:12,fontWeight:800,color:energyColor}}>{energy}%</span>
         </div>
-        <div style={{height:8,background:'rgba(255,255,255,0.15)',borderRadius:4,overflow:'hidden',marginBottom:8}}>
+        <div style={{height:8,background:'rgba(36,63,82,0.65)',borderRadius:4,overflow:'hidden',marginBottom:8}}>
           <div style={{height:'100%',width:`${energy}%`,background:`linear-gradient(90deg,${energyColor},${energyColor}aa)`,borderRadius:4,transition:'width 0.5s',boxShadow:`0 0 12px ${energyColor}66`}}/>
         </div>
         <div style={{display:'flex',justifyContent:'space-between'}}>
@@ -390,7 +390,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <div style={{fontSize:11,color:C.sub}}>{cc.dept} · {cc.patient}</div>
           </div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.15)'}}>
+        <div style={{background:'rgba(36,63,82,0.60)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 SITUATION</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{cc.presentation}</div>
         </div>
@@ -419,7 +419,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{display:'flex',gap:10,marginBottom:14}}>
         {/* Timer */}
         <div style={{flex:1,background:C.card,borderRadius:16,padding:'12px',border:`1px solid ${timerColor}30`,textAlign:'center'}}>
-          <div style={{width:52,height:52,borderRadius:'50%',background:`conic-gradient(${timerColor} ${timerPct*3.6}deg, rgba(255,255,255,0.05) 0deg)`,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px',boxShadow:`0 0 16px ${timerColor}44`}}>
+          <div style={{width:52,height:52,borderRadius:'50%',background:`conic-gradient(${timerColor} ${timerPct*3.6}deg, rgba(36,63,82,0.50) 0deg)`,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px',boxShadow:`0 0 16px ${timerColor}44`}}>
             <div style={{width:42,height:42,borderRadius:'50%',background:'rgba(15,5,35,1)',display:'flex',alignItems:'center',justifyContent:'center'}}>
               <span style={{fontSize:18,fontWeight:900,color:timerColor}}>{timeLeft}</span>
             </div>
@@ -432,7 +432,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <span style={{fontSize:11,color:C.sub,fontWeight:600}}>⚡ Energy</span>
             <span style={{fontSize:13,fontWeight:800,color:energyColor}}>{energy}%</span>
           </div>
-          <div style={{height:8,background:'rgba(255,255,255,0.15)',borderRadius:4,overflow:'hidden',marginBottom:6}}>
+          <div style={{height:8,background:'rgba(36,63,82,0.65)',borderRadius:4,overflow:'hidden',marginBottom:6}}>
             <div style={{height:'100%',width:`${energy}%`,background:`linear-gradient(90deg,${energyColor},${energyColor}aa)`,borderRadius:4,transition:'width 0.5s',boxShadow:`0 0 10px ${energyColor}66`}}/>
           </div>
           <div style={{fontSize:10,color:C.muted}}>Wrong decisions drain your energy</div>
@@ -470,7 +470,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           return (
             <div key={action.id} onClick={()=>!done&&handleAction(action)}
               style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!action.correct&&!isSelected?0.4:1}}>
-              <div style={{width:36,height:36,borderRadius:11,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+              <div style={{width:36,height:36,borderRadius:11,background:'rgba(36,63,82,0.50)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                 {done?(action.correct?'✅':isSelected?'❌':'○'):'▷'}
               </div>
               <div style={{flex:1}}>
@@ -494,7 +494,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{fontSize:13,color:C.sub,marginBottom:24}}>You lasted {caseIdx+1}/{sc.cases.length} cases · +{totalXP} XP</div>
       <div style={{display:'flex',gap:10,justifyContent:'center'}}>
         <button onClick={()=>startShift(sc)} style={{padding:'14px 24px',borderRadius:16,border:'1px solid rgba(255,69,58,0.3)',background:'rgba(255,69,58,0.1)',color:'#ff453a',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
+        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
       </div>
     </div>
   )
@@ -504,7 +504,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
     const pct = Math.round((totalXP / sc.totalXP) * 100)
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-        <div style={{background:`linear-gradient(145deg,${sc.color}15,rgba(139,92,246,0.08))`,borderRadius:24,padding:'28px 20px',marginBottom:16,border:`1px solid ${sc.color}30`,textAlign:'center',boxShadow:`0 8px 32px ${sc.color}20`}}>
+        <div style={{background:`linear-gradient(145deg,${sc.color}15,rgba(0,196,180,0.08))`,borderRadius:24,padding:'28px 20px',marginBottom:16,border:`1px solid ${sc.color}30`,textAlign:'center',boxShadow:`0 8px 32px ${sc.color}20`}}>
           <div style={{fontSize:60,marginBottom:12,filter:`drop-shadow(0 0 24px ${pct>=80?'rgba(255,214,10,0.6)':'rgba(139,92,246,0.4)'})`}}>
             {pct>=80?'🏆':pct>=60?'🥇':'🎖️'}
           </div>
@@ -530,7 +530,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
 
         <div style={{display:'flex',gap:10,marginTop:16}}>
           <button onClick={()=>startShift(sc)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${sc.color}30`,background:`${sc.color}10`,color:sc.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
+          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
         </div>
       </div>
     )

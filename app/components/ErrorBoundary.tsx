@@ -20,11 +20,11 @@ export default class ErrorBoundary extends React.Component<{children: React.Reac
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{minHeight:'100vh',background:'#0a0015',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,fontFamily:'-apple-system,sans-serif'}}>
+        <div style={{minHeight:'100vh',background:'#1e3d52',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,fontFamily:'-apple-system,sans-serif'}}>
           <div style={{fontSize:60,marginBottom:16}}>🏥</div>
           <div style={{fontSize:22,fontWeight:800,color:'white',marginBottom:8}}>Something went wrong</div>
           <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:32,textAlign:'center'}}>Please refresh the page to continue training</div>
-          <button onClick={()=>window.location.reload()} style={{background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',border:'none',borderRadius:16,padding:'14px 32px',fontSize:16,fontWeight:700,color:'white',cursor:'pointer'}}>
+          <button onClick={()=>window.location.reload()} style={{background:'linear-gradient(135deg,#00C4B4,#0a84ff)',border:'none',borderRadius:16,padding:'14px 32px',fontSize:16,fontWeight:700,color:'white',cursor:'pointer'}}>
             Refresh App
           </button>
         </div>

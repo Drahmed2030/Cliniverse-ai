@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.11)', border:'rgba(139,92,246,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(36,63,82,0.60)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const LAB_PANELS = [
   {
@@ -14,7 +14,7 @@ const LAB_PANELS = [
     ]
   },
   {
-    panel:'Renal Function', icon:'🫘', color:'#0a84ff',
+    panel:'Renal Function', icon:'🫘', color:'#00C4B4',
     tests:[
       {name:'Sodium',unit:'mmol/L',male:'135-145',female:'135-145',low:'Hyponatraemia: SIADH, heart failure',high:'Hypernatraemia: dehydration, DI',critical:'< 120 or > 155'},
       {name:'Potassium',unit:'mmol/L',male:'3.5-5.0',female:'3.5-5.0',low:'Hypokalaemia: diuretics, vomiting',high:'Hyperkalaemia: AKI, ACEi, K-sparing diuretics',critical:'< 2.5 or > 6.5'},
@@ -71,8 +71,8 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
 
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(191,90,242,0.12),rgba(100,210,255,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(191,90,242,0.2)'}}>
-        <div style={{fontSize:11,color:'rgba(191,90,242,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🔬 LABORATORY</div>
+      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(100,210,255,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.2)'}}>
+        <div style={{fontSize:11,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🔬 LABORATORY</div>
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>Lab Interpretation</div>
         <div style={{fontSize:13,color:C.sub}}>5 panels · Critical values · Clinical context</div>
       </div>
@@ -100,7 +100,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{fontSize:16,fontWeight:800,color:C.text}}>{panel.icon} {panel.panel}</div>
         </div>
         {panel.tests.map((t,i)=>(
@@ -117,8 +117,8 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
               </div>
             </div>
             {expandedTest===`${selectedPanel}-${i}`&&(
-              <div style={{borderTop:'1px solid rgba(255,255,255,0.05)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-                <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(10,132,255,0.15)'}}><div style={{fontSize:9,color:'#0a84ff',fontWeight:700,marginBottom:3}}>LOW →</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{t.low}</div></div>
+              <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
+                <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>LOW →</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{t.low}</div></div>
                 <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>HIGH →</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{t.high}</div></div>
               </div>
             )}
@@ -147,7 +147,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🔬 Lab Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length}</div></div>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
@@ -160,7 +160,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -170,8 +170,8 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
         </div>
         {ans!==null&&(
           <div>
-            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(10,132,255,0.2)'}}>
-              <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
+            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
+              <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer'}}>

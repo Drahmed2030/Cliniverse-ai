@@ -20,8 +20,8 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
       <div style={{display:'flex',alignItems:'center',gap:16}}>
         <div style={{position:'relative',width:90,height:90,flexShrink:0}}>
           <svg width="90" height="90" viewBox="0 0 90 90" style={{transform:'rotate(-90deg)'}}>
-            <circle cx="45" cy="45" r={r1} fill="none" stroke="rgba(10,132,255,0.15)" strokeWidth="7"/>
-            <circle cx="45" cy="45" r={r1} fill="none" stroke="#0a84ff" strokeWidth="7" strokeLinecap="round"
+            <circle cx="45" cy="45" r={r1} fill="none" stroke="rgba(0,196,180,0.15)" strokeWidth="7"/>
+            <circle cx="45" cy="45" r={r1} fill="none" stroke="#00C4B4" strokeWidth="7" strokeLinecap="round"
               strokeDasharray={`${(knowledge/100)*c1} ${c1}`} style={{filter:'drop-shadow(0 0 4px #0a84ff)',transition:'stroke-dasharray 1s ease'}}/>
             <circle cx="45" cy="45" r={r2} fill="none" stroke="rgba(48,209,88,0.15)" strokeWidth="7"/>
             <circle cx="45" cy="45" r={r2} fill="none" stroke="#30d158" strokeWidth="7" strokeLinecap="round"
@@ -39,7 +39,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
           {[
             {color:'#ff453a',label:'Accuracy',val:accuracy},
             {color:'#30d158',label:'Speed',val:speed},
-            {color:'#0a84ff',label:'Knowledge',val:knowledge},
+            {color:'#00C4B4',label:'Knowledge',val:knowledge},
           ].map((r,i)=>(
             <div key={i}>
               <div style={{display:'flex',justifyContent:'space-between',marginBottom:2}}>

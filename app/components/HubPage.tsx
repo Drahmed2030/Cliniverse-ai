@@ -7,8 +7,8 @@ const F = '"Inter", -apple-system, sans-serif'
 
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(255,255,255,0.15)',
-  border: 'rgba(255,255,255,0.1)',
+  card: 'rgba(36,63,82,0.65)',
+  border: 'rgba(0,196,180,0.20)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.85)',
   muted: 'rgba(148,163,184,0.45)',
@@ -16,7 +16,7 @@ const T = {
   amber: '#fbbf24',
   rose: '#f87171',
   green: '#4ade80',
-  purple: '#a78bfa',
+  purple: '#00DFD0',
   indigo: '#818cf8',
 }
 
@@ -64,7 +64,7 @@ function SectionModal({ section, onClose, onCase, isPro, setShowUpgrade }: any) 
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {(section.cases||[]).map((c:any)=>(
-            <div key={c.id} onClick={()=>{ if(!c.free&&!isPro){setShowUpgrade(true);return} onCase(c.id);onClose() }} style={{ background:'rgba(255,255,255,0.15)', borderRadius:18, padding:'14px 16px', border:`1px solid ${c.color||section.color}25`, cursor:'pointer', display:'flex', alignItems:'center', gap:12 }}>
+            <div key={c.id} onClick={()=>{ if(!c.free&&!isPro){setShowUpgrade(true);return} onCase(c.id);onClose() }} style={{ background:'rgba(36,63,82,0.65)', borderRadius:18, padding:'14px 16px', border:`1px solid ${c.color||section.color}25`, cursor:'pointer', display:'flex', alignItems:'center', gap:12 }}>
               <div style={{ width:44, height:44, borderRadius:13, flexShrink:0, background:`${c.color||section.color}18`, border:`1px solid ${c.color||section.color}30`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>{c.icon||'🏥'}</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:15, fontWeight:700, color:'#fff', marginBottom:2 }}>{c.title}</div>
@@ -112,12 +112,12 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
       <HexBg/>
       <StethoscopeBg/>
       <div style={{ position:'fixed', top:-200, left:-100, width:500, height:500, borderRadius:'50%', background:'radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%)', pointerEvents:'none', zIndex:0 }}/>
-      <div style={{ position:'fixed', bottom:-200, right:-100, width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%)', pointerEvents:'none', zIndex:0 }}/>
+      <div style={{ position:'fixed', bottom:-200, right:-100, width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,223,208,0.08) 0%, transparent 70%)', pointerEvents:'none', zIndex:0 }}/>
 
       <div style={{ position:'relative', zIndex:1, padding:'16px 16px 120px' }}>
 
         {/* HERO */}
-        <div style={{ background:'linear-gradient(135deg, rgba(56,189,248,0.12), rgba(167,139,250,0.08))', border:'1px solid rgba(56,189,248,0.2)', borderRadius:24, padding:'20px', marginBottom:16, position:'relative', overflow:'hidden' }}>
+        <div style={{ background:'linear-gradient(135deg, rgba(56,189,248,0.12), rgba(0,223,208,0.08))', border:'1px solid rgba(56,189,248,0.2)', borderRadius:24, padding:'20px', marginBottom:16, position:'relative', overflow:'hidden' }}>
           <div style={{ position:'absolute', top:-40, right:-40, width:160, height:160, borderRadius:'50%', background:'radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%)', pointerEvents:'none' }}/>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
             <div>
@@ -158,7 +158,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               { city:'Dubai', tag:'URGENT', title:'67F — Acute HF', sub:'BNP 4200 · BiPAP started', color:'#fbbf24' },
               { city:'London', tag:'CRITICAL', title:'19M — DKA', sub:'pH 7.1 · Insulin infusion', color:'#f87171' },
             ].map((c,i)=>(
-              <div key={i} onClick={()=>setShowLive(true)} style={{ minWidth:200, background:'rgba(255,255,255,0.15)', borderRadius:18, padding:'14px', border:`1px solid ${c.color}25`, cursor:'pointer', flexShrink:0 }}>
+              <div key={i} onClick={()=>setShowLive(true)} style={{ minWidth:200, background:'rgba(36,63,82,0.65)', borderRadius:18, padding:'14px', border:`1px solid ${c.color}25`, cursor:'pointer', flexShrink:0 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
                   <span style={{ fontSize:10, color:T.muted, fontWeight:600 }}>{c.city}</span>
                   <span style={{ fontSize:9, fontWeight:800, color:c.color, background:`${c.color}15`, padding:'2px 8px', borderRadius:6 }}>{c.tag}</span>
@@ -176,12 +176,12 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
         </div>
 
         {/* FEATURED CASE */}
-        <div onClick={()=>setShowLive(true)} style={{ background:'linear-gradient(135deg, #1a0533, #0d1a3a)', border:'1px solid rgba(167,139,250,0.3)', borderRadius:20, padding:'18px', marginBottom:16, cursor:'pointer', position:'relative', overflow:'hidden' }}>
-          <div style={{ position:'absolute', top:-30, right:-30, width:120, height:120, borderRadius:'50%', background:'radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%)', pointerEvents:'none' }}/>
+        <div onClick={()=>setShowLive(true)} style={{ background:'linear-gradient(135deg, #1a0533, #0d1a3a)', border:'1px solid rgba(0,223,208,0.3)', borderRadius:20, padding:'18px', marginBottom:16, cursor:'pointer', position:'relative', overflow:'hidden' }}>
+          <div style={{ position:'absolute', top:-30, right:-30, width:120, height:120, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,223,208,0.2) 0%, transparent 70%)', pointerEvents:'none' }}/>
           <div style={{ fontSize:10, fontWeight:800, letterSpacing:2, color:T.purple, marginBottom:6 }}>TODAY'S FEATURED CASE</div>
           <div style={{ fontSize:22, fontWeight:900, color:T.text, marginBottom:4 }}>🫀 STEMI Protocol</div>
           <div style={{ fontSize:13, color:T.sub, marginBottom:14 }}>Master door-to-balloon · +80 XP</div>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(167,139,250,0.2)', border:'1px solid rgba(167,139,250,0.4)', borderRadius:12, padding:'10px 18px' }}>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(0,223,208,0.2)', border:'1px solid rgba(0,223,208,0.4)', borderRadius:12, padding:'10px 18px' }}>
             <span style={{ fontSize:14, fontWeight:800, color:'#fff' }}>Start Case →</span>
           </div>
         </div>
@@ -249,7 +249,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
         <div style={{ position:'fixed', inset:0, zIndex:9999, background:'rgba(0,0,0,0.9)', backdropFilter:'blur(12px)' }}>
           <div style={{ padding:'20px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <span style={{ color:'#fff', fontWeight:800, fontSize:16, fontFamily:F }}>Live Case</span>
-            <button onClick={()=>setShowLive(false)} style={{ background:'rgba(255,255,255,0.1)', border:'none', borderRadius:10, padding:'8px 14px', color:'#fff', cursor:'pointer', fontFamily:F, fontSize:14 }}>✕ Close</button>
+            <button onClick={()=>setShowLive(false)} style={{ background:'rgba(0,196,180,0.20)', border:'none', borderRadius:10, padding:'8px 14px', color:'#fff', cursor:'pointer', fontFamily:F, fontSize:14 }}>✕ Close</button>
           </div>
           <LiveCaseViewer specialty="Emergency Medicine" difficulty="Intermediate" onXP={onXP}/>
         </div>

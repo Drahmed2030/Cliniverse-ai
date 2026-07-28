@@ -41,7 +41,7 @@ export default function PaymentModal({ onClose }: Props) {
       <div style={{position:'relative',width:'100%',maxWidth:480,background:'linear-gradient(145deg,#12002a,#0a0015)',borderRadius:'28px 28px 0 0',padding:'8px 0 0',border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 -20px 60px rgba(139,92,246,0.3)',animation:'slideUp 0.3s ease'}}>
         
         {/* Handle */}
-        <div style={{width:40,height:4,background:'rgba(255,255,255,0.2)',borderRadius:2,margin:'0 auto 20px'}}/>
+        <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 20px'}}/>
         
         <div style={{padding:'0 24px 40px'}}>
           {/* Header */}
@@ -52,7 +52,7 @@ export default function PaymentModal({ onClose }: Props) {
           </div>
 
           {/* Plan toggle */}
-          <div style={{display:'flex',background:'rgba(255,255,255,0.15)',borderRadius:16,padding:4,marginBottom:20,border:'1px solid rgba(255,255,255,0.18)'}}>
+          <div style={{display:'flex',background:'rgba(36,63,82,0.65)',borderRadius:16,padding:4,marginBottom:20,border:'1px solid rgba(255,255,255,0.18)'}}>
             {(['monthly','yearly'] as const).map(pl=>(
               <button key={pl} onClick={()=>setPlan(pl)}
                 style={{flex:1,padding:'10px',borderRadius:13,border:'none',background:plan===pl?'rgba(139,92,246,0.3)':'transparent',color:plan===pl?'white':'rgba(255,255,255,0.4)',fontWeight:700,fontSize:14,cursor:'pointer',position:'relative',transition:'all 0.2s'}}>
@@ -70,7 +70,7 @@ export default function PaymentModal({ onClose }: Props) {
           </div>
 
           {/* Features */}
-          <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:16,marginBottom:20,border:'1px solid rgba(255,255,255,0.11)'}}>
+          <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:16,marginBottom:20,border:'1px solid rgba(36,63,82,0.60)'}}>
             {p.features.map(f=>(
               <div key={f} style={{display:'flex',gap:10,alignItems:'center',marginBottom:10}}>
                 <div style={{width:20,height:20,borderRadius:'50%',background:'rgba(48,209,88,0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,color:'#30d158',flexShrink:0}}>✓</div>
@@ -81,12 +81,12 @@ export default function PaymentModal({ onClose }: Props) {
 
           {/* Apple Pay / Card button */}
           <button onClick={handleCheckout}
-            style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:16,fontWeight:800,cursor:'pointer',marginBottom:12,boxShadow:'0 8px 32px rgba(139,92,246,0.4)',letterSpacing:-0.3,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+            style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:16,fontWeight:800,cursor:'pointer',marginBottom:12,boxShadow:'0 8px 32px rgba(139,92,246,0.4)',letterSpacing:-0.3,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
             🍎 Continue with Apple Pay
           </button>
           
           <button onClick={handleCheckout}
-            style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.15)',background:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.7)',fontSize:14,fontWeight:600,cursor:'pointer',marginBottom:16}}>
+            style={{width:'100%',padding:'14px',borderRadius:16,border:'1px solid rgba(36,63,82,0.65)',background:'rgba(36,63,82,0.65)',color:'rgba(255,255,255,0.7)',fontSize:14,fontWeight:600,cursor:'pointer',marginBottom:16}}>
             Pay with Card →
           </button>
 
@@ -97,7 +97,7 @@ export default function PaymentModal({ onClose }: Props) {
             ))}
           </div>
           
-          <div style={{textAlign:'center',fontSize:11,color:'rgba(255,255,255,0.2)'}}>
+          <div style={{textAlign:'center',fontSize:11,color:'rgba(0,196,180,0.25)'}}>
             Processed securely by Lemon Squeezy · Apple Pay available on Safari
           </div>
         </div>

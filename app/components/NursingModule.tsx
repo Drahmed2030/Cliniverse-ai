@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.11)', border:'rgba(139,92,246,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(36,63,82,0.60)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const VITALS_RANGES = [
   { param:'Heart Rate', normal:'60-100 bpm', concern:'< 50 or > 120', critical:'< 40 or > 150', icon:'❤️', color:'#ff453a', action:'Assess rhythm, check BP, escalate if symptomatic' },
-  { param:'Blood Pressure', normal:'90-139 / 60-89 mmHg', concern:'SBP < 90 or > 160', critical:'SBP < 80 or > 180', icon:'🩺', color:'#0a84ff', action:'Check lying/standing, review medications, escalate if symptomatic' },
+  { param:'Blood Pressure', normal:'90-139 / 60-89 mmHg', concern:'SBP < 90 or > 160', critical:'SBP < 80 or > 180', icon:'🩺', color:'#00C4B4', action:'Check lying/standing, review medications, escalate if symptomatic' },
   { param:'SpO2', normal:'≥ 95%', concern:'92-94%', critical:'< 92%', icon:'🫁', color:'#64d2ff', action:'Apply O2, check probe position, escalate if not improving' },
   { param:'Temperature', normal:'36-37.5°C', concern:'37.6-38.4°C or < 35.5°C', critical:'> 39°C or < 35°C', icon:'🌡️', color:'#ff9f0a', action:'Culture if pyrexic, warm if hypothermic, escalate if NEWS high' },
   { param:'Respiratory Rate', normal:'12-20 /min', concern:'21-24 /min', critical:'< 8 or > 25 /min', icon:'💨', color:'#30d158', action:'Most sensitive early warning sign — escalate immediately if > 25' },
@@ -13,7 +13,7 @@ const VITALS_RANGES = [
 ]
 
 const SKILLS = [
-  { title:'IV Cannula Insertion', icon:'💉', color:'#0a84ff', steps:['Select vein — antecubital first choice', 'Clean with 2% chlorhexidine × 30 seconds, allow to dry', 'Insert at 15-30° bevel up, advance on flashback', 'Advance cannula, withdraw needle, apply pressure', 'Flush with 5ml 0.9% NaCl — check patency', 'Secure with transparent dressing, document date'] },
+  { title:'IV Cannula Insertion', icon:'💉', color:'#00C4B4', steps:['Select vein — antecubital first choice', 'Clean with 2% chlorhexidine × 30 seconds, allow to dry', 'Insert at 15-30° bevel up, advance on flashback', 'Advance cannula, withdraw needle, apply pressure', 'Flush with 5ml 0.9% NaCl — check patency', 'Secure with transparent dressing, document date'] },
   { title:'Urinary Catheter Care', icon:'🩺', color:'#30d158', steps:['Maintain closed drainage system always', 'Secure catheter to prevent traction', 'Empty bag when ≥ 2/3 full or every 8h', 'Document colour, volume, clarity every shift', 'Clean meatal area daily with soap and water', 'Remove catheter as soon as clinically safe — CAUTI prevention'] },
   { title:'Wound Assessment', icon:'🩹', color:'#ff9f0a', steps:['Document size (cm), depth, wound bed', 'Assess edges, surrounding skin, exudate', 'Note odour, signs of infection (NERDS/STONES)', 'Pain assessment before and during dressing', 'Choose dressing based on wound type and exudate', 'Photograph with consent — baseline and trend'] },
   { title:'Nasogastric Tube', icon:'🔬', color:'#bf5af2', steps:['Explain procedure, position upright', 'Measure: nose → ear → xiphisternum', 'Lubricate and advance during swallowing', 'NEVER use before confirming position', 'Aspirate: pH ≤ 5.5 confirms gastric — document', 'CXR if pH not obtained — gold standard'] },
@@ -52,7 +52,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
         {[
           {id:'vitals',icon:'❤️',label:'Vital Signs Guide',sub:'Normal + Critical ranges',color:'#ff453a'},
-          {id:'skills',icon:'💉',label:'Clinical Skills',sub:'IV, catheter, NGT, wounds',color:'#0a84ff'},
+          {id:'skills',icon:'💉',label:'Clinical Skills',sub:'IV, catheter, NGT, wounds',color:'#00C4B4'},
           {id:'news2',icon:'📊',label:'NEWS2 Score',sub:'Early warning system',color:'#30d158'},
           {id:'quiz',icon:'🧠',label:'Nursing Quiz',sub:'5 clinical questions',color:'#ffd60a'},
         ].map(t=>(
@@ -70,7 +70,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'vitals') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>❤️ Vital Signs Guide</div>
       </div>
       {VITALS_RANGES.map((v,i)=>(
@@ -87,7 +87,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
               </div>
             ))}
           </div>
-          <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'8px 12px',border:'1px solid rgba(10,132,255,0.15)'}}>
+          <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'8px 12px',border:'1px solid rgba(0,196,180,0.15)'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',lineHeight:1.5}}>→ {v.action}</div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'skills') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>💉 Clinical Skills</div>
       </div>
       {SKILLS.map((s,i)=>(
@@ -110,7 +110,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
             <div style={{fontSize:16,color:`${s.color}60`}}>{expandedSkill===i?'▲':'▼'}</div>
           </div>
           {expandedSkill===i&&s.steps.map((step,j)=>(
-            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<s.steps.length-1?`1px solid rgba(255,255,255,0.11)`:'none'}}>
+            <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<s.steps.length-1?`1px solid rgba(36,63,82,0.60)`:'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:`${s.color}20`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:s.color,flexShrink:0}}>{j+1}</div>
               <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{step}</div>
             </div>
@@ -123,12 +123,12 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'news2') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>📊 NEWS2 Score</div>
       </div>
-      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
+      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
         {NEWS2_TABLE.map((row,i)=>(
-          <div key={i} style={{marginBottom:i<NEWS2_TABLE.length-1?12:0,paddingBottom:i<NEWS2_TABLE.length-1?12:0,borderBottom:i<NEWS2_TABLE.length-1?'1px solid rgba(255,255,255,0.05)':'none'}}>
+          <div key={i} style={{marginBottom:i<NEWS2_TABLE.length-1?12:0,paddingBottom:i<NEWS2_TABLE.length-1?12:0,borderBottom:i<NEWS2_TABLE.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',fontWeight:700,marginBottom:6}}>{row.param}</div>
             <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
               {row.scores.map(([range,score],j)=>(
@@ -172,7 +172,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🧠 Nursing Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length}</div></div>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
@@ -185,7 +185,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -195,8 +195,8 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
         </div>
         {ans!==null&&(
           <div>
-            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(10,132,255,0.2)'}}>
-              <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
+            <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
+              <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#64d2ff,#30d158)',color:'black',fontSize:14,fontWeight:800,cursor:'pointer'}}>

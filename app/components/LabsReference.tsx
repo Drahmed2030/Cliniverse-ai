@@ -12,7 +12,7 @@ interface Lab {
 
 const CATS = ['All','Haematology','Biochemistry','Cardiac','Critical Care','ABG','Endocrine','Inflammatory']
 const COLORS: Record<string,string> = {
-  Haematology:'#ff453a',Biochemistry:'#0a84ff',Cardiac:'#ff453a',
+  Haematology:'#ff453a',Biochemistry:'#00C4B4',Cardiac:'#ff453a',
   'Critical Care':'#ff9f0a',ABG:'#30d158',Endocrine:'#bf5af2',Inflammatory:'#ffd60a'
 }
 
@@ -38,11 +38,11 @@ export default function LabsReference() {
         <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>Normal ranges · Updated 2026</div>
       </div>
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search lab test..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.65)',color:'white',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:16,paddingBottom:4,scrollbarWidth:'none'}}>
         {CATS.map(c=>(
           <button key={c} onClick={()=>setCat(c)}
-            style={{flexShrink:0,padding:'6px 14px',borderRadius:20,border:cat===c?'1px solid rgba(139,92,246,0.5)':'1px solid rgba(255,255,255,0.18)',background:cat===c?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.15)',color:cat===c?'white':'rgba(255,255,255,0.5)',fontSize:12,fontWeight:cat===c?700:400,cursor:'pointer',fontFamily:'inherit'}}>
+            style={{flexShrink:0,padding:'6px 14px',borderRadius:20,border:cat===c?'1px solid rgba(139,92,246,0.5)':'1px solid rgba(255,255,255,0.18)',background:cat===c?'rgba(139,92,246,0.3)':'rgba(36,63,82,0.65)',color:cat===c?'white':'rgba(255,255,255,0.5)',fontSize:12,fontWeight:cat===c?700:400,cursor:'pointer',fontFamily:'inherit'}}>
             {c}
           </button>
         ))}
@@ -52,16 +52,16 @@ export default function LabsReference() {
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
           {filtered.map(lab=>(
-            <div key={lab.id} style={{background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.15)',display:'flex',alignItems:'center',gap:12}}>
-              <div style={{width:40,height:40,borderRadius:12,background:(COLORS[lab.category]||'#8b5cf6')+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                <div style={{width:8,height:8,borderRadius:'50%',background:COLORS[lab.category]||'#8b5cf6'}}/>
+            <div key={lab.id} style={{background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)',display:'flex',alignItems:'center',gap:12}}>
+              <div style={{width:40,height:40,borderRadius:12,background:(COLORS[lab.category]||'#00C4B4')+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <div style={{width:8,height:8,borderRadius:'50%',background:COLORS[lab.category]||'#00C4B4'}}/>
               </div>
               <div style={{flex:1}}>
                 <div style={{fontSize:14,fontWeight:700,color:'white',marginBottom:2}}>{lab.name}</div>
                 <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{lab.category}</div>
               </div>
               <div style={{textAlign:'right'}}>
-                <div style={{fontSize:14,fontWeight:800,color:COLORS[lab.category]||'#8b5cf6'}}>{lab.normal_range}</div>
+                <div style={{fontSize:14,fontWeight:800,color:COLORS[lab.category]||'#00C4B4'}}>{lab.normal_range}</div>
                 <div style={{fontSize:10,color:'rgba(255,255,255,0.35)'}}>{lab.unit}</div>
               </div>
             </div>

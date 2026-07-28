@@ -3,9 +3,9 @@ import { useState, useRef } from 'react'
 
 const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 const T = {
-  bg: '#1e2d40', card: 'rgba(255,255,255,0.11)', border: 'rgba(255,255,255,0.18)',
+  bg: '#1e2d40', card: 'rgba(36,63,82,0.60)', border: 'rgba(255,255,255,0.18)',
   text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
-  teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#a78bfa',
+  teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#00DFD0',
 }
 
 const QUICK = [
@@ -67,8 +67,8 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
 
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(167,139,250,0.1), rgba(56,189,248,0.06))',
-        border: '1px solid rgba(167,139,250,0.2)', borderRadius: 20, padding: '14px 18px', marginBottom: 14,
+        background: 'linear-gradient(135deg, rgba(0,223,208,0.1), rgba(56,189,248,0.06))',
+        border: '1px solid rgba(0,223,208,0.2)', borderRadius: 20, padding: '14px 18px', marginBottom: 14,
       }}>
         <div style={{ fontSize: 9, color: T.purple, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, marginBottom: 4 }}>AI Clinical Consultant</div>
         <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>Pocket Consultant 🧠</div>
@@ -102,7 +102,7 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
               display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start',
             }}>
               {m.role === 'ai' && (
-                <div style={{ width: 28, height: 28, borderRadius: 9, background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, marginRight: 8, flexShrink: 0, marginTop: 2 }}>🧠</div>
+                <div style={{ width: 28, height: 28, borderRadius: 9, background: 'rgba(0,223,208,0.15)', border: '1px solid rgba(0,223,208,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, marginRight: 8, flexShrink: 0, marginTop: 2 }}>🧠</div>
               )}
               <div style={{
                 maxWidth: '80%', padding: '12px 14px', borderRadius: m.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
@@ -114,7 +114,7 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
           ))}
           {loading && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 28, height: 28, borderRadius: 9, background: 'rgba(167,139,250,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🧠</div>
+              <div style={{ width: 28, height: 28, borderRadius: 9, background: 'rgba(0,223,208,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>🧠</div>
               <div style={{ background: T.card, border: '1px solid ' + T.border, borderRadius: '18px 18px 18px 4px', padding: '12px 16px' }}>
                 <div style={{ display: 'flex', gap: 4 }}>
                   {[0,1,2].map(i => (
@@ -130,7 +130,7 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
 
       {/* Input */}
       <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
-        <div style={{ flex: 1, background: T.card, border: '1px solid rgba(167,139,250,0.2)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ flex: 1, background: T.card, border: '1px solid rgba(0,223,208,0.2)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
           <textarea
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -145,10 +145,10 @@ export default function PocketConsultant({ onXP }: { onXP?: (n: number) => void 
         </div>
         <button onClick={() => ask(input)} disabled={loading || !input.trim()} style={{
           width: 46, height: 46, borderRadius: 14, border: 'none', flexShrink: 0,
-          background: loading || !input.trim() ? 'rgba(255,255,255,0.15)' : 'linear-gradient(135deg, #a78bfa, #38bdf8)',
+          background: loading || !input.trim() ? 'rgba(36,63,82,0.65)' : 'linear-gradient(135deg, #a78bfa, #38bdf8)',
           cursor: loading || !input.trim() ? 'default' : 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
-          boxShadow: loading || !input.trim() ? 'none' : '0 4px 16px rgba(167,139,250,0.3)',
+          boxShadow: loading || !input.trim() ? 'none' : '0 4px 16px rgba(0,223,208,0.3)',
         }}>↑</button>
       </div>
       <style>{`textarea::placeholder{color:rgba(148,163,184,0.4);}textarea{scrollbar-width:none;}`}</style>

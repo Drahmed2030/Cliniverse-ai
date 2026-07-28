@@ -28,7 +28,7 @@ const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 const GrandRoundsAI = dynamic(() => import('./GrandRoundsAI'), { ssr: false })
 
 const T = {
-  card: 'rgba(255,255,255,0.11)',
+  card: 'rgba(36,63,82,0.60)',
   border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
@@ -44,8 +44,8 @@ const SECTIONS = [
       { id: 'codeblue', label: 'Code Blue', icon: '🔴', desc: 'Resuscitation protocols', color: '#f87171' },
       { id: 'rapid', label: 'Rapid Fire', icon: '⚡', desc: 'Quick-fire clinical cases', color: '#fbbf24' },
       { id: 'bls', label: 'BLS / ACLS', icon: '💊', desc: 'Life support algorithms', color: '#f87171' },
-      { id: 'oncall', label: 'On-Call', icon: '📞', desc: 'Night shift call system', color: '#a78bfa' },
-      { id: 'nightshift', label: 'Night Shift', icon: '🌙', desc: 'Survival mode · Triage', color: '#a78bfa' },
+      { id: 'oncall', label: 'On-Call', icon: '📞', desc: 'Night shift call system', color: '#00DFD0' },
+      { id: 'nightshift', label: 'Night Shift', icon: '🌙', desc: 'Survival mode · Triage', color: '#00DFD0' },
     ]
   },
   {
@@ -54,7 +54,7 @@ const SECTIONS = [
     tools: [
       { id: 'ecg', label: 'ECG Challenge', icon: '📈', desc: 'Interpret real ECGs', color: '#38bdf8' },
       { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#f87171' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#a78bfa' },
+      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#00DFD0' },
       { id: 'nexus', label: 'Clinical Nexus', icon: '🔗', desc: 'AI clinical reasoning', color: '#38bdf8' },
     ]
   },
@@ -64,7 +64,7 @@ const SECTIONS = [
     tools: [
       { id: 'general', label: 'General Surgery AI', icon: '🔪', desc: 'Appendix · Cholecyst · Hernia', color: '#38bdf8' },
       { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#f87171' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#a78bfa' },
+      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#00DFD0' },
     ]
   },
   {
@@ -73,7 +73,7 @@ const SECTIONS = [
     tools: [
       { id: 'pharmacy', label: 'Pharmacy', icon: '💊', desc: 'Drug interactions · Dosing', color: '#4ade80' },
       { id: 'nursing', label: 'Nursing', icon: '🩺', desc: 'Vitals · NEWS2 · Skills', color: '#64d2ff' },
-      { id: 'lab', label: 'Laboratory', icon: '🔬', desc: '5 panels · Critical values', color: '#a78bfa' },
+      { id: 'lab', label: 'Laboratory', icon: '🔬', desc: '5 panels · Critical values', color: '#00DFD0' },
       { id: 'radiology', label: 'Radiology', icon: '🩻', desc: 'CXR · CT patterns · Echo', color: '#fbbf24' },
     ]
   },
@@ -81,13 +81,13 @@ const SECTIONS = [
     id: 'aitools',
     label: 'AI Clinical Tools',
     icon: '🧠',
-    color: '#a78bfa',
+    color: '#00DFD0',
     desc: 'Pocket Consultant · Drug Checker · Handover AI',
     tools: [
-      { id: 'pocket', label: 'Pocket Consultant', icon: '🧠', desc: 'Ask any clinical question', color: '#a78bfa' },
+      { id: 'pocket', label: 'Pocket Consultant', icon: '🧠', desc: 'Ask any clinical question', color: '#00DFD0' },
       { id: 'drugcheck', label: 'Drug Interaction AI', icon: '💊', desc: 'Check drug interactions instantly', color: '#f87171' },
       { id: 'handover', label: 'Shift Handover AI', icon: '📋', desc: 'Generate SBAR handover report', color: '#4ade80' },
-      { id: 'grandrounds', label: 'Grand Rounds AI', icon: '🎓', desc: 'Multidisciplinary complex cases', color: '#a78bfa' },
+      { id: 'grandrounds', label: 'Grand Rounds AI', icon: '🎓', desc: 'Multidisciplinary complex cases', color: '#00DFD0' },
     ]
   },
   {
@@ -95,7 +95,7 @@ const SECTIONS = [
     desc: 'Guidelines · Labs · Medications · Calculators',
     tools: [
       { id: 'guidelines', label: 'Guidelines', icon: '📋', desc: 'ESC · NICE · AHA 2024', color: '#fbbf24' },
-      { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#a78bfa' },
+      { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#00DFD0' },
       { id: 'medications', label: 'Medications', icon: '💉', desc: 'Drug database · Doses', color: '#4ade80' },
       { id: 'calc', label: 'Calculators', icon: '🧮', desc: 'GFR · BMI · Scores', color: '#38bdf8' },
     ]
@@ -239,7 +239,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
   if (view === 'section' && activeSection) return (
     <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-        <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.15)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
+        <button onClick={goBack} style={{ background: 'rgba(36,63,82,0.65)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
         <div>
           <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>{activeSection.icon} {activeSection.label}</div>
           <div style={{ fontSize: 11, color: T.sub }}>{activeSection.tools.length} tools</div>
@@ -267,7 +267,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
 
   return (
     <div style={{ fontFamily: T.F }}>
-      <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.15)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
+      <button onClick={goBack} style={{ background: 'rgba(36,63,82,0.65)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
       <ToolRenderer toolId={activeTool} onXP={onXP} />
     </div>
   )

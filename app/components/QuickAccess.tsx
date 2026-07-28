@@ -6,7 +6,7 @@ interface Props {
 
 export default function QuickAccess({ onNavigate }: Props) {
   const items = [
-    {icon:'📋',label:'SBAR',color:'#0a84ff',tab:'workshop'},
+    {icon:'📋',label:'SBAR',color:'#00C4B4',tab:'workshop'},
     {icon:'⚡',label:'Rapid',color:'#ff453a',tab:'tools',tool:'rapid'},
     {icon:'📈',label:'ECG',color:'#30d158',tab:'tools',tool:'ecg'},
     {icon:'🧮',label:'Calc',color:'#ff9f0a',tab:'tools',tool:'calc'},

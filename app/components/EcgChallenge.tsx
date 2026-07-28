@@ -11,7 +11,7 @@ const ECG_CASES = [
     options: ['Normal Sinus Rhythm', 'Anterior STEMI', 'LBBB', 'Pericarditis'],
     correct: 1,
     findings: [
-      { label: 'P Wave', color: '#0a84ff', note: 'Normal — sinus origin' },
+      { label: 'P Wave', color: '#00C4B4', note: 'Normal — sinus origin' },
       { label: 'ST Segment', color: '#ff3b30', note: 'Elevation 3mm V1-V4 ⚠' },
       { label: 'T Wave', color: '#ff9500', note: 'Hyperacute — tall peaked' },
       { label: 'QRS', color: '#30d158', note: 'Narrow — no aberrancy' },
@@ -31,7 +31,7 @@ const ECG_CASES = [
       { label: 'P Wave', color: '#ff3b30', note: 'Absent — replaced by fibrillatory baseline ⚠' },
       { label: 'RR Interval', color: '#ff9500', note: 'Irregularly irregular ⚠' },
       { label: 'QRS', color: '#30d158', note: 'Narrow — normal conduction' },
-      { label: 'Rate', color: '#0a84ff', note: '110 bpm — rapid ventricular response' },
+      { label: 'Rate', color: '#00C4B4', note: '110 bpm — rapid ventricular response' },
     ],
     explain: 'AF hallmarks: absent P waves, irregularly irregular rhythm, fibrillatory baseline. Rate control first (target HR < 110). Anticoagulate if CHA₂DS₂-VASc ≥ 2.',
     xpReward: 40,
@@ -45,10 +45,10 @@ const ECG_CASES = [
     options: ['1st Degree AV Block', '2nd Degree Mobitz II', 'Complete AV Block', 'Sinus Bradycardia'],
     correct: 2,
     findings: [
-      { label: 'P Wave', color: '#0a84ff', note: 'Present — rate 75/min, independent' },
+      { label: 'P Wave', color: '#00C4B4', note: 'Present — rate 75/min, independent' },
       { label: 'QRS', color: '#ff3b30', note: 'Wide escape — rate 32/min ⚠' },
       { label: 'PR Interval', color: '#ff9500', note: 'Variable — no fixed relationship ⚠' },
-      { label: 'AV Dissociation', color: '#8b5cf6', note: 'Complete — P and QRS independent ⚠' },
+      { label: 'AV Dissociation', color: '#00C4B4', note: 'Complete — P and QRS independent ⚠' },
     ],
     explain: 'Complete (3rd degree) AV block: P waves and QRS completely dissociated. Ventricular escape rate 30-40/min. Urgent transcutaneous pacing. Permanent pacemaker required.',
     xpReward: 60,
@@ -64,8 +64,8 @@ const ECG_CASES = [
     findings: [
       { label: 'QRS Width', color: '#ff3b30', note: '> 120ms — broad complex ⚠' },
       { label: 'Rate', color: '#ff9500', note: '180 bpm — regular tachycardia ⚠' },
-      { label: 'AV Dissociation', color: '#8b5cf6', note: 'Present — capture/fusion beats ⚠' },
-      { label: 'Axis', color: '#0a84ff', note: 'Northwest axis — extreme deviation' },
+      { label: 'AV Dissociation', color: '#00C4B4', note: 'Present — capture/fusion beats ⚠' },
+      { label: 'Axis', color: '#00C4B4', note: 'Northwest axis — extreme deviation' },
     ],
     explain: 'VT: broad complex tachycardia >100/min. If pulseless → immediate defibrillation. If pulse present → amiodarone 300mg IV. Treat underlying ischaemia.',
     xpReward: 70,
@@ -81,8 +81,8 @@ const ECG_CASES = [
     findings: [
       { label: 'T Wave', color: '#ff3b30', note: 'Tall peaked — tented ⚠' },
       { label: 'P Wave', color: '#ff9500', note: 'Flattened — disappearing ⚠' },
-      { label: 'QRS', color: '#8b5cf6', note: 'Widening — sine wave pattern ⚠' },
-      { label: 'PR Interval', color: '#0a84ff', note: 'Prolonged — first degree block' },
+      { label: 'QRS', color: '#00C4B4', note: 'Widening — sine wave pattern ⚠' },
+      { label: 'PR Interval', color: '#00C4B4', note: 'Prolonged — first degree block' },
     ],
     explain: 'Hyperkalaemia progression: peaked T → flat P → wide QRS → sine wave → VF. Immediate: Calcium gluconate 10ml IV (stabilises membrane). Then: insulin/dextrose, salbutamol, dialysis.',
     xpReward: 50,
@@ -174,11 +174,11 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
       <div style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: -0.5 }}>ECG Challenge</h2>
-          <span style={{ fontSize: 13, color: '#0a84ff', fontWeight: 700 }}>⚡ {score} XP</span>
+          <span style={{ fontSize: 13, color: '#00C4B4', fontWeight: 700 }}>⚡ {score} XP</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
           {ECG_CASES.map((_, i) => (
-            <div key={i} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= caseIdx ? '#0a84ff' : 'rgba(0,0,0,0.08)' }} />
+            <div key={i} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= caseIdx ? '#00C4B4' : 'rgba(0,0,0,0.08)' }} />
           ))}
         </div>
       </div>
@@ -240,8 +240,8 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
             }
             return (
               <div key={i} onClick={() => handleAnswer(i)} style={{ background: bg, backdropFilter: 'blur(8px)', borderRadius: 12, padding: '13px 16px', border, cursor: selected === null ? 'pointer' : 'default', display: 'flex', alignItems: 'center', gap: 12, transition: 'all 0.2s' }}>
-                <div style={{ width: 26, height: 26, borderRadius: '50%', background: selected !== null && i === current.correct ? '#16a34a' : selected === i && i !== current.correct ? '#dc2626' : 'rgba(10,132,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: selected !== null && (i === current.correct || i === selected) ? 'white' : '#0a84ff' }}>{['A', 'B', 'C', 'D'][i]}</span>
+                <div style={{ width: 26, height: 26, borderRadius: '50%', background: selected !== null && i === current.correct ? '#16a34a' : selected === i && i !== current.correct ? '#dc2626' : 'rgba(0,196,180,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: selected !== null && (i === current.correct || i === selected) ? 'white' : '#00C4B4' }}>{['A', 'B', 'C', 'D'][i]}</span>
                 </div>
                 <span style={{ fontSize: 13, color: tc, fontWeight: 500, flex: 1 }}>{opt}</span>
                 {selected !== null && i === current.correct && <span>✅</span>}
@@ -277,7 +277,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
             <p style={{ fontSize: 13, color: '#1f2937', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>{current.explain}</p>
           </div>
 
-          <button onClick={next} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,#0a84ff,#8b5cf6)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(10,132,255,0.25)' }}>
+          <button onClick={next} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,#0a84ff,#8b5cf6)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,196,180,0.25)' }}>
             {caseIdx < ECG_CASES.length - 1 ? 'Next ECG →' : 'Restart Challenge 🔄'}
           </button>
         </div>

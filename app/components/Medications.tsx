@@ -39,7 +39,7 @@ export default function Medications() {
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search medications..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.15)',color:'white',fontSize:14,outline:'none',marginBottom:16,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.65)',color:'white',fontSize:14,outline:'none',marginBottom:16,boxSizing:'border-box',fontFamily:'inherit'}}/>
 
       {loading ? (
         <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>Loading...</div>
@@ -53,20 +53,20 @@ export default function Medications() {
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(m=>(
             <div key={m.id} onClick={()=>setExpanded(expanded===m.id?null:m.id)}
-              style={{background:'rgba(255,255,255,0.11)',borderRadius:18,padding:16,border:'1px solid rgba(48,209,88,0.15)',cursor:'pointer'}}>
+              style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:16,border:'1px solid rgba(48,209,88,0.15)',cursor:'pointer'}}>
               <div style={{display:'flex',alignItems:'center',gap:12}}>
                 <div style={{width:44,height:44,borderRadius:13,background:'rgba(48,209,88,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>💊</div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:14,fontWeight:800,color:'white',marginBottom:4}}>{m.name}</div>
                   <div style={{display:'flex',gap:6}}>
                     {m.class&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(48,209,88,0.1)',color:'#30d158',fontWeight:700}}>{m.class}</span>}
-                    {m.approval_date&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.4)'}}>{m.approval_date}</span>}
+                    {m.approval_date&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(36,63,82,0.65)',color:'rgba(255,255,255,0.4)'}}>{m.approval_date}</span>}
                   </div>
                 </div>
                 <span style={{color:'rgba(255,255,255,0.3)',fontSize:18,transition:'transform 0.2s',transform:expanded===m.id?'rotate(90deg)':'none'}}>›</span>
               </div>
               {expanded===m.id&&(
-                <div style={{marginTop:12,paddingTop:12,borderTop:'1px solid rgba(255,255,255,0.15)'}}>
+                <div style={{marginTop:12,paddingTop:12,borderTop:'1px solid rgba(36,63,82,0.65)'}}>
                   {m.indication&&<div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7,marginBottom:8}}><span style={{color:'rgba(255,255,255,0.4)',fontWeight:600}}>Indication: </span>{m.indication}</div>}
                   {m.notes&&<div style={{fontSize:12,color:'rgba(255,255,255,0.5)',lineHeight:1.6}}>{m.notes}</div>}
                 </div>

@@ -31,7 +31,7 @@ const BOARD_LEVELS = [
     ]
   },
   {
-    level: 2, name: 'Resident', icon: '📋', color: '#0a84ff',
+    level: 2, name: 'Resident', icon: '📋', color: '#00C4B4',
     questions: [
       { q: 'Massive PE, BP 80/50, RV:LV 1.5 on echo. Best treatment?', options: ['LMWH alone', 'Alteplase 100mg IV', 'Surgical embolectomy', 'IVC filter'], correct: 1, explain: 'Haemodynamically unstable massive PE: systemic thrombolysis with alteplase.' },
       { q: 'DKA: BG 28, pH 7.1, K+ 3.2. What BEFORE insulin?', options: ['Sodium bicarbonate', 'Potassium replacement', 'Insulin 10u bolus', 'Dextrose 50%'], correct: 1, explain: 'NEVER give insulin before K+ replacement in DKA. K+ 3.2 will drop further → fatal arrhythmia.' },
@@ -51,7 +51,7 @@ const BOARD_LEVELS = [
     ]
   },
   {
-    level: 4, name: 'Specialist', icon: '🏥', color: '#8b5cf6',
+    level: 4, name: 'Specialist', icon: '🏥', color: '#00C4B4',
     questions: [
       { q: 'Refractory VF post 3 shocks + amiodarone. What next?', options: ['Increase shock energy', 'Double sequential defibrillation', 'Lidocaine + continue CPR', 'All of the above consider'], correct: 3, explain: 'Refractory VF: consider double sequential defibrillation (2 AEDs simultaneously), vector change, lidocaine, correct reversible causes.' },
       { q: 'ARDS: P/F ratio 80, driving pressure 18 cmH2O. Best intervention?', options: ['PEEP reduction', 'Prone positioning 16h/day', 'High-frequency ventilation', 'Immediate ECMO'], correct: 1, explain: 'Severe ARDS (P/F < 150): prone positioning 16h/day reduces mortality 28% (PROSEVA trial). First-line before ECMO.' },
@@ -171,10 +171,10 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
         <h3 style={{ fontSize:18, fontWeight:800, margin:'0 0 6px' }}>{DAILY_CHALLENGE_CASES[dailyIdx].title}</h3>
         <p style={{ fontSize:12, color:'rgba(255,255,255,0.5)', margin:'0 0 16px' }}>Resets in: {getTimeUntilMidnight()} · +{DAILY_CHALLENGE_CASES[dailyIdx].xp} XP</p>
         <div style={{ display:'flex', gap:8 }}>
-          <button onClick={()=>{setMode('daily');setDailyQ(0);setDailyAns(null);setDailyCorrect(0);setDailyDone(false)}} style={{ flex:1, padding:'12px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#8b5cf6,#0a84ff)', color:'white', fontSize:14, fontWeight:700, cursor:'pointer' }}>
+          <button onClick={()=>{setMode('daily');setDailyQ(0);setDailyAns(null);setDailyCorrect(0);setDailyDone(false)}} style={{ flex:1, padding:'12px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'white', fontSize:14, fontWeight:700, cursor:'pointer' }}>
             Start Challenge →
           </button>
-          <button onClick={()=>setDailyIdx(i=>(i+1)%DAILY_CHALLENGE_CASES.length)} style={{ padding:'12px 16px', borderRadius:14, border:'1px solid rgba(255,255,255,0.15)', background:'transparent', color:'rgba(255,255,255,0.6)', fontSize:13, cursor:'pointer' }}>
+          <button onClick={()=>setDailyIdx(i=>(i+1)%DAILY_CHALLENGE_CASES.length)} style={{ padding:'12px 16px', borderRadius:14, border:'1px solid rgba(36,63,82,0.65)', background:'transparent', color:'rgba(255,255,255,0.6)', fontSize:13, cursor:'pointer' }}>
             Change
           </button>
         </div>
@@ -288,11 +288,11 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
           <div style={{ fontSize:64, marginBottom:12 }}>🏆</div>
           <h3 style={{ fontSize:22, fontWeight:800, marginBottom:8 }}>Daily Challenge Complete!</h3>
           <p style={{ fontSize:14, color:'rgba(255,255,255,0.6)', marginBottom:20 }}>{dailyCorrect}/{dailyCase.questions.length} correct · Come back tomorrow for a new challenge!</p>
-          <div style={{ background:'rgba(139,92,246,0.25)', borderRadius:14, padding:14, marginBottom:20, border:'1px solid rgba(139,92,246,0.25)' }}>
-            <div style={{ fontSize:28, fontWeight:900, color:'#c4b5fd' }}>+{dailyCase.xp} XP</div>
+          <div style={{ background:'rgba(0,196,180,0.25)', borderRadius:14, padding:14, marginBottom:20, border:'1px solid rgba(0,196,180,0.25)' }}>
+            <div style={{ fontSize:28, fontWeight:900, color:'#6ee7e1' }}>+{dailyCase.xp} XP</div>
             <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', marginTop:4 }}>Daily bonus earned</div>
           </div>
-          <button onClick={()=>setMode('menu')} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:'linear-gradient(135deg,#8b5cf6,#0a84ff)', color:'white', fontSize:16, fontWeight:700, cursor:'pointer' }}>
+          <button onClick={()=>setMode('menu')} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'white', fontSize:16, fontWeight:700, cursor:'pointer' }}>
             Back to Menu
           </button>
         </div>
@@ -329,7 +329,7 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
             return(
               <div key={i} onClick={()=>handleDailyAnswer(i)} style={{ background:bg, backdropFilter:'blur(12px)', borderRadius:14, padding:'14px 16px', border, cursor:dailyAns===null?'pointer':'default', display:'flex', alignItems:'center', gap:12, transition:'all 0.2s' }}>
                 <div style={{ width:28, height:28, borderRadius:'50%', background:dailyAns!==null&&i===dailyQuestion.correct?'#16a34a':dailyAns===i&&i!==dailyQuestion.correct?'#dc2626':'rgba(139,92,246,0.1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <span style={{ fontSize:11, fontWeight:800, color:dailyAns!==null&&(i===dailyQuestion.correct||i===dailyAns)?'white':'#8b5cf6' }}>{['A','B','C','D'][i]}</span>
+                  <span style={{ fontSize:11, fontWeight:800, color:dailyAns!==null&&(i===dailyQuestion.correct||i===dailyAns)?'white':'#00C4B4' }}>{['A','B','C','D'][i]}</span>
                 </div>
                 <span style={{ fontSize:13, color:tc, fontWeight:500, flex:1, lineHeight:1.5 }}>{opt}</span>
                 {dailyAns!==null&&i===dailyQuestion.correct&&<span>✅</span>}

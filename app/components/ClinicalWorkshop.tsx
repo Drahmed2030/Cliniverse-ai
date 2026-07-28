@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic'
 const DifficultConversations = dynamic(() => import('./DifficultConversations'), { ssr: false })
 
 const C = {
-  card: 'rgba(255,255,255,0.11)',
-  border: 'rgba(139,92,246,0.25)',
+  card: 'rgba(36,63,82,0.60)',
+  border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -67,7 +67,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
     <div style={{flex:half?1:'none',width:half?undefined:'100%',marginBottom:half?0:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <input value={(form as any)[k]} onChange={e=>f(k,e.target.value)} placeholder={placeholder||label}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
@@ -75,21 +75,21 @@ Generate a complete professional SBAR handover ready for verbal or written commu
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
   if (mode === 'result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>✅ SBAR Generated</div></div>
-        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(48,209,88,0.2)':'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
+        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(48,209,88,0.2)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
-      <div style={{background:'linear-gradient(135deg,rgba(139,92,246,0.08),rgba(10,132,255,0.05))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)'}}>
-        <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 AI SBAR HANDOVER</div>
+      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.08),rgba(10,132,255,0.05))',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)'}}>
+        <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 AI SBAR HANDOVER</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
       </div>
       <button onClick={()=>{setForm({patientAge:'',patientSex:'M',ward:'',time:'',situation:'',background:'',pmh:'',meds:'',observations:'',bp:'',hr:'',o2:'',temp:'',rr:'',gcs:'',assessment:'',recommendation:''});setMode('form');setResult('')}}
@@ -103,15 +103,15 @@ Generate a complete professional SBAR handover ready for verbal or written commu
   return (
     <div style={{paddingBottom:20}}>
       {/* Patient */}
-      <div style={{background:'rgba(10,132,255,0.08)',borderRadius:16,padding:'14px',marginBottom:12,border:'1px solid rgba(10,132,255,0.15)'}}>
-        <div style={{fontSize:10,color:'#0a84ff',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>👤 PATIENT</div>
+      <div style={{background:'rgba(10,132,255,0.08)',borderRadius:16,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.15)'}}>
+        <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>👤 PATIENT</div>
         <div style={{display:'flex',gap:8,marginBottom:8}}>
           <div style={{flex:2}}><InputField label="AGE" k="patientAge" placeholder="e.g. 58" half/></div>
           <div style={{flex:1}}>
             <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>SEX</div>
             <div style={{display:'flex',gap:6}}>
               {['M','F'].map(s=>(
-                <button key={s} onClick={()=>f('patientSex',s)} style={{flex:1,padding:'10px',borderRadius:10,border:form.patientSex===s?'2px solid #0a84ff':`1px solid ${C.border}`,background:form.patientSex===s?'rgba(10,132,255,0.15)':C.card,color:form.patientSex===s?'#0a84ff':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>{s}</button>
+                <button key={s} onClick={()=>f('patientSex',s)} style={{flex:1,padding:'10px',borderRadius:10,border:form.patientSex===s?'2px solid #0a84ff':`1px solid ${C.border}`,background:form.patientSex===s?'rgba(0,196,180,0.15)':C.card,color:form.patientSex===s?'#00C4B4':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>{s}</button>
               ))}
             </div>
           </div>
@@ -137,14 +137,14 @@ Generate a complete professional SBAR handover ready for verbal or written commu
       </div>
 
       {/* A — Assessment */}
-      <div style={{background:'rgba(139,92,246,0.06)',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(139,92,246,0.25)'}}>
-        <div style={{fontSize:10,color:'#8b5cf6',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>A — ASSESSMENT (Vitals)</div>
+      <div style={{background:'rgba(139,92,246,0.06)',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(0,196,180,0.25)'}}>
+        <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>A — ASSESSMENT (Vitals)</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:10}}>
           {[{l:'BP',k:'bp',p:'120/80'},{l:'HR',k:'hr',p:'88'},{l:'SpO2',k:'o2',p:'96'},{l:'Temp°C',k:'temp',p:'37.2'},{l:'RR',k:'rr',p:'18'},{l:'GCS',k:'gcs',p:'15'}].map(v=>(
             <div key={v.k}>
               <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3,letterSpacing:0.5}}>{v.l}</div>
               <input value={(form as any)[v.k]} onChange={e=>f(v.k,e.target.value)} placeholder={v.p}
-                style={{width:'100%',padding:'8px 10px',borderRadius:10,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
+                style={{width:'100%',padding:'8px 10px',borderRadius:10,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
             </div>
           ))}
         </div>
@@ -158,7 +158,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
       </div>
 
       <button onClick={generate} disabled={generating||!form.situation}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:generating||!form.situation?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:15,fontWeight:800,cursor:generating||!form.situation?'not-allowed':'pointer',boxShadow:generating||!form.situation?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:generating||!form.situation?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:15,fontWeight:800,cursor:generating||!form.situation?'not-allowed':'pointer',boxShadow:generating||!form.situation?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
         {generating?(<><div style={{width:18,height:18,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid white',animation:'spin 1s linear infinite'}}/>Generating SBAR...</>):'🤖 Generate SBAR with AI'}
       </button>
       <style>{`input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.2)}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
@@ -217,14 +217,14 @@ Be warm, reassuring and clear.`
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box',direction:form.language==='Arabic'&&k==='diagnosis'?'rtl':'ltr'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box',direction:form.language==='Arabic'&&k==='diagnosis'?'rtl':'ltr'}}/>
     </div>
   )
 
   if (mode === 'result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>📄 Discharge Summary</div><div style={{fontSize:11,color:C.sub}}>{form.language} · Patient-friendly</div></div>
         <button onClick={()=>{navigator.clipboard.writeText(result);setCopied(true);setTimeout(()=>setCopied(false),2000)}} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(48,209,88,0.2)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -324,7 +324,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
@@ -333,13 +333,13 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
   if (mode==='result') return (
     <div style={{paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setMode('form')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Edit</button>
         <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>📓 Reflective Log</div><div style={{fontSize:11,color:C.sub}}>GMC/RCPI Portfolio Ready</div></div>
-        <button onClick={()=>{navigator.clipboard.writeText(result);setCopied(true);setTimeout(()=>setCopied(false),2000)}} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(191,90,242,0.2)':'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
+        <button onClick={()=>{navigator.clipboard.writeText(result);setCopied(true);setTimeout(()=>setCopied(false),2000)}} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?'rgba(0,196,180,0.2)':'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:12,fontWeight:700,cursor:'pointer'}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
-      <div style={{background:'rgba(191,90,242,0.06)',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(191,90,242,0.2)'}}>
+      <div style={{background:'rgba(0,196,180,0.06)',borderRadius:20,padding:'18px',marginBottom:14,border:'1px solid rgba(0,196,180,0.2)'}}>
         <div style={{fontSize:10,color:'#bf5af2',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>📓 REFLECTIVE PRACTICE — GIBBS CYCLE</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.9,whiteSpace:'pre-line'}}>{result}</div>
       </div>
@@ -349,21 +349,21 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
 
   return (
     <div style={{paddingBottom:20}}>
-      <div style={{background:'rgba(191,90,242,0.08)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:'1px solid rgba(191,90,242,0.2)'}}>
-        <div style={{fontSize:12,color:'rgba(191,90,242,0.9)',lineHeight:1.6}}>📓 Generates a professional Reflective Practice entry using Gibbs Reflective Cycle — ready for GMC, RCPI, or ACGME portfolios.</div>
+      <div style={{background:'rgba(0,196,180,0.08)',borderRadius:16,padding:'12px 14px',marginBottom:14,border:'1px solid rgba(0,196,180,0.2)'}}>
+        <div style={{fontSize:12,color:'rgba(0,196,180,0.9)',lineHeight:1.6}}>📓 Generates a professional Reflective Practice entry using Gibbs Reflective Cycle — ready for GMC, RCPI, or ACGME portfolios.</div>
       </div>
 
       {/* Specialty */}
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>SPECIALTY</div>
       <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom:12}}>
         {SPECIALTIES.map(s=>(
-          <button key={s} onClick={()=>f('specialty',s)} style={{padding:'6px 12px',borderRadius:10,border:form.specialty===s?'2px solid #bf5af2':`1px solid ${C.border}`,background:form.specialty===s?'rgba(191,90,242,0.15)':C.card,color:form.specialty===s?'#bf5af2':C.sub,fontSize:10,fontWeight:700,cursor:'pointer'}}>
+          <button key={s} onClick={()=>f('specialty',s)} style={{padding:'6px 12px',borderRadius:10,border:form.specialty===s?'2px solid #bf5af2':`1px solid ${C.border}`,background:form.specialty===s?'rgba(0,196,180,0.15)':C.card,color:form.specialty===s?'#bf5af2':C.sub,fontSize:10,fontWeight:700,cursor:'pointer'}}>
             {s}
           </button>
         ))}
       </div>
 
-      <div style={{background:'rgba(255,255,255,0.11)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
         <TextArea label="CASE TYPE / CLINICAL SCENARIO" k="caseType" rows={2}/>
         <TextArea label="YOUR ROLE IN THE CASE" k="role" rows={1}/>
         <TextArea label="PATIENT OUTCOME" k="outcome" rows={1}/>
@@ -372,7 +372,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
       </div>
 
       <button onClick={generate} disabled={generating||!form.specialty||!form.caseType}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:generating||!form.specialty?'rgba(191,90,242,0.3)':'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:15,fontWeight:800,cursor:generating||!form.specialty?'not-allowed':'pointer',boxShadow:generating||!form.specialty?'none':'0 8px 32px rgba(191,90,242,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:generating||!form.specialty?'rgba(0,196,180,0.3)':'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:15,fontWeight:800,cursor:generating||!form.specialty?'not-allowed':'pointer',boxShadow:generating||!form.specialty?'none':'0 8px 32px rgba(0,196,180,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
         {generating?(<><div style={{width:18,height:18,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid white',animation:'spin 1s linear infinite'}}/>Writing reflective log...</>):'📓 Generate Portfolio Entry'}
       </button>
       <style>{`textarea::placeholder{color:rgba(255,255,255,0.2)}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`}</style>
@@ -389,11 +389,11 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
   const TOOLS = [
     {
       id:'sbar' as Tool,
-      icon:<svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#0a84ff" strokeWidth="1.8" strokeLinecap="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#0a84ff" strokeWidth="1.8" strokeLinecap="round"/></svg>,
+      icon:<svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#00C4B4" strokeWidth="1.8" strokeLinecap="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#00C4B4" strokeWidth="1.8" strokeLinecap="round"/></svg>,
       label:'SBAR Generator',
       sub:'AI handover in 30 seconds',
       desc:'NHS/HSE standard SBAR handover generated by AI — saves 30-40 min per shift',
-      color:'#0a84ff',
+      color:'#00C4B4',
       badge:'NHS STANDARD',
     },
     {
@@ -429,7 +429,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setTool('menu')} style={{background:'rgba(139,92,246,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#c4b5fd',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setTool('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:C.text}}>{t.label}</div>
             <div style={{fontSize:11,color:C.sub}}>{t.sub}</div>
@@ -447,14 +447,14 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
   return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       {/* Header */}
-      <div style={{background:'linear-gradient(135deg,rgba(10,132,255,0.12),rgba(139,92,246,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(10,132,255,0.2)',position:'relative',overflow:'hidden'}}>
-        <div style={{position:'absolute',top:-25,right:-25,width:110,height:110,borderRadius:'50%',background:'radial-gradient(circle,rgba(10,132,255,0.2),transparent 70%)',pointerEvents:'none'}}/>
+      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(0,196,180,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.20)',position:'relative',overflow:'hidden'}}>
+        <div style={{position:'absolute',top:-25,right:-25,width:110,height:110,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.20),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(10,132,255,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🔧 PROFESSIONAL TOOLS</div>
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>Clinical Workshop</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.6}}>AI-powered tools for your daily clinical workflow — SBAR, discharge letters, portfolio</div>
         <div style={{display:'flex',gap:6,marginTop:12,flexWrap:'wrap'}}>
           {['NHS','HSE Ireland','KSA','ACGME','GMC'].map(b=>(
-            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.15)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{b}</span>
+            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(36,63,82,0.65)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{b}</span>
           ))}
         </div>
       </div>

@@ -26,8 +26,8 @@ const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 const DEPTS = [
   {id:'ed', label:'ED', color:'#ff453a', icon:'🚨'},
   {id:'ccu', label:'CCU', color:'#ff9f0a', icon:'🫀'},
-  {id:'icu', label:'ICU', color:'#8b5cf6', icon:'🫁'},
-  {id:'ward', label:'Ward', color:'#0a84ff', icon:'🏥'},
+  {id:'icu', label:'ICU', color:'#00C4B4', icon:'🫁'},
+  {id:'ward', label:'Ward', color:'#00C4B4', icon:'🏥'},
   {id:'peds', label:'Peds', color:'#30d158', icon:'🧸'},
   {id:'neuro', label:'Neuro', color:'#64d2ff', icon:'🧠'},
 ]
@@ -50,8 +50,8 @@ const TIPS = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.11)',
-  border: 'rgba(139,92,246,0.25)',
+  card: 'rgba(36,63,82,0.60)',
+  border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
@@ -124,7 +124,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
         </div>
         {/* Rotating tip */}
-        <div style={{background:'rgba(255,255,255,0.11)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(255,255,255,0.15)'}}>
+        <div style={{background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>
@@ -132,7 +132,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Tabs */}
       <div style={{display:'flex',gap:6,marginBottom:16,background:C.card,borderRadius:18,padding:5,border:`1px solid ${C.border}`}}>
         {[{id:'schedule',icon:'📅',label:'My Schedule'},{id:'live',icon:'🚨',label:'Live Cases'},{id:'tips',icon:'💡',label:'Night Tips'}].map(t=>(
-          <button key={t.id} onClick={()=>setView(t.id as any)} style={{flex:1,padding:'10px 6px',borderRadius:13,border:'none',background:view===t.id?'linear-gradient(135deg,rgba(139,92,246,0.3),rgba(10,132,255,0.2))':'transparent',cursor:'pointer',color:view===t.id?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,border:view===t.id?'1px solid rgba(139,92,246,0.3)':'1px solid transparent',transition:'all 0.2s'}}>
+          <button key={t.id} onClick={()=>setView(t.id as any)} style={{flex:1,padding:'10px 6px',borderRadius:13,border:'none',background:view===t.id?'linear-gradient(135deg,rgba(0,196,180,0.3),rgba(0,196,180,0.20))':'transparent',cursor:'pointer',color:view===t.id?'#6ee7e1':C.sub,fontSize:12,fontWeight:700,border:view===t.id?'1px solid rgba(139,92,246,0.3)':'1px solid transparent',transition:'all 0.2s'}}>
             {t.icon} {t.label}
           </button>
         ))}
@@ -146,7 +146,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           {/* Day selector */}
           <div style={{display:'flex',gap:6,marginBottom:10,overflowX:'auto',paddingBottom:4}}>
             {DAYS.map((d,i)=>(
-              <button key={d} onClick={()=>setSelectedDay(i)} style={{flexShrink:0,padding:'8px 12px',borderRadius:12,border:selectedDay===i?'2px solid #8b5cf6':'1px solid rgba(139,92,246,0.25)',background:selectedDay===i?'rgba(139,92,246,0.3)':C.card,color:selectedDay===i?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>
+              <button key={d} onClick={()=>setSelectedDay(i)} style={{flexShrink:0,padding:'8px 12px',borderRadius:12,border:selectedDay===i?'2px solid #8b5cf6':'1px solid rgba(0,196,180,0.25)',background:selectedDay===i?'rgba(139,92,246,0.3)':C.card,color:selectedDay===i?'#6ee7e1':C.sub,fontSize:12,fontWeight:700,cursor:'pointer'}}>
                 {d}
               </button>
             ))}
@@ -158,7 +158,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>DEPARTMENT</div>
               <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
                 {DEPTS.map(d=>(
-                  <button key={d.id} onClick={()=>setSelectedDept(d.id)} style={{padding:'5px 10px',borderRadius:10,border:selectedDept===d.id?`2px solid ${d.color}`:'1px solid rgba(255,255,255,0.1)',background:selectedDept===d.id?`${d.color}20`:C.card,color:selectedDept===d.id?d.color:C.sub,fontSize:11,fontWeight:700,cursor:'pointer'}}>
+                  <button key={d.id} onClick={()=>setSelectedDept(d.id)} style={{padding:'5px 10px',borderRadius:10,border:selectedDept===d.id?`2px solid ${d.color}`:'1px solid rgba(0,196,180,0.20)',background:selectedDept===d.id?`${d.color}20`:C.card,color:selectedDept===d.id?d.color:C.sub,fontSize:11,fontWeight:700,cursor:'pointer'}}>
                     {d.icon} {d.label}
                   </button>
                 ))}
@@ -167,14 +167,14 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             <div style={{background:C.card,borderRadius:14,padding:'12px',border:`1px solid ${C.border}`}}>
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>TIME</div>
               {['08:00','14:00','20:00','22:00','00:00'].map(t=>(
-                <button key={t} onClick={()=>setSelectedTime(t)} style={{display:'block',width:'100%',padding:'6px 10px',borderRadius:10,border:selectedTime===t?'2px solid #8b5cf6':'1px solid rgba(255,255,255,0.15)',background:selectedTime===t?'rgba(139,92,246,0.3)':C.card,color:selectedTime===t?'#c4b5fd':C.sub,fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:4,textAlign:'left'}}>
+                <button key={t} onClick={()=>setSelectedTime(t)} style={{display:'block',width:'100%',padding:'6px 10px',borderRadius:10,border:selectedTime===t?'2px solid #8b5cf6':'1px solid rgba(36,63,82,0.65)',background:selectedTime===t?'rgba(139,92,246,0.3)':C.card,color:selectedTime===t?'#6ee7e1':C.sub,fontSize:12,fontWeight:700,cursor:'pointer',marginBottom:4,textAlign:'left'}}>
                   {t} {t>='20:00'||t<'08:00'?'🌙':'☀️'}
                 </button>
               ))}
             </div>
           </div>
 
-          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
+          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
             + Add Shift to Schedule
           </button>
 
@@ -251,7 +251,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           {[
             {title:'First 30 minutes of shift', color:'#ff453a', icon:'⏰', tips:['Check crash trolley location and key','Introduce yourself to nursing team','Review sick patients on handover list','Know the ICU bed availability']},
             {title:'Common Night Calls', color:'#ff9f0a', icon:'📞', tips:['Chest pain → ECG within 10 min','Low SpO2 → Airway first, then cause','Low BP → IV access + fluids first','Confusion → Rule out hypoglycaemia first']},
-            {title:'Escalation & Safety', color:'#0a84ff', icon:'🛡️', tips:['Never manage an arrest alone — call team','Document all night calls with timestamp','Verbal orders → write up before morning','If unsure — always escalate to senior']},
+            {title:'Escalation & Safety', color:'#00C4B4', icon:'🛡️', tips:['Never manage an arrest alone — call team','Document all night calls with timestamp','Verbal orders → write up before morning','If unsure — always escalate to senior']},
             {title:'Handover at 08:00', color:'#30d158', icon:'🤝', tips:['Use SBAR for each sick patient','Mention outstanding results/imaging','Flag any patient you are worried about','Ensure day team accepts responsibility']},
           ].map(s=>(
             <div key={s.title} style={{background:C.card,borderRadius:20,padding:'16px',marginBottom:10,border:`1px solid ${s.color}20`,boxShadow:`0 4px 16px ${s.color}08`}}>
@@ -260,7 +260,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{fontSize:14,fontWeight:800,color:'white'}}>{s.title}</div>
               </div>
               {s.tips.map((tip,i)=>(
-                <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<s.tips.length-1?'1px solid rgba(255,255,255,0.05)':'none'}}>
+                <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<s.tips.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
                   <div style={{width:6,height:6,borderRadius:'50%',background:s.color,flexShrink:0,marginTop:6,boxShadow:`0 0 6px ${s.color}`}}/>
                   <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.6}}>{tip}</div>
                 </div>

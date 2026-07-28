@@ -6,15 +6,15 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 // ── DESIGN TOKENS ──
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(255,255,255,0.11)',
-  border: 'rgba(255,255,255,0.11)',
+  card: 'rgba(36,63,82,0.60)',
+  border: 'rgba(36,63,82,0.60)',
   borderBlue: 'rgba(0,212,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.18)',
   teal: '#38bdf8',
   blue: '#0066ff',
-  purple: '#a78bfa',
+  purple: '#00DFD0',
   green: '#4ade80',
   amber: '#fbbf24',
   rose: '#f87171',
@@ -24,7 +24,7 @@ const T = {
 const TIERS = [
   { min: 0,    max: 100,  id: 'intern',     label: 'Intern',     color: '#64748b', shape: '○' },
   { min: 100,  max: 500,  id: 'resident',   label: 'Resident',   color: '#38bdf8', shape: '◇' },
-  { min: 500,  max: 1500, id: 'fellow',     label: 'Fellow',     color: '#a78bfa', shape: '⬡' },
+  { min: 500,  max: 1500, id: 'fellow',     label: 'Fellow',     color: '#00DFD0', shape: '⬡' },
   { min: 1500, max: 3000, id: 'specialist', label: 'Specialist', color: '#38bdf8', shape: '◈' },
   { min: 3000, max: 9999, id: 'consultant', label: 'Consultant', color: '#fbbf24', shape: '✦' },
 ]
@@ -42,7 +42,7 @@ const CVWatermark = () => (
     <path d="M20 10 L27 30 L34 10" stroke="url(#cwm)" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"/>
     <defs>
       <linearGradient id="cwm" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#00d4ff"/><stop offset="1" stopColor="#7c3aed"/>
+        <stop stopColor="#00d4ff"/><stop offset="1" stopColor="#00B4A6"/>
       </linearGradient>
     </defs>
   </svg>
@@ -56,11 +56,11 @@ const XPRing = ({ xp, tier }: { xp: number, tier: typeof TIERS[0] }) => {
   return (
     <div style={{ position: 'relative', width: 130, height: 130, flexShrink: 0 }}>
       <svg width="130" height="130" viewBox="0 0 130 130">
-        <circle cx="65" cy="65" r={r} fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="8"/>
+        <circle cx="65" cy="65" r={r} fill="none" stroke="rgba(36,63,82,0.65)" strokeWidth="8"/>
         <circle cx="65" cy="65" r={r} fill="none" stroke={tier.color} strokeWidth="8"
           strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ * 0.25}
           strokeLinecap="round" style={{ filter: `drop-shadow(0 0 8px ${tier.color})` }}/>
-        <circle cx="65" cy="65" r="44" fill="rgba(255,255,255,0.03)"/>
+        <circle cx="65" cy="65" r="44" fill="rgba(36,63,82,0.40)"/>
       </svg>
       <div style={{
         position: 'absolute', inset: 0, display: 'flex',
@@ -80,7 +80,7 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
 }) => (
   <div style={{
     background: unlocked ? `${color}08` : 'rgba(255,255,255,0.02)',
-    border: `1px solid ${unlocked ? color + '25' : 'rgba(255,255,255,0.05)'}`,
+    border: `1px solid ${unlocked ? color + '25' : 'rgba(36,63,82,0.50)'}`,
     borderRadius: 16, padding: '12px 14px',
     display: 'flex', alignItems: 'center', gap: 12,
     opacity: unlocked ? 1 : 0.4,
@@ -88,7 +88,7 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
   }}>
     <div style={{
       width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.11)',
+      background: unlocked ? `${color}15` : 'rgba(36,63,82,0.60)',
       border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.18)'}`,
       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
       boxShadow: unlocked ? `0 0 16px ${color}20` : 'none',
@@ -143,7 +143,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
     { icon: '🌍', label: 'Global MD', desc: 'Join the global leaderboard', color: T.blue, unlocked: casesCompleted >= 3 },
     { icon: '🤖', label: 'AI Pioneer', desc: 'Use AI Case Generator', color: T.teal, unlocked: false },
     { icon: '👑', label: 'Consultant', desc: 'Reach Consultant tier', color: T.amber, unlocked: xp >= 3000 },
-    { icon: '💎', label: 'PRO Member', desc: 'Unlock all features', color: '#a78bfa', unlocked: isPro },
+    { icon: '💎', label: 'PRO Member', desc: 'Unlock all features', color: '#00DFD0', unlocked: isPro },
   ]
 
   return (
@@ -159,7 +159,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
       }}>
         {/* Ambient glows */}
         <div style={{ position: 'absolute', top: -50, left: -20, width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,212,255,0.1),transparent 70%)', pointerEvents: 'none' }}/>
-        <div style={{ position: 'absolute', bottom: -40, right: -20, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle,rgba(124,58,237,0.1),transparent 70%)', pointerEvents: 'none' }}/>
+        <div style={{ position: 'absolute', bottom: -40, right: -20, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,180,166,0.1),transparent 70%)', pointerEvents: 'none' }}/>
         <CVWatermark />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, position: 'relative', zIndex: 1 }}>
@@ -191,7 +191,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                   <span style={{ fontSize: 11, color: T.muted, fontWeight: 700 }}>NEXT: {nextTier.label.toUpperCase()}</span>
                   <span style={{ fontSize: 11, color: tier.color, fontWeight: 700 }}>{nextTier.min - xp} XP away</span>
                 </div>
-                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.15)' }}>
+                <div style={{ height: 4, borderRadius: 2, background: 'rgba(36,63,82,0.65)' }}>
                   <div style={{
                     height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${tier.color}, ${nextTier.color})`,
                     width: `${Math.min(((xp - tier.min) / (nextTier.min - tier.min)) * 100, 100)}%`,
@@ -233,7 +233,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
             transition: 'all 0.2s',
             background: activeTab === t ? 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,102,255,0.1))' : 'transparent',
             color: activeTab === t ? T.teal : T.muted,
-            boxShadow: activeTab === t ? `0 0 16px rgba(0,212,255,0.1), inset 0 1px 0 rgba(255,255,255,0.05)` : 'none',
+            boxShadow: activeTab === t ? `0 0 16px rgba(0,212,255,0.1), inset 0 1px 0 rgba(36,63,82,0.50)` : 'none',
             border: activeTab === t ? `1px solid rgba(0,212,255,0.2)` : '1px solid transparent',
           }}>
             {t === 'stats' ? '📊 Stats' : t === 'achievements' ? '🏆 Awards' : '⚙️ Settings'}
@@ -267,8 +267,8 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                   <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-                      background: isActive ? `${t.color}20` : isPast ? `${t.color}10` : 'rgba(255,255,255,0.03)',
-                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(255,255,255,0.15)'}`,
+                      background: isActive ? `${t.color}20` : isPast ? `${t.color}10` : 'rgba(36,63,82,0.40)',
+                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(36,63,82,0.65)'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 14, color: isActive || isPast ? t.color : T.muted,
                       boxShadow: isActive ? `0 0 12px ${t.color}30` : 'none',
@@ -290,7 +290,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
           {/* PRO Upgrade */}
           {!isPro && (
             <div onClick={onUpgrade} style={{
-              background: 'linear-gradient(135deg, rgba(0,212,255,0.1), rgba(124,58,237,0.08))',
+              background: 'linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,180,166,0.08))',
               border: '1px solid rgba(0,212,255,0.2)', borderRadius: 20, padding: '18px',
               cursor: 'pointer', position: 'relative', overflow: 'hidden',
             }}>

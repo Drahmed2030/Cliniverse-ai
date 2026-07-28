@@ -30,12 +30,12 @@ const Icons = {
       <path d="M2 12h3l2-7 3 14 2-9 2 4 1-2h7" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
-  lungs: (color='#8b5cf6') => (
+  lungs: (color='#00C4B4') => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
       <path d="M12 3v8M8 7C5 7 3 9 3 12v4c0 2 1.5 3 3 3s2-1 2-2v-3M16 7c3 0 5 2 5 5v4c0 2-1.5 3-3 3s-2-1-2-2v-3" stroke={color} strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
-  brain: (color='#0a84ff') => (
+  brain: (color='#00C4B4') => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
       <path d="M9.5 2A2.5 2.5 0 007 4.5c0 .56.19 1.08.5 1.5A3 3 0 004 9a3 3 0 002 2.83V18a2 2 0 002 2h8a2 2 0 002-2v-6.17A3 3 0 0020 9a3 3 0 00-3.5-2.95A2.5 2.5 0 0014.5 2" stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
       <path d="M9 12h6M9 15h6" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
@@ -147,7 +147,7 @@ const SCENARIOS = [
     successMessage:'PCI performed! Door-to-balloon 67 min. TIMI 3 flow!', failMessage:'Aspirin + P2Y12 → Heparin → Cath Lab < 90 min.', xpReward:110,
   },
   {
-    id:'pe_massive', title:'Massive Pulmonary Embolism', icon:'lungs', color:'#8b5cf6',
+    id:'pe_massive', title:'Massive Pulmonary Embolism', icon:'lungs', color:'#00C4B4',
     setting:'Ward — 44F. Sudden collapse. HR 135, BP 80/50, O2 82%. Post long-haul flight.',
     vitals:{rhythm:'Tachy', bp:'80/50', hr:'135', o2:'82%'}, timeLimit:90,
     steps:[
@@ -161,7 +161,7 @@ const SCENARIOS = [
     successMessage:'Thrombolysis successful! BP normalising. SpO2 95%.', failMessage:'O2 → Heparin → CT-PA → Echo → Thrombolysis if unstable.', xpReward:110,
   },
   {
-    id:'stroke', title:'Acute Ischaemic Stroke', icon:'brain', color:'#0a84ff',
+    id:'stroke', title:'Acute Ischaemic Stroke', icon:'brain', color:'#00C4B4',
     setting:'ED — 61F. Sudden left hemiplegia. NIHSS 16. Last seen normal 80 min ago. CT: no bleed.',
     vitals:{rhythm:'AF', bp:'188/104', hr:'92', o2:'96%'}, timeLimit:90,
     steps:[
@@ -315,7 +315,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', margin: 0 }}>Real-time emergency · 10 scenarios</p>
         </div>
         <div style={{ textAlign:'right' }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: '#8b5cf6' }}>+{totalXP} XP</div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#00C4B4' }}>+{totalXP} XP</div>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>total earned</div>
         </div>
       </div>
@@ -324,7 +324,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       <div style={{ display:'flex', gap:8, overflowX:'auto', paddingBottom:8, marginBottom:14, scrollbarWidth:'none' }}>
         {SCENARIOS.map((s, i) => (
           <button key={s.id} onClick={() => { if(phase!=='running'){setScenarioIdx(i);setPhase('intro')} }}
-            style={{ flexShrink:0, width:68, padding:'10px 6px', borderRadius:16, border: i===scenarioIdx?`2px solid ${s.color}`:'1px solid rgba(139,92,246,0.25)', background: i===scenarioIdx?`${s.color}18`:'rgba(255,255,255,0.11)', cursor:'pointer', backdropFilter:'blur(12px)', display:'flex', flexDirection:'column', alignItems:'center', gap:4, boxShadow: i===scenarioIdx?`0 4px 16px ${s.color}44`:'none', transition:'all 0.2s' }}>
+            style={{ flexShrink:0, width:68, padding:'10px 6px', borderRadius:16, border: i===scenarioIdx?`2px solid ${s.color}`:'1px solid rgba(0,196,180,0.25)', background: i===scenarioIdx?`${s.color}18`:'rgba(36,63,82,0.60)', cursor:'pointer', backdropFilter:'blur(12px)', display:'flex', flexDirection:'column', alignItems:'center', gap:4, boxShadow: i===scenarioIdx?`0 4px 16px ${s.color}44`:'none', transition:'all 0.2s' }}>
             <ScenarioIcon iconName={s.icon} color={i===scenarioIdx?s.color:'rgba(255,255,255,0.35)'} size={28}/>
             <div style={{ fontSize:8, fontWeight:700, color:i===scenarioIdx?s.color:'rgba(255,255,255,0.35)', lineHeight:1.2, textAlign:'center' }}>{s.title.split(' ')[0]}</div>
           </button>
@@ -333,7 +333,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
 
       {/* INTRO */}
       {phase==='intro'&&(
-        <div style={{ background:'rgba(255,255,255,0.11)', backdropFilter:'blur(20px)', borderRadius:20, padding:20, border:'1px solid rgba(139,92,246,0.25)', boxShadow:'0 4px 24px rgba(0,0,0,0.07)' }}>
+        <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:20, padding:20, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 4px 24px rgba(0,0,0,0.07)' }}>
           <div style={{ display:'flex', justifyContent:'center', marginBottom:12 }}>
             <div style={{ width:72, height:72, borderRadius:22, background:`${scenario.color}12`, border:`2px solid ${scenario.color}25`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 8px 24px ${scenario.color}20` }}>
               <ScenarioIcon iconName={scenario.icon} color={scenario.color} size={40}/>
@@ -346,14 +346,14 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:14 }}>
             {Object.entries(scenario.vitals).map(([k,v])=>(
-              <div key={k} style={{ background:'rgba(255,255,255,0.05)', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
+              <div key={k} style={{ background:'rgba(36,63,82,0.50)', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
                 <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', fontWeight:700, letterSpacing:0.3, marginBottom:4 }}>{k.toUpperCase()}</div>
                 <div style={{ fontSize:12, fontWeight:800, color:(v.includes('0/0')||v==='---'||v==='0%')?'#ff453a':'white' }}>{v}</div>
               </div>
             ))}
           </div>
           <div style={{ fontSize:12, color:'rgba(255,255,255,0.45)', textAlign:'center', marginBottom:14 }}>
-            ⏱ <b style={{color:'#ff3b30'}}>{scenario.timeLimit}s</b> · 2 wrong = FAILED · <b style={{color:'#8b5cf6'}}>+{scenario.xpReward} XP</b>
+            ⏱ <b style={{color:'#ff3b30'}}>{scenario.timeLimit}s</b> · 2 wrong = FAILED · <b style={{color:'#00C4B4'}}>+{scenario.xpReward} XP</b>
           </div>
           <button onClick={startScenario} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${scenario.color},${scenario.color}bb)`, color:'white', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:`0 6px 20px ${scenario.color}44` }}>
             🚨 Respond Now
@@ -364,7 +364,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       {/* RUNNING */}
       {phase==='running'&&(
         <div>
-          <div style={{ background:'rgba(255,255,255,0.11)', backdropFilter:'blur(20px)', borderRadius:16, padding:14, marginBottom:10, border:'1px solid rgba(139,92,246,0.25)' }}>
+          <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:16, padding:14, marginBottom:10, border:'1px solid rgba(0,196,180,0.25)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
               <span style={{ fontSize:14, fontWeight:800, color:timerColor }}>⏱ {timeLeft}s</span>
               <div style={{ display:'flex', gap:10 }}>
@@ -372,7 +372,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
                 <span style={{ fontSize:12, color:'#ff3b30', fontWeight:700 }}>❌ {errors}/2</span>
               </div>
             </div>
-            <div style={{ height:6, background:'rgba(255,255,255,0.15)', borderRadius:3, overflow:'hidden' }}>
+            <div style={{ height:6, background:'rgba(36,63,82,0.65)', borderRadius:3, overflow:'hidden' }}>
               <div style={{ height:'100%', background:timerColor, width:`${timerPct}%`, transition:'width 1s linear', borderRadius:3, boxShadow:`0 0 8px ${timerColor}88` }}/>
             </div>
           </div>
@@ -401,9 +401,9 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
               const done = actions.includes(step.id)
               return(
                 <button key={step.id} onClick={()=>handleAction(step)} disabled={done}
-                  style={{ padding:'13px 16px', borderRadius:14, border:done?(step.correct?'2px solid #30d158':'2px solid #ff453a'):'1px solid rgba(139,92,246,0.3)', background:done?(step.correct?'rgba(48,209,88,0.12)':'rgba(255,69,58,0.12)'):'rgba(255,255,255,0.11)', backdropFilter:'blur(12px)', cursor:done?'default':'pointer', display:'flex', alignItems:'center', gap:12, textAlign:'left', opacity:done?0.85:1, transition:'all 0.2s', boxShadow:done?(step.correct?'0 4px 16px rgba(48,209,88,0.15)':'0 4px 16px rgba(255,69,58,0.15)'):'none' }}>
-                  <div style={{ width:36, height:36, borderRadius:10, background:done?(step.correct?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)'):step.correct?'rgba(10,132,255,0.1)':'rgba(255,59,48,0.1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:done?(step.correct?'1px solid rgba(48,209,88,0.3)':'1px solid rgba(255,69,58,0.3)'):'1px solid rgba(255,255,255,0.18)' }}>
-                    {done ? (step.correct ? Icons.check('#30d158') : Icons.cross('#ff453a')) : <ScenarioIcon iconName={step.icon} color={step.correct?'#0a84ff':'#ff453a'} size={22}/>}
+                  style={{ padding:'13px 16px', borderRadius:14, border:done?(step.correct?'2px solid #30d158':'2px solid #ff453a'):'1px solid rgba(139,92,246,0.3)', background:done?(step.correct?'rgba(48,209,88,0.12)':'rgba(255,69,58,0.12)'):'rgba(36,63,82,0.60)', backdropFilter:'blur(12px)', cursor:done?'default':'pointer', display:'flex', alignItems:'center', gap:12, textAlign:'left', opacity:done?0.85:1, transition:'all 0.2s', boxShadow:done?(step.correct?'0 4px 16px rgba(48,209,88,0.15)':'0 4px 16px rgba(255,69,58,0.15)'):'none' }}>
+                  <div style={{ width:36, height:36, borderRadius:10, background:done?(step.correct?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)'):step.correct?'rgba(0,196,180,0.10)':'rgba(255,59,48,0.1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:done?(step.correct?'1px solid rgba(48,209,88,0.3)':'1px solid rgba(255,69,58,0.3)'):'1px solid rgba(255,255,255,0.18)' }}>
+                    {done ? (step.correct ? Icons.check('#30d158') : Icons.cross('#ff453a')) : <ScenarioIcon iconName={step.icon} color={step.correct?'#00C4B4':'#ff453a'} size={22}/>}
                   </div>
                   <span style={{ fontSize:13, fontWeight:600, color:done?(step.correct?'#86efac':'#fca5a5'):'rgba(255,255,255,0.85)', flex:1, lineHeight:1.4 }}>{step.label}</span>
                   {!done&&Icons.arrow()}

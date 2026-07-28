@@ -5,10 +5,10 @@ export const T = {
   // ── BACKGROUNDS ──
   bg:           '#0f1117',
   bgSecondary:  '#1a1d27',
-  card:         'rgba(255,255,255,0.04)',
-  cardHover:    'rgba(255,255,255,0.07)',
-  border:       'rgba(255,255,255,0.08)',
-  borderLight:  'rgba(255,255,255,0.05)',
+  card:         'rgba(36,63,82,0.45)',
+  cardHover:    'rgba(36,63,82,0.55)',
+  border:       'rgba(36,63,82,0.55)',
+  borderLight:  'rgba(36,63,82,0.50)',
 
   // ── TEXT ──
   text:         '#ffffff',
@@ -22,7 +22,7 @@ export const T = {
   green:        '#4ade80',
   amber:        '#fbbf24',
   rose:         '#f87171',
-  purple:       '#a78bfa',
+  purple:       '#00DFD0',
   pink:         '#f9a8d4',
   orange:       '#fb923c',
   gold:         '#ffd700',
@@ -30,13 +30,13 @@ export const T = {
   // ── MEDICAL SPECIALTIES ──
   emergency:    '#f87171',
   cardiac:      '#38bdf8',
-  neuro:        '#a78bfa',
+  neuro:        '#00DFD0',
   respiratory:  '#67e8f9',
   pharmacy:     '#4ade80',
   radiology:    '#fbbf24',
   pediatrics:   '#f9a8d4',
   infectious:   '#86efac',
-  nephrology:   '#c4b5fd',
+  nephrology:   '#6ee7e1',
   endocrine:    '#fb923c',
 
   // ── STATUS ──
@@ -57,7 +57,7 @@ export const T = {
 
   // ── NAV ──
   navBg:     'rgba(15,17,23,0.92)',
-  navBorder: 'rgba(255,255,255,0.07)',
+  navBorder: 'rgba(36,63,82,0.55)',
 }
 
 // ── GRADIENTS ──

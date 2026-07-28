@@ -71,7 +71,7 @@ export default function PWAInstall() {
   if (showIOSGuide) return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:9999,display:'flex',alignItems:'flex-end',fontFamily:'-apple-system,sans-serif'}}>
       <div style={{width:'100%',background:'linear-gradient(135deg,rgba(28,8,58,0.99),rgba(12,4,32,0.99))',borderRadius:'24px 24px 0 0',padding:'24px 20px 40px',border:'1px solid rgba(139,92,246,0.3)'}}>
-        <div style={{width:40,height:4,borderRadius:2,background:'rgba(255,255,255,0.2)',margin:'0 auto 20px'}}/>
+        <div style={{width:40,height:4,borderRadius:2,background:'rgba(0,196,180,0.25)',margin:'0 auto 20px'}}/>
         <div style={{fontSize:20,fontWeight:900,color:'white',marginBottom:6,textAlign:'center'}}>📲 Install Cliniverse AI</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',marginBottom:24,textAlign:'center'}}>Add to your Home Screen for the best experience</div>
         {[
@@ -85,7 +85,7 @@ export default function PWAInstall() {
           </div>
         ))}
         <button onClick={()=>{setShowIOSGuide(false);dismiss()}}
-          style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 8px 32px rgba(139,92,246,0.5)',marginTop:8}}>
+          style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 8px 32px rgba(139,92,246,0.5)',marginTop:8}}>
           Got it!
         </button>
       </div>
@@ -100,7 +100,7 @@ export default function PWAInstall() {
         <div style={{position:'absolute',top:-20,left:'20%',width:200,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',filter:'blur(20px)',pointerEvents:'none'}}/>
         <div style={{display:'flex',alignItems:'center',gap:14,position:'relative',zIndex:1}}>
           {/* App icon */}
-          <div style={{width:52,height:52,borderRadius:16,background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0,boxShadow:'0 6px 24px rgba(139,92,246,0.5)'}}>⚕️</div>
+          <div style={{width:52,height:52,borderRadius:16,background:'linear-gradient(135deg,#00C4B4,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0,boxShadow:'0 6px 24px rgba(139,92,246,0.5)'}}>⚕️</div>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:'white',marginBottom:2}}>Cliniverse AI</div>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.5)'}}>Install for instant access — works offline</div>
@@ -108,11 +108,11 @@ export default function PWAInstall() {
           <button onClick={dismiss} style={{background:'none',border:'none',color:'rgba(255,255,255,0.3)',fontSize:20,cursor:'pointer',padding:4,flexShrink:0}}>×</button>
         </div>
         <div style={{display:'flex',gap:10,marginTop:14,position:'relative',zIndex:1}}>
-          <button onClick={dismiss} style={{flex:1,padding:'12px',borderRadius:14,border:'1px solid rgba(255,255,255,0.1)',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.5)',fontSize:13,fontWeight:600,cursor:'pointer'}}>
+          <button onClick={dismiss} style={{flex:1,padding:'12px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.50)',color:'rgba(255,255,255,0.5)',fontSize:13,fontWeight:600,cursor:'pointer'}}>
             Not now
           </button>
           <button onClick={handleInstall}
-            style={{flex:2,padding:'12px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:13,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.5)'}}>
+            style={{flex:2,padding:'12px',borderRadius:14,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:13,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.5)'}}>
             📲 {isIOS ? 'Add to Home Screen' : 'Install App'}
           </button>
         </div>

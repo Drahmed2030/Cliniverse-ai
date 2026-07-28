@@ -5,7 +5,7 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(255,255,255,0.11)',
+  card: 'rgba(36,63,82,0.60)',
   border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
@@ -14,7 +14,7 @@ const T = {
   amber: '#fbbf24',
   rose: '#f87171',
   green: '#4ade80',
-  purple: '#a78bfa',
+  purple: '#00DFD0',
 }
 
 const CASE = {
@@ -47,7 +47,7 @@ const CASE = {
     {
       specialty: 'Nephrology',
       icon: '🫘',
-      color: '#a78bfa',
+      color: '#00DFD0',
       name: 'Dr. Khalid',
       opinion: 'AKI on CKD — likely cardiorenal syndrome type 1. K+ 5.9 is dangerous with acidosis. Contrast for Cath is high risk. We need to stabilize kidneys before any invasive procedure. CVVH may be needed.',
       plan: ['Calcium Gluconate 1g IV STAT', 'Insulin + Dextrose for K+', 'Sodium Bicarbonate infusion', 'Avoid NSAIDs and contrast', 'Nephrology ICU consult'],
@@ -99,17 +99,17 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
 
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(167,139,250,0.1), rgba(56,189,248,0.06))',
-        border: '1px solid rgba(167,139,250,0.2)',
+        background: 'linear-gradient(135deg, rgba(0,223,208,0.1), rgba(56,189,248,0.06))',
+        border: '1px solid rgba(0,223,208,0.2)',
         borderRadius: 22, padding: '16px 18px', marginBottom: 16,
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: -30, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%)', pointerEvents: 'none' }}/>
+        <div style={{ position: 'absolute', top: -30, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,223,208,0.12),transparent 70%)', pointerEvents: 'none' }}/>
         <div style={{ fontSize: 9, color: T.purple, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Grand Rounds AI · Multidisciplinary</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: T.text, letterSpacing: -0.5, marginBottom: 4 }}>{CASE.title}</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
           {['Cardiology', 'Nephrology', 'ICU', 'Complex'].map((t, i) => (
-            <span key={i} style={{ fontSize: 9, padding: '2px 8px', borderRadius: 8, background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.2)', color: T.purple, fontWeight: 700 }}>{t}</span>
+            <span key={i} style={{ fontSize: 9, padding: '2px 8px', borderRadius: 8, background: 'rgba(0,223,208,0.1)', border: '1px solid rgba(0,223,208,0.2)', color: T.purple, fontWeight: 700 }}>{t}</span>
           ))}
         </div>
       </div>
@@ -124,10 +124,10 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
             <button key={p.id} onClick={() => setPhase(p.id)} style={{
               flexShrink: 0, padding: '8px 14px', borderRadius: 12, border: 'none',
               cursor: 'pointer', fontFamily: F, fontWeight: 700, fontSize: 11,
-              background: active ? T.purple : done ? 'rgba(167,139,250,0.1)' : T.card,
+              background: active ? T.purple : done ? 'rgba(0,223,208,0.1)' : T.card,
               color: active ? '#fff' : done ? T.purple : T.muted,
-              border: active ? 'none' : '1px solid ' + (done ? 'rgba(167,139,250,0.2)' : T.border),
-              boxShadow: active ? '0 4px 16px rgba(167,139,250,0.3)' : 'none',
+              border: active ? 'none' : '1px solid ' + (done ? 'rgba(0,223,208,0.2)' : T.border),
+              boxShadow: active ? '0 4px 16px rgba(0,223,208,0.3)' : 'none',
             }}>
               {p.icon} {p.label} {done ? '✓' : ''}
             </button>
@@ -159,7 +159,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
             width: '100%', padding: '15px', border: 'none', borderRadius: 16,
             background: 'linear-gradient(135deg, #a78bfa, #38bdf8)',
             color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F,
-            boxShadow: '0 6px 24px rgba(167,139,250,0.3)',
+            boxShadow: '0 6px 24px rgba(0,223,208,0.3)',
           }}>Check Labs 🔬</button>
         </div>
       )}
@@ -192,7 +192,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
               })}
             </div>
           </div>
-          <button onClick={() => setPhase('imaging')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(167,139,250,0.3)' }}>Check Imaging 🩻</button>
+          <button onClick={() => setPhase('imaging')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Check Imaging 🩻</button>
         </div>
       )}
 
@@ -212,7 +212,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
               <p style={{ fontSize: 13, color: T.sub, lineHeight: 1.65, margin: 0 }}>{img.content}</p>
             </div>
           ))}
-          <button onClick={() => setPhase('consultants')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(167,139,250,0.3)' }}>Grand Rounds 👨‍⚕️</button>
+          <button onClick={() => setPhase('consultants')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Grand Rounds 👨‍⚕️</button>
         </div>
       )}
 
@@ -255,7 +255,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                     </div>
                   ))}
                 </div>
-                <button onClick={() => setPhase('decision')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(167,139,250,0.3)' }}>Make Decision ⚡</button>
+                <button onClick={() => setPhase('decision')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Make Decision ⚡</button>
               </div>
             )
           })()}
@@ -287,7 +287,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                      background: !showResult ? 'rgba(255,255,255,0.15)' : isSelected && isCorrect ? 'rgba(74,222,128,0.2)' : isSelected && !isCorrect ? 'rgba(248,113,113,0.2)' : 'rgba(255,255,255,0.15)',
+                      background: !showResult ? 'rgba(36,63,82,0.65)' : isSelected && isCorrect ? 'rgba(74,222,128,0.2)' : isSelected && !isCorrect ? 'rgba(248,113,113,0.2)' : 'rgba(36,63,82,0.65)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 12, fontWeight: 800, color: T.sub,
                     }}>
@@ -306,7 +306,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
           </div>
 
           {showResult && (
-            <div style={{ marginTop: 14, background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.2)', borderRadius: 18, padding: '16px', textAlign: 'center' }}>
+            <div style={{ marginTop: 14, background: 'rgba(0,223,208,0.08)', border: '1px solid rgba(0,223,208,0.2)', borderRadius: 18, padding: '16px', textAlign: 'center' }}>
               <div style={{ fontSize: 28, marginBottom: 6 }}>{CASE.options.find(o => o.id === selected)?.correct ? '🏆' : '📚'}</div>
               <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 4 }}>
                 {CASE.options.find(o => o.id === selected)?.correct ? '+120 XP — Excellent Clinical Judgment!' : 'Keep Learning — Review the Consultants\' Plans'}
