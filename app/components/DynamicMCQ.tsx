@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const C = {
-  card:'rgba(36,63,82,0.60)', border:'rgba(0,196,180,0.25)',
+  card:'rgba(255,255,255,0.14)', border:'rgba(0,196,180,0.25)',
   text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)',
 }
 
@@ -209,7 +209,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
         ))}
       </div>
 
-      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'12px 14px',marginBottom:20,border:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between'}}>
+      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:16,padding:'12px 14px',marginBottom:20,border:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between'}}>
         <div style={{textAlign:'center'}}>
           <div style={{fontSize:18,fontWeight:900,color:'white'}}>{SESSION_LENGTH}</div>
           <div style={{fontSize:10,color:C.muted}}>Questions</div>
@@ -255,7 +255,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
             {question.fromCache&&<span style={{fontSize:8,padding:'1px 6px',borderRadius:6,background:'rgba(48,209,88,0.1)',color:'rgba(48,209,88,0.6)',border:'1px solid rgba(48,209,88,0.15)'}}>cached</span>}
           </div>
           {/* Progress bar */}
-          <div style={{height:3,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden',marginTop:4}}>
+          <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden',marginTop:4}}>
             <div style={{height:'100%',width:`${(qCount/SESSION_LENGTH)*100}%`,background:'linear-gradient(90deg,#ff9f0a,#ff6b35)',borderRadius:2,transition:'width 0.4s'}}/>
           </div>
         </div>
@@ -274,7 +274,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
       )}
 
       {/* Vignette */}
-      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`,position:'relative',overflow:'hidden'}}>
+      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:0,left:0,width:'100%',height:3,background:'linear-gradient(90deg,#ff9f0a,#ff6b35)'}}/>
         <div style={{fontSize:10,color:'#ff9f0a',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>📋 CLINICAL VIGNETTE</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.85}}>{question.vignette}</div>
@@ -299,7 +299,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
           return (
             <div key={opt.id} onClick={()=>handleAnswer(opt.id)}
               style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:selected?'default':'pointer',display:'flex',alignItems:'flex-start',gap:12,transition:'all 0.25s',opacity:selected&&!isCorrect&&!isSelected?0.4:1}}>
-              <div style={{width:32,height:32,borderRadius:10,background:selected&&isCorrect?'rgba(48,209,88,0.2)':selected&&isSelected?'rgba(255,69,58,0.2)':'rgba(36,63,82,0.65)',border:`1px solid ${selected&&isCorrect?'rgba(48,209,88,0.4)':selected&&isSelected?'rgba(255,69,58,0.3)':'rgba(0,196,180,0.20)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:900,color:selected&&isCorrect?'#30d158':selected&&isSelected?'#ff453a':'rgba(255,255,255,0.4)',flexShrink:0}}>
+              <div style={{width:32,height:32,borderRadius:10,background:selected&&isCorrect?'rgba(48,209,88,0.2)':selected&&isSelected?'rgba(255,69,58,0.2)':'rgba(255,255,255,0.12)',border:`1px solid ${selected&&isCorrect?'rgba(48,209,88,0.4)':selected&&isSelected?'rgba(255,69,58,0.3)':'rgba(0,196,180,0.20)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:900,color:selected&&isCorrect?'#30d158':selected&&isSelected?'#ff453a':'rgba(255,255,255,0.4)',flexShrink:0}}>
                 {selected?(isCorrect?'✓':isSelected?'✗':opt.id):opt.id}
               </div>
               <div style={{fontSize:13,color:tc,fontWeight:500,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
@@ -336,7 +336,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
       )}
 
       {/* Live stats bar */}
-      <div style={{display:'flex',gap:10,marginTop:12,background:'rgba(36,63,82,0.40)',borderRadius:14,padding:'10px 14px',border:`1px solid ${C.border}`}}>
+      <div style={{display:'flex',gap:10,marginTop:12,background:'rgba(255,255,255,0.04)',borderRadius:14,padding:'10px 14px',border:`1px solid ${C.border}`}}>
         <div style={{textAlign:'center',flex:1}}>
           <div style={{fontSize:16,fontWeight:900,color:'#30d158'}}>{stats.correct}</div>
           <div style={{fontSize:9,color:C.muted}}>Correct</div>

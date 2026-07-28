@@ -165,7 +165,7 @@ const CASES: AutopsyCase[] = [
 ]
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -200,7 +200,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7}}>Analyse real medical errors. Find what went wrong. Learn without blame. Prevent future harm.</div>
         <div style={{display:'flex',gap:8,marginTop:12}}>
           {['🔍 Analyse','⚠️ No Blame','🛡️ Prevent'].map(t=>(
-            <div key={t} style={{flex:1,background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
+            <div key={t} style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center',fontSize:11,color:C.sub,fontWeight:600}}>{t}</div>
           ))}
         </div>
       </div>
@@ -370,7 +370,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
         </div>
 
-        <div style={{height:4,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:4,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/c.questions.length)*100}%`,background:`linear-gradient(90deg,${c.color},${c.color}bb)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${c.color}88`}}/>
         </div>
 
@@ -388,7 +388,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}

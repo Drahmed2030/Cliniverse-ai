@@ -14,7 +14,7 @@ const SLIDES = [
     headline: ['Your next patient', 'could change', 'everything.'],
     sub: 'Cliniverse AI puts you inside real emergencies — STEMI, Sepsis, Stroke. Make the call before it is too late.',
     accent: '#00C4B4',
-    bg: ['#0d2535', '#1e3d52'],
+    bg: ['#1a3a50', '#2a4a60'],
     glow: 'rgba(0,196,180,0.18)',
     btnGrad: 'linear-gradient(135deg, #00C4B4, #0066cc)',
     visual: 'ecg',
@@ -24,7 +24,7 @@ const SLIDES = [
     headline: ['AI that challenges', 'you like your', 'toughest attending.'],
     sub: 'Every case built on AHA, ESC, and MRCP guidelines. Instant AI feedback on every decision you make.',
     accent: '#00DFD0',
-    bg: ['#0a1f2e', '#162e3e'],
+    bg: ['#0a1f2e', '#1e3d52'],
     glow: 'rgba(0,180,166,0.18)',
     btnGrad: 'linear-gradient(135deg, #D4A847, #FF9500)',
     visual: 'brain',
@@ -44,7 +44,7 @@ const SLIDES = [
     headline: ['From intern', 'to consultant —', 'one platform.'],
     sub: 'The clinical platform that grows with your career. Built by a physician, for physicians worldwide.',
     accent: '#3ED6A0',
-    bg: ['#0d2535', '#162e3e'],
+    bg: ['#1a3a50', '#1e3d52'],
     glow: 'rgba(62,214,160,0.15)',
     btnGrad: 'linear-gradient(135deg, #34C759, #00C4B4)',
     visual: 'shield',
@@ -240,7 +240,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         </p>
 
         {/* Plan toggle */}
-        <div style={{ display:'flex', background:'rgba(36,63,82,0.50)', borderRadius:16, padding:4, marginBottom:20, gap:4 }}>
+        <div style={{ display:'flex', background:'rgba(255,255,255,0.05)', borderRadius:16, padding:4, marginBottom:20, gap:4 }}>
           {([['annual','Annual','$99/yr','Save 45%'],['monthly','Monthly','$14.99/mo','']] as const).map(([key,label,price,save]) => (
             <button key={key} onClick={() => setPlan(key)} style={{
               flex:1, padding:'12px 8px', borderRadius:13, border:'none', cursor:'pointer', fontFamily:F,
@@ -259,7 +259,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
         {/* Features */}
         <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:24 }}>
           {features.map((f,i) => (
-            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(36,63,82,0.40)', borderRadius:14, border:'1px solid rgba(36,63,82,0.65)' }}>
+            <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'12px 16px', background:'rgba(255,255,255,0.04)', borderRadius:14, border:'1px solid rgba(36,63,82,0.65)' }}>
               <span style={{ fontSize:20 }}>{f.icon}</span>
               <span style={{ fontSize:14, color:'rgba(255,255,255,0.8)', fontWeight:600 }}>{f.text}</span>
               <span style={{ marginLeft:'auto', color:'#34d399', fontSize:16 }}>✓</span>
@@ -285,7 +285,7 @@ const Paywall = ({ onPay, onSkip }: { onPay: () => void; onSkip: () => void }) =
           Continue with Free (1 case)
         </button>
 
-        <p style={{ textAlign:'center', fontSize:11, color:'rgba(36,63,82,0.65)', margin:0, lineHeight:1.8 }}>
+        <p style={{ textAlign:'center', fontSize:11, color:'rgba(255,255,255,0.12)', margin:0, lineHeight:1.8 }}>
           Cancel anytime · Secure payment · 7-day free trial
         </p>
       </div>
@@ -357,7 +357,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
       {/* Stories progress bars */}
       <div style={{ padding:'52px 20px 0', display:'flex', gap:5, position:'relative', zIndex:2 }}>
         {SLIDES.map((_,i) => (
-          <div key={i} style={{ flex:1, height:3, borderRadius:2, background:'rgba(36,63,82,0.65)', overflow:'hidden' }}>
+          <div key={i} style={{ flex:1, height:3, borderRadius:2, background:'rgba(255,255,255,0.12)', overflow:'hidden' }}>
             <div style={{
               height:'100%', borderRadius:2,
               background: i < slide ? SLIDES[i].accent : i === slide ? current.accent : 'transparent',
@@ -416,7 +416,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
             {isLast ? 'See Plans →' : 'Continue →'}
           </button>
           <button onClick={e=>{ e.stopPropagation(); setShowPaywall(true) }} style={{
-            padding:'17px 18px', background:'rgba(36,63,82,0.65)',
+            padding:'17px 18px', background:'rgba(255,255,255,0.12)',
             border:'1px solid rgba(0,196,180,0.20)', borderRadius:18,
             color:'rgba(255,255,255,0.35)', fontSize:13, fontWeight:700,
             cursor:'pointer', fontFamily:F,

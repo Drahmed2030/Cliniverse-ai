@@ -49,7 +49,7 @@ const DIFFICULTIES = [
 const AUDIENCES = ['Medical Students','Junior Residents','Senior Residents','Consultants','Nurses','Pharmacists','Lab Technicians','All Healthcare']
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -253,7 +253,7 @@ Return ONLY this JSON structure:
         value={topic}
         onChange={e=>setTopic(e.target.value)}
         placeholder={`e.g. "STEMI in young patient" or "Drug interaction warfarin"`}
-        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:'white',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
+        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'white',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
       />
 
       {/* Generate button */}
@@ -305,7 +305,7 @@ Return ONLY this JSON structure:
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>VITAL SIGNS</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
             {Object.entries(g.vitals).map(([k,v])=>(
-              <div key={k} style={{background:'rgba(36,63,82,0.40)',borderRadius:10,padding:'8px',textAlign:'center'}}>
+              <div key={k} style={{background:'rgba(255,255,255,0.04)',borderRadius:10,padding:'8px',textAlign:'center'}}>
                 <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>{k.toUpperCase()}</div>
                 <div style={{fontSize:13,fontWeight:800,color:C.text}}>{v}</div>
               </div>

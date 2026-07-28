@@ -55,7 +55,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         <span style={{fontSize:10,color:'rgba(255,255,255,0.3)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
       </div>
 
-      <div style={{background:'rgba(36,63,82,0.40)',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
+      <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{width:8,height:8,borderRadius:'50%',background:current.color,boxShadow:'0 0 8px '+current.color,flexShrink:0}}/>
           <span style={{fontSize:12,color:current.color,fontWeight:700,flexShrink:0}}>{current.flag} {current.city}</span>
@@ -67,7 +67,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
       <div style={{display:'flex',flexDirection:'column',gap:6}}>
         {FEED.slice(0,4).map((f)=>(
           <div key={f.id} onClick={()=>setActive(active===f.id?null:f.id)}
-            style={{background:active===f.id?f.color+'10':'rgba(36,63,82,0.40)',borderRadius:14,padding:'10px 12px',border:'1px solid '+(active===f.id?f.color+'30':'rgba(36,63,82,0.50)'),cursor:'pointer',transition:'all 0.2s'}}>
+            style={{background:active===f.id?f.color+'10':'rgba(255,255,255,0.04)',borderRadius:14,padding:'10px 12px',border:'1px solid '+(active===f.id?f.color+'30':'rgba(255,255,255,0.05)'),cursor:'pointer',transition:'all 0.2s'}}>
             <div style={{display:'flex',alignItems:'center',gap:8}}>
               <div style={{width:7,height:7,borderRadius:'50%',background:f.color,flexShrink:0,boxShadow:f.status==='LIVE'?'0 0 6px '+f.color:'none'}}/>
               <span style={{fontSize:11,color:f.color,fontWeight:700,flexShrink:0}}>{f.flag} {f.city}</span>
@@ -99,7 +99,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
             <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
             <div style={{fontSize:14,fontWeight:800,color:'white',marginBottom:12}}>📋 SBAR Report</div>
             <textarea readOnly value={sbar}
-              style={{width:'100%',height:200,background:'rgba(36,63,82,0.50)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(255,255,255,0.8)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
+              style={{width:'100%',height:200,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(255,255,255,0.8)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
             <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
               style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
               Copy SBAR

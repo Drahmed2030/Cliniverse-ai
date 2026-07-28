@@ -5,7 +5,7 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
@@ -287,7 +287,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                      background: !showResult ? 'rgba(36,63,82,0.65)' : isSelected && isCorrect ? 'rgba(74,222,128,0.2)' : isSelected && !isCorrect ? 'rgba(248,113,113,0.2)' : 'rgba(36,63,82,0.65)',
+                      background: !showResult ? 'rgba(255,255,255,0.12)' : isSelected && isCorrect ? 'rgba(74,222,128,0.2)' : isSelected && !isCorrect ? 'rgba(248,113,113,0.2)' : 'rgba(255,255,255,0.12)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 12, fontWeight: 800, color: T.sub,
                     }}>

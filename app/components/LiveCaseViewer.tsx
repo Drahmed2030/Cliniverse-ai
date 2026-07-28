@@ -5,7 +5,7 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(255,255,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(148,163,184,0.8)',
@@ -260,7 +260,7 @@ export default function LiveCaseViewer({ specialty = 'Emergency Medicine', diffi
               return (
                 <div key={o.id} onClick={() => handleAnswer(o.id)} style={{ background: bg, border: '1px solid ' + bdr, borderRadius: 18, padding: '14px 16px', cursor: selected ? 'default' : 'pointer', transition: 'all 0.3s' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: 'rgba(36,63,82,0.65)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: T.sub }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: 'rgba(255,255,255,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: T.sub }}>
                       {showResult && isSelected ? (isCorrect ? '✓' : '✗') : o.id.toUpperCase()}
                     </div>
                     <span style={{ fontSize: 13, fontWeight: 600, color: T.text, flex: 1, lineHeight: 1.4 }}>{o.text}</span>

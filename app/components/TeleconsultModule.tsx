@@ -272,7 +272,7 @@ const GUIDELINES = [
 ]
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -493,7 +493,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
               📋 {showHandover?'Hide':'View'} SBAR Handover Template
             </button>
             {showHandover&&(
-              <div style={{background:'rgba(36,63,82,0.40)',borderRadius:14,padding:'14px 16px',border:'1px solid rgba(0,196,180,0.2)'}}>
+              <div style={{background:'rgba(255,255,255,0.04)',borderRadius:14,padding:'14px 16px',border:'1px solid rgba(0,196,180,0.2)'}}>
                 <div style={{fontSize:11,color:'#bf5af2',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>📋 SBAR HANDOVER</div>
                 <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.85,whiteSpace:'pre-line'}}>{c.handoverTemplate}</div>
               </div>

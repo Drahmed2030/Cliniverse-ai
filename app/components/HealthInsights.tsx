@@ -113,7 +113,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       </div>
 
       {/* Tab Toggle */}
-      <div style={{ display:'flex', gap:8, marginBottom:16, background:'rgba(36,63,82,0.60)', backdropFilter:'blur(12px)', borderRadius:16, padding:5, border:'1px solid rgba(0,196,180,0.25)' }}>
+      <div style={{ display:'flex', gap:8, marginBottom:16, background:'rgba(255,255,255,0.14)', backdropFilter:'blur(12px)', borderRadius:16, padding:5, border:'1px solid rgba(0,196,180,0.25)' }}>
         {[{id:'insights',icon:'📊',label:'Weekly Insights'},{id:'drugs',icon:'💊',label:'Drug Checker'}].map(t=>(
           <button key={t.id} onClick={()=>setActiveTab(t.id as any)} style={{ flex:1, padding:'10px 8px', borderRadius:12, border:'none', background:activeTab===t.id?'rgba(139,92,246,0.3)':'transparent', cursor:'pointer', fontSize:13, fontWeight:700, color:activeTab===t.id?'#00C4B4':'rgba(255,255,255,0.35)', boxShadow:activeTab===t.id?'0 2px 8px rgba(0,0,0,0.08)':'none', transition:'all 0.2s' }}>
             {t.icon} {t.label}
@@ -148,7 +148,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 {label:'XP Earned', value:weeklyXP, unit:'', color:'#30d158', goal:`/${weeklyGoal} goal`},
                 {label:'MCQ Accuracy', value:`${accuracy}`, unit:'%', color:'#00C4B4', goal:`${mcqTotal} answered`},
               ].map(s=>(
-                <div key={s.label} style={{ background:'rgba(36,63,82,0.60)', border:'1px solid rgba(36,63,82,0.65)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
+                <div key={s.label} style={{ background:'rgba(255,255,255,0.14)', border:'1px solid rgba(36,63,82,0.65)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
                   <div style={{ fontSize:22, fontWeight:900, color:s.color, letterSpacing:-1 }}>{s.value}{s.unit}</div>
                   <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
                   <div style={{ fontSize:9, color:'rgba(0,196,180,0.25)', marginTop:2 }}>{s.goal}</div>
@@ -159,7 +159,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
           {/* Streak + Rank Progress */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:14 }}>
-            <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
+            <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#ff9500', lineHeight:1 }}>{streak}</div>
               <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>days in a row 🔥</div>
@@ -168,7 +168,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
               </div>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', marginTop:4 }}>Goal: 7-day streak</div>
             </div>
-            <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
+            <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#00C4B4', lineHeight:1 }}>{xp}</div>
               <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>clinical points</div>
@@ -180,7 +180,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           </div>
 
           {/* Weekly Performance Chart */}
-          <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:18, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
+          <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:14 }}>Weekly Activity</div>
             <div style={{ display:'flex', gap:6, alignItems:'flex-end', height:60 }}>
               {['M','T','W','T','F','S','S'].map((day,i)=>{
@@ -209,13 +209,13 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {/* ── DRUG INTERACTION CHECKER ── */}
       {activeTab === 'drugs' && (
         <div>
-          <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:20, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
+          <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:20, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:14 }}>💊 Drug Interaction Checker</div>
 
             {/* Drug 1 */}
             <div style={{ marginBottom:12, position:'relative' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 1</div>
-              <input value={drug1||search1} onChange={e=>{setSearch1(e.target.value);setDrug1('');setShow1(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow1(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug1?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug1?'rgba(10,132,255,0.05)':'rgba(36,63,82,0.50)', fontSize:14, fontWeight:drug1?700:400, color:drug1?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
+              <input value={drug1||search1} onChange={e=>{setSearch1(e.target.value);setDrug1('');setShow1(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow1(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug1?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug1?'rgba(10,132,255,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug1?700:400, color:drug1?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show1 && search1 && !drug1 && filtered1.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
                   {filtered1.map(d=>(
@@ -230,7 +230,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
             {/* Drug 2 */}
             <div style={{ marginBottom:16, position:'relative' }}>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 2</div>
-              <input value={drug2||search2} onChange={e=>{setSearch2(e.target.value);setDrug2('');setShow2(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow2(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug2?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug2?'rgba(0,196,180,0.05)':'rgba(36,63,82,0.50)', fontSize:14, fontWeight:drug2?700:400, color:drug2?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
+              <input value={drug2||search2} onChange={e=>{setSearch2(e.target.value);setDrug2('');setShow2(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow2(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug2?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug2?'rgba(0,196,180,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug2?700:400, color:drug2?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show2 && search2 && !drug2 && filtered2.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
                   {filtered2.map(d=>(
@@ -281,7 +281,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           )}
 
           {/* Common Dangerous Interactions */}
-          <div style={{ background:'rgba(36,63,82,0.60)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)' }}>
+          <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)' }}>
             <div style={{ fontSize:13, fontWeight:700, color:'white', marginBottom:12 }}>⚠️ High-Risk Combinations</div>
             {[
               {combo:'Warfarin + Fluconazole', sev:'CONTRAINDICATED', color:'#dc2626'},
@@ -298,7 +298,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 const key1=`${parts[0]}+${parts[1]}`, key2=`${parts[1]}+${parts[0]}`
                 const result = INTERACTIONS[key1]||INTERACTIONS[key2]
                 if(result){setInteraction(result);setNoInteraction(false)}
-              }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:12, background:'rgba(36,63,82,0.60)', marginBottom:6, cursor:'pointer', border:'1px solid rgba(0,0,0,0.05)' }}>
+              }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:12, background:'rgba(255,255,255,0.14)', marginBottom:6, cursor:'pointer', border:'1px solid rgba(0,0,0,0.05)' }}>
                 <div style={{ width:8, height:8, borderRadius:'50%', background:item.color, flexShrink:0 }}/>
                 <div style={{ flex:1, fontSize:13, fontWeight:600, color:'white' }}>{item.combo}</div>
                 <div style={{ fontSize:9, padding:'2px 8px', borderRadius:8, background:`${item.color}15`, color:item.color, fontWeight:800 }}>{item.sev}</div>

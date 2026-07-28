@@ -58,7 +58,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         </div>
       </div>
       {CASES.map(c=>(
-        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
+        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:48,height:48,borderRadius:15,background:`${c.color}18`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26}}>{c.icon}</div>
             <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:'white'}}>{c.title}</div><div style={{fontSize:12,color:'rgba(255,255,255,0.4)',marginTop:2}}>{c.sub}</div></div>
@@ -84,7 +84,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',marginBottom:12}}>{active.scenario}</div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
           {Object.entries(active.vitals).map(([k,v])=>(
-            <div key={k} style={{background:'rgba(36,63,82,0.65)',borderRadius:12,padding:'8px 12px'}}>
+            <div key={k} style={{background:'rgba(255,255,255,0.12)',borderRadius:12,padding:'8px 12px'}}>
               <div style={{fontSize:9,color:'rgba(255,255,255,0.35)',textTransform:'uppercase',marginBottom:2}}>{k}</div>
               <div style={{fontSize:13,fontWeight:700,color:'white'}}>{v as string}</div>
             </div>
@@ -93,24 +93,24 @@ export default function CardiacSurgeryAI({onXP}:Props){
       </div>
       <div style={{display:'flex',gap:6,marginBottom:14,overflowX:'auto'}}>
         {active.steps.map((_,i)=>(
-          <div key={i} onClick={()=>{setStep(i);setDetail(false)}} style={{flexShrink:0,width:36,height:36,borderRadius:12,background:i===step?`${active.color}30`:i<step?'rgba(48,209,88,0.2)':'rgba(36,63,82,0.50)',border:`1.5px solid ${i===step?active.color:i<step?'rgba(48,209,88,0.5)':'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,cursor:'pointer',color:'white'}}>{i<step?'✓':i+1}</div>
+          <div key={i} onClick={()=>{setStep(i);setDetail(false)}} style={{flexShrink:0,width:36,height:36,borderRadius:12,background:i===step?`${active.color}30`:i<step?'rgba(48,209,88,0.2)':'rgba(255,255,255,0.05)',border:`1.5px solid ${i===step?active.color:i<step?'rgba(48,209,88,0.5)':'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,cursor:'pointer',color:'white'}}>{i<step?'✓':i+1}</div>
         ))}
       </div>
-      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
+      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
           <div style={{width:36,height:36,borderRadius:11,background:`${active.color}20`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{s.icon}</div>
           <div style={{fontSize:15,fontWeight:800,color:'white'}}>{s.title}</div>
         </div>
         <div style={{fontSize:14,color:'rgba(255,255,255,0.8)',lineHeight:1.75,marginBottom:12}}>{s.content}</div>
-        <button onClick={()=>setDetail(p=>!p)} style={{background:'rgba(36,63,82,0.50)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'rgba(255,255,255,0.6)',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
-        {detail&&<div style={{marginTop:10,padding:'12px',background:'rgba(36,63,82,0.40)',borderRadius:12,fontSize:13,color:'rgba(255,255,255,0.65)',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
+        <button onClick={()=>setDetail(p=>!p)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'rgba(255,255,255,0.6)',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
+        {detail&&<div style={{marginTop:10,padding:'12px',background:'rgba(255,255,255,0.04)',borderRadius:12,fontSize:13,color:'rgba(255,255,255,0.65)',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
       </div>
       <button onClick={()=>setShowAIPanel(p=>!p)} style={{width:'100%',padding:'12px',borderRadius:16,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(139,92,246,0.1)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',marginBottom:10,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>🤖 AI Consultant {showAIPanel?'▲':'▼'}</button>
       {showAIPanel&&(
         <div style={{background:'rgba(15,5,40,0.97)',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(139,92,246,0.3)'}}>
           {aiAnswer&&<div style={{background:'rgba(10,132,255,0.08)',borderRadius:12,padding:12,marginBottom:10,fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.7}}><span style={{fontSize:10,color:'#00C4B4',fontWeight:700,display:'block',marginBottom:4}}>🤖 AI</span>{aiAnswer}</div>}
           <div style={{display:'flex',gap:8}}>
-            <input value={aiQ} onChange={e=>setAiQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ask()} placeholder="Ask cardiac surgery question..." style={{flex:1,padding:'11px 14px',borderRadius:13,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.65)',color:'white',fontSize:13,outline:'none'}}/>
+            <input value={aiQ} onChange={e=>setAiQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ask()} placeholder="Ask cardiac surgery question..." style={{flex:1,padding:'11px 14px',borderRadius:13,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'white',fontSize:13,outline:'none'}}/>
             <button onClick={ask} style={{width:44,height:44,borderRadius:13,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:18,cursor:'pointer',flexShrink:0}}>→</button>
           </div>
         </div>

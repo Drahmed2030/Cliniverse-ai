@@ -20,7 +20,7 @@ export default class ErrorBoundary extends React.Component<{children: React.Reac
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{minHeight:'100vh',background:'#1e3d52',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,fontFamily:'-apple-system,sans-serif'}}>
+        <div style={{minHeight:'100vh',background:'#2a4a60',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24,fontFamily:'-apple-system,sans-serif'}}>
           <div style={{fontSize:60,marginBottom:16}}>🏥</div>
           <div style={{fontSize:22,fontWeight:800,color:'white',marginBottom:8}}>Something went wrong</div>
           <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',marginBottom:32,textAlign:'center'}}>Please refresh the page to continue training</div>

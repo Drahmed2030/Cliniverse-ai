@@ -136,7 +136,7 @@ const CASES: DetectiveCase[] = [
 ]
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -188,15 +188,15 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Order investigations wisely. Every test costs money. Diagnose accurately with the least spend to maximise your score.</div>
         <div style={{display:'flex',gap:8}}>
-          <div style={{flex:1,background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>💰</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Budget System</div>
           </div>
-          <div style={{flex:1,background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🔬</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Order Tests</div>
           </div>
-          <div style={{flex:1,background:'rgba(36,63,82,0.60)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🏆</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Diagnose</div>
           </div>
@@ -270,7 +270,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
             <span style={{fontSize:12,color:C.sub,fontWeight:600}}>💰 Remaining Budget</span>
             <span style={{fontSize:14,fontWeight:800,color:budgetColor}}>{budget} pts</span>
           </div>
-          <div style={{height:6,background:'rgba(36,63,82,0.65)',borderRadius:3,overflow:'hidden'}}>
+          <div style={{height:6,background:'rgba(255,255,255,0.12)',borderRadius:3,overflow:'hidden'}}>
             <div style={{height:'100%',width:`${budgetPct}%`,background:`linear-gradient(90deg,${budgetColor},${budgetColor}aa)`,borderRadius:3,transition:'width 0.4s ease',boxShadow:`0 0 10px ${budgetColor}88`}}/>
           </div>
           <div style={{fontSize:10,color:C.muted,marginTop:4}}>{ordered.length} tests ordered · {c.budget - budget} pts spent</div>
@@ -350,7 +350,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         {c.ddx.map((dx,i)=>(
           <div key={i} onClick={()=>setSelectedDx(i)}
             style={{background:selectedDx===i?`${c.color}15`:C.card,borderRadius:16,padding:'16px',border:selectedDx===i?`2px solid ${c.color}`:`1px solid ${C.border}`,cursor:'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',boxShadow:selectedDx===i?`0 4px 20px ${c.color}25`:'none'}}>
-            <div style={{width:30,height:30,borderRadius:9,background:selectedDx===i?`${c.color}25`:'rgba(36,63,82,0.65)',border:`1px solid ${selectedDx===i?c.color:'rgba(0,196,180,0.20)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:800,color:selectedDx===i?c.color:C.muted,flexShrink:0}}>{i+1}</div>
+            <div style={{width:30,height:30,borderRadius:9,background:selectedDx===i?`${c.color}25`:'rgba(255,255,255,0.12)',border:`1px solid ${selectedDx===i?c.color:'rgba(0,196,180,0.20)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:800,color:selectedDx===i?c.color:C.muted,flexShrink:0}}>{i+1}</div>
             <div style={{fontSize:14,fontWeight:600,color:selectedDx===i?C.text:C.sub,flex:1}}>{dx}</div>
             {selectedDx===i&&<span style={{color:c.color,fontSize:18}}>◉</span>}
           </div>
@@ -358,7 +358,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
       </div>
 
       <button onClick={submitDx} disabled={selectedDx===null}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:selectedDx!==null?'linear-gradient(135deg,#00C4B4,#0a84ff)':'rgba(36,63,82,0.65)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',boxShadow:selectedDx!==null?'0 6px 24px rgba(139,92,246,0.4)':'none',opacity:selectedDx!==null?1:0.5}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:selectedDx!==null?'linear-gradient(135deg,#00C4B4,#0a84ff)':'rgba(255,255,255,0.12)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',boxShadow:selectedDx!==null?'0 6px 24px rgba(139,92,246,0.4)':'none',opacity:selectedDx!==null?1:0.5}}>
         ✅ Submit Diagnosis
       </button>
     </div>

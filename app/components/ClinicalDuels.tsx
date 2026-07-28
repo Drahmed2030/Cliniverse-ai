@@ -91,7 +91,7 @@ const DUEL_CASES: DuelCase[] = [
 ]
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -310,7 +310,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>!showExplain&&handleAnswer('A',i)}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:showExplain?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:30,height:30,borderRadius:9,background:'rgba(36,63,82,0.60)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.5)',flexShrink:0}}>
+                <div style={{width:30,height:30,borderRadius:9,background:'rgba(255,255,255,0.14)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.5)',flexShrink:0}}>
                   {['A','B','C','D'][i]}
                 </div>
                 <div style={{fontSize:13,color,fontWeight:600,flex:1,lineHeight:1.4}}>{opt}</div>

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 const DifficultConversations = dynamic(() => import('./DifficultConversations'), { ssr: false })
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -67,7 +67,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
     <div style={{flex:half?1:'none',width:half?undefined:'100%',marginBottom:half?0:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <input value={(form as any)[k]} onChange={e=>f(k,e.target.value)} placeholder={placeholder||label}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
@@ -75,7 +75,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
@@ -144,7 +144,7 @@ Generate a complete professional SBAR handover ready for verbal or written commu
             <div key={v.k}>
               <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3,letterSpacing:0.5}}>{v.l}</div>
               <input value={(form as any)[v.k]} onChange={e=>f(v.k,e.target.value)} placeholder={v.p}
-                style={{width:'100%',padding:'8px 10px',borderRadius:10,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
+                style={{width:'100%',padding:'8px 10px',borderRadius:10,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',boxSizing:'border-box'}}/>
             </div>
           ))}
         </div>
@@ -217,7 +217,7 @@ Be warm, reassuring and clear.`
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box',direction:form.language==='Arabic'&&k==='diagnosis'?'rtl':'ltr'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box',direction:form.language==='Arabic'&&k==='diagnosis'?'rtl':'ltr'}}/>
     </div>
   )
 
@@ -324,7 +324,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
     <div style={{marginBottom:10}}>
       <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:4,letterSpacing:0.5}}>{label}</div>
       <textarea value={(form as any)[k]} onChange={e=>f(k,e.target.value)} rows={rows}
-        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
+        style={{width:'100%',padding:'10px 12px',borderRadius:12,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:C.text,fontSize:12,outline:'none',resize:'none',boxSizing:'border-box'}}/>
     </div>
   )
 
@@ -363,7 +363,7 @@ Write a structured reflective log using Gibbs Reflective Cycle (Description, Fee
         ))}
       </div>
 
-      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:16,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`}}>
         <TextArea label="CASE TYPE / CLINICAL SCENARIO" k="caseType" rows={2}/>
         <TextArea label="YOUR ROLE IN THE CASE" k="role" rows={1}/>
         <TextArea label="PATIENT OUTCOME" k="outcome" rows={1}/>
@@ -454,7 +454,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
         <div style={{fontSize:13,color:C.sub,lineHeight:1.6}}>AI-powered tools for your daily clinical workflow — SBAR, discharge letters, portfolio</div>
         <div style={{display:'flex',gap:6,marginTop:12,flexWrap:'wrap'}}>
           {['NHS','HSE Ireland','KSA','ACGME','GMC'].map(b=>(
-            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(36,63,82,0.65)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{b}</span>
+            <span key={b} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{b}</span>
           ))}
         </div>
       </div>

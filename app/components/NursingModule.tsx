@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(36,63,82,0.60)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(255,255,255,0.14)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
 
 const VITALS_RANGES = [
   { param:'Heart Rate', normal:'60-100 bpm', concern:'< 50 or > 120', critical:'< 40 or > 150', icon:'❤️', color:'#ff453a', action:'Assess rhythm, check BP, escalate if symptomatic' },
@@ -126,7 +126,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
         <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:C.text}}>📊 NEWS2 Score</div>
       </div>
-      <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
+      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
         {NEWS2_TABLE.map((row,i)=>(
           <div key={i} style={{marginBottom:i<NEWS2_TABLE.length-1?12:0,paddingBottom:i<NEWS2_TABLE.length-1?12:0,borderBottom:i<NEWS2_TABLE.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
             <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',fontWeight:700,marginBottom:6}}>{row.param}</div>
@@ -185,7 +185,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}

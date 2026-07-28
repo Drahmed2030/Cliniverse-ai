@@ -5,10 +5,10 @@ export const T = {
   // ── BACKGROUNDS ──
   bg:           '#0f1117',
   bgSecondary:  '#1a1d27',
-  card:         'rgba(36,63,82,0.45)',
-  cardHover:    'rgba(36,63,82,0.55)',
-  border:       'rgba(36,63,82,0.55)',
-  borderLight:  'rgba(36,63,82,0.50)',
+  card:         'rgba(255,255,255,0.05)',
+  cardHover:    'rgba(255,255,255,0.12)',
+  border:       'rgba(255,255,255,0.12)',
+  borderLight:  'rgba(255,255,255,0.05)',
 
   // ── TEXT ──
   text:         '#ffffff',
@@ -57,7 +57,7 @@ export const T = {
 
   // ── NAV ──
   navBg:     'rgba(15,17,23,0.92)',
-  navBorder: 'rgba(36,63,82,0.55)',
+  navBorder: 'rgba(255,255,255,0.12)',
 }
 
 // ── GRADIENTS ──

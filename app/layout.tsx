@@ -3,7 +3,7 @@ import "./globals.css"
 import ThemeProvider from "./components/ThemeProvider"
 
 export const viewport: Viewport = {
-  themeColor: "#1e3d52",
+  themeColor: "#2a4a60",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

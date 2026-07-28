@@ -1,6 +1,6 @@
 :root {
-  --bg-base:        #1e3d52;
-  --bg-deep:        #162e3e;
+  --bg-base:        #2a4a60;
+  --bg-deep:        #1e3d52;
   --bg-card:        #243f52;
   --bg-card-2:      #2a4a60;
   --bg-glass:       rgba(36, 63, 82, 0.80);
@@ -65,6 +65,10 @@ html, body {
     radial-gradient(ellipse at 15% 15%, rgba(0,196,180,0.10) 0%, transparent 55%),
     radial-gradient(ellipse at 85% 85%, rgba(212,168,71,0.08) 0%, transparent 55%);
   background-attachment: fixed;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(0,196,180,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(212,168,71,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(42,74,96,0.80) 0%, transparent 100%);
 }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }

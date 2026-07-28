@@ -138,7 +138,7 @@ const darkTheme = {
   bg: 'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',
   headerBg: 'rgba(26,37,53,0.92)',
   headerBorder: 'rgba(0,196,180,0.25)',
-  cardBg: 'rgba(36,63,82,0.55)',
+  cardBg: 'rgba(255,255,255,0.12)',
   cardBorder: 'rgba(0,196,180,0.30)',
   text: '#ffffff',
   textSub: 'rgba(255,255,255,0.6)',
@@ -147,9 +147,9 @@ const darkTheme = {
   navBorder: 'rgba(0,196,180,0.3)',
   navActiveColor: '#00C4B4',
   navInactiveColor: 'rgba(255,255,255,0.3)',
-  inputBg: 'rgba(36,63,82,0.65)',
+  inputBg: 'rgba(255,255,255,0.12)',
   accent: '#00C4B4',
-  segmentBg: 'rgba(36,63,82,0.65)',
+  segmentBg: 'rgba(255,255,255,0.12)',
   caseBg: 'rgba(28,14,50,0.9)',
 }
 
@@ -333,7 +333,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <div style={{fontSize:52,textAlign:'center',marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.5))'}}>🔒</div>
         <h2 style={{fontSize:24,fontWeight:900,color:'white',textAlign:'center',margin:'0 0 8px',letterSpacing:-0.5}}>PRO Case</h2>
         <p style={{color:'rgba(255,255,255,0.5)',fontSize:14,textAlign:'center',lineHeight:1.7,margin:'0 0 24px'}}>Unlock all 30+ emergency cases with Cliniverse PRO</p>
-        <div style={{background:'rgba(36,63,82,0.50)',borderRadius:16,padding:'14px 16px',marginBottom:20}}>
+        <div style={{background:'rgba(255,255,255,0.05)',borderRadius:16,padding:'14px 16px',marginBottom:20}}>
           {['30+ Emergency Cases','AI Clinical Consultant','PDF Certificates','500+ MCQ Bank','Global Leaderboard'].map(f=>(
             <div key={f} style={{display:'flex',alignItems:'center',gap:10,padding:'6px 0',borderBottom:'1px solid rgba(36,63,82,0.50)'}}>
               <span style={{color:'#30d158',fontSize:14}}>✓</span>
@@ -390,10 +390,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       <div style={{height:22,marginBottom:28,overflow:'hidden',width:300,textAlign:'center'}}>
         <p key={tagline} style={{fontSize:13,color:'rgba(255,255,255,0.5)',margin:0,animation:'slideUp 0.6s ease'}}>{taglines[tagline]}</p>
       </div>
-      <div style={{width:220,height:2,background:'rgba(36,63,82,0.60)',borderRadius:1,marginBottom:12,overflow:'hidden'}}>
+      <div style={{width:220,height:2,background:'rgba(255,255,255,0.14)',borderRadius:1,marginBottom:12,overflow:'hidden'}}>
         <div style={{height:'100%',background:'linear-gradient(90deg,#00C4B4,#0a84ff,#30d158)',width:`${progress}%`,transition:'width 0.1s'}}/>
       </div>
-      <p style={{fontSize:10,color:'rgba(36,63,82,0.65)',letterSpacing:2}}>v5.0 · SECURE · Built by a Physician</p>
+      <p style={{fontSize:10,color:'rgba(255,255,255,0.12)',letterSpacing:2}}>v5.0 · SECURE · Built by a Physician</p>
       <style>{`@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}`}</style>
     </div>
   )
@@ -407,7 +407,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <p style={{fontSize:15,color:'rgba(255,255,255,0.5)',lineHeight:1.7,margin:'0 auto 40px',maxWidth:300}}>The clinical intelligence platform built by a physician, for physicians.</p>
         <div style={{display:'flex',flexDirection:'column',gap:12,maxWidth:360,margin:'0 auto'}}>
           <button onClick={()=>setScreen('signin')} style={{padding:'18px 32px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:17,fontWeight:700,boxShadow:'0 8px 40px rgba(0,196,180,0.5)'}}>Enter Hospital →</button>
-          <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'rgba(36,63,82,0.50)',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
+          <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
         </div>
       </div>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}`}</style>
@@ -422,16 +422,16 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <p style={{fontSize:14,color:'rgba(255,255,255,0.35)',marginBottom:36}}>Access your clinical dashboard</p>
         <div style={{marginBottom:14}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Email / Medical ID</label>
-          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
         <div style={{marginBottom:28}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Password</label>
-          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
         <button onClick={()=>setScreen('app')} style={{width:'100%',padding:'17px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:16,fontWeight:700,boxShadow:'0 8px 32px rgba(0,196,180,0.4)',marginBottom:14}}>Access Hospital →</button>
         <div style={{display:'flex',gap:10,marginBottom:24}}>
-          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
-          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
+          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
+          <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
         </div>
         <p style={{textAlign:'center',fontSize:13,color:'rgba(238,246,250,0.60)'}}>New physician? <span style={{color:'#00C4B4',cursor:'pointer'}} onClick={()=>setScreen('app')}>Request Access</span></p>
       </div>
@@ -525,7 +525,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                       `What are the contraindications in this case?`,
                       `When should I consider ICU admission?`,
                     ].map(q=>(
-                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'rgba(36,63,82,0.50)',border:'1px solid rgba(36,63,82,0.65)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
+                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(36,63,82,0.65)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
                     ))}
                   </div>
                 </div>
@@ -560,7 +560,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   onChange={e=>setAiQuestion(e.target.value)}
                   onKeyDown={e=>e.key==='Enter'&&askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%`)}
                   placeholder="Ask a clinical question..."
-                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'white',fontSize:13,outline:'none'}}
+                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:13,outline:'none'}}
                 />
                 <button
                   onClick={()=>askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%. ECG: ${c.ecg}`)}
@@ -762,7 +762,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <div style={{fontSize:28,fontWeight:900,color:'white',lineHeight:1}}>$9.99</div>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',marginTop:2}}>/month</div>
                 </div>
-                <div style={{background:'rgba(36,63,82,0.60)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'1px solid rgba(0,196,180,0.3)'}}>
+                <div style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'1px solid rgba(0,196,180,0.3)'}}>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',fontWeight:600,marginBottom:4}}>Yearly</div>
                   <div style={{fontSize:28,fontWeight:900,color:'#ffd60a',lineHeight:1}}>$79</div>
                   <div style={{fontSize:11,color:'rgba(48,209,88,0.9)',marginTop:2}}>Save 34% 🎉</div>
@@ -791,7 +791,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   {icon:'🔔',title:'On-Call Alerts',sub:'Smart reminders',color:'#64d2ff'},
                   {icon:'📱',title:'Mobile App',sub:'iOS & Android soon',color:'#ff6b35'},
                 ].map(f=>(
-                  <div key={f.title} style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(56,189,248,0.2)',display:'flex',flexDirection:'column',gap:6}}>
+                  <div key={f.title} style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:'14px 12px',border:'1px solid rgba(56,189,248,0.2)',display:'flex',flexDirection:'column',gap:6}}>
                     <div style={{width:38,height:38,borderRadius:12,background:`${f.color}20`,border:`1px solid ${f.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
                       {f.icon}
                     </div>
@@ -834,7 +834,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <div onClick={e=>e.stopPropagation()} style={{background:'#1e2d40',borderRadius:'28px 28px 0 0',border:'1px solid rgba(36,63,82,0.65)',height:'90vh',overflow:'hidden'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(36,63,82,0.65)'}}>
               <span style={{fontSize:15,fontWeight:800,color:'white',fontFamily:'"Inter",sans-serif'}}>Complete Purchase</span>
-              <button onClick={()=>setCheckoutUrl('')} style={{background:'rgba(36,63,82,0.60)',border:'none',color:'white',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:18}}>×</button>
+              <button onClick={()=>setCheckoutUrl('')} style={{background:'rgba(255,255,255,0.14)',border:'none',color:'white',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:18}}>×</button>
             </div>
             <iframe src={checkoutUrl} style={{width:'100%',height:'calc(90vh - 60px)',border:'none'}} allow="payment"/>
           </div>

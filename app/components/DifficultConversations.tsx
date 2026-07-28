@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -229,7 +229,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:10}}>Practise the hardest clinical conversations with an AI patient. Get real-time feedback on your communication skills.</div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
           {['SPIKES','REMAP','HEARD','MCA','Being Open'].map(p=>(
-            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(36,63,82,0.65)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{p}</span>
+            <span key={p} style={{fontSize:9,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)',fontWeight:700}}>{p}</span>
           ))}
         </div>
       </div>
@@ -251,7 +251,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
               <div style={{fontSize:9,color:C.muted,fontWeight:600}}>{s.protocol}</div>
             </div>
           </div>
-          <div style={{background:'rgba(36,63,82,0.40)',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}>
+          <div style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}>
             <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{s.context.slice(0,120)}...</div>
           </div>
         </div>
@@ -308,7 +308,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
           <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>⏹ End</button>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:800,color:C.text}}>{s.icon} {s.title}</div>
-            <div style={{height:3,background:'rgba(36,63,82,0.65)',borderRadius:2,overflow:'hidden',marginTop:4}}>
+            <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden',marginTop:4}}>
               <div style={{height:'100%',width:`${progress}%`,background:`linear-gradient(90deg,${s.color},${s.color}aa)`,borderRadius:2,transition:'width 0.4s',boxShadow:`0 0 8px ${s.color}88`}}/>
             </div>
           </div>
@@ -362,7 +362,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
             onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}}
             placeholder="Type your response to the patient..."
             rows={2}
-            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(36,63,82,0.50)',color:'white',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
+            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'white',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
           <button onClick={sendMessage} disabled={loading||!input.trim()}
             style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
         </div>

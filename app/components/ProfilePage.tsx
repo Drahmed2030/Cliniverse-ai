@@ -6,8 +6,8 @@ const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
 // ── DESIGN TOKENS ──
 const T = {
   bg: '#1e2d40',
-  card: 'rgba(36,63,82,0.60)',
-  border: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
+  border: 'rgba(255,255,255,0.14)',
   borderBlue: 'rgba(0,212,255,0.18)',
   text: '#ffffff',
   sub: 'rgba(255,255,255,0.45)',
@@ -80,7 +80,7 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
 }) => (
   <div style={{
     background: unlocked ? `${color}08` : 'rgba(255,255,255,0.02)',
-    border: `1px solid ${unlocked ? color + '25' : 'rgba(36,63,82,0.50)'}`,
+    border: `1px solid ${unlocked ? color + '25' : 'rgba(255,255,255,0.05)'}`,
     borderRadius: 16, padding: '12px 14px',
     display: 'flex', alignItems: 'center', gap: 12,
     opacity: unlocked ? 1 : 0.4,
@@ -88,7 +88,7 @@ const AchievementCard = ({ icon, label, desc, color, unlocked }: {
   }}>
     <div style={{
       width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-      background: unlocked ? `${color}15` : 'rgba(36,63,82,0.60)',
+      background: unlocked ? `${color}15` : 'rgba(255,255,255,0.14)',
       border: `1px solid ${unlocked ? color + '30' : 'rgba(255,255,255,0.18)'}`,
       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
       boxShadow: unlocked ? `0 0 16px ${color}20` : 'none',
@@ -191,7 +191,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                   <span style={{ fontSize: 11, color: T.muted, fontWeight: 700 }}>NEXT: {nextTier.label.toUpperCase()}</span>
                   <span style={{ fontSize: 11, color: tier.color, fontWeight: 700 }}>{nextTier.min - xp} XP away</span>
                 </div>
-                <div style={{ height: 4, borderRadius: 2, background: 'rgba(36,63,82,0.65)' }}>
+                <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.12)' }}>
                   <div style={{
                     height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${tier.color}, ${nextTier.color})`,
                     width: `${Math.min(((xp - tier.min) / (nextTier.min - tier.min)) * 100, 100)}%`,
@@ -267,8 +267,8 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
                   <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
                       width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-                      background: isActive ? `${t.color}20` : isPast ? `${t.color}10` : 'rgba(36,63,82,0.40)',
-                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(36,63,82,0.65)'}`,
+                      background: isActive ? `${t.color}20` : isPast ? `${t.color}10` : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${isActive ? t.color + '40' : isPast ? t.color + '20' : 'rgba(255,255,255,0.12)'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: 14, color: isActive || isPast ? t.color : T.muted,
                       boxShadow: isActive ? `0 0 12px ${t.color}30` : 'none',

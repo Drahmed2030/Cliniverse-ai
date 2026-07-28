@@ -23,7 +23,7 @@ const DEPT_COLORS: Record<string, string> = {
 }
 
 const C = {
-  card: 'rgba(36,63,82,0.60)',
+  card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
   text: 'white',
   sub: 'rgba(255,255,255,0.45)',
@@ -106,7 +106,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:18,fontWeight:800,color:C.text,textAlign:'center',marginBottom:4}}>{c.title}</div>
           <div style={{fontSize:13,color:C.sub,textAlign:'center',marginBottom:14}}>{c.patient}</div>
           {c.details&&(
-            <div style={{background:'rgba(36,63,82,0.50)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.18)'}}>
+            <div style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.18)'}}>
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 CLINICAL NOTE</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7}}>{c.details}</div>
             </div>
@@ -114,7 +114,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
 
         {/* Action */}
-        <div style={{background:'rgba(36,63,82,0.60)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${c.color}25`}}>
+        <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${c.color}25`}}>
           <div style={{fontSize:10,color:c.color,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>⚡ IMMEDIATE ACTION</div>
           <div style={{fontSize:16,fontWeight:800,color:C.text,lineHeight:1.5}}>{c.action}</div>
         </div>
@@ -164,7 +164,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{fontSize:9,color:'rgba(255,69,58,0.7)',fontWeight:800}}>STAT</div>
               </div>
             )}
-            <button onClick={refetch} style={{background:'rgba(36,63,82,0.65)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:10,color:C.sub,padding:'6px 12px',fontSize:11,cursor:'pointer',fontWeight:600}}>
+            <button onClick={refetch} style={{background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:10,color:C.sub,padding:'6px 12px',fontSize:11,cursor:'pointer',fontWeight:600}}>
               🔄 Refresh
             </button>
           </div>
