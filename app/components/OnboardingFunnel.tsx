@@ -131,8 +131,13 @@ const ShieldVisual = ({ accent }: { accent: string }) => (
     </defs>
     <path d="M160 20 L220 45 L220 110 C220 155 160 185 160 185 C160 185 100 155 100 110 L100 45 Z"
       fill="url(#shieldGrad)" stroke={accent} strokeWidth="2" strokeOpacity="0.7"/>
-    <text x="160" y="100" textAnchor="middle" fill={accent} fontSize="38" fontWeight="900" fontFamily="Inter,sans-serif">CV</text>
-    <text x="160" y="120" textAnchor="middle" fill={accent} fontSize="8" fontWeight="800" fontFamily="Inter,sans-serif" opacity="0.6">CLINIVERSE AI</text>
+    <path d="M160 55C148 55 138 62 138 75C138 88 148 95 160 95C172 95 182 88 182 75C182 62 172 55 160 55Z"
+      fill="none" stroke={accent} strokeWidth="5" strokeLinecap="round" strokeOpacity="0.9"/>
+    <path d="M145 130C149 123 153 118 160 118C167 118 171 123 175 130"
+      stroke={accent} strokeWidth="5" strokeLinecap="round" fill="none" strokeOpacity="0.7"/>
+    <path d="M148 75L157 85L175 65"
+      stroke={accent} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
+    <text x="160" y="158" textAnchor="middle" fill={accent} fontSize="8" fontWeight="800" fontFamily="Inter,sans-serif" opacity="0.5">CLINIVERSE AI</text>
   </svg>
 )
 
