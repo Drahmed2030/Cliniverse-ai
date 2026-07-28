@@ -124,20 +124,72 @@ const GlobeVisual = ({ accent }: { accent: string }) => (
 const ShieldVisual = ({ accent }: { accent: string }) => (
   <svg viewBox="0 0 320 200" width="100%" height="180">
     <defs>
-      <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor={accent} stopOpacity="0.3"/>
-        <stop offset="100%" stopColor="#0066ff" stopOpacity="0.1"/>
+      <linearGradient id="sgold" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#FFFDE7"/>
+        <stop offset="20%" stopColor="#FFD54F"/>
+        <stop offset="60%" stopColor="#FF8F00"/>
+        <stop offset="100%" stopColor="#E65100"/>
       </linearGradient>
+      <linearGradient id="steal" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#E0FFFD"/>
+        <stop offset="30%" stopColor="#00E5FF"/>
+        <stop offset="100%" stopColor="#00796B"/>
+      </linearGradient>
+      <linearGradient id="sbg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="rgba(255,213,79,0.20)"/>
+        <stop offset="50%" stopColor="rgba(30,61,82,0.90)"/>
+        <stop offset="100%" stopColor="rgba(0,180,166,0.15)"/>
+      </linearGradient>
+      <radialGradient id="ssheen" cx="35%" cy="35%" r="60%">
+        <stop offset="0%" stopColor="rgba(255,255,255,0.22)"/>
+        <stop offset="100%" stopColor="rgba(255,255,255,0.02)"/>
+      </radialGradient>
+      <filter id="sglow">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="sglow2">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
     </defs>
-    <path d="M160 20 L220 45 L220 110 C220 155 160 185 160 185 C160 185 100 155 100 110 L100 45 Z"
-      fill="url(#shieldGrad)" stroke={accent} strokeWidth="2" strokeOpacity="0.7"/>
-    <path d="M160 55C148 55 138 62 138 75C138 88 148 95 160 95C172 95 182 88 182 75C182 62 172 55 160 55Z"
-      fill="none" stroke={accent} strokeWidth="5" strokeLinecap="round" strokeOpacity="0.9"/>
-    <path d="M145 130C149 123 153 118 160 118C167 118 171 123 175 130"
-      stroke={accent} strokeWidth="5" strokeLinecap="round" fill="none" strokeOpacity="0.7"/>
-    <path d="M148 75L157 85L175 65"
-      stroke={accent} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-    <text x="160" y="158" textAnchor="middle" fill={accent} fontSize="8" fontWeight="800" fontFamily="Inter,sans-serif" opacity="0.5">CLINIVERSE AI</text>
+    {/* Outer ring glow */}
+    <rect x="96" y="10" width="128" height="128" rx="33" fill="none" stroke="url(#sgold)" strokeWidth="2" strokeOpacity="0.5" filter="url(#sglow2)"/>
+    {/* Glass background */}
+    <rect x="98" y="12" width="124" height="124" rx="31" fill="url(#sbg)" stroke="url(#sgold)" strokeWidth="2.5" strokeOpacity="0.95"/>
+    <rect x="98" y="12" width="124" height="124" rx="31" fill="url(#ssheen)"/>
+    <rect x="104" y="18" width="112" height="112" rx="26" fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth="1"/>
+    {/* Ambient glow */}
+    <ellipse cx="148" cy="74" rx="40" ry="40" fill="#FFD54F" fillOpacity="0.08" filter="url(#sglow)"/>
+    {/* C glow */}
+    <path d="M184 46C174 36 162 30 148 30C122 30 100 50 100 74C100 98 122 118 148 118C162 118 174 112 184 102"
+      stroke="#FFD54F" strokeWidth="22" strokeLinecap="round" fill="none" strokeOpacity="0.18" filter="url(#sglow)"/>
+    {/* C main */}
+    <path d="M184 46C174 36 162 30 148 30C122 30 100 50 100 74C100 98 122 118 148 118C162 118 174 112 184 102"
+      stroke="url(#sgold)" strokeWidth="13" strokeLinecap="round" fill="none"/>
+    {/* Checkmark glow */}
+    <path d="M122 74L140 94L186 52"
+      stroke="#00E5FF" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.28" filter="url(#sglow)"/>
+    {/* Checkmark main */}
+    <path d="M122 74L140 94L186 52"
+      stroke="url(#steal)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+    {/* Gold dots */}
+    <circle cx="184" cy="46" r="8" fill="#FFD54F" filter="url(#sglow2)"/>
+    <circle cx="184" cy="46" r="5" fill="#FFFDE7"/>
+    <circle cx="184" cy="102" r="8" fill="#FFD54F" filter="url(#sglow2)"/>
+    <circle cx="184" cy="102" r="5" fill="#FFFDE7"/>
+    {/* Sparkle top-left */}
+    <line x1="106" y1="22" x2="106" y2="16" stroke="#FFD54F" strokeWidth="2.5" strokeLinecap="round" opacity="0.8"/>
+    <line x1="102" y1="22" x2="110" y2="22" stroke="#FFD54F" strokeWidth="2.5" strokeLinecap="round" opacity="0.8"/>
+    {/* Teal sparkle bottom-right */}
+
+
+<line x1="214" y1="126" x2="214" y2="121" stroke="#00E5FF" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+    <line x1="210" y1="126" x2="218" y2="126" stroke="#00E5FF" strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
+    {/* App name */}
+    <text x="160" y="158" textAnchor="middle" fill={accent} fontSize="9" fontWeight="800" fontFamily="Inter,sans-serif" opacity="0.6" letterSpacing="2">CLINIVERSE AI</text>
+    {/* Tagline */}
+    <text x="160" y="172" textAnchor="middle" fill={accent} fontSize="7.5" fontWeight="500" fontFamily="Inter,sans-serif" opacity="0.35">Where Doctors Train</text>
   </svg>
 )
 
