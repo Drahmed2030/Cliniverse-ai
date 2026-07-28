@@ -447,7 +447,9 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
       <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.045}}>
-        <CliniverseLogo size={500}/>
+        <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.045}}>
+          <CliniverseLogo size={500}/>
+        </div>
       </div>
         <div style={{background:`linear-gradient(160deg,${c.color}22,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(0,196,180,0.25)',position:'relative',zIndex:1}}>
           <button onClick={()=>setActiveCase(null)} style={{background:'rgba(0,196,180,0.25)',backdropFilter:'blur(10px)',border:'1px solid rgba(0,196,180,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
