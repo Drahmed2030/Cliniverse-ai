@@ -345,7 +345,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           onClick={()=>{openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1');setShowUpgrade(false)}}
           style={{width:'100%',padding:'16px',borderRadius:16,border:'none',background:'white',color:'black',fontSize:16,fontWeight:800,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:8,marginBottom:10}}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="black"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          Pay with Apple Pay · $9.99/mo
+          Pay with Apple Pay · $14.99/mo
         </button>
         <button
           onClick={()=>{openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1');setShowUpgrade(false)}}
@@ -433,7 +433,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
           <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(36,63,82,0.60)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
         </div>
-        <p style={{textAlign:'center',fontSize:13,color:'rgba(255,255,255,0.25)'}}>New physician? <span style={{color:'#00C4B4',cursor:'pointer'}} onClick={()=>setScreen('app')}>Request Access</span></p>
+        <p style={{textAlign:'center',fontSize:13,color:'rgba(238,246,250,0.60)'}}>New physician? <span style={{color:'#00C4B4',cursor:'pointer'}} onClick={()=>setScreen('app')}>Request Access</span></p>
       </div>
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
@@ -470,7 +470,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <p style={{color:T.textSub,fontSize:13,margin:0}}>{c.sub}</p>
         </div>
         <div style={{padding:'16px 20px',maxWidth:640,margin:'0 auto',position:'relative',zIndex:1}}>
-          <p style={{color:T.textMuted,fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 10px',fontWeight:700}}>Vital Signs</p>
+          <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 10px',fontWeight:700}}>Vital Signs</p>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:14}}>
             {[{l:'BP',v:c.vitals.bp+' mmHg',a:parseInt(c.vitals.bp)<90},{l:'HR',v:c.vitals.hr+' bpm',a:parseInt(c.vitals.hr)>120||parseInt(c.vitals.hr)<50},{l:'O2 Sat',v:c.vitals.o2+'%',a:parseInt(c.vitals.o2)<94},{l:'Temp',v:c.vitals.temp+'°C',a:parseFloat(c.vitals.temp)>38.5},{l:'RR',v:c.vitals.rr+'/min',a:parseInt(c.vitals.rr)>25},{l:'GCS',v:c.vitals.gcs+'/15',a:parseInt(c.vitals.gcs)<14}].map(v=>(
               <div key={v.l} style={{background:v.a?'rgba(255,59,48,0.15)': T.cardBg,backdropFilter:'blur(12px)',borderRadius:14,padding:'12px',border:v.a?'1.5px solid rgba(255,59,48,0.4)': `1px solid ${T.cardBorder}`}}>
@@ -485,11 +485,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             <p style={{color: dark ? 'rgba(255,255,255,0.8)' : '#164e32',fontSize:13,lineHeight:1.75,margin:0}}>{c.ecg}</p>
           </div>
           <div style={{...glassCard,padding:16,marginBottom:12}}>
-            <p style={{color:T.textMuted,fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 8px',fontWeight:700}}>Clinical Presentation</p>
+            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 8px',fontWeight:700}}>Clinical Presentation</p>
             <p style={{color:T.text,fontSize:13,lineHeight:1.8,margin:0}}>{c.presentation}</p>
           </div>
           <div style={{...glassCard,padding:16,marginBottom:14}}>
-            <p style={{color:T.textMuted,fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Management Protocol</p>
+            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Management Protocol</p>
             {c.management.map((m,i)=>(
               <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:10}}>
                 <div style={{width:24,height:24,borderRadius:'50%',background:`${c.color}22`,border:`1.5px solid ${c.color}55`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:11,fontWeight:800,color:c.color}}>{i+1}</div>
@@ -518,7 +518,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               {/* Suggested questions */}
               {aiHistory.length===0&&(
                 <div style={{marginBottom:14}}>
-                  <div style={{fontSize:10,color:'rgba(255,255,255,0.3)',marginBottom:8,letterSpacing:1,textTransform:'uppercase'}}>Suggested Questions</div>
+                  <div style={{fontSize:10,color:'rgba(238,246,250,0.65)',marginBottom:8,letterSpacing:1,textTransform:'uppercase'}}>Suggested Questions</div>
                   <div style={{display:'flex',flexDirection:'column',gap:6}}>
                     {[
                       `What is the first-line treatment for ${c.title}?`,
@@ -589,10 +589,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         </div>
         <div style={{padding:'16px 20px',maxWidth:640,margin:'0 auto',position:'relative',zIndex:1}}>
           <div style={{background:T.cardBg,borderRadius:18,padding:20,marginBottom:14,minHeight:150,display:'flex',alignItems:'center',justifyContent:'center',border:`1px solid ${T.cardBorder}`}}>
-            <div style={{textAlign:'center'}}><div style={{fontSize:68,marginBottom:10}}>{r.icon}</div><p style={{color:T.textMuted,fontSize:12,margin:0}}>Interactive viewer — PRO feature</p></div>
+            <div style={{textAlign:'center'}}><div style={{fontSize:68,marginBottom:10}}>{r.icon}</div><p style={{color:'rgba(238,246,250,0.65)',fontSize:12,margin:0}}>Interactive viewer — PRO feature</p></div>
           </div>
           <div style={{...glassCard,padding:18,marginBottom:14}}>
-            <p style={{color:T.textMuted,fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Radiologist Report</p>
+            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Radiologist Report</p>
             <p style={{color:T.text,fontSize:13,lineHeight:1.9,margin:0,whiteSpace:'pre-line'}}>{r.report}</p>
           </div>
           <button style={{width:'100%',padding:'16px',borderRadius:18,border:'none',cursor:'pointer',background:`linear-gradient(135deg,${r.color},${r.color}bb)`,color:'white',fontSize:15,fontWeight:700}}>🤖 AI Interpretation</button>
@@ -661,7 +661,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <span style={{fontSize:22}}>{l.icon}</span>
                   <div style={{flex:1}}>
                     <div style={{fontSize:15,fontWeight:700,color:T.text}}>{l.name}</div>
-                    <div style={{fontSize:11,color:T.textMuted,marginTop:1}}>{l.unit}</div>
+                    <div style={{fontSize:11,color:'rgba(238,246,250,0.65)',marginTop:1}}>{l.unit}</div>
                   </div>
                 </div>
                 <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:10}}>
@@ -696,7 +696,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <div style={{fontSize:15,fontWeight:700,color:T.text,marginBottom:2}}>{r.title}</div>
                   <div style={{fontSize:12,color:T.textSub}}>{r.sub}</div>
                 </div>
-                <span style={{fontSize:20,color:T.textMuted}}>›</span>
+                <span style={{fontSize:20,color:'rgba(238,246,250,0.65)'}}>›</span>
               </div>
             ))}
 
@@ -772,9 +772,9 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <button
                 onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
                 style={{background:'linear-gradient(135deg,#00C4B4,#0a84ff)',border:'none',borderRadius:18,padding:'18px 40px',fontSize:17,fontWeight:800,color:'white',cursor:'pointer',width:'100%',boxShadow:'0 8px 40px rgba(0,196,180,0.5)',letterSpacing:-0.3}}>
-                🚀 Upgrade to PRO — $9.99/mo
+                🚀 Upgrade to PRO — $14.99/mo
               </button>
-              <p style={{fontSize:11,color:'rgba(255,255,255,0.3)',marginTop:10}}>Cancel anytime · Secure payment via Lemon Squeezy</p>
+              <p style={{fontSize:11,color:'rgba(238,246,250,0.65)',marginTop:10}}>Cancel anytime · Secure payment via Lemon Squeezy</p>
             </div>
 
             {/* Features Grid */}
