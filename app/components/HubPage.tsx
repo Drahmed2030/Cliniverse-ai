@@ -138,6 +138,17 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
       <div style={{ position:'fixed', bottom:-80, right:-60, width:350, height:350, borderRadius:'50%', background:'radial-gradient(circle,rgba(212,168,71,0.06),transparent 70%)', pointerEvents:'none', zIndex:0, filter:'blur(40px)' }}/>
 
       <div style={{ position:'relative', zIndex:1, padding:'16px 16px 120px' }}>
+      {/* ── LOGO WATERMARK ── */}
+      <div style={{ position:'fixed', inset:0, display:'flex', alignItems:'center', justifyContent:'center', pointerEvents:'none', zIndex:0, overflow:'hidden', opacity:0.06 }}>
+        <svg width='520' height='520' viewBox='0 0 100 100' fill='none'>
+          <rect x='5' y='5' width='90' height='90' rx='23' fill='rgba(255,213,79,0.15)' stroke='rgba(255,213,79,0.9)' strokeWidth='2'/>
+          <rect x='5' y='5' width='90' height='90' rx='23' fill='rgba(255,255,255,0.08)'/>
+          <path d='M69 32C63 25 55 21 46 21C30 21 17 34 17 50C17 66 30 79 46 79C55 79 63 75 69 68' stroke='rgba(255,213,79,1)' strokeWidth='9' strokeLinecap='round' fill='none'/>
+          <path d='M36 50L46 63L70 36' stroke='rgba(0,229,255,1)' strokeWidth='5.5' strokeLinecap='round' strokeLinejoin='round'/>
+          <circle cx='69' cy='32' r='5' fill='rgba(255,213,79,1)'/>
+          <circle cx='69' cy='68' r='5' fill='rgba(255,213,79,1)'/>
+        </svg>
+      </div>
 
         {/* ── GREETING ── */}
         <div style={{ marginBottom:14 }}>
