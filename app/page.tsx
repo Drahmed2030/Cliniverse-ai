@@ -447,8 +447,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
       <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.045}}>
-        <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:0,overflow:'hidden',opacity:0.045}}>
-          <CliniverseLogo size={500}/>
+        <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'none',zIndex:1,overflow:'hidden'}}>
+          <div style={{opacity:0.08,transform:'scale(1.2)'}}>
+            <CliniverseLogo size={520}/>
+          </div>
         </div>
       </div>
         <div style={{background:`linear-gradient(160deg,${c.color}22,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(0,196,180,0.25)',position:'relative',zIndex:1}}>
