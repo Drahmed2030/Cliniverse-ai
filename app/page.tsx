@@ -848,74 +848,58 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
       )}
 
       {/* FLOATING TAB BAR */}
+        {/* ── FLOATING ISLAND NAV ── */}
         <div style={{
-          position:'fixed', bottom:20, left:'50%', transform:'translateX(-50%)',
-          zIndex:9998, width:'calc(100% - 32px)', maxWidth:420,
+          position:'fixed', bottom:28, left:'50%', transform:'translateX(-50%)',
+          zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center',
         }}>
-          <nav style={{
-            background:'rgba(26,37,53,0.95)',
-            backdropFilter:'blur(28px)',
-            WebkitBackdropFilter:'blur(28px)',
-            borderRadius:28,
-            border:'1px solid rgba(56,189,248,0.2)',
-            boxShadow:'0 8px 40px rgba(0,0,0,0.65), 0 0 0 0.5px rgba(36,63,82,0.65)',
-            display:'flex',
-            padding:'10px 6px 12px',
-            gap:2,
+          <div style={{
+            display:'flex', alignItems:'center', gap:4,
+            background:'rgba(15,35,50,0.88)',
+            backdropFilter:'blur(40px)', WebkitBackdropFilter:'blur(40px)',
+            border:'1px solid rgba(255,255,255,0.14)',
+            borderRadius:40, padding:'8px 10px',
+            boxShadow:'0 8px 40px rgba(0,0,0,0.40), 0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.10)',
           }}>
             {[
-              {id:'hub', label:'Hub', color:'#38bdf8',
-                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M17.5 14v7M14 17.5h7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              },
-              {id:'tools', label:'Tools', color:'#f87171',
-                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" strokeWidth="1.8"/><path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              },
-              {id:'mcq', label:'MCQ', color:'#fbbf24',
-                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3 8-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              },
-              {id:'workshop', label:'Work', color:'#4ade80',
-                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              },
-              {id:'profile', label:'Me', color:'#00DFD0',
-                svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              },
-            ].map(t=>{
+              { id:'hub',  label:'Hub',   color:'#00C4B4', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M14 17.5H21M17.5 14V21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
+              { id:'tools',label:'Tools', color:'#FF9500', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
+              { id:'mcq',  label:'MCQ',   color:'#D4A847', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+              { id:'work', label:'Work',  color:'#34C759', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+              { id:'profile', label:'Me', color:'#007AFF', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
+            ].map(t => {
               const active = tab===t.id
-              return(
+              return (
                 <button key={t.id} onClick={()=>setTab(t.id)} style={{
-                  flex:1, border:'none', cursor:'pointer',
-                  display:'flex', flexDirection:'column', alignItems:'center', gap:5,
-                  padding:'8px 4px', borderRadius:22,
-                  background:active ? t.color + '15' : 'transparent',
-                  transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
+                  border:'none', cursor:'pointer', borderRadius:32,
+                  padding: active ? '10px 18px' : '10px 12px',
+                  display:'flex', alignItems:'center', gap: active ? 7 : 0,
+                  background: active ? t.color+'22' : 'transparent',
+                  transition:'all 0.3s cubic-bezier(.34,1.56,.64,1)',
                   position:'relative',
                 }}>
-                  {active && <div style={{
-                    position:'absolute', top:0, left:'50%', transform:'translateX(-50%)',
-                    width:28, height:2.5, borderRadius:2,
-                    background:t.color,
-                    boxShadow:'0 0 10px ' + t.color + ', 0 0 20px ' + t.color + '60',
-                  }}/>}
                   <div style={{
-                    color: active ? t.color : 'rgba(148,163,184,0.45)',
-                    transform: active ? 'scale(1.12) translateY(1px)' : 'scale(1)',
-                    transition:'all 0.25s cubic-bezier(.34,1.56,.64,1)',
-                    filter: active ? 'drop-shadow(0 0 8px ' + t.color + ')' : 'none',
-                    marginTop: 4,
+                    color: active ? t.color : 'rgba(238,246,250,0.35)',
+                    filter: active ? 'drop-shadow(0 0 8px '+t.color+')' : 'none',
+                    transition:'all 0.3s',
+                    display:'flex', alignItems:'center', justifyContent:'center',
                   }}>{t.svg}</div>
-                  <span style={{
-                    fontSize:9, fontWeight: active ? 800 : 500,
-                    color: active ? t.color : 'rgba(148,163,184,0.35)',
-                    letterSpacing:0.8, textTransform:'uppercase',
-                    fontFamily:'"Inter",-apple-system,sans-serif',
-                    transition:'all 0.2s',
-                  }}>{t.label}</span>
+                  {active && (
+                    <span style={{
+                      fontSize:11, fontWeight:800, color:t.color,
+                      letterSpacing:0.3, whiteSpace:'nowrap',
+                      overflow:'hidden', maxWidth:60,
+                    }}>{t.label}</span>
+                  )}
                 </button>
               )
-            })}
-          </nav>
+
+
+})}
+          </div>
         </div>
-        <div style={{height:110}}/>
+        <div style={{height:100}}/>
+
       </div>
 
       <style>{`
