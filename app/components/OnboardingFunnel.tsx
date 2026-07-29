@@ -6,7 +6,7 @@ interface Props {
   onComplete: (email?: string, password?: string, name?: string) => void
 }
 
-const F = '"Inter", -apple-system, sans-serif'
+const F = '-apple-system, sans-serif'
 
 const SLIDES = [
   {

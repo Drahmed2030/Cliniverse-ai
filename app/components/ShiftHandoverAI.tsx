@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
 
-const F = '"Inter", -apple-system, "SF Pro Display", sans-serif'
+const F = '-apple-system, "SF Pro Display", sans-serif'
 const T = {
   card: 'rgba(255,255,255,0.14)', border: 'rgba(255,255,255,0.18)',
-  text: '#ffffff', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
-  teal: '#38bdf8', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#00DFD0',
+  text: '#EEF6FA', sub: 'rgba(148,163,184,0.8)', muted: 'rgba(148,163,184,0.4)',
+  teal: '#00C4B4', amber: '#fbbf24', rose: '#f87171', green: '#4ade80', purple: '#00DFD0',
 }
 
 export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }) {

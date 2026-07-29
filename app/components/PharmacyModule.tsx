@@ -6,7 +6,7 @@ type View = 'menu' | 'interactions' | 'dosing' | 'quiz' | 'counselling'
 const C = {
   card: 'rgba(255,255,255,0.14)',
   border: 'rgba(0,196,180,0.25)',
-  text: 'white',
+  text: '#EEF6FA',
   sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.25)',
 }

@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-const F = '"Inter", -apple-system, sans-serif'
+const F = '-apple-system, sans-serif'
 
 const CASES = [
-  { id:1, icon:'\u{1FAC0}', color:'#38bdf8', title:'52M — Anterior STEMI', detail:'Door-to-balloon: 67 min', level:'CRITICAL', city:'Riyadh' },
+  { id:1, icon:'\u{1FAC0}', color:'#00C4B4', title:'52M — Anterior STEMI', detail:'Door-to-balloon: 67 min', level:'CRITICAL', city:'Riyadh' },
   { id:2, icon:'\u{1F9E0}', color:'#cc5de8', title:'34F — Status Epilepticus', detail:'IV Lorazepam given', level:'URGENT', city:'London' },
   { id:3, icon:'\u{1FAC1}', color:'#74c0fc', title:'61M — Massive PE', detail:'Systemic thrombolysis', level:'CRITICAL', city:'Dubai' },
   { id:4, icon:'\u{1F9A0}', color:'#51cf66', title:'28F — Septic Shock', detail:'Noradrenaline started', level:'CRITICAL', city:'Toronto' },
   { id:5, icon:'\u{1F9E0}', color:'#cc5de8', title:'71M — Acute Stroke', detail:'NIHSS 14 - tPA candidate', level:'URGENT', city:'Cairo' },
   { id:6, icon:'\u{1FAD8}', color:'#fbbf24', title:'45M — AKI on CKD', detail:'K+ 6.8 - Urgent dialysis', level:'CRITICAL', city:'Riyadh' },
-  { id:7, icon:'\u{1FAC0}', color:'#38bdf8', title:'67F — Acute HF', detail:'BNP 4200 - BiPAP started', level:'URGENT', city:'London' },
+  { id:7, icon:'\u{1FAC0}', color:'#00C4B4', title:'67F — Acute HF', detail:'BNP 4200 - BiPAP started', level:'URGENT', city:'London' },
   { id:8, icon:'\u{1F489}', color:'#ffa94d', title:'19M — DKA', detail:'pH 7.1 - Insulin infusion', level:'CRITICAL', city:'Dubai' },
 ]
 
