@@ -636,7 +636,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         )}
 
         {/* WORKSHOP */}
-        {tab==='workshop'&&(
+        {tab==='work'&&(
           <div><ClinicalWorkshop onXP={addXP}/></div>
         )}
 
