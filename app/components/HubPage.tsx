@@ -1,5 +1,7 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React
+import dynamic from 'next/dynamic'
+const DynamicMCQ = dynamic(() => import('./DynamicMCQ'), { ssr: false }), { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 
@@ -112,6 +114,7 @@ function LiveTicker({ xp, streak, liveCount }: { xp:number, streak:number, liveC
 
 export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro, criticalCases, sportsCases, pedsCases, setActiveCase, setShowUpgrade, setTab, setToolTab, onXP }: Props) {
   const [openSection, setOpenSection] = useState<any>(null)
+  const [showMCQ, setShowMCQ] = useState(false)
   const [liveCount, setLiveCount] = useState(1247)
   const [showLive, setShowLive] = useState(false)
   const [waitlist, setWaitlist] = useState<string[]>([])
@@ -176,7 +179,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
         <div style={{ display:'flex', gap:8, marginBottom:18 }}>
           {[
             { icon:'🫀', label:'Start Case', sub:'AI Sim',  color:T.red,   pulse:true,  action:()=>setOpenSection(sections[0]) },
-            { icon:'🧠', label:'MCQ',        sub:'Board',   color:T.blue,  pulse:false, action:()=>setTab('mcq') },
+            { icon:'🧠', label:'MCQ',        sub:'Board',   color:T.blue,  pulse:false, action:()=>setShowMCQ(true) },
             { icon:'🤖', label:'AI',         sub:'Claude',  color:T.teal,  pulse:false, action:()=>setTab('tools') },
             { icon:'🏆', label:'Ranks',      sub:'Global',  color:T.gold,  pulse:false, action:()=>setTab('leaderboard') },
           ].map((btn,i) => (
@@ -223,7 +226,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
 
             {/* Right column */}
             <div style={{ flex:1, display:'flex', flexDirection:'column', gap:10 }}>
-              <div onClick={()=>setTab('mcq')} style={{ flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)', border:`1.5px solid ${T.blue}28`, borderRadius:18, padding:'12px 10px', cursor:'pointer' }}>
+              <div onClick={()=>setShowMCQ(true)} style={{ flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)', border:`1.5px solid ${T.blue}28`, borderRadius:18, padding:'12px 10px', cursor:'pointer' }}>
                 <div style={{ fontSize:20, marginBottom:4 }}>🧠</div>
                 <div style={{ fontSize:12, fontWeight:800, color:T.text }}>MCQ</div>
                 <div style={{ fontSize:9, color:T.sub }}>Board Prep</div>
@@ -299,7 +302,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               { icon:'🧬', label:'Lab AI',        sub:'CBC · BMP · ABG · LFTs', color:T.purple, action:()=>{ setTab('tools'); setToolTab('lab') } },
               { icon:'👥', label:'Clinical Duels',sub:'Challenge a colleague',   color:T.orange, action:()=>setTab('tools') },
               { icon:'🏆', label:'Grand Rounds',  sub:'Real cases · Experts',   color:T.red,    action:()=>setTab('tools') },
-              { icon:'🤖', label:'AI Generator',  sub:'Infinite AI cases',      color:T.blue,   action:()=>setTab('mcq') },
+              { icon:'🤖', label:'AI Generator',  sub:'Infinite AI cases',      color:T.blue,   action:()=>setShowMCQ(true) },
             ].map((m,i) => (
               <div key={i} onClick={m.action} style={{
                 flexShrink:0, width:116,
@@ -450,6 +453,22 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             <button onClick={()=>setShowLive(false)} style={{ background:T.glass, border:'none', borderRadius:10, padding:'8px 14px', color:T.text, cursor:'pointer', fontFamily:F, fontSize:14 }}>✕ Close</button>
           </div>
           <LiveCaseViewer specialty="Emergency Medicine" difficulty="Intermediate" onXP={onXP}/>
+        </div>
+      )}
+
+      {/* MCQ Modal */}
+      {showMCQ && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+          <div style={{padding:'20px 20px 40px',maxWidth:480,margin:'0 auto'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
+              <div>
+                <div style={{fontSize:10,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1.5,marginBottom:2}}>AI-POWERED</div>
+                <div style={{fontSize:20,fontWeight:900,color:'#EEF6FA'}}>Dynamic MCQ</div>
+              </div>
+              <button onClick={()=>setShowMCQ(false)} style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:14,padding:'8px 16px',color:'#EEF6FA',fontSize:13,fontWeight:700,cursor:'pointer'}}>✕ Close</button>
+            </div>
+            <DynamicMCQ onXP={onXP}/>
+          </div>
         </div>
       )}
 
