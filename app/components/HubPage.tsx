@@ -5,7 +5,9 @@ const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const DynamicMCQ        = dynamic(() => import('./DynamicMCQ'),          { ssr: false })
 const PediatricsModule   = dynamic(() => import('./PediatricsModule'),    { ssr: false })
 const SportsMedicineModule = dynamic(() => import('./SportsMedicineModule'), { ssr: false })
-const CriticalCareModule = dynamic(() => import('./CriticalCareModule'),  { ssr: false })
+const CriticalCareModule  = dynamic(() => import('./CriticalCareModule'),   { ssr: false })
+const TeleconsultModule   = dynamic(() => import('./TeleconsultModule'),   { ssr: false })
+const NonInvasiveTech     = dynamic(() => import('./NonInvasiveTech'),     { ssr: false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -118,6 +120,8 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
   const [openSection, setOpenSection] = useState<any>(null)
   const [showMCQ, setShowMCQ] = useState(false)
   const [activeModule, setActiveModule] = useState<string|null>(null)
+  const [showTele, setShowTele] = useState(false)
+  const [showNIT,  setShowNIT]  = useState(false)
   const [liveCount, setLiveCount] = useState(1247)
   const [showLive, setShowLive] = useState(false)
   const [waitlist, setWaitlist] = useState<string[]>([])
@@ -183,7 +187,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           {[
             { icon:'🫀', label:'Start Case', sub:'AI Sim',  color:T.red,   pulse:true,  action:()=>setOpenSection(sections[0]) },
             { icon:'🧠', label:'MCQ',        sub:'Board',   color:T.blue,  pulse:false, action:()=>setShowMCQ(true) },
-            { icon:'🤖', label:'AI',         sub:'Claude',  color:T.teal,  pulse:false, action:()=>setTab('tools') },
+            { icon:'🤖', label:'AI',         sub:'Claude',  color:T.teal,  pulse:false, action:()=>setShowTele(true) },
             { icon:'🏆', label:'Ranks',      sub:'Global',  color:T.gold,  pulse:false, action:()=>setTab('leaderboard') },
           ].map((btn,i) => (
             <div key={i} onClick={btn.action} style={{
@@ -303,8 +307,8 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               { icon:'💊', label:'Pharmacy AI',   sub:'Drug checker · Dosing',   color:T.green,  action:()=>{ setTab('tools'); setToolTab('pharmacy') } },
               { icon:'🩻', label:'Radiology',     sub:'X-ray · CT · MRI',       color:T.teal,   action:()=>{ setTab('tools'); setToolTab('rad') } },
               { icon:'🧬', label:'Lab AI',        sub:'CBC · BMP · ABG · LFTs', color:T.purple, action:()=>{ setTab('tools'); setToolTab('lab') } },
-              { icon:'👥', label:'Clinical Duels',sub:'Challenge a colleague',   color:T.orange, action:()=>setTab('tools') },
-              { icon:'🏆', label:'Grand Rounds',  sub:'Real cases · Experts',   color:T.red,    action:()=>setTab('tools') },
+              { icon:'👥', label:'Clinical Duels',sub:'Challenge a colleague',   color:T.orange, action:()=>setShowTele(true) },
+              { icon:'🏆', label:'Grand Rounds',  sub:'Real cases · Experts',   color:T.red,    action:()=>setShowTele(true) },
               { icon:'🤖', label:'AI Generator',  sub:'Infinite AI cases',      color:T.blue,   action:()=>setShowMCQ(true) },
             ].map((m,i) => (
               <div key={i} onClick={m.action} style={{
@@ -366,7 +370,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               desc:'Video consult · Second opinion · Real-time AI assist',
               color:T.blue, live:true,
               stats:[{l:'Specialists',v:'120+'},{l:'Countries',v:'28'},{l:'Avg wait',v:'4 min'}],
-              action:()=>{ setTab('tools'); setToolTab('teleconsult') },
+              action:()=>setShowTele(true),
             },
             {
               id:'reports',
@@ -376,7 +380,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               stats:[{l:'Report types',v:'12+'},{l:'Languages',v:'EN·AR'},{l:'Time saved',v:'40 min'}],
             },
             {
-              id:'nit',
+              id:'nit', action:()=>setShowNIT(true),
               icon:'🔬', title:'Non-Invasive Tech', sub:'AI-powered diagnostics',
               desc:'ECG AI · Retinal scan · Skin lesion · Waveform analysis',
               color:T.purple, live:false, count:1203,
@@ -424,7 +428,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               {/* CTA */}
               {card.live ? (
                 <div style={{ background:`linear-gradient(135deg,${card.color},${card.color}CC)`, borderRadius:14, padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'space-between', boxShadow:`0 6px 20px ${card.color}35` }}>
-                  <span style={{ fontSize:13, fontWeight:800, color:'#fff' }}>Start Consultation →</span>
+                  <span style={{ fontSize:13, fontWeight:800, color:'#fff' }} onClick={()=>setShowTele(true)}>Start Consultation →</span>
                   <span style={{ fontSize:16 }}>🌐</span>
                 </div>
               ) : (
@@ -476,6 +480,38 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
       )}
 
       {/* Module Modals */}
+      {/* Teleconsult Modal */}
+      {showTele && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+          <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+              <div>
+                <div style={{fontSize:10,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1.5,marginBottom:2}}>TELECONSULTATION 2030</div>
+                <div style={{fontSize:18,fontWeight:900,color:'#EEF6FA'}}>🌐 Global Medicine</div>
+              </div>
+              <button onClick={()=>setShowTele(false)} style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,padding:'8px 16px',color:'#EEF6FA',cursor:'pointer',fontWeight:700,fontFamily:'-apple-system,sans-serif'}}>✕ Close</button>
+            </div>
+            <TeleconsultModule onXP={onXP}/>
+          </div>
+        </div>
+      )}
+
+      {/* Non-Invasive Tech Modal */}
+      {showNIT && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+          <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+              <div>
+                <div style={{fontSize:10,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1.5,marginBottom:2}}>NON-INVASIVE TECH</div>
+                <div style={{fontSize:18,fontWeight:900,color:'#EEF6FA'}}>🔬 AI Diagnostics</div>
+              </div>
+              <button onClick={()=>setShowNIT(false)} style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,padding:'8px 16px',color:'#EEF6FA',cursor:'pointer',fontWeight:700,fontFamily:'-apple-system,sans-serif'}}>✕ Close</button>
+            </div>
+            <NonInvasiveTech onXP={onXP}/>
+          </div>
+        </div>
+      )}
+
       {activeModule && (
         <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
           <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto'}}>
