@@ -2,7 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
-const DynamicMCQ = dynamic(() => import('./DynamicMCQ'), { ssr: false })
+const DynamicMCQ        = dynamic(() => import('./DynamicMCQ'),          { ssr: false })
+const PediatricsModule   = dynamic(() => import('./PediatricsModule'),    { ssr: false })
+const SportsMedicineModule = dynamic(() => import('./SportsMedicineModule'), { ssr: false })
+const CriticalCareModule = dynamic(() => import('./CriticalCareModule'),  { ssr: false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -114,6 +117,7 @@ function LiveTicker({ xp, streak, liveCount }: { xp:number, streak:number, liveC
 export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro, criticalCases, sportsCases, pedsCases, setActiveCase, setShowUpgrade, setTab, setToolTab, onXP }: Props) {
   const [openSection, setOpenSection] = useState<any>(null)
   const [showMCQ, setShowMCQ] = useState(false)
+  const [activeModule, setActiveModule] = useState<string|null>(null)
   const [liveCount, setLiveCount] = useState(1247)
   const [showLive, setShowLive] = useState(false)
   const [waitlist, setWaitlist] = useState<string[]>([])
@@ -325,7 +329,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           <div style={{ fontSize:10, color:T.muted, fontWeight:700, letterSpacing:1.5, marginBottom:10 }}>CASE LIBRARY</div>
           <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
             {sections.map((s,i) => (
-              <div key={i} onClick={()=>setOpenSection(s)} style={{ background:T.glass, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)', border:`1px solid ${s.color}20`, borderRadius:18, padding:'16px', cursor:'pointer', display:'flex', alignItems:'center', gap:14, position:'relative', overflow:'hidden' }}>
+              <div key={i} onClick={()=>{ if(s.key==='peds'||s.key==='sports'||s.key==='critical'){setActiveModule(s.key)}else{setOpenSection(s)} }} style={{ background:T.glass, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)', border:`1px solid ${s.color}20`, borderRadius:18, padding:'16px', cursor:'pointer', display:'flex', alignItems:'center', gap:14, position:'relative', overflow:'hidden' }}>
                 <div style={{ position:'absolute', top:0, right:0, width:80, height:80, borderRadius:'50%', background:`radial-gradient(circle, ${s.color}08 0%, transparent 70%)`, pointerEvents:'none' }}/>
                 <div style={{ width:48, height:48, borderRadius:15, background:`${s.color}15`, border:`1px solid ${s.color}28`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>{s.icon}</div>
                 <div style={{ flex:1 }}>
@@ -467,6 +471,23 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               <button onClick={()=>setShowMCQ(false)} style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:14,padding:'8px 16px',color:'#EEF6FA',fontSize:13,fontWeight:700,cursor:'pointer'}}>✕ Close</button>
             </div>
             <DynamicMCQ onXP={onXP}/>
+          </div>
+        </div>
+      )}
+
+      {/* Module Modals */}
+      {activeModule && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+          <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+              <div style={{fontSize:16,fontWeight:900,color:'#EEF6FA'}}>
+                {activeModule==='peds'?'🧸 Pediatrics':activeModule==='sports'?'⚽ Sports Medicine':'🚨 Critical Care'}
+              </div>
+              <button onClick={()=>setActiveModule(null)} style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,padding:'8px 16px',color:'#EEF6FA',cursor:'pointer',fontWeight:700,fontFamily:'-apple-system,sans-serif'}}>✕ Close</button>
+            </div>
+            {activeModule==='peds'    && <PediatricsModule    onXP={onXP}/>}
+            {activeModule==='sports'  && <SportsMedicineModule onXP={onXP}/>}
+            {activeModule==='critical'&& <CriticalCareModule  onXP={onXP}/>}
           </div>
         </div>
       )}

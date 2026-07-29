@@ -142,7 +142,12 @@ function ToolRenderer({ toolId, onXP }: { toolId:string, onXP:(n:number)=>void }
     guidelines: <Guidelines onXP={onXP}/>,
     duels:      <ClinicalDuels onXP={onXP}/>,
     rounds:     <GrandRoundsAI onXP={onXP}/>,
-    teleconsult:<TeleconsultModule onXP={onXP}/>,
+    teleconsult:  <TeleconsultModule   onXP={onXP}/>,
+    noninvasive:  <NonInvasiveTech     onXP={onXP}/>,
+    consultant:   <PocketConsultant    onXP={onXP}/>,
+    critical:     <CriticalCareModule  onXP={onXP}/>,
+    peds:         <PediatricsModule    onXP={onXP}/>,
+    sports:       <SportsMedicineModule onXP={onXP}/>,
     ai:         <AICaseGenerator onXP={onXP}/>,
   }
   return <>{map[toolId] || <div style={{color:T.text,padding:20,fontFamily:F}}>Tool coming soon...</div>}</>

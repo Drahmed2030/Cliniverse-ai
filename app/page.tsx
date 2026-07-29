@@ -196,11 +196,25 @@ export default function Home() {
 
   const taglines = ['Where medicine meets precision.','Train on real emergencies.','Think like a consultant.','AI-powered clinical intelligence.']
 
-  const criticalCases: any[] = []
+  const criticalCases: any[] = [
+    { id:'septic_shock', icon:'🦠', title:'Septic Shock',         sub:'Vasopressors · Bundle',    color:'#FF3B30', free:true,  xpReward:30 },
+    { id:'ards',         icon:'🫁', title:'ARDS Management',       sub:'Prone · Lung-protective',  color:'#007AFF', free:true,  xpReward:30 },
+    { id:'sofa',         icon:'📊', title:'SOFA Score Calculator', sub:'Organ failure · Mortality', color:'#FF9500', free:true,  xpReward:20 },
+    { id:'vent',         icon:'🔧', title:'Ventilator Simulator',  sub:'Settings · Lung-protective',color:'#AF52DE', free:false, xpReward:25 },
+  ]
 
-  const sportsCases: any[] = []
+  const sportsCases: any[] = [
+    { id:'concussion',  icon:'🏃', title:'Concussion Assessment', sub:'SCAT6 · FIFA Protocol',    color:'#007AFF', free:true,  xpReward:25 },
+    { id:'heatstroke',  icon:'☀️', title:'Heat Stroke',           sub:'EHS · Cold immersion',     color:'#FF3B30', free:true,  xpReward:25 },
+    { id:'sca_sports',  icon:'🫀', title:'Cardiac Arrest',        sub:'Pitch-side · AED',         color:'#FF3B30', free:false, xpReward:30 },
+    { id:'rtp',         icon:'🏆', title:'Return to Play',        sub:'6-step FIFA protocol',     color:'#34C759', free:true,  xpReward:20 },
+  ]
 
-  const pedsCases: any[] = []
+  const pedsCases: any[] = [
+    { id:'febrile',   icon:'🌡️', title:'Febrile Seizure', sub:'Management · Safety-net',    color:'#FF3B30', free:true,  xpReward:20 },
+    { id:'croup',     icon:'🫁', title:'Croup',           sub:'Westley · Dex · Adrenaline', color:'#007AFF', free:true,  xpReward:20 },
+    { id:'dka_peds',  icon:'💉', title:'Paediatric DKA',  sub:'BSPED · Cerebral oedema',    color:'#FF9500', free:false, xpReward:25 },
+  ]
 
   const radCases: any[] = []
 
