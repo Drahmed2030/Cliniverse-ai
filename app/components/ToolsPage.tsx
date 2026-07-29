@@ -102,6 +102,7 @@ const SECTIONS = [
       { id:'drug',        icon:'⚗️', label:'Drug Interaction AI', desc:'Check drug combinations',      color:'#FF9500' },
       { id:'handover',    icon:'📋', label:'Shift Handover AI',   desc:'SBAR in 30 seconds',           color:'#34C759' },
       { id:'workshop',    icon:'🛠️', label:'Clinical Workshop',   desc:'Discharge · Portfolio · Notes', color:'#007AFF' },
+      { id:'toolkit',     icon:'🏥', label:'Clinical Toolkit', desc:'Drug dosing · Renal · 7 Clinical Scores', color:'#00C4B4' },
       { id:'calculator',  icon:'🧮', label:'Med Calculators',    desc:'GFR · CHADS · Wells · SOFA',   color:'#AF52DE' },
     ]
   },
