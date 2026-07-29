@@ -28,6 +28,8 @@ const LabModule = dynamic(() => import('./components/LabModule'), { ssr: false }
 const RadiologyModule = dynamic(() => import('./components/RadiologyModule'), { ssr: false })
 const SocialHub = dynamic(() => import('./components/SocialHub'), { ssr: false })
 const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), { ssr: false })
+const ClinicalNet      = dynamic(() => import('./components/ClinicalNet'),      { ssr: false })
+const MedFeed          = dynamic(() => import('./components/MedFeed'),          { ssr: false })
 const VirtualWard = dynamic(() => import('./components/VirtualWard'), { ssr: false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
@@ -655,6 +657,17 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <div><ClinicalWorkshop onXP={addXP}/></div>
         )}
 
+        {tab==='net'&&(
+          <div style={{padding:'0 0 20px'}}>
+            <div style={{display:'flex',gap:4,background:'rgba(255,255,255,0.04)',borderRadius:16,padding:4,marginBottom:16,border:'1px solid rgba(255,255,255,0.12)'}}>
+              <button id="net-feed" onClick={()=>{document.getElementById('net-social').style.display='none';document.getElementById('net-feed-content').style.display='block';document.getElementById('net-feed').style.background='rgba(255,255,255,0.07)';document.getElementById('net-social').style.background='transparent'}} style={{flex:1,padding:'9px',border:'none',cursor:'pointer',borderRadius:12,fontFamily:'-apple-system,sans-serif',fontWeight:700,fontSize:12,background:'rgba(255,255,255,0.07)',color:'#00C4B4',transition:'all 0.2s'}}>📰 MedFeed</button>
+              <button id="net-social" onClick={()=>{document.getElementById('net-feed-content').style.display='none';document.getElementById('net-social-content').style.display='block';document.getElementById('net-social').style.background='rgba(255,255,255,0.07)';document.getElementById('net-feed').style.background='transparent'}} style={{flex:1,padding:'9px',border:'none',cursor:'pointer',borderRadius:12,fontFamily:'-apple-system,sans-serif',fontWeight:700,fontSize:12,background:'transparent',color:'rgba(238,246,250,0.38)',transition:'all 0.2s'}}>🌐 ClinicalNet</button>
+            </div>
+            <div id="net-feed-content"><MedFeed onXP={addXP}/></div>
+            <div id="net-social-content" style={{display:'none'}}><ClinicalNet onXP={addXP}/></div>
+          </div>
+        )}
+
         {tab==='ward'&&(
           <div><VirtualWard onXP={addXP}/></div>
         )}
@@ -881,10 +894,14 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             boxShadow:'0 8px 40px rgba(0,0,0,0.40), 0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.10)',
           }}>
             {[
-              { id:'hub',  label:'Hub',   color:'#00C4B4', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M14 17.5H21M17.5 14V21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
+              { id:'hub',  label:'Pulse',   color:'#00C4B4', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M14 17.5H21M17.5 14V21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
               { id:'tools',label:'Tools', color:'#FF9500', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
               { id:'ward', label:'Ward',  color:'#34C759', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
               { id:'work', label:'Work',  color:'#34C759', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
+              { id:'net',  label:'Net',   color:'#00C4B4', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.
+
+
+8"/><path d="M12 3C12 3 8 7 8 12C8 17 12 21 12 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 3C12 3 16 7 16 12C16 17 12 21 12 21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M3 12H21" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
               { id:'profile', label:'Me', color:'#007AFF', svg:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg> },
             ].map(t => {
               const active = tab===t.id
