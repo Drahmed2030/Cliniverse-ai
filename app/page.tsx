@@ -28,6 +28,7 @@ const LabModule = dynamic(() => import('./components/LabModule'), { ssr: false }
 const RadiologyModule = dynamic(() => import('./components/RadiologyModule'), { ssr: false })
 const SocialHub = dynamic(() => import('./components/SocialHub'), { ssr: false })
 const ClinicalWorkshop = dynamic(() => import('./components/ClinicalWorkshop'), { ssr: false })
+const VirtualWard = dynamic(() => import('./components/VirtualWard'), { ssr: false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr: false })
 const PWAInstall = dynamic(() => import('./components/PWAInstall'), { ssr: false })
 const DynamicMCQ = dynamic(() => import('./components/DynamicMCQ'), { ssr: false })
