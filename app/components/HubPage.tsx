@@ -1,9 +1,8 @@
 'use client'
-import React
-import dynamic from 'next/dynamic'
-const DynamicMCQ = dynamic(() => import('./DynamicMCQ'), { ssr: false }), { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
+const DynamicMCQ = dynamic(() => import('./DynamicMCQ'), { ssr: false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
