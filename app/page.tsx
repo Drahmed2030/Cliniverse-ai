@@ -444,22 +444,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     return(
       <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
         {ambientGlow}
-        
-          {/* C letter small repeating */}
-          <text x="30" y="150" fontSize="40" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.5">C</text>
-          <text x="340" y="550" fontSize="40" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif" opacity="0.5">AI</text>
-          <text x="20" y="450" fontSize="30" fontWeight="900" fill="#D4A847" fontFamily="-apple-system,sans-serif" opacity="0.4">C</text>
-          <text x="350" y="200" fontSize="30" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.3">AI</text>
-        </svg>
-      </div>
 
-          {/* C letter small repeating */}
-          <text x="30" y="150" fontSize="40" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.5">C</text>
-          <text x="340" y="550" fontSize="40" fontWeight="900" fill="#007AFF" fontFamily="-apple-system,sans-serif" opacity="0.5">AI</text>
-          <text x="20" y="450" fontSize="30" fontWeight="900" fill="#D4A847" fontFamily="-apple-system,sans-serif" opacity="0.4">C</text>
-          <text x="350" y="200" fontSize="30" fontWeight="900" fill="#FFFFFF" fontFamily="-apple-system,sans-serif" opacity="0.3">AI</text>
-        </svg>
-      </div>
       {/* ── WATERMARK ── */}
       <div style={{position:'fixed',top:'50%',left:'50%',transform:'translate(-50%,-50%)',pointerEvents:'none',zIndex:9999,opacity:0.08,width:500,height:500}}>
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
