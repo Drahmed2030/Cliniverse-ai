@@ -491,7 +491,7 @@ export default function DynamicMCQ({ isPro=false, onXP, mcqCorrect=0, setMcqCorr
     }
 
     try {
-      const res = await fetch('/api/generate-mcq', {
+      const res = await fetch('/api/exam', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({ specialty:cfg.specialty, examType:cfg.exam, difficulty:cfg.difficulty }),
