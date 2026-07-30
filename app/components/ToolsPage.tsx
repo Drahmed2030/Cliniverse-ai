@@ -28,6 +28,7 @@ const Guidelines      = dynamic(() => import('./Guidelines'),         { ssr:fals
 const ClinicalDuels   = dynamic(() => import('./ClinicalDuels'),      { ssr:false })
 const GrandRoundsAI   = dynamic(() => import('./GrandRoundsAI'),      { ssr:false })
 const ClinicalToolkit = dynamic(() => import('./ClinicalToolkit'),  { ssr:false })
+const RenalDosingAI   = dynamic(() => import('./RenalDosingAI'),    { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
