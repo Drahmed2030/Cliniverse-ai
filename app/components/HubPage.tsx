@@ -1,4 +1,5 @@
 'use client'
+import { supabase } from '../supabase'
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
@@ -125,6 +126,17 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
   const [liveCount, setLiveCount] = useState(1247)
   const [showLive, setShowLive] = useState(false)
   const [waitlist, setWaitlist] = useState<string[]>([])
+  const [dailyCase, setDailyCase] = useState<any>(null)
+
+  useEffect(() => {
+    supabase
+      .from('daily_cases')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+      .then(({ data }) => { if (data) setDailyCase(data) })
+  }, [])
 
   useEffect(() => {
     const t = setInterval(() => setLiveCount(n => Math.max(900, Math.min(1600, n + Math.floor(Math.random()*5)-2))), 3000)
@@ -178,6 +190,30 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             </div>
           </div>
         </div>
+
+        {/* ── CASE OF THE DAY ── */}
+        {dailyCase && (
+          <div style={{
+            background:'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(0,122,255,0.08))',
+            border:`1.5px solid ${T.teal}35`, borderRadius:22, padding:'16px',
+            marginBottom:16, position:'relative', overflow:'hidden',
+          }}>
+            <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:`radial-gradient(circle,${T.teal}18,transparent 70%)`,pointerEvents:'none'}}/>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
+              <div style={{display:'flex',alignItems:'center',gap:6,background:`${T.teal}15`,border:`1px solid ${T.teal}30`,borderRadius:20,padding:'3px 10px'}}>
+                <div style={{width:5,height:5,borderRadius:'50%',background:T.teal,boxShadow:`0 0 6px ${T.teal}`}}/>
+                <span style={{fontSize:9,fontWeight:800,color:T.teal,letterSpacing:1}}>CASE OF THE DAY</span>
+              </div>
+              <span style={{fontSize:9,color:T.muted}}>{dailyCase.specialty}</span>
+            </div>
+            <div style={{fontSize:16,fontWeight:900,color:T.text,marginBottom:6}}>{dailyCase.title}</div>
+            <div style={{fontSize:12,color:T.sub,lineHeight:1.6,marginBottom:10}}>{dailyCase.presentation}</div>
+            <div style={{display:'flex',gap:8}}>
+              <span style={{fontSize:10,color:T.blue,background:`${T.blue}12`,border:`1px solid ${T.blue}20`,borderRadius:8,padding:'3px 8px',fontWeight:600}}>{dailyCase.difficulty}</span>
+              <span style={{fontSize:10,color:T.teal,background:`${T.teal}12`,border:`1px solid ${T.teal}20`,borderRadius:8,padding:'3px 8px',fontWeight:600}}>{dailyCase.specialty}</span>
+            </div>
+          </div>
+        )}
 
         {/* ── LIVE TICKER ── */}
         <LiveTicker xp={xp} streak={streak} liveCount={liveCount}/>
