@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
+const getSupabase = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_KEY  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY  ''
 )
 
 const SPECIALTIES = [
@@ -45,7 +45,7 @@ export async function GET(req: Request) {
       published_at: new Date(a.pubdate).toISOString(),
     }))
 
-    await supabase.from('pubmed_articles').upsert(rows, { onConflict: 'id' })
+    await getSupabase().from('pubmed_articles').upsert(rows, { onConflict: 'id' })
 
     return NextResponse.json({ success: true, count: rows.length })
   } catch (e: any) {
