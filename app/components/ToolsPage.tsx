@@ -31,6 +31,9 @@ const ClinicalToolkit = dynamic(() => import('./ClinicalToolkit'),  { ssr:false 
 const RenalDosingAI         = dynamic(() => import('./RenalDosingAI'),         { ssr:false })
 const DrugInteractionChecker   = dynamic(() => import('./DrugInteractionChecker'),    { ssr:false })
 const ClinicalRiskCalculator   = dynamic(() => import('./ClinicalRiskCalculator'),    { ssr:false })
+const ClinicalMemory           = dynamic(() => import('./ClinicalMemory'),           { ssr:false })
+const PrescriptionAI           = dynamic(() => import('./PrescriptionAI'),           { ssr:false })
+const ClinicalLogbook          = dynamic(() => import('./ClinicalLogbook'),          { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -111,6 +114,9 @@ const SECTIONS = [
       { id:'renal',       icon:'🫘', label:'Renal Dosing AI',    desc:'Drug doses by eGFR · 8 drugs',  color:'#00C4B4' },
       { id:'drugcheck',   icon:'⚗️', label:'Drug Interactions',  desc:'AI interaction checker',         color:'#FF9500' },
       { id:'riskcalc',    icon:'📊', label:'Risk Calculators',   desc:'CHA2DS2 · Wells · CURB65 · GCS', color:'#AF52DE' },
+      { id:'memory',      icon:'🗂️', label:'Clinical Memory',    desc:'Patient records · AI report in 30s', color:'#00C4B4' },
+      { id:'rx',          icon:'💊', label:'Prescription AI',    desc:'Evidence-based Rx · EN + AR · Renal adjusted', color:'#34C759' },
+      { id:'logbook',     icon:'📋', label:'Clinical Logbook',   desc:'CPD · Procedures · Reflections · Revalidation', color:'#D4A847' },
     ]
   },
   {
