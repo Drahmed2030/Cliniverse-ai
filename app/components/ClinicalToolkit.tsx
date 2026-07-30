@@ -8,8 +8,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.60)',
-  muted:  'rgba(238,246,250,0.38)',
+  sub:    'rgba(238,246,250,0.72)',
+  muted:  'rgba(238,246,250,0.50)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -164,7 +164,7 @@ function DrugCalculator() {
       </div>
 
       {/* Patient params */}
-      <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${T.border}`}}>
+      <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${T.border}`}}>
         <div style={{fontSize:9,color:T.muted,fontWeight:700,letterSpacing:1.5,marginBottom:12}}>PATIENT PARAMETERS</div>
         {[
           {label:'Weight (kg)', value:weight, set:setWeight, min:30, max:200, step:1,  color:T.blue},
@@ -202,7 +202,7 @@ function DrugCalculator() {
 
       {/* Result card */}
       <div style={{
-        background:`${selected.color}10`,backdropFilter:'blur(30px)',
+        background:`${selected.color}10`,backdropFilter:'blur(16px)',
         borderRadius:20,padding:'18px',marginBottom:12,
         border:`1.5px solid ${selected.color}30`,
         boxShadow:`0 0 24px ${selected.color}18`,
