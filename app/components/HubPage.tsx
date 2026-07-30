@@ -12,9 +12,9 @@ const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 // ── DESIGN TOKENS — Apple-grade contrast & clarity ──
 const D = {
   // Backgrounds
-  bg0:     '#080d14',   // deepest — true black-blue
-  bg1:     '#0d1520',   // card base
-  bg2:     '#111d2b',   // card elevated
+  bg0:     '#0d1520',   // deepest — true black-blue
+  bg1:     '#111d2b',   // card base
+  bg2:     '#162536',   // card elevated
   // Glass layers
   glass:   'rgba(255,255,255,0.06)',
   glass2:  'rgba(255,255,255,0.03)',
@@ -238,7 +238,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   )
 
   return (
-    <div style={{minHeight:'100vh',background:D.bg0,fontFamily:F,overflowX:'hidden',position:'relative'}}>
+    <div style={{minHeight:'100vh',background:'linear-gradient(160deg,#0d1520 0%,#0a1828 50%,#0d1520 100%)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
       <NeuralBg/>
 
       {/* Ambient top glow */}
