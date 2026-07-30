@@ -5,7 +5,8 @@ import { supabase } from '../supabase'
 
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const PulseAcademy   = dynamic(() => import('./PulseAcademy'),   { ssr: false })
-const AmbientScribe  = dynamic(() => import('./AmbientScribe'),  { ssr: false })
+const AmbientScribe       = dynamic(() => import('./AmbientScribe'),       { ssr: false })
+const HealthStatusHeader  = dynamic(() => import('./HealthStatusHeader'), { ssr: false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -247,28 +248,14 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
       {/* ── MAIN SCROLL — pb accounts for Floating Nav ── */}
       <main style={{position:'relative',zIndex:1,padding:'20px 16px 116px',maxWidth:540,margin:'0 auto'}}>
 
-        {/* ── GREETING ── */}
-        <div style={{marginBottom:16,animation:'fadeUp 0.35s ease'}}>
-          <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
-            <div>
-              <div style={{fontSize:11,color:D.teal,fontWeight:700,letterSpacing:1.5,marginBottom:5}}>CLINIVERSE AI</div>
-              <div style={{fontSize:24,fontWeight:900,color:D.t1,letterSpacing:-0.6,lineHeight:1.1}}>
-                {greetIcon} {greeting},<br/><span style={{color:D.teal}}>Doctor</span>
-              </div>
-              <div style={{fontSize:13,color:D.t2,marginTop:6}}>
-                <span style={{color:D.orange,fontWeight:700}}>{streak}-day streak 🔥</span> · {xp} XP
-              </div>
-            </div>
-            {/* Live badge */}
-            <div style={{display:'flex',alignItems:'center',gap:6,background:'rgba(255,69,58,0.12)',border:'1px solid rgba(255,69,58,0.28)',borderRadius:22,padding:'6px 12px',flexShrink:0}}>
-              <div style={{width:6,height:6,borderRadius:'50%',background:D.live,animation:'liveBlink 1.4s ease-in-out infinite'}}/>
-              <span style={{fontSize:10,fontWeight:800,color:D.live,letterSpacing:0.5}}>LIVE</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── TICKER ── */}
-        <Ticker xp={xp} streak={streak} live={liveCount}/>
+        {/* ── HEALTH STATUS HEADER ── */}
+        <HealthStatusHeader
+          doctorName="Dr. Ahmed Osman"
+          xp={xp}
+          streak={streak}
+          liveCount={liveCount}
+          isPro={isPro}
+        />
 
         {/* ── AMBIENT SCRIBE — HERO CTA ── */}
         <div onClick={()=>setShowScribe(true)} style={{
