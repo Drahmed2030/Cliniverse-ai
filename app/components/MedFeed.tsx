@@ -9,8 +9,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.72)',
-  muted:  'rgba(238,246,250,0.50)',
+  sub:    'rgba(238,246,250,0.60)',
+  muted:  'rgba(238,246,250,0.38)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -203,7 +203,7 @@ Suitable for a medical journal club discussion.`,
         </div>
 
         {/* Title */}
-        <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${j.color}22`,position:'relative',overflow:'hidden'}}>
+        <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${j.color}22`,position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:`radial-gradient(circle,${j.color}14,transparent 70%)`,pointerEvents:'none'}}/>
           <div style={{fontSize:16,fontWeight:900,color:T.text,lineHeight:1.4,marginBottom:10}}>{article.title}</div>
           <div style={{fontSize:12,color:T.sub,lineHeight:1.7}}>{article.summary}</div>
@@ -237,7 +237,7 @@ Suitable for a medical journal club discussion.`,
 
         {/* Clinical / Debate tabs */}
         {(tab==='clinical'||tab==='debate') && (
-          <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:18,padding:'16px',border:`1px solid ${T.border}`}}>
+          <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',border:`1px solid ${T.border}`}}>
             <div style={{fontSize:9,color:tab==='clinical'?T.blue:T.orange,fontWeight:700,letterSpacing:1,marginBottom:10}}>
               {tab==='clinical'?'🏥 CLINICAL APPLICATION':'⚔️ CLINICAL DEBATE'}
             </div>
@@ -274,7 +274,7 @@ function NewsCard({ article, onOpen, onSave, onLike }: { article:any, onOpen:(a:
 
   return (
     <div style={{
-      background:T.glass,backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',
+      background:T.glass,backdropFilter:'blur(40px)',WebkitBackdropFilter:'blur(40px)',
       border:`1px solid ${j.color}20`,borderRadius:22,padding:'18px',
       marginBottom:12,position:'relative',overflow:'hidden',
       boxShadow:`0 4px 20px rgba(0,0,0,0.12),0 0 12px ${j.color}08`,
