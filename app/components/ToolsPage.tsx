@@ -36,8 +36,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.60)',
-  muted:  'rgba(238,246,250,0.38)',
+  sub:    'rgba(238,246,250,0.72)',
+  muted:  'rgba(238,246,250,0.50)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -187,8 +187,8 @@ function CinematicCard({ section, index, onClick }: { section:typeof SECTIONS[0]
   return (
     <div ref={ref} onClick={onClick} style={{
       background: T.glass,
-      backdropFilter: 'blur(40px)',
-      WebkitBackdropFilter: 'blur(40px)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
       border: `1.5px solid ${section.color}30`,
       borderRadius: 24,
       padding: '20px',
@@ -300,7 +300,7 @@ function SectionDetail({ section, onBack, onTool }: { section:typeof SECTIONS[0]
         {section.tools.map((tool, i) => (
           <div key={tool.id} onClick={() => onTool(tool.id)} style={{
             display:'flex', alignItems:'center', gap:14,
-            background: T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)',
+            background: T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)',
             borderRadius:20, padding:'16px 18px',
             border:`1px solid ${tool.color}22`, cursor:'pointer',
             boxShadow:`0 4px 20px ${tool.color}10`,
