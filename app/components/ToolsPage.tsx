@@ -36,6 +36,7 @@ const PrescriptionAI           = dynamic(() => import('./PrescriptionAI'),      
 const ClinicalLogbook          = dynamic(() => import('./ClinicalLogbook'),          { ssr:false })
 const AmbientScribe            = dynamic(() => import('./AmbientScribe'),            { ssr:false })
 const ClinicalExplorer         = dynamic(() => import('./ClinicalExplorer'),         { ssr:false })
+const FHIRIntegration          = dynamic(() => import('./FHIRIntegration'),          { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -121,6 +122,7 @@ const SECTIONS = [
       { id:'logbook',     icon:'📋', label:'Clinical Logbook',   desc:'CPD · Procedures · Reflections · Revalidation', color:'#D4A847' },
       { id:'scribe',      icon:'🎙️', label:'Ambient Scribe',     desc:'Record consultation → AI SOAP note', color:'#00C4B4' },
       { id:'explorer',    icon:'🔬', label:'Clinical Explorer',   desc:'OpenFDA · ClinicalTrials.gov · Live', color:'#007AFF' },
+      { id:'fhir',        icon:'🌐', label:'FHIR Integration',    desc:'HL7 FHIR R4 · Global EHR standard', color:'#34C759' },
     ]
   },
   {
