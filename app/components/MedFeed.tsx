@@ -264,7 +264,6 @@ Suitable for a medical journal club discussion.`,
           🔗 Share in ClinicalNet
         </button>
       </div>
-      </div>)}
       <style>{`@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}`}</style>
     </div>
   )
@@ -516,7 +515,6 @@ Respond in JSON only:
         <NewsCard key={article.id} article={article} onOpen={setSelected} onSave={handleSave} onLike={handleLike}/>
       ))}
 
-      </div>)}
       <style>{`
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
         @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
