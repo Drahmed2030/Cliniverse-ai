@@ -34,6 +34,8 @@ const ClinicalRiskCalculator   = dynamic(() => import('./ClinicalRiskCalculator'
 const ClinicalMemory           = dynamic(() => import('./ClinicalMemory'),           { ssr:false })
 const PrescriptionAI           = dynamic(() => import('./PrescriptionAI'),           { ssr:false })
 const ClinicalLogbook          = dynamic(() => import('./ClinicalLogbook'),          { ssr:false })
+const AmbientScribe            = dynamic(() => import('./AmbientScribe'),            { ssr:false })
+const ClinicalExplorer         = dynamic(() => import('./ClinicalExplorer'),         { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -117,6 +119,8 @@ const SECTIONS = [
       { id:'memory',      icon:'🗂️', label:'Clinical Memory',    desc:'Patient records · AI report in 30s', color:'#00C4B4' },
       { id:'rx',          icon:'💊', label:'Prescription AI',    desc:'Evidence-based Rx · EN + AR · Renal adjusted', color:'#34C759' },
       { id:'logbook',     icon:'📋', label:'Clinical Logbook',   desc:'CPD · Procedures · Reflections · Revalidation', color:'#D4A847' },
+      { id:'scribe',      icon:'🎙️', label:'Ambient Scribe',     desc:'Record consultation → AI SOAP note', color:'#00C4B4' },
+      { id:'explorer',    icon:'🔬', label:'Clinical Explorer',   desc:'OpenFDA · ClinicalTrials.gov · Live', color:'#007AFF' },
     ]
   },
   {
