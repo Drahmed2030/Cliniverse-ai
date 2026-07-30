@@ -104,7 +104,7 @@ function ParentTalk({ caseName, onClose }: { caseName:string, onClose:()=>void }
   }
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.90)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column'}}>
       <div style={{padding:'16px 20px',display:'flex',alignItems:'center',gap:12,borderBottom:`1px solid ${T.border}`}}>
         <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
         <div>

@@ -51,7 +51,7 @@ const PLATFORMS = [
     id: 'twitter',
     label: 'X / Twitter',
     icon: '𝕏',
-    color: '#000000',
+    color: '#0a1628',
     build: (content: string, title: string, hashtags: string[]) => {
       const tags = hashtags.map(h => '#' + h).join(' ')
       const text = `${content.substring(0, 200)}...\n\n${tags}\n\n#CliniverseAI #MedEd`
@@ -168,7 +168,7 @@ export function ShareModal({ title, content, type = 'general', hashtags, onClose
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.88)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
       <div style={{ background: 'linear-gradient(180deg,#1e3d52,#162e3e)', borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', maxHeight: '85vh', overflowY: 'auto', border: `1px solid ${T.border}` }}>
         <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.20)', margin: '0 auto 20px' }} />
 

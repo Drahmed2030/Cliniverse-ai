@@ -249,7 +249,7 @@ function NewPostModal({ onClose, onPost, doctorName, doctorSpecialty }: {
   }
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.88)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto',fontFamily:F}}>
 
         {/* Header */}
@@ -404,7 +404,7 @@ function CommentsModal({ post, onClose }: { post:any, onClose:()=>void }) {
   const pt = POST_TYPES.find(t=>t.id===post.post_type)||POST_TYPES[0]
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.90)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',fontFamily:F}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',fontFamily:F}}>
       {/* Header */}
       <div style={{padding:'16px 20px',borderBottom:`1px solid ${T.border}`,display:'flex',alignItems:'center',gap:12,flexShrink:0}}>
         <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>←</button>

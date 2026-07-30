@@ -125,7 +125,7 @@ function Ticker({xp,streak,live}:{xp:number,streak:number,live:number}) {
 // ── SECTION MODAL ──
 function SectionModal({section,onClose,onCase,isPro,setShowUpgrade}:any) {
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.80)',backdropFilter:'blur(16px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}} onClick={onClose}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.82)',backdropFilter:'blur(16px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}} onClick={onClose}>
       <div onClick={e=>e.stopPropagation()} style={{background:`linear-gradient(180deg,${D.bg2},${D.bg1})`,borderRadius:'28px 28px 0 0',border:`1px solid ${D.borderHi}`,padding:'24px 20px 44px',maxHeight:'78vh',overflowY:'auto',animation:'fadeUp 0.28s ease'}}>
         <div style={{width:38,height:4,borderRadius:2,background:D.border,margin:'0 auto 22px'}}/>
         <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:22}}>
@@ -228,7 +228,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
   if(showLive)    return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.92)',backdropFilter:'blur(16px)'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
       <div style={{padding:'20px 16px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${D.border}`}}>
         <span style={{color:D.t1,fontWeight:800,fontSize:16,fontFamily:F}}>Live Case</span>
         <button onClick={()=>setShowLive(false)} style={{background:D.glass,border:`1px solid ${D.border}`,borderRadius:10,padding:'8px 14px',color:D.t1,cursor:'pointer',fontFamily:F,fontSize:14}}>✕</button>
@@ -238,7 +238,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   )
 
   return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(160deg,#0d1520 0%,#0a1828 50%,#0d1520 100%)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
+    <div style={{minHeight:'100vh',background:'linear-gradient(160deg,#101e30 0%,#0a1828 50%,#0d1520 100%)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
       <NeuralBg/>
 
       {/* Ambient top glow */}

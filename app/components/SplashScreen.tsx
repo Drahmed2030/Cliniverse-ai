@@ -17,7 +17,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 99999,
-      background: '#080d14',
+      background: '#0d1828',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       fontFamily: F,

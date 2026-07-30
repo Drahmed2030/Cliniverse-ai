@@ -57,7 +57,7 @@ function AddPatientModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: a
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.88)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
       <div style={{ background: 'linear-gradient(180deg,#1e3d52,#162e3e)', borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', border: '1px solid ' + T.border }}>
         <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.20)', margin: '0 auto 20px' }} />
         <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 20 }}>➕ New Patient</div>
@@ -149,7 +149,7 @@ function AddInterpretationModal({ patient, onClose, onAdd }: { patient: any, onC
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
           <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>

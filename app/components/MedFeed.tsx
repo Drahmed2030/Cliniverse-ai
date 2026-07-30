@@ -189,7 +189,7 @@ Suitable for a medical journal club discussion.`,
   const j = JOURNALS.find(j=>j.label===article.source)||JOURNALS[0]
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.90)',backdropFilter:'blur(12px)',overflowY:'auto',fontFamily:F}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',overflowY:'auto',fontFamily:F}}>
 
   {/* Cliniverse Logo Watermark */}
   <div style={{position:'absolute',top:0,right:0,width:180,height:180,pointerEvents:'none',zIndex:0,opacity:0.06,overflow:'hidden'}}>

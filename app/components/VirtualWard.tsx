@@ -160,7 +160,7 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
   const copy = () => { navigator.clipboard.writeText(note); setCopied(true); setTimeout(()=>setCopied(false),2000) }
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
 
 {/* Cliniverse Logo Watermark */}
 <div style={{position:'fixed',bottom:'15%',right:'5%',opacity:0.06,pointerEvents:'none',zIndex:0,transform:'rotate(-15deg)'}}>
@@ -295,7 +295,7 @@ Write a complete discharge summary including: admission reason, hospital course,
   const copy = () => { navigator.clipboard.writeText(summary); setCopied(true); setTimeout(()=>setCopied(false),2000) }
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
           <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>

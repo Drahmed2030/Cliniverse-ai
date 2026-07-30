@@ -69,7 +69,7 @@ export default function PWAInstall() {
 
   // iOS Guide Modal
   if (showIOSGuide) return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:9999,display:'flex',alignItems:'flex-end',fontFamily:'-apple-system,sans-serif'}}>
+    <div style={{position:'fixed',inset:0,background:'rgba(10,22,40,0.85)',zIndex:9999,display:'flex',alignItems:'flex-end',fontFamily:'-apple-system,sans-serif'}}>
       <div style={{width:'100%',background:'linear-gradient(135deg,rgba(28,8,58,0.99),rgba(12,4,32,0.99))',borderRadius:'24px 24px 0 0',padding:'24px 20px 40px',border:'1px solid rgba(139,92,246,0.3)'}}>
         <div style={{width:40,height:4,borderRadius:2,background:'rgba(0,196,180,0.25)',margin:'0 auto 20px'}}/>
         <div style={{fontSize:20,fontWeight:900,color:'white',marginBottom:6,textAlign:'center'}}>📲 Install Cliniverse AI</div>

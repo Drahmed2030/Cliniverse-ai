@@ -263,7 +263,7 @@ Be clinically precise. If information is missing, note "Not documented".`
           {[
             { icon: '💬', label: 'WhatsApp', color: '#25D366', action: () => window.open('https://wa.me/?text=' + encodeURIComponent('📋 SOAP Note\n\n' + soapNote.substring(0, 500)), '_blank') },
             { icon: '🔗', label: 'LinkedIn', color: '#0A66C2', action: () => window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://cliniverseai.com'), '_blank') },
-            { icon: '𝕏', label: 'X/Twitter', color: '#000000', action: () => window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('Generated a SOAP note with @CliniverseAI 🎙️ #MedicalAI #Healthcare'), '_blank') },
+            { icon: '𝕏', label: 'X/Twitter', color: '#0a1628', action: () => window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('Generated a SOAP note with @CliniverseAI 🎙️ #MedicalAI #Healthcare'), '_blank') },
           ].map(s => (
             <button key={s.label} onClick={s.action} style={{ flex: 1, padding: '10px 8px', borderRadius: 14, border: '1px solid ' + s.color + '30', background: s.color + '12', color: s.color, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
               {s.icon} {s.label}

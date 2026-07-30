@@ -79,7 +79,7 @@ function RTPCalculator({ onClose }: { onClose:()=>void }) {
     { day:5, activity:'Return to competition', notes:'Full return to sport' },
   ]
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.90)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
           <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>

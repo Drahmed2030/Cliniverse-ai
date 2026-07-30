@@ -249,7 +249,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
   }
 
   if (sent) return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.90)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F }}>
       <div style={{ background: 'linear-gradient(180deg,#1e3d52,#162e3e)', borderRadius: 24, padding: '40px 30px', maxWidth: 340, textAlign: 'center', border: `1px solid ${T.green}30` }}>
         <div style={{ fontSize: 52, marginBottom: 16 }}>✅</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: T.green, marginBottom: 8 }}>Request Sent!</div>
@@ -260,7 +260,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
   )
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
           <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>

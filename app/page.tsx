@@ -125,7 +125,7 @@ const lightTheme = {
   headerBorder: 'rgba(60,60,67,0.1)',
   cardBg: '#ffffff',
   cardBorder: 'rgba(60,60,67,0.08)',
-  text: '#000000',
+  text: '#0a1628',
   textSub: '#3c3c43',
   textMuted: '#8e8e93',
   navBg: 'rgba(255,255,255,0.97)',
@@ -343,7 +343,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
   // UPGRADE MODAL
   if(showUpgrade) return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(20px)',zIndex:999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+    <div style={{position:'fixed',inset:0,background:'rgba(10,22,40,0.85)',backdropFilter:'blur(20px)',zIndex:999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
       <div style={{background:'linear-gradient(145deg,#0d3347,#162e3e)',borderRadius:28,padding:32,maxWidth:380,width:'100%',border:'1px solid rgba(0,196,180,0.4)',boxShadow:'0 20px 80px rgba(0,196,180,0.4)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-40,right:-40,width:160,height:160,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <button onClick={()=>setShowUpgrade(false)} style={{position:'absolute',top:16,right:16,background:'rgba(0,196,180,0.20)',border:'none',borderRadius:'50%',width:32,height:32,color:'white',fontSize:16,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
@@ -870,7 +870,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   
       {/* Checkout Modal */}
       {checkoutUrl && (
-        <div onClick={()=>setCheckoutUrl('')} style={{position:'fixed',inset:0,zIndex:99999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+        <div onClick={()=>setCheckoutUrl('')} style={{position:'fixed',inset:0,zIndex:99999,background:'rgba(10,22,40,0.85)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
           <div onClick={e=>e.stopPropagation()} style={{background:'#1e2d40',borderRadius:'28px 28px 0 0',border:'1px solid rgba(36,63,82,0.65)',height:'90vh',overflow:'hidden'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'16px 20px',borderBottom:'1px solid rgba(36,63,82,0.65)'}}>
               <span style={{fontSize:15,fontWeight:800,color:'white',fontFamily:'"Inter",sans-serif'}}>Complete Purchase</span>
