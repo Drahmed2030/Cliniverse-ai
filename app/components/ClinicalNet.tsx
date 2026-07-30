@@ -95,6 +95,33 @@ function PostCard({ post, onComment, onLike }: { post:any, onComment:(p:any)=>vo
 
       {/* Post type badge */}
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+
+  {/* Cliniverse Logo Watermark */}
+  <div style={{position:'absolute',top:0,right:0,width:180,height:180,pointerEvents:'none',zIndex:0,opacity:0.06,overflow:'hidden'}}>
+    <svg width="180" height="180" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"
+      style={{animation:'logoFloat 4s ease-in-out infinite',position:'absolute',top:-20,right:-20}}>
+      <defs>
+        <linearGradient id="arcNT" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00E5D4"/><stop offset="100%" stopColor="#0096FF"/>
+        </linearGradient>
+        <filter id="glNT" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path d="M 84 38 A 30 30 0 1 0 84 82" fill="none" stroke="url(#arcNT)" strokeWidth="7" strokeLinecap="round" filter="url(#glNT)"/>
+      <circle cx="84" cy="38" r="4" fill="#00E5D4"><animate attributeName="r" values="3;6;3" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="84" cy="82" r="4" fill="#0096FF"><animate attributeName="r" values="3;6;3" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle>
+      <polyline points="26,60 34,60 38,60 42,47 46,73 50,54 54,66 58,60 78,60"
+        fill="none" stroke="#00C8B8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+        filter="url(#glNT)" strokeDasharray="120" strokeDashoffset="120">
+        <animate attributeName="strokeDashoffset" values="120;0;120" dur="2.4s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="opacity" values="0;1;0" dur="2.4s" repeatCount="indefinite"/>
+      </polyline>
+    </svg>
+  </div>
+
+
         <div style={{display:'flex',alignItems:'center',gap:6,background:`${pt.color}15`,border:`1px solid ${pt.color}28`,borderRadius:20,padding:'4px 10px'}}>
           <span style={{fontSize:12}}>{pt.icon}</span>
           <span style={{fontSize:9,color:pt.color,fontWeight:800,letterSpacing:0.5}}>{pt.label.toUpperCase()}</span>
@@ -325,7 +352,8 @@ function NewPostModal({ onClose, onPost, doctorName, doctorSpecialty }: {
             : '🌐 Share with Colleagues'}
         </button>
       </div>
-      <style>{`@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}textarea::placeholder,input::placeholder{color:rgba(238,246,250,0.22)}`}</style>
+      <style>{`@keyframes logoFloat { 0%,100%{opacity:0.06;transform:translateY(0)} 50%{opacity:0.10;transform:translateY(-6px)} }
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}textarea::placeholder,input::placeholder{color:rgba(238,246,250,0.22)}`}</style>
     </div>
   )
 }

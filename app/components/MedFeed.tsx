@@ -190,6 +190,33 @@ Suitable for a medical journal club discussion.`,
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.90)',backdropFilter:'blur(12px)',overflowY:'auto',fontFamily:F}}>
+
+  {/* Cliniverse Logo Watermark */}
+  <div style={{position:'absolute',top:0,right:0,width:180,height:180,pointerEvents:'none',zIndex:0,opacity:0.06,overflow:'hidden'}}>
+    <svg width="180" height="180" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"
+      style={{animation:'logoFloat 4s ease-in-out infinite',position:'absolute',top:-20,right:-20}}>
+      <defs>
+        <linearGradient id="arcMF" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00E5D4"/><stop offset="100%" stopColor="#0096FF"/>
+        </linearGradient>
+        <filter id="glMF" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path d="M 84 38 A 30 30 0 1 0 84 82" fill="none" stroke="url(#arcMF)" strokeWidth="7" strokeLinecap="round" filter="url(#glMF)"/>
+      <circle cx="84" cy="38" r="4" fill="#00E5D4"><animate attributeName="r" values="3;6;3" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="84" cy="82" r="4" fill="#0096FF"><animate attributeName="r" values="3;6;3" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle>
+      <polyline points="26,60 34,60 38,60 42,47 46,73 50,54 54,66 58,60 78,60"
+        fill="none" stroke="#00C8B8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+        filter="url(#glMF)" strokeDasharray="120" strokeDashoffset="120">
+        <animate attributeName="strokeDashoffset" values="120;0;120" dur="2.4s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+        <animate attributeName="opacity" values="0;1;0" dur="2.4s" repeatCount="indefinite"/>
+      </polyline>
+    </svg>
+  </div>
+
+
       <div style={{padding:'20px 16px 60px',maxWidth:480,margin:'0 auto'}}>
 
         {/* Header */}
@@ -262,7 +289,8 @@ Suitable for a medical journal club discussion.`,
           🔗 Share in ClinicalNet
         </button>
       </div>
-      <style>{`@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}`}</style>
+      <style>{`@keyframes logoFloat { 0%,100%{opacity:0.06;transform:translateY(0)} 50%{opacity:0.10;transform:translateY(-6px)} }
+  @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}`}</style>
     </div>
   )
 }
