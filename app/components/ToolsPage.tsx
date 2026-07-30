@@ -37,6 +37,7 @@ const ClinicalLogbook          = dynamic(() => import('./ClinicalLogbook'),     
 const AmbientScribe            = dynamic(() => import('./AmbientScribe'),            { ssr:false })
 const ClinicalExplorer         = dynamic(() => import('./ClinicalExplorer'),         { ssr:false })
 const FHIRIntegration          = dynamic(() => import('./FHIRIntegration'),          { ssr:false })
+const EnterprisePage           = dynamic(() => import('./EnterprisePage'),           { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -123,6 +124,7 @@ const SECTIONS = [
       { id:'scribe',      icon:'🎙️', label:'Ambient Scribe',     desc:'Record consultation → AI SOAP note', color:'#00C4B4' },
       { id:'explorer',    icon:'🔬', label:'Clinical Explorer',   desc:'OpenFDA · ClinicalTrials.gov · Live', color:'#007AFF' },
       { id:'fhir',        icon:'🌐', label:'FHIR Integration',    desc:'HL7 FHIR R4 · Global EHR standard', color:'#34C759' },
+      { id:'enterprise',  icon:'🤝', label:'Enterprise',          desc:'Hospitals · Universities · Investors', color:'#D4A847' },
     ]
   },
   {
