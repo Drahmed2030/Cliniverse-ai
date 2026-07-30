@@ -139,11 +139,11 @@ function LogoMark({ size=56 }: { size?: number }) {
 
 interface Props {
   xp:number; streak:number; casesCompleted:number; mcqCorrect:number
-  isPro:boolean; unlockedBadges:string[]; setShowUpgrade:(v:boolean)=>void
-  onLogout?:()=>void
+  isPro:boolean; unlockedBadges?:string[]; setShowUpgrade?:(v:boolean)=>void
+  onLogout?:()=>void; name?:string; onUpgrade?:()=>void; onReset?:()=>void
 }
 
-export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, unlockedBadges, setShowUpgrade, onLogout }: Props) {
+export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, unlockedBadges=[], setShowUpgrade, onLogout, name, onUpgrade, onReset }: Props) {
   const [tab, setTab] = useState<'stats'|'badges'|'settings'>('stats')
 
   const rank     = [...RANKS].reverse().find(r => xp >= r.xpNeeded) || RANKS[0]
@@ -230,7 +230,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
 
         {/* PRO banner */}
         {!isPro && (
-          <div onClick={()=>setShowUpgrade(true)} style={{
+          <div onClick={()=>{ if(setShowUpgrade) setShowUpgrade(true); if(onUpgrade) onUpgrade(); }} style={{
             background:'linear-gradient(135deg,rgba(255,214,10,0.10),rgba(255,159,10,0.07))',
             border:'1.5px solid rgba(255,214,10,0.24)',
             borderRadius:22,padding:'14px 16px',marginBottom:12,
