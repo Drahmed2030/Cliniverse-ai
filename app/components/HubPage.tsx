@@ -1,6 +1,5 @@
 'use client'
 import { supabase } from '../supabase'
-import dynamic from 'next/dynamic'
 const PulseAcademy = dynamic(() => import('./PulseAcademy'), { ssr: false })
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
