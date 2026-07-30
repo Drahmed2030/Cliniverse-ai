@@ -8,8 +8,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.60)',
-  muted:  'rgba(238,246,250,0.38)',
+  sub:    'rgba(238,246,250,0.72)',
+  muted:  'rgba(238,246,250,0.50)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -177,7 +177,7 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
         </div>
 
         {/* Patient summary */}
-        <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'14px',marginBottom:16,border:`1px solid ${patient.statusColor}28`}}>
+        <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:18,padding:'14px',marginBottom:16,border:`1px solid ${patient.statusColor}28`}}>
           <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
             <div style={{width:8,height:8,borderRadius:'50%',background:patient.statusColor,boxShadow:`0 0 8px ${patient.statusColor}`}}/>
             <span style={{fontSize:10,color:patient.statusColor,fontWeight:800}}>{STATUS_LABELS[patient.status]}</span>
@@ -205,7 +205,7 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
         {/* Generated note */}
         {note && (
           <div>
-            <div style={{background:T.glass,backdropFilter:'blur(40px)',borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${T.blue}25`}}>
+            <div style={{background:T.glass,backdropFilter:'blur(20px)',borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${T.blue}25`}}>
               <div style={{fontSize:9,color:T.blue,fontWeight:700,letterSpacing:1,marginBottom:10}}>📋 PROGRESS NOTE — SOAP FORMAT</div>
               <div style={{fontSize:12,color:T.sub,lineHeight:1.8,whiteSpace:'pre-line'}}>{note}</div>
             </div>
@@ -305,7 +305,7 @@ Write a complete discharge summary including: admission reason, hospital course,
 
         {summary && (
           <div>
-            <div style={{background:T.glass,backdropFilter:'blur(40px)',borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${T.green}25`}}>
+            <div style={{background:T.glass,backdropFilter:'blur(20px)',borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${T.green}25`}}>
               <div style={{fontSize:9,color:T.green,fontWeight:700,letterSpacing:1,marginBottom:10}}>📄 DISCHARGE SUMMARY</div>
               <div style={{fontSize:12,color:T.sub,lineHeight:1.8,whiteSpace:'pre-line'}}>{summary}</div>
             </div>
@@ -345,7 +345,7 @@ function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack
       </div>
 
       {/* Diagnosis */}
-      <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${patient.statusColor}22`,position:'relative',overflow:'hidden'}}>
+      <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${patient.statusColor}22`,position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:`radial-gradient(circle,${patient.statusColor}15,transparent 70%)`,pointerEvents:'none'}}/>
         <div style={{fontSize:10,color:patient.statusColor,fontWeight:700,letterSpacing:1,marginBottom:6}}>DIAGNOSIS</div>
         <div style={{fontSize:15,fontWeight:900,color:T.text,marginBottom:6}}>{patient.diagnosis}</div>
@@ -382,7 +382,7 @@ function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack
 
       {/* Tab content */}
       {activeTab==='overview' && (
-        <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'14px',border:`1px solid ${T.border}`}}>
+        <div style={{background:T.glass,backdropFilter:'blur(16px)',borderRadius:18,padding:'14px',border:`1px solid ${T.border}`}}>
           <div style={{fontSize:10,color:T.muted,fontWeight:700,letterSpacing:1,marginBottom:10}}>CLINICAL NOTES</div>
           <div style={{fontSize:13,color:T.sub,lineHeight:1.7}}>{patient.notes}</div>
         </div>
@@ -501,7 +501,7 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
       <div style={{display:'flex',flexDirection:'column',gap:10}}>
         {PATIENTS.map(p=>(
           <div key={p.id} onClick={()=>setSelected(p)} style={{
-            background:T.glass, backdropFilter:'blur(40px)', WebkitBackdropFilter:'blur(40px)',
+            background:T.glass, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)',
             border:`1.5px solid ${p.statusColor}25`,
             borderRadius:20, padding:'16px', cursor:'pointer',
             position:'relative', overflow:'hidden',
