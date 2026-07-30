@@ -69,6 +69,7 @@ const SECTIONS = [
     color:'#FF3B30', count:'5 tools',
     tools:[
       { id:'teleconsult', icon:'📱', label:'Teleconsult',        desc:'Remote consultation · AI assisted', color:'#00C8B8' },
+      { id:'teleconsult', icon:'📱', label:'Teleconsult', desc:'Remote consultation · AI assisted', color:'#00C8B8' },
       { id:'codeblue',   icon:'🔴', label:'Code Blue',   desc:'Resuscitation protocols',   color:'#FF3B30' },
       { id:'rapid',      icon:'⚡', label:'Rapid Fire',   desc:'Quick-fire clinical cases', color:'#FFB300' },
       { id:'bls',        icon:'💊', label:'BLS / ACLS',  desc:'Life support algorithms',   color:'#FF3B30' },
