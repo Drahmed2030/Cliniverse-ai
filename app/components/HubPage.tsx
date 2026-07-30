@@ -218,6 +218,22 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           </div>
         )}
 
+        {/* PULSE ACADEMY CARD */}
+        <div onClick={()=>setShowAcademy(true)} style={{background:'linear-gradient(135deg,rgba(175,82,222,0.12),rgba(0,122,255,0.08))',border:'1.5px solid rgba(175,82,222,0.30)',borderRadius:20,padding:'14px 16px',marginBottom:16,cursor:'pointer',position:'relative',overflow:'hidden'}}>
+          <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(175,82,222,0.15),transparent 70%)',pointerEvents:'none'}}/>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+              <div style={{width:42,height:42,borderRadius:13,background:'rgba(175,82,222,0.15)',border:'1px solid rgba(175,82,222,0.30)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>🎙️</div>
+              <div>
+                <div style={{fontSize:10,color:'rgba(175,82,222,0.90)',fontWeight:700,letterSpacing:1,marginBottom:2}}>PULSE ACADEMY</div>
+                <div style={{fontSize:14,fontWeight:900,color:T.text}}>AI Medical Lectures</div>
+                <div style={{fontSize:10,color:T.sub}}>Vote · Listen · Learn · EN + AR</div>
+              </div>
+            </div>
+            <span style={{fontSize:20,color:'rgba(175,82,222,0.70)'}}>›</span>
+          </div>
+        </div>
+
         {/* ── LIVE TICKER ── */}
         <LiveTicker xp={xp} streak={streak} liveCount={liveCount}/>
 
@@ -563,6 +579,15 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             {activeModule==='peds'    && <PediatricsModule    onXP={onXP}/>}
             {activeModule==='sports'  && <SportsMedicineModule onXP={onXP}/>}
             {activeModule==='critical'&& <CriticalCareModule  onXP={onXP}/>}
+          </div>
+        </div>
+      )}
+
+      {showAcademy && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'linear-gradient(160deg,#2a5068,#1e3d52,#1a3a50)',overflowY:'auto'}}>
+          <div style={{padding:'20px 16px 120px'}}>
+            <button onClick={()=>setShowAcademy(false)} style={{background:'rgba(255,255,255,0.07)',backdropFilter:'blur(16px)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,padding:'9px 16px',color:'rgba(238,246,250,0.72)',fontSize:13,fontWeight:700,cursor:'pointer',marginBottom:20,fontFamily:'-apple-system,sans-serif'}}>← Back to Pulse</button>
+            <PulseAcademy onXP={onXP}/>
           </div>
         </div>
       )}
