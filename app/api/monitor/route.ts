@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN || ''
-const CHAT   = process.env.TELEGRAM_CHAT_ID   || ''
+const CHAT   = process.env.TELEGRAM_CHAT_ID   || '-1004359189976'
 
 export async function sendTelegram(msg: string) {
   if (!TOKEN || !CHAT) { console.log('Missing TOKEN or CHAT'); return }
