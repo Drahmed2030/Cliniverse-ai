@@ -147,6 +147,8 @@ function AISummaryModal({ article, onClose }: { article:any, onClose:()=>void })
   const [deepDive, setDeepDive] = useState('')
   const [pubmedArticles, setPubmedArticles] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState<'feed'|'pubmed'>('feed')
+  const [pubmed, setPubmed] = useState<any[]>([])
+  const [feedTab, setFeedTab] = useState<'feed'|'pubmed'>('feed')
   const [loading, setLoading]   = useState(false)
   const [tab, setTab]           = useState<'summary'|'clinical'|'debate'>('summary')
 
@@ -341,6 +343,8 @@ export default function MedFeed({ onXP }: { onXP?: (n:number)=>void }) {
   const [journal, setJournal]   = useState('All')
   const [pubmedArticles, setPubmedArticles] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState<'feed'|'pubmed'>('feed')
+  const [pubmed, setPubmed] = useState<any[]>([])
+  const [feedTab, setFeedTab] = useState<'feed'|'pubmed'>('feed')
   const [loading, setLoading]   = useState(false)
   const [generating, setGenerating] = useState(false)
 
@@ -515,6 +519,7 @@ Respond in JSON only:
         <NewsCard key={article.id} article={article} onOpen={setSelected} onSave={handleSave} onLike={handleLike}/>
       ))}
 
+      </div>}
       <style>{`
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
         @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
