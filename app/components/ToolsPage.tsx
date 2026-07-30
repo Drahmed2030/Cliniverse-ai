@@ -108,6 +108,9 @@ const SECTIONS = [
       { id:'workshop',    icon:'🛠️', label:'Clinical Workshop',   desc:'Discharge · Portfolio · Notes', color:'#007AFF' },
       { id:'toolkit',     icon:'🏥', label:'Clinical Toolkit', desc:'Drug dosing · Renal · 7 Clinical Scores', color:'#00C4B4' },
       { id:'calculator',  icon:'🧮', label:'Med Calculators',    desc:'GFR · CHADS · Wells · SOFA',   color:'#AF52DE' },
+      { id:'renal',       icon:'🫘', label:'Renal Dosing AI',    desc:'Drug doses by eGFR · 8 drugs',  color:'#00C4B4' },
+      { id:'drugcheck',   icon:'⚗️', label:'Drug Interactions',  desc:'AI interaction checker',         color:'#FF9500' },
+      { id:'riskcalc',    icon:'📊', label:'Risk Calculators',   desc:'CHA2DS2 · Wells · CURB65 · GCS', color:'#AF52DE' },
     ]
   },
   {
