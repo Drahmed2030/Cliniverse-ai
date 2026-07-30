@@ -29,7 +29,8 @@ const ClinicalDuels   = dynamic(() => import('./ClinicalDuels'),      { ssr:fals
 const GrandRoundsAI   = dynamic(() => import('./GrandRoundsAI'),      { ssr:false })
 const ClinicalToolkit = dynamic(() => import('./ClinicalToolkit'),  { ssr:false })
 const RenalDosingAI         = dynamic(() => import('./RenalDosingAI'),         { ssr:false })
-const DrugInteractionChecker= dynamic(() => import('./DrugInteractionChecker'), { ssr:false })
+const DrugInteractionChecker   = dynamic(() => import('./DrugInteractionChecker'),    { ssr:false })
+const ClinicalRiskCalculator   = dynamic(() => import('./ClinicalRiskCalculator'),    { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
