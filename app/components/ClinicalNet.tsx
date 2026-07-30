@@ -9,8 +9,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.60)',
-  muted:  'rgba(238,246,250,0.38)',
+  sub:    'rgba(238,246,250,0.72)',
+  muted:  'rgba(238,246,250,0.50)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -86,7 +86,7 @@ function PostCard({ post, onComment, onLike }: { post:any, onComment:(p:any)=>vo
 
   return (
     <div style={{
-      background:T.glass, backdropFilter:'blur(40px)', WebkitBackdropFilter:'blur(40px)',
+      background:T.glass, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)',
       border:`1px solid ${pt.color}22`, borderRadius:22, padding:'18px',
       marginBottom:12, position:'relative', overflow:'hidden',
     }}>
