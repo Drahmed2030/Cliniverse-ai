@@ -1,4 +1,5 @@
 'use client'
+import CertificateGenerator from './CertificateGenerator'
 import { useState } from 'react'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -145,6 +146,7 @@ interface Props {
 
 export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, unlockedBadges=[], setShowUpgrade, onLogout, name, onUpgrade, onReset }: Props) {
   const [tab, setTab] = useState<'stats'|'badges'|'settings'>('stats')
+  const [showCert, setShowCert] = useState(false)
 
   const rank     = [...RANKS].reverse().find(r => xp >= r.xpNeeded) || RANKS[0]
   const nextRank = RANKS[RANKS.findIndex(r => r.name === rank.name) + 1]
@@ -259,7 +261,9 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
         </div>
 
         {/* ── STATS ── */}
-        {tab==='stats' && (
+        {showCert && <CertificateGenerator doctorName={name||'Dr. Ahmed Osman'} casesCompleted={casesCompleted} mcqCorrect={mcqCorrect} xp={xp} streak={streak} onClose={()=>setShowCert(false)}/>}
+
+        {!showCert && tab==='stats' && (
           <div>
             <div style={{fontSize:10,color:D.t4,fontWeight:700,letterSpacing:1.5,marginBottom:10}}>CLINICAL PERFORMANCE</div>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:14}}>
@@ -284,6 +288,9 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
               ))}
             </div>
 
+            <button onClick={()=>setShowCert(true)} style={{width:'100%',padding:'14px',borderRadius:18,border:'1.5px solid rgba(255,214,10,0.28)',background:'linear-gradient(135deg,rgba(255,214,10,0.12),rgba(184,134,11,0.08))',color:'#FFD700',fontSize:14,fontWeight:800,cursor:'pointer',fontFamily:F,marginBottom:16,display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+              🎓 Generate Certificate
+            </button>
             {/* Rank ladder */}
             <div style={{fontSize:10,color:D.t4,fontWeight:700,letterSpacing:1.5,marginBottom:10}}>RANK LADDER</div>
             <div style={{display:'flex',flexDirection:'column',gap:7}}>
