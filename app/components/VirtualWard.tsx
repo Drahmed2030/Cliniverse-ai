@@ -161,6 +161,27 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.85)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+
+{/* Cliniverse Logo Watermark */}
+<div style={{position:'fixed',bottom:'15%',right:'5%',opacity:0.06,pointerEvents:'none',zIndex:0,transform:'rotate(-15deg)'}}>
+  <svg width="140" height="140" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="arcW" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#00E5D4"/><stop offset="100%" stopColor="#0096FF"/>
+      </linearGradient>
+      <filter id="glW" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <path d="M 84 38 A 30 30 0 1 0 84 82" fill="none" stroke="url(#arcW)" strokeWidth="8" strokeLinecap="round" filter="url(#glW)"/>
+    <circle cx="84" cy="38" r="5" fill="#00E5D4"/>
+    <circle cx="84" cy="82" r="5" fill="#0096FF"/>
+    <polyline points="28,60 36,60 40,60 44,48 48,72 52,55 56,65 60,60 78,60" fill="none" stroke="#00C8B8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+</div>
+
+
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         {/* Header */}
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
