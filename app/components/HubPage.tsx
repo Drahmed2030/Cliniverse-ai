@@ -18,8 +18,8 @@ const T = {
   glass2: 'rgba(255,255,255,0.04)',
   border: 'rgba(255,255,255,0.12)',
   text:   '#EEF6FA',
-  sub:    'rgba(238,246,250,0.60)',
-  muted:  'rgba(238,246,250,0.38)',
+  sub:    'rgba(238,246,250,0.72)',
+  muted:  'rgba(238,246,250,0.50)',
   teal:   '#00C4B4',
   blue:   '#007AFF',
   green:  '#34C759',
@@ -144,8 +144,8 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
     <div style={{ minHeight:'100vh', background:`linear-gradient(160deg,#2a5068 0%,#1e3d52 50%,#1a3a50 100%)`, fontFamily:F, overflowX:'hidden', position:'relative' }}>
 
       {/* Ambient glows — subtle only */}
-      <div style={{ position:'fixed', top:-100, left:'50%', transform:'translateX(-50%)', width:500, height:300, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.08),transparent 70%)', pointerEvents:'none', zIndex:0, filter:'blur(40px)' }}/>
-      <div style={{ position:'fixed', bottom:-80, right:-60, width:350, height:350, borderRadius:'50%', background:'radial-gradient(circle,rgba(212,168,71,0.06),transparent 70%)', pointerEvents:'none', zIndex:0, filter:'blur(40px)' }}/>
+      <div style={{ position:'fixed', top:-100, left:'50%', transform:'translateX(-50%)', width:500, height:300, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.08),transparent 70%)', pointerEvents:'none', zIndex:0, filter:'blur(20px)' }}/>
+      <div style={{ position:'fixed', bottom:-80, right:-60, width:350, height:350, borderRadius:'50%', background:'radial-gradient(circle,rgba(212,168,71,0.06),transparent 70%)', pointerEvents:'none', zIndex:0, filter:'blur(20px)' }}/>
 
       <div style={{ position:'relative', zIndex:1, padding:'16px 16px 120px' }}>
       {/* ── LOGO WATERMARK ── */}
@@ -191,7 +191,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             { icon:'🏆', label:'Ranks',      sub:'Global',  color:T.gold,  pulse:false, action:()=>setTab('leaderboard') },
           ].map((btn,i) => (
             <div key={i} onClick={btn.action} style={{
-              flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)',
+              flex:1, background:T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)',
               border:`1.5px solid ${btn.color}40`, borderRadius:18, padding:'12px 6px', cursor:'pointer',
               display:'flex', flexDirection:'column', alignItems:'center', gap:5,
               position:'relative', overflow:'hidden',
@@ -215,7 +215,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
           <div style={{ display:'flex', gap:10, marginBottom:10 }}>
             {/* Virtual Ward — large */}
             <div onClick={()=>setOpenSection(sections[0])} style={{
-              flex:2, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)',
+              flex:2, background:T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)',
               border:`1.5px solid rgba(255,59,48,0.30)`, borderRadius:22, padding:'16px 14px',
               cursor:'pointer', position:'relative', overflow:'hidden',
               boxShadow:'0 0 20px rgba(255,59,48,0.15)', minHeight:115,
@@ -233,12 +233,12 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
 
             {/* Right column */}
             <div style={{ flex:1, display:'flex', flexDirection:'column', gap:10 }}>
-              <div onClick={()=>setShowMCQ(true)} style={{ flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)', border:`1.5px solid ${T.blue}28`, borderRadius:18, padding:'12px 10px', cursor:'pointer' }}>
+              <div onClick={()=>setShowMCQ(true)} style={{ flex:1, background:T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)', border:`1.5px solid ${T.blue}28`, borderRadius:18, padding:'12px 10px', cursor:'pointer' }}>
                 <div style={{ fontSize:20, marginBottom:4 }}>🧠</div>
                 <div style={{ fontSize:12, fontWeight:800, color:T.text }}>MCQ</div>
                 <div style={{ fontSize:9, color:T.sub }}>Board Prep</div>
               </div>
-              <div style={{ flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)', border:`1.5px solid ${T.orange}28`, borderRadius:18, padding:'12px 10px' }}>
+              <div style={{ flex:1, background:T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)', border:`1.5px solid ${T.orange}28`, borderRadius:18, padding:'12px 10px' }}>
                 <div style={{ fontSize:20, marginBottom:2 }}>🔥</div>
                 <div style={{ fontSize:18, fontWeight:900, color:T.orange }}>{streak}</div>
                 <div style={{ fontSize:9, color:T.sub }}>Day Streak</div>
@@ -253,7 +253,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
               { icon:'🧬', label:'Labs',    color:T.purple, action:()=>{ setTab('tools'); setToolTab('lab') } },
               { icon:'🏆', label:`${xp} XP`, color:T.gold, action:()=>setTab('leaderboard') },
             ].map(c => (
-              <div key={c.label} onClick={c.action} style={{ flex:1, background:T.glass, backdropFilter:'blur(30px)', WebkitBackdropFilter:'blur(30px)', border:`1.5px solid ${c.color}22`, borderRadius:18, padding:'12px 8px', cursor:'pointer', display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center', gap:4, boxShadow:`0 0 10px ${c.color}10` }}>
+              <div key={c.label} onClick={c.action} style={{ flex:1, background:T.glass, backdropFilter:'blur(16px)', WebkitBackdropFilter:'blur(16px)', border:`1.5px solid ${c.color}22`, borderRadius:18, padding:'12px 8px', cursor:'pointer', display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center', gap:4, boxShadow:`0 0 10px ${c.color}10` }}>
                 <div style={{ fontSize:22 }}>{c.icon}</div>
                 <div style={{ fontSize:11, fontWeight:800, color:T.text }}>{c.label}</div>
               </div>
@@ -388,7 +388,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
             },
           ].map((card,i) => (
             <div key={card.id} onClick={card.live ? card.action : undefined} style={{
-              background:T.glass, backdropFilter:'blur(40px)', WebkitBackdropFilter:'blur(40px)',
+              background:T.glass, backdropFilter:'blur(20px)', WebkitBackdropFilter:'blur(20px)',
               border:`1.5px solid ${card.color}${card.live?'40':'20'}`,
               borderRadius:24, padding:'18px', marginBottom:12,
               position:'relative', overflow:'hidden',
