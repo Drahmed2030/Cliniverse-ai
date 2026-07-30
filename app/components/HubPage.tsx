@@ -1,5 +1,7 @@
 'use client'
 import { supabase } from '../supabase'
+import dynamic from 'next/dynamic'
+const PulseAcademy = dynamic(() => import('./PulseAcademy'), { ssr: false })
 import React, { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
@@ -126,6 +128,7 @@ export default function HubPage({ xp, streak, casesCompleted, mcqCorrect, isPro,
   const [liveCount, setLiveCount] = useState(1247)
   const [showLive, setShowLive] = useState(false)
   const [waitlist, setWaitlist] = useState<string[]>([])
+  const [showAcademy, setShowAcademy] = useState(false)
   const [dailyCase, setDailyCase] = useState<any>(null)
 
   useEffect(() => {
