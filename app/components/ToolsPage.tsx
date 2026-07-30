@@ -39,6 +39,8 @@ const ClinicalExplorer         = dynamic(() => import('./ClinicalExplorer'),    
 const FHIRIntegration          = dynamic(() => import('./FHIRIntegration'),          { ssr:false })
 const EnterprisePage           = dynamic(() => import('./EnterprisePage'),           { ssr:false })
 const MedicalTerminology       = dynamic(() => import('./MedicalTerminology'),       { ssr:false })
+const WeeklyClinicalPearl      = dynamic(() => import('./WeeklyClinicalPearl'),      { ssr:false })
+const ThemeToggle              = dynamic(() => import('./ThemeToggle'),              { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -127,6 +129,8 @@ const SECTIONS = [
       { id:'fhir',        icon:'🌐', label:'FHIR Integration',    desc:'HL7 FHIR R4 · Global EHR standard', color:'#34C759' },
       { id:'enterprise',  icon:'🤝', label:'Enterprise',          desc:'Hospitals · Universities · Investors', color:'#D4A847' },
       { id:'terminology', icon:'📖', label:'Medical Codes',       desc:'WHO ICD-11 · SNOMED CT · Global', color:'#00C4B4' },
+      { id:'pearl',       icon:'💎', label:'Clinical Pearls',    desc:'Weekly high-yield · AI generated', color:'#FFD60A' },
+      { id:'theme',       icon:'🎨', label:'Appearance',         desc:'Dark mode · Navy · Midnight · Slate', color:'#BF5AF2' },
     ]
   },
   {
