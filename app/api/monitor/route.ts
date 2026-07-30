@@ -15,7 +15,7 @@ export async function sendTelegram(message: string, emoji = '🔔') {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: CHAT_ID,
+        chat_id: CHAT_ID.toString(),
         text: message,
         parse_mode: 'HTML',
         disable_web_page_preview: true,
