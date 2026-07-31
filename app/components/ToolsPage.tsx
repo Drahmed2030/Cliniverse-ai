@@ -42,6 +42,7 @@ const MedicalTerminology       = dynamic(() => import('./MedicalTerminology'),  
 const WeeklyClinicalPearl      = dynamic(() => import('./WeeklyClinicalPearl'),      { ssr:false })
 const ThemeToggle              = dynamic(() => import('./ThemeToggle'),              { ssr:false })
 const AppearanceSettings       = dynamic(() => import('./AppearanceSettings'),       { ssr:false })
+const PersonaliseHome          = dynamic(() => import('./PersonaliseHome'),          { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -135,6 +136,7 @@ const SECTIONS = [
       { id:'pearl',       icon:'💎', label:'Clinical Pearls',    desc:'Weekly high-yield · AI generated', color:'#FFD60A' },
       { id:'theme',       icon:'🎨', label:'Appearance',         desc:'Dark mode · Navy · Midnight · Slate', color:'#BF5AF2' },
       { id:'appearance',  icon:'✨', label:'Display Settings',   desc:'Font · Cards · Layout · Effects', color:'#00C8B8' },
+      { id:'personalise', icon:'🏠', label:'Personalise Home',   desc:'Sections · Quick tools · Specialty', color:'#30D158' },
     ]
   },
   {
