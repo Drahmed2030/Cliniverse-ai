@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import SplashScreen from './components/SplashScreen'
+import OnboardingSurvey from './components/OnboardingSurvey'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
@@ -162,6 +163,7 @@ export default function Home() {
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showSplash, setShowSplash] = useState(true)
+  const [showSurvey, setShowSurvey] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [userName, setUserName] = useState('')
   const [tab, setTab] = useState('hub')
