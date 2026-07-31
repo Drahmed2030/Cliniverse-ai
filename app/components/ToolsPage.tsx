@@ -41,6 +41,7 @@ const EnterprisePage           = dynamic(() => import('./EnterprisePage'),      
 const MedicalTerminology       = dynamic(() => import('./MedicalTerminology'),       { ssr:false })
 const WeeklyClinicalPearl      = dynamic(() => import('./WeeklyClinicalPearl'),      { ssr:false })
 const ThemeToggle              = dynamic(() => import('./ThemeToggle'),              { ssr:false })
+const AppearanceSettings       = dynamic(() => import('./AppearanceSettings'),       { ssr:false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -133,6 +134,7 @@ const SECTIONS = [
       { id:'terminology', icon:'📖', label:'Medical Codes',       desc:'WHO ICD-11 · SNOMED CT · Global', color:'#00C4B4' },
       { id:'pearl',       icon:'💎', label:'Clinical Pearls',    desc:'Weekly high-yield · AI generated', color:'#FFD60A' },
       { id:'theme',       icon:'🎨', label:'Appearance',         desc:'Dark mode · Navy · Midnight · Slate', color:'#BF5AF2' },
+      { id:'appearance',  icon:'✨', label:'Display Settings',   desc:'Font · Cards · Layout · Effects', color:'#00C8B8' },
     ]
   },
   {
