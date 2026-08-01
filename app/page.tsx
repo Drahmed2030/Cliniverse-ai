@@ -464,7 +464,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     const allCases=[...criticalCases,...sportsCases,...pedsCases]
     const c=allCases.find(x=>x.id===activeCase)!
     return(
-      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
+      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
         {ambientGlow}
 
       {/* ── WATERMARK ── */}
@@ -600,7 +600,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   if(activeRad){
     const r=radCases.find(x=>x.id===activeRad)!
     return(
-      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:40,position:'relative'}}>
+      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
         {ambientGlow}
         <div style={{background:`linear-gradient(160deg,${r.color}18,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(0,196,180,0.25)',position:'relative',zIndex:1}}>
           <button onClick={()=>setActiveRad(null)} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(0,196,180,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
@@ -643,7 +643,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         </div>
       </header>
 
-      <main style={{flex:1,padding:'14px 16px',paddingBottom:90,maxWidth:700,margin:'0 auto',width:'100%',boxSizing:'border-box',position:'relative',zIndex:1}}>
+      <main style={{flex:1,padding:'14px 16px',paddingBottom:140,maxWidth:700,margin:'0 auto',width:'100%',boxSizing:'border-box',position:'relative',zIndex:1}}>
 
 
         {/* HUB */}
@@ -948,7 +948,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         isPro={isPro}
       />
 
-        <div style={{height:100}}/>
+        <div style={{height:120}}/>
 
       </div>
 
