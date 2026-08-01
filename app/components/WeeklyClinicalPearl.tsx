@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
 const T = {
-  glass:  'rgba(255,255,255,0.07)',
-  glass2: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.10)',
+  glass:  'var(--bg-card,rgba(255,255,255,0.07))',
+  glass2: 'var(--bg-card,rgba(255,255,255,0.04))',
+  border: 'var(--border-card,rgba(255,255,255,0.10))',
   t1: '#F2F8FC',
   t2: 'rgba(242,248,252,0.75)',
   t3: 'rgba(242,248,252,0.50)',
