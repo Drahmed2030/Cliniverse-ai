@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import ThemeProvider from "./components/ThemeProvider"
+import { ClinicalProvider } from "./components/ClinicalContext"
 
 export const viewport: Viewport = {
   themeColor: "#2a4a60",
@@ -75,7 +76,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <circle cx="69" cy="68" r="5" fill="rgba(255,213,79,1)"/>
           </svg>
         </div>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ClinicalProvider>
+            {children}
+          </ClinicalProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
