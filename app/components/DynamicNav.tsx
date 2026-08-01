@@ -1,6 +1,5 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { useClinical } from './ClinicalContext'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -178,12 +177,18 @@ function CorePillContent({ mode, pressed }: { mode: PillMode; pressed: boolean }
 
 // ── PROPS ────────────────────────────────────────────────────────────────────
 interface Props {
+  tab: string
+  setTab: (t: string) => void
+  setToolTab?: (t: string) => void
+  toolTab?: string
   liveCount?: number
+  isPro?: boolean
 }
 
 // ── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function DynamicNav({ liveCount=1247 }: Props) {
-  const { tab, setTab, toolTab, setToolTab, isPro, activeCase, stabilityScore, alerts } = useClinical()
+export default function DynamicNav({
+  tab, setTab, setToolTab, toolTab='', liveCount=1247, isPro=false
+}: Props) {
   const [showCommand, setShowCommand] = useState(false)
   const [pressed, setPressed]         = useState(false)
   const [pillKey, setPillKey]         = useState(0)

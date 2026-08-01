@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useClinical } from './components/ClinicalContext'
 import SplashScreen from './components/SplashScreen'
 import OnboardingSurvey from './components/OnboardingSurvey'
 import CliniverseLogo from './components/Logo'
@@ -161,17 +160,23 @@ const darkTheme = {
 }
 
 export default function Home() {
-  const { tab, setTab, toolTab, setToolTab, xp, addXP, casesCompleted, setCasesCompleted, mcqCorrect, setMcqCorrect, isPro, setIsPro, userName, setUserName, showUpgrade, setShowUpgrade } = useClinical()
   const [screen, setScreen] = useState('hub')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
   const [showSplash, setShowSplash] = useState(true)
   const [showSurvey, setShowSurvey] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(true)
+  const [userName, setUserName] = useState('')
+  const [tab, setTab] = useState('hub')
+  const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
   const [activeRad, setActiveRad] = useState<string|null>(null)
   const [mcqIndex, setMcqIndex] = useState(0)
   const [mcqAnswer, setMcqAnswer] = useState<number|null>(null)
+  const [xp, setXp] = useState(0)
+  const [streak] = useState(3)
+  const [casesCompleted, setCasesCompleted] = useState(0)
+  const [mcqCorrect, setMcqCorrect] = useState(0)
   const [mcqTotal, setMcqTotal] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string|null>('critical')
   const [showWelcome, setShowWelcome] = useState(true)
@@ -181,6 +186,8 @@ export default function Home() {
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
+  const [isPro] = useState(false) // set true after payment
+  const [showUpgrade, setShowUpgrade] = useState(false)
   const [checkoutUrl, setCheckoutUrl] = useState('')
   const openCheckout = (url: string) => setCheckoutUrl(url)
   const [showAdmin, setShowAdmin] = useState(false)
@@ -285,7 +292,8 @@ export default function Home() {
     return ()=>{clearInterval(prog);clearInterval(tag)}
   },[screen])
 
-  const completeCase=(reward:number)=>{addXP(reward);setCasesCompleted(c=>c+1)}
+  const completeCase=(reward:number)=>{setXp(x=>x+reward);setCasesCompleted(c=>c+1);setActiveCase(null)}
+  const addXP=(n:number)=>setXp(x=>x+n)
 
   const askAI = async (caseContext: string) => {
     if(!aiQuestion.trim()) return
@@ -293,7 +301,7 @@ export default function Home() {
     const q = aiQuestion
     setAiQuestion('')
     try {
-      const res = await fetch('/api/generate-case', {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -857,7 +865,13 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
       {/* BOTTOM NAV — Apple Health 2026 */}
       {/* ── DYNAMIC NAV ── */}
-      <DynamicNav/>
+      <DynamicNav
+        tab={tab}
+        setTab={setTab}
+        setToolTab={setToolTab}
+        liveCount={1247}
+        isPro={isPro}
+      />
 
       <div style={{height:120}}/>
       <PWAInstall/>
