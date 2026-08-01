@@ -239,7 +239,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   )
 
   return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(160deg,#101e30 0%,#0a1828 50%,#0d1520 100%)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
+    <div style={{minHeight:'100vh',background:'var(--bg-base, #0a1828)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
       <NeuralBg/>
 
       {/* Ambient top glow */}

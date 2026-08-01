@@ -385,7 +385,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   )
 
   if(screen==='launch') return (
-    <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',overflow:'hidden',position:'relative'}}>
+    <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'var(--bg-base, #162e3e)',fontFamily:'-apple-system,sans-serif',overflow:'hidden',position:'relative'}}>
       <div style={{position:'absolute',width:500,height:500,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.25) 0%,transparent 70%)',top:-150,left:-150,filter:'blur(60px)'}}/>
       <div style={{position:'absolute',width:400,height:400,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.12) 0%,transparent 70%)',bottom:-100,right:-100,filter:'blur(60px)'}}/>
       <div style={{marginBottom:28,position:'relative'}}>
@@ -418,7 +418,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   )
 
   if(screen==='welcome') return (
-    <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',padding:'0 32px',textAlign:'center'}}>
+    <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'var(--bg-base, #162e3e)',fontFamily:'-apple-system,sans-serif',padding:'0 32px',textAlign:'center'}}>
       <div style={{animation:'fadeIn 0.8s ease',maxWidth:420,width:'100%'}}>
         <p style={{fontSize:13,color:'rgba(0,196,180,0.8)',letterSpacing:3,textTransform:'uppercase',marginBottom:16,fontWeight:600}}>Welcome to</p>
         <h1 style={{fontSize:56,fontWeight:900,margin:'0 0 6px',letterSpacing:-2,lineHeight:1,background:'linear-gradient(135deg,#fff,rgba(200,180,255,0.9))',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Cliniverse</h1>
@@ -461,7 +461,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     const allCases=[...criticalCases,...sportsCases,...pedsCases]
     const c=allCases.find(x=>x.id===activeCase)!
     return(
-      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
+      <div style={{minHeight:'100vh',width:'100vw',background:'var(--bg-base, #162e3e)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
         {ambientGlow}
 
       {/* ── WATERMARK ── */}
@@ -597,7 +597,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   if(activeRad){
     const r=radCases.find(x=>x.id===activeRad)!
     return(
-      <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
+      <div style={{minHeight:'100vh',width:'100vw',background:'var(--bg-base, #162e3e)',fontFamily:'-apple-system,sans-serif',paddingBottom:0,position:'relative'}}>
         {ambientGlow}
         <div style={{background:`linear-gradient(160deg,${r.color}18,rgba(10,0,21,0.9))`,backdropFilter:'blur(30px)',padding:'56px 20px 24px',borderBottom:'1px solid rgba(0,196,180,0.25)',position:'relative',zIndex:1}}>
           <button onClick={()=>setActiveRad(null)} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(0,196,180,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 18px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:18,fontWeight:600}}>← Back</button>
@@ -623,7 +623,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
   const currentMCQ=mcqs[mcqIndex]
 
   return(
-    <div style={{minHeight:'100vh',width:'100vw',background:'radial-gradient(ellipse at 30% 20%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Display,sans-serif',display:'flex',flexDirection:'column',position:'relative'}}>
+    <div style={{minHeight:'100vh',width:'100vw',background:'var(--bg-base, #162e3e)',fontFamily:'-apple-system,BlinkMacSystemFont,SF Pro Display,sans-serif',display:'flex',flexDirection:'column',position:'relative'}}>
       {ambientGlow}
 
       {/* HEADER — Apple Health 2026 */}
