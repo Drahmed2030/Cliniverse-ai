@@ -259,7 +259,9 @@ export default function DynamicNav({
             onClick={e => e.stopPropagation()}
             style={{
               position:'absolute', bottom:0, left:0, right:0,
-              background:'rgba(10,20,40,0.92)',
+              background:'rgba(255,255,255,0.10)',
+              backdropFilter:'blur(60px) saturate(200%) brightness(1.15)',
+              WebkitBackdropFilter:'blur(60px) saturate(200%) brightness(1.15)',
               borderRadius:'32px 32px 0 0',
               border:'1px solid rgba(0,200,184,0.18)',
               padding:'20px 18px 52px',
