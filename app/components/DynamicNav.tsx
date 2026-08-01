@@ -249,8 +249,8 @@ export default function DynamicNav({
           {/* Backdrop */}
           <div style={{
             position:'absolute', inset:0,
-            background:'rgba(0,0,0,0.70)',
-            backdropFilter:'blur(14px)',
+            background:'rgba(0,0,0,0.40)',
+            backdropFilter:'blur(20px) saturate(150%)',
             animation:'fadeIn 0.2s ease',
           }}/>
 
