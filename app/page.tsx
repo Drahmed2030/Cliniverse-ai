@@ -414,7 +414,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <div style={{height:'100%',background:'linear-gradient(90deg,#00C4B4,#0a84ff,#30d158)',width:`${progress}%`,transition:'width 0.1s'}}/>
       </div>
       <p style={{fontSize:10,color:'rgba(255,255,255,0.12)',letterSpacing:2}}>v5.0 · SECURE · Built by a Physician</p>
-      <style>{`@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}`}</style>
     </div>
   )
 
@@ -430,7 +429,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
         </div>
       </div>
-      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   )
 
@@ -455,7 +453,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         </div>
         <p style={{textAlign:'center',fontSize:13,color:'rgba(238,246,250,0.60)'}}>New physician? <span style={{color:'#00C4B4',cursor:'pointer'}} onClick={()=>setScreen('app')}>Request Access</span></p>
       </div>
-      <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   )
 
@@ -879,16 +876,6 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <div style={{height:120}}/>
 
       </div>
-
-      <style>{`
-        @keyframes iconPulse{0%,to{transform:scale(1)}50%{transform:scale(1.1)}}
-        @keyframes rankPulse{0%,to{opacity:1}50%{opacity:0.7}}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        @keyframes ringGlow{0%,to{filter:drop-shadow(0 0 6px currentColor)}50%{filter:drop-shadow(0 0 16px currentColor)}}
-        @keyframes pillGlow{0%,100%{opacity:0.8}50%{opacity:1}}
-        @keyframes liveDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
-      `}</style>
       <PWAInstall/>
     </div>
   )
