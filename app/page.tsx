@@ -865,13 +865,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
       {/* BOTTOM NAV — Apple Health 2026 */}
       {/* ── DYNAMIC NAV ── */}
-      <DynamicNav
-        tab={tab}
-        setTab={setTab}
-        setToolTab={setToolTab}
-        liveCount={1247}
-        isPro={isPro}
-      />
+      <DynamicNav/>
 
       <div style={{height:120}}/>
       <PWAInstall/>
