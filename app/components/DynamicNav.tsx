@@ -362,12 +362,12 @@ export default function DynamicNav({
         zIndex:200, width:'calc(100% - 28px)', maxWidth:460, fontFamily:F,
       }}>
         <div style={{
-          background:'rgba(10,18,32,0.90)',
-          backdropFilter:'blur(28px)',
-          WebkitBackdropFilter:'blur(28px)',
-          borderRadius:28,
-          border:'1px solid rgba(255,255,255,0.08)',
-          boxShadow:'0 8px 32px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.06)',
+          background:'rgba(255,255,255,0.04)',
+          backdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
+          WebkitBackdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
+          borderRadius:32,
+          border:'1px solid rgba(255,255,255,0.12)',
+          boxShadow:'0 8px 40px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(255,255,255,0.05)',
           padding:'10px 12px',
           display:'flex', alignItems:'center', justifyContent:'space-between',
         }}>
