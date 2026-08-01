@@ -346,7 +346,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:14 }}>
             {Object.entries(scenario.vitals).map(([k,v])=>(
-              <div key={k} style={{ background:'rgba(255,255,255,0.05)', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
+              <div key={k} style={{ background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
                 <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', fontWeight:700, letterSpacing:0.3, marginBottom:4 }}>{k.toUpperCase()}</div>
                 <div style={{ fontSize:12, fontWeight:800, color:(v.includes('0/0')||v==='---'||v==='0%')?'#ff453a':'white' }}>{v}</div>
               </div>

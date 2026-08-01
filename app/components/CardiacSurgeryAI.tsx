@@ -102,8 +102,8 @@ export default function CardiacSurgeryAI({onXP}:Props){
           <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>{s.title}</div>
         </div>
         <div style={{fontSize:14,color:'rgba(255,255,255,0.8)',lineHeight:1.75,marginBottom:12}}>{s.content}</div>
-        <button onClick={()=>setDetail(p=>!p)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'rgba(255,255,255,0.6)',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
-        {detail&&<div style={{marginTop:10,padding:'12px',background:'rgba(255,255,255,0.04)',borderRadius:12,fontSize:13,color:'rgba(255,255,255,0.65)',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
+        <button onClick={()=>setDetail(p=>!p)} style={{background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'rgba(255,255,255,0.6)',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
+        {detail&&<div style={{marginTop:10,padding:'12px',background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:12,fontSize:13,color:'rgba(255,255,255,0.65)',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
       </div>
       <button onClick={()=>setShowAIPanel(p=>!p)} style={{width:'100%',padding:'12px',borderRadius:16,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(139,92,246,0.1)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',marginBottom:10,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>🤖 AI Consultant {showAIPanel?'▲':'▼'}</button>
       {showAIPanel&&(

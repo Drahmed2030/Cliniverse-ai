@@ -274,13 +274,13 @@ function CinematicCard({ section, index, onClick }: { section:typeof SECTIONS[0]
       {/* Tool pills preview */}
       <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:14 }}>
         {section.tools.slice(0,4).map((t,i) => (
-          <div key={i} style={{ display:'flex', alignItems:'center', gap:4, background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:20, padding:'4px 10px' }}>
+          <div key={i} style={{ display:'flex', alignItems:'center', gap:4, background:'var(--bg-card,rgba(255,255,255,0.06))', border:'1px solid var(--border-card,rgba(255,255,255,0.10))', borderRadius:20, padding:'4px 10px' }}>
             <span style={{ fontSize:12 }}>{t.icon}</span>
             <span style={{ fontSize:10, color:T.sub, fontWeight:600 }}>{t.label}</span>
           </div>
         ))}
         {section.tools.length > 4 && (
-          <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:20, padding:'4px 10px' }}>
+          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.04))', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:20, padding:'4px 10px' }}>
             <span style={{ fontSize:10, color:T.muted }}>+{section.tools.length-4} more</span>
           </div>
         )}

@@ -271,7 +271,7 @@ export default function AdminDashboard({ onClose }: { onClose:()=>void }) {
                     <span style={{fontSize:11,color:T.sub}}>{r.label}</span>
                     <span style={{fontSize:12,fontWeight:800,color:T.gold}}>{r.value}</span>
                   </div>
-                  <div style={{height:4,borderRadius:2,background:'rgba(255,255,255,0.06)'}}>
+                  <div style={{height:4,borderRadius:2,background:'var(--bg-card,rgba(255,255,255,0.06))'}}>
                     <div style={{height:'100%',borderRadius:2,width:`${r.pct}%`,background:`linear-gradient(90deg,${T.gold},${T.orange})`}}/>
                   </div>
                 </div>
@@ -381,7 +381,7 @@ export default function AdminDashboard({ onClose }: { onClose:()=>void }) {
                 </div>
                 <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:e.resolved?0:10}}>
                   {[e.error_source, e.page_context].map((tag,i)=>(
-                    <span key={i} style={{fontSize:10,color:T.muted,background:'rgba(255,255,255,0.05)',borderRadius:6,padding:'2px 8px'}}>{tag}</span>
+                    <span key={i} style={{fontSize:10,color:T.muted,background:'var(--bg-card,rgba(255,255,255,0.05))',borderRadius:6,padding:'2px 8px'}}>{tag}</span>
                   ))}
                   <span style={{fontSize:10,color:T.muted}}>{new Date(e.created_at).toLocaleString()}</span>
                 </div>

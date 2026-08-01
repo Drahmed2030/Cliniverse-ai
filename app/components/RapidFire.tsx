@@ -117,7 +117,7 @@ export default function RapidFire({ onXP }:Props) {
           <div style={{fontSize:24,fontWeight:900,color:grade.c,marginBottom:16}}>{grade.l}</div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:20}}>
             {[[`${score}/30`,'Score','#ffd60a'],[`${accuracy}%`,'Accuracy','#30d158'],[`${maxStreak}x`,'Streak','#ff9f0a']].map(([v,l,c])=>(
-              <div key={l} style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'14px 8px',border:'1px solid rgba(36,63,82,0.60)'}}>
+              <div key={l} style={{background:'var(--bg-card,rgba(255,255,255,0.05))',borderRadius:14,padding:'14px 8px',border:'1px solid rgba(36,63,82,0.60)'}}>
                 <div style={{fontSize:22,fontWeight:900,color:c as string}}>{v}</div>
                 <div style={{fontSize:10,color:'rgba(255,255,255,0.4)',marginTop:3}}>{l}</div>
               </div>

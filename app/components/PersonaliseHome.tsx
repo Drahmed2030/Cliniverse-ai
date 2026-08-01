@@ -135,7 +135,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
       </div>
 
       {/* Tabs */}
-      <div style={{ display:'flex', gap:5, background:'rgba(255,255,255,0.05)', borderRadius:16, padding:4, marginBottom:18, border:'1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ display:'flex', gap:5, background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:16, padding:4, marginBottom:18, border:'1px solid var(--border-card,rgba(255,255,255,0.08))' }}>
         {([
           ['sections','🏠 Sections'],
           ['tools',   '⚡ Quick Tools'],
@@ -222,7 +222,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
             )
           })}
 
-          <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:12, padding:'10px 14px', marginTop:8 }}>
+          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.04))', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:12, padding:'10px 14px', marginTop:8 }}>
             <div style={{ fontSize:10, color:'rgba(242,248,252,0.38)' }}>
               💡 Drag sections to reorder · Toggle to show/hide on Home
             </div>
@@ -243,7 +243,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
           </div>
 
           {/* Preview */}
-          <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, padding:'14px', marginBottom:14 }}>
+          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.04))', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:16, padding:'14px', marginBottom:14 }}>
             <div style={{ fontSize:9, color:'rgba(242,248,252,0.38)', fontWeight:700, letterSpacing:1, marginBottom:10 }}>PREVIEW — HOME QUICK TOOLS</div>
             <div style={{ display:'flex', gap:10, overflowX:'auto' }}>
               {prefs.quickTools.length === 0
@@ -296,7 +296,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
               value={prefs.greeting}
               onChange={e => setPrefs(p => ({ ...p, greeting: e.target.value }))}
               placeholder="Doctor"
-              style={{ width:'100%', padding:'13px 14px', borderRadius:14, border:'1.5px solid rgba(0,200,184,0.28)', background:'rgba(255,255,255,0.06)', color:'var(--text-primary, #F2F8FC)', fontSize:14, outline:'none', fontFamily:F, boxSizing:'border-box' }}
+              style={{ width:'100%', padding:'13px 14px', borderRadius:14, border:'1.5px solid rgba(0,200,184,0.28)', background:'var(--bg-card,rgba(255,255,255,0.06))', color:'var(--text-primary, #F2F8FC)', fontSize:14, outline:'none', fontFamily:F, boxSizing:'border-box' }}
             />
             <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))', marginTop:5 }}>
               Preview: "Good morning, {prefs.greeting||'Doctor'} 👋"

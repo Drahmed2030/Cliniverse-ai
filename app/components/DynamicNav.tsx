@@ -347,8 +347,8 @@ export default function DynamicNav({
             <button onClick={() => setShowCommand(false)} style={{
               width:'100%', padding:'15px',
               borderRadius:18,
-              border:'1px solid rgba(255,255,255,0.08)',
-              background:'rgba(255,255,255,0.04)',
+              border:'1px solid var(--border-card,rgba(255,255,255,0.08))',
+              background:'var(--bg-card,rgba(255,255,255,0.04))',
               color:'var(--text-secondary, rgba(242,248,252,0.55))',
               fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:F,
             }}>Cancel</button>

@@ -108,7 +108,7 @@ export default function PWAInstall() {
           <button onClick={dismiss} style={{background:'none',border:'none',color:'rgba(255,255,255,0.3)',fontSize:20,cursor:'pointer',padding:4,flexShrink:0}}>×</button>
         </div>
         <div style={{display:'flex',gap:10,marginTop:14,position:'relative',zIndex:1}}>
-          <button onClick={dismiss} style={{flex:1,padding:'12px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.5)',fontSize:13,fontWeight:600,cursor:'pointer'}}>
+          <button onClick={dismiss} style={{flex:1,padding:'12px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'var(--bg-card,rgba(255,255,255,0.05))',color:'rgba(255,255,255,0.5)',fontSize:13,fontWeight:600,cursor:'pointer'}}>
             Not now
           </button>
           <button onClick={handleInstall}

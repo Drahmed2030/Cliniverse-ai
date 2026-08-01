@@ -350,7 +350,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           </div>
           <div style={{display:'flex',gap:6}}>
             <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:`${s.color}12`,color:s.color,fontWeight:700,border:`1px solid ${s.color}20`}}>{s.cases.length} cases</span>
-            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
+            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'var(--bg-card,rgba(255,255,255,0.05))',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
           </div>
         </div>
       ))}
@@ -470,7 +470,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           return (
             <div key={action.id} onClick={()=>!done&&handleAction(action)}
               style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!action.correct&&!isSelected?0.4:1}}>
-              <div style={{width:36,height:36,borderRadius:11,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+              <div style={{width:36,height:36,borderRadius:11,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                 {done?(action.correct?'✅':isSelected?'❌':'○'):'▷'}
               </div>
               <div style={{flex:1}}>

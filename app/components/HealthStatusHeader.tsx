@@ -66,7 +66,7 @@ function VitalChip({ icon, value, unit, label, color, pulse: doPulse }:
   return (
     <div style={{
       display:'flex', flexDirection:'column', alignItems:'center',
-      background:'rgba(255,255,255,0.05)',
+      background:'var(--bg-card,rgba(255,255,255,0.05))',
       border:`1px solid ${color}22`,
       borderRadius:14, padding:'7px 10px',
       minWidth:62, gap:2,

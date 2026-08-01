@@ -224,14 +224,14 @@ function DrugCalculator() {
             {l:'For this patient', v:result.actual, c:result.actual.includes('Avoid')||result.actual.includes('Contra')||result.actual.includes('STOP')?T.red:T.green},
             {l:'Target',   v:result.target,   c:T.gold},
           ].map(r=>(
-            <div key={r.l} style={{background:'rgba(255,255,255,0.06)',borderRadius:12,padding:'10px 10px'}}>
+            <div key={r.l} style={{background:'var(--bg-card,rgba(255,255,255,0.06))',borderRadius:12,padding:'10px 10px'}}>
               <div style={{fontSize:8,color:T.muted,fontWeight:700,letterSpacing:1,marginBottom:4}}>{r.l.toUpperCase()}</div>
               <div style={{fontSize:11,fontWeight:800,color:r.c,lineHeight:1.4}}>{r.v}</div>
             </div>
           ))}
         </div>
 
-        <div style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px 12px',marginBottom:10,border:`1px solid rgba(255,255,255,0.08)`}}>
+        <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:12,padding:'10px 12px',marginBottom:10,border:`1px solid rgba(255,255,255,0.08)`}}>
           <div style={{fontSize:8,color:T.orange,fontWeight:700,letterSpacing:1,marginBottom:4}}>📊 MONITORING</div>
           <div style={{fontSize:11,color:T.sub,lineHeight:1.5}}>{result.monitor}</div>
         </div>

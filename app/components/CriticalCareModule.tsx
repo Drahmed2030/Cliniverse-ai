@@ -139,7 +139,7 @@ function VentSimulator({ onClose }: { onClose:()=>void }) {
               {l:'Min Vol', v:`${Math.round(minute*10)/10} L/min`, ok:minute<10},
               {l:'PEEP', v:`${settings.peep} cmH2O`, ok:isPEEPAdequate},
             ].map(d=>(
-              <div key={d.l} style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:10,padding:'8px 6px',textAlign:'center'}}>
+              <div key={d.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:10,padding:'8px 6px',textAlign:'center'}}>
                 <div style={{fontSize:12,fontWeight:900,color:d.ok?T.green:T.red}}>{d.v}</div>
                 <div style={{fontSize:8,color:T.muted,marginTop:2}}>{d.l}</div>
               </div>

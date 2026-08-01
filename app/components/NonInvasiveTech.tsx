@@ -439,7 +439,7 @@ export default function NonInvasiveTech({ onXP }: { onXP?: (n:number)=>void }) {
 
           <div style={{display:'flex',gap:8,marginBottom:12}}>
             {t.stats.map(s=>(
-              <div key={s.l} style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:10,padding:'7px 5px',textAlign:'center',border:'1px solid rgba(255,255,255,0.06)'}}>
+              <div key={s.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:10,padding:'7px 5px',textAlign:'center',border:'1px solid rgba(255,255,255,0.06)'}}>
                 <div style={{fontSize:12,fontWeight:900,color:t.color}}>{s.v}</div>
                 <div style={{fontSize:8,color:T.muted,marginTop:2,fontWeight:600}}>{s.l}</div>
               </div>

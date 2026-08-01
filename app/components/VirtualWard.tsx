@@ -562,7 +562,7 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
                 {l:'SpO2', v:p.vitals.spo2+'%'},
                 {l:'Temp', v:p.vitals.temp},
               ].map(v=>(
-                <div key={v.l} style={{flex:1,background:'rgba(255,255,255,0.04)',borderRadius:8,padding:'5px 4px',textAlign:'center',border:`1px solid rgba(255,255,255,0.07)`}}>
+                <div key={v.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:8,padding:'5px 4px',textAlign:'center',border:`1px solid rgba(255,255,255,0.07)`}}>
                   <div style={{fontSize:11,fontWeight:800,color:T.text}}>{v.v}</div>
                   <div style={{fontSize:7,color:T.muted,marginTop:1}}>{v.l}</div>
                 </div>

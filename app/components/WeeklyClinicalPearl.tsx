@@ -213,7 +213,7 @@ export default function WeeklyClinicalPearl({ onXP }: { onXP?: (n:number)=>void 
         </div>
 
         {/* Pearl text */}
-        <div style={{background:'rgba(255,255,255,0.04)',border:`1px solid rgba(255,255,255,0.08)`,borderRadius:14,padding:'14px',marginBottom:12,position:'relative',zIndex:1}}>
+        <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',border:`1px solid rgba(255,255,255,0.08)`,borderRadius:14,padding:'14px',marginBottom:12,position:'relative',zIndex:1}}>
           <div style={{fontSize:13,color:T.t2,lineHeight:1.75}}>{pearl.pearl}</div>
         </div>
 

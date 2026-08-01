@@ -150,7 +150,7 @@ export default function ThemeToggle({ onThemeChange }: Props) {
       {/* ── MODE TOGGLE ── */}
       <div style={{ marginBottom:16 }}>
         <div style={{ fontSize:10, color:'rgba(242,248,252,0.42)', fontWeight:700, letterSpacing:1.5, marginBottom:8 }}>APPEARANCE MODE</div>
-        <div style={{ display:'flex', gap:6, background:'rgba(255,255,255,0.05)', borderRadius:16, padding:4, border:'1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ display:'flex', gap:6, background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:16, padding:4, border:'1px solid var(--border-card,rgba(255,255,255,0.08))' }}>
           {([['auto','⚙️ Auto'],['light','☀️ Light'],['dark','🌙 Dark']] as [string,string][]).map(([id,label])=>(
             <button key={id} onClick={()=>apply(current, id as any)} style={{
               flex:1, padding:'9px 4px', cursor:'pointer', borderRadius:12, fontFamily:F,
@@ -225,7 +225,7 @@ export default function ThemeToggle({ onThemeChange }: Props) {
       )}
 
       {/* iOS note */}
-      <div style={{ marginTop:12, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:12, padding:'10px 14px', textAlign:'center' }}>
+      <div style={{ marginTop:12, background:'var(--bg-card,rgba(255,255,255,0.04))', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:12, padding:'10px 14px', textAlign:'center' }}>
         <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))' }}>
           🍎 Auto mode follows iPhone Dark/Light setting
         </div>

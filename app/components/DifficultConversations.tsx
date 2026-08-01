@@ -251,7 +251,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
               <div style={{fontSize:9,color:C.muted,fontWeight:600}}>{s.protocol}</div>
             </div>
           </div>
-          <div style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}>
+          <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:12,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}>
             <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5}}>{s.context.slice(0,120)}...</div>
           </div>
         </div>
@@ -362,7 +362,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
             onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}}
             placeholder="Type your response to the patient..."
             rows={2}
-            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'var(--text-primary, white)',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
+            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'var(--bg-card,rgba(255,255,255,0.05))',color:'var(--text-primary, white)',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
           <button onClick={sendMessage} disabled={loading||!input.trim()}
             style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
         </div>

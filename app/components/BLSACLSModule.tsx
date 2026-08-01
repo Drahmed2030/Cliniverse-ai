@@ -261,7 +261,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         </div>
 
         <div style={{display:'flex',gap:10}}>
-          <button onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.5)',fontSize:14,fontWeight:700,cursor:'pointer',opacity:step===0?0.3:1}}>← Prev</button>
+          <button onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(0,196,180,0.20)',background:'var(--bg-card,rgba(255,255,255,0.05))',color:'rgba(255,255,255,0.5)',fontSize:14,fontWeight:700,cursor:'pointer',opacity:step===0?0.3:1}}>← Prev</button>
           {step<algo.steps.length-1
             ? <button onClick={()=>setStep(s=>s+1)} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${algo.color},${algo.color}bb)`,color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${algo.color}44`}}>Next Step →</button>
             : <button onClick={()=>{onXP&&onXP(60);setView('menu')}} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>✅ Complete +60 XP</button>

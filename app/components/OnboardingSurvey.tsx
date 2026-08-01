@@ -192,7 +192,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
       <div style={{position:'absolute',top:0,left:0,right:0,height:'40%',background:`radial-gradient(ellipse at 50% 0%,rgba(0,200,184,0.12) 0%,transparent 70%)`,pointerEvents:'none'}}/>
 
       {/* Progress bar */}
-      <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:'rgba(255,255,255,0.08)'}}>
+      <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:'var(--bg-card-2,rgba(255,255,255,0.08))'}}>
         <div style={{height:'100%',background:'linear-gradient(90deg,#00C8B8,#1A8CFF)',width:`${progress}%`,transition:'width 0.4s ease',boxShadow:'0 0 8px rgba(0,200,184,0.60)'}}/>
       </div>
 
@@ -200,7 +200,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
 
         {/* Top nav */}
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-          <button onClick={back} style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:12,padding:'8px 14px',color:'var(--text-secondary, rgba(242,248,252,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,opacity:step===0?0:1,pointerEvents:step===0?'none':'auto'}}>
+          <button onClick={back} style={{background:'var(--bg-card-2,rgba(255,255,255,0.07))',border:'1px solid var(--border-card,rgba(255,255,255,0.10))',borderRadius:12,padding:'8px 14px',color:'var(--text-secondary, rgba(242,248,252,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,opacity:step===0?0:1,pointerEvents:step===0?'none':'auto'}}>
             ← Back
           </button>
           <div style={{display:'flex',alignItems:'center',gap:6}}>

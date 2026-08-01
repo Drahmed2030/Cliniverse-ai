@@ -295,7 +295,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
           {/* Tags */}
           <div style={{display:'flex',gap:7,marginTop:12}}>
             {['2h/day saved','SOAP format','Arabic + English'].map(tag=>(
-              <span key={tag} style={{fontSize:10,color:D.t2,background:'rgba(255,255,255,0.06)',border:`1px solid ${D.border}`,borderRadius:8,padding:'3px 9px',fontWeight:600}}>{tag}</span>
+              <span key={tag} style={{fontSize:10,color:D.t2,background:'var(--bg-card,rgba(255,255,255,0.06))',border:`1px solid ${D.border}`,borderRadius:8,padding:'3px 9px',fontWeight:600}}>{tag}</span>
             ))}
           </div>
         </div>

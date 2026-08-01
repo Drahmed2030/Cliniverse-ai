@@ -333,7 +333,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
       {/* Header */}
       <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:18 }}>
         {onClose && (
-          <button onClick={onClose} style={{ background:'rgba(255,255,255,0.07)', backdropFilter:'blur(16px)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:12, padding:'9px 16px', color:'rgba(238,246,250,0.72)', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
+          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', backdropFilter:'blur(16px)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:12, padding:'9px 16px', color:'rgba(238,246,250,0.72)', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
         )}
         <div>
           <div style={{ fontSize:10, color:'#FFD700CC', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>CERTIFICATE GENERATOR</div>

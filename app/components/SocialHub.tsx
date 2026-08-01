@@ -438,7 +438,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:12,color:C.sub,lineHeight:1.6,marginBottom:10}}>{gr.patient}</div>
           <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
             {gr.keyFindings.slice(0,3).map((f,i)=>(
-              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'rgba(255,255,255,0.05)',color:C.muted,border:'1px solid rgba(255,255,255,0.18)'}}>{f}</span>
+              <span key={i} style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'var(--bg-card,rgba(255,255,255,0.05))',color:C.muted,border:'1px solid rgba(255,255,255,0.18)'}}>{f}</span>
             ))}
           </div>
         </div>
@@ -651,7 +651,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(done)return;setJourneyAns(i);if(ch.correct)setJourneyScore(s=>s+1);else setJourneyMistakes(m=>m+1)}}
                 style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!ch.correct&&!isSelected?0.4:1}}>
-                <div style={{width:32,height:32,borderRadius:10,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+                <div style={{width:32,height:32,borderRadius:10,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                   {done?(ch.correct?'✅':isSelected?'❌':'○'):'▷'}
                 </div>
                 <div style={{fontSize:13,color:tc,fontWeight:600,flex:1,lineHeight:1.4}}>{ch.label}</div>

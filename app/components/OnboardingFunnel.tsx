@@ -179,7 +179,7 @@ function Visual({ type, accent, animKey }: { type:string, accent:string, animKey
       <LogoMark size={108}/>
       <div style={{display:'flex',gap:12}}>
         {['Medical AI','2026','Saudi Arabia'].map((t,i)=>(
-          <div key={i} style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:10,padding:'5px 10px',fontSize:10,color:'var(--text-secondary, rgba(242,248,252,0.60))',fontWeight:600}}>{t}</div>
+          <div key={i} style={{background:'var(--bg-card,rgba(255,255,255,0.06))',border:'1px solid var(--border-card,rgba(255,255,255,0.10))',borderRadius:10,padding:'5px 10px',fontSize:10,color:'var(--text-secondary, rgba(242,248,252,0.60))',fontWeight:600}}>{t}</div>
         ))}
       </div>
     </div>
@@ -341,7 +341,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
           </div>
           <div style={{fontSize:11,color:'rgba(242,248,252,0.42)',fontWeight:600,letterSpacing:3.5}}>MEDICAL INTELLIGENCE</div>
         </div>
-        <div style={{width:130,height:2,borderRadius:2,background:'rgba(255,255,255,0.08)',overflow:'hidden',animation:'fadeUp 0.4s ease 0.9s both'}}>
+        <div style={{width:130,height:2,borderRadius:2,background:'var(--bg-card-2,rgba(255,255,255,0.08))',overflow:'hidden',animation:'fadeUp 0.4s ease 0.9s both'}}>
           <div style={{height:'100%',borderRadius:2,background:'linear-gradient(90deg,#00C8B8,#0096FF)',animation:'loadBar 2.4s ease forwards',boxShadow:'0 0 10px rgba(0,200,184,0.55)'}}/>
         </div>
       </div>
@@ -416,7 +416,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
           {slide.stats.map((s,i)=>(
             <div key={i} style={{
               flex:1,
-              background:'rgba(255,255,255,0.05)',
+              background:'var(--bg-card,rgba(255,255,255,0.05))',
               border:`1px solid ${slide.accent}20`,
               borderRadius:16,padding:'10px 4px',textAlign:'center',
             }}>

@@ -106,7 +106,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:18,fontWeight:800,color:C.text,textAlign:'center',marginBottom:4}}>{c.title}</div>
           <div style={{fontSize:13,color:C.sub,textAlign:'center',marginBottom:14}}>{c.patient}</div>
           {c.details&&(
-            <div style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.18)'}}>
+            <div style={{background:'var(--bg-card,rgba(255,255,255,0.05))',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(255,255,255,0.18)'}}>
               <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 CLINICAL NOTE</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7}}>{c.details}</div>
             </div>

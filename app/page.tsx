@@ -353,7 +353,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <div style={{fontSize:52,textAlign:'center',marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.5))'}}>🔒</div>
         <h2 style={{fontSize:24,fontWeight:900,color:'var(--text-primary, white)',textAlign:'center',margin:'0 0 8px',letterSpacing:-0.5}}>PRO Case</h2>
         <p style={{color:'rgba(255,255,255,0.5)',fontSize:14,textAlign:'center',lineHeight:1.7,margin:'0 0 24px'}}>Unlock all 30+ emergency cases with Cliniverse PRO</p>
-        <div style={{background:'rgba(255,255,255,0.05)',borderRadius:16,padding:'14px 16px',marginBottom:20}}>
+        <div style={{background:'var(--bg-card,rgba(255,255,255,0.05))',borderRadius:16,padding:'14px 16px',marginBottom:20}}>
           {['30+ Emergency Cases','AI Clinical Consultant','PDF Certificates','500+ MCQ Bank','Global Leaderboard'].map(f=>(
             <div key={f} style={{display:'flex',alignItems:'center',gap:10,padding:'6px 0',borderBottom:'1px solid rgba(36,63,82,0.50)'}}>
               <span style={{color:'#30d158',fontSize:14}}>✓</span>
@@ -426,7 +426,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <p style={{fontSize:15,color:'rgba(255,255,255,0.5)',lineHeight:1.7,margin:'0 auto 40px',maxWidth:300}}>The clinical intelligence platform built by a physician, for physicians.</p>
         <div style={{display:'flex',flexDirection:'column',gap:12,maxWidth:360,margin:'0 auto'}}>
           <button onClick={()=>setScreen('signin')} style={{padding:'18px 32px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:17,fontWeight:700,boxShadow:'0 8px 40px rgba(0,196,180,0.5)'}}>Enter Hospital →</button>
-          <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
+          <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'var(--bg-card,rgba(255,255,255,0.05))',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
         </div>
       </div>
     </div>
@@ -543,7 +543,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                       `What are the contraindications in this case?`,
                       `When should I consider ICU admission?`,
                     ].map(q=>(
-                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(36,63,82,0.65)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
+                      <button key={q} onClick={()=>setAiQuestion(q)} style={{background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(36,63,82,0.65)',borderRadius:12,padding:'10px 14px',color:'rgba(255,255,255,0.7)',fontSize:12,cursor:'pointer',textAlign:'left',fontWeight:500}}>{q}</button>
                     ))}
                   </div>
                 </div>
@@ -661,8 +661,8 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
         {tab==='net'&&(
           <div style={{padding:'0 0 20px'}}>
-            <div style={{display:'flex',gap:4,background:'rgba(255,255,255,0.04)',borderRadius:16,padding:4,marginBottom:16,border:'1px solid rgba(255,255,255,0.12)'}}>
-              <button id="net-feed" onClick={()=>{document.getElementById('net-social').style.display='none';document.getElementById('net-feed-content').style.display='block';document.getElementById('net-feed').style.background='rgba(255,255,255,0.07)';document.getElementById('net-social').style.background='transparent'}} style={{flex:1,padding:'9px',border:'none',cursor:'pointer',borderRadius:12,fontFamily:'-apple-system,sans-serif',fontWeight:700,fontSize:12,background:'rgba(255,255,255,0.07)',color:'#00C4B4',transition:'all 0.2s'}}>📰 MedFeed</button>
+            <div style={{display:'flex',gap:4,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:16,padding:4,marginBottom:16,border:'1px solid rgba(255,255,255,0.12)'}}>
+              <button id="net-feed" onClick={()=>{document.getElementById('net-social').style.display='none';document.getElementById('net-feed-content').style.display='block';document.getElementById('net-feed').style.background='rgba(255,255,255,0.07)';document.getElementById('net-social').style.background='transparent'}} style={{flex:1,padding:'9px',border:'none',cursor:'pointer',borderRadius:12,fontFamily:'-apple-system,sans-serif',fontWeight:700,fontSize:12,background:'var(--bg-card-2,rgba(255,255,255,0.07))',color:'#00C4B4',transition:'all 0.2s'}}>📰 MedFeed</button>
               <button id="net-social" onClick={()=>{document.getElementById('net-feed-content').style.display='none';document.getElementById('net-social-content').style.display='block';document.getElementById('net-social').style.background='rgba(255,255,255,0.07)';document.getElementById('net-feed').style.background='transparent'}} style={{flex:1,padding:'9px',border:'none',cursor:'pointer',borderRadius:12,fontFamily:'-apple-system,sans-serif',fontWeight:700,fontSize:12,background:'transparent',color:'rgba(238,246,250,0.38)',transition:'all 0.2s'}}>🌐 ClinicalNet</button>
             </div>
             <div id="net-feed-content"><MedFeed onXP={addXP}/></div>

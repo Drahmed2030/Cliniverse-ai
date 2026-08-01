@@ -71,7 +71,7 @@ export default function ClinicalNexus({ onXP }:Props) {
 
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:20}}>
           {[['🌍','Global votes','Real-time'],['🤖','AI Attending','Comments live'],['📊','Your rank','vs world']].map(([i,t,s])=>(
-            <div key={t} style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 8px',textAlign:'center',border:'1px solid rgba(36,63,82,0.65)'}}>
+            <div key={t} style={{background:'var(--bg-card,rgba(255,255,255,0.05))',borderRadius:14,padding:'12px 8px',textAlign:'center',border:'1px solid rgba(36,63,82,0.65)'}}>
               <div style={{fontSize:22,marginBottom:4}}>{i}</div>
               <div style={{fontSize:11,fontWeight:700,color:'var(--text-primary, white)'}}>{t}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',marginTop:2}}>{s}</div>
@@ -217,7 +217,7 @@ export default function ClinicalNexus({ onXP }:Props) {
               🌍 See how {viewers.toLocaleString()} doctors voted {showGlobal?'▲':'▼'}
             </button>
             {showGlobal&&(
-              <div style={{background:'rgba(255,255,255,0.04)',borderRadius:14,padding:14,marginBottom:12,border:'1px solid rgba(36,63,82,0.65)'}}>
+              <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:14,padding:14,marginBottom:12,border:'1px solid rgba(36,63,82,0.65)'}}>
                 {step.opts.map((opt,i)=>(
                   <div key={i} style={{marginBottom:10}}>
                     <div style={{display:'flex',justifyContent:'space-between',marginBottom:4}}>
