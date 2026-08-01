@@ -259,7 +259,7 @@ export default function DynamicNav({
             onClick={e => e.stopPropagation()}
             style={{
               position:'absolute', bottom:0, left:0, right:0,
-              background:'linear-gradient(180deg,#0e2240,#091828)',
+              background:'rgba(10,20,40,0.92)',
               borderRadius:'32px 32px 0 0',
               border:'1px solid rgba(0,200,184,0.18)',
               padding:'20px 18px 52px',
@@ -362,22 +362,25 @@ export default function DynamicNav({
         zIndex:200, width:'calc(100% - 28px)', maxWidth:460, fontFamily:F,
       }}>
         <div style={{
-          background:'var(--nav-bg, rgba(255,255,255,0.04))',
-          backdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
-          WebkitBackdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
+          background:'rgba(255,255,255,0.08)',
+          backdropFilter:'blur(50px) saturate(200%) brightness(1.15)',
+          WebkitBackdropFilter:'blur(50px) saturate(200%) brightness(1.15)',
           borderRadius:32,
-          border:'1px solid rgba(128,128,128,0.15)',
-          boxShadow:'0 8px 40px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.15)',
+          border:'1px solid rgba(255,255,255,0.14)',
+          boxShadow:'0 8px 40px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.20)',
           padding:'10px 12px',
           display:'flex', alignItems:'center', justifyContent:'space-between',
         }}>
 
           {/* Left tabs */}
           {leftTabs.map(t => (
-            <button key={t.id} onClick={() => { setTab(t.id); if('vibrate' in navigator) navigator.vibrate(4) }} style={{
+            <button key={t.id} onClick={() => { setTab(t.id); if('vibrate' in navigator) navigator.vibrate(6) }} style={{
               display:'flex', flexDirection:'column', alignItems:'center', gap:3,
               background:'transparent', border:'none', cursor:'pointer',
               padding:'4px 6px', borderRadius:14, fontFamily:F, minWidth:50,
+              WebkitTapHighlightColor:'transparent',
+              transition:'transform 0.1s, opacity 0.1s',
+              active:{transform:'scale(0.88)', opacity:0.7},
             }}>
               {t.svg(tab === t.id)}
               <span style={{
@@ -405,8 +408,9 @@ export default function DynamicNav({
               cursor:'pointer',
               display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
               animation: pillAnim,
-              transform: pressed ? 'scale(0.90)' : 'scale(1)',
-              transition:'transform 0.12s, border-color 0.4s, background 0.4s',
+              transform: pressed ? 'scale(0.85)' : 'scale(1)',
+              transition:'transform 0.08s cubic-bezier(0.34,1.56,0.64,1), border-color 0.4s, background 0.4s',
+              opacity: pressed ? 0.85 : 1,
               flexShrink:0,
               marginBottom:6,
               userSelect:'none',
@@ -429,10 +433,13 @@ export default function DynamicNav({
 
           {/* Right tabs */}
           {rightTabs.map(t => (
-            <button key={t.id} onClick={() => { setTab(t.id); if('vibrate' in navigator) navigator.vibrate(4) }} style={{
+            <button key={t.id} onClick={() => { setTab(t.id); if('vibrate' in navigator) navigator.vibrate(6) }} style={{
               display:'flex', flexDirection:'column', alignItems:'center', gap:3,
               background:'transparent', border:'none', cursor:'pointer',
               padding:'4px 6px', borderRadius:14, fontFamily:F, minWidth:50,
+              WebkitTapHighlightColor:'transparent',
+              transition:'transform 0.1s, opacity 0.1s',
+              active:{transform:'scale(0.88)', opacity:0.7},
             }}>
               {t.svg(tab === t.id)}
               <span style={{
