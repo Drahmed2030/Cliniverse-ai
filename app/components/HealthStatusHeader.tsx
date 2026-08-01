@@ -77,7 +77,7 @@ function VitalChip({ icon, value, unit, label, color, pulse: doPulse }:
         <span style={{fontSize:14,fontWeight:900,color,letterSpacing:-0.5}}>{value}</span>
         <span style={{fontSize:8,color:`${color}90`,fontWeight:600}}>{unit}</span>
       </div>
-      <div style={{fontSize:7,color:'rgba(242,248,252,0.38)',fontWeight:600,letterSpacing:0.5}}>{label}</div>
+      <div style={{fontSize:7,color:'var(--text-muted,rgba(242,248,252,0.38))',fontWeight:600,letterSpacing:0.5}}>{label}</div>
     </div>
   )
 }
@@ -111,8 +111,8 @@ export default function HealthStatusHeader({ doctorName, xp, streak, liveCount =
   return (
     <div style={{
       position:'relative', overflow:'hidden',
-      background:'linear-gradient(135deg,rgba(0,200,184,0.06),rgba(26,140,255,0.04))',
-      border:'1px solid rgba(0,200,184,0.16)',
+      background:'var(--bg-card,rgba(0,200,184,0.06))',
+      border:'1px solid var(--border-accent,rgba(0,200,184,0.16))',
       borderRadius:22, padding:'14px 16px 18px',
       marginBottom:14, fontFamily:F,
     }}>
