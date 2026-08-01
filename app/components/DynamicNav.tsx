@@ -272,7 +272,7 @@ export default function DynamicNav({
             {/* Header */}
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
               <div>
-                <div style={{ fontSize:9, color:'rgba(0,200,184,0.85)', fontWeight:800, letterSpacing:2, marginBottom:3 }}>COMMAND CENTER</div>
+                <div style={{ fontSize:9, color:'var(--accent,#00C8B8)', fontWeight:800, letterSpacing:2, marginBottom:3 }}>COMMAND CENTER</div>
                 <div style={{ fontSize:20, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.3 }}>Quick Actions</div>
               </div>
               <div style={{
