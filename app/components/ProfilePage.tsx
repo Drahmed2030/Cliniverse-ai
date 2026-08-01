@@ -94,8 +94,9 @@ function applyTheme(id: ThemeId) {
   const root = document.documentElement
   Object.entries(t.vars).forEach(([k, v]) => root.style.setProperty(k, v))
   localStorage.setItem('cliniverse-theme-v2', id)
-  // Also update globals for nav
   document.body.setAttribute('data-theme', id)
+  // Notify ThemeProvider + all components
+  window.dispatchEvent(new CustomEvent('cliniverse-theme-change', { detail: id }))
 }
 
 // ─────────────────────────────────────────────
