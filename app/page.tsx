@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useClinical } from './components/ClinicalContext'
 import SplashScreen from './components/SplashScreen'
 import OnboardingSurvey from './components/OnboardingSurvey'
 import CliniverseLogo from './components/Logo'
@@ -160,6 +161,7 @@ const darkTheme = {
 }
 
 export default function Home() {
+  const { tab, setTab, toolTab, setToolTab, xp, addXP, casesCompleted, setCasesCompleted, mcqCorrect, setMcqCorrect, isPro, setIsPro, userName, setUserName, showUpgrade, setShowUpgrade } = useClinical()
   const [screen, setScreen] = useState('hub')
   const [progress, setProgress] = useState(0)
   const [tagline, setTagline] = useState(0)
