@@ -873,9 +873,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         isPro={isPro}
       />
 
-        <div style={{height:120}}/>
-
-      </div>
+      <div style={{height:120}}/>
       <PWAInstall/>
     </div>
   )
