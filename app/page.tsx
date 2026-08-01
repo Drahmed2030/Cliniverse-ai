@@ -168,17 +168,10 @@ export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
   const [showSurvey, setShowSurvey] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(true)
-  const [userName, setUserName] = useState('')
-  const [tab, setTab] = useState('hub')
-  const [toolTab, setToolTab] = useState('codeblue')
   const [activeCase, setActiveCase] = useState<string|null>(null)
   const [activeRad, setActiveRad] = useState<string|null>(null)
   const [mcqIndex, setMcqIndex] = useState(0)
   const [mcqAnswer, setMcqAnswer] = useState<number|null>(null)
-  const [xp, setXp] = useState(0)
-  const [streak] = useState(3)
-  const [casesCompleted, setCasesCompleted] = useState(0)
-  const [mcqCorrect, setMcqCorrect] = useState(0)
   const [mcqTotal, setMcqTotal] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string|null>('critical')
   const [showWelcome, setShowWelcome] = useState(true)
@@ -188,8 +181,6 @@ export default function Home() {
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiHistory, setAiHistory] = useState<{q:string,a:string}[]>([])
-  const [isPro] = useState(false) // set true after payment
-  const [showUpgrade, setShowUpgrade] = useState(false)
   const [checkoutUrl, setCheckoutUrl] = useState('')
   const openCheckout = (url: string) => setCheckoutUrl(url)
   const [showAdmin, setShowAdmin] = useState(false)
@@ -294,8 +285,7 @@ export default function Home() {
     return ()=>{clearInterval(prog);clearInterval(tag)}
   },[screen])
 
-  const completeCase=(reward:number)=>{setXp(x=>x+reward);setCasesCompleted(c=>c+1);setActiveCase(null)}
-  const addXP=(n:number)=>setXp(x=>x+n)
+  const completeCase=(reward:number)=>{addXP(reward);setCasesCompleted(c=>c+1)}
 
   const askAI = async (caseContext: string) => {
     if(!aiQuestion.trim()) return
