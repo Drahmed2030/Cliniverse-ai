@@ -939,6 +939,15 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 })}
           </div>
         </div>
+      {/* ── DYNAMIC NAV ── */}
+      <DynamicNav
+        tab={tab}
+        setTab={setTab}
+        setToolTab={setToolTab}
+        liveCount={1247}
+        isPro={isPro}
+      />
+
         <div style={{height:100}}/>
 
       </div>
