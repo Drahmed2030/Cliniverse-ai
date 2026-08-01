@@ -220,7 +220,7 @@ export default function AdminDashboard({ onClose }: { onClose:()=>void }) {
             }}>
               {t.icon} {t.label}
               {t.id==='errors'&&errors.filter(e=>!e.resolved).length>0&&(
-                <span style={{marginLeft:4,background:T.red,borderRadius:10,padding:'1px 5px',fontSize:8,color:'white',fontWeight:900}}>
+                <span style={{marginLeft:4,background:T.red,borderRadius:10,padding:'1px 5px',fontSize:8,color:'var(--text-primary, white)',fontWeight:900}}>
                   {errors.filter(e=>!e.resolved).length}
                 </span>
               )}

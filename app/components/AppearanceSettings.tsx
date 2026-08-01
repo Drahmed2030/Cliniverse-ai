@@ -123,7 +123,7 @@ function SectionHeader({ title, icon }: { title:string, icon:string }) {
   return (
     <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:10, marginTop:4 }}>
       <span style={{ fontSize:16 }}>{icon}</span>
-      <div style={{ fontSize:10, color:'rgba(242,248,252,0.45)', fontWeight:700, letterSpacing:1.5 }}>{title}</div>
+      <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.45))', fontWeight:700, letterSpacing:1.5 }}>{title}</div>
     </div>
   )
 }
@@ -140,8 +140,8 @@ function OptionRow({ label, desc, selected, onSelect, accent='#00C8B8' }:
       transition:'all 0.2s ease', marginBottom:7,
     }}>
       <div style={{ flex:1 }}>
-        <div style={{ fontSize:13, fontWeight:700, color:'#F2F8FC' }}>{label}</div>
-        <div style={{ fontSize:10, color:'rgba(242,248,252,0.45)', marginTop:2 }}>{desc}</div>
+        <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, #F2F8FC)' }}>{label}</div>
+        <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.45))', marginTop:2 }}>{desc}</div>
       </div>
       {selected && (
         <div style={{ width:22, height:22, borderRadius:'50%', background:accent, display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, color:'#000', fontWeight:900, flexShrink:0, animation:'checkIn 0.2s ease' }}>✓</div>
@@ -185,7 +185,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
         )}
         <div>
           <div style={{ fontSize:10, color:'rgba(0,200,184,0.85)', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>APPEARANCE</div>
-          <div style={{ fontSize:19, fontWeight:900, color:'#F2F8FC', letterSpacing:-0.4 }}>
+          <div style={{ fontSize:19, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.4 }}>
             Customise <span style={{ color:'#00C8B8' }}>Display</span>
           </div>
         </div>
@@ -218,8 +218,8 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
                 position:'relative', overflow:'hidden', transition:'all 0.2s',
               }}>
                 <div style={{ fontSize:26, fontWeight:900, color: s.font===f.id?'#00C8B8':'#F2F8FC', marginBottom:6, ...f.style }}>{f.sample}</div>
-                <div style={{ fontSize:12, fontWeight:700, color:'#F2F8FC', marginBottom:2 }}>{f.label}</div>
-                <div style={{ fontSize:9, color:'rgba(242,248,252,0.45)' }}>{f.desc}</div>
+                <div style={{ fontSize:12, fontWeight:700, color:'var(--text-primary, #F2F8FC)', marginBottom:2 }}>{f.label}</div>
+                <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.45))' }}>{f.desc}</div>
                 {s.font===f.id && <div style={{ position:'absolute', top:8, right:8, width:18, height:18, borderRadius:'50%', background:'#00C8B8', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, color:'#000', fontWeight:900, animation:'checkIn 0.2s ease' }}>✓</div>}
               </div>
             ))}
@@ -234,16 +234,16 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
                 borderRadius:14, padding:'12px 4px', cursor:'pointer', textAlign:'center', transition:'all 0.2s',
               }}>
                 <div style={{ fontSize:10+t.scale*6, fontWeight:800, color:s.textSize===t.id?'#00C8B8':'#F2F8FC', marginBottom:4 }}>Aa</div>
-                <div style={{ fontSize:8, color:'rgba(242,248,252,0.45)', fontWeight:600 }}>{t.label}</div>
+                <div style={{ fontSize:8, color:'var(--text-muted, rgba(242,248,252,0.45))', fontWeight:600 }}>{t.label}</div>
               </div>
             ))}
           </div>
 
           {/* Live preview */}
           <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, padding:'14px', marginTop:12 }}>
-            <div style={{ fontSize:9, color:'rgba(242,248,252,0.40)', fontWeight:700, letterSpacing:1, marginBottom:8 }}>PREVIEW</div>
-            <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:14*( TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), fontWeight:800, color:'#F2F8FC', marginBottom:4 }}>Clinical Excellence</div>
-            <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:12*(TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), color:'rgba(242,248,252,0.60)' }}>Medical Intelligence Platform · 2026</div>
+            <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.40))', fontWeight:700, letterSpacing:1, marginBottom:8 }}>PREVIEW</div>
+            <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:14*( TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), fontWeight:800, color:'var(--text-primary, #F2F8FC)', marginBottom:4 }}>Clinical Excellence</div>
+            <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:12*(TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), color:'var(--text-secondary, rgba(242,248,252,0.60))' }}>Medical Intelligence Platform · 2026</div>
           </div>
         </div>
       )}
@@ -268,8 +268,8 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
                     <div style={{ width:28, height:3, borderRadius:2, background:'rgba(242,248,252,0.22)' }}/>
                   </div>
                 </div>
-                <div style={{ fontSize:12, fontWeight:700, color:'#F2F8FC', marginBottom:2 }}>{c.icon} {c.label}</div>
-                <div style={{ fontSize:9, color:'rgba(242,248,252,0.45)' }}>{c.desc}</div>
+                <div style={{ fontSize:12, fontWeight:700, color:'var(--text-primary, #F2F8FC)', marginBottom:2 }}>{c.icon} {c.label}</div>
+                <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.45))' }}>{c.desc}</div>
                 {s.card===c.id && <div style={{ position:'absolute', top:8, right:8, width:18, height:18, borderRadius:'50%', background:'#00C8B8', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, color:'#000', fontWeight:900, animation:'checkIn 0.2s ease' }}>✓</div>}
               </div>
             ))}
@@ -309,7 +309,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
               }}>
                 <div style={{ fontSize:24, marginBottom:5 }}>{n.icon}</div>
                 <div style={{ fontSize:10, fontWeight:700, color:s.nav===n.id?'#00C8B8':'#F2F8FC', marginBottom:2 }}>{n.label}</div>
-                <div style={{ fontSize:8, color:'rgba(242,248,252,0.40)' }}>{n.desc}</div>
+                <div style={{ fontSize:8, color:'var(--text-muted, rgba(242,248,252,0.40))' }}>{n.desc}</div>
               </div>
             ))}
           </div>
@@ -326,7 +326,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
 
           <div style={{ background:'rgba(255,149,10,0.08)', border:'1px solid rgba(255,149,10,0.20)', borderRadius:14, padding:'12px 14px', marginTop:8 }}>
             <div style={{ fontSize:11, color:'rgba(255,149,10,0.90)', fontWeight:700, marginBottom:4 }}>♿ Accessibility</div>
-            <div style={{ fontSize:11, color:'rgba(242,248,252,0.55)', lineHeight:1.6 }}>
+            <div style={{ fontSize:11, color:'var(--text-secondary, rgba(242,248,252,0.55))', lineHeight:1.6 }}>
               "No Motion" recommended for users with vestibular disorders. App also respects iPhone's Reduce Motion setting.
             </div>
           </div>

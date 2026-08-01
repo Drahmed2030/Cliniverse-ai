@@ -448,7 +448,7 @@ function ClinicalScores() {
               background:checked[f.id]?score.color:'rgba(255,255,255,0.08)',
               border:`1.5px solid ${checked[f.id]?score.color:'rgba(255,255,255,0.15)'}`,
               display:'flex',alignItems:'center',justifyContent:'center',
-              fontSize:13,color:'white',fontWeight:900,transition:'all 0.2s',
+              fontSize:13,color:'var(--text-primary, white)',fontWeight:900,transition:'all 0.2s',
             }}>
               {checked[f.id]?'✓':''}
             </div>

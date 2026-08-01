@@ -126,10 +126,10 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
       {/* Header */}
       <div style={{ marginBottom:20 }}>
         <div style={{ fontSize:10, color:'rgba(0,200,184,0.85)', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>SETTINGS</div>
-        <div style={{ fontSize:20, fontWeight:900, color:'#F2F8FC', letterSpacing:-0.4 }}>
+        <div style={{ fontSize:20, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.4 }}>
           Personalise <span style={{ color:'#00C8B8' }}>Home</span>
         </div>
-        <div style={{ fontSize:12, color:'rgba(242,248,252,0.50)', marginTop:4 }}>
+        <div style={{ fontSize:12, color:'var(--text-muted, rgba(242,248,252,0.50))', marginTop:4 }}>
           Customise your clinical workspace
         </div>
       </div>
@@ -159,7 +159,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
             <div style={{ fontSize:10, color:'rgba(242,248,252,0.42)', fontWeight:700, letterSpacing:1.5 }}>
               HOME SECTIONS ({activeCount} active)
             </div>
-            <div style={{ fontSize:10, color:'rgba(242,248,252,0.35)' }}>Drag to reorder</div>
+            <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))' }}>Drag to reorder</div>
           </div>
 
           {prefs.sections.map((sec, i) => {
@@ -197,8 +197,8 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
 
                 {/* Info */}
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:13, fontWeight:700, color:'#F2F8FC', marginBottom:2 }}>{info.label}</div>
-                  <div style={{ fontSize:10, color:'rgba(242,248,252,0.45)' }}>{info.desc}</div>
+                  <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, #F2F8FC)', marginBottom:2 }}>{info.label}</div>
+                  <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.45))' }}>{info.desc}</div>
                 </div>
 
                 {/* Toggle */}
@@ -247,13 +247,13 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
             <div style={{ fontSize:9, color:'rgba(242,248,252,0.38)', fontWeight:700, letterSpacing:1, marginBottom:10 }}>PREVIEW — HOME QUICK TOOLS</div>
             <div style={{ display:'flex', gap:10, overflowX:'auto' }}>
               {prefs.quickTools.length === 0
-                ? <div style={{ fontSize:12, color:'rgba(242,248,252,0.35)' }}>No tools selected</div>
+                ? <div style={{ fontSize:12, color:'var(--text-muted, rgba(242,248,252,0.35))' }}>No tools selected</div>
                 : prefs.quickTools.map(id => {
                     const t = ALL_TOOLS.find(t=>t.id===id)!
                     return t ? (
                       <div key={id} style={{ flexShrink:0, display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
                         <div style={{ width:48, height:48, borderRadius:15, background:`${t.color}15`, border:`1.5px solid ${t.color}28`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:20 }}>{t.icon}</div>
-                        <div style={{ fontSize:8, color:'rgba(242,248,252,0.55)', fontWeight:700 }}>{t.label}</div>
+                        <div style={{ fontSize:8, color:'var(--text-secondary, rgba(242,248,252,0.55))', fontWeight:700 }}>{t.label}</div>
                       </div>
                     ) : null
                   })
@@ -276,7 +276,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
                   opacity: maxed ? 0.4 : 1, position:'relative',
                 }}>
                   <div style={{ fontSize:24, marginBottom:4 }}>{t.icon}</div>
-                  <div style={{ fontSize:10, fontWeight:700, color: on?t.color:'#F2F8FC' }}>{t.label}</div>
+                  <div style={{ fontSize:10, fontWeight:700, color: on?t.color:'var(--text-primary, #F2F8FC)' }}>{t.label}</div>
                   {on && <div style={{ position:'absolute', top:6, right:6, width:16, height:16, borderRadius:'50%', background:t.color, display:'flex', alignItems:'center', justifyContent:'center', fontSize:9, color:'#000', fontWeight:900, animation:'checkIn 0.2s ease' }}>✓</div>}
                 </div>
               )
@@ -296,9 +296,9 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
               value={prefs.greeting}
               onChange={e => setPrefs(p => ({ ...p, greeting: e.target.value }))}
               placeholder="Doctor"
-              style={{ width:'100%', padding:'13px 14px', borderRadius:14, border:'1.5px solid rgba(0,200,184,0.28)', background:'rgba(255,255,255,0.06)', color:'#F2F8FC', fontSize:14, outline:'none', fontFamily:F, boxSizing:'border-box' }}
+              style={{ width:'100%', padding:'13px 14px', borderRadius:14, border:'1.5px solid rgba(0,200,184,0.28)', background:'rgba(255,255,255,0.06)', color:'var(--text-primary, #F2F8FC)', fontSize:14, outline:'none', fontFamily:F, boxSizing:'border-box' }}
             />
-            <div style={{ fontSize:10, color:'rgba(242,248,252,0.35)', marginTop:5 }}>
+            <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))', marginTop:5 }}>
               Preview: "Good morning, {prefs.greeting||'Doctor'} 👋"
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
                 }}>{sp}</button>
               ))}
             </div>
-            <div style={{ fontSize:10, color:'rgba(242,248,252,0.35)', marginTop:6 }}>
+            <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))', marginTop:6 }}>
               Used to personalise AI cases and recommendations
             </div>
           </div>
@@ -325,10 +325,10 @@ export default function PersonaliseHome({ onSave }: { onSave?: (p:Prefs)=>void }
           {/* Home greeting preview */}
           <div style={{ background:'linear-gradient(135deg,rgba(0,200,184,0.08),rgba(26,140,255,0.05))', border:'1.5px solid rgba(0,200,184,0.20)', borderRadius:18, padding:'16px', marginBottom:4 }}>
             <div style={{ fontSize:9, color:'rgba(0,200,184,0.80)', fontWeight:700, letterSpacing:1.5, marginBottom:8 }}>HOME PREVIEW</div>
-            <div style={{ fontSize:22, fontWeight:900, color:'#F2F8FC', letterSpacing:-0.5, marginBottom:4 }}>
+            <div style={{ fontSize:22, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.5, marginBottom:4 }}>
               ☀️ Good morning,<br/><span style={{ color:'#00C8B8' }}>{prefs.greeting||'Doctor'}</span>
             </div>
-            <div style={{ fontSize:12, color:'rgba(242,248,252,0.55)' }}>
+            <div style={{ fontSize:12, color:'var(--text-secondary, rgba(242,248,252,0.55))' }}>
               {prefs.specialty} · Cliniverse AI
             </div>
           </div>

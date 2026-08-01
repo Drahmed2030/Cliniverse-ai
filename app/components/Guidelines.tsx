@@ -39,12 +39,12 @@ export default function Guidelines() {
   return (
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
-        <div style={{fontSize:20,fontWeight:900,color:'white',marginBottom:4}}>📋 Clinical Guidelines</div>
+        <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>📋 Clinical Guidelines</div>
         <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>ESC · AHA · NICE · WHO · Updated 2026</div>
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search guidelines..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'white',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
 
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:16,paddingBottom:4,scrollbarWidth:'none'}}>
         {SPECS.map(s=>(
@@ -67,7 +67,7 @@ export default function Guidelines() {
                   {g.specialty==='Cardiology'?'🫀':g.specialty==='Critical Care'?'🏥':g.specialty==='Respiratory'?'🫁':g.specialty==='Endocrine'?'💉':g.specialty==='Neurology'?'🧠':'⚕️'}
                 </div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:14,fontWeight:800,color:'white',marginBottom:4}}>{g.title}</div>
+                  <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:4}}>{g.title}</div>
                   <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                     <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:(COLORS[g.specialty]||'#00C4B4')+'15',color:COLORS[g.specialty]||'#00C4B4',fontWeight:700}}>{g.specialty}</span>
                     <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'rgba(255,255,255,0.4)',fontWeight:600}}>{g.source} {g.year}</span>

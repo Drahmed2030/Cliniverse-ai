@@ -22,7 +22,7 @@ export default function QuickAccess({ onNavigate }: Props) {
             onTouchStart={e=>(e.currentTarget.style.transform='scale(0.95)')}
             onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}>
             <div style={{fontSize:22,marginBottom:4}}>{q.icon}</div>
-            <div style={{fontSize:10,fontWeight:700,color:'white'}}>{q.label}</div>
+            <div style={{fontSize:10,fontWeight:700,color:'var(--text-primary, white)'}}>{q.label}</div>
           </div>
         ))}
       </div>

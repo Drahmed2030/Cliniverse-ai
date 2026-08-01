@@ -235,7 +235,7 @@ export default function WeeklyClinicalPearl({ onXP }: { onXP?: (n:number)=>void 
       <button onClick={generateAIPearl} disabled={generating} style={{
         width:'100%',padding:'14px',borderRadius:18,border:'none',
         background:generating?'rgba(191,90,242,0.15)':`linear-gradient(135deg,${T.purple},#7B00CC)`,
-        color:'#fff',fontSize:14,fontWeight:800,cursor:generating?'not-allowed':'pointer',fontFamily:F,
+        color:'var(--text-primary, #fff)',fontSize:14,fontWeight:800,cursor:generating?'not-allowed':'pointer',fontFamily:F,
         display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:12,
         boxShadow:generating?'none':`0 6px 24px ${T.purple}35`,
       }}>

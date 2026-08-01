@@ -208,7 +208,7 @@ Question: ${q}`,
             <button onClick={()=>ask(input)} disabled={loading||!input.trim()} style={{
               padding:'13px 18px',borderRadius:18,border:'none',
               background:loading||!input.trim()?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-              color:'#fff',fontSize:13,fontWeight:700,cursor:loading||!input.trim()?'not-allowed':'pointer',fontFamily:F,
+              color:'var(--text-primary, #fff)',fontSize:13,fontWeight:700,cursor:loading||!input.trim()?'not-allowed':'pointer',fontFamily:F,
               boxShadow:loading||!input.trim()?'none':`0 4px 16px ${T.teal}35`,
             }}>→</button>
           </div>

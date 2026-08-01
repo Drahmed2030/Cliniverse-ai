@@ -179,7 +179,7 @@ function Visual({ type, accent, animKey }: { type:string, accent:string, animKey
       <LogoMark size={108}/>
       <div style={{display:'flex',gap:12}}>
         {['Medical AI','2026','Saudi Arabia'].map((t,i)=>(
-          <div key={i} style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:10,padding:'5px 10px',fontSize:10,color:'rgba(242,248,252,0.60)',fontWeight:600}}>{t}</div>
+          <div key={i} style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:10,padding:'5px 10px',fontSize:10,color:'var(--text-secondary, rgba(242,248,252,0.60))',fontWeight:600}}>{t}</div>
         ))}
       </div>
     </div>
@@ -225,10 +225,10 @@ function Visual({ type, accent, animKey }: { type:string, accent:string, animKey
           <div style={{display:'flex',flexDirection:'column',gap:3,flex:1}}>
             <div style={{display:'flex',alignItems:'center',gap:7}}>
               <span style={{fontSize:9,color:c.color,background:`${c.color}18`,borderRadius:6,padding:'2px 8px',fontWeight:800}}>{c.tag}</span>
-              <span style={{fontSize:9,color:'rgba(242,248,252,0.45)'}}>{c.city}</span>
+              <span style={{fontSize:9,color:'var(--text-muted, rgba(242,248,252,0.45))'}}>{c.city}</span>
             </div>
-            <span style={{fontSize:13,color:'#F2F8FC',fontWeight:700}}>{c.title}</span>
-            <span style={{fontSize:10,color:'rgba(242,248,252,0.55)'}}>{c.sub}</span>
+            <span style={{fontSize:13,color:'var(--text-primary, #F2F8FC)',fontWeight:700}}>{c.title}</span>
+            <span style={{fontSize:10,color:'var(--text-secondary, rgba(242,248,252,0.55))'}}>{c.sub}</span>
           </div>
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
             <div style={{width:7,height:7,borderRadius:'50%',background:c.color,animation:'ping 1.5s ease-out infinite'}}/>
@@ -336,7 +336,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
           <LogoMark size={110}/>
         </div>
         <div style={{textAlign:'center',animation:'fadeUp 0.6s ease 0.5s both'}}>
-          <div style={{fontSize:28,fontWeight:900,color:'#F2F8FC',letterSpacing:-0.7,marginBottom:6}}>
+          <div style={{fontSize:28,fontWeight:900,color:'var(--text-primary, #F2F8FC)',letterSpacing:-0.7,marginBottom:6}}>
             Cliniverse <span style={{color:'#00C8B8'}}>AI</span>
           </div>
           <div style={{fontSize:11,color:'rgba(242,248,252,0.42)',fontWeight:600,letterSpacing:3.5}}>MEDICAL INTELLIGENCE</div>
@@ -403,7 +403,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
 
         {/* Title */}
         <div style={{textAlign:'center',marginBottom:12,animation:'fadeUp 0.45s ease 0.05s both'}} key={`t-${animKey}`}>
-          <h1 style={{fontSize:27,fontWeight:900,color:'#F2F8FC',letterSpacing:-0.7,lineHeight:1.18,margin:0,whiteSpace:'pre-line'}}>{slide.title}</h1>
+          <h1 style={{fontSize:27,fontWeight:900,color:'var(--text-primary, #F2F8FC)',letterSpacing:-0.7,lineHeight:1.18,margin:0,whiteSpace:'pre-line'}}>{slide.title}</h1>
         </div>
 
         {/* Sub */}
@@ -421,7 +421,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
               borderRadius:16,padding:'10px 4px',textAlign:'center',
             }}>
               <div style={{fontSize:17,fontWeight:900,color:slide.accent,marginBottom:2}}>{s.v}</div>
-              <div style={{fontSize:9,color:'rgba(242,248,252,0.45)',fontWeight:600,letterSpacing:0.5}}>{s.l}</div>
+              <div style={{fontSize:9,color:'var(--text-muted, rgba(242,248,252,0.45))',fontWeight:600,letterSpacing:0.5}}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -452,7 +452,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
         )}
 
         {!isLast && (
-          <button onClick={()=>onComplete(false)} style={{background:'transparent',border:'none',color:'rgba(242,248,252,0.35)',fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:F,padding:'6px'}}>
+          <button onClick={()=>onComplete(false)} style={{background:'transparent',border:'none',color:'var(--text-muted, rgba(242,248,252,0.35))',fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:F,padding:'6px'}}>
             Skip for now
           </button>
         )}

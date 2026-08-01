@@ -273,7 +273,7 @@ export default function DynamicNav({
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20 }}>
               <div>
                 <div style={{ fontSize:9, color:'rgba(0,200,184,0.85)', fontWeight:800, letterSpacing:2, marginBottom:3 }}>COMMAND CENTER</div>
-                <div style={{ fontSize:20, fontWeight:900, color:'#F2F8FC', letterSpacing:-0.3 }}>Quick Actions</div>
+                <div style={{ fontSize:20, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.3 }}>Quick Actions</div>
               </div>
               <div style={{
                 display:'flex', alignItems:'center', gap:6,
@@ -301,10 +301,10 @@ export default function DynamicNav({
               }}>🎙️</div>
               <div style={{ flex:1 }}>
                 <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:2 }}>
-                  <span style={{ fontSize:13, fontWeight:800, color:'#F2F8FC' }}>Voice AI Command</span>
+                  <span style={{ fontSize:13, fontWeight:800, color:'var(--text-primary, #F2F8FC)' }}>Voice AI Command</span>
                   {!isPro && <span style={{ fontSize:8, fontWeight:900, color:'#BF5AF2', background:'rgba(191,90,242,0.15)', borderRadius:6, padding:'2px 7px', letterSpacing:1 }}>PRO</span>}
                 </div>
-                <div style={{ fontSize:10, color:'rgba(242,248,252,0.45)' }}>
+                <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.45))' }}>
                   {isPro ? 'Speak your command or question' : 'Unlock real-time voice automation'}
                 </div>
               </div>
@@ -336,8 +336,8 @@ export default function DynamicNav({
                     fontSize:20, flexShrink:0,
                   }}>{cmd.icon}</div>
                   <div>
-                    <div style={{ fontSize:12, fontWeight:800, color:'#F2F8FC', marginBottom:1 }}>{cmd.label}</div>
-                    <div style={{ fontSize:9, color:'rgba(242,248,252,0.45)' }}>{cmd.desc}</div>
+                    <div style={{ fontSize:12, fontWeight:800, color:'var(--text-primary, #F2F8FC)', marginBottom:1 }}>{cmd.label}</div>
+                    <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.45))' }}>{cmd.desc}</div>
                   </div>
                 </div>
               ))}
@@ -349,7 +349,7 @@ export default function DynamicNav({
               borderRadius:18,
               border:'1px solid rgba(255,255,255,0.08)',
               background:'rgba(255,255,255,0.04)',
-              color:'rgba(242,248,252,0.55)',
+              color:'var(--text-secondary, rgba(242,248,252,0.55))',
               fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:F,
             }}>Cancel</button>
           </div>

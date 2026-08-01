@@ -342,7 +342,7 @@ function NewPostModal({ onClose, onPost, doctorName, doctorSpecialty }: {
         <button onClick={submit} disabled={posting||!content.trim()} style={{
           width:'100%',padding:'16px',borderRadius:18,border:'none',
           background:posting||!content.trim()?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-          color:'#fff',fontSize:15,fontWeight:800,
+          color:'var(--text-primary, #fff)',fontSize:15,fontWeight:800,
           cursor:posting||!content.trim()?'not-allowed':'pointer',fontFamily:F,
           boxShadow:posting||!content.trim()?'none':`0 8px 32px ${T.teal}35`,
           display:'flex',alignItems:'center',justifyContent:'center',gap:10,
@@ -456,7 +456,7 @@ function CommentsModal({ post, onClose }: { post:any, onClose:()=>void }) {
         <button onClick={addComment} disabled={posting||!input.trim()} style={{
           padding:'12px 18px',borderRadius:16,border:'none',
           background:!input.trim()?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-          color:'#fff',fontSize:13,fontWeight:700,cursor:!input.trim()?'not-allowed':'pointer',fontFamily:F,
+          color:'var(--text-primary, #fff)',fontSize:13,fontWeight:700,cursor:!input.trim()?'not-allowed':'pointer',fontFamily:F,
         }}>→</button>
       </div>
       <style>{`input::placeholder{color:rgba(238,246,250,0.22)}`}</style>
@@ -542,7 +542,7 @@ export default function ClinicalNet({ onXP }: { onXP?: (n:number)=>void }) {
       <button onClick={()=>setShowNewPost(true)} style={{
         width:'100%',padding:'14px',borderRadius:18,border:'none',marginBottom:16,
         background:`linear-gradient(135deg,${T.teal},${T.blue})`,
-        color:'#fff',fontSize:14,fontWeight:800,cursor:'pointer',fontFamily:F,
+        color:'var(--text-primary, #fff)',fontSize:14,fontWeight:800,cursor:'pointer',fontFamily:F,
         boxShadow:`0 6px 24px ${T.teal}35`,
         display:'flex',alignItems:'center',justifyContent:'center',gap:10,
       }}>

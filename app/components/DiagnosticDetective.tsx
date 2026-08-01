@@ -252,7 +252,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
       </div>
 
       <div style={{display:'flex',gap:8}}>
-        <button onClick={()=>setPhase('investigate')} style={{flex:2,padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`}}>
+        <button onClick={()=>setPhase('investigate')} style={{flex:2,padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`}}>
           🔬 Start Investigating
         </button>
       </div>
@@ -322,7 +322,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         ))}
 
         <button onClick={()=>setPhase('diagnose')} disabled={ordered.length<2}
-          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:ordered.length>=2?`linear-gradient(135deg,${c.color},${c.color}bb)`:'rgba(255,255,255,0.18)',color:'white',fontSize:15,fontWeight:800,cursor:ordered.length>=2?'pointer':'not-allowed',boxShadow:ordered.length>=2?`0 6px 24px ${c.color}44`:'none',opacity:ordered.length>=2?1:0.5}}>
+          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:ordered.length>=2?`linear-gradient(135deg,${c.color},${c.color}bb)`:'rgba(255,255,255,0.18)',color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:ordered.length>=2?'pointer':'not-allowed',boxShadow:ordered.length>=2?`0 6px 24px ${c.color}44`:'none',opacity:ordered.length>=2?1:0.5}}>
           🩺 Make Diagnosis ({ordered.length} tests done)
         </button>
       </div>
@@ -358,7 +358,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
       </div>
 
       <button onClick={submitDx} disabled={selectedDx===null}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:selectedDx!==null?'linear-gradient(135deg,#00C4B4,#0a84ff)':'rgba(255,255,255,0.12)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',boxShadow:selectedDx!==null?'0 6px 24px rgba(139,92,246,0.4)':'none',opacity:selectedDx!==null?1:0.5}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:selectedDx!==null?'linear-gradient(135deg,#00C4B4,#0a84ff)':'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',boxShadow:selectedDx!==null?'0 6px 24px rgba(139,92,246,0.4)':'none',opacity:selectedDx!==null?1:0.5}}>
         ✅ Submit Diagnosis
       </button>
     </div>
@@ -412,7 +412,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startCase(c)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${c.color}30`,background:`${c.color}10`,color:c.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>setPhase('intro')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(0,196,180,0.4)'}}>🕵️ New Case</button>
+          <button onClick={()=>setPhase('intro')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(0,196,180,0.4)'}}>🕵️ New Case</button>
         </div>
       </div>
     )

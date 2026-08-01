@@ -337,7 +337,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
         )}
         <div>
           <div style={{ fontSize:10, color:'#FFD700CC', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>CERTIFICATE GENERATOR</div>
-          <div style={{ fontSize:18, fontWeight:900, color:'#F2F8FC', letterSpacing:-0.4 }}>
+          <div style={{ fontSize:18, fontWeight:900, color:'var(--text-primary, #F2F8FC)', letterSpacing:-0.4 }}>
             Your <span style={{ color:'#FFD700' }}>Achievement</span>
           </div>
         </div>

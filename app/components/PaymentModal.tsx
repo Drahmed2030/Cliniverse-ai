@@ -47,7 +47,7 @@ export default function PaymentModal({ onClose }: Props) {
           {/* Header */}
           <div style={{textAlign:'center',marginBottom:24}}>
             <div style={{fontSize:40,marginBottom:8}}>🚀</div>
-            <div style={{fontSize:22,fontWeight:900,color:'white',marginBottom:4,letterSpacing:-0.5}}>Upgrade to Pro</div>
+            <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4,letterSpacing:-0.5}}>Upgrade to Pro</div>
             <div style={{fontSize:14,color:'rgba(255,255,255,0.5)'}}>Join 10,000+ doctors worldwide</div>
           </div>
 
@@ -57,14 +57,14 @@ export default function PaymentModal({ onClose }: Props) {
               <button key={pl} onClick={()=>setPlan(pl)}
                 style={{flex:1,padding:'10px',borderRadius:13,border:'none',background:plan===pl?'rgba(139,92,246,0.3)':'transparent',color:plan===pl?'white':'rgba(255,255,255,0.4)',fontWeight:700,fontSize:14,cursor:'pointer',position:'relative',transition:'all 0.2s'}}>
                 {pl==='yearly'?'Annual':'Monthly'}
-                {pl==='yearly'&&<span style={{position:'absolute',top:-8,right:4,background:'#30d158',color:'white',fontSize:9,fontWeight:800,padding:'2px 6px',borderRadius:20}}>-33%</span>}
+                {pl==='yearly'&&<span style={{position:'absolute',top:-8,right:4,background:'#30d158',color:'var(--text-primary, white)',fontSize:9,fontWeight:800,padding:'2px 6px',borderRadius:20}}>-33%</span>}
               </button>
             ))}
           </div>
 
           {/* Price */}
           <div style={{textAlign:'center',marginBottom:20}}>
-            <div style={{fontSize:48,fontWeight:900,color:'white',letterSpacing:-2}}>{p.price}</div>
+            <div style={{fontSize:48,fontWeight:900,color:'var(--text-primary, white)',letterSpacing:-2}}>{p.price}</div>
             <div style={{fontSize:14,color:'rgba(255,255,255,0.4)',marginTop:2}}>{p.period}</div>
             {plan==='yearly'&&<div style={{fontSize:12,color:'#30d158',fontWeight:700,marginTop:4}}>That's only $6.67/month</div>}
           </div>
@@ -81,7 +81,7 @@ export default function PaymentModal({ onClose }: Props) {
 
           {/* Apple Pay / Card button */}
           <button onClick={handleCheckout}
-            style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:16,fontWeight:800,cursor:'pointer',marginBottom:12,boxShadow:'0 8px 32px rgba(139,92,246,0.4)',letterSpacing:-0.3,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+            style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:16,fontWeight:800,cursor:'pointer',marginBottom:12,boxShadow:'0 8px 32px rgba(139,92,246,0.4)',letterSpacing:-0.3,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
             🍎 Continue with Apple Pay
           </button>
           

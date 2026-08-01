@@ -165,13 +165,13 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
       </div>
 
       {/* Daily Challenge Card */}
-      <div style={{ background:'linear-gradient(135deg,#1a0533,#0a0f1e)', borderRadius:22, padding:20, marginBottom:16, color:'white', border:'1px solid rgba(139,92,246,0.3)', boxShadow:'0 8px 32px rgba(139,92,246,0.3)', position:'relative', overflow:'hidden' }}>
+      <div style={{ background:'linear-gradient(135deg,#1a0533,#0a0f1e)', borderRadius:22, padding:20, marginBottom:16, color:'var(--text-primary, white)', border:'1px solid rgba(139,92,246,0.3)', boxShadow:'0 8px 32px rgba(139,92,246,0.3)', position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-20, right:-20, width:120, height:120, borderRadius:'50%', background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent)', pointerEvents:'none' }}/>
         <div style={{ fontSize:11, color:'rgba(139,92,246,0.8)', fontWeight:700, letterSpacing:2, textTransform:'uppercase', marginBottom:8 }}>🔥 TODAY'S CHALLENGE</div>
         <h3 style={{ fontSize:18, fontWeight:800, margin:'0 0 6px' }}>{DAILY_CHALLENGE_CASES[dailyIdx].title}</h3>
         <p style={{ fontSize:12, color:'rgba(255,255,255,0.5)', margin:'0 0 16px' }}>Resets in: {getTimeUntilMidnight()} · +{DAILY_CHALLENGE_CASES[dailyIdx].xp} XP</p>
         <div style={{ display:'flex', gap:8 }}>
-          <button onClick={()=>{setMode('daily');setDailyQ(0);setDailyAns(null);setDailyCorrect(0);setDailyDone(false)}} style={{ flex:1, padding:'12px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'white', fontSize:14, fontWeight:700, cursor:'pointer' }}>
+          <button onClick={()=>{setMode('daily');setDailyQ(0);setDailyAns(null);setDailyCorrect(0);setDailyDone(false)}} style={{ flex:1, padding:'12px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>
             Start Challenge →
           </button>
           <button onClick={()=>setDailyIdx(i=>(i+1)%DAILY_CHALLENGE_CASES.length)} style={{ padding:'12px 16px', borderRadius:14, border:'1px solid rgba(36,63,82,0.65)', background:'transparent', color:'rgba(255,255,255,0.6)', fontSize:13, cursor:'pointer' }}>
@@ -271,7 +271,7 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
               <div style={{ fontSize:11, fontWeight:800, color:'#1d4ed8', marginBottom:6, letterSpacing:0.5 }}>💡 BOARD EXPLANATION</div>
               <p style={{ fontSize:13, color:'#1e3a5f', lineHeight:1.75, margin:0, fontWeight:500 }}>{currentQ.explain}</p>
             </div>
-            <button onClick={nextBoardQ} style={{ width:'100%', padding:'15px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${level.color},${level.color}bb)`, color:'white', fontSize:15, fontWeight:700, cursor:'pointer', boxShadow:`0 6px 20px ${level.color}33` }}>
+            <button onClick={nextBoardQ} style={{ width:'100%', padding:'15px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${level.color},${level.color}bb)`, color:'var(--text-primary, white)', fontSize:15, fontWeight:700, cursor:'pointer', boxShadow:`0 6px 20px ${level.color}33` }}>
               {qIndex<questions.length-1?'Next Question →':'Submit Exam 📋'}
             </button>
           </div>
@@ -284,7 +284,7 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
   if (mode === 'daily') {
     if (dailyDone) return (
       <div style={{ fontFamily:'-apple-system,sans-serif' }}>
-        <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(20px)', borderRadius:22, padding:28, textAlign:'center', border:'1px solid rgba(139,92,246,0.3)', color:'white', animation:'fadeIn 0.5s ease' }}>
+        <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(20px)', borderRadius:22, padding:28, textAlign:'center', border:'1px solid rgba(139,92,246,0.3)', color:'var(--text-primary, white)', animation:'fadeIn 0.5s ease' }}>
           <div style={{ fontSize:64, marginBottom:12 }}>🏆</div>
           <h3 style={{ fontSize:22, fontWeight:800, marginBottom:8 }}>Daily Challenge Complete!</h3>
           <p style={{ fontSize:14, color:'rgba(255,255,255,0.6)', marginBottom:20 }}>{dailyCorrect}/{dailyCase.questions.length} correct · Come back tomorrow for a new challenge!</p>
@@ -292,7 +292,7 @@ export default function BoardExam({ onXP }: { onXP: (n: number) => void }) {
             <div style={{ fontSize:28, fontWeight:900, color:'#6ee7e1' }}>+{dailyCase.xp} XP</div>
             <div style={{ fontSize:12, color:'rgba(255,255,255,0.4)', marginTop:4 }}>Daily bonus earned</div>
           </div>
-          <button onClick={()=>setMode('menu')} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'white', fontSize:16, fontWeight:700, cursor:'pointer' }}>
+          <button onClick={()=>setMode('menu')} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:'linear-gradient(135deg,#00C4B4,#0a84ff)', color:'var(--text-primary, white)', fontSize:16, fontWeight:700, cursor:'pointer' }}>
             Back to Menu
           </button>
         </div>

@@ -377,7 +377,7 @@ export default function LiveCaseViewer({ specialty='Emergency Medicine', difficu
           <button onClick={()=>setPhase(hasLabs?'labs':hasImaging?'imaging':'decision')} style={{
             width:'100%',padding:'15px',borderRadius:18,border:'none',
             background:`linear-gradient(135deg,${T.teal},${T.blue})`,
-            color:'#fff',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
+            color:'var(--text-primary, #fff)',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
             boxShadow:`0 6px 24px ${T.teal}35`,
           }}>
             {hasLabs?'Review Labs →':hasImaging?'View Imaging →':'Make Decision →'}
@@ -393,7 +393,7 @@ export default function LiveCaseViewer({ specialty='Emergency Medicine', difficu
           <button onClick={()=>setPhase(hasImaging?'imaging':'decision')} style={{
             width:'100%',padding:'15px',borderRadius:18,border:'none',marginTop:8,
             background:`linear-gradient(135deg,${T.blue},${T.purple})`,
-            color:'#fff',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
+            color:'var(--text-primary, #fff)',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
             boxShadow:`0 6px 24px ${T.blue}35`,
           }}>
             {hasImaging?'View Imaging →':'Make Decision →'}
@@ -413,7 +413,7 @@ export default function LiveCaseViewer({ specialty='Emergency Medicine', difficu
           <button onClick={()=>setPhase('decision')} style={{
             width:'100%',padding:'15px',borderRadius:18,border:'none',
             background:`linear-gradient(135deg,${T.orange},${T.red})`,
-            color:'#fff',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
+            color:'var(--text-primary, #fff)',fontSize:15,fontWeight:800,cursor:'pointer',fontFamily:F,
             boxShadow:`0 6px 24px ${T.orange}35`,
           }}>
             Make Decision →
@@ -493,7 +493,7 @@ export default function LiveCaseViewer({ specialty='Emergency Medicine', difficu
                 <button onClick={fetchCase} style={{
                   width:'100%', padding:'16px', borderRadius:18, border:'none',
                   background:`linear-gradient(135deg,${T.teal},${T.blue})`,
-                  color:'#fff', fontSize:15, fontWeight:800, cursor:'pointer', fontFamily:F,
+                  color:'var(--text-primary, #fff)', fontSize:15, fontWeight:800, cursor:'pointer', fontFamily:F,
                   boxShadow:`0 6px 24px ${T.teal}35`,
                 }}>
                   🔄 Next Case →

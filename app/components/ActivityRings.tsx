@@ -31,7 +31,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
               strokeDasharray={`${(accuracy/100)*c3} ${c3}`} style={{filter:'drop-shadow(0 0 4px #ff453a)',transition:'stroke-dasharray 1s ease'}}/>
           </svg>
           <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
-            <div style={{fontSize:15,fontWeight:900,color:'white'}}>{xp}</div>
+            <div style={{fontSize:15,fontWeight:900,color:'var(--text-primary, white)'}}>{xp}</div>
             <div style={{fontSize:7,color:'rgba(255,255,255,0.4)'}}>XP</div>
           </div>
         </div>
@@ -43,7 +43,7 @@ export default function ActivityRings({ xp, casesCompleted, mcqCorrect }: Props)
           ].map((r,i)=>(
             <div key={i}>
               <div style={{display:'flex',justifyContent:'space-between',marginBottom:2}}>
-                <span style={{fontSize:10,color:'white',fontWeight:600}}>{r.label}</span>
+                <span style={{fontSize:10,color:'var(--text-primary, white)',fontWeight:600}}>{r.label}</span>
                 <span style={{fontSize:10,color:r.color,fontWeight:700}}>{r.val}%</span>
               </div>
               <div style={{height:3,background:'rgba(255,255,255,0.18)',borderRadius:2,overflow:'hidden'}}>

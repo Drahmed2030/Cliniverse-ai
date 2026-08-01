@@ -253,12 +253,12 @@ Return ONLY this JSON structure:
         value={topic}
         onChange={e=>setTopic(e.target.value)}
         placeholder={`e.g. "STEMI in young patient" or "Drug interaction warfarin"`}
-        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'white',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
+        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'var(--text-primary, white)',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
       />
 
       {/* Generate button */}
       <button onClick={generateCase} disabled={generating||audience.length===0}
-        style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:generating?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:16,fontWeight:800,cursor:generating?'not-allowed':'pointer',boxShadow:generating?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'all 0.3s'}}>
+        style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:generating?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:16,fontWeight:800,cursor:generating?'not-allowed':'pointer',boxShadow:generating?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'all 0.3s'}}>
         {generating ? (
           <>
             <div style={{width:20,height:20,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid white',animation:'spin 1s linear infinite'}}/>
@@ -363,7 +363,7 @@ Return ONLY this JSON structure:
             🔄 Regenerate
           </button>
           <button onClick={saveToSupabase} disabled={saving||saved}
-            style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:saved?'rgba(48,209,88,0.2)':saving?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:14,fontWeight:800,cursor:saved||saving?'not-allowed':'pointer',boxShadow:saved||saving?'none':'0 6px 20px rgba(48,209,88,0.4)'}}>
+            style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:saved?'rgba(48,209,88,0.2)':saving?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:saved||saving?'not-allowed':'pointer',boxShadow:saved||saving?'none':'0 6px 20px rgba(48,209,88,0.4)'}}>
             {saved ? '✅ Saved to Library!' : saving ? 'Saving...' : '💾 Save to Library'}
           </button>
         </div>

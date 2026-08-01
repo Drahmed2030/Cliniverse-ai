@@ -467,7 +467,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
             </div>
           ))}
         </div>
-        <button onClick={()=>setGrPhase('diagnose')} style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${gr.color},${gr.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${gr.color}44`}}>
+        <button onClick={()=>setGrPhase('diagnose')} style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${gr.color},${gr.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${gr.color}44`}}>
           🩺 Make Your Diagnosis →
         </button>
       </div>
@@ -490,7 +490,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           ))}
         </div>
         <button onClick={()=>setGrPhase('analysis')} disabled={selectedDx===null}
-          style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:selectedDx!==null?`linear-gradient(135deg,${gr.color},${gr.color}bb)`:'rgba(255,255,255,0.12)',color:'white',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',opacity:selectedDx!==null?1:0.5}}>
+          style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:selectedDx!==null?`linear-gradient(135deg,${gr.color},${gr.color}bb)`:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:selectedDx!==null?'pointer':'not-allowed',opacity:selectedDx!==null?1:0.5}}>
           🤖 Get AI Analysis →
         </button>
       </div>
@@ -512,7 +512,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:10,letterSpacing:0.5}}>🤖 CLAUDE AI ANALYSIS</div>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.85,whiteSpace:'pre-line'}}>{gr.aiAnalysis}</div>
         </div>
-        <button onClick={()=>setGrPhase('quiz')} style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 24px rgba(139,92,246,0.4)'}}>
+        <button onClick={()=>setGrPhase('quiz')} style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 24px rgba(139,92,246,0.4)'}}>
           🧠 Test Knowledge →
         </button>
       </div>
@@ -529,7 +529,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
             <div style={{fontSize:14,color:'#ffd60a',fontWeight:700,marginBottom:20}}>+{xp} XP · Grand Rounds Complete</div>
             <div style={{display:'flex',gap:10}}>
               <button onClick={()=>setActiveGR(null)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>← Cases</button>
-              <button onClick={()=>setView('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff453a,#8b5cf6)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>Social Hub</button>
+              <button onClick={()=>setView('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff453a,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer'}}>Social Hub</button>
             </div>
           </div>
         )
@@ -565,7 +565,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
                 <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
               </div>
-              <button onClick={()=>{setGrQIdx(i=>i+1);setGrAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${gr.color},${gr.color}bb)`,color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 20px ${gr.color}44`}}>
+              <button onClick={()=>{setGrQIdx(i=>i+1);setGrAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${gr.color},${gr.color}bb)`,color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 20px ${gr.color}44`}}>
                 {grQIdx<gr.questions.length-1?'Next →':'Results 🏆'}
               </button>
             </div>
@@ -618,7 +618,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>setActiveJourney(null)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>← Cases</button>
-          <button onClick={()=>{onXP&&onXP(journeyScore*15);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>+{journeyScore*15} XP ✓</button>
+          <button onClick={()=>{onXP&&onXP(journeyScore*15);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>+{journeyScore*15} XP ✓</button>
         </div>
       </div>
     )
@@ -661,7 +661,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
         {journeyAns!==null&&(
           <button onClick={()=>{setJourneyPhaseIdx(i=>i+1);setJourneyAns(null)}}
-            style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${j.color},${j.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${j.color}44`}}>
+            style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${j.color},${j.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${j.color}44`}}>
             {journeyPhaseIdx<j.phases.length-1?'Continue Journey →':'Complete Journey 🏁'}
           </button>
         )}
@@ -758,7 +758,7 @@ export default function SocialHub({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
         {crossPerspIdx < cc.perspectives.length-1 ? (
           <button onClick={()=>setCrossPerspIdx(i=>i+1)}
-            style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${p.color},${p.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${p.color}44`}}>
+            style={{width:'100%',padding:'15px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${p.color},${p.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${p.color}44`}}>
             Next: {cc.perspectives[crossPerspIdx+1].icon} {cc.perspectives[crossPerspIdx+1].specialty} →
           </button>
         ) : (

@@ -200,23 +200,23 @@ export default function OnboardingSurvey({ onComplete }: Props) {
 
         {/* Top nav */}
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-          <button onClick={back} style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:12,padding:'8px 14px',color:'rgba(242,248,252,0.55)',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,opacity:step===0?0:1,pointerEvents:step===0?'none':'auto'}}>
+          <button onClick={back} style={{background:'rgba(255,255,255,0.07)',border:'1px solid rgba(255,255,255,0.10)',borderRadius:12,padding:'8px 14px',color:'var(--text-secondary, rgba(242,248,252,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,opacity:step===0?0:1,pointerEvents:step===0?'none':'auto'}}>
             ← Back
           </button>
           <div style={{display:'flex',alignItems:'center',gap:6}}>
             <LogoMark/>
           </div>
-          <div style={{fontSize:11,color:'rgba(242,248,252,0.40)',fontWeight:600}}>
+          <div style={{fontSize:11,color:'var(--text-muted, rgba(242,248,252,0.40))',fontWeight:600}}>
             {step+1} of {STEPS.length}
           </div>
         </div>
 
         {/* Question */}
         <div style={{textAlign:'center',marginBottom:24,animation:'fadeUp 0.4s ease'}} key={`q-${animKey}`}>
-          <div style={{fontSize:24,fontWeight:900,color:'#F2F8FC',letterSpacing:-0.6,lineHeight:1.2,marginBottom:8}}>
+          <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary, #F2F8FC)',letterSpacing:-0.6,lineHeight:1.2,marginBottom:8}}>
             {current.question}
           </div>
-          <div style={{fontSize:13,color:'rgba(242,248,252,0.55)',lineHeight:1.5}}>
+          <div style={{fontSize:13,color:'var(--text-secondary, rgba(242,248,252,0.55))',lineHeight:1.5}}>
             {current.subtitle}
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
                     transition:'all 0.2s', position:'relative',
                   }}>
                     <div style={{fontSize:24,marginBottom:5}}>{opt.icon}</div>
-                    <div style={{fontSize:10,fontWeight:700,color:isSelected?opt.color:'rgba(242,248,252,0.70)',lineHeight:1.3}}>{opt.v}</div>
+                    <div style={{fontSize:10,fontWeight:700,color:isSelected?opt.color:'var(--text-secondary, rgba(242,248,252,0.70))',lineHeight:1.3}}>{opt.v}</div>
                     {isSelected && <div style={{position:'absolute',top:5,right:5,width:16,height:16,borderRadius:'50%',background:opt.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,color:'#000',fontWeight:900,animation:'checkIn 0.2s ease'}}>✓</div>}
                   </div>
                 )
@@ -261,8 +261,8 @@ export default function OnboardingSurvey({ onComplete }: Props) {
                   }}>
                     <div style={{width:44,height:44,borderRadius:14,background:`${opt.color}18`,border:`1px solid ${opt.color}28`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{opt.icon}</div>
                     <div style={{flex:1}}>
-                      <div style={{fontSize:14,fontWeight:800,color:'#F2F8FC',marginBottom:2}}>{opt.v}</div>
-                      <div style={{fontSize:11,color:'rgba(242,248,252,0.50)'}}>{(opt as any).desc}</div>
+                      <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, #F2F8FC)',marginBottom:2}}>{opt.v}</div>
+                      <div style={{fontSize:11,color:'var(--text-muted, rgba(242,248,252,0.50))'}}>{(opt as any).desc}</div>
                     </div>
                     {isSelected && <div style={{width:24,height:24,borderRadius:'50%',background:opt.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,color:'#000',fontWeight:900,flexShrink:0,animation:'checkIn 0.2s ease'}}>✓</div>}
                   </div>
@@ -286,7 +286,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
                   }}>
                     <span style={{fontSize:26}}>{opt.icon}</span>
                     <div style={{flex:1}}>
-                      <div style={{fontSize:14,fontWeight:800,color:'#F2F8FC'}}>{opt.v}</div>
+                      <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, #F2F8FC)'}}>{opt.v}</div>
                     </div>
                     {/* Visual bar */}
                     <div style={{width:80,height:6,borderRadius:3,background:'rgba(255,255,255,0.10)',overflow:'hidden'}}>
@@ -301,7 +301,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
         </div>
 
         {current.skippable && (
-          <button onClick={()=>advance('skip')} style={{marginTop:14,background:'transparent',border:'none',color:'rgba(242,248,252,0.35)',fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:F,padding:'8px',textAlign:'center',width:'100%'}}>
+          <button onClick={()=>advance('skip')} style={{marginTop:14,background:'transparent',border:'none',color:'var(--text-muted, rgba(242,248,252,0.35))',fontSize:13,fontWeight:600,cursor:'pointer',fontFamily:F,padding:'8px',textAlign:'center',width:'100%'}}>
             Skip this step →
           </button>
         )}
@@ -314,7 +314,7 @@ export default function OnboardingSurvey({ onComplete }: Props) {
           background: !selected && !current.skippable
             ? 'rgba(0,200,184,0.15)'
             : 'linear-gradient(135deg,#00C8B8,#1A8CFF)',
-          color:'#fff', fontSize:16, fontWeight:900,
+          color:'var(--text-primary, #fff)', fontSize:16, fontWeight:900,
           cursor: !selected && !current.skippable ? 'not-allowed' : 'pointer',
           fontFamily:F,
           boxShadow: !selected && !current.skippable ? 'none' : '0 8px 28px rgba(0,200,184,0.40)',

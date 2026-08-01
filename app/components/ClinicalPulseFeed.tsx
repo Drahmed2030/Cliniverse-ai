@@ -59,7 +59,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{width:8,height:8,borderRadius:'50%',background:current.color,boxShadow:'0 0 8px '+current.color,flexShrink:0}}/>
           <span style={{fontSize:12,color:current.color,fontWeight:700,flexShrink:0}}>{current.flag} {current.city}</span>
-          <span style={{fontSize:12,color:'white',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{current.title}</span>
+          <span style={{fontSize:12,color:'var(--text-primary, white)',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{current.title}</span>
           <span style={{fontSize:9,padding:'2px 8px',borderRadius:10,background:current.color+'18',color:current.color,fontWeight:700,flexShrink:0,border:'1px solid '+current.color+'30'}}>{current.status}</span>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
             <div style={{display:'flex',alignItems:'center',gap:8}}>
               <div style={{width:7,height:7,borderRadius:'50%',background:f.color,flexShrink:0,boxShadow:f.status==='LIVE'?'0 0 6px '+f.color:'none'}}/>
               <span style={{fontSize:11,color:f.color,fontWeight:700,flexShrink:0}}>{f.flag} {f.city}</span>
-              <span style={{fontSize:12,color:'white',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{f.title}</span>
+              <span style={{fontSize:12,color:'var(--text-primary, white)',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{f.title}</span>
               <span style={{fontSize:9,padding:'2px 7px',borderRadius:8,background:f.color+'15',color:f.color,fontWeight:700,flexShrink:0}}>{f.level}</span>
             </div>
             {active===f.id&&(
@@ -97,11 +97,11 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         <div style={{position:'fixed',inset:0,zIndex:400,background:'rgba(0,0,0,0.8)',backdropFilter:'blur(8px)',display:'flex',alignItems:'flex-end'}} onClick={()=>setSbar(null)}>
           <div style={{width:'100%',maxWidth:480,margin:'0 auto',background:'linear-gradient(145deg,#12002a,#0a0015)',borderRadius:'24px 24px 0 0',padding:'20px 20px 40px',border:'1px solid rgba(0,196,180,0.30)'}} onClick={e=>e.stopPropagation()}>
             <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
-            <div style={{fontSize:14,fontWeight:800,color:'white',marginBottom:12}}>📋 SBAR Report</div>
+            <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:12}}>📋 SBAR Report</div>
             <textarea readOnly value={sbar}
               style={{width:'100%',height:200,background:'rgba(255,255,255,0.05)',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(255,255,255,0.8)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
             <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
-              style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
+              style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
               Copy SBAR
             </button>
           </div>

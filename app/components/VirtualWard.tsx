@@ -212,7 +212,7 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
           <button onClick={generate} disabled={generating} style={{
             width:'100%', padding:'16px', borderRadius:18, border:'none',
             background:generating?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-            color:'#fff', fontSize:15, fontWeight:800, cursor:generating?'not-allowed':'pointer',
+            color:'var(--text-primary, #fff)', fontSize:15, fontWeight:800, cursor:generating?'not-allowed':'pointer',
             fontFamily:F, boxShadow:generating?'none':`0 8px 32px ${T.teal}35`,
             display:'flex', alignItems:'center', justifyContent:'center', gap:10,
             marginBottom:16,
@@ -314,7 +314,7 @@ Write a complete discharge summary including: admission reason, hospital course,
           <button onClick={generate} disabled={generating} style={{
             width:'100%', padding:'16px', borderRadius:18, border:'none',
             background:generating?'rgba(52,199,89,0.2)':`linear-gradient(135deg,${T.green},${T.teal})`,
-            color:'#fff', fontSize:15, fontWeight:800, cursor:generating?'not-allowed':'pointer',
+            color:'var(--text-primary, #fff)', fontSize:15, fontWeight:800, cursor:generating?'not-allowed':'pointer',
             fontFamily:F, boxShadow:generating?'none':`0 8px 32px ${T.green}35`,
             display:'flex', alignItems:'center', justifyContent:'center', gap:10,
           }}>
@@ -447,7 +447,7 @@ function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack
         <button onClick={()=>setShowNote(true)} style={{
           flex:1, padding:'14px', borderRadius:16, border:'none',
           background:`linear-gradient(135deg,${T.blue},${T.teal})`,
-          color:'#fff', fontSize:13, fontWeight:800, cursor:'pointer', fontFamily:F,
+          color:'var(--text-primary, #fff)', fontSize:13, fontWeight:800, cursor:'pointer', fontFamily:F,
           boxShadow:`0 6px 20px ${T.blue}35`,
         }}>
           📋 Progress Note

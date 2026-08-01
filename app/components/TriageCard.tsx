@@ -20,10 +20,10 @@ export default function TriageCard({ onStart }: Props) {
         <span style={{fontSize:10,color:today.color,fontWeight:800,letterSpacing:2}}>TRIAGE · {today.level}</span>
         <span style={{marginLeft:'auto',fontSize:10,color:'rgba(255,255,255,0.3)'}}>Daily Case</span>
       </div>
-      <div style={{fontSize:16,fontWeight:800,color:'white',marginBottom:6}}>{today.title}</div>
+      <div style={{fontSize:16,fontWeight:800,color:'var(--text-primary, white)',marginBottom:6}}>{today.title}</div>
       <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',marginBottom:14,fontFamily:'monospace'}}>{today.vitals}</div>
       <button onClick={()=>onStart(today.id)}
-        style={{width:'100%',padding:'12px',borderRadius:14,border:'none',background:'linear-gradient(135deg,'+today.color+','+today.color+'aa)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
+        style={{width:'100%',padding:'12px',borderRadius:14,border:'none',background:'linear-gradient(135deg,'+today.color+','+today.color+'aa)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
         {today.action} →
       </button>
     </div>

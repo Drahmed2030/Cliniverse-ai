@@ -481,7 +481,7 @@ Respond in JSON only:
       <button onClick={generateNews} disabled={generating} style={{
         width:'100%',padding:'14px',borderRadius:18,border:'none',marginBottom:16,
         background:generating?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-        color:'#fff',fontSize:14,fontWeight:800,
+        color:'var(--text-primary, #fff)',fontSize:14,fontWeight:800,
         cursor:generating?'not-allowed':'pointer',fontFamily:F,
         boxShadow:generating?'none':`0 6px 24px ${T.teal}35`,
         display:'flex',alignItems:'center',justifyContent:'center',gap:10,

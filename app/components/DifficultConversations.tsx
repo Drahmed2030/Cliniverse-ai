@@ -289,7 +289,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
         </div>
 
         <button onClick={()=>startSimulation(s)}
-          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${s.color},${s.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 8px 32px ${s.color}44`}}>
+          style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${s.color},${s.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 8px 32px ${s.color}44`}}>
           💬 Begin Conversation
         </button>
       </div>
@@ -336,7 +336,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
                 <div style={{maxWidth:'80%'}}>
                   <div style={{fontSize:9,color:C.muted,marginBottom:3,marginRight:4,textAlign:'right'}}>You (Doctor) · {msg.timestamp}</div>
                   <div style={{background:'rgba(0,196,180,0.25)',borderRadius:'18px 18px 4px 18px',padding:'12px 14px',border:'1px solid rgba(0,196,180,0.25)'}}>
-                    <div style={{fontSize:13,color:'white',lineHeight:1.7}}>{msg.content}</div>
+                    <div style={{fontSize:13,color:'var(--text-primary, white)',lineHeight:1.7}}>{msg.content}</div>
                   </div>
                 </div>
               )}
@@ -362,9 +362,9 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
             onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}}
             placeholder="Type your response to the patient..."
             rows={2}
-            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'white',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
+            style={{flex:1,padding:'12px 14px',borderRadius:16,border:`1px solid ${C.border}`,background:'rgba(255,255,255,0.05)',color:'var(--text-primary, white)',fontSize:13,outline:'none',resize:'none',lineHeight:1.5}}/>
           <button onClick={sendMessage} disabled={loading||!input.trim()}
-            style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
+            style={{width:52,borderRadius:16,border:'none',background:loading||!input.trim()?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:18,cursor:loading||!input.trim()?'not-allowed':'pointer',flexShrink:0,boxShadow:loading||!input.trim()?'none':'0 4px 16px rgba(139,92,246,0.4)'}}>→</button>
         </div>
         <style>{`@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}} textarea::placeholder{color:rgba(255,255,255,0.2)}`}</style>
       </div>
@@ -402,7 +402,7 @@ export default function DifficultConversations({ onXP }: { onXP?: (n:number)=>vo
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startSimulation(s)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${s.color}30`,background:`${s.color}10`,color:s.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>setView('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#ff453a)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>💬 Scenarios</button>
+          <button onClick={()=>setView('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#ff453a)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>💬 Scenarios</button>
         </div>
       </div>
     )

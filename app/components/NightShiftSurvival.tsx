@@ -405,7 +405,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       )}
 
       <button onClick={startCase}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${cc.color},${cc.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${cc.color}44`,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${cc.color},${cc.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${cc.color}44`,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
         <span>▶ Respond Now</span>
         <span style={{fontSize:12,opacity:0.8}}>({cc.timeLimit}s to decide)</span>
       </button>
@@ -494,7 +494,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{fontSize:13,color:C.sub,marginBottom:24}}>You lasted {caseIdx+1}/{sc.cases.length} cases · +{totalXP} XP</div>
       <div style={{display:'flex',gap:10,justifyContent:'center'}}>
         <button onClick={()=>startShift(sc)} style={{padding:'14px 24px',borderRadius:16,border:'1px solid rgba(255,69,58,0.3)',background:'rgba(255,69,58,0.1)',color:'#ff453a',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
+        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
       </div>
     </div>
   )
@@ -530,7 +530,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
 
         <div style={{display:'flex',gap:10,marginTop:16}}>
           <button onClick={()=>startShift(sc)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${sc.color}30`,background:`${sc.color}10`,color:sc.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
+          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
         </div>
       </div>
     )

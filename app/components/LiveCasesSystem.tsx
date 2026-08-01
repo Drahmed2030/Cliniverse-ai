@@ -132,7 +132,7 @@ export default function LiveCasesSystem({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
 
         {!handled.includes(c.id) ? (
-          <button onClick={()=>{handleCase(c);setSelectedCase(null)}} style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`}}>
+          <button onClick={()=>{handleCase(c);setSelectedCase(null)}} style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`}}>
             ✅ Mark as Handled · +30 XP
           </button>
         ) : (

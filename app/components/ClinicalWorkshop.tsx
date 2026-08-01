@@ -27,12 +27,12 @@ const inputStyle = {
   border:'1px solid rgba(255,255,255,0.12)',
   background:'rgba(255,255,255,0.06)',
   backdropFilter:'blur(20px)',
-  color:'#EEF6FA', fontSize:13, outline:'none',
+  color:'var(--text-primary, #EEF6FA)', fontSize:13, outline:'none',
   boxSizing:'border-box' as const, fontFamily:F,
 }
 
 const labelStyle = {
-  fontSize:9, color:'rgba(238,246,250,0.40)',
+  fontSize:9, color:'var(--text-muted, rgba(238,246,250,0.40))',
   fontWeight:700, marginBottom:5, letterSpacing:1,
   textTransform:'uppercase' as const,
 }
@@ -85,7 +85,7 @@ Generate a complete professional SBAR handover with S/B/A/R headers. Include saf
           <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ SBAR Generated</div>
           <div style={{fontSize:11,color:T.sub}}>Ready to handover</div>
         </div>
-        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?`${T.green}25`:`linear-gradient(135deg,${T.blue},${T.teal})`,color:'white',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F,border:copied?`1px solid ${T.green}`:'none'}}>
+        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?`${T.green}25`:`linear-gradient(135deg,${T.blue},${T.teal})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F,border:copied?`1px solid ${T.green}`:'none'}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
@@ -171,7 +171,7 @@ Generate a complete professional SBAR handover with S/B/A/R headers. Include saf
       <button onClick={generate} disabled={generating||!form.situation} style={{
         width:'100%', padding:'16px', borderRadius:18, border:'none',
         background:generating||!form.situation?'rgba(0,196,180,0.2)':`linear-gradient(135deg,${T.teal},${T.blue})`,
-        color:'white', fontSize:15, fontWeight:800, cursor:generating||!form.situation?'not-allowed':'pointer',
+        color:'var(--text-primary, white)', fontSize:15, fontWeight:800, cursor:generating||!form.situation?'not-allowed':'pointer',
         fontFamily:F, boxShadow:generating||!form.situation?'none':`0 8px 32px ${T.teal}40`,
         display:'flex', alignItems:'center', justifyContent:'center', gap:10,
       }}>
@@ -226,7 +226,7 @@ Use simple language a patient can understand. Be warm and reassuring. Include re
           <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ Letter Ready</div>
           <div style={{fontSize:11,color:T.sub}}>{form.language==='AR'?'Arabic':'English'} · Patient-friendly</div>
         </div>
-        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.green}`:'none',background:copied?`${T.green}20`:`linear-gradient(135deg,${T.green},${T.teal})`,color:'white',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.green}`:'none',background:copied?`${T.green}20`:`linear-gradient(135deg,${T.green},${T.teal})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
@@ -280,7 +280,7 @@ Use simple language a patient can understand. Be warm and reassuring. Include re
       <button onClick={generate} disabled={generating||!form.diagnosis} style={{
         width:'100%', padding:'16px', borderRadius:18, border:'none',
         background:generating||!form.diagnosis?'rgba(52,199,89,0.2)':`linear-gradient(135deg,${T.green},${T.teal})`,
-        color:'white', fontSize:15, fontWeight:800, cursor:generating||!form.diagnosis?'not-allowed':'pointer',
+        color:'var(--text-primary, white)', fontSize:15, fontWeight:800, cursor:generating||!form.diagnosis?'not-allowed':'pointer',
         fontFamily:F, boxShadow:generating||!form.diagnosis?'none':`0 8px 32px ${T.green}35`,
         display:'flex', alignItems:'center', justifyContent:'center', gap:10,
       }}>
@@ -335,7 +335,7 @@ Write a structured reflective entry with: Description, Feelings, Evaluation, Ana
           <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ Portfolio Entry Ready</div>
           <div style={{fontSize:11,color:T.sub}}>Gibbs Reflective Cycle · GMC/RCPI</div>
         </div>
-        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.purple}`:'none',background:copied?`${T.purple}20`:`linear-gradient(135deg,${T.purple},${T.blue})`,color:'white',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+        <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.purple}`:'none',background:copied?`${T.purple}20`:`linear-gradient(135deg,${T.purple},${T.blue})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
           {copied?'✓ Copied':'📋 Copy'}
         </button>
       </div>
@@ -368,7 +368,7 @@ Write a structured reflective entry with: Description, Feelings, Evaluation, Ana
       <button onClick={generate} disabled={generating||!form.specialty||!form.caseType} style={{
         width:'100%', padding:'16px', borderRadius:18, border:'none',
         background:generating||!form.specialty?'rgba(175,82,222,0.2)':`linear-gradient(135deg,${T.purple},${T.blue})`,
-        color:'white', fontSize:15, fontWeight:800,
+        color:'var(--text-primary, white)', fontSize:15, fontWeight:800,
         cursor:generating||!form.specialty?'not-allowed':'pointer',
         fontFamily:F, boxShadow:generating||!form.specialty?'none':`0 8px 32px ${T.purple}35`,
         display:'flex', alignItems:'center', justifyContent:'center', gap:10,

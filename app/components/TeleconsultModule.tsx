@@ -504,12 +504,12 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
         {/* Next phase / Complete */}
         {phaseProgress < PHASES.length-1 ? (
           <button onClick={()=>setPhase(PHASES[phaseProgress+1])}
-            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${color},${color}aa)`,color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${color}44`}}>
+            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${color},${color}aa)`,color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${color}44`}}>
             Next: {phaseLabels[PHASES[phaseProgress+1]]} →
           </button>
         ) : (
           <button onClick={()=>{onXP&&onXP(Math.round((score/(activeCase.correctActions.length))*activeCase.xpReward));setView('debrief')}}
-            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>
+            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>
             ✅ Complete Consultation
           </button>
         )}
@@ -551,7 +551,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startCase(c)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${c.color}30`,background:`${c.color}10`,color:c.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>{setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>← Cases</button>
+          <button onClick={()=>{setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>← Cases</button>
         </div>
       </div>
     )

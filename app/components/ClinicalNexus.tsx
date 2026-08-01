@@ -66,14 +66,14 @@ export default function ClinicalNexus({ onXP }:Props) {
         </div>
 
         <div style={{fontSize:13,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:2,marginBottom:8,textTransform:'uppercase'}}>Clinical Nexus</div>
-        <div style={{fontSize:26,fontWeight:900,color:'white',letterSpacing:-0.8,marginBottom:8,lineHeight:1.1}}>The Global<br/>Medical Room</div>
+        <div style={{fontSize:26,fontWeight:900,color:'var(--text-primary, white)',letterSpacing:-0.8,marginBottom:8,lineHeight:1.1}}>The Global<br/>Medical Room</div>
         <div style={{fontSize:14,color:'rgba(255,255,255,0.5)',lineHeight:1.7,marginBottom:20}}>Real cases. Real decisions. Real doctors worldwide — voting on the same patient, same time. See how you compare to the global medical community.</div>
 
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:20}}>
           {[['🌍','Global votes','Real-time'],['🤖','AI Attending','Comments live'],['📊','Your rank','vs world']].map(([i,t,s])=>(
             <div key={t} style={{background:'rgba(255,255,255,0.05)',borderRadius:14,padding:'12px 8px',textAlign:'center',border:'1px solid rgba(36,63,82,0.65)'}}>
               <div style={{fontSize:22,marginBottom:4}}>{i}</div>
-              <div style={{fontSize:11,fontWeight:700,color:'white'}}>{t}</div>
+              <div style={{fontSize:11,fontWeight:700,color:'var(--text-primary, white)'}}>{t}</div>
               <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',marginTop:2}}>{s}</div>
             </div>
           ))}
@@ -91,7 +91,7 @@ export default function ClinicalNexus({ onXP }:Props) {
             <span style={{fontSize:10,color:c.color,fontWeight:800,letterSpacing:1}}>{c.tag}</span>
             <span style={{marginLeft:'auto',fontSize:11,color:'rgba(255,255,255,0.3)'}}>{viewers+Math.floor(Math.random()*200)} watching</span>
           </div>
-          <div style={{fontSize:19,fontWeight:900,color:'white',marginBottom:6,letterSpacing:-0.3}}>{c.title}</div>
+          <div style={{fontSize:19,fontWeight:900,color:'var(--text-primary, white)',marginBottom:6,letterSpacing:-0.3}}>{c.title}</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.5)',lineHeight:1.6,marginBottom:14}}>{c.intro.substring(0,120)}...</div>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
             <div style={{display:'flex',gap:8}}>
@@ -114,7 +114,7 @@ export default function ClinicalNexus({ onXP }:Props) {
           <span style={{fontSize:10,color:'#ff453a',fontWeight:800,letterSpacing:2}}>LIVE · {viewers.toLocaleString()} DOCTORS ONLINE</span>
         </div>
         <div style={{fontSize:13,color:active.color,fontWeight:700,letterSpacing:1,marginBottom:8}}>{active.tag}</div>
-        <div style={{fontSize:22,fontWeight:900,color:'white',marginBottom:14,letterSpacing:-0.5}}>{active.title}</div>
+        <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary, white)',marginBottom:14,letterSpacing:-0.5}}>{active.title}</div>
         <div style={{background:'rgba(255,255,255,0.14)',borderRadius:16,padding:16,border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:14,color:'rgba(255,255,255,0.8)',lineHeight:1.8}}>{active.intro}</div>
         </div>
@@ -128,7 +128,7 @@ export default function ClinicalNexus({ onXP }:Props) {
           </div>
         ))}
       </div>
-      <button onClick={()=>setPhase('case')} style={{width:'100%',padding:'17px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${active.color},${active.color}aa)`,color:'white',fontSize:16,fontWeight:800,cursor:'pointer',boxShadow:`0 8px 32px ${active.glow}`}}>
+      <button onClick={()=>setPhase('case')} style={{width:'100%',padding:'17px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${active.color},${active.color}aa)`,color:'var(--text-primary, white)',fontSize:16,fontWeight:800,cursor:'pointer',boxShadow:`0 8px 32px ${active.glow}`}}>
         🌍 Enter the Global Room →
       </button>
     </div>
@@ -154,7 +154,7 @@ export default function ClinicalNexus({ onXP }:Props) {
         {/* Event */}
         <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(36,63,82,0.60)'}}>
           <div style={{fontSize:10,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,marginBottom:6,fontWeight:700}}>SITUATION UPDATE</div>
-          <div style={{fontSize:15,fontWeight:700,color:'white',lineHeight:1.6}}>{step.event}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'var(--text-primary, white)',lineHeight:1.6}}>{step.event}</div>
         </div>
 
         {/* Vitals */}
@@ -176,7 +176,7 @@ export default function ClinicalNexus({ onXP }:Props) {
         {/* Question */}
         <div style={{background:`linear-gradient(135deg,${active.color}12,rgba(0,0,0,0.2))`,borderRadius:18,padding:16,marginBottom:14,border:`1px solid ${active.color}20`}}>
           <div style={{fontSize:10,color:active.color,fontWeight:800,letterSpacing:1,marginBottom:8}}>🌍 GLOBAL DECISION — {viewers.toLocaleString()} DOCTORS DECIDING</div>
-          <div style={{fontSize:15,fontWeight:700,color:'white',lineHeight:1.6}}>{step.question}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'var(--text-primary, white)',lineHeight:1.6}}>{step.question}</div>
         </div>
 
         {/* Options */}
@@ -233,7 +233,7 @@ export default function ClinicalNexus({ onXP }:Props) {
             )}
 
             {!isLast
-              ?<button onClick={()=>{setStepIdx(p=>p+1);setSelected(null);setShowExplain(false);setShowGlobal(false)}} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${active.color},${active.color}bb)`,color:'white',fontSize:15,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 24px ${active.glow}`}}>Next Decision →</button>
+              ?<button onClick={()=>{setStepIdx(p=>p+1);setSelected(null);setShowExplain(false);setShowGlobal(false)}} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${active.color},${active.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 24px ${active.glow}`}}>Next Decision →</button>
               :<button onClick={()=>{onXP(200);if(!completed.includes(active.id))setCompleted(p=>[...p,active.id]);setPhase('outcome')}} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:15,fontWeight:800,cursor:'pointer'}}>🌍 See Patient Outcome +200 XP</button>
             }
           </div>
@@ -247,7 +247,7 @@ export default function ClinicalNexus({ onXP }:Props) {
       <div style={{background:'linear-gradient(145deg,rgba(15,5,40,0.98),rgba(25,8,55,0.95))',borderRadius:24,padding:24,marginBottom:16,border:'1px solid rgba(139,92,246,0.3)',textAlign:'center'}}>
         <div style={{fontSize:48,marginBottom:12}}>🌍</div>
         <div style={{fontSize:13,color:'rgba(255,255,255,0.4)',letterSpacing:2,marginBottom:6}}>PATIENT OUTCOME</div>
-        <div style={{fontSize:20,fontWeight:900,color:'white',marginBottom:16,letterSpacing:-0.3}}>{active.title}</div>
+        <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:16,letterSpacing:-0.3}}>{active.title}</div>
         <div style={{background:'rgba(48,209,88,0.08)',borderRadius:16,padding:16,marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',textAlign:'left'}}>
           <div style={{fontSize:10,color:'#30d158',fontWeight:800,letterSpacing:1,marginBottom:8}}>WHAT HAPPENED</div>
           <div style={{fontSize:14,color:'rgba(255,255,255,0.85)',lineHeight:1.8}}>{active.outcome}</div>
@@ -266,7 +266,7 @@ export default function ClinicalNexus({ onXP }:Props) {
           <div style={{fontSize:36,fontWeight:900,color:'#ffd60a'}}>{totalScore}/4</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.4)',marginTop:4}}>vs global average: {Math.round((active.timeline.reduce((a,s)=>a+s.globalVote[s.correct],0)/active.timeline.length))}%</div>
         </div>
-        <button onClick={()=>setPhase('hub')} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:15,fontWeight:700,cursor:'pointer'}}>← Back to Nexus</button>
+        <button onClick={()=>setPhase('hub')} style={{width:'100%',padding:'15px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer'}}>← Back to Nexus</button>
       </div>
     </div>
   )

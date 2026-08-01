@@ -197,9 +197,9 @@ export default function ThemeToggle({ onThemeChange }: Props) {
               {/* Icon + Label */}
               <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:3 }}>
                 <span style={{ fontSize:16 }}>{theme.icon}</span>
-                <span style={{ fontSize:13, fontWeight:800, color:'#F2F8FC' }}>{theme.label}</span>
+                <span style={{ fontSize:13, fontWeight:800, color:'var(--text-primary, #F2F8FC)' }}>{theme.label}</span>
               </div>
-              <div style={{ fontSize:9, color:'rgba(242,248,252,0.45)', lineHeight:1.4 }}>{theme.desc}</div>
+              <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.45))', lineHeight:1.4 }}>{theme.desc}</div>
 
               {/* Active checkmark */}
               {isActive && (
@@ -226,7 +226,7 @@ export default function ThemeToggle({ onThemeChange }: Props) {
 
       {/* iOS note */}
       <div style={{ marginTop:12, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:12, padding:'10px 14px', textAlign:'center' }}>
-        <div style={{ fontSize:10, color:'rgba(242,248,252,0.35)' }}>
+        <div style={{ fontSize:10, color:'var(--text-muted, rgba(242,248,252,0.35))' }}>
           🍎 Auto mode follows iPhone Dark/Light setting
         </div>
       </div>

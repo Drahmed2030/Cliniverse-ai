@@ -211,7 +211,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
 
       <div style={{background:'rgba(255,255,255,0.04)',borderRadius:16,padding:'12px 14px',marginBottom:20,border:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between'}}>
         <div style={{textAlign:'center'}}>
-          <div style={{fontSize:18,fontWeight:900,color:'white'}}>{SESSION_LENGTH}</div>
+          <div style={{fontSize:18,fontWeight:900,color:'var(--text-primary, white)'}}>{SESSION_LENGTH}</div>
           <div style={{fontSize:10,color:C.muted}}>Questions</div>
         </div>
         <div style={{textAlign:'center'}}>
@@ -229,7 +229,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
       </div>
 
       <button onClick={fetchQuestion} disabled={loading}
-        style={{width:'100%',padding:'17px',borderRadius:20,border:'none',background:loading?'rgba(255,159,10,0.3)':'linear-gradient(135deg,#ff9f0a,#ff6b35)',color:'white',fontSize:16,fontWeight:800,cursor:loading?'not-allowed':'pointer',boxShadow:loading?'none':'0 8px 32px rgba(255,159,10,0.45)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
+        style={{width:'100%',padding:'17px',borderRadius:20,border:'none',background:loading?'rgba(255,159,10,0.3)':'linear-gradient(135deg,#ff9f0a,#ff6b35)',color:'var(--text-primary, white)',fontSize:16,fontWeight:800,cursor:loading?'not-allowed':'pointer',boxShadow:loading?'none':'0 8px 32px rgba(255,159,10,0.45)',display:'flex',alignItems:'center',justifyContent:'center',gap:10}}>
         {loading
           ? <><Spinner color="white"/>Generating question...</>
           : <>🧠 Start {SESSION_LENGTH}-Question Session</>
@@ -282,7 +282,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
 
       {/* Question */}
       <div style={{background:'rgba(139,92,246,0.08)',borderRadius:16,padding:'14px',marginBottom:12,border:'1px solid rgba(139,92,246,0.2)'}}>
-        <div style={{fontSize:14,fontWeight:700,color:'white',lineHeight:1.6}}>{question.question}</div>
+        <div style={{fontSize:14,fontWeight:700,color:'var(--text-primary, white)',lineHeight:1.6}}>{question.question}</div>
       </div>
 
       {/* Options */}
@@ -362,7 +362,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{background:`linear-gradient(135deg,${accuracy>=80?'rgba(48,209,88,0.15)':accuracy>=60?'rgba(255,159,10,0.15)':'rgba(255,69,58,0.12)'},rgba(139,92,246,0.08))`,borderRadius:24,padding:'28px 20px',marginBottom:16,border:`1px solid ${accuracy>=80?'rgba(48,209,88,0.25)':accuracy>=60?'rgba(255,159,10,0.25)':'rgba(255,69,58,0.2)'}`,textAlign:'center'}}>
         <div style={{fontSize:64,marginBottom:12}}>{accuracy>=80?'🏆':accuracy>=60?'🥈':'📚'}</div>
-        <div style={{fontSize:48,fontWeight:900,color:'white',letterSpacing:-2,marginBottom:4}}>{accuracy}%</div>
+        <div style={{fontSize:48,fontWeight:900,color:'var(--text-primary, white)',letterSpacing:-2,marginBottom:4}}>{accuracy}%</div>
         <div style={{fontSize:16,color:accuracy>=80?'#30d158':accuracy>=60?'#ff9f0a':'#ff453a',fontWeight:700,marginBottom:4}}>
           {accuracy>=80?'Excellent!':accuracy>=60?'Good effort':'Keep practising'}
         </div>
@@ -390,7 +390,7 @@ export default function DynamicMCQ({ onXP }: { onXP?: (n:number)=>void }) {
           🔄 New Session
         </button>
         <button onClick={()=>{onXP&&onXP(stats.xp);setView('setup');setStats({total:0,correct:0,streak:0,maxStreak:0,xp:0,timePerQ:[]});setQCount(0)}}
-          style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff9f0a,#ff6b35)',color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,159,10,0.4)'}}>
+          style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff9f0a,#ff6b35)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,159,10,0.4)'}}>
           +{stats.xp} XP ✓
         </button>
       </div>

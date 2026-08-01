@@ -145,7 +145,7 @@ function ParentTalk({ caseName, onClose }: { caseName:string, onClose:()=>void }
           placeholder="Type your response to the parent..."
           style={{flex:1,padding:'12px 16px',borderRadius:14,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.text,fontSize:13,outline:'none',fontFamily:F}}
         />
-        <button onClick={send} disabled={loading||!input.trim()} style={{padding:'12px 18px',borderRadius:14,border:'none',background:`linear-gradient(135deg,${T.teal},${T.blue})`,color:'#fff',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>Send</button>
+        <button onClick={send} disabled={loading||!input.trim()} style={{padding:'12px 18px',borderRadius:14,border:'none',background:`linear-gradient(135deg,${T.teal},${T.blue})`,color:'var(--text-primary, #fff)',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>Send</button>
       </div>
       <style>{`input::placeholder{color:rgba(238,246,250,0.25)}`}</style>
     </div>

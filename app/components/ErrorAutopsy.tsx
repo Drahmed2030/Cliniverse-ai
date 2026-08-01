@@ -323,7 +323,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
       )}
 
       <button onClick={()=>setPhase('analysis')}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'white',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`,marginTop:16}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${c.color}44`,marginTop:16}}>
         🧠 Test Your Knowledge →
       </button>
     </div>
@@ -353,7 +353,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
 
           <div style={{display:'flex',gap:10,marginTop:16}}>
             <button onClick={()=>startCase(c)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${c.color}30`,background:`${c.color}10`,color:c.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-            <button onClick={()=>{onXP&&onXP(xpEarned);setPhase('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff453a,#bf5af2)',color:'white',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,69,58,0.4)'}}>+{xpEarned} XP ✓</button>
+            <button onClick={()=>{onXP&&onXP(xpEarned);setPhase('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ff453a,#bf5af2)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,69,58,0.4)'}}>+{xpEarned} XP ✓</button>
           </div>
         </div>
       )
@@ -404,7 +404,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}}
-              style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'white',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 20px ${c.color}44`}}>
+              style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 20px ${c.color}44`}}>
               {qIdx<c.questions.length-1?'Next →':'See Results 🏆'}
             </button>
           </div>

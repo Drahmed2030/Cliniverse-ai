@@ -349,9 +349,9 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     <div style={{position:'fixed',inset:0,background:'rgba(10,22,40,0.85)',backdropFilter:'blur(20px)',zIndex:999,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
       <div style={{background:'linear-gradient(145deg,#0d3347,#162e3e)',borderRadius:28,padding:32,maxWidth:380,width:'100%',border:'1px solid rgba(0,196,180,0.4)',boxShadow:'0 20px 80px rgba(0,196,180,0.4)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-40,right:-40,width:160,height:160,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.3),transparent 70%)',pointerEvents:'none'}}/>
-        <button onClick={()=>setShowUpgrade(false)} style={{position:'absolute',top:16,right:16,background:'rgba(0,196,180,0.20)',border:'none',borderRadius:'50%',width:32,height:32,color:'white',fontSize:16,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
+        <button onClick={()=>setShowUpgrade(false)} style={{position:'absolute',top:16,right:16,background:'rgba(0,196,180,0.20)',border:'none',borderRadius:'50%',width:32,height:32,color:'var(--text-primary, white)',fontSize:16,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
         <div style={{fontSize:52,textAlign:'center',marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.5))'}}>🔒</div>
-        <h2 style={{fontSize:24,fontWeight:900,color:'white',textAlign:'center',margin:'0 0 8px',letterSpacing:-0.5}}>PRO Case</h2>
+        <h2 style={{fontSize:24,fontWeight:900,color:'var(--text-primary, white)',textAlign:'center',margin:'0 0 8px',letterSpacing:-0.5}}>PRO Case</h2>
         <p style={{color:'rgba(255,255,255,0.5)',fontSize:14,textAlign:'center',lineHeight:1.7,margin:'0 0 24px'}}>Unlock all 30+ emergency cases with Cliniverse PRO</p>
         <div style={{background:'rgba(255,255,255,0.05)',borderRadius:16,padding:'14px 16px',marginBottom:20}}>
           {['30+ Emergency Cases','AI Clinical Consultant','PDF Certificates','500+ MCQ Bank','Global Leaderboard'].map(f=>(
@@ -425,7 +425,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         <h1 style={{fontSize:56,fontWeight:900,margin:'0 0 20px',letterSpacing:3,lineHeight:1,background:'linear-gradient(135deg,#00C4B4,#0a84ff,#30d158)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>AI</h1>
         <p style={{fontSize:15,color:'rgba(255,255,255,0.5)',lineHeight:1.7,margin:'0 auto 40px',maxWidth:300}}>The clinical intelligence platform built by a physician, for physicians.</p>
         <div style={{display:'flex',flexDirection:'column',gap:12,maxWidth:360,margin:'0 auto'}}>
-          <button onClick={()=>setScreen('signin')} style={{padding:'18px 32px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:17,fontWeight:700,boxShadow:'0 8px 40px rgba(0,196,180,0.5)'}}>Enter Hospital →</button>
+          <button onClick={()=>setScreen('signin')} style={{padding:'18px 32px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:17,fontWeight:700,boxShadow:'0 8px 40px rgba(0,196,180,0.5)'}}>Enter Hospital →</button>
           <button onClick={()=>setScreen('signin')} style={{padding:'16px 32px',borderRadius:16,cursor:'pointer',background:'rgba(255,255,255,0.05)',color:'rgba(255,255,255,0.55)',fontSize:15,border:'1px solid rgba(0,196,180,0.20)'}}>Sign in with existing account</button>
         </div>
       </div>
@@ -436,17 +436,17 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
     <div style={{minHeight:'100vh',width:'100vw',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'radial-gradient(ellipse at 70% 80%, #1e3d52 0%, #162e3e 40%, #000510 100%)',fontFamily:'-apple-system,sans-serif',padding:'40px 24px'}}>
       <div style={{animation:'fadeIn 0.6s ease',width:'100%',maxWidth:420}}>
         <p style={{fontSize:13,color:'rgba(0,196,180,0.7)',letterSpacing:2,textTransform:'uppercase',marginBottom:8,fontWeight:600}}>Cliniverse AI</p>
-        <h2 style={{fontSize:36,fontWeight:800,color:'white',margin:'0 0 6px',letterSpacing:-1}}>Sign In</h2>
+        <h2 style={{fontSize:36,fontWeight:800,color:'var(--text-primary, white)',margin:'0 0 6px',letterSpacing:-1}}>Sign In</h2>
         <p style={{fontSize:14,color:'rgba(255,255,255,0.35)',marginBottom:36}}>Access your clinical dashboard</p>
         <div style={{marginBottom:14}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Email / Medical ID</label>
-          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input placeholder="doctor@hospital.com" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'var(--text-primary, white)',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
         <div style={{marginBottom:28}}>
           <label style={{fontSize:11,color:'rgba(255,255,255,0.35)',letterSpacing:1.5,textTransform:'uppercase',marginBottom:8,display:'block'}}>Password</label>
-          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
+          <input type="password" placeholder="••••••••" style={{width:'100%',padding:'16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'var(--text-primary, white)',fontSize:15,outline:'none',boxSizing:'border-box'}}/>
         </div>
-        <button onClick={()=>setScreen('app')} style={{width:'100%',padding:'17px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:16,fontWeight:700,boxShadow:'0 8px 32px rgba(0,196,180,0.4)',marginBottom:14}}>Access Hospital →</button>
+        <button onClick={()=>setScreen('app')} style={{width:'100%',padding:'17px',borderRadius:16,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:16,fontWeight:700,boxShadow:'0 8px 32px rgba(0,196,180,0.4)',marginBottom:14}}>Access Hospital →</button>
         <div style={{display:'flex',gap:10,marginBottom:24}}>
           <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Face ID 🔒</button>
           <button onClick={()=>setScreen('app')} style={{flex:1,padding:'15px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'rgba(255,255,255,0.6)',fontSize:14,cursor:'pointer'}}>Touch ID 👆</button>
@@ -488,7 +488,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
           <p style={{color:T.textSub,fontSize:13,margin:0}}>{c.sub}</p>
         </div>
         <div style={{padding:'16px 20px',maxWidth:640,margin:'0 auto',position:'relative',zIndex:1}}>
-          <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 10px',fontWeight:700}}>Vital Signs</p>
+          <p style={{color:'var(--text-secondary, rgba(238,246,250,0.65))',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 10px',fontWeight:700}}>Vital Signs</p>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:14}}>
             {[{l:'BP',v:c.vitals.bp+' mmHg',a:parseInt(c.vitals.bp)<90},{l:'HR',v:c.vitals.hr+' bpm',a:parseInt(c.vitals.hr)>120||parseInt(c.vitals.hr)<50},{l:'O2 Sat',v:c.vitals.o2+'%',a:parseInt(c.vitals.o2)<94},{l:'Temp',v:c.vitals.temp+'°C',a:parseFloat(c.vitals.temp)>38.5},{l:'RR',v:c.vitals.rr+'/min',a:parseInt(c.vitals.rr)>25},{l:'GCS',v:c.vitals.gcs+'/15',a:parseInt(c.vitals.gcs)<14}].map(v=>(
               <div key={v.l} style={{background:v.a?'rgba(255,59,48,0.15)': T.cardBg,backdropFilter:'blur(12px)',borderRadius:14,padding:'12px',border:v.a?'1.5px solid rgba(255,59,48,0.4)': `1px solid ${T.cardBorder}`}}>
@@ -503,11 +503,11 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
             <p style={{color: dark ? 'rgba(255,255,255,0.8)' : '#164e32',fontSize:13,lineHeight:1.75,margin:0}}>{c.ecg}</p>
           </div>
           <div style={{...glassCard,padding:16,marginBottom:12}}>
-            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 8px',fontWeight:700}}>Clinical Presentation</p>
+            <p style={{color:'var(--text-secondary, rgba(238,246,250,0.65))',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 8px',fontWeight:700}}>Clinical Presentation</p>
             <p style={{color:T.text,fontSize:13,lineHeight:1.8,margin:0}}>{c.presentation}</p>
           </div>
           <div style={{...glassCard,padding:16,marginBottom:14}}>
-            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Management Protocol</p>
+            <p style={{color:'var(--text-secondary, rgba(238,246,250,0.65))',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Management Protocol</p>
             {c.management.map((m,i)=>(
               <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:10}}>
                 <div style={{width:24,height:24,borderRadius:'50%',background:`${c.color}22`,border:`1.5px solid ${c.color}55`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,fontSize:11,fontWeight:800,color:c.color}}>{i+1}</div>
@@ -515,10 +515,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               </div>
             ))}
           </div>
-          <button onClick={()=>completeCase(c.xpReward)} style={{width:'100%',padding:'16px',borderRadius:18,border:'none',cursor:'pointer',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'white',fontSize:15,fontWeight:700,marginBottom:10,boxShadow:`0 6px 24px ${c.color}55`}}>✅ Complete Case +{c.xpReward} XP</button>
+          <button onClick={()=>completeCase(c.xpReward)} style={{width:'100%',padding:'16px',borderRadius:18,border:'none',cursor:'pointer',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:700,marginBottom:10,boxShadow:`0 6px 24px ${c.color}55`}}>✅ Complete Case +{c.xpReward} XP</button>
           
           {/* AI CLINICAL CONSULTANT */}
-          <button onClick={()=>{setShowAI(s=>!s);setAiHistory([]);setAiResponse('')}} style={{width:'100%',padding:'14px',borderRadius:18,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#1e3d52,#162e3e)',color:'white',fontSize:14,fontWeight:700,marginBottom:10,boxShadow:'0 6px 24px rgba(0,196,180,0.4)',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+          <button onClick={()=>{setShowAI(s=>!s);setAiHistory([]);setAiResponse('')}} style={{width:'100%',padding:'14px',borderRadius:18,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#1e3d52,#162e3e)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,marginBottom:10,boxShadow:'0 6px 24px rgba(0,196,180,0.4)',display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
             <span style={{fontSize:18}}>🤖</span> AI Clinical Consultant {showAI?'▲':'▼'}
           </button>
 
@@ -527,7 +527,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                 <div style={{width:36,height:36,borderRadius:'50%',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>🤖</div>
                 <div>
-                  <div style={{fontSize:14,fontWeight:700,color:'white'}}>Claude AI Consultant</div>
+                  <div style={{fontSize:14,fontWeight:700,color:'var(--text-primary, white)'}}>Claude AI Consultant</div>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>Ask anything about this case</div>
                 </div>
                 <div style={{marginLeft:'auto',fontSize:10,padding:'3px 10px',borderRadius:10,background:'rgba(48,209,88,0.15)',color:'#30d158',border:'1px solid rgba(48,209,88,0.3)',fontWeight:700}}>● LIVE</div>
@@ -536,7 +536,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               {/* Suggested questions */}
               {aiHistory.length===0&&(
                 <div style={{marginBottom:14}}>
-                  <div style={{fontSize:10,color:'rgba(238,246,250,0.65)',marginBottom:8,letterSpacing:1,textTransform:'uppercase'}}>Suggested Questions</div>
+                  <div style={{fontSize:10,color:'var(--text-secondary, rgba(238,246,250,0.65))',marginBottom:8,letterSpacing:1,textTransform:'uppercase'}}>Suggested Questions</div>
                   <div style={{display:'flex',flexDirection:'column',gap:6}}>
                     {[
                       `What is the first-line treatment for ${c.title}?`,
@@ -578,12 +578,12 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   onChange={e=>setAiQuestion(e.target.value)}
                   onKeyDown={e=>e.key==='Enter'&&askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%`)}
                   placeholder="Ask a clinical question..."
-                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'white',fontSize:13,outline:'none'}}
+                  style={{flex:1,padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.14)',color:'var(--text-primary, white)',fontSize:13,outline:'none'}}
                 />
                 <button
                   onClick={()=>askAI(`${c.title}: ${c.presentation}. Vitals: BP ${c.vitals.bp}, HR ${c.vitals.hr}, O2 ${c.vitals.o2}%. ECG: ${c.ecg}`)}
                   disabled={aiLoading||!aiQuestion.trim()}
-                  style={{width:46,height:46,borderRadius:14,border:'none',background:aiLoading||!aiQuestion.trim()?'rgba(0,196,180,0.20)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'white',fontSize:18,cursor:aiLoading||!aiQuestion.trim()?'not-allowed':'pointer',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}
+                  style={{width:46,height:46,borderRadius:14,border:'none',background:aiLoading||!aiQuestion.trim()?'rgba(0,196,180,0.20)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:18,cursor:aiLoading||!aiQuestion.trim()?'not-allowed':'pointer',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}
                 >→</button>
               </div>
             </div>
@@ -607,13 +607,13 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         </div>
         <div style={{padding:'16px 20px',maxWidth:640,margin:'0 auto',position:'relative',zIndex:1}}>
           <div style={{background:T.cardBg,borderRadius:18,padding:20,marginBottom:14,minHeight:150,display:'flex',alignItems:'center',justifyContent:'center',border:`1px solid ${T.cardBorder}`}}>
-            <div style={{textAlign:'center'}}><div style={{fontSize:68,marginBottom:10}}>{r.icon}</div><p style={{color:'rgba(238,246,250,0.65)',fontSize:12,margin:0}}>Interactive viewer — PRO feature</p></div>
+            <div style={{textAlign:'center'}}><div style={{fontSize:68,marginBottom:10}}>{r.icon}</div><p style={{color:'var(--text-secondary, rgba(238,246,250,0.65))',fontSize:12,margin:0}}>Interactive viewer — PRO feature</p></div>
           </div>
           <div style={{...glassCard,padding:18,marginBottom:14}}>
-            <p style={{color:'rgba(238,246,250,0.65)',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Radiologist Report</p>
+            <p style={{color:'var(--text-secondary, rgba(238,246,250,0.65))',fontSize:10,letterSpacing:2,textTransform:'uppercase',margin:'0 0 12px',fontWeight:700}}>Radiologist Report</p>
             <p style={{color:T.text,fontSize:13,lineHeight:1.9,margin:0,whiteSpace:'pre-line'}}>{r.report}</p>
           </div>
-          <button style={{width:'100%',padding:'16px',borderRadius:18,border:'none',cursor:'pointer',background:`linear-gradient(135deg,${r.color},${r.color}bb)`,color:'white',fontSize:15,fontWeight:700}}>🤖 AI Interpretation</button>
+          <button style={{width:'100%',padding:'16px',borderRadius:18,border:'none',cursor:'pointer',background:`linear-gradient(135deg,${r.color},${r.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:700}}>🤖 AI Interpretation</button>
         </div>
       </div>
     )
@@ -636,7 +636,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
         {/* Right — avatar + XP */}
         <div style={{display:'flex',alignItems:'center',gap:10,flexShrink:0}}>
           <div style={{fontSize:11,fontWeight:600,color:'#00C4B4',flexShrink:0}}>{rank.icon}{xp} XP</div>
-          <div onClick={()=>setTab('profile')} style={{width:30,height:30,borderRadius:'50%',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:13,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 10px rgba(0,196,180,0.5)'}}>👤</div>
+          <div onClick={()=>setTab('profile')} style={{width:30,height:30,borderRadius:'50%',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--text-primary, white)',fontSize:13,cursor:'pointer',flexShrink:0,boxShadow:'0 2px 10px rgba(0,196,180,0.5)'}}>👤</div>
         </div>
       </header>
 
@@ -694,7 +694,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <span style={{fontSize:22}}>{l.icon}</span>
                   <div style={{flex:1}}>
                     <div style={{fontSize:15,fontWeight:700,color:T.text}}>{l.name}</div>
-                    <div style={{fontSize:11,color:'rgba(238,246,250,0.65)',marginTop:1}}>{l.unit}</div>
+                    <div style={{fontSize:11,color:'var(--text-secondary, rgba(238,246,250,0.65))',marginTop:1}}>{l.unit}</div>
                   </div>
                 </div>
                 <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:10}}>
@@ -729,7 +729,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                   <div style={{fontSize:15,fontWeight:700,color:T.text,marginBottom:2}}>{r.title}</div>
                   <div style={{fontSize:12,color:T.textSub}}>{r.sub}</div>
                 </div>
-                <span style={{fontSize:20,color:'rgba(238,246,250,0.65)'}}>›</span>
+                <span style={{fontSize:20,color:'var(--text-secondary, rgba(238,246,250,0.65))'}}>›</span>
               </div>
             ))}
 
@@ -791,15 +791,15 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <div style={{position:'absolute',top:-60,left:'50%',transform:'translateX(-50%)',width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.3),transparent 70%)',pointerEvents:'none'}}/>
               <div style={{fontSize:64,marginBottom:12,filter:'drop-shadow(0 0 20px rgba(255,214,10,0.6))'}}>⭐</div>
               <div style={{fontSize:11,letterSpacing:3,color:'rgba(0,196,180,0.9)',fontWeight:700,textTransform:'uppercase',marginBottom:8}}>Cliniverse</div>
-              <h2 style={{fontSize:32,fontWeight:900,color:'white',margin:'0 0 8px',letterSpacing:-1}}>PRO Access</h2>
+              <h2 style={{fontSize:32,fontWeight:900,color:'var(--text-primary, white)',margin:'0 0 8px',letterSpacing:-1}}>PRO Access</h2>
               <p style={{color:'rgba(255,255,255,0.5)',fontSize:14,lineHeight:1.7,margin:'0 0 28px',maxWidth:280,marginLeft:'auto',marginRight:'auto'}}>The full virtual hospital. Train like a consultant from day one.</p>
 
               {/* Pricing Toggle */}
               <div style={{display:'flex',gap:10,marginBottom:20,justifyContent:'center'}}>
                 <div style={{background:'linear-gradient(135deg,#00C4B4,#0a84ff)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'2px solid rgba(0,196,180,0.25)',position:'relative'}}>
-                  <div style={{position:'absolute',top:-10,left:'50%',transform:'translateX(-50%)',background:'#30d158',borderRadius:10,padding:'2px 10px',fontSize:10,fontWeight:800,color:'white',whiteSpace:'nowrap'}}>MOST POPULAR</div>
+                  <div style={{position:'absolute',top:-10,left:'50%',transform:'translateX(-50%)',background:'#30d158',borderRadius:10,padding:'2px 10px',fontSize:10,fontWeight:800,color:'var(--text-primary, white)',whiteSpace:'nowrap'}}>MOST POPULAR</div>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.7)',fontWeight:600,marginBottom:4}}>Monthly</div>
-                  <div style={{fontSize:28,fontWeight:900,color:'white',lineHeight:1}}>$9.99</div>
+                  <div style={{fontSize:28,fontWeight:900,color:'var(--text-primary, white)',lineHeight:1}}>$9.99</div>
                   <div style={{fontSize:11,color:'rgba(255,255,255,0.5)',marginTop:2}}>/month</div>
                 </div>
                 <div style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:'18px 20px',flex:1,maxWidth:160,cursor:'pointer',border:'1px solid rgba(0,196,180,0.3)'}}>
@@ -811,10 +811,10 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
 
               <button
                 onClick={()=>openCheckout('https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly?embed=1&dark=1')}
-                style={{background:'linear-gradient(135deg,#00C4B4,#0a84ff)',border:'none',borderRadius:18,padding:'18px 40px',fontSize:17,fontWeight:800,color:'white',cursor:'pointer',width:'100%',boxShadow:'0 8px 40px rgba(0,196,180,0.5)',letterSpacing:-0.3}}>
+                style={{background:'linear-gradient(135deg,#00C4B4,#0a84ff)',border:'none',borderRadius:18,padding:'18px 40px',fontSize:17,fontWeight:800,color:'var(--text-primary, white)',cursor:'pointer',width:'100%',boxShadow:'0 8px 40px rgba(0,196,180,0.5)',letterSpacing:-0.3}}>
                 🚀 Upgrade to PRO — $14.99/mo
               </button>
-              <p style={{fontSize:11,color:'rgba(238,246,250,0.65)',marginTop:10}}>Cancel anytime · Secure payment via Lemon Squeezy</p>
+              <p style={{fontSize:11,color:'var(--text-secondary, rgba(238,246,250,0.65))',marginTop:10}}>Cancel anytime · Secure payment via Lemon Squeezy</p>
             </div>
 
             {/* Features Grid */}
@@ -835,7 +835,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
                     <div style={{width:38,height:38,borderRadius:12,background:`${f.color}20`,border:`1px solid ${f.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>
                       {f.icon}
                     </div>
-                    <div style={{fontSize:13,fontWeight:700,color:'white'}}>{f.title}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:'var(--text-primary, white)'}}>{f.title}</div>
                     <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{f.sub}</div>
                   </div>
                 ))}
@@ -847,7 +847,7 @@ Focus on practical clinical decision-making. Be direct and evidence-based.`,
               <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:12}}>
                 <div style={{fontSize:32}}>🏛️</div>
                 <div>
-                  <div style={{fontSize:16,fontWeight:800,color:'white'}}>Institution Plan</div>
+                  <div style={{fontSize:16,fontWeight:800,color:'var(--text-primary, white)'}}>Institution Plan</div>
                   <div style={{fontSize:12,color:'rgba(238,246,250,0.60)'}}>For hospitals & medical colleges</div>
                 </div>
                 <div style={{marginLeft:'auto',fontSize:18,fontWeight:900,color:'#00C4B4'}}>$49<span style={{fontSize:11,fontWeight:500,color:'rgba(255,255,255,0.4)'}}>/mo</span></div>

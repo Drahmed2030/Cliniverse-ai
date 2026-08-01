@@ -126,12 +126,12 @@ export default function HealthStatusHeader({ doctorName, xp, streak, liveCount =
           <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
             <div style={{width:6,height:6,borderRadius:'50%',background:'#FF453A',animation:'liveBlink 1.4s ease-in-out infinite'}}/>
             <span style={{fontSize:9,fontWeight:800,color:'#FF453A',letterSpacing:1}}>LIVE</span>
-            <span style={{fontSize:9,color:'rgba(242,248,252,0.40)',marginLeft:2}}>{live.toLocaleString()} active</span>
+            <span style={{fontSize:9,color:'var(--text-muted, rgba(242,248,252,0.40))',marginLeft:2}}>{live.toLocaleString()} active</span>
           </div>
           <div style={{fontSize:13,fontWeight:800,color:'rgba(242,248,252,0.85)',letterSpacing:-0.2}}>
             {dayName}, {dateStr}
           </div>
-          <div style={{fontSize:11,color:'rgba(242,248,252,0.45)',fontWeight:500,letterSpacing:0.5}}>
+          <div style={{fontSize:11,color:'var(--text-muted, rgba(242,248,252,0.45))',fontWeight:500,letterSpacing:0.5}}>
             {timeStr} · {isPro ? '⭐ Pro' : 'Free'}
           </div>
         </div>

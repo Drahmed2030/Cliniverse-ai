@@ -82,7 +82,7 @@ export default function STEMICase({ onBack }: { onBack: () => void }) {
             58-year-old male presented with crushing central chest pain radiating to left arm for 45 minutes. Diaphoretic, pale, and in distress. PMH: HTN, T2DM, smoker. Medications: Amlodipine, Metformin.
           </div>
         </div>
-        <button onClick={() => setStep(1)} style={{background:'#FF3B30',color:'#fff',border:'none',borderRadius:14,padding:16,fontSize:16,fontWeight:600,width:'100%',cursor:'pointer',boxShadow:'0 4px 20px #FF3B3060'}}>
+        <button onClick={() => setStep(1)} style={{background:'#FF3B30',color:'var(--text-primary, #fff)',border:'none',borderRadius:14,padding:16,fontSize:16,fontWeight:600,width:'100%',cursor:'pointer',boxShadow:'0 4px 20px #FF3B3060'}}>
           Proceed to Management →
         </button>
       </div>
@@ -130,7 +130,7 @@ toUpperCase()}.</span>
                 {!c.correct && c.id===selected && <span style={{marginLeft:8,color:'#FF3B30',fontWeight:700}}>✗ Incorrect</span>}
               </div>
             ))}
-            <div style={{background:'linear-gradient(135deg,#007AFF,#5856D6)',borderRadius:16,padding:20,textAlign:'center',color:'#fff',marginTop:8}}>
+            <div style={{background:'linear-gradient(135deg,#007AFF,#5856D6)',borderRadius:16,padding:20,textAlign:'center',color:'var(--text-primary, #fff)',marginTop:8}}>
               <div style={{fontSize:28,fontWeight:800}}>+{xpEarned} XP</div>
               <div style={{fontSize:13,opacity:0.85,marginTop:4}}>{choices.find(c=>c.id===selected)?.correct ? 'Excellent clinical decision!' : 'Keep practicing — review the guidelines'}</div>
             </div>
