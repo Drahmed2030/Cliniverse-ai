@@ -465,6 +465,10 @@ export default function ProfilePage({
   const handleThemeChange = useCallback((id: ThemeId) => {
     setTheme(id)
     applyTheme(id)
+    // Brief flash to signal theme applied globally
+    setTimeout(() => {
+      window.dispatchEvent(new Event('cliniverse-theme-applied'))
+    }, 100)
   }, [])
 
   const rank     = [...RANKS].reverse().find(r => xp >= r.xpNeeded) || RANKS[0]

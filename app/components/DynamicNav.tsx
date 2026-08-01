@@ -52,7 +52,7 @@ const NAV_TABS = [
     svg: (active: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M2 12h4l3-7 4 14 3-7h6"
-          stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'}
+          stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'}
           strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
@@ -62,10 +62,10 @@ const NAV_TABS = [
     label: 'TOOLS',
     svg: (active: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="3"  y="3"  width="8" height="8" rx="2" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
-        <rect x="13" y="3"  width="8" height="8" rx="2" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
-        <rect x="3"  y="13" width="8" height="8" rx="2" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
-        <rect x="13" y="13" width="8" height="8" rx="2" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
+        <rect x="3"  y="3"  width="8" height="8" rx="2" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
+        <rect x="13" y="3"  width="8" height="8" rx="2" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
+        <rect x="3"  y="13" width="8" height="8" rx="2" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
+        <rect x="13" y="13" width="8" height="8" rx="2" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
       </svg>
     ),
   },
@@ -75,9 +75,9 @@ const NAV_TABS = [
     svg: (active: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M3 9l9-6 9 6v11a1 1 0 01-1 1H4a1 1 0 01-1-1V9z"
-          stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
+          stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
         <path d="M9 22V12h6v10"
-          stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8" strokeLinecap="round"/>
+          stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -86,11 +86,11 @@ const NAV_TABS = [
     label: 'NET',
     svg: (active: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="5"  r="2.5" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
-        <circle cx="5"  cy="19" r="2.5" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
-        <circle cx="19" cy="19" r="2.5" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
+        <circle cx="12" cy="5"  r="2.5" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
+        <circle cx="5"  cy="19" r="2.5" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
+        <circle cx="19" cy="19" r="2.5" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
         <path d="M12 7.5L5 16.5M12 7.5L19 16.5M5 19h14"
-          stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.5" strokeLinecap="round"/>
+          stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -99,9 +99,9 @@ const NAV_TABS = [
     label: 'ME',
     svg: (active: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="8" r="4" stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8"/>
+        <circle cx="12" cy="8" r="4" stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8"/>
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
-          stroke={active ? '#00C8B8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.8" strokeLinecap="round"/>
+          stroke={active ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))'} strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     ),
   },
@@ -362,12 +362,12 @@ export default function DynamicNav({
         zIndex:200, width:'calc(100% - 28px)', maxWidth:460, fontFamily:F,
       }}>
         <div style={{
-          background:'rgba(255,255,255,0.04)',
+          background:'var(--nav-bg, rgba(255,255,255,0.04))',
           backdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
           WebkitBackdropFilter:'blur(40px) saturate(180%) brightness(1.1)',
           borderRadius:32,
-          border:'1px solid rgba(255,255,255,0.12)',
-          boxShadow:'0 8px 40px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(255,255,255,0.05)',
+          border:'1px solid rgba(128,128,128,0.15)',
+          boxShadow:'0 8px 40px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.15)',
           padding:'10px 12px',
           display:'flex', alignItems:'center', justifyContent:'space-between',
         }}>
@@ -382,7 +382,7 @@ export default function DynamicNav({
               {t.svg(tab === t.id)}
               <span style={{
                 fontSize:7.5, fontWeight: tab===t.id ? 800 : 600,
-                color: tab===t.id ? '#00C8B8' : 'rgba(255,255,255,0.35)',
+                color: tab===t.id ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))',
                 letterSpacing:0.8,
               }}>{t.label}</span>
             </button>
@@ -437,7 +437,7 @@ export default function DynamicNav({
               {t.svg(tab === t.id)}
               <span style={{
                 fontSize:7.5, fontWeight: tab===t.id ? 800 : 600,
-                color: tab===t.id ? '#00C8B8' : 'rgba(255,255,255,0.35)',
+                color: tab===t.id ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))',
                 letterSpacing:0.8,
               }}>{t.label}</span>
             </button>
@@ -452,7 +452,7 @@ export default function DynamicNav({
             {profileTab.svg(tab === 'profile')}
             <span style={{
               fontSize:7.5, fontWeight: tab==='profile' ? 800 : 600,
-              color: tab==='profile' ? '#00C8B8' : 'rgba(255,255,255,0.35)',
+              color: tab==='profile' ? 'var(--accent, #00C8B8)' : 'var(--text-muted, rgba(255,255,255,0.35))',
               letterSpacing:0.8,
             }}>ME</span>
           </button>
