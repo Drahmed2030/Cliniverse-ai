@@ -6,6 +6,8 @@ import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
 import ProfilePage from './components/ProfilePage'
+import dynamic from 'next/dynamic'
+const DynamicNav = dynamic(() => import('./components/DynamicNav'), { ssr:false })
 import ToolsPage from './components/ToolsPage'
 
 const EcgChallenge = dynamic(() => import('./components/EcgChallenge'), { ssr: false })
