@@ -1,91 +1,205 @@
-/* ═══════════════════════════════════════════════
-   CLINIVERSE AI — Global Theme Variables
-   Add this to the TOP of globals.css
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   CLINIVERSE AI — Unified Theme System v3
+   Single :root — No conflicts — CSS Variables only
+   ═══════════════════════════════════════════════════════ */
 
 :root {
-  /* Default: Cyber Clinical */
-  --bg-primary:     linear-gradient(160deg,#080e1a,#0d1828,#091420);
-  --bg-card:        rgba(255,255,255,0.04);
-  --bg-card-hover:  rgba(255,255,255,0.07);
-  --border-card:    rgba(255,255,255,0.09);
-  --border-accent:  rgba(0,200,184,0.30);
-  --text-primary:   #F2F8FC;
-  --text-secondary: rgba(242,248,252,0.55);
-  --text-muted:     rgba(242,248,252,0.30);
-  --accent:         #00C8B8;
-  --accent-glow:    rgba(0,200,184,0.20);
-  --aurora:         radial-gradient(ellipse at 50% 0%,rgba(0,200,184,0.10),rgba(26,140,255,0.06) 50%,transparent 75%);
-  --nav-bg:         rgba(255,255,255,0.04);
-  --nav-blur:       blur(40px) saturate(180%) brightness(1.0);
-  --tab-active:     rgba(0,200,184,0.14);
-  --tab-text:       #00C8B8;
-  --shadow:         0 8px 40px rgba(0,0,0,0.40);
+  /* ── THEME: Dark (default) ── */
+  --bg-base:         #0d1828;
+  --bg-deep:         #080e1a;
+  --bg-card:         rgba(255,255,255,0.04);
+  --bg-card-2:       rgba(255,255,255,0.07);
+  --bg-glass:        rgba(13,24,40,0.85);
+  --bg-glass-2:      rgba(255,255,255,0.06);
+
+  /* ── ACCENT COLORS ── */
+  --accent:          #00C8B8;
+  --accent-glow:     rgba(0,200,184,0.20);
+  --accent-border:   rgba(0,200,184,0.30);
+
+  --gold:            #D4A847;
+  --gold-light:      #E8C060;
+  --gold-glow:       rgba(212,168,71,0.22);
+  --gold-border:     rgba(212,168,71,0.32);
+
+  --teal:            #00C8B8;
+  --teal-light:      #00DFD0;
+  --teal-glow:       rgba(0,200,184,0.20);
+  --teal-border:     rgba(0,200,184,0.30);
+
+  --emerald:         #30D158;
+  --emerald-glow:    rgba(48,209,88,0.20);
+
+  --amber:           #FF9F0A;
+  --amber-glow:      rgba(255,159,10,0.20);
+
+  --blue:            #1A8CFF;
+  --blue-glow:       rgba(26,140,255,0.20);
+
+  --purple:          #BF5AF2;
+  --purple-glow:     rgba(191,90,242,0.20);
+
+  --red:             #FF453A;
+  --red-glow:        rgba(255,69,58,0.20);
+
+  --danger:          #FF453A;
+  --danger-glow:     rgba(255,69,58,0.20);
+  --success:         #30D158;
+  --success-glow:    rgba(48,209,88,0.20);
+  --warning:         #FF9F0A;
+  --warning-glow:    rgba(255,159,10,0.20);
+
+  /* ── TEXT ── */
+  --text:            #F2F8FC;
+  --text-primary:    #F2F8FC;
+  --text-secondary:  rgba(242,248,252,0.60);
+  --text-dim:        rgba(242,248,252,0.55);
+  --text-muted:      rgba(242,248,252,0.35);
+
+  /* ── BORDERS ── */
+  --border:          rgba(255,255,255,0.09);
+  --border-card:     rgba(255,255,255,0.09);
+  --border-accent:   rgba(0,200,184,0.30);
+  --border-gold:     rgba(212,168,71,0.32);
+  --border-teal:     rgba(0,200,184,0.30);
+
+  /* ── NAV ── */
+  --nav-bg:          rgba(255,255,255,0.04);
+  --nav-border:      rgba(255,255,255,0.10);
+  --nav-active:      #00C8B8;
+  --tab-active:      rgba(0,200,184,0.14);
+  --tab-text:        #00C8B8;
+
+  /* ── SHADOWS ── */
+  --shadow:          0 8px 40px rgba(0,0,0,0.40);
+  --shadow-card:     0 8px 32px rgba(0,0,0,0.30);
+  --shadow-gold:     0 0 28px rgba(212,168,71,0.24);
+  --shadow-teal:     0 0 28px rgba(0,200,184,0.22);
+
+  /* ── RADII ── */
+  --radius-sm:       10px;
+  --radius-md:       14px;
+  --radius-lg:       20px;
+  --radius-xl:       28px;
+
+  /* ── AURORA ── */
+  --aurora: radial-gradient(ellipse at 50% 0%,rgba(0,200,184,0.10),rgba(26,140,255,0.06) 50%,transparent 75%);
 }
 
-/* Smooth theme transitions */
-*, *::before, *::after {
-  transition-property: background, background-color, border-color, color, box-shadow;
-  transition-duration: 0.35s;
-  transition-timing-function: ease;
+/* ═══════════════════════════════════════════════════════
+   THEME: Pure Hospital (Light)
+   ═══════════════════════════════════════════════════════ */
+body[data-theme="hospital"] {
+  --bg-base:         #EAF4F8;
+  --bg-deep:         #DFF0F6;
+  --bg-card:         rgba(255,255,255,0.85);
+  --bg-card-2:       rgba(255,255,255,0.95);
+  --bg-glass:        rgba(240,250,255,0.90);
+  --bg-glass-2:      rgba(255,255,255,0.70);
+
+  --accent:          #007A6E;
+  --accent-glow:     rgba(0,122,110,0.15);
+  --accent-border:   rgba(0,122,110,0.30);
+  --teal:            #007A6E;
+  --teal-light:      #00A896;
+  --teal-glow:       rgba(0,122,110,0.15);
+  --teal-border:     rgba(0,122,110,0.25);
+
+  --text:            #071828;
+  --text-primary:    #071828;
+  --text-secondary:  rgba(7,24,40,0.68);
+  --text-dim:        rgba(7,24,40,0.65);
+  --text-muted:      rgba(7,24,40,0.42);
+
+  --border:          rgba(0,100,130,0.12);
+  --border-card:     rgba(0,100,130,0.12);
+  --border-accent:   rgba(0,122,110,0.30);
+
+  --nav-bg:          rgba(220,242,250,0.82);
+  --nav-border:      rgba(0,122,110,0.18);
+  --nav-active:      #007A6E;
+  --tab-active:      rgba(0,122,110,0.12);
+  --tab-text:        #007A6E;
+
+  --shadow:          0 8px 40px rgba(0,60,100,0.12);
+  --shadow-card:     0 4px 20px rgba(0,60,100,0.10);
+
+  --aurora: radial-gradient(ellipse at 50% 0%,rgba(0,122,110,0.07),rgba(0,90,150,0.04) 50%,transparent 75%);
 }
 
-/* Exception: don't slow down transforms/opacity */
-.no-theme-transition,
-button,
-[style*="animation"],
-[style*="transform"] {
-  transition-property: transform, opacity, filter;
-}
-:root {
-  --bg-base:        #2a4a60;
-  --bg-deep:        #1e3d52;
-  --bg-card:        #243f52;
-  --bg-card-2:      #2a4a60;
-  --bg-glass:       rgba(36, 63, 82, 0.80);
-  --bg-glass-2:     rgba(255, 255, 255, 0.06);
-  --gold:           #D4A847;
-  --gold-light:     #E8C060;
-  --gold-glow:      rgba(212, 168, 71, 0.22);
-  --gold-border:    rgba(212, 168, 71, 0.32);
-  --teal:           #00C4B4;
-  --teal-light:     #00DFD0;
-  --teal-glow:      rgba(0, 196, 180, 0.20);
-  --teal-border:    rgba(0, 196, 180, 0.30);
-  --amber:          #E8821A;
-  --amber-glow:     rgba(232, 130, 26, 0.20);
-  --blue:           #5AB4D6;
-  --blue-glow:      rgba(90, 180, 214, 0.20);
-  --purple:         #A07EE8;
-  --purple-glow:    rgba(160, 126, 232, 0.20);
-  --green:          #3ED6A0;
-  --green-glow:     rgba(62, 214, 160, 0.20);
-  --red:            #E06060;
-  --red-glow:       rgba(224, 96, 96, 0.18);
-  --danger:         #E06060;
-  --danger-glow:    rgba(224, 96, 96, 0.20);
-  --success:        #3ED6A0;
-  --success-glow:   rgba(62, 214, 160, 0.20);
-  --warning:        #E8821A;
-  --warning-glow:   rgba(232, 130, 26, 0.20);
-  --text:           #EEF6FA;
-  --text-dim:       rgba(238, 246, 250, 0.65);
-  --text-muted:     rgba(238, 246, 250, 0.40);
-  --nav-bg:         rgba(22, 46, 62, 0.97);
-  --nav-border:     rgba(0, 196, 180, 0.30);
-  --nav-active:     #00C4B4;
-  --border:         rgba(255, 255, 255, 0.10);
-  --border-gold:    rgba(212, 168, 71, 0.32);
-  --border-teal:    rgba(0, 196, 180, 0.30);
-  --radius-sm:      10px;
-  --radius-md:      14px;
-  --radius-lg:      20px;
-  --radius-xl:      28px;
-  --shadow-gold:    0 0 28px rgba(212, 168, 71, 0.24);
-  --shadow-teal:    0 0 28px rgba(0, 196, 180, 0.22);
-  --shadow-card:    0 8px 32px rgba(0, 0, 0, 0.25);
+/* ═══════════════════════════════════════════════════════
+   THEME: Adaptive Ambient
+   ═══════════════════════════════════════════════════════ */
+body[data-theme="ambient"] {
+  --bg-base:         #0e1a2d;
+  --bg-deep:         #0c1424;
+  --bg-card:         rgba(255,255,255,0.05);
+  --bg-card-2:       rgba(255,255,255,0.08);
+  --bg-glass:        rgba(14,26,45,0.88);
+  --bg-glass-2:      rgba(255,255,255,0.06);
+
+  --accent:          #BF5AF2;
+  --accent-glow:     rgba(191,90,242,0.20);
+  --accent-border:   rgba(191,90,242,0.30);
+
+  --text:            #F5F0FF;
+  --text-primary:    #F5F0FF;
+  --text-secondary:  rgba(245,240,255,0.60);
+  --text-dim:        rgba(245,240,255,0.55);
+  --text-muted:      rgba(245,240,255,0.35);
+
+  --border:          rgba(191,90,242,0.10);
+  --border-card:     rgba(191,90,242,0.10);
+  --border-accent:   rgba(191,90,242,0.30);
+
+  --nav-bg:          rgba(255,255,255,0.04);
+  --nav-border:      rgba(191,90,242,0.18);
+  --nav-active:      #BF5AF2;
+  --tab-active:      rgba(191,90,242,0.14);
+  --tab-text:        #BF5AF2;
+
+  --shadow:          0 8px 40px rgba(80,0,120,0.30);
+  --shadow-card:     0 4px 20px rgba(80,0,120,0.20);
+
+  --aurora: radial-gradient(ellipse at 30% 0%,rgba(191,90,242,0.10),rgba(255,159,10,0.05) 50%,transparent 75%);
 }
 
+/* ═══════════════════════════════════════════════════════
+   GLOBAL BODY BACKGROUND — responds to data-theme
+   ═══════════════════════════════════════════════════════ */
+html, body {
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse at 20% 15%, var(--teal-glow, rgba(0,200,184,0.10)) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 85%, var(--gold-glow, rgba(212,168,71,0.08)) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.3s ease;
+}
+
+/* Hospital body override */
+body[data-theme="hospital"] {
+  background-color: #EAF4F8;
+  background-image:
+    radial-gradient(ellipse at 20% 15%, rgba(0,122,110,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 85%, rgba(0,90,150,0.05) 0%, transparent 50%);
+}
+
+/* Ambient body override */
+body[data-theme="ambient"] {
+  background-color: #0e1a2d;
+  background-image:
+    radial-gradient(ellipse at 25% 10%, rgba(191,90,242,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 90%, rgba(255,159,10,0.06) 0%, transparent 50%);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SMOOTH THEME TRANSITIONS
+   ═══════════════════════════════════════════════════════ */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -93,23 +207,36 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
-  background: var(--bg-base);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
-               'Segoe UI', system-ui, sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background-image:
-    radial-gradient(ellipse at 15% 15%, rgba(0,196,180,0.10) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 85%, rgba(212,168,71,0.08) 0%, transparent 55%);
-  background-attachment: fixed;
-  background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(0,196,180,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(212,168,71,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(42,74,96,0.80) 0%, transparent 100%);
-}
-
+/* ═══════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
 ::-webkit-scrollbar-thumb { background: var(--teal-border); border-radius: 4px; }
+
+/* ═══════════════════════════════════════════════════════
+   DYNAMIC NAV — theme-aware
+   ═══════════════════════════════════════════════════════ */
+body[data-theme="hospital"] .cliniverse-nav {
+  background: rgba(220,242,250,0.82) !important;
+  border-color: rgba(0,122,110,0.18) !important;
+}
+
+body[data-theme="hospital"] .cliniverse-nav svg path,
+body[data-theme="hospital"] .cliniverse-nav svg polyline,
+body[data-theme="hospital"] .cliniverse-nav svg circle,
+body[data-theme="hospital"] .cliniverse-nav svg rect {
+  stroke: rgba(7,24,40,0.35);
+}
+
+body[data-theme="hospital"] .cliniverse-nav [data-active="true"] svg path,
+body[data-theme="hospital"] .cliniverse-nav [data-active="true"] svg polyline {
+  stroke: #007A6E;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SAFE AREA
+   ═══════════════════════════════════════════════════════ */
+.safe-bottom {
+  padding-bottom: max(140px, calc(140px + env(safe-area-inset-bottom)));
+}
