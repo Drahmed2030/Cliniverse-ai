@@ -166,9 +166,9 @@ export default function HubPage({
     return () => clearInterval(t)
   }, [])
 
-  if (showScribe)    return <AmbientScribe onXP={onXP} onClose={() => setShowScribe(false)}/>
-  if (showAcademy)   return <PulseAcademy onXP={onXP} onClose={() => setShowAcademy(false)}/>
-  if (showLiveCases) return <LiveCaseViewer onXP={onXP} onClose={() => setShowLiveCases(false)}/>
+  if (showScribe)    return <AmbientScribe onXP={onXP}/>
+  if (showAcademy)   return <PulseAcademy onXP={onXP}/>
+  if (showLiveCases) return <LiveCaseViewer onXP={onXP}/>
 
   const quickTools = [
     { icon:'🎙️', label:'AI Scribe',  color:D.teal,   action: () => setShowScribe(true) },
