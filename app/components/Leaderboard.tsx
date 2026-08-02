@@ -95,7 +95,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
 
       {/* Header */}
       <div style={{ marginBottom: 16 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, color: '#ffffff', margin: '0 0 4px', letterSpacing: -0.5 }}>🏆 Global Leaderboard</h2>
+        <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary, #0A1628)', margin: '0 0 4px', letterSpacing: -0.5 }}>🏆 Global Leaderboard</h2>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: 0 }}>Top physicians worldwide</p>
       </div>
 
@@ -106,8 +106,8 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
             {getRankIcon(currentRank)}
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'white', marginBottom: 2 }}>Your Position</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{currentRank} · {currentXP} XP</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary, #0A1628)', marginBottom: 2 }}>Your Position</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted, rgba(10,22,40,0.40))' }}>{currentRank} · {currentXP} XP</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: 28, fontWeight: 900, color: '#bf5af2', lineHeight: 1 }}>#{myRank || '—'}</div>
@@ -135,7 +135,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
               <div key={idx} style={{ flex: 1, background: p.bg, backdropFilter: 'blur(16px)', borderRadius: isFirst ? 20 : 16, padding: isFirst ? '18px 10px 14px' : '14px 10px 12px', border: p.border, textAlign: 'center', boxShadow: p.shadow }}>
                 <div style={{ fontSize: isFirst ? 32 : 28, marginBottom: 6 }}>{getMedal(idx)}</div>
                 <div style={{ fontSize: isFirst ? 26 : 22 }}>{getRankIcon(leaders[idx]?.rank)}</div>
-                <div style={{ fontSize: isFirst ? 12 : 11, fontWeight: 800, color: 'rgba(255,255,255,0.9)', marginTop: 6, lineHeight: 1.3 }}>{leaders[idx]?.name?.split(' ').slice(-1)[0]}</div>
+                <div style={{ fontSize: isFirst ? 12 : 11, fontWeight: 800, color: 'var(--text-primary, #0A1628)', marginTop: 6, lineHeight: 1.3 }}>{leaders[idx]?.name?.split(' ').slice(-1)[0]}</div>
                 <div style={{ fontSize: isFirst ? 13 : 12, fontWeight: 900, color: idx===0?'#ffd60a':idx===1?'#c0c0c0':'#cd7f32', marginTop: 4 }}>{leaders[idx]?.xp} XP</div>
               </div>
             )
@@ -149,7 +149,7 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
           const p = podiumGlow(i)
           return (
             <div key={leader.id} style={{ background: p.bg, backdropFilter: 'blur(12px)', borderRadius: 16, padding: '12px 14px', border: p.border, display: 'flex', alignItems: 'center', gap: 12, boxShadow: p.shadow }}>
-              <div style={{ width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: i < 3 ? 22 : 12, fontWeight: 800, color: 'rgba(255,255,255,0.5)' }}>
+              <div style={{ width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: i < 3 ? 22 : 12, fontWeight: 800, color: 'var(--text-muted, rgba(10,22,40,0.40))' }}>
                 {getMedal(i)}
               </div>
               <div style={{ width: 40, height: 40, borderRadius: '50%', background: `linear-gradient(135deg,${getRankColor(leader.rank)},${getRankColor(leader.rank)}88)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0, boxShadow: `0 4px 12px ${getRankColor(leader.rank)}44` }}>
@@ -157,11 +157,11 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.92)', letterSpacing: -0.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{leader.name}</div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 1 }}>{leader.specialty} · {leader.cases_completed} cases</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted, rgba(10,22,40,0.40))', marginTop: 1 }}>{leader.specialty} · {leader.cases_completed} cases</div>
               </div>
               <div style={{ textAlign: 'right', flexShrink: 0 }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: getRankColor(leader.rank) }}>{leader.xp.toLocaleString()}</div>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', fontWeight: 700, letterSpacing: 0.3 }}>XP</div>
+                <div style={{ fontSize: 9, color: 'var(--text-muted, rgba(10,22,40,0.40))', fontWeight: 700, letterSpacing: 0.3 }}>XP</div>
               </div>
             </div>
           )
@@ -170,10 +170,10 @@ export default function Leaderboard({ currentXP = 0, currentRank = 'Clinical Cle
 
       {/* Join message */}
       <div style={{ background: 'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(10,132,255,0.08))', backdropFilter: 'blur(12px)', borderRadius: 16, padding: 16, marginTop: 16, border: '1px solid rgba(139,92,246,0.3)', textAlign: 'center' }}>
-        <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', fontWeight: 600, lineHeight: 1.6 }}>
+        <div style={{ fontSize: 13, color: 'var(--text-secondary, rgba(10,22,40,0.65))', fontWeight: 600, lineHeight: 1.6 }}>
           Complete cases to earn XP and climb the global leaderboard! 🚀
         </div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 6 }}>Updated in real-time · Powered by Supabase</div>
+        <div style={{ fontSize: 11, color: 'var(--text-muted, rgba(10,22,40,0.40))', marginTop: 6 }}>Updated in real-time · Powered by Supabase</div>
       </div>
 
       <style>{`

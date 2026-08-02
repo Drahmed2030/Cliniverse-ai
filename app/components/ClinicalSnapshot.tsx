@@ -34,7 +34,7 @@ export default function ClinicalSnapshot({ onCaseClick }: { onCaseClick?: () => 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#ff6b6b', boxShadow: '0 0 8px #ff6b6b' }}/>
-          <span style={{ fontSize: 11, fontWeight: 800, color: '#ffffff', letterSpacing: 1.5, textTransform: 'uppercase' as const, fontFamily: F }}>Live Clinical Feed</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: 'var(--text-primary, #0A1628)', letterSpacing: 1.5, textTransform: 'uppercase' as const, fontFamily: F }}>Live Clinical Feed</span>
         </div>
         <span style={{ fontSize: 10, color: 'rgba(148,163,184,0.5)', fontFamily: F }}>{CASES.length} active</span>
       </div>
@@ -65,7 +65,7 @@ export default function ClinicalSnapshot({ onCaseClick }: { onCaseClick?: () => 
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                 <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: c.color + '15', border: '1px solid ' + c.color + '25', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{c.icon}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 800, color: '#ffffff', marginBottom: 3, lineHeight: 1.2, fontFamily: F }}>{c.title}</div>
+                  <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary, #0A1628)', marginBottom: 3, lineHeight: 1.2, fontFamily: F }}>{c.title}</div>
                   <div style={{ fontSize: 10, color: 'rgba(148,163,184,0.6)', lineHeight: 1.3, fontFamily: F }}>{c.detail}</div>
                 </div>
               </div>

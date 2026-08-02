@@ -175,7 +175,7 @@ function LectureDetail({ lecture, onBack }: { lecture: any, onBack: () => void }
           <div style={{ fontSize: 10, color: T.purple, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12 }}>🎙️ AI AUDIO LECTURE</div>
 
           {!audioUrl ? (
-            <button onClick={generateAudio} disabled={generating} style={{ width: '100%', padding: '14px', borderRadius: 16, border: 'none', background: generating ? 'rgba(175,82,222,0.2)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: '#fff', fontSize: 14, fontWeight: 800, cursor: generating ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <button onClick={generateAudio} disabled={generating} style={{ width: '100%', padding: '14px', borderRadius: 16, border: 'none', background: generating ? 'rgba(175,82,222,0.2)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: 'var(--text-primary, #0A1628)', fontSize: 14, fontWeight: 800, cursor: generating ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
               {generating
                 ? <><div style={{ width: 18, height: 18, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Generating audio...</>
                 : '🎙️ Generate Audio Lecture'}
@@ -184,7 +184,7 @@ function LectureDetail({ lecture, onBack }: { lecture: any, onBack: () => void }
             <div>
               <audio ref={audioRef} src={audioUrl} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} style={{ display: 'none' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button onClick={() => { playing ? audioRef.current?.pause() : audioRef.current?.play() }} style={{ width: 52, height: 52, borderRadius: '50%', border: 'none', background: 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: '#fff', fontSize: 22, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px ' + T.purple + '35', flexShrink: 0 }}>
+                <button onClick={() => { playing ? audioRef.current?.pause() : audioRef.current?.play() }} style={{ width: 52, height: 52, borderRadius: '50%', border: 'none', background: 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: 'var(--text-primary, #0A1628)', fontSize: 22, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px ' + T.purple + '35', flexShrink: 0 }}>
                   {playing ? '⏸' : '▶️'}
                 </button>
                 <div style={{ flex: 1 }}>
@@ -241,7 +241,7 @@ function LectureDetail({ lecture, onBack }: { lecture: any, onBack: () => void }
 
           <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
             <input value={question} onChange={e => setQuestion(e.target.value)} onKeyDown={e => e.key === 'Enter' && askQuestion()} placeholder={lang === 'ar' ? 'اكتب سؤالك...' : 'Ask a question...'} style={{ flex: 1, padding: '11px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F }} />
-            <button onClick={askQuestion} disabled={answering || !question.trim()} style={{ padding: '11px 18px', borderRadius: 14, border: 'none', background: !question.trim() ? 'rgba(0,122,255,0.15)' : 'linear-gradient(135deg,' + T.blue + ',' + T.teal + ')', color: '#fff', fontSize: 13, fontWeight: 700, cursor: !question.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
+            <button onClick={askQuestion} disabled={answering || !question.trim()} style={{ padding: '11px 18px', borderRadius: 14, border: 'none', background: !question.trim() ? 'rgba(0,122,255,0.15)' : 'linear-gradient(135deg,' + T.blue + ',' + T.teal + ')', color: 'var(--text-primary, #0A1628)', fontSize: 13, fontWeight: 700, cursor: !question.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
               {answering ? '...' : '→'}
             </button>
           </div>

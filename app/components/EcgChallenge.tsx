@@ -277,7 +277,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
             <p style={{ fontSize: 13, color: '#1f2937', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>{current.explain}</p>
           </div>
 
-          <button onClick={next} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background:'var(--bg-base,#F7F9FC)', color: 'white', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,196,180,0.25)' }}>
+          <button onClick={next} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background:'var(--bg-base,#F7F9FC)', color: 'var(--text-primary, #0A1628)', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,196,180,0.25)' }}>
             {caseIdx < ECG_CASES.length - 1 ? 'Next ECG →' : 'Restart Challenge 🔄'}
           </button>
         </div>

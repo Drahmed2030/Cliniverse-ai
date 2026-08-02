@@ -311,7 +311,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
     <div style={{ fontFamily: '-apple-system, sans-serif', paddingBottom: 20 }}>
       <div style={{ marginBottom: 14, display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
         <div>
-          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', margin: '0 0 2px', letterSpacing: -0.5 }}>Code Blue</h2>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary, #0A1628)', margin: '0 0 2px', letterSpacing: -0.5 }}>Code Blue</h2>
           <p style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', margin: 0 }}>Real-time emergency · 10 scenarios</p>
         </div>
         <div style={{ textAlign:'right' }}>
