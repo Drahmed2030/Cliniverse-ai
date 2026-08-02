@@ -482,6 +482,24 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
     return () => window.removeEventListener('cliniverse-research-update', handler)
   }, [])
 
+  // WARD→TOOLS Integration — broadcast active patient specialty
+  useEffect(() => {
+    const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
+    if (criticalPatients.length > 0) {
+      localStorage.setItem('cliniverse-tools-suggest', JSON.stringify({
+        specialty: criticalPatients[0].specialty,
+        diagnosis: criticalPatients[0].diagnosis,
+        tools: criticalPatients[0].specialty === 'Cardiology'
+          ? ['ECG Challenge', 'TIMI Score', 'Cardiac Surgery']
+          : criticalPatients[0].specialty === 'Respiratory'
+          ? ['ABG Interpreter', 'BLS/ACLS', 'Critical Care']
+          : ['Risk Calculator', 'Clinical Memory'],
+        timestamp: Date.now()
+      }))
+      window.dispatchEvent(new CustomEvent('cliniverse-tools-update'))
+    }
+  }, [])
+
   // WARD→PULSE Integration — broadcast critical patients
   useEffect(() => {
     const criticalPatients = PATIENTS.filter(p => p.status === 'critical')

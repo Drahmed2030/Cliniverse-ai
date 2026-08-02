@@ -362,6 +362,19 @@ function SectionDetail({ section, onBack, onTool }: { section:typeof SECTIONS[0]
 export default function ToolsPage({ onXP }: { onXP: (n:number) => void }) {
   const [view, setView] = useState<'list'|'section'|'tool'>('list')
   const [activeSection, setActiveSection] = useState<typeof SECTIONS[0]|null>(null)
+  const [toolsSuggest, setToolsSuggest] = useState<{specialty:string,diagnosis:string,tools:string[]}|null>(null)
+
+  // WARD→TOOLS Integration
+  useEffect(() => {
+    const saved = localStorage.getItem('cliniverse-tools-suggest')
+    if (saved) { try { setToolsSuggest(JSON.parse(saved)) } catch {} }
+    const handler = () => {
+      const data = localStorage.getItem('cliniverse-tools-suggest')
+      if (data) { try { setToolsSuggest(JSON.parse(data)) } catch {} }
+    }
+    window.addEventListener('cliniverse-tools-update', handler)
+    return () => window.removeEventListener('cliniverse-tools-update', handler)
+  }, [])
   const [activeTool, setActiveTool] = useState<string>('')
 
   const openSection = (s: typeof SECTIONS[0]) => {
@@ -408,6 +421,38 @@ export default function ToolsPage({ onXP }: { onXP: (n:number) => void }) {
         <div style={{ fontSize:22, fontWeight:900, color:T.text, letterSpacing:-0.5, lineHeight:1.1 }}>
           <span style={{ color:T.text }}>Clinical</span>{' '}
           <span style={{ color:T.teal }}>Tools</span>
+        {/* ── WARD→TOOLS Suggest Banner ── */}
+        {toolsSuggest && (
+          <div style={{
+            background:'rgba(26,140,255,0.08)',
+            border:'1px solid rgba(26,140,255,0.25)',
+            borderRadius:14, padding:'10px 14px',
+            marginBottom:12, display:'flex', alignItems:'center', gap:10,
+          }}>
+            <span style={{fontSize:18}}>🏥</span>
+            <div style={{flex:1}}>
+              <div style={{fontSize:9,color:'#1A8CFF',fontWeight:800,letterSpacing:1,marginBottom:2}}>
+                WARD SUGGESTS — {toolsSuggest.specialty.toUpperCase()}
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:'var(--text-primary,#F2F8FC)',marginBottom:3}}>
+                {toolsSuggest.diagnosis}
+              </div>
+              <div style={{display:'flex',gap:6,flexWrap:'wrap' as const}}>
+                {toolsSuggest.tools.map((tool:string) => (
+                  <span key={tool} style={{
+                    fontSize:9,fontWeight:700,
+                    color:'#1A8CFF',
+                    background:'rgba(26,140,255,0.12)',
+                    border:'1px solid rgba(26,140,255,0.25)',
+                    borderRadius:8, padding:'2px 8px',
+                  }}>⚡ {tool}</span>
+                ))}
+              </div>
+            </div>
+            <div onClick={()=>setToolsSuggest(null)} style={{fontSize:16,color:'var(--text-muted,rgba(242,248,252,0.45))',cursor:'pointer',padding:'4px'}}>✕</div>
+          </div>
+        )}
+
         </div>
         <div style={{ fontSize:12, color:T.sub, marginTop:4 }}>
           6 categories · 24+ tools
