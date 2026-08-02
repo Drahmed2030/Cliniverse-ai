@@ -223,6 +223,12 @@ export default function Home() {
 
   // ── DATA ──────────────────────────────────────────────────────────────
   const criticalCases = [
+    { id:'stemi', icon:'🫀', title:'Anterior STEMI', sub:'LAD occlusion · Interactive SVG', color:'#FF6B6B', free:true, xpReward:50,
+      vitals:{bp:'88/58',hr:'118',o2:'91',temp:'36.8',rr:'26',gcs:'15'},
+      ecg:'ST elevation 3mm V1-V4. Anterior STEMI. LAD occlusion suspected.',
+      presentation:'52M, crushing chest pain radiating to left arm × 45 minutes. Diaphoretic. BP 88/58 mmHg.',
+      management:['Aspirin 300mg + Ticagrelor 180mg stat','Activate Cath Lab — PCI within 90 min','Heparin 5000 units IV bolus','O2 if SpO2 < 94%','Morphine 2.5mg IV for pain if needed'],
+    },
     { id:'septic_shock', icon:'🦠', title:'Septic Shock',         sub:'Vasopressors · Bundle',    color:'#FF6B6B', free:true,  xpReward:30,
       vitals:{bp:'72/40',hr:'128',o2:'88',temp:'39.1',rr:'28',gcs:'13'},
       ecg:'Sinus tachycardia 128 bpm. No ST changes. QTc 440ms.',
