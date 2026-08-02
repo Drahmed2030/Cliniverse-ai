@@ -1,267 +1,106 @@
 
-/* ══ OCEAN THEME ══ */
-[data-theme='ocean'], [data-mode='light'] {
-  --bg-base:        #EEF6FF;
-  --bg-card:        rgba(255,255,255,0.80);
-  --bg-elevated:    #FFFFFF;
-  --text-primary:   #0A1F3C;
-  --text-secondary: rgba(10,31,60,0.65);
-  --text-muted:     rgba(10,31,60,0.40);
-  --border-card:    rgba(10,132,255,0.10);
-  --accent:         #00B8A9;
+/* ══════════════════════════════════════════════════════
+   CLINIVERSE AI — Single Ocean Theme (Apple Style 2026)
+   Applied globally — no theme switching needed
+══════════════════════════════════════════════════════ */
+:root {
+  /* Backgrounds */
+  --bg-base:         #F2F7FF;
+  --bg-card:         rgba(255, 255, 255, 0.82);
+  --bg-elevated:     #FFFFFF;
+  --bg-deep:         #E4EEF8;
+  --bg-input:        rgba(255, 255, 255, 0.70);
+
+  /* Text */
+  --text-primary:    #0A1F3C;
+  --text-secondary:  rgba(10, 31, 60, 0.65);
+  --text-muted:      rgba(10, 31, 60, 0.40);
+  --text-inverse:    #FFFFFF;
+
+  /* Borders */
+  --border-card:     rgba(10, 132, 255, 0.10);
+  --border-subtle:   rgba(10, 132, 255, 0.06);
+  --border-accent:   rgba(0, 184, 169, 0.25);
+
+  /* Accents */
+  --accent:          #00B8A9;
+  --accent-blue:     #0A84FF;
+  --accent-coral:    #FF6B6B;
+  --accent-amber:    #FFB347;
+  --accent-mint:     #30D158;
+  --accent-violet:   #7C5CFC;
+  --accent-glow:     rgba(0, 184, 169, 0.15);
+
+  /* Nav */
+  --nav-bg:          rgba(255, 255, 255, 0.92);
+  --nav-border:      rgba(10, 132, 255, 0.10);
+  --nav-active:      #0A84FF;
+  --nav-inactive:    rgba(10, 31, 60, 0.35);
+  --tab-active:      rgba(10, 132, 255, 0.10);
+  --tab-text:        #0A84FF;
+
+  /* Shadows */
+  --shadow:          0 2px 20px rgba(10, 132, 255, 0.08);
+  --shadow-md:       0 8px 32px rgba(10, 132, 255, 0.12);
+  --shadow-lg:       0 20px 60px rgba(10, 132, 255, 0.18);
+  --shadow-card:     0 4px 24px rgba(10, 132, 255, 0.08), 0 1px 4px rgba(0,0,0,0.04);
+
+  /* Legacy bridge vars */
+  --bg-primary:      #F2F7FF;
+  --bg-card-hover:   rgba(255, 255, 255, 0.95);
+  --text:            #0A1F3C;
+  --t1:              #0A1F3C;
+  --t2:              rgba(10, 31, 60, 0.65);
+  --bg:              #F2F7FF;
+  --bg1:             #FFFFFF;
+  --bg2:             #E4EEF8;
+  --border:          rgba(10, 132, 255, 0.10);
+  --aurora:          radial-gradient(ellipse at 30% 0%, rgba(0,184,169,0.08), rgba(10,132,255,0.05) 50%, transparent 75%);
 }
 
-/* ══ MIDNIGHT THEME ══ */
-[data-theme='midnight'], [data-mode='dark'] {
-  --bg-base:        #050E1F;
-  --bg-card:        rgba(255,255,255,0.05);
-  --bg-elevated:    rgba(255,255,255,0.08);
-  --text-primary:   #E8F4FF;
-  --text-secondary: rgba(232,244,255,0.65);
-  --text-muted:     rgba(232,244,255,0.38);
-  --border-card:    rgba(255,255,255,0.08);
-  --accent:         #00C8B8;
-}
-
-body {
-  background: var(--bg-base, #EEF6FF);
-  color: var(--text-primary, #0A1F3C);
-  transition: background 0.3s ease, color 0.2s ease;
-}
-
-
-/* ══════════════════════════════════════════════════
-   THEME BRIDGE — يربط ThemeToggle variables
-   بـ CSS variables المستخدمة في المكونات
-   يطبق تلقائياً على كل theme
-══════════════════════════════════════════════════ */
-:root,
-[data-theme] {
-  /* Bridge: component vars → ThemeToggle vars */
-  --bg-base:        var(--bg,  #EEF6FF);
-  --bg-card:        rgba(255,255,255,0.72);
-  --bg-elevated:    var(--bg1, #FFFFFF);
-  --bg-deep:        var(--bg2, #D6E8F5);
-
-  --text-primary:   var(--t1,  #0A1628);
-  --text-secondary: var(--t2,  rgba(10,22,40,0.65));
-  --text-muted:     rgba(10,22,40,0.40);
-
-  --border-card:    var(--border, rgba(10,30,53,0.10));
-  --accent:         var(--accent-color, #00C8B8);
-}
-
-/* Dark mode — when data-mode=dark */
-[data-mode='dark'] {
-  --bg-card:        rgba(255,255,255,0.06);
-  --text-muted:     rgba(242,248,252,0.38);
-}
-
-/* Light mode — when data-mode=light */
-[data-mode='light'] {
-  --bg-card:        rgba(255,255,255,0.82);
-  --text-muted:     rgba(10,22,40,0.40);
-}
-
-/* Body background follows --bg */
-body {
-  background: var(--bg, #EEF6FF) !important;
-  color: var(--t1, #0A1628) !important;
-}
-
-
-/* ══════════════════════════════════════════════════
-   Pure Hospital Theme — Light clinical white
-   Applied when data-theme="hospital" on <html>
-══════════════════════════════════════════════════ */
-[data-theme='hospital'],
-[data-theme='hospital'] * {
-  --bg-base:           #F7F9FC;
-  --bg-card:           rgba(255, 255, 255, 0.88);
-  --bg-elevated:       #FFFFFF;
-  --bg-overlay:        rgba(247, 249, 252, 0.95);
-
-  --border-card:       rgba(0, 100, 180, 0.10);
-  --border-subtle:     rgba(0, 100, 180, 0.06);
-
-  --text-primary:      #0A1628;
-  --text-secondary:    rgba(10, 22, 40, 0.65);
-  --text-muted:        rgba(10, 22, 40, 0.38);
-  --text-inverse:      #F7F9FC;
-
-  --accent:            #0064B4;
-  --accent-soft:       rgba(0, 100, 180, 0.10);
-  --accent-glow:       rgba(0, 100, 180, 0.15);
-
-  --red:               #D93025;
-  --green:             #1A7F37;
-  --amber:             #B45309;
-  --purple:            #6B21A8;
-
-  --shadow-card:       0 2px 16px rgba(0, 100, 180, 0.08);
-  --shadow-elevated:   0 8px 32px rgba(0, 100, 180, 0.12);
-}
-
-/* ══════════════════════════════════════════════════
-   Dark Cyber Theme (default) — cosmic navy
-   Applied when data-theme="cyber" or no data-theme
-══════════════════════════════════════════════════ */
-:root,
-[data-theme='cyber'] {
-  --bg-base:           #0A1628;
-  --bg-card:           rgba(255, 255, 255, 0.04);
-  --bg-elevated:       rgba(255, 255, 255, 0.07);
-  --bg-overlay:        rgba(10, 22, 40, 0.95);
-
-  --border-card:       rgba(255, 255, 255, 0.09);
-  --border-subtle:     rgba(255, 255, 255, 0.05);
-
-  --text-primary:      #F2F8FC;
-  --text-secondary:    rgba(242, 248, 252, 0.55);
-  --text-muted:        rgba(242, 248, 252, 0.38);
-  --text-inverse:      #0A1628;
-
-  --accent:            #00C8B8;
-  --accent-soft:       rgba(0, 200, 184, 0.10);
-  --accent-glow:       rgba(0, 200, 184, 0.15);
-
-  --red:               #FF453A;
-  --green:             #30D158;
-  --amber:             #FF9F0A;
-  --purple:            #BF5AF2;
-
-  --shadow-card:       0 2px 16px rgba(0, 0, 0, 0.30);
-  --shadow-elevated:   0 8px 32px rgba(0, 0, 0, 0.40);
-}
-
-/* ══════════════════════════════════════════════════
-   Midnight Blue Theme
-══════════════════════════════════════════════════ */
-[data-theme='midnight'] {
-  --bg-base:           #05101F;
-  --bg-card:           rgba(255, 255, 255, 0.04);
-  --bg-elevated:       rgba(255, 255, 255, 0.06);
-  --bg-overlay:        rgba(5, 16, 31, 0.96);
-
-  --border-card:       rgba(100, 160, 255, 0.10);
-  --border-subtle:     rgba(100, 160, 255, 0.06);
-
-  --text-primary:      #E8F0FE;
-  --text-secondary:    rgba(232, 240, 254, 0.55);
-  --text-muted:        rgba(232, 240, 254, 0.38);
-  --text-inverse:      #05101F;
-
-  --accent:            #4A90E2;
-  --accent-soft:       rgba(74, 144, 226, 0.12);
-  --accent-glow:       rgba(74, 144, 226, 0.18);
-
-  --red:               #FF6B6B;
-  --green:             #51CF66;
-  --amber:             #FFD43B;
-  --purple:            #CC5DE8;
-
-  --shadow-card:       0 2px 16px rgba(0, 0, 0, 0.40);
-  --shadow-elevated:   0 8px 32px rgba(0, 0, 0, 0.55);
-}
-
-/* ═══════════════════════════════════════════════════════
-   CLINIVERSE AI — Unified Theme System v3
-   Single :root — No conflicts — CSS Variables only
-   ═══════════════════════════════════════════════════════ */
-
-
-
-/* ═══════════════════════════════════════════════════════
-   THEME: Pure Hospital (Light)
-   ═══════════════════════════════════════════════════════ */
-/*  ═══════════════════════════════════════════════════════
-   THEME: Adaptive Ambient
-   ═══════════════════════════════════════════════════════ */
-body[data-theme="ambient"] {
-  --bg-base:         #0e1a2d;
-  --bg-deep:         #0c1424;
-  --bg-card:         rgba(255,255,255,0.05);
-  --bg-card-2:       rgba(255,255,255,0.08);
-  --bg-glass:        rgba(14,26,45,0.88);
-  --bg-glass-2:      rgba(255,255,255,0.06);
-
-  --accent:          #BF5AF2;
-  --accent-glow:     rgba(191,90,242,0.20);
-  --accent-border:   rgba(191,90,242,0.30);
-
-  --text:            #F5F0FF;
-  --text-primary:    #F5F0FF;
-  --text-secondary:  rgba(245,240,255,0.60);
-  --text-dim:        rgba(245,240,255,0.55);
-  --text-muted:      rgba(245,240,255,0.35);
-
-  --border:          rgba(191,90,242,0.10);
-  --border-card:     rgba(191,90,242,0.10);
-  --border-accent:   rgba(191,90,242,0.30);
-
-  --nav-bg:          rgba(255,255,255,0.04);
-  --nav-border:      rgba(191,90,242,0.18);
-  --nav-active:      #BF5AF2;
-  --tab-active:      rgba(191,90,242,0.14);
-  --tab-text:        #BF5AF2;
-
-  --shadow:          0 8px 40px rgba(80,0,120,0.30);
-  --shadow-card:     0 4px 20px rgba(80,0,120,0.20);
-
-  --aurora: radial-gradient(ellipse at 30% 0%,rgba(191,90,242,0.10),rgba(255,159,10,0.05) 50%,transparent 75%);
-}
-
-/* ═══════════════════════════════════════════════════════
-   GLOBAL BODY BACKGROUND — responds to data-theme
-   ═══════════════════════════════════════════════════════ */
+/* Body */
 html, body {
-  background-color: var(--bg-base);
-  background-image:
-    radial-gradient(ellipse at 20% 15%, var(--teal-glow, rgba(0,200,184,0.10)) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 85%, var(--gold-glow, rgba(212,168,71,0.08)) 0%, transparent 50%);
-  background-attachment: fixed;
-  color: var(--text);
+  background: var(--bg-base);
+  color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
-               'Segoe UI', system-ui, sans-serif;
+               'SF Pro Text', 'Helvetica Neue', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background-color 0.4s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hospital body override */
-/*  Ambient body override */
-body[data-theme="ambient"] {
-  background-color: #0e1a2d;
-  background-image:
-    radial-gradient(ellipse at 25% 10%, rgba(191,90,242,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 75% 90%, rgba(255,159,10,0.06) 0%, transparent 50%);
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 4px; }
+
+/* Glass card utility */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
 }
 
-/* ═══════════════════════════════════════════════════════
-   SMOOTH THEME TRANSITIONS
-   ═══════════════════════════════════════════════════════ */
+/* Input */
+input, textarea {
+  color: var(--text-primary);
+  background: var(--bg-input);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Tap highlight */
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ═══════════════════════════════════════════════════════
-   SCROLLBAR
-   ═══════════════════════════════════════════════════════ */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--teal-border); border-radius: 4px; }
-
-/* ═══════════════════════════════════════════════════════
-   DYNAMIC NAV — theme-aware
-   ═══════════════════════════════════════════════════════ */
-
-
-/*  ═══════════════════════════════════════════════════════
-   SAFE AREA
-   ═══════════════════════════════════════════════════════ */
-.safe-bottom {
-  padding-bottom: max(140px, calc(140px + env(safe-area-inset-bottom)));
-}
+@keyframes spin    { to { transform: rotate(360deg) } }
+@keyframes fadeIn  { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }
+@keyframes pulse   { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+@keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }

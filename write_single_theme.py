@@ -1,4 +1,131 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_single_theme.py — Cliniverse AI
+══════════════════════════════════════
+ثيم واحد Ocean/Apple style على كل التطبيق
++ تبسيط Settings في ProfilePage
+"""
+
+from pathlib import Path
+import re, shutil
+
+PROJECT = Path('/Users/macbook/cliniverse-ai')
+COMP    = PROJECT / 'app' / 'components'
+BACKUP  = PROJECT / '_theme_backups'
+BACKUP.mkdir(exist_ok=True)
+
+# ── 1. globals.css — ثيم واحد نظيف ──────────────────────────────
+GLOBALS_SINGLE_THEME = """
+/* ══════════════════════════════════════════════════════
+   CLINIVERSE AI — Single Ocean Theme (Apple Style 2026)
+   Applied globally — no theme switching needed
+══════════════════════════════════════════════════════ */
+:root {
+  /* Backgrounds */
+  --bg-base:         #F2F7FF;
+  --bg-card:         rgba(255, 255, 255, 0.82);
+  --bg-elevated:     #FFFFFF;
+  --bg-deep:         #E4EEF8;
+  --bg-input:        rgba(255, 255, 255, 0.70);
+
+  /* Text */
+  --text-primary:    #0A1F3C;
+  --text-secondary:  rgba(10, 31, 60, 0.65);
+  --text-muted:      rgba(10, 31, 60, 0.40);
+  --text-inverse:    #FFFFFF;
+
+  /* Borders */
+  --border-card:     rgba(10, 132, 255, 0.10);
+  --border-subtle:   rgba(10, 132, 255, 0.06);
+  --border-accent:   rgba(0, 184, 169, 0.25);
+
+  /* Accents */
+  --accent:          #00B8A9;
+  --accent-blue:     #0A84FF;
+  --accent-coral:    #FF6B6B;
+  --accent-amber:    #FFB347;
+  --accent-mint:     #30D158;
+  --accent-violet:   #7C5CFC;
+  --accent-glow:     rgba(0, 184, 169, 0.15);
+
+  /* Nav */
+  --nav-bg:          rgba(255, 255, 255, 0.92);
+  --nav-border:      rgba(10, 132, 255, 0.10);
+  --nav-active:      #0A84FF;
+  --nav-inactive:    rgba(10, 31, 60, 0.35);
+  --tab-active:      rgba(10, 132, 255, 0.10);
+  --tab-text:        #0A84FF;
+
+  /* Shadows */
+  --shadow:          0 2px 20px rgba(10, 132, 255, 0.08);
+  --shadow-md:       0 8px 32px rgba(10, 132, 255, 0.12);
+  --shadow-lg:       0 20px 60px rgba(10, 132, 255, 0.18);
+  --shadow-card:     0 4px 24px rgba(10, 132, 255, 0.08), 0 1px 4px rgba(0,0,0,0.04);
+
+  /* Legacy bridge vars */
+  --bg-primary:      #F2F7FF;
+  --bg-card-hover:   rgba(255, 255, 255, 0.95);
+  --text:            #0A1F3C;
+  --t1:              #0A1F3C;
+  --t2:              rgba(10, 31, 60, 0.65);
+  --bg:              #F2F7FF;
+  --bg1:             #FFFFFF;
+  --bg2:             #E4EEF8;
+  --border:          rgba(10, 132, 255, 0.10);
+  --aurora:          radial-gradient(ellipse at 30% 0%, rgba(0,184,169,0.08), rgba(10,132,255,0.05) 50%, transparent 75%);
+}
+
+/* Body */
+html, body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+               'SF Pro Text', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 4px; }
+
+/* Glass card utility */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Input */
+input, textarea {
+  color: var(--text-primary);
+  background: var(--bg-input);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Tap highlight */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes spin    { to { transform: rotate(360deg) } }
+@keyframes fadeIn  { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }
+@keyframes pulse   { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+@keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+"""
+
+# ── 2. ProfilePage Settings section ──────────────────────────────
+# نكتب settings section بسيطة بدون ThemeToggle
+SETTINGS_COMPONENT = r"""'use client'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
@@ -406,3 +533,37 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
     </div>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — Single Ocean Theme + Simplified Settings")
+    print("═"*60 + "\n")
+
+    # 1. Update globals.css
+    globals_path = PROJECT / 'app' / 'globals.css'
+    if globals_path.exists():
+        shutil.copy2(globals_path, BACKUP / 'globals.css.pre-single')
+    globals_path.write_text(GLOBALS_SINGLE_THEME, encoding='utf-8')
+    print(f"✅ globals.css — single Ocean theme")
+
+    # 2. Write ProfilePage.tsx
+    profile_path = COMP / 'ProfilePage.tsx'
+    if profile_path.exists():
+        shutil.copy2(profile_path, BACKUP / 'ProfilePage.tsx.pre-single')
+    profile_path.write_text(SETTINGS_COMPONENT, encoding='utf-8')
+    print(f"✅ ProfilePage.tsx — simplified settings, no ThemeToggle")
+
+    print(f"""
+═══════════════════════════════════════════════════
+✅ Done!
+
+Next:
+  npx next build
+  git add -A && git commit -m "feat: single Ocean theme + simplified settings"
+  git push
+═══════════════════════════════════════════════════
+""")
+
+if __name__ == '__main__':
+    main()
