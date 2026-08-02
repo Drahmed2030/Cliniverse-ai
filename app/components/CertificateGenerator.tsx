@@ -333,7 +333,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
       {/* Header */}
       <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:18 }}>
         {onClose && (
-          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', backdropFilter:'blur(16px)', border:'1px solid rgba(255,255,255,0.12)', borderRadius:12, padding:'9px 16px', color:'rgba(238,246,250,0.72)', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
+          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', backdropFilter:'blur(16px)', border:'1px solid var(--border-card,rgba(255,255,255,0.12))', borderRadius:12, padding:'9px 16px', color:'var(--text-secondary,rgba(238,246,250,0.72))', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
         )}
         <div>
           <div style={{ fontSize:10, color:'#FFD700CC', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>CERTIFICATE GENERATOR</div>
@@ -388,7 +388,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
             flex:1, padding:'13px', borderRadius:16,
             border:'1px solid rgba(29,161,242,0.25)',
             background:'rgba(29,161,242,0.10)',
-            color:'rgba(242,248,252,0.72)',
+            color:'var(--text-secondary,rgba(242,248,252,0.72))',
             fontSize:13, fontWeight:800, cursor:'pointer', fontFamily:F,
           }}>
             𝕏 Share on X
@@ -402,7 +402,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
           width:'100%', padding:'13px', borderRadius:16,
           border:'1px solid rgba(37,211,102,0.25)',
           background:'rgba(37,211,102,0.08)',
-          color:'rgba(242,248,252,0.72)',
+          color:'var(--text-secondary,rgba(242,248,252,0.72))',
           fontSize:13, fontWeight:800, cursor:'pointer', fontFamily:F,
         }}>
           💬 Share via WhatsApp
@@ -410,7 +410,7 @@ export default function CertificateGenerator({ doctorName, casesCompleted, mcqCo
       </div>
 
       <div style={{ marginTop:14, background:'rgba(212,168,71,0.06)', border:'1px solid rgba(212,168,71,0.15)', borderRadius:12, padding:'10px 14px', textAlign:'center' }}>
-        <div style={{ fontSize:10, color:'rgba(238,246,250,0.45)' }}>
+        <div style={{ fontSize:10, color:'var(--text-muted,rgba(238,246,250,0.45))' }}>
           ⭐ Certificate issued by Cliniverse AI · 🇸🇦 Vision 2030 Aligned
         </div>
       </div>

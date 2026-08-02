@@ -190,7 +190,7 @@ export default function ThemeToggle({ onThemeChange }: Props) {
               {/* Preview swatches */}
               <div style={{ display:'flex', gap:4, marginBottom:10 }}>
                 {theme.preview.map((c,i)=>(
-                  <div key={i} style={{ width:i===0?22:14, height:14, borderRadius:4, background:c, border:'1px solid rgba(255,255,255,0.12)', flexShrink:0 }}/>
+                  <div key={i} style={{ width:i===0?22:14, height:14, borderRadius:4, background:c, border:'1px solid var(--border-card,rgba(255,255,255,0.12))', flexShrink:0 }}/>
                 ))}
               </div>
 

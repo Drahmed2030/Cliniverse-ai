@@ -348,7 +348,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
             {/* Case of the Day — 2/3 width */}
             <div onClick={()=>{setShowLive(true);onXP(5)}} style={{
               flex:2,
-              background:'rgba(255,255,255,0.05)',
+              background:'var(--bg-card,rgba(255,255,255,0.05))',
               backdropFilter:'blur(40px) saturate(180%)',
               WebkitBackdropFilter:'blur(40px) saturate(180%)',
               border:'1px solid rgba(255,69,58,0.20)',

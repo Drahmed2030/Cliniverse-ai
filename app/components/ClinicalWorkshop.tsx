@@ -24,7 +24,7 @@ const T = {
 // ── INPUT COMPONENTS ──
 const inputStyle = {
   width:'100%', padding:'11px 14px', borderRadius:14,
-  border:'1px solid rgba(255,255,255,0.12)',
+  border:'1px solid var(--border-card,rgba(255,255,255,0.12))',
   background:'var(--bg-card,rgba(255,255,255,0.06))',
   backdropFilter:'blur(20px)',
   color:'var(--text-primary, #EEF6FA)', fontSize:13, outline:'none',

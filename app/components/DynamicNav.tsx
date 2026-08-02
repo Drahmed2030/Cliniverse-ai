@@ -364,7 +364,7 @@ export default function DynamicNav({
         zIndex:200, width:'calc(100% - 28px)', maxWidth:460, fontFamily:F,
       }}>
         <div style={{
-          background:'rgba(255,255,255,0.08)',
+          background:'var(--bg-card,rgba(255,255,255,0.08))',
           backdropFilter:'blur(50px) saturate(200%) brightness(1.15)',
           WebkitBackdropFilter:'blur(50px) saturate(200%) brightness(1.15)',
           borderRadius:32,

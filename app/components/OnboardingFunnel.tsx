@@ -408,7 +408,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
 
         {/* Sub */}
         <div style={{textAlign:'center',marginBottom:18,animation:'fadeUp 0.45s ease 0.12s both'}} key={`s-${animKey}`}>
-          <p style={{fontSize:14,color:'rgba(242,248,252,0.72)',lineHeight:1.68,margin:0,maxWidth:310,marginLeft:'auto',marginRight:'auto'}}>{slide.sub}</p>
+          <p style={{fontSize:14,color:'var(--text-secondary,rgba(242,248,252,0.72))',lineHeight:1.68,margin:0,maxWidth:310,marginLeft:'auto',marginRight:'auto'}}>{slide.sub}</p>
         </div>
 
         {/* Stats */}

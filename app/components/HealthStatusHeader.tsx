@@ -240,7 +240,7 @@ export default function HealthStatusHeader({ doctorName, xp, streak, liveCount =
             width:42, height:42, borderRadius:'50%',
             background:'linear-gradient(135deg,#00C8B8,#1A8CFF)',
             display:'flex', alignItems:'center', justifyContent:'center',
-            color:'white', fontSize:14, fontWeight:800,
+            color:'var(--text-primary,white)', fontSize:14, fontWeight:800,
             boxShadow:'0 2px 12px rgba(0,200,184,0.40)',
           }}>{initials}</div>
           <div style={{fontSize:10,color:'var(--text-secondary,rgba(242,248,252,0.55))',fontWeight:600}}>{doctorName.split(' ')[0]}</div>

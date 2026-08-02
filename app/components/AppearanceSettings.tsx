@@ -181,7 +181,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
       {/* Header */}
       <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
         {onClose && (
-          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', border:'1px solid rgba(255,255,255,0.12)', borderRadius:12, padding:'9px 16px', color:'rgba(242,248,252,0.72)', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
+          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', border:'1px solid var(--border-card,rgba(255,255,255,0.12))', borderRadius:12, padding:'9px 16px', color:'var(--text-secondary,rgba(242,248,252,0.72))', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
         )}
         <div>
           <div style={{ fontSize:10, color:'rgba(0,200,184,0.85)', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>APPEARANCE</div>
