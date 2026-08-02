@@ -22,11 +22,19 @@ workflows:
         script: |
           npx cap add ios || true
           npx cap sync ios
-          echo "=== Podfile content ==="
-          cat ios/App/Podfile
-          echo "=== End Podfile ==="
-          sed -i '' "s/platform :ios, '[0-9.]*'/platform :ios, '14.0'/" ios/App/Podfile
-          cat ios/App/Podfile
+      - name: Fix deployment target
+        script: |
+          cd ios/App
+          cat >> Podfile << 'PODEOF'
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+    end
+  end
+end
+PODEOF
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
