@@ -13,36 +13,17 @@ workflows:
       - name: Install dependencies
         script: npm install
       - name: Install Capacitor
-        script: |
-          npm install @capacitor/core @capacitor/ios @capacitor/cli
-          npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
+        script: npm install @capacitor/core @capacitor/ios @capacitor/cli && npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
       - name: Build Next.js
         script: npm run build
       - name: Add iOS platform
-        script: |
-          npx cap add ios || true
-          npx cap sync ios
-      - name: Fix deployment target
-        script: |
-          cd ios/App
-          cat >> Podfile << 'PODEOF'
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
-    end
-  end
-end
-PODEOF
+        script: npx cap add ios || true && npx cap sync ios
+      - name: Fix Podfile
+        script: python3 fix_podfile.py
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
-        script: |
-          xcode-project use-profiles
-          xcode-project build-ipa \
-            --workspace ios/App/App.xcworkspace \
-            --scheme App
+        script: xcode-project use-profiles && xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
