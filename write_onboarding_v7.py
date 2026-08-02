@@ -1,4 +1,27 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_onboarding_v7.py — Cliniverse AI
+════════════════════════════════════════
+Cinematic Onboarding + Apple PRO Paywall
+7 screens total:
+  0. Splash     — ECG pulse + logo glow
+  1. Welcome    — emotional hook
+  2. Live Cases — urgency + FOMO
+  3. AI Scribe  — time savings
+  4. Board Prep — career stakes
+  5. PRO Wall   — Apple-style pricing
+  6. Final CTA  — get started
+"""
+
+from pathlib import Path
+import shutil
+
+PROJECT = Path('/Users/macbook/cliniverse-ai')
+COMP    = PROJECT / 'app' / 'components'
+BACKUP  = PROJECT / '_theme_backups'
+BACKUP.mkdir(exist_ok=True)
+
+ONBOARDING = r"""'use client'
 import { useState, useEffect, useRef } from 'react'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -659,3 +682,35 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
     </Screen>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — Onboarding v7 Cinematic Rewrite")
+    print("═"*60 + "\n")
+
+    target = COMP / 'OnboardingFunnel.tsx'
+    if target.exists():
+        shutil.copy2(target, BACKUP / 'OnboardingFunnel.tsx.v6.bak')
+        print("📁 Backup saved")
+
+    target.write_text(ONBOARDING, encoding='utf-8')
+    print(f"✅ OnboardingFunnel.tsx written ({len(ONBOARDING):,} chars)")
+    print("""
+7 Screens:
+  0. Splash      — ECG pulse + logo glow + loading bar
+  1. Welcome     — emotional hook + 50K physicians
+  2. Live Cases  — FOMO + real case cards
+  3. AI Scribe   — microphone + waveform animation
+  4. Board Prep  — 6 board flags grid
+  5. PRO Paywall — dark Apple-style pricing
+  6. Final CTA   — Enter the Hospital
+
+Next:
+  npx next build
+  git add -A && git commit -m "feat: Onboarding v7 cinematic + Apple PRO paywall"
+  git push
+""")
+
+if __name__ == '__main__':
+    main()
