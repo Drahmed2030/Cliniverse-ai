@@ -114,6 +114,23 @@ const VitalBadge = ({ label, value, alert }: { label:string, value:string, alert
 function ProgressNoteModal({ patient, onClose }: { patient:typeof PATIENTS[0], onClose:()=>void }) {
   const [generating, setGenerating] = useState(false)
   const [note, setNote] = useState('')
+  const [researchBanner, setResearchBanner] = useState<{title:string,specialty:string,source:string}|null>(null)
+
+  // NET→WARD Integration listener
+  useEffect(() => {
+    const saved = localStorage.getItem('cliniverse-latest-research')
+    if (saved) {
+      try { setResearchBanner(JSON.parse(saved)) } catch {}
+    }
+    const handler = () => {
+      const data = localStorage.getItem('cliniverse-latest-research')
+      if (data) {
+        try { setResearchBanner(JSON.parse(data)) } catch {}
+      }
+    }
+    window.addEventListener('cliniverse-research-update', handler)
+    return () => window.removeEventListener('cliniverse-research-update', handler)
+  }, [])
   const [copied, setCopied] = useState(false)
   const [feedback, setFeedback] = useState('')
 
@@ -511,6 +528,33 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
 
       {/* Live badge */}
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+        {/* ── NET→WARD Research Banner ── */}
+        {researchBanner && (
+          <div style={{
+            background:'rgba(0,200,184,0.08)',
+            border:'1px solid rgba(0,200,184,0.25)',
+            borderRadius:14, padding:'10px 14px',
+            marginBottom:12, display:'flex', alignItems:'center', gap:10,
+          }}>
+            <span style={{fontSize:18}}>🔬</span>
+            <div style={{flex:1}}>
+              <div style={{fontSize:9,color:'var(--accent,#00C8B8)',fontWeight:800,letterSpacing:1,marginBottom:2}}>
+                NEW RESEARCH — {researchBanner.source}
+              </div>
+              <div style={{fontSize:11,fontWeight:700,color:'var(--text-primary,#F2F8FC)',lineHeight:1.4}}>
+                {researchBanner.title}
+              </div>
+              <div style={{fontSize:9,color:'var(--text-muted,rgba(242,248,252,0.45))',marginTop:2}}>
+                Relevant to: {researchBanner.specialty} patients in this ward
+              </div>
+            </div>
+            <div onClick={()=>setResearchBanner(null)} style={{
+              fontSize:16, color:'var(--text-muted,rgba(242,248,252,0.45))',
+              cursor:'pointer', padding:'4px',
+            }}>✕</div>
+          </div>
+        )}
+
         <div style={{fontSize:10,color:T.muted,fontWeight:700,letterSpacing:1.5}}>PATIENT CENSUS</div>
         <div style={{display:'flex',alignItems:'center',gap:5,background:'rgba(255,59,48,0.10)',border:'1px solid rgba(255,59,48,0.22)',borderRadius:20,padding:'3px 10px'}}>
           <div style={{width:5,height:5,borderRadius:'50%',background:T.red,boxShadow:`0 0 6px ${T.red}`}}/>

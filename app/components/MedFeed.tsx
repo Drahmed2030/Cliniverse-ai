@@ -529,7 +529,16 @@ Respond in JSON only:
           <div style={{fontSize:12,color:T.muted}}>Press "Generate" to fetch latest research</div>
         </div>
       ) : filtered.map(article=>(
-        <NewsCard key={article.id} article={article} onOpen={setSelected} onSave={handleSave} onLike={handleLike}/>
+        <NewsCard key={article.id} article={article} onOpen={(article) => {
+            setSelected(article)
+            localStorage.setItem('cliniverse-latest-research', JSON.stringify({
+              title: article.title,
+              specialty: article.specialty,
+              source: article.source,
+              timestamp: Date.now()
+            }))
+            window.dispatchEvent(new CustomEvent('cliniverse-research-update'))
+          }} onSave={handleSave} onLike={handleLike}/>
       ))}
 
       <style>{`
