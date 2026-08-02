@@ -203,6 +203,20 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
     return()=>clearInterval(t)
   },[])
 
+  // WARD→PULSE Integration
+  const [wardAlert, setWardAlert] = useState<{patient:string,bed:string,diagnosis:string}|null>(null)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('cliniverse-ward-alert')
+    if (saved) { try { setWardAlert(JSON.parse(saved)) } catch {} }
+    const handler = () => {
+      const data = localStorage.getItem('cliniverse-ward-alert')
+      if (data) { try { setWardAlert(JSON.parse(data)) } catch {} }
+    }
+    window.addEventListener('cliniverse-ward-update', handler)
+    return () => window.removeEventListener('cliniverse-ward-update', handler)
+  }, [])
+
   const h = new Date().getHours()
   const greeting = h<12?'Good morning':h<17?'Good afternoon':h<21?'Good evening':'Night shift'
   const greetIcon = h<12?'🌅':h<17?'☀️':h<21?'🌆':'🌙'
@@ -302,6 +316,30 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
 
         {/* ── BENTO GRID ── */}
         <div style={{marginBottom:14}}>
+          {/* ── WARD→PULSE Alert Banner ── */}
+          {wardAlert && (
+            <div style={{
+              background:'rgba(255,69,58,0.08)',
+              border:'1px solid rgba(255,69,58,0.25)',
+              borderRadius:14, padding:'10px 14px',
+              marginBottom:12, display:'flex', alignItems:'center', gap:10,
+            }}>
+              <div style={{width:8,height:8,borderRadius:'50%',background:'#FF453A',animation:'liveBlink 0.8s infinite',flexShrink:0}}/>
+              <div style={{flex:1}}>
+                <div style={{fontSize:9,color:'#FF453A',fontWeight:800,letterSpacing:1,marginBottom:2}}>
+                  WARD ALERT — CRITICAL PATIENT
+                </div>
+                <div style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#F2F8FC)'}}>
+                  {wardAlert.patient} · Bed {wardAlert.bed}
+                </div>
+                <div style={{fontSize:10,color:'var(--text-muted,rgba(242,248,252,0.45))'}}>
+                  {wardAlert.diagnosis}
+                </div>
+              </div>
+              <div onClick={()=>setWardAlert(null)} style={{fontSize:16,color:'var(--text-muted,rgba(242,248,252,0.45))',cursor:'pointer',padding:'4px'}}>✕</div>
+            </div>
+          )}
+
           <div style={{fontSize:10,color:D.t4,fontWeight:700,letterSpacing:1.5,marginBottom:10}}>CLINICAL DASHBOARD</div>
 
           {/* Row 1 */}

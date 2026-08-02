@@ -481,6 +481,21 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
     window.addEventListener('cliniverse-research-update', handler)
     return () => window.removeEventListener('cliniverse-research-update', handler)
   }, [])
+
+  // WARD→PULSE Integration — broadcast critical patients
+  useEffect(() => {
+    const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
+    if (criticalPatients.length > 0) {
+      localStorage.setItem('cliniverse-ward-alert', JSON.stringify({
+        count: criticalPatients.length,
+        patient: criticalPatients[0].name,
+        bed: criticalPatients[0].bed,
+        diagnosis: criticalPatients[0].diagnosis,
+        timestamp: Date.now()
+      }))
+      window.dispatchEvent(new CustomEvent('cliniverse-ward-update'))
+    }
+  }, [])
   const [liveCount, setLiveCount] = useState(1247)
 
   useEffect(() => {
