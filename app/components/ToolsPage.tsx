@@ -183,6 +183,8 @@ function ToolRenderer({ toolId, onXP }: { toolId:string, onXP:(n:number)=>void }
     sports:      <SportsMedicineModule onXP={onXP}/>,
     ai:         <AICaseGenerator onXP={onXP}/>,
   }
+  return map[toolId] || <div style={{padding:'40px',textAlign:'center',color:'rgba(242,248,252,0.5)'}}>Tool not found: {toolId}</div>
+
   return <>{map[toolId] || <div style={{color:T.text,padding:20,fontFamily:F}}>Tool coming soon...</div>}</>
 }
 
