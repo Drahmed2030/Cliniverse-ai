@@ -22,10 +22,9 @@ workflows:
         script: |
           npx cap add ios || true
           npx cap sync ios
-      - name: Set iOS deployment target
+      - name: Fix Podfile deployment target
         script: |
-          cd ios/App
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' App.xcodeproj/project.pbxproj
+          sed -i '' "1s/^/platform :ios, '14.0'\n/" ios/App/Podfile
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
