@@ -23,11 +23,11 @@ const DEPT_COLORS: Record<string, string> = {
 }
 
 const C = {
-  card: 'rgba(255,255,255,0.14)',
-  border: 'rgba(0,196,180,0.25)',
-  text: '#EEF6FA',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.25)',
+  card: 'var(--bg-card, rgba(255,255,255,0.72))',
+  border: 'var(--border-card, rgba(10,132,255,0.12))',
+  text: 'var(--text-primary, #0A1628)',
+  sub: 'var(--text-secondary, rgba(10,22,40,0.55))',
+  muted: 'var(--text-muted, rgba(10,22,40,0.40))',
 }
 
 // ── HOOK: useLiveCases ──

@@ -8,7 +8,7 @@ const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 const T = {
   glass:  'rgba(255,255,255,0.07)',
   glass2: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.12)',
+  border: 'var(--border-card, rgba(10,132,255,0.12))',
   text:   '#EEF6FA',
   sub:    'rgba(238,246,250,0.60)',
   muted:  'rgba(238,246,250,0.38)',

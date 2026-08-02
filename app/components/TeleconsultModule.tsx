@@ -274,8 +274,8 @@ const GUIDELINES = [
 const C = {
   card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
-  text: '#EEF6FA',
-  sub: 'rgba(255,255,255,0.45)',
+  text: 'var(--text-primary, #0A1628)',
+  sub: 'var(--text-secondary, rgba(10,22,40,0.55))',
   muted: 'rgba(255,255,255,0.28)',
 }
 
