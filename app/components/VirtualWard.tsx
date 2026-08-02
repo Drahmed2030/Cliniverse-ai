@@ -114,23 +114,7 @@ const VitalBadge = ({ label, value, alert }: { label:string, value:string, alert
 function ProgressNoteModal({ patient, onClose }: { patient:typeof PATIENTS[0], onClose:()=>void }) {
   const [generating, setGenerating] = useState(false)
   const [note, setNote] = useState('')
-  const [researchBanner, setResearchBanner] = useState<{title:string,specialty:string,source:string}|null>(null)
 
-  // NET→WARD Integration listener
-  useEffect(() => {
-    const saved = localStorage.getItem('cliniverse-latest-research')
-    if (saved) {
-      try { setResearchBanner(JSON.parse(saved)) } catch {}
-    }
-    const handler = () => {
-      const data = localStorage.getItem('cliniverse-latest-research')
-      if (data) {
-        try { setResearchBanner(JSON.parse(data)) } catch {}
-      }
-    }
-    window.addEventListener('cliniverse-research-update', handler)
-    return () => window.removeEventListener('cliniverse-research-update', handler)
-  }, [])
   const [copied, setCopied] = useState(false)
   const [feedback, setFeedback] = useState('')
 
@@ -484,6 +468,19 @@ function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack
 // ── MAIN VIRTUAL WARD ──
 export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
   const [selected, setSelected] = useState<typeof PATIENTS[0]|null>(null)
+  const [researchBanner, setResearchBanner] = useState<{title:string,specialty:string,source:string}|null>(null)
+
+  // NET→WARD Integration
+  useEffect(() => {
+    const saved = localStorage.getItem('cliniverse-latest-research')
+    if (saved) { try { setResearchBanner(JSON.parse(saved)) } catch {} }
+    const handler = () => {
+      const data = localStorage.getItem('cliniverse-latest-research')
+      if (data) { try { setResearchBanner(JSON.parse(data)) } catch {} }
+    }
+    window.addEventListener('cliniverse-research-update', handler)
+    return () => window.removeEventListener('cliniverse-research-update', handler)
+  }, [])
   const [liveCount, setLiveCount] = useState(1247)
 
   useEffect(() => {
