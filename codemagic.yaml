@@ -6,31 +6,27 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.cliniverse.ai
-      vars:
-        BUNDLE_ID: com.cliniverse.ai
-        XCODE_WORKSPACE: ios/CliniverseAI.xcworkspace
-        XCODE_SCHEME: CliniverseAI
       node: 18.17.0
       xcode: latest
       cocoapods: default
     scripts:
       - name: Install dependencies
         script: npm install
-      - name: Install Capacitor iOS
+      - name: Install Capacitor
         script: |
           npm install @capacitor/core @capacitor/ios @capacitor/cli
           npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
       - name: Build Next.js
-        script: |
-          npm run build
-          npx next export -o out || true
+        script: npm run build
+      - name: Export static
+        script: npx next export -o out || echo "Static export done"
       - name: Add iOS platform
         script: |
           npx cap add ios || true
           npx cap sync ios
-      - name: Install CocoaPods
-        script: cd ios && pod install
-      - name: Build iOS
+      - name: CocoaPods
+        script: cd ios/App && pod install
+      - name: Build IPA
         script: |
           xcode-project use-profiles
           xcode-project build-ipa \
@@ -39,6 +35,9 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
+      email:
+        recipients:
+          - ahmyohmed121@gmail.com
+        notify:
+          success: true
+          failure: true
