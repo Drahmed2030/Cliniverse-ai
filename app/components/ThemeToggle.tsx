@@ -79,13 +79,26 @@ function applyTheme(id: ThemeId, mode: 'light'|'dark') {
   const theme = THEMES.find(t => t.id === id)!
   const vars  = mode === 'light' ? theme.light : theme.dark
   const root  = document.documentElement
-  root.style.setProperty('--bg',      vars.bg)
-  root.style.setProperty('--bg1',     vars.bg1)
-  root.style.setProperty('--bg2',     vars.bg2)
-  root.style.setProperty('--t1',      vars.t1)
-  root.style.setProperty('--t2',      vars.t2)
-  root.style.setProperty('--border',  vars.border)
-  root.style.setProperty('--accent',  vars.accent)
+  root.style.setProperty('--bg',           vars.bg)
+  root.style.setProperty('--bg1',          vars.bg1)
+  root.style.setProperty('--bg2',          vars.bg2)
+  root.style.setProperty('--t1',           vars.t1)
+  root.style.setProperty('--t2',           vars.t2)
+  root.style.setProperty('--border',       vars.border)
+  root.style.setProperty('--accent',       vars.accent)
+  // Bridge — component variables
+  root.style.setProperty('--bg-base',      vars.bg)
+  root.style.setProperty('--bg-card',      mode === 'light' ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.06)')
+  root.style.setProperty('--bg-elevated',  vars.bg1)
+  root.style.setProperty('--text-primary', vars.t1)
+  root.style.setProperty('--text-secondary', vars.t2)
+  root.style.setProperty('--text-muted',   mode === 'light' ? 'rgba(10,22,40,0.40)' : 'rgba(242,248,252,0.38)')
+  root.style.setProperty('--border-card',  vars.border)
+  root.style.setProperty('--accent-color', vars.accent)
+  root.style.setProperty('--nav-bg',       mode === 'light' ? 'rgba(255,255,255,0.92)' : 'rgba(5,14,31,0.95)')
+  root.style.setProperty('--nav-border',   vars.border)
+  document.body.style.background = vars.bg
+  document.body.style.color      = vars.t1
   root.setAttribute('data-theme', id)
   root.setAttribute('data-mode',  mode)
 }
