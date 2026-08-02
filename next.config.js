@@ -1,5 +1,5 @@
 /** @type {import("next").NextConfig} */
-const nextConfig = {
+const nextConfig = {n  output: "export",
   typescript: { ignoreBuildErrors: true },
   generateBuildId: async () => {
     return Date.now().toString()
