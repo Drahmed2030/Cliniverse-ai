@@ -22,7 +22,7 @@ workflows:
         script: |
           npx cap add ios || true
           npx cap sync ios
-          echo "platform :ios, '14.0'" | cat - ios/App/Podfile > temp && mv temp ios/App/Podfile
+          sed -i '' "s/platform :ios.*/platform :ios, '14.0'/" ios/App/Podfile
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
