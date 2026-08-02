@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { ClinicalProvider } from './components/ClinicalContext'
 import SplashScreen from './components/SplashScreen'
 import OnboardingSurvey from './components/OnboardingSurvey'
 import CliniverseLogo from './components/Logo'

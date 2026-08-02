@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import ThemeProvider from "./components/ThemeProvider"
-import { ClinicalProvider } from "./components/ClinicalContext"
 
 export const viewport: Viewport = {
   themeColor: "#2a4a60",
@@ -77,9 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </svg>
         </div>
         <ThemeProvider>
-          <ClinicalProvider>
-            {children}
-          </ClinicalProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>
