@@ -22,9 +22,7 @@ workflows:
         script: |
           npx cap add ios || true
           npx cap sync ios
-      - name: Fix Podfile deployment target
-        script: |
-          sed -i '' "1s/^/platform :ios, '14.0'\n/" ios/App/Podfile
+          echo "platform :ios, '14.0'" | cat - ios/App/Podfile > temp && mv temp ios/App/Podfile
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
