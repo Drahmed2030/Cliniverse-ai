@@ -1,4 +1,35 @@
 
+/* ══ OCEAN THEME ══ */
+[data-theme='ocean'], [data-mode='light'] {
+  --bg-base:        #EEF6FF;
+  --bg-card:        rgba(255,255,255,0.80);
+  --bg-elevated:    #FFFFFF;
+  --text-primary:   #0A1F3C;
+  --text-secondary: rgba(10,31,60,0.65);
+  --text-muted:     rgba(10,31,60,0.40);
+  --border-card:    rgba(10,132,255,0.10);
+  --accent:         #00B8A9;
+}
+
+/* ══ MIDNIGHT THEME ══ */
+[data-theme='midnight'], [data-mode='dark'] {
+  --bg-base:        #050E1F;
+  --bg-card:        rgba(255,255,255,0.05);
+  --bg-elevated:    rgba(255,255,255,0.08);
+  --text-primary:   #E8F4FF;
+  --text-secondary: rgba(232,244,255,0.65);
+  --text-muted:     rgba(232,244,255,0.38);
+  --border-card:    rgba(255,255,255,0.08);
+  --accent:         #00C8B8;
+}
+
+body {
+  background: var(--bg-base, #EEF6FF);
+  color: var(--text-primary, #0A1F3C);
+  transition: background 0.3s ease, color 0.2s ease;
+}
+
+
 /* ══════════════════════════════════════════════════
    THEME BRIDGE — يربط ThemeToggle variables
    بـ CSS variables المستخدمة في المكونات
