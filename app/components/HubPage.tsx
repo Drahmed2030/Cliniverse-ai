@@ -13,21 +13,21 @@ const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 // ── DESIGN TOKENS — Apple-grade contrast & clarity ──
 const D = {
   // Backgrounds
-  bg0:     'var(--bg-deep,#0d1520)',
-  bg1:     'var(--bg-card,#111d2b)',
-  bg2:     'var(--bg-card-2,#162536)',
+  bg0:     'var(--bg-base,#EEF4FF)',
+  bg1:     'var(--bg-card,rgba(255,255,255,0.85))',
+  bg2:     'var(--bg-card,rgba(255,255,255,0.72))',
   // Glass layers
-  glass:   'var(--bg-card,rgba(255,255,255,0.06))',
-  glass2:  'var(--bg-card,rgba(255,255,255,0.03))',
-  glassHover: 'var(--bg-card-2,rgba(255,255,255,0.09))',
+  glass:   'var(--bg-card,rgba(255,255,255,0.85))',
+  glass2:  'var(--bg-card,rgba(255,255,255,0.72))',
+  glassHover: 'var(--bg-card,rgba(255,255,255,0.95))',
   // Borders
-  border:  'var(--border-card,rgba(255,255,255,0.09))',
-  borderHi:'var(--border-card,rgba(255,255,255,0.16))',
+  border:  'var(--border-card,rgba(10,132,255,0.10))',
+  borderHi:'var(--border-card,rgba(10,132,255,0.18))',
   // Text — WCAG AA compliant
-  t1: 'var(--text-primary,#F2F8FC)',
-  t2: 'var(--text-secondary,rgba(242,248,252,0.78))',
-  t3: 'var(--text-secondary,rgba(242,248,252,0.52))',
-  t4: 'var(--text-muted,rgba(242,248,252,0.34))',
+  t1: 'var(--text-primary,#0A1F3C)',
+  t2: 'var(--text-secondary,rgba(10,31,60,0.65))',
+  t3: 'var(--text-secondary,rgba(10,31,60,0.50))',
+  t4: 'var(--text-muted,rgba(10,31,60,0.38))',
   // Brand accents
   teal:   '#00C8B8',
   tealDim:'rgba(0,200,184,0.12)',
