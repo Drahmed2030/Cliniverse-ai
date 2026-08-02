@@ -133,7 +133,7 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
 
   useEffect(() => {
     if (screen === 0) {
-      const t = setTimeout(() => setSplashDone(true), 2800)
+      const t = setTimeout(() => setScreen(1), 3000)
       return () => clearTimeout(t)
     }
   }, [screen])
