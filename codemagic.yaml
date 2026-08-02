@@ -6,7 +6,7 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.cliniverse.ai
-      node: 18.17.0
+      node: 20.17.0
       xcode: latest
       cocoapods: default
     scripts:
