@@ -404,7 +404,6 @@ export default function ToolsPage({ onXP }: { onXP: (n:number) => void }) {
         <div style={{ fontSize:22, fontWeight:900, color:T.text, letterSpacing:-0.5, lineHeight:1.1 }}>
           <span style={{ color:T.text }}>Clinical</span>{' '}
           <span style={{ color:T.teal }}>Tools</span>
-        </div>
         {/* ── WARD→TOOLS Suggest Banner ── */}
         {toolsSuggest && (
           <div style={{
