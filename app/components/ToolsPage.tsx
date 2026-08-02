@@ -27,11 +27,11 @@ const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
 const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 
 const T = {
-  card: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
-  text: '#ffffff',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.18)',
+  card: 'var(--bg-card,rgba(255,255,255,0.04))',
+  border: 'var(--border-card,rgba(255,255,255,0.08))',
+  text: 'var(--text-primary,#ffffff)',
+  sub: 'var(--text-secondary,rgba(255,255,255,0.65))',
+  muted: 'var(--text-muted,rgba(255,255,255,0.35))',
   F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
 }
 
