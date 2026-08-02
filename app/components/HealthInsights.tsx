@@ -108,7 +108,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
   return (
     <div style={{ fontFamily:'-apple-system,sans-serif', paddingBottom:20 }}>
       <div style={{ marginBottom:16 }}>
-        <h2 style={{ fontSize:22, fontWeight:800, color:'var(--text-primary, white)', margin:'0 0 4px', letterSpacing:-0.5 }}>Clinical Dashboard</h2>
+        <h2 style={{ fontSize:22, fontWeight:800, color:'var(--text-primary, #0A1628)', margin:'0 0 4px', letterSpacing:-0.5 }}>Clinical Dashboard</h2>
         <p style={{ fontSize:13, color:'rgba(255,255,255,0.45)', margin:0 }}>Health insights & drug interactions</p>
       </div>
 
@@ -125,7 +125,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {activeTab === 'insights' && (
         <div>
           {/* Activity Rings — Apple Health Style */}
-          <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.18)', color:'var(--text-primary, white)', overflow:'hidden', position:'relative' }}>
+          <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.18)', color:'var(--text-primary, #0A1628)', overflow:'hidden', position:'relative' }}>
             <div style={{ position:'absolute', top:-30, right:-30, width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.08),transparent)', pointerEvents:'none' }}/>
             <div style={{ fontSize:11, color:'rgba(255,255,255,0.35)', letterSpacing:2, textTransform:'uppercase', marginBottom:16, fontWeight:700 }}>This Week's Activity</div>
             <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', marginBottom:18 }}>
@@ -181,7 +181,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
           {/* Weekly Performance Chart */}
           <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, white)', marginBottom:14 }}>Weekly Activity</div>
+            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, #0A1628)', marginBottom:14 }}>Weekly Activity</div>
             <div style={{ display:'flex', gap:6, alignItems:'flex-end', height:60 }}>
               {['M','T','W','T','F','S','S'].map((day,i)=>{
                 const h = [40,70,55,90,65,30,80][i]
@@ -210,7 +210,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {activeTab === 'drugs' && (
         <div>
           <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:20, padding:18, marginBottom:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, white)', marginBottom:14 }}>💊 Drug Interaction Checker</div>
+            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, #0A1628)', marginBottom:14 }}>💊 Drug Interaction Checker</div>
 
             {/* Drug 1 */}
             <div style={{ marginBottom:12, position:'relative' }}>
@@ -219,7 +219,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
               {show1 && search1 && !drug1 && filtered1.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
                   {filtered1.map(d=>(
-                    <div key={d} onClick={()=>{setDrug1(d);setSearch1(d);setShow1(false);setInteraction(null);setNoInteraction(false)}} style={{ padding:'12px 16px', cursor:'pointer', fontSize:14, color:'var(--text-primary, white)', borderBottom:'1px solid rgba(0,0,0,0.04)', fontWeight:500 }}>
+                    <div key={d} onClick={()=>{setDrug1(d);setSearch1(d);setShow1(false);setInteraction(null);setNoInteraction(false)}} style={{ padding:'12px 16px', cursor:'pointer', fontSize:14, color:'var(--text-primary, #0A1628)', borderBottom:'1px solid rgba(0,0,0,0.04)', fontWeight:500 }}>
                       💊 {d}
                     </div>
                   ))}
@@ -234,7 +234,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
               {show2 && search2 && !drug2 && filtered2.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
                   {filtered2.map(d=>(
-                    <div key={d} onClick={()=>{setDrug2(d);setSearch2(d);setShow2(false);setInteraction(null);setNoInteraction(false)}} style={{ padding:'12px 16px', cursor:'pointer', fontSize:14, color:'var(--text-primary, white)', borderBottom:'1px solid rgba(0,0,0,0.04)', fontWeight:500 }}>
+                    <div key={d} onClick={()=>{setDrug2(d);setSearch2(d);setShow2(false);setInteraction(null);setNoInteraction(false)}} style={{ padding:'12px 16px', cursor:'pointer', fontSize:14, color:'var(--text-primary, #0A1628)', borderBottom:'1px solid rgba(0,0,0,0.04)', fontWeight:500 }}>
                       💊 {d}
                     </div>
                   ))}
@@ -282,7 +282,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
           {/* Common Dangerous Interactions */}
           <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)' }}>
-            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, white)', marginBottom:12 }}>⚠️ High-Risk Combinations</div>
+            <div style={{ fontSize:13, fontWeight:700, color:'var(--text-primary, #0A1628)', marginBottom:12 }}>⚠️ High-Risk Combinations</div>
             {[
               {combo:'Warfarin + Fluconazole', sev:'CONTRAINDICATED', color:'#dc2626'},
               {combo:'Simvastatin + Clarithromycin', sev:'CONTRAINDICATED', color:'#dc2626'},
@@ -300,7 +300,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 if(result){setInteraction(result);setNoInteraction(false)}
               }} style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:12, background:'rgba(255,255,255,0.14)', marginBottom:6, cursor:'pointer', border:'1px solid rgba(0,0,0,0.05)' }}>
                 <div style={{ width:8, height:8, borderRadius:'50%', background:item.color, flexShrink:0 }}/>
-                <div style={{ flex:1, fontSize:13, fontWeight:600, color:'var(--text-primary, white)' }}>{item.combo}</div>
+                <div style={{ flex:1, fontSize:13, fontWeight:600, color:'var(--text-primary, #0A1628)' }}>{item.combo}</div>
                 <div style={{ fontSize:9, padding:'2px 8px', borderRadius:8, background:`${item.color}15`, color:item.color, fontWeight:800 }}>{item.sev}</div>
               </div>
             ))}
