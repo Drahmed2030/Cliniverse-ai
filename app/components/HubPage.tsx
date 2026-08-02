@@ -205,6 +205,19 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
 
   // WARD→PULSE Integration
   const [wardAlert, setWardAlert] = useState<{patient:string,bed:string,diagnosis:string}|null>(null)
+  const [toolActivity, setToolActivity] = useState<{tool:string}|null>(null)
+
+  // TOOLS→PULSE listener
+  useEffect(() => {
+    const saved = localStorage.getItem('cliniverse-tool-activity')
+    if (saved) { try { setToolActivity(JSON.parse(saved)) } catch {} }
+    const handler = () => {
+      const data = localStorage.getItem('cliniverse-tool-activity')
+      if (data) { try { setToolActivity(JSON.parse(data)) } catch {} }
+    }
+    window.addEventListener('cliniverse-tool-update', handler)
+    return () => window.removeEventListener('cliniverse-tool-update', handler)
+  }, [])
 
   useEffect(() => {
     const saved = localStorage.getItem('cliniverse-ward-alert')
@@ -337,6 +350,27 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
                 </div>
               </div>
               <div onClick={()=>setWardAlert(null)} style={{fontSize:16,color:'var(--text-muted,rgba(242,248,252,0.45))',cursor:'pointer',padding:'4px'}}>✕</div>
+            </div>
+          )}
+
+          {/* TOOLS→PULSE Activity */}
+          {toolActivity && (
+            <div style={{
+              background:'rgba(48,209,88,0.08)',
+              border:'1px solid rgba(48,209,88,0.22)',
+              borderRadius:14, padding:'10px 14px',
+              marginBottom:12, display:'flex', alignItems:'center', gap:10,
+            }}>
+              <span style={{fontSize:18}}>⚡</span>
+              <div style={{flex:1}}>
+                <div style={{fontSize:9,color:'#30D158',fontWeight:800,letterSpacing:1,marginBottom:2}}>
+                  TOOL ACTIVE
+                </div>
+                <div style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#F2F8FC)'}}>
+                  {toolActivity.tool} — In Progress
+                </div>
+              </div>
+              <div onClick={()=>setToolActivity(null)} style={{fontSize:16,color:'var(--text-muted,rgba(242,248,252,0.45))',cursor:'pointer',padding:'4px'}}>✕</div>
             </div>
           )}
 
