@@ -364,15 +364,6 @@ export default function ToolsPage({ onXP }: { onXP: (n:number) => void }) {
   const [activeSection, setActiveSection] = useState<typeof SECTIONS[0]|null>(null)
   const [toolsSuggest, setToolsSuggest] = useState<{specialty:string,diagnosis:string,tools:string[]}|null>(null)
 
-  // TOOLS→PULSE broadcast when tool opened
-  const broadcastToolActivity = (toolName: string) => {
-    localStorage.setItem('cliniverse-tool-activity', JSON.stringify({
-      tool: toolName,
-      timestamp: Date.now()
-    }))
-    window.dispatchEvent(new CustomEvent('cliniverse-tool-update'))
-  }
-
   // WARD→TOOLS Integration
   useEffect(() => {
     const saved = localStorage.getItem('cliniverse-tools-suggest')
