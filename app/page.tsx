@@ -10,6 +10,7 @@ const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), 
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 import ToolsPage from './components/ToolsPage'
+const STEMICase = dynamic(() => import('./components/STEMICase'), { ssr:false })
 
 const EcgChallenge        = dynamic(() => import('./components/EcgChallenge'),        { ssr:false })
 const MedCalculators      = dynamic(() => import('./components/MedCalculators'),      { ssr:false })
@@ -389,7 +390,9 @@ export default function Home() {
 
   // ── CASE VIEW ─────────────────────────────────────────────────────────
   if (activeCase) {
-    const allCases = [...criticalCases,...sportsCases,...pedsCases]
+    // STEMI gets special interactive component
+  if (activeCase === 'stemi') return <div style={{minHeight:'100vh',background:'var(--bg-base,#F2F7FF)',fontFamily:'-apple-system,sans-serif',padding:'60px 20px 20px'}}><button onClick={()=>setActiveCase(null)} style={{background:'rgba(255,255,255,0.75)',backdropFilter:'blur(12px)',border:'1px solid rgba(10,132,255,0.12)',borderRadius:14,padding:'8px 18px',fontSize:13,fontWeight:600,color:'#0A1F3C',cursor:'pointer',marginBottom:16}}>← Back</button><STEMICase onXP={addXP}/></div>
+  const allCases = [...criticalCases,...sportsCases,...pedsCases]
     const c = allCases.find(x=>x.id===activeCase)!
     if (!c) { setActiveCase(null); return null }
 

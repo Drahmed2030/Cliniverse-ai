@@ -1,4 +1,24 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_stemi_interactive.py — Cliniverse AI
+══════════════════════════════════════════
+Interactive STEMI Case:
+  • Animated SVG heart — beats, shows stenosis
+  • Live ECG with ST elevation
+  • Vitals change based on decisions
+  • Clinical Stability Bar 0-100%
+  • Decision panel with consequences
+"""
+
+from pathlib import Path
+import shutil
+
+PROJECT = Path('/Users/macbook/cliniverse-ai')
+COMP    = PROJECT / 'app' / 'components'
+BACKUP  = PROJECT / '_theme_backups'
+BACKUP.mkdir(exist_ok=True)
+
+STEMI = r"""'use client'
 import { useState, useEffect, useRef } from 'react'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -528,3 +548,53 @@ export default function STEMICase({ onXP }: { onXP?: (n:number)=>void }) {
     </div>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — Interactive STEMI Case")
+    print("  Animated SVG Heart + Live Vitals + Stability Bar")
+    print("═"*60 + "\n")
+
+    target = COMP / 'STEMICase.tsx'
+    target.write_text(STEMI, encoding='utf-8')
+    print(f"✅ STEMICase.tsx written ({len(STEMI):,} chars)")
+
+    # Now update page.tsx to use STEMICase when activeCase === 'stemi'
+    page = PROJECT / 'app' / 'page.tsx'
+    if page.exists():
+        content = page.read_text()
+        # Add import if not present
+        if 'STEMICase' not in content:
+            content = content.replace(
+                "import ToolsPage from './components/ToolsPage'",
+                "import ToolsPage from './components/ToolsPage'\nconst STEMICase = dynamic(() => import('./components/STEMICase'), { ssr:false })"
+            )
+            # Add STEMI case rendering
+            content = content.replace(
+                "const allCases = [...criticalCases,...sportsCases,...pedsCases]",
+                "// STEMI gets special interactive component\n  if (activeCase === 'stemi') return <div style={{minHeight:'100vh',background:'var(--bg-base,#F2F7FF)',fontFamily:'-apple-system,sans-serif',padding:'60px 20px 20px'}}><button onClick={()=>setActiveCase(null)} style={{background:'rgba(255,255,255,0.75)',backdropFilter:'blur(12px)',border:'1px solid rgba(10,132,255,0.12)',borderRadius:14,padding:'8px 18px',fontSize:13,fontWeight:600,color:'#0A1F3C',cursor:'pointer',marginBottom:16}}>← Back</button><STEMICase onXP={addXP}/></div>\n  const allCases = [...criticalCases,...sportsCases,...pedsCases]"
+            )
+            page.write_text(content)
+            print("✅ page.tsx updated with STEMICase route")
+        else:
+            print("✓  page.tsx already has STEMICase")
+
+    print("""
+Features:
+  🫀 Animated SVG heart — beats, shows LAD occlusion
+  📈 Live ECG — ST elevation changes with stability
+  ⚡ Stability bar — 0-100% changes with decisions
+  ⏱ 90-second countdown timer
+  💊 4 clinical decisions with real-time feedback
+  📊 Vitals update dynamically
+  🏆 Results screen with key learning point
+
+Next:
+  npx next build
+  git add -A && git commit -m "feat: Interactive STEMI SVG heart + live vitals"
+  git push
+""")
+
+if __name__ == '__main__':
+    main()
