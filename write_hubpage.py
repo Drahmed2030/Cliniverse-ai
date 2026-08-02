@@ -1,4 +1,18 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_hubpage.py — Cliniverse AI
+HubPage rewrite — Apple Health 2026 · Ocean Blue · Clean Cards
+"""
+
+from pathlib import Path
+import shutil
+
+PROJECT = Path('/Users/macbook/cliniverse-ai')
+COMP    = PROJECT / 'app' / 'components'
+BACKUP  = PROJECT / '_theme_backups'
+BACKUP.mkdir(exist_ok=True)
+
+HUBPAGE = r"""'use client'
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
@@ -463,3 +477,40 @@ export default function HubPage({
     </div>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — HubPage Rewrite")
+    print("  Apple Health 2026 · Ocean Blue · Clean Cards")
+    print("═"*60 + "\n")
+
+    target = COMP / 'HubPage.tsx'
+    if target.exists():
+        shutil.copy2(target, BACKUP / 'HubPage.tsx.pre-rewrite')
+        print(f"📁 Backup saved")
+
+    target.write_text(HUBPAGE, encoding='utf-8')
+    print(f"✅ HubPage.tsx written ({len(HUBPAGE):,} chars)")
+    print(f"""
+═══════════════════════════════════════════════════
+What's new:
+  • HealthStatusHeader (Apple Watch) — top
+  • Ambient AI Scribe — prominent CTA
+  • Quick Tools — horizontal scroll, 6 tools
+  • Case of the Day — live progress bar
+  • Live Clinical Feed — horizontal scroll cards
+  • Academy — clean entry card
+  • Case Library — Critical/Sports/Peds
+  • Stats strip — XP/Cases/Streak
+  • Coming Soon — clean 2-item list
+
+Next:
+  npx next build
+  git add -A && git commit -m "feat: HubPage Apple Health 2026 redesign"
+  git push
+═══════════════════════════════════════════════════
+""")
+
+if __name__ == '__main__':
+    main()
