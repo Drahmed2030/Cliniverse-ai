@@ -1,4 +1,25 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_onboarding_v8.py — Cliniverse AI
+════════════════════════════════════════
+Dark Cinematic Story Mode Onboarding
+- Tap right half → next screen
+- Tap left half → previous screen  
+- Progress bar at top (Instagram style)
+- Auto-advance every 5 seconds
+- Dark backgrounds + glowing text
+- No buttons except PRO paywall
+"""
+
+from pathlib import Path
+import shutil
+
+PROJECT = Path('/Users/macbook/cliniverse-ai')
+COMP    = PROJECT / 'app' / 'components'
+BACKUP  = PROJECT / '_theme_backups'
+BACKUP.mkdir(exist_ok=True)
+
+ONBOARDING = r"""'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -465,3 +486,42 @@ export default function OnboardingFunnel({ onComplete }: Props) {
     </div>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — Onboarding v8 Dark Story Mode")
+    print("═"*60 + "\n")
+
+    target = COMP / 'OnboardingFunnel.tsx'
+    if target.exists():
+        shutil.copy2(target, BACKUP / 'OnboardingFunnel.tsx.v7.bak')
+        print("📁 Backup saved")
+
+    target.write_text(ONBOARDING, encoding='utf-8')
+    print(f"✅ OnboardingFunnel.tsx written ({len(ONBOARDING):,} chars)")
+    print("""
+7 Screens — Story Mode:
+  0. Splash      — Logo glow + ECG draw
+  1. Welcome     — Dark blue + stats
+  2. Live Cases  — Dark red + live cards  
+  3. AI Scribe   — Dark green + mic waves
+  4. Board Prep  — Dark violet + 6 boards
+  5. PRO Paywall — Pricing + features
+  6. Final CTA   — Enter the Hospital
+
+Controls:
+  → Tap right half = next
+  ← Tap left half  = previous
+  ⟵ Swipe left     = next
+  ⟶ Swipe right    = previous
+  ⏱ Auto-advance   = 5 seconds
+
+Next:
+  npx next build
+  git add -A && git commit -m "feat: Onboarding v8 dark story mode"
+  git push
+""")
+
+if __name__ == '__main__':
+    main()
