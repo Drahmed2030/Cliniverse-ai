@@ -118,8 +118,8 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
             </div>
             {expandedTest===`${selectedPanel}-${i}`&&(
               <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-                <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>LOW →</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{t.low}</div></div>
-                <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>HIGH →</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{t.high}</div></div>
+                <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>LOW →</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{t.low}</div></div>
+                <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>HIGH →</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{t.high}</div></div>
               </div>
             )}
           </div>
@@ -138,7 +138,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
           <div style={{fontSize:14,color:'#bf5af2',fontWeight:700,marginBottom:20}}>+{xp} XP</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, #0A1628)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
+            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
           </div>
         </div>
       )
@@ -160,7 +160,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -174,7 +174,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
-            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, #0A1628)',fontSize:14,fontWeight:800,cursor:'pointer'}}>
+            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}
             </button>
           </div>

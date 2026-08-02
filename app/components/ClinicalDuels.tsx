@@ -91,11 +91,11 @@ const DUEL_CASES: DuelCase[] = [
 ]
 
 const C = {
-  card: 'var(--bg-card, rgba(255,255,255,0.72))',
-  border: 'var(--border-card, rgba(10,132,255,0.12))',
-  text: 'var(--text-primary, #0A1628)',
-  sub: 'var(--text-secondary, rgba(10,22,40,0.55))',
-  muted: 'var(--text-muted, rgba(10,22,40,0.40))',
+  card: 'rgba(255,255,255,0.14)',
+  border: 'rgba(0,196,180,0.25)',
+  text: '#EEF6FA',
+  sub: 'rgba(255,255,255,0.45)',
+  muted: 'rgba(255,255,255,0.25)',
 }
 
 export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
@@ -266,7 +266,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
           {/* Timer */}
           <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
             <div style={{width:54,height:54,borderRadius:'50%',background:`conic-gradient(${timerColor} ${timerPct*3.6}deg, rgba(36,63,82,0.50) 0deg)`,display:'flex',alignItems:'center',justifyContent:'center',boxShadow:`0 0 20px ${timerColor}55`}}>
-              <div style={{width:44,height:44,borderRadius:'50%',background:'var(--bg-card,rgba(255,255,255,0.06))',display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <div style={{width:44,height:44,borderRadius:'50%',background:'rgba(15,5,35,1)',display:'flex',alignItems:'center',justifyContent:'center'}}>
                 <div style={{fontSize:18,fontWeight:900,color:timerColor}}>{timeLeft}</div>
               </div>
             </div>
@@ -285,7 +285,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
         {/* Case context */}
         <div style={{background:`${c.color}10`,borderRadius:16,padding:'12px 14px',marginBottom:12,border:`1px solid ${c.color}25`}}>
           <div style={{fontSize:11,color:c.color,fontWeight:700,marginBottom:3}}>{c.icon} {c.title}</div>
-          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{c.presentation}</div>
+          <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.5}}>{c.presentation}</div>
         </div>
 
         {/* Question */}
@@ -310,7 +310,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>!showExplain&&handleAnswer('A',i)}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:showExplain?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:30,height:30,borderRadius:9,background:'rgba(255,255,255,0.14)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>
+                <div style={{width:30,height:30,borderRadius:9,background:'rgba(255,255,255,0.14)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.5)',flexShrink:0}}>
                   {['A','B','C','D'][i]}
                 </div>
                 <div style={{fontSize:13,color,fontWeight:600,flex:1,lineHeight:1.4}}>{opt}</div>
@@ -378,7 +378,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startDuel(selectedCase)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${selectedCase.color}30`,background:`${selectedCase.color}10`,color:selectedCase.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Rematch</button>
-          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
+          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
         </div>
       </div>
     )

@@ -274,8 +274,8 @@ const GUIDELINES = [
 const C = {
   card: 'rgba(255,255,255,0.07)',
   border: 'rgba(139,92,246,0.15)',
-  text: 'var(--text-primary, #0A1628)',
-  sub: 'var(--text-secondary, rgba(10,22,40,0.55))',
+  text: '#EEF6FA',
+  sub: 'rgba(255,255,255,0.45)',
   muted: 'rgba(255,255,255,0.28)',
 }
 
@@ -391,7 +391,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
           {g.points.map((p,i)=>(
             <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<g.points.length-1?`1px solid rgba(255,255,255,0.05)`:'none'}}>
               <div style={{width:22,height:22,borderRadius:7,background:`${g.color}18`,border:`1px solid ${g.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:g.color,flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5,fontWeight:500}}>{p}</div>
+              <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5,fontWeight:500}}>{p}</div>
             </div>
           ))}
         </div>
@@ -440,7 +440,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
             <div style={{fontSize:32}}>{c.icon}</div>
             <div style={{flex:1}}>
               <div style={{fontSize:13,fontWeight:800,color:C.text,marginBottom:4}}>{c.patient}</div>
-              <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7}}>{c.background}</div>
+              <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.7}}>{c.background}</div>
             </div>
           </div>
           {/* Key findings */}
@@ -495,7 +495,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
             {showHandover&&(
               <div style={{background:'rgba(255,255,255,0.03)',borderRadius:14,padding:'14px 16px',border:'1px solid rgba(191,90,242,0.2)'}}>
                 <div style={{fontSize:11,color:'#bf5af2',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>📋 SBAR HANDOVER</div>
-                <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-line'}}>{c.handoverTemplate}</div>
+                <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.85,whiteSpace:'pre-line'}}>{c.handoverTemplate}</div>
               </div>
             )}
           </div>
@@ -509,7 +509,7 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
           </button>
         ) : (
           <button onClick={()=>{onXP&&onXP(Math.round((score/(activeCase.correctActions.length))*activeCase.xpReward));setView('debrief')}}
-            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>
+            style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>
             ✅ Complete Consultation
           </button>
         )}
@@ -546,12 +546,12 @@ export default function TeleconsultModule({ onXP }: { onXP?: (n:number)=>void })
         {/* SBAR reminder */}
         <div style={{background:'linear-gradient(135deg,rgba(191,90,242,0.1),rgba(10,132,255,0.08))',borderRadius:18,padding:'16px',marginBottom:14,border:'1px solid rgba(191,90,242,0.2)'}}>
           <div style={{fontSize:13,fontWeight:800,color:'#c4b5fd',marginBottom:10}}>📋 SBAR Handover</div>
-          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-line'}}>{c.handoverTemplate}</div>
+          <div style={{fontSize:12,color:'rgba(255,255,255,0.65)',lineHeight:1.85,whiteSpace:'pre-line'}}>{c.handoverTemplate}</div>
         </div>
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startCase(c)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${c.color}30`,background:`${c.color}10`,color:c.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>{setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>← Cases</button>
+          <button onClick={()=>{setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#8b5cf6,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>← Cases</button>
         </div>
       </div>
     )
