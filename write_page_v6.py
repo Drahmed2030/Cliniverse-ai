@@ -1,4 +1,31 @@
-'use client'
+#!/usr/bin/env python3
+"""
+write_page_v6.py — Cliniverse AI
+══════════════════════════════════════════════════════════════════
+Liquid Ocean 2026 design system — complete page.tsx rewrite.
+
+Design language:
+  • Background: layered ocean-to-sky liquid gradient (not dark, not flat white)
+    #EEF6FF → #F5F0FF → animated radial mist
+  • Cards: frosted glass with luminous colored borders
+    backdrop-blur + rgba(255,255,255,0.72) + colored glow ring
+  • Typography: Inter / SF Pro — clean, clinical, confident
+  • Vitals & ECG: color-coded, high-contrast against light glass
+  • Accent: Teal #00B8A9, Cobalt #0A84FF, Coral #FF6B6B
+  • Zero hardcoded dark backgrounds — all via CSS variables
+  • Pure Hospital theme compatible
+══════════════════════════════════════════════════════════════════
+Usage:
+  cd /Users/macbook/cliniverse-ai
+  python3 write_page_v6.py
+"""
+
+from pathlib import Path
+
+TARGET = Path('/Users/macbook/cliniverse-ai/app/page.tsx')
+BACKUP = Path('/Users/macbook/cliniverse-ai/_theme_backups/page.tsx.v5.bak')
+
+content = r"""'use client'
 import { useState, useEffect } from 'react'
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
@@ -822,3 +849,28 @@ export default function Home() {
     </div>
   )
 }
+"""
+
+def main():
+    print("\n" + "═"*60)
+    print("  Cliniverse AI — page.tsx Liquid Ocean 2026 Rewrite")
+    print("═"*60 + "\n")
+
+    # Backup
+    BACKUP.parent.mkdir(exist_ok=True)
+    if TARGET.exists() and not BACKUP.exists():
+        import shutil
+        shutil.copy2(TARGET, BACKUP)
+        print(f"📁 Backup → {BACKUP}")
+
+    TARGET.write_text(content, encoding='utf-8')
+    print(f"✅ Written → {TARGET}")
+    print(f"   Size: {len(content):,} chars\n")
+    print("🚀 Next:")
+    print("   npx next build  (verify no errors)")
+    print("   git add -A && git commit -m 'feat: Liquid Ocean 2026 design system'")
+    print("   git push\n")
+    print("═"*60 + "\n")
+
+if __name__ == '__main__':
+    main()
