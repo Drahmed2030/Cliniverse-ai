@@ -324,7 +324,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
 
   // ── SPLASH ──
   if (splash) return (
-    <div style={{position:'fixed',inset:0,background:'#0d1828',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',fontFamily:F,zIndex:9999}}>
+    <div style={{position:'fixed',inset:0,background:'var(--bg-card,#0d1828)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',fontFamily:F,zIndex:9999}}>
       {/* Aurora */}
       <div style={{position:'absolute',top:0,left:0,right:0,height:'55%',background:'radial-gradient(ellipse at 50% 0%,rgba(0,200,184,0.18) 0%,rgba(0,200,184,0.04) 55%,transparent 80%)',pointerEvents:'none'}}/>
       {/* Neural dots */}
@@ -354,7 +354,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
   return (
     <div style={{
       position:'fixed',inset:0,
-      background:'#0d1828',
+      background:'var(--bg-card,#0d1828)',
       fontFamily:F,overflow:'hidden',
       display:'flex',flexDirection:'column',
       opacity: leaving ? 0 : 1,

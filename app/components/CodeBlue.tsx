@@ -384,7 +384,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           )}
 
           {/* Vitals Monitor */}
-          <div style={{ background:'#1e2d40', borderRadius:14, padding:12, marginBottom:10, border:'1px solid rgba(0,255,157,0.15)' }}>
+          <div style={{ background:'var(--bg-card,#1e2d40)', borderRadius:14, padding:12, marginBottom:10, border:'1px solid rgba(0,255,157,0.15)' }}>
             <div style={{ display:'flex', justifyContent:'space-around' }}>
               {Object.entries(scenario.vitals).map(([k,v])=>(
                 <div key={k} style={{ textAlign:'center' }}>
