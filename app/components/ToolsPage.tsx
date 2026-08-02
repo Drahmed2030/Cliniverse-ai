@@ -209,7 +209,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
               <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `${s.color}08`, filter: 'blur(16px)', pointerEvents: 'none' }} />
               <div style={{ width: 52, height: 52, borderRadius: 16, flexShrink: 0, background: `${s.color}15`, border: `1px solid ${s.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{s.icon}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 3 }}>{s.label}</div>
+                <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary,#071828)', marginBottom: 3 }}>{s.label}</div>
                 <div style={{ fontSize: 11, color: T.sub }}>{s.desc}</div>
                 <div style={{ fontSize: 10, color: `${s.color}90`, fontWeight: 700, marginTop: 4 }}>{s.tools.length} tools</div>
               </div>
@@ -240,7 +240,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
           }}>
             <div style={{ width: 52, height: 52, borderRadius: 16, flexShrink: 0, background: `${t.color}15`, border: `1px solid ${t.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{t.icon}</div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 3 }}>{t.label}</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary,#071828)', marginBottom: 3 }}>{t.label}</div>
               <div style={{ fontSize: 12, color: T.sub }}>{t.desc}</div>
             </div>
             <div style={{ background: `${t.color}15`, border: `1px solid ${t.color}25`, borderRadius: 10, padding: '6px 12px', fontSize: 12, color: t.color, fontWeight: 700 }}>Open →</div>
