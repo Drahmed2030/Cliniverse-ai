@@ -1,0 +1,44 @@
+workflows:
+  ios-workflow:
+    name: Cliniverse AI iOS
+    max_build_duration: 60
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.cliniverse.ai
+      vars:
+        BUNDLE_ID: com.cliniverse.ai
+        XCODE_WORKSPACE: ios/CliniverseAI.xcworkspace
+        XCODE_SCHEME: CliniverseAI
+      node: 18.17.0
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: npm install
+      - name: Install Capacitor iOS
+        script: |
+          npm install @capacitor/core @capacitor/ios @capacitor/cli
+          npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
+      - name: Build Next.js
+        script: |
+          npm run build
+          npx next export -o out || true
+      - name: Add iOS platform
+        script: |
+          npx cap add ios || true
+          npx cap sync ios
+      - name: Install CocoaPods
+        script: cd ios && pod install
+      - name: Build iOS
+        script: |
+          xcode-project use-profiles
+          xcode-project build-ipa \
+            --workspace ios/App/App.xcworkspace \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
