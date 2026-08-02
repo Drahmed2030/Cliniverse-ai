@@ -106,7 +106,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
       }}>
         <div style={{ position: 'absolute', top: -30, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,223,208,0.12),transparent 70%)', pointerEvents: 'none' }}/>
         <div style={{ fontSize: 9, color: T.purple, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>Grand Rounds AI · Multidisciplinary</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: T.text, letterSpacing: -0.5, marginBottom: 4 }}>{CASE.title}</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5, marginBottom: 4 }}>{CASE.title}</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
           {['Cardiology', 'Nephrology', 'ICU', 'Complex'].map((t, i) => (
             <span key={i} style={{ fontSize: 9, padding: '2px 8px', borderRadius: 8, background: 'rgba(0,223,208,0.1)', border: '1px solid rgba(0,223,208,0.2)', color: T.purple, fontWeight: 700 }}>{t}</span>
@@ -140,7 +140,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
         <div>
           <div style={{ background: T.card, border: '1px solid ' + T.border, borderRadius: 20, padding: '18px', marginBottom: 12 }}>
             <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>Clinical Presentation</div>
-            <p style={{ fontSize: 14, color: T.sub, lineHeight: 1.7, margin: 0 }}>{CASE.brief}</p>
+            <p style={{ fontSize: 14, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, margin: 0 }}>{CASE.brief}</p>
           </div>
 
           <div style={{ background: T.card, border: '1px solid rgba(248,113,113,0.2)', borderRadius: 20, padding: '16px', marginBottom: 12 }}>
@@ -158,7 +158,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
           <button onClick={() => setPhase('labs')} style={{
             width: '100%', padding: '15px', border: 'none', borderRadius: 16,
             background: 'linear-gradient(135deg, #a78bfa, #38bdf8)',
-            color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F,
+            color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F,
             boxShadow: '0 6px 24px rgba(0,223,208,0.3)',
           }}>Check Labs 🔬</button>
         </div>
@@ -180,7 +180,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                     border: '1px solid ' + (l.status === 'critical' ? 'rgba(248,113,113,0.2)' : T.border),
                   }}>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{l.name}</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color:'var(--text-primary,#0A1628)' }}>{l.name}</div>
                       <div style={{ fontSize: 10, color: T.muted }}>Ref: {l.ref}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
@@ -192,7 +192,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
               })}
             </div>
           </div>
-          <button onClick={() => setPhase('imaging')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Check Imaging 🩻</button>
+          <button onClick={() => setPhase('imaging')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Check Imaging 🩻</button>
         </div>
       )}
 
@@ -207,12 +207,12 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
             <div key={i} style={{ background: T.card, border: '1px solid ' + img.color + '20', borderRadius: 20, padding: '16px', marginBottom: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
                 <div style={{ width: 36, height: 36, borderRadius: 11, background: img.color + '15', border: '1px solid ' + img.color + '25', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{img.icon}</div>
-                <div style={{ fontSize: 13, fontWeight: 800, color: T.text }}>{img.title}</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color:'var(--text-primary,#0A1628)' }}>{img.title}</div>
               </div>
-              <p style={{ fontSize: 13, color: T.sub, lineHeight: 1.65, margin: 0 }}>{img.content}</p>
+              <p style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.65, margin: 0 }}>{img.content}</p>
             </div>
           ))}
-          <button onClick={() => setPhase('consultants')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Grand Rounds 👨‍⚕️</button>
+          <button onClick={() => setPhase('consultants')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Grand Rounds 👨‍⚕️</button>
         </div>
       )}
 
@@ -242,20 +242,20 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                     <div style={{ width: 44, height: 44, borderRadius: 14, background: c.color + '15', border: '1px solid ' + c.color + '25', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{c.icon}</div>
                     <div>
-                      <div style={{ fontSize: 14, fontWeight: 800, color: T.text }}>{c.name}</div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)' }}>{c.name}</div>
                       <div style={{ fontSize: 11, color: c.color, fontWeight: 700 }}>{c.specialty} Consultant</div>
                     </div>
                   </div>
-                  <p style={{ fontSize: 13, color: T.sub, lineHeight: 1.7, margin: '0 0 14px' }}>{c.opinion}</p>
+                  <p style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, margin: '0 0 14px' }}>{c.opinion}</p>
                   <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 8 }}>Recommended Plan</div>
                   {c.plan.map((p, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: i < c.plan.length - 1 ? '1px solid ' + T.border : 'none' }}>
                       <div style={{ width: 6, height: 6, borderRadius: '50%', background: c.color, flexShrink: 0 }}/>
-                      <span style={{ fontSize: 12, color: T.sub }}>{p}</span>
+                      <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{p}</span>
                     </div>
                   ))}
                 </div>
-                <button onClick={() => setPhase('decision')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Make Decision ⚡</button>
+                <button onClick={() => setPhase('decision')} style={{ width: '100%', padding: '15px', border: 'none', borderRadius: 16, background: 'linear-gradient(135deg, #a78bfa, #38bdf8)', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(0,223,208,0.3)' }}>Make Decision ⚡</button>
               </div>
             )
           })()}
@@ -267,7 +267,7 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
         <div>
           <div style={{ background: T.card, border: '1px solid ' + T.border, borderRadius: 20, padding: '18px', marginBottom: 14 }}>
             <div style={{ fontSize: 10, color: T.purple, fontWeight: 800, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 10 }}>Your Decision</div>
-            <p style={{ fontSize: 15, fontWeight: 700, color: T.text, lineHeight: 1.5, margin: 0 }}>{CASE.question}</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color:'var(--text-primary,#0A1628)', lineHeight: 1.5, margin: 0 }}>{CASE.question}</p>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -289,11 +289,11 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
                       width: 28, height: 28, borderRadius: 8, flexShrink: 0,
                       background: !showResult ? 'rgba(255,255,255,0.12)' : isSelected && isCorrect ? 'rgba(74,222,128,0.2)' : isSelected && !isCorrect ? 'rgba(248,113,113,0.2)' : 'rgba(255,255,255,0.12)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 12, fontWeight: 800, color: T.sub,
+                      fontSize: 12, fontWeight: 800, color:'var(--text-secondary,rgba(10,22,40,0.55))',
                     }}>
                       {showResult && isSelected ? (isCorrect ? '✓' : '✗') : o.id.toUpperCase()}
                     </div>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: T.text, flex: 1, lineHeight: 1.4 }}>{o.text}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color:'var(--text-primary,#0A1628)', flex: 1, lineHeight: 1.4 }}>{o.text}</span>
                   </div>
                   {showFeedback && (
                     <div style={{ marginTop: 10, padding: '10px 12px', borderRadius: 12, background: isCorrect ? 'rgba(74,222,128,0.06)' : 'rgba(248,113,113,0.06)', border: '1px solid ' + (isCorrect ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)') }}>
@@ -308,10 +308,10 @@ export default function GrandRoundsAI({ onXP }: { onXP?: (n: number) => void }) 
           {showResult && (
             <div style={{ marginTop: 14, background: 'rgba(0,223,208,0.08)', border: '1px solid rgba(0,223,208,0.2)', borderRadius: 18, padding: '16px', textAlign: 'center' }}>
               <div style={{ fontSize: 28, marginBottom: 6 }}>{CASE.options.find(o => o.id === selected)?.correct ? '🏆' : '📚'}</div>
-              <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 4 }}>
+              <div style={{ fontSize: 15, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>
                 {CASE.options.find(o => o.id === selected)?.correct ? '+120 XP — Excellent Clinical Judgment!' : 'Keep Learning — Review the Consultants\' Plans'}
               </div>
-              <div style={{ fontSize: 12, color: T.sub }}>Grand Rounds complete · New case tomorrow</div>
+              <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Grand Rounds complete · New case tomorrow</div>
             </div>
           )}
         </div>

@@ -28,7 +28,7 @@ const INTERPRETATION_TYPES = [
   { id: 'echo',    label: 'Echo',         icon: '🫀', color: T.purple },
   { id: 'labs',    label: 'Lab Results',  icon: '🧪', color: T.green  },
   { id: 'vitals',  label: 'Vitals',       icon: '💊', color: T.gold   },
-  { id: 'note',    label: 'Clinical Note',icon: '📋', color: T.sub    },
+  { id: 'note',    label: 'Clinical Note',icon: '📋', color:'var(--text-secondary,rgba(10,22,40,0.55))'    },
 ]
 
 // ── ADD PATIENT MODAL ──
@@ -57,10 +57,10 @@ function AddPatientModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: a
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.88)', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
-      <div style={{ background: 'linear-gradient(180deg,#1e3d52,#162e3e)', borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', border: '1px solid ' + T.border }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', fontFamily: F }}>
+      <div style={{ background:'var(--bg-base,#F7F9FC)', borderRadius: '24px 24px 0 0', padding: '24px 20px 40px', border: '1px solid ' + T.border }}>
         <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.20)', margin: '0 auto 20px' }} />
-        <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 20 }}>➕ New Patient</div>
+        <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 20 }}>➕ New Patient</div>
 
         {[
           { key: 'name',      label: 'Full Name *',    placeholder: 'Patient name' },
@@ -74,7 +74,7 @@ function AddPatientModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: a
               value={(form as any)[f.key]}
               onChange={e => setForm(prev => ({ ...prev, [f.key]: e.target.value }))}
               placeholder={f.placeholder}
-              style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }}
             />
           </div>
         ))}
@@ -90,7 +90,7 @@ function AddPatientModal({ onClose, onAdd }: { onClose: () => void, onAdd: (p: a
           </div>
         </div>
 
-        <button onClick={save} disabled={saving || !form.name || !form.mrn} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !form.name || !form.mrn ? 'rgba(0,196,180,0.2)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: '#fff', fontSize: 14, fontWeight: 800, cursor: !form.name || !form.mrn ? 'not-allowed' : 'pointer', fontFamily: F }}>
+        <button onClick={save} disabled={saving || !form.name || !form.mrn} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !form.name || !form.mrn ? 'rgba(0,196,180,0.2)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: !form.name || !form.mrn ? 'not-allowed' : 'pointer', fontFamily: F }}>
           {saving ? 'Saving...' : '✅ Add Patient'}
         </button>
         <button onClick={onClose} style={{ width: '100%', padding: '12px', marginTop: 8, borderRadius: 16, border: '1px solid ' + T.border, background: 'transparent', color: T.muted, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>Cancel</button>
@@ -149,12 +149,12 @@ function AddInterpretationModal({ patient, onClose, onAdd }: { patient: any, onC
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
+          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 900, color: T.text }}>Add Interpretation</div>
+            <div style={{ fontSize: 16, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>Add Interpretation</div>
             <div style={{ fontSize: 11, color: T.teal }}>{patient.name} · {patient.mrn}</div>
           </div>
         </div>
@@ -176,22 +176,22 @@ function AddInterpretationModal({ patient, onClose, onAdd }: { patient: any, onC
           onChange={e => setFinding(e.target.value)}
           placeholder={'Describe the ' + t.label + ' finding...'}
           rows={4}
-          style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, boxSizing: 'border-box', marginBottom: 12 }}
+          style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, boxSizing: 'border-box', marginBottom: 12 }}
         />
 
         {/* AI Generate */}
-        <button onClick={generateAI} disabled={generating || !finding.trim()} style={{ width: '100%', padding: '13px', borderRadius: 14, border: 'none', background: generating || !finding.trim() ? 'rgba(175,82,222,0.15)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: '#fff', fontSize: 13, fontWeight: 800, cursor: generating || !finding.trim() ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
+        <button onClick={generateAI} disabled={generating || !finding.trim()} style={{ width: '100%', padding: '13px', borderRadius: 14, border: 'none', background: generating || !finding.trim() ? 'rgba(175,82,222,0.15)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: generating || !finding.trim() ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12 }}>
           {generating ? <><div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Generating AI interpretation...</> : '🤖 Generate AI Interpretation'}
         </button>
 
         {aiText && (
           <div style={{ background: T.purple + '08', border: '1px solid ' + T.purple + '22', borderRadius: 16, padding: '14px', marginBottom: 16 }}>
             <div style={{ fontSize: 9, color: T.purple, fontWeight: 700, letterSpacing: 1, marginBottom: 8 }}>🤖 AI INTERPRETATION</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.8, whiteSpace: 'pre-line' }}>{aiText}</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{aiText}</div>
           </div>
         )}
 
-        <button onClick={save} disabled={!finding.trim()} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !finding.trim() ? 'rgba(0,196,180,0.15)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: '#fff', fontSize: 14, fontWeight: 800, cursor: !finding.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
+        <button onClick={save} disabled={!finding.trim()} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !finding.trim() ? 'rgba(0,196,180,0.15)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: !finding.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
           💾 Save to Patient Record
         </button>
       </div>
@@ -254,10 +254,10 @@ function PatientDetail({ patient, onBack }: { patient: any, onBack: () => void }
     <div style={{ fontFamily: F }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <button onClick={onBack} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Patients</button>
+        <button onClick={onBack} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Patients</button>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 16, fontWeight: 900, color: T.text }}>{patient.name}</div>
-          <div style={{ fontSize: 11, color: T.sub }}>MRN: {patient.mrn} · {patient.age}{patient.gender} · {patient.diagnosis}</div>
+          <div style={{ fontSize: 16, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>{patient.name}</div>
+          <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>MRN: {patient.mrn} · {patient.age}{patient.gender} · {patient.diagnosis}</div>
         </div>
       </div>
 
@@ -278,7 +278,7 @@ function PatientDetail({ patient, onBack }: { patient: any, onBack: () => void }
 
       {/* Add + Report buttons */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-        <button onClick={() => setShowAdd(true)} style={{ flex: 1, padding: '13px', borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: '#fff', fontSize: 13, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
+        <button onClick={() => setShowAdd(true)} style={{ flex: 1, padding: '13px', borderRadius: 16, border: 'none', background: 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
           ➕ Add Record
         </button>
         <button onClick={genReport} disabled={generating || interpretations.length === 0} style={{ flex: 1, padding: '13px', borderRadius: 16, border: '1px solid ' + T.gold + '30', background: T.gold + '12', color: interpretations.length === 0 ? T.muted : T.gold, fontSize: 13, fontWeight: 800, cursor: interpretations.length === 0 ? 'not-allowed' : 'pointer', fontFamily: F }}>
@@ -293,7 +293,7 @@ function PatientDetail({ patient, onBack }: { patient: any, onBack: () => void }
             <div style={{ fontSize: 9, color: T.gold, fontWeight: 700, letterSpacing: 1.5 }}>📄 MEDICAL REPORT</div>
             <button onClick={copy} style={{ background: copied ? T.green + '20' : T.glass2, border: '1px solid ' + (copied ? T.green : T.border), borderRadius: 10, padding: '5px 12px', color: copied ? T.green : T.muted, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>{copied ? '✓ Copied' : '📋 Copy'}</button>
           </div>
-          <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.9, whiteSpace: 'pre-line' }}>{report}</div>
+          <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.9, whiteSpace: 'pre-line' }}>{report}</div>
         </div>
       )}
 
@@ -305,7 +305,7 @@ function PatientDetail({ patient, onBack }: { patient: any, onBack: () => void }
       {interpretations.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: '1px solid ' + T.border }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>🗂️</div>
-          <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>No records yet</div>
+          <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>No records yet</div>
           <div style={{ fontSize: 12, color: T.muted }}>Tap "Add Record" to start</div>
         </div>
       ) : interpretations.map((item, i) => {
@@ -320,11 +320,11 @@ function PatientDetail({ patient, onBack }: { patient: any, onBack: () => void }
               </div>
               <span style={{ fontSize: 9, color: T.muted }}>{new Date(item.created_at).toLocaleDateString()}</span>
             </div>
-            <div style={{ fontSize: 13, color: T.text, fontWeight: 600, marginBottom: 6, lineHeight: 1.5 }}>{item.finding}</div>
+            <div style={{ fontSize: 13, color:'var(--text-primary,#0A1628)', fontWeight: 600, marginBottom: 6, lineHeight: 1.5 }}>{item.finding}</div>
             {item.ai_interpretation && (
               <div style={{ background: T.purple + '08', border: '1px solid ' + T.purple + '18', borderRadius: 10, padding: '8px 10px', marginTop: 6 }}>
                 <div style={{ fontSize: 8, color: T.purple, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>🤖 AI</div>
-                <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>{item.ai_interpretation.substring(0, 150)}...</div>
+                <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{item.ai_interpretation.substring(0, 150)}...</div>
               </div>
             )}
           </div>
@@ -363,10 +363,10 @@ export default function ClinicalMemory({ onXP }: { onXP?: (n: number) => void })
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.teal + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>CLINICAL MEMORY</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Patient <span style={{ color: T.teal }}>Records</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>ECG · Retinal · Labs · Imaging · AI Report in 30s</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>ECG · Retinal · Labs · Imaging · AI Report in 30s</div>
       </div>
 
       {/* Stats */}
@@ -390,21 +390,21 @@ export default function ClinicalMemory({ onXP }: { onXP?: (n: number) => void })
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search patient name, MRN, diagnosis..."
-          style={{ flex: 1, padding: '11px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, backdropFilter: 'blur(16px)', color: T.text, fontSize: 13, outline: 'none', fontFamily: F }}
+          style={{ flex: 1, padding: '11px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, backdropFilter: 'blur(16px)', color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F }}
         />
-        <button onClick={() => setShowAdd(true)} style={{ padding: '11px 16px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: '#fff', fontSize: 13, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>+ New</button>
+        <button onClick={() => setShowAdd(true)} style={{ padding: '11px 16px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>+ New</button>
       </div>
 
       {/* Patients list */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.08)', borderTop: '3px solid ' + T.teal, animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
-          <div style={{ fontSize: 13, color: T.sub }}>Loading patients...</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Loading patients...</div>
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: '1px solid ' + T.border }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>🗂️</div>
-          <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>{patients.length === 0 ? 'No patients yet' : 'No results'}</div>
+          <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>{patients.length === 0 ? 'No patients yet' : 'No results'}</div>
           <div style={{ fontSize: 12, color: T.muted }}>{patients.length === 0 ? 'Tap "+ New" to add your first patient' : 'Try a different search'}</div>
         </div>
       ) : filtered.map(p => (
@@ -414,8 +414,8 @@ export default function ClinicalMemory({ onXP }: { onXP?: (n: number) => void })
             {p.gender === 'F' ? '👩' : '👨'}
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: T.text, marginBottom: 2 }}>{p.name}</div>
-            <div style={{ fontSize: 11, color: T.sub }}>MRN: {p.mrn} · {p.age}{p.gender}</div>
+            <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{p.name}</div>
+            <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>MRN: {p.mrn} · {p.age}{p.gender}</div>
             {p.diagnosis && <div style={{ fontSize: 10, color: T.teal, marginTop: 3, fontWeight: 600 }}>{p.diagnosis}</div>}
           </div>
           <span style={{ fontSize: 18, color: T.muted }}>›</span>

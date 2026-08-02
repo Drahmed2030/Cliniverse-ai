@@ -70,7 +70,7 @@ function ICDCard({ entity }: { entity: any }) {
     <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.blue}22`, borderRadius: 16, padding: '14px', marginBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
         <div style={{ flex: 1, marginRight: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: T.text, lineHeight: 1.4, marginBottom: 4 }}>{title}</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color:'var(--text-primary,#0A1628)', lineHeight: 1.4, marginBottom: 4 }}>{title}</div>
           {chapter && <div style={{ fontSize: 10, color: T.muted }}>{chapter}</div>}
         </div>
         <div style={{ background: T.blue + '15', border: `1px solid ${T.blue}25`, borderRadius: 10, padding: '4px 10px', fontSize: 12, color: T.blue, fontWeight: 900, flexShrink: 0 }}>{code}</div>
@@ -102,7 +102,7 @@ function SNOMEDCard({ concept }: { concept: any }) {
     <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.purple}22`, borderRadius: 16, padding: '14px', marginBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
         <div style={{ flex: 1, marginRight: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: T.text, lineHeight: 1.4, marginBottom: 4 }}>{cleanTerm}</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color:'var(--text-primary,#0A1628)', lineHeight: 1.4, marginBottom: 4 }}>{cleanTerm}</div>
           <div style={{ fontSize: 10, color: T.muted, fontFamily: 'monospace' }}>SCTID: {id}</div>
         </div>
         <div style={{ background: T.purple + '15', border: `1px solid ${T.purple}25`, borderRadius: 10, padding: '4px 8px', fontSize: 9, color: T.purple, fontWeight: 700, flexShrink: 0 }}>{module}</div>
@@ -172,10 +172,10 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.teal + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>MEDICAL TERMINOLOGY</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Clinical <span style={{ color: T.teal }}>Codes</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>WHO ICD-11 · SNOMED CT · Global Standards</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>WHO ICD-11 · SNOMED CT · Global Standards</div>
       </div>
 
       {/* Stats */}
@@ -208,7 +208,7 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
         <div style={{ fontSize: 11, color: tab === 'icd' ? T.blue : T.purple, fontWeight: 700, marginBottom: 3 }}>
           {tab === 'icd' ? '🌍 WHO ICD-11 (2024)' : '🔬 SNOMED CT International'}
         </div>
-        <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.5 }}>
           {tab === 'icd'
             ? 'International Classification of Diseases · Used in 194 WHO member states · Required for Saudi MOH billing'
             : 'Systematized Nomenclature of Medicine · 350,000+ clinical concepts · Used in Epic, Cerner, NHS systems'}
@@ -222,9 +222,9 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && search()}
           placeholder={tab === 'icd' ? 'Search ICD-11 (e.g. Myocardial infarction)...' : 'Search SNOMED (e.g. Hypertension)...'}
-          style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F }}
+          style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F }}
         />
-        <button onClick={search} disabled={loading || !query.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !query.trim() ? 'rgba(0,196,180,0.15)' : `linear-gradient(135deg,${tab === 'icd' ? T.blue : T.purple},${tab === 'icd' ? '#0055CC' : '#7B00CC'})`, color: '#fff', fontSize: 13, fontWeight: 800, cursor: !query.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
+        <button onClick={search} disabled={loading || !query.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !query.trim() ? 'rgba(0,196,180,0.15)' : `linear-gradient(135deg,${tab === 'icd' ? T.blue : T.purple},${tab === 'icd' ? '#0055CC' : '#7B00CC'})`, color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: !query.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
           {loading ? <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} /> : '🔍'}
         </button>
       </div>
@@ -234,7 +234,7 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>QUICK SEARCH</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {(tab === 'icd' ? QUICK_ICD : QUICK_SNOMED).map(term => (
-            <button key={term} onClick={() => { setQuery(term) }} style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color: T.sub, fontSize: 11, fontWeight: 600 }}>{term}</button>
+            <button key={term} onClick={() => { setQuery(term) }} style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 11, fontWeight: 600 }}>{term}</button>
           ))}
         </div>
       </div>
@@ -250,7 +250,7 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
       {loading && (
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div style={{ width: 40, height: 40, borderRadius: '50%', border: `3px solid rgba(255,255,255,0.08)`, borderTop: `3px solid ${tab === 'icd' ? T.blue : T.purple}`, animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
-          <div style={{ fontSize: 13, color: T.sub }}>Searching {tab === 'icd' ? 'WHO ICD-11' : 'SNOMED CT'}...</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Searching {tab === 'icd' ? 'WHO ICD-11' : 'SNOMED CT'}...</div>
         </div>
       )}
 
@@ -270,7 +270,7 @@ export default function MedicalTerminology({ onXP }: { onXP?: (n: number) => voi
       {!loading && searched && results.length === 0 && !error && (
         <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: `1px solid ${T.border}` }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>🔍</div>
-          <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>No results found</div>
+          <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>No results found</div>
           <div style={{ fontSize: 12, color: T.muted }}>Try different search terms</div>
         </div>
       )}

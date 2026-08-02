@@ -312,11 +312,11 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       <div style={{ marginBottom: 14, display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
         <div>
           <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', margin: '0 0 2px', letterSpacing: -0.5 }}>Code Blue</h2>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', margin: 0 }}>Real-time emergency · 10 scenarios</p>
+          <p style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', margin: 0 }}>Real-time emergency · 10 scenarios</p>
         </div>
         <div style={{ textAlign:'right' }}>
           <div style={{ fontSize: 14, fontWeight: 800, color: '#00C4B4' }}>+{totalXP} XP</div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>total earned</div>
+          <div style={{ fontSize: 10, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>total earned</div>
         </div>
       </div>
 
@@ -325,8 +325,8 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
         {SCENARIOS.map((s, i) => (
           <button key={s.id} onClick={() => { if(phase!=='running'){setScenarioIdx(i);setPhase('intro')} }}
             style={{ flexShrink:0, width:68, padding:'10px 6px', borderRadius:16, border: i===scenarioIdx?`2px solid ${s.color}`:'1px solid rgba(0,196,180,0.25)', background: i===scenarioIdx?`${s.color}18`:'rgba(255,255,255,0.14)', cursor:'pointer', backdropFilter:'blur(12px)', display:'flex', flexDirection:'column', alignItems:'center', gap:4, boxShadow: i===scenarioIdx?`0 4px 16px ${s.color}44`:'none', transition:'all 0.2s' }}>
-            <ScenarioIcon iconName={s.icon} color={i===scenarioIdx?s.color:'rgba(255,255,255,0.35)'} size={28}/>
-            <div style={{ fontSize:8, fontWeight:700, color:i===scenarioIdx?s.color:'rgba(255,255,255,0.35)', lineHeight:1.2, textAlign:'center' }}>{s.title.split(' ')[0]}</div>
+            <ScenarioIcon iconName={s.icon} color={i===scenarioIdx?s.color:'var(--text-secondary,rgba(10,22,40,0.55))'} size={28}/>
+            <div style={{ fontSize:8, fontWeight:700, color:i===scenarioIdx?s.color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight:1.2, textAlign:'center' }}>{s.title.split(' ')[0]}</div>
           </button>
         ))}
       </div>
@@ -347,12 +347,12 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:14 }}>
             {Object.entries(scenario.vitals).map(([k,v])=>(
               <div key={k} style={{ background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
-                <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', fontWeight:700, letterSpacing:0.3, marginBottom:4 }}>{k.toUpperCase()}</div>
+                <div style={{ fontSize:9, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight:700, letterSpacing:0.3, marginBottom:4 }}>{k.toUpperCase()}</div>
                 <div style={{ fontSize:12, fontWeight:800, color:(v.includes('0/0')||v==='---'||v==='0%')?'#ff453a':'white' }}>{v}</div>
               </div>
             ))}
           </div>
-          <div style={{ fontSize:12, color:'rgba(255,255,255,0.45)', textAlign:'center', marginBottom:14 }}>
+          <div style={{ fontSize:12, color:'var(--text-secondary,rgba(10,22,40,0.55))', textAlign:'center', marginBottom:14 }}>
             ⏱ <b style={{color:'#ff3b30'}}>{scenario.timeLimit}s</b> · 2 wrong = FAILED · <b style={{color:'#00C4B4'}}>+{scenario.xpReward} XP</b>
           </div>
           <button onClick={startScenario} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${scenario.color},${scenario.color}bb)`, color:'var(--text-primary, white)', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:`0 6px 20px ${scenario.color}44` }}>
@@ -425,7 +425,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
           <div style={{ display:'flex', gap:10 }}>
             <button onClick={startScenario} style={{ flex:1, padding:'14px', borderRadius:14, border:'none', background:'rgba(22,163,74,0.2)', color:'#86efac', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Retry</button>
-            <button onClick={()=>{setScenarioIdx(i=>(i+1)%SCENARIOS.length);setPhase('intro')}} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#30d158,#0a84ff)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>Next →</button>
+            <button onClick={()=>{setScenarioIdx(i=>(i+1)%SCENARIOS.length);setPhase('intro')}} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'var(--bg-base,#F7F9FC)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>Next →</button>
           </div>
         </div>
       )}

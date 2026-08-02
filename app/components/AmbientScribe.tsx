@@ -235,9 +235,9 @@ Be clinically precise. If information is missing, note "Not documented".`
     return (
       <div style={{ fontFamily: F }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <button onClick={reset} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← New</button>
+          <button onClick={reset} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← New</button>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 900, color: T.text }}>🎙️ SOAP Note Generated</div>
+            <div style={{ fontSize: 15, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>🎙️ SOAP Note Generated</div>
             <div style={{ fontSize: 11, color: T.teal }}>{patientName || 'Patient'} · {formatTime(duration)}</div>
           </div>
           <button onClick={copy} style={{ background: copied ? T.green + '20' : T.glass, border: '1px solid ' + (copied ? T.green : T.border), borderRadius: 12, padding: '8px 14px', color: copied ? T.green : T.muted, fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>
@@ -248,13 +248,13 @@ Be clinically precise. If information is missing, note "Not documented".`
         {/* Transcript */}
         <div style={{ background: T.glass2, border: '1px solid ' + T.border, borderRadius: 14, padding: '12px 14px', marginBottom: 14 }}>
           <div style={{ fontSize: 9, color: T.muted, fontWeight: 700, letterSpacing: 1, marginBottom: 6 }}>🎤 TRANSCRIPT</div>
-          <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.7, direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{transcript.substring(0, 200)}{transcript.length > 200 ? '...' : ''}</div>
+          <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{transcript.substring(0, 200)}{transcript.length > 200 ? '...' : ''}</div>
         </div>
 
         {/* SOAP Note */}
         <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.teal + '25', borderRadius: 20, padding: '18px', marginBottom: 16, animation: 'bioGlow 3s ease-in-out infinite' }}>
           <div style={{ fontSize: 9, color: T.teal, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12 }}>📋 AI SOAP NOTE</div>
-          <div style={{ fontSize: 13, color: T.sub, lineHeight: 2, whiteSpace: 'pre-line', direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{soapNote}</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 2, whiteSpace: 'pre-line', direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{soapNote}</div>
         </div>
 
         {/* Share buttons */}
@@ -286,8 +286,8 @@ Be clinically precise. If information is missing, note "Not documented".`
         <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'radial-gradient(circle,' + T.teal + '30,transparent 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, animation: 'bioGlow 2s ease-in-out infinite' }}>
           <div style={{ width: 50, height: 50, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.1)', borderTop: '3px solid ' + T.teal, animation: 'spin 0.8s linear infinite' }} />
         </div>
-        <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 8 }}>Generating SOAP Note...</div>
-        <div style={{ fontSize: 13, color: T.sub }}>AI is processing your consultation</div>
+        <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 8 }}>Generating SOAP Note...</div>
+        <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>AI is processing your consultation</div>
         <style>{BIO_GLOW}</style>
       </div>
     )
@@ -298,7 +298,7 @@ Be clinically precise. If information is missing, note "Not documented".`
     return (
       <div style={{ fontFamily: F }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-          <div style={{ fontSize: 16, fontWeight: 900, color: T.text }}>🎙️ Recording Consultation</div>
+          <div style={{ fontSize: 16, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>🎙️ Recording Consultation</div>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,59,48,0.12)', border: '1px solid ' + T.red + '30', borderRadius: 20, padding: '4px 12px' }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: T.red, animation: 'pulse 1s ease-in-out infinite' }} />
             <span style={{ fontSize: 11, fontWeight: 800, color: T.red }}>{formatTime(duration)}</span>
@@ -319,19 +319,19 @@ Be clinically precise. If information is missing, note "Not documented".`
           <WaveformBars active={true} />
 
           <div style={{ fontSize: 14, fontWeight: 700, color: T.teal }}>Listening to consultation...</div>
-          <div style={{ fontSize: 12, color: T.sub }}>Speak naturally — AI will transcribe</div>
+          <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Speak naturally — AI will transcribe</div>
         </div>
 
         {/* Live transcript */}
         {transcript && (
           <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 16, padding: '14px', marginBottom: 16, maxHeight: 150, overflowY: 'auto' }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 700, letterSpacing: 1, marginBottom: 6 }}>LIVE TRANSCRIPT</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.7, direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{transcript}</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, direction: lang === 'ar' ? 'rtl' : 'ltr' }}>{transcript}</div>
           </div>
         )}
 
         {/* Stop button */}
-        <button onClick={finishAndGenerate} style={{ width: '100%', padding: '16px', borderRadius: 18, border: 'none', background: 'linear-gradient(135deg,' + T.red + ',#CC1000)', color: '#fff', fontSize: 15, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 8px 28px rgba(255,59,48,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        <button onClick={finishAndGenerate} style={{ width: '100%', padding: '16px', borderRadius: 18, border: 'none', background: 'linear-gradient(135deg,' + T.red + ',#CC1000)', color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 8px 28px rgba(255,59,48,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
           ⏹ Stop & Generate SOAP Note
         </button>
         <style>{BIO_GLOW}</style>
@@ -346,10 +346,10 @@ Be clinically precise. If information is missing, note "Not documented".`
       {/* Header with bioluminescence */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 10, color: T.teal + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>AMBIENT AI SCRIBE</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           <span style={{ color: T.teal }}>Ambient</span> Scribe
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>Record consultation → AI generates SOAP note</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>Record consultation → AI generates SOAP note</div>
       </div>
 
       {/* Stats */}
@@ -370,7 +370,7 @@ Be clinically precise. If information is missing, note "Not documented".`
       {/* Patient name */}
       <div style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 6 }}>PATIENT NAME (optional)</div>
-        <input value={patientName} onChange={e => setPatientName(e.target.value)} placeholder="Enter patient name..." style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+        <input value={patientName} onChange={e => setPatientName(e.target.value)} placeholder="Enter patient name..." style={{ width: '100%', padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
       </div>
 
       {/* Language toggle */}
@@ -383,13 +383,13 @@ Be clinically precise. If information is missing, note "Not documented".`
       {/* Main start button — Bioluminescence */}
       <div style={{ position: 'relative', marginBottom: 20 }}>
         <div style={{ position: 'absolute', inset: -2, borderRadius: 22, background: 'radial-gradient(ellipse at center,' + T.teal + '20,transparent 70%)', animation: 'bioGlow 3s ease-in-out infinite', pointerEvents: 'none' }} />
-        <button onClick={startRecording} style={{ width: '100%', padding: '20px', borderRadius: 20, border: '1.5px solid ' + T.teal + '40', background: 'linear-gradient(135deg,rgba(0,196,180,0.15),rgba(0,122,255,0.10))', color: T.text, fontSize: 16, fontWeight: 900, cursor: 'pointer', fontFamily: F, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, position: 'relative' }}>
+        <button onClick={startRecording} style={{ width: '100%', padding: '20px', borderRadius: 20, border: '1.5px solid ' + T.teal + '40', background: 'linear-gradient(135deg,rgba(0,196,180,0.15),rgba(0,122,255,0.10))', color:'var(--text-primary,#0A1628)', fontSize: 16, fontWeight: 900, cursor: 'pointer', fontFamily: F, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, position: 'relative' }}>
           <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'radial-gradient(circle,' + T.teal + '25,transparent 70%)', border: '2px solid ' + T.teal + '50', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, animation: 'bioGlow 2s ease-in-out infinite' }}>
             🎙️
           </div>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 900, color: T.text, marginBottom: 4 }}>Start Consultation</div>
-            <div style={{ fontSize: 11, color: T.sub }}>Tap to begin recording · Speak naturally</div>
+            <div style={{ fontSize: 16, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>Start Consultation</div>
+            <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Tap to begin recording · Speak naturally</div>
           </div>
           <WaveformBars active={false} />
         </button>
@@ -413,7 +413,7 @@ Be clinically precise. If information is missing, note "Not documented".`
         ].map(s => (
           <div key={s.step} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: T.teal + '15', border: '1px solid ' + T.teal + '25', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0 }}>{s.icon}</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.5 }}>{s.text}</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.5 }}>{s.text}</div>
           </div>
         ))}
       </div>

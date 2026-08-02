@@ -31,7 +31,7 @@ function AscvdCalc() {
   const SliderRow = ({ label, val, min, max, step=1, onChange }: any) => (
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>{label}</span>
+        <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{val}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={val} onChange={e => onChange(+e.target.value)}
@@ -53,7 +53,7 @@ function AscvdCalc() {
       <div style={{ background: riskLevel.bg, borderRadius: 16, padding: 16, textAlign: 'center', border: `2px solid ${riskLevel.color}33` }}>
         <div style={{ fontSize: 48, fontWeight: 900, color: riskLevel.color, lineHeight: 1 }}>{risk}%</div>
         <div style={{ fontSize: 12, fontWeight: 800, color: riskLevel.color, letterSpacing: 1, marginTop: 4 }}>{riskLevel.label} RISK</div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>10-year ASCVD risk</div>
+        <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 6 }}>10-year ASCVD risk</div>
         {risk >= 7.5 && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 8, fontWeight: 600 }}>⚠ Consider statin therapy (AHA/ACC guidelines)</div>}
       </div>
     </div>
@@ -95,7 +95,7 @@ function ChadsCalc() {
       </div>
       <div style={{ background: 'rgba(255,255,255,0.14)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(0,196,180,0.25)' }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: '#00C4B4', lineHeight: 1 }}>{score}</div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginBottom: 8 }}>Annual stroke risk: {risk}%</div>
+        <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginBottom: 8 }}>Annual stroke risk: {risk}%</div>
         <div style={{ fontSize: 13, fontWeight: 700, color: anticoagColor, padding: '8px 12px', background: `${anticoagColor}15`, borderRadius: 10, border: `1px solid ${anticoagColor}30` }}>{anticoag}</div>
       </div>
     </div>
@@ -121,7 +121,7 @@ function CrClCalc() {
         { label: 'Weight (kg)', val: weight, min: 30, max: 200, set: setWeight }].map(s => (
         <div key={s.label} style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>{s.label}</span>
+            <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>{s.label}</span>
             <span style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{s.val}</span>
           </div>
           <input type="range" min={s.min} max={s.max} value={s.val} onChange={e => s.set(+e.target.value)} style={{ width: '100%', accentColor: '#00C4B4' }} />
@@ -129,7 +129,7 @@ function CrClCalc() {
       ))}
       <div style={{ marginBottom: 14 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>Serum Creatinine (mg/dL)</span>
+          <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>Serum Creatinine (mg/dL)</span>
           <span style={{ fontSize: 13, fontWeight: 800, color: 'white' }}>{creatinine.toFixed(1)}</span>
         </div>
         <input type="range" min={0.4} max={15} step={0.1} value={creatinine} onChange={e => setCreatinine(+e.target.value)} style={{ width: '100%', accentColor: '#00C4B4' }} />
@@ -139,7 +139,7 @@ function CrClCalc() {
       </button>
       <div style={{ background: 'rgba(255,255,255,0.14)', borderRadius: 16, padding: 16, textAlign: 'center', border: '1px solid rgba(0,196,180,0.25)' }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: stage.color, lineHeight: 1 }}>{crcl}</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)' }}>mL/min — CrCl (Cockcroft-Gault)</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>mL/min — CrCl (Cockcroft-Gault)</div>
         <div style={{ fontSize: 12, fontWeight: 700, color: stage.color, marginTop: 8 }}>{stage.label}</div>
         {crcl < 30 && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 8, fontWeight: 600 }}>⚠ Adjust renally-cleared drugs. Consider nephrology referral.</div>}
         {crcl < 45 && <div style={{ fontSize: 11, color: '#d97706', marginTop: 4, fontWeight: 600 }}>⚠ Avoid contrast if not urgent. Use KDIGO staging.</div>}
@@ -176,7 +176,7 @@ function Curb65Calc() {
       <div style={{ background: `${severity.color}15`, borderRadius: 16, padding: 16, textAlign: 'center', border: `2px solid ${severity.color}33`, marginTop: 8 }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: severity.color, lineHeight: 1 }}>{score}</div>
         <div style={{ fontSize: 13, fontWeight: 800, color: severity.color, marginTop: 4 }}>{severity.label}</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>30-day mortality: {severity.mortality}</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>30-day mortality: {severity.mortality}</div>
         <div style={{ fontSize: 12, color: severity.color, fontWeight: 600, marginTop: 8, padding: '8px', background: `${severity.color}10`, borderRadius: 10 }}>{severity.action}</div>
       </div>
     </div>
@@ -213,7 +213,7 @@ function TimiCalc() {
       <div style={{ background: `${risk.color}12`, borderRadius: 16, padding: 16, textAlign: 'center', border: `2px solid ${risk.color}33`, marginTop: 8 }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: risk.color, lineHeight: 1 }}>{score}/7</div>
         <div style={{ fontSize: 13, fontWeight: 800, color: risk.color, marginTop: 4 }}>{risk.label} RISK</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>14-day MACE: {risk.event}</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>14-day MACE: {risk.event}</div>
         <div style={{ fontSize: 12, color: risk.color, fontWeight: 600, marginTop: 8 }}>{risk.strategy}</div>
       </div>
     </div>
@@ -250,7 +250,7 @@ function WellsCalc() {
       <div style={{ background: `${prob.color}12`, borderRadius: 16, padding: 16, textAlign: 'center', border: `2px solid ${prob.color}33`, marginTop: 8 }}>
         <div style={{ fontSize: 52, fontWeight: 900, color: prob.color, lineHeight: 1 }}>{score}</div>
         <div style={{ fontSize: 13, fontWeight: 800, color: prob.color, marginTop: 4 }}>{prob.label} PROBABILITY</div>
-        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 4 }}>PE prevalence: {prob.risk}</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>PE prevalence: {prob.risk}</div>
         <div style={{ fontSize: 12, color: prob.color, fontWeight: 600, marginTop: 8 }}>{prob.action}</div>
       </div>
     </div>
@@ -264,7 +264,7 @@ export default function MedCalculators() {
     <div style={{ fontFamily: '-apple-system, sans-serif', paddingBottom: 20 }}>
       <div style={{ marginBottom: 16 }}>
         <h2 style={{ fontSize: 22, fontWeight: 800, color: 'white', margin: '0 0 4px', letterSpacing: -0.5 }}>Med Calculators</h2>
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', margin: 0 }}>Evidence-based clinical decision tools</p>
+        <p style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', margin: 0 }}>Evidence-based clinical decision tools</p>
       </div>
 
       {!active ? (
@@ -273,7 +273,7 @@ export default function MedCalculators() {
             <div key={c.id} onClick={() => setActive(c.id)} style={{ background: 'rgba(255,255,255,0.14)', backdropFilter: 'blur(20px)', borderRadius: 18, padding: 16, border: '1px solid rgba(0,196,180,0.25)', boxShadow: '0 4px 16px rgba(0,0,0,0.06)', cursor: 'pointer', transition: 'all 0.2s' }}>
               <div style={{ fontSize: 28, marginBottom: 8 }}>{c.icon}</div>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'white', marginBottom: 4, lineHeight: 1.3 }}>{c.name}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{c.desc}</div>
+              <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{c.desc}</div>
               <div style={{ marginTop: 10, height: 3, borderRadius: 2, background: `${c.color}20` }}>
                 <div style={{ width: '60%', height: '100%', borderRadius: 2, background: c.color }} />
               </div>

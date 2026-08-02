@@ -79,13 +79,13 @@ function RTPCalculator({ onClose }: { onClose:()=>void }) {
     { day:5, activity:'Return to competition', notes:'Full return to sport' },
   ]
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-card,rgba(255,255,255,0.06))',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
-          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
+          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
           <div>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>🏃 Return to Play Protocol</div>
-            <div style={{fontSize:11,color:T.sub}}>FIFA/World Rugby Concussion RTP</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>🏃 Return to Play Protocol</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>FIFA/World Rugby Concussion RTP</div>
           </div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
@@ -109,7 +109,7 @@ function RTPCalculator({ onClose }: { onClose:()=>void }) {
         </div>
         <div style={{background:`${T.gold}08`,border:`1px solid ${T.gold}18`,borderRadius:14,padding:'12px 14px',marginTop:14}}>
           <div style={{fontSize:9,color:T.gold,fontWeight:700,letterSpacing:1,marginBottom:4}}>⚠️ IMPORTANT</div>
-          <div style={{fontSize:11,color:T.sub,lineHeight:1.6}}>If ANY symptoms return during a step, go back to the previous step. Minimum 24h at each step. Medical clearance required before Step 5.</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>If ANY symptoms return during a step, go back to the previous step. Minimum 24h at each step. Medical clearance required before Step 5.</div>
         </div>
       </div>
     </div>
@@ -129,10 +129,10 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
     return (
       <div style={{fontFamily:F}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
-          <button onClick={()=>{setSelected(null);setAnswered(null);setCheckDone([])}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Pitch</button>
+          <button onClick={()=>{setSelected(null);setAnswered(null);setCheckDone([])}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Pitch</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>{selected.icon} {selected.title}</div>
-            <div style={{fontSize:11,color:T.sub}}>{selected.sport}{selected.minute?` · Min ${selected.minute}`:''}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{selected.icon} {selected.title}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{selected.sport}{selected.minute?` · Min ${selected.minute}`:''}</div>
           </div>
           <div style={{background:`${selected.color}18`,border:`1px solid ${selected.color}30`,borderRadius:20,padding:'4px 12px',fontSize:9,color:selected.color,fontWeight:800}}>{selected.urgency}</div>
         </div>
@@ -141,7 +141,7 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
         <div style={{background:`${selected.color}08`,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${selected.color}22`,position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:`radial-gradient(circle,${selected.color}15,transparent 70%)`,pointerEvents:'none'}}/>
           <div style={{fontSize:9,color:selected.color,fontWeight:700,letterSpacing:1,marginBottom:6}}>⚡ PITCH-SIDE SITUATION</div>
-          <div style={{fontSize:13,color:T.sub,lineHeight:1.75}}>{selected.situation}</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75}}>{selected.situation}</div>
         </div>
 
         {/* Checklist */}
@@ -158,7 +158,7 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
         </div>
 
         {/* Question */}
-        <div style={{fontSize:14,fontWeight:800,color:T.text,marginBottom:12}}>What do you do?</div>
+        <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:12}}>What do you do?</div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:14}}>
           {selected.options.map((opt,i)=>{
@@ -186,7 +186,7 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
                 }}>
                   {done?(isCorrectOpt?'✓':isSel?'✗':String.fromCharCode(65+i)):String.fromCharCode(65+i)}
                 </div>
-                <div style={{fontSize:13,color:T.text,fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
+                <div style={{fontSize:13,color:'var(--text-primary,#0A1628)',fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
               </button>
             )
           })}
@@ -198,12 +198,12 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
               <div style={{fontSize:14,fontWeight:900,color:isCorrect?T.green:T.red,marginBottom:8}}>
                 {isCorrect?'✅ Correct! +25 XP':'❌ Incorrect'}
               </div>
-              <div style={{fontSize:13,color:T.sub,lineHeight:1.7}}>{selected.options[answered].explanation}</div>
+              <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7}}>{selected.options[answered].explanation}</div>
             </div>
 
             <div style={{background:`${T.gold}08`,border:`1px solid ${T.gold}22`,borderRadius:14,padding:'12px 14px',marginBottom:10}}>
               <div style={{fontSize:9,color:T.gold,fontWeight:700,letterSpacing:1,marginBottom:4}}>⭐ SPORTS MED PEARL</div>
-              <div style={{fontSize:12,color:T.sub,lineHeight:1.6}}>{selected.pearl}</div>
+              <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>{selected.pearl}</div>
             </div>
 
             <div style={{background:`${T.blue}08`,border:`1px solid ${T.blue}18`,borderRadius:12,padding:'10px 14px',marginBottom:14}}>
@@ -214,7 +214,7 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
               <button onClick={()=>setShowRTP(true)} style={{flex:1,padding:'13px',borderRadius:16,border:`1px solid ${T.green}35`,background:`${T.green}15`,color:T.green,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
                 🏃 RTP Protocol
               </button>
-              <button onClick={()=>{setSelected(null);setAnswered(null);setCheckDone([])}} style={{flex:1,padding:'13px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+              <button onClick={()=>{setSelected(null);setAnswered(null);setCheckDone([])}} style={{flex:1,padding:'13px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
                 Next Case →
               </button>
             </div>
@@ -228,10 +228,10 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
     <div style={{fontFamily:F}}>
       <div style={{marginBottom:20}}>
         <div style={{fontSize:10,color:`${T.green}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>SPORTS MEDICINE</div>
-        <div style={{fontSize:24,fontWeight:900,color:T.text,letterSpacing:-0.5}}>
+        <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5}}>
           Pitch-Side <span style={{color:T.green}}>Doctor</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4,lineHeight:1.5}}>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4,lineHeight:1.5}}>
           FIFA 2026 protocols · Real-time decisions · Return to play
         </div>
       </div>
@@ -250,8 +250,8 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
       }}>
         <div style={{width:44,height:44,borderRadius:14,background:`${T.blue}18`,border:`1px solid ${T.blue}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22}}>🏃</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:13,fontWeight:800,color:T.text}}>Return to Play Calculator</div>
-          <div style={{fontSize:11,color:T.sub}}>FIFA/World Rugby 6-step RTP protocol</div>
+          <div style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>Return to Play Calculator</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>FIFA/World Rugby 6-step RTP protocol</div>
         </div>
         <span style={{fontSize:18,color:T.blue}}>›</span>
       </div>
@@ -269,14 +269,14 @@ export default function SportsMedicineModule({ onXP }: { onXP?: (n:number)=>void
             <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:10}}>
               <div style={{width:52,height:52,borderRadius:16,background:`${s.color}15`,border:`1.5px solid ${s.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,boxShadow:`0 0 16px ${s.color}25`}}>{s.icon}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:16,fontWeight:900,color:T.text,marginBottom:2}}>{s.title}</div>
-                <div style={{fontSize:11,color:T.sub}}>{s.sport}{s.minute?` · Min ${s.minute}`:''}</div>
+                <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{s.title}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{s.sport}{s.minute?` · Min ${s.minute}`:''}</div>
               </div>
               <div style={{background:`${s.color}18`,border:`1px solid ${s.color}30`,borderRadius:10,padding:'4px 10px',fontSize:9,color:s.color,fontWeight:800}}>{s.urgency}</div>
             </div>
-            <div style={{fontSize:12,color:T.sub,lineHeight:1.6,marginBottom:12}}>{s.situation.substring(0,100)}...</div>
+            <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6,marginBottom:12}}>{s.situation.substring(0,100)}...</div>
             <div style={{background:`linear-gradient(135deg,${s.color}18,${s.color}08)`,border:`1px solid ${s.color}28`,borderRadius:12,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-              <span style={{fontSize:12,fontWeight:700,color:T.text}}>Start Scenario</span>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>Start Scenario</span>
               <span style={{fontSize:16,color:s.color}}>›</span>
             </div>
           </div>

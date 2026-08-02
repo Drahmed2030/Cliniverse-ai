@@ -37,20 +37,20 @@ function SOFACalculator({ onClose }: { onClose:()=>void }) {
   const mortColor = total<=6?T.green:total<=9?T.orange:T.red
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-card,rgba(255,255,255,0.06))',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
-          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
+          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
           <div>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>📊 SOFA Score Calculator</div>
-            <div style={{fontSize:11,color:T.sub}}>Sequential Organ Failure Assessment</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>📊 SOFA Score Calculator</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Sequential Organ Failure Assessment</div>
           </div>
         </div>
 
         {/* Score display */}
         <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:16,border:`1px solid ${mortColor}30`,textAlign:'center'}}>
           <div style={{fontSize:42,fontWeight:900,color:mortColor,lineHeight:1}}>{total}</div>
-          <div style={{fontSize:12,color:T.sub,marginTop:4}}>SOFA Score</div>
+          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4}}>SOFA Score</div>
           <div style={{fontSize:14,fontWeight:800,color:mortColor,marginTop:8}}>Mortality: {mortality}</div>
         </div>
 
@@ -72,7 +72,7 @@ function SOFACalculator({ onClose }: { onClose:()=>void }) {
 
         <div style={{background:`${T.gold}08`,border:`1px solid ${T.gold}18`,borderRadius:14,padding:'12px 14px',marginTop:8}}>
           <div style={{fontSize:10,color:T.gold,fontWeight:700,marginBottom:4}}>📌 SOFA NOTE</div>
-          <div style={{fontSize:11,color:T.sub,lineHeight:1.6}}>SOFA score increase ≥2 = organ failure. Used to define sepsis (suspected infection + SOFA ≥2). Reassess daily.</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>SOFA score increase ≥2 = organ failure. Used to define sepsis (suspected infection + SOFA ≥2). Reassess daily.</div>
         </div>
       </div>
     </div>
@@ -90,13 +90,13 @@ function VentSimulator({ onClose }: { onClose:()=>void }) {
   const isPEEPAdequate = settings.peep >= 5
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',overflowY:'auto'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-card,rgba(255,255,255,0.06))',backdropFilter:'blur(12px)',overflowY:'auto'}}>
       <div style={{padding:'20px',maxWidth:480,margin:'0 auto',paddingBottom:40}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20}}>
-          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
+          <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
           <div>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>🫁 Ventilator Settings</div>
-            <div style={{fontSize:11,color:T.sub}}>Lung-protective ventilation simulator</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>🫁 Ventilator Settings</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Lung-protective ventilation simulator</div>
           </div>
         </div>
 
@@ -202,9 +202,9 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
     return (
       <div style={{fontFamily:F}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
-          <button onClick={()=>{setView('menu');setAnswered(null);setTimerOn(false);setTime(0)}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← ICU</button>
+          <button onClick={()=>{setView('menu');setAnswered(null);setTimerOn(false);setTime(0)}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← ICU</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>{selectedCase.icon} {selectedCase.title}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{selectedCase.icon} {selectedCase.title}</div>
           </div>
           <div style={{fontSize:14,fontWeight:900,color:time>60?T.red:T.orange,fontFamily:'monospace'}}>
             {Math.floor(time/60)}:{String(time%60).padStart(2,'0')}
@@ -213,10 +213,10 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
 
         <div style={{background:`${selectedCase.color}08`,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${selectedCase.color}22`}}>
           <div style={{fontSize:9,color:selectedCase.color,fontWeight:700,letterSpacing:1,marginBottom:6}}>🏥 ICU CASE</div>
-          <div style={{fontSize:13,color:T.sub,lineHeight:1.75}}>{selectedCase.patient}</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75}}>{selectedCase.patient}</div>
         </div>
 
-        <div style={{fontSize:14,fontWeight:800,color:T.text,marginBottom:12}}>{selectedCase.question}</div>
+        <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:12}}>{selectedCase.question}</div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:14}}>
           {selectedCase.options.map((opt,i)=>{
@@ -243,7 +243,7 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
                 }}>
                   {done?(isCorrectOpt?'✓':isSel?'✗':String.fromCharCode(65+i)):String.fromCharCode(65+i)}
                 </div>
-                <div style={{fontSize:13,color:T.text,fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
+                <div style={{fontSize:13,color:'var(--text-primary,#0A1628)',fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
               </button>
             )
           })}
@@ -255,13 +255,13 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
               <div style={{fontSize:14,fontWeight:900,color:isCorrect?T.green:T.red,marginBottom:8}}>
                 {isCorrect?'✅ Correct! +30 XP':'❌ Incorrect'}
               </div>
-              <div style={{fontSize:13,color:T.sub,lineHeight:1.7}}>{selectedCase.options[answered].explanation}</div>
+              <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7}}>{selectedCase.options[answered].explanation}</div>
             </div>
             <div style={{background:`${T.gold}08`,border:`1px solid ${T.gold}22`,borderRadius:14,padding:'12px 14px',marginBottom:14}}>
               <div style={{fontSize:9,color:T.gold,fontWeight:700,letterSpacing:1,marginBottom:4}}>⭐ ICU PEARL</div>
-              <div style={{fontSize:12,color:T.sub,lineHeight:1.6}}>{selectedCase.pearl}</div>
+              <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>{selectedCase.pearl}</div>
             </div>
-            <button onClick={()=>{setView('menu');setAnswered(null);setTime(0)}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+            <button onClick={()=>{setView('menu');setAnswered(null);setTime(0)}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
               ← Back to ICU
             </button>
           </div>
@@ -274,10 +274,10 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
     <div style={{fontFamily:F}}>
       <div style={{marginBottom:20}}>
         <div style={{fontSize:10,color:`${T.red}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>CRITICAL CARE</div>
-        <div style={{fontSize:24,fontWeight:900,color:T.text,letterSpacing:-0.5}}>
+        <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5}}>
           The ICU <span style={{color:T.red}}>Shift</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4,lineHeight:1.5}}>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4,lineHeight:1.5}}>
           Sepsis · ARDS · Vasopressors · Ventilator · SOFA Score
         </div>
       </div>
@@ -293,13 +293,13 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
       <div style={{display:'flex',gap:10,marginBottom:16}}>
         <div onClick={()=>setView('sofa')} style={{flex:1,background:T.glass,backdropFilter:'blur(30px)',border:`1px solid ${T.orange}28`,borderRadius:18,padding:'14px',cursor:'pointer',textAlign:'center',boxShadow:`0 0 14px ${T.orange}10`}}>
           <div style={{fontSize:24,marginBottom:6}}>📊</div>
-          <div style={{fontSize:13,fontWeight:800,color:T.text}}>SOFA Score</div>
-          <div style={{fontSize:10,color:T.sub}}>Mortality calculator</div>
+          <div style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>SOFA Score</div>
+          <div style={{fontSize:10,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Mortality calculator</div>
         </div>
         <div onClick={()=>setView('vent')} style={{flex:1,background:T.glass,backdropFilter:'blur(30px)',border:`1px solid ${T.blue}28`,borderRadius:18,padding:'14px',cursor:'pointer',textAlign:'center',boxShadow:`0 0 14px ${T.blue}10`}}>
           <div style={{fontSize:24,marginBottom:6}}>🫁</div>
-          <div style={{fontSize:13,fontWeight:800,color:T.text}}>Ventilator</div>
-          <div style={{fontSize:10,color:T.sub}}>Settings simulator</div>
+          <div style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>Ventilator</div>
+          <div style={{fontSize:10,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Settings simulator</div>
         </div>
       </div>
 
@@ -317,13 +317,13 @@ export default function CriticalCareModule({ onXP }: { onXP?: (n:number)=>void }
             <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:10}}>
               <div style={{width:52,height:52,borderRadius:16,background:`${c.color}15`,border:`1.5px solid ${c.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,boxShadow:`0 0 16px ${c.color}25`}}>{c.icon}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:16,fontWeight:900,color:T.text,marginBottom:2}}>{c.title}</div>
+                <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{c.title}</div>
               </div>
               <div style={{background:`${c.color}18`,border:`1px solid ${c.color}30`,borderRadius:10,padding:'4px 10px',fontSize:9,color:c.color,fontWeight:800}}>{c.urgency}</div>
             </div>
-            <div style={{fontSize:12,color:T.sub,lineHeight:1.6,marginBottom:12}}>{c.patient.substring(0,100)}...</div>
+            <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6,marginBottom:12}}>{c.patient.substring(0,100)}...</div>
             <div style={{background:`linear-gradient(135deg,${c.color}18,${c.color}08)`,border:`1px solid ${c.color}28`,borderRadius:12,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-              <span style={{fontSize:12,fontWeight:700,color:T.text}}>Start Case · +30 XP</span>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>Start Case · +30 XP</span>
               <span style={{fontSize:16,color:c.color}}>›</span>
             </div>
           </div>

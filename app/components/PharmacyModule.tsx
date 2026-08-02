@@ -109,7 +109,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           {selectedInteraction===i&&(
             <div style={{borderTop:`1px solid rgba(36,63,82,0.65)`,paddingTop:10}}>
-              <div style={{marginBottom:8}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MECHANISM</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{int.mechanism}</div></div>
+              <div style={{marginBottom:8}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MECHANISM</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{int.mechanism}</div></div>
               <div style={{marginBottom:8}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>EFFECT</div><div style={{fontSize:12,color:'rgba(255,150,150,0.9)',lineHeight:1.5,fontWeight:600}}>{int.effect}</div></div>
               <div style={{background:'rgba(48,209,88,0.08)',borderRadius:10,padding:'8px 12px',border:'1px solid rgba(48,209,88,0.2)'}}><div style={{fontSize:9,color:'#30d158',fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(150,255,150,0.9)',lineHeight:1.5}}>{int.action}</div></div>
             </div>
@@ -135,9 +135,9 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           {selectedDrug===i&&(
             <div style={{borderTop:`1px solid rgba(36,63,82,0.65)`,paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>🫘 RENAL ADJUSTMENT</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.renal}</div></div>
-              <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>📊 MONITORING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.monitoring}</div></div>
-              <div style={{background:'rgba(255,214,10,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,214,10,0.15)'}}><div style={{fontSize:9,color:'#ffd60a',fontWeight:700,marginBottom:3}}>⭐ SPECIAL NOTE</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.special}</div></div>
+              <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>🫘 RENAL ADJUSTMENT</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{d.renal}</div></div>
+              <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>📊 MONITORING</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{d.monitoring}</div></div>
+              <div style={{background:'rgba(255,214,10,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,214,10,0.15)'}}><div style={{fontSize:9,color:'#ffd60a',fontWeight:700,marginBottom:3}}>⭐ SPECIAL NOTE</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{d.special}</div></div>
             </div>
           )}
         </div>
@@ -179,7 +179,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:20}}>+{xp} XP earned</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
+            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
           </div>
         </div>
       )
@@ -193,7 +193,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:13,fontWeight:700,color:'#30d158'}}>{score*20} XP</div>
         </div>
         <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
-          <div style={{height:'100%',width:`${(qIdx/QUIZ_Q.length)*100}%`,background:'linear-gradient(90deg,#30d158,#0a84ff)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(48,209,88,0.5)'}}/>
+          <div style={{height:'100%',width:`${(qIdx/QUIZ_Q.length)*100}%`,background:'var(--bg-base,#F7F9FC)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(48,209,88,0.5)'}}/>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
           <div style={{fontSize:15,fontWeight:700,color:C.text,lineHeight:1.7}}>{q.q}</div>
@@ -208,7 +208,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -222,7 +222,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
             </div>
-            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.35)'}}>
+            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.35)'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}
             </button>
           </div>

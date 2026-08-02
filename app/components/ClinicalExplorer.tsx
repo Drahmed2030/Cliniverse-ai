@@ -64,7 +64,7 @@ function DrugCard({ drug }: { drug: any }) {
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 900, color: T.text, marginBottom: 2 }}>{name}</div>
+          <div style={{ fontSize: 15, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{name}</div>
           {generic && generic !== name && <div style={{ fontSize: 11, color: T.muted }}>{generic}</div>}
         </div>
         <div style={{ background: T.blue + '15', border: '1px solid ' + T.blue + '25', borderRadius: 20, padding: '3px 10px', fontSize: 9, color: T.blue, fontWeight: 700 }}>FDA ✓</div>
@@ -78,7 +78,7 @@ function DrugCard({ drug }: { drug: any }) {
       {indications && (
         <div style={{ background: T.teal + '08', border: '1px solid ' + T.teal + '18', borderRadius: 10, padding: '8px 10px', marginBottom: 8 }}>
           <div style={{ fontSize: 8, color: T.teal, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>INDICATIONS</div>
-          <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>{indications.substring(0, 150)}...</div>
+          <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{indications.substring(0, 150)}...</div>
         </div>
       )}
 
@@ -87,19 +87,19 @@ function DrugCard({ drug }: { drug: any }) {
           {dosage && (
             <div style={{ background: T.green + '08', border: '1px solid ' + T.green + '18', borderRadius: 10, padding: '8px 10px', marginBottom: 8 }}>
               <div style={{ fontSize: 8, color: T.green, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>DOSAGE</div>
-              <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>{dosage.substring(0, 200)}...</div>
+              <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{dosage.substring(0, 200)}...</div>
             </div>
           )}
           {warnings && (
             <div style={{ background: 'rgba(255,149,0,0.08)', border: '1px solid ' + T.orange + '20', borderRadius: 10, padding: '8px 10px', marginBottom: 8 }}>
               <div style={{ fontSize: 8, color: T.orange, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>⚠️ WARNINGS</div>
-              <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>{warnings.substring(0, 200)}...</div>
+              <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{warnings.substring(0, 200)}...</div>
             </div>
           )}
           {contraindications && (
             <div style={{ background: 'rgba(255,59,48,0.08)', border: '1px solid ' + T.red + '20', borderRadius: 10, padding: '8px 10px' }}>
               <div style={{ fontSize: 8, color: T.red, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>🛑 CONTRAINDICATIONS</div>
-              <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>{contraindications.substring(0, 200)}...</div>
+              <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{contraindications.substring(0, 200)}...</div>
             </div>
           )}
         </div>
@@ -135,7 +135,7 @@ function TrialCard({ trial }: { trial: any }) {
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
         <div style={{ flex: 1, marginRight: 8 }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: T.text, lineHeight: 1.4, marginBottom: 4 }}>{title}</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color:'var(--text-primary,#0A1628)', lineHeight: 1.4, marginBottom: 4 }}>{title}</div>
           <div style={{ fontSize: 10, color: T.muted }}>{nctId}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }}>
@@ -145,7 +145,7 @@ function TrialCard({ trial }: { trial: any }) {
       </div>
 
       {summary && (
-        <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6, marginBottom: 10 }}>{summary.substring(0, 180)}...</div>
+        <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6, marginBottom: 10 }}>{summary.substring(0, 180)}...</div>
       )}
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -197,10 +197,10 @@ export default function ClinicalExplorer({ onXP }: { onXP?: (n: number) => void 
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.blue + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>CLINICAL INTELLIGENCE</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Clinical <span style={{ color: T.blue }}>Explorer</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>OpenFDA · ClinicalTrials.gov · Live data</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>OpenFDA · ClinicalTrials.gov · Live data</div>
       </div>
 
       {/* Stats */}
@@ -228,14 +228,14 @@ export default function ClinicalExplorer({ onXP }: { onXP?: (n: number) => void 
       {/* Search */}
       <div style={{ marginBottom: 14 }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-          <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search()} placeholder={tab === 'fda' ? 'Drug name (e.g. Metformin, Aspirin)...' : 'Keyword (e.g. STEMI, Diabetes)...'} style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F }} />
-          <button onClick={search} disabled={loading || !query.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !query.trim() ? 'rgba(0,122,255,0.15)' : 'linear-gradient(135deg,' + T.blue + ',#0055CC)', color: '#fff', fontSize: 13, fontWeight: 800, cursor: !query.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
+          <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search()} placeholder={tab === 'fda' ? 'Drug name (e.g. Metformin, Aspirin)...' : 'Keyword (e.g. STEMI, Diabetes)...'} style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F }} />
+          <button onClick={search} disabled={loading || !query.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !query.trim() ? 'rgba(0,122,255,0.15)' : 'linear-gradient(135deg,' + T.blue + ',#0055CC)', color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: !query.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
             {loading ? <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} /> : '🔍'}
           </button>
         </div>
 
         {tab === 'trials' && (
-          <input value={condition} onChange={e => setCondition(e.target.value)} placeholder="Condition (optional, e.g. Heart Failure)..." style={{ width: '100%', padding: '10px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+          <input value={condition} onChange={e => setCondition(e.target.value)} placeholder="Condition (optional, e.g. Heart Failure)..." style={{ width: '100%', padding: '10px 14px', borderRadius: 14, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
         )}
       </div>
 
@@ -244,7 +244,7 @@ export default function ClinicalExplorer({ onXP }: { onXP?: (n: number) => void 
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>{tab === 'fda' ? 'QUICK DRUGS' : 'QUICK CONDITIONS'}</div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {(tab === 'fda' ? QUICK_DRUGS : QUICK_CONDITIONS).map(item => (
-            <button key={item} onClick={() => { setQuery(item); }} style={{ background: T.glass2, border: '1px solid ' + T.border, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color: T.sub, fontSize: 11, fontWeight: 600 }}>{item}</button>
+            <button key={item} onClick={() => { setQuery(item); }} style={{ background: T.glass2, border: '1px solid ' + T.border, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 11, fontWeight: 600 }}>{item}</button>
           ))}
         </div>
       </div>
@@ -260,14 +260,14 @@ export default function ClinicalExplorer({ onXP }: { onXP?: (n: number) => void 
       {loading && (
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.08)', borderTop: '3px solid ' + T.blue, animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
-          <div style={{ fontSize: 13, color: T.sub }}>Searching {tab === 'fda' ? 'FDA database' : 'ClinicalTrials.gov'}...</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Searching {tab === 'fda' ? 'FDA database' : 'ClinicalTrials.gov'}...</div>
         </div>
       )}
 
       {!loading && searched && results.length === 0 && !error && (
         <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: '1px solid ' + T.border }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>🔍</div>
-          <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>No results found</div>
+          <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>No results found</div>
           <div style={{ fontSize: 12, color: T.muted }}>Try a different search term</div>
         </div>
       )}

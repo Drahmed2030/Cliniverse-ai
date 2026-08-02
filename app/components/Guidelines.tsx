@@ -40,7 +40,7 @@ export default function Guidelines() {
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
         <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>📋 Clinical Guidelines</div>
-        <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>ESC · AHA · NICE · WHO · Updated 2026</div>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>ESC · AHA · NICE · WHO · Updated 2026</div>
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search guidelines..."
@@ -56,7 +56,7 @@ export default function Guidelines() {
       </div>
 
       {loading ? (
-        <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>Loading guidelines...</div>
+        <div style={{textAlign:'center',padding:40,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Loading guidelines...</div>
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(g=>(
@@ -70,21 +70,21 @@ export default function Guidelines() {
                   <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:4}}>{g.title}</div>
                   <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                     <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:(COLORS[g.specialty]||'#00C4B4')+'15',color:COLORS[g.specialty]||'#00C4B4',fontWeight:700}}>{g.specialty}</span>
-                    <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'rgba(255,255,255,0.4)',fontWeight:600}}>{g.source} {g.year}</span>
+                    <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontWeight:600}}>{g.source} {g.year}</span>
                   </div>
                 </div>
-                <span style={{color:'rgba(255,255,255,0.3)',fontSize:18,transition:'transform 0.2s',transform:expanded===g.id?'rotate(90deg)':'none'}}>›</span>
+                <span style={{color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:18,transition:'transform 0.2s',transform:expanded===g.id?'rotate(90deg)':'none'}}>›</span>
               </div>
               {expanded===g.id&&(
                 <div style={{marginTop:12,paddingTop:12,borderTop:'1px solid rgba(36,63,82,0.65)'}}>
-                  <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7}}>{g.summary}</div>
-                  <div style={{marginTop:10,fontSize:11,color:'rgba(255,255,255,0.3)',fontStyle:'italic'}}>Source: {g.source} {g.year}</div>
+                  <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7}}>{g.summary}</div>
+                  <div style={{marginTop:10,fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',fontStyle:'italic'}}>Source: {g.source} {g.year}</div>
                 </div>
               )}
             </div>
           ))}
           {filtered.length===0&&(
-            <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>No guidelines found</div>
+            <div style={{textAlign:'center',padding:40,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>No guidelines found</div>
           )}
         </div>
       )}

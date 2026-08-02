@@ -226,11 +226,11 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
           <button onClick={() => setView('list')} style={{
             background: T.glass, backdropFilter: 'blur(16px)',
             border: `1px solid ${T.border}`, borderRadius: 12,
-            padding: '9px 16px', color: T.sub, fontSize: 13,
+            padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13,
             fontWeight: 700, cursor: 'pointer', fontFamily: F,
           }}>← Back</button>
           <div>
-            <div style={{ fontSize: 17, fontWeight: 900, color: T.text }}>{selected.icon} {selected.name}</div>
+            <div style={{ fontSize: 17, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>{selected.icon} {selected.name}</div>
             <div style={{ fontSize: 11, color: selected.color, fontWeight: 600 }}>{selected.category}</div>
           </div>
         </div>
@@ -269,7 +269,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
               <div style={{ fontSize: 32 }}>🛑</div>
               <div>
                 <div style={{ fontSize: 20, fontWeight: 900, color: T.red }}>CONTRAINDICATED</div>
-                <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>{adj.note}</div>
+                <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>{adj.note}</div>
               </div>
             </div>
           ) : (
@@ -284,7 +284,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
                   <div style={{ fontSize: 9, color: T.muted, marginTop: 4 }}>INTERVAL</div>
                 </div>
               </div>
-              <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.6, background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px' }}>
+              <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6, background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px' }}>
                 {adj.note}
               </div>
             </div>
@@ -294,13 +294,13 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
         {/* Monitoring */}
         <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 16, padding: '14px', marginBottom: 14 }}>
           <div style={{ fontSize: 9, color: T.teal, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>📊 MONITORING</div>
-          <div style={{ fontSize: 13, color: T.sub, lineHeight: 1.6 }}>{selected.monitoring}</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{selected.monitoring}</div>
         </div>
 
         {/* Caution */}
         <div style={{ background: 'rgba(255,149,0,0.08)', border: `1px solid ${T.orange}25`, borderRadius: 16, padding: '14px', marginBottom: 14 }}>
           <div style={{ fontSize: 9, color: T.orange, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>⚠️ CAUTION</div>
-          <div style={{ fontSize: 13, color: T.sub, lineHeight: 1.6 }}>{selected.caution}</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{selected.caution}</div>
         </div>
 
         {/* AI Analysis */}
@@ -312,7 +312,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
               <span style={{ fontSize: 12, color: T.muted }}>Analysing renal dosing...</span>
             </div>
           ) : (
-            <div style={{ fontSize: 13, color: T.sub, lineHeight: 1.75, whiteSpace: 'pre-line' }}>{aiText}</div>
+            <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.75, whiteSpace: 'pre-line' }}>{aiText}</div>
           )}
         </div>
 
@@ -332,10 +332,10 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: `${T.teal}CC`, fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>RENAL DOSING AI</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Renal <span style={{ color: T.teal }}>Dose</span> Calculator
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>Adjust drug doses based on eGFR in real time</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>Adjust drug doses based on eGFR in real time</div>
       </div>
 
       {/* Patient inputs */}
@@ -345,7 +345,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
         {/* eGFR slider */}
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-            <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>eGFR</span>
+            <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>eGFR</span>
             <span style={{ fontSize: 14, fontWeight: 900, color: stage.color }}>{egfr} <span style={{ fontSize: 10, fontWeight: 600 }}>mL/min/1.73m²</span></span>
           </div>
           <input type="range" min={1} max={120} value={egfr} onChange={e => setEgfr(+e.target.value)}
@@ -361,7 +361,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
         <div style={{ display: 'flex', gap: 12 }}>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>Weight</span>
+              <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>Weight</span>
               <span style={{ fontSize: 13, fontWeight: 900, color: T.teal }}>{weight} kg</span>
             </div>
             <input type="range" min={30} max={150} value={weight} onChange={e => setWeight(+e.target.value)}
@@ -369,7 +369,7 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 12, color: T.sub, fontWeight: 600 }}>Age</span>
+              <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 600 }}>Age</span>
               <span style={{ fontSize: 13, fontWeight: 900, color: T.blue }}>{age} yrs</span>
             </div>
             <input type="range" min={18} max={95} value={age} onChange={e => setAge(+e.target.value)}
@@ -415,8 +415,8 @@ export default function RenalDosingAI({ onXP }: { onXP?: (n: number) => void }) 
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
               }}>{drug.icon}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: T.text, marginBottom: 2 }}>{drug.name}</div>
-                <div style={{ fontSize: 11, color: T.sub }}>{drug.category}</div>
+                <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{drug.name}</div>
+                <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{drug.category}</div>
               </div>
               <div style={{ textAlign: 'right', flexShrink: 0 }}>
                 <div style={{

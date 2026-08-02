@@ -80,10 +80,10 @@ Generate a complete professional SBAR handover with S/B/A/R headers. Include saf
   if (mode==='result') return (
     <div style={{paddingBottom:20,fontFamily:F}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:T.sub,padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ SBAR Generated</div>
-          <div style={{fontSize:11,color:T.sub}}>Ready to handover</div>
+          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>✅ SBAR Generated</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Ready to handover</div>
         </div>
         <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:'none',background:copied?`${T.green}25`:`linear-gradient(135deg,${T.blue},${T.teal})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F,border:copied?`1px solid ${T.green}`:'none'}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -91,10 +91,10 @@ Generate a complete professional SBAR handover with S/B/A/R headers. Include saf
       </div>
       <div style={{background:T.glass,backdropFilter:'blur(40px)',WebkitBackdropFilter:'blur(40px)',borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${T.blue}25`,boxShadow:`0 0 20px ${T.blue}10`}}>
         <div style={{fontSize:10,color:T.blue,fontWeight:700,marginBottom:10,letterSpacing:1}}>🤖 AI SBAR HANDOVER</div>
-        <div style={{fontSize:13,color:T.sub,lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
+        <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
       </div>
       <button onClick={()=>{setForm({patientAge:'',patientSex:'M',ward:'',time:'',situation:'',background:'',pmh:'',meds:'',bp:'',hr:'',o2:'',temp:'',rr:'',gcs:'',assessment:'',recommendation:''});setMode('form');setResult('')}}
-        style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+        style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
         🔄 New SBAR
       </button>
     </div>
@@ -221,10 +221,10 @@ Use simple language a patient can understand. Be warm and reassuring. Include re
   if (mode==='result') return (
     <div style={{paddingBottom:20,fontFamily:F}}>
       <div style={{display:'flex',gap:10,marginBottom:16}}>
-        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:T.sub,padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ Letter Ready</div>
-          <div style={{fontSize:11,color:T.sub}}>{form.language==='AR'?'Arabic':'English'} · Patient-friendly</div>
+          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>✅ Letter Ready</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{form.language==='AR'?'Arabic':'English'} · Patient-friendly</div>
         </div>
         <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.green}`:'none',background:copied?`${T.green}20`:`linear-gradient(135deg,${T.green},${T.teal})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -232,9 +232,9 @@ Use simple language a patient can understand. Be warm and reassuring. Include re
       </div>
       <div style={{background:T.glass,backdropFilter:'blur(40px)',borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${T.green}25`}}>
         <div style={{fontSize:10,color:T.green,fontWeight:700,marginBottom:10,letterSpacing:1}}>📄 DISCHARGE LETTER</div>
-        <div style={{fontSize:13,color:T.sub,lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
+        <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
       </div>
-      <button onClick={()=>{setResult('');setMode('form')}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+      <button onClick={()=>{setResult('');setMode('form')}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
         🔄 New Letter
       </button>
     </div>
@@ -330,10 +330,10 @@ Write a structured reflective entry with: Description, Feelings, Evaluation, Ana
   if (mode==='result') return (
     <div style={{paddingBottom:20,fontFamily:F}}>
       <div style={{display:'flex',gap:10,marginBottom:16}}>
-        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:T.sub,padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
+        <button onClick={()=>setMode('form')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600,fontFamily:F}}>← Edit</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:T.text}}>✅ Portfolio Entry Ready</div>
-          <div style={{fontSize:11,color:T.sub}}>Gibbs Reflective Cycle · GMC/RCPI</div>
+          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>✅ Portfolio Entry Ready</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Gibbs Reflective Cycle · GMC/RCPI</div>
         </div>
         <button onClick={copy} style={{padding:'8px 14px',borderRadius:12,border:copied?`1px solid ${T.purple}`:'none',background:copied?`${T.purple}20`:`linear-gradient(135deg,${T.purple},${T.blue})`,color:'var(--text-primary, white)',fontSize:12,fontWeight:700,cursor:'pointer',fontFamily:F}}>
           {copied?'✓ Copied':'📋 Copy'}
@@ -341,9 +341,9 @@ Write a structured reflective entry with: Description, Feelings, Evaluation, Ana
       </div>
       <div style={{background:T.glass,backdropFilter:'blur(40px)',borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${T.purple}25`}}>
         <div style={{fontSize:10,color:T.purple,fontWeight:700,marginBottom:10,letterSpacing:1}}>📓 PORTFOLIO ENTRY</div>
-        <div style={{fontSize:13,color:T.sub,lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
+        <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-line'}}>{result}</div>
       </div>
-      <button onClick={()=>{setResult('');setMode('form')}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
+      <button onClick={()=>{setResult('');setMode('form')}} style={{width:'100%',padding:'14px',borderRadius:16,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>
         🔄 New Entry
       </button>
     </div>
@@ -438,12 +438,12 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
           <button onClick={()=>setTool('menu')} style={{
             background:T.glass, backdropFilter:'blur(20px)',
             border:`1px solid ${T.border}`, borderRadius:14,
-            color:T.sub, padding:'9px 16px', fontSize:13,
+            color:'var(--text-secondary,rgba(10,22,40,0.55))', padding:'9px 16px', fontSize:13,
             cursor:'pointer', fontWeight:700, fontFamily:F,
           }}>← Back</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>{t.icon} {t.label}</div>
-            <div style={{fontSize:11,color:T.sub}}>{t.sub}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{t.icon} {t.label}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{t.sub}</div>
           </div>
           <div style={{fontSize:9,padding:'4px 10px',borderRadius:8,background:`${t.color}18`,color:t.color,fontWeight:800,border:`1px solid ${t.color}28`}}>{t.badge}</div>
         </div>
@@ -461,10 +461,10 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
       {/* Header */}
       <div style={{marginBottom:20}}>
         <div style={{fontSize:10,color:`${T.teal}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>PROFESSIONAL TOOLS</div>
-        <div style={{fontSize:24,fontWeight:900,color:T.text,letterSpacing:-0.5,lineHeight:1.1}}>
+        <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5,lineHeight:1.1}}>
           Clinical <span style={{color:T.teal}}>Workshop</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4,lineHeight:1.5}}>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4,lineHeight:1.5}}>
           AI-powered tools for your daily clinical workflow
         </div>
         <div style={{display:'flex',gap:6,marginTop:10,flexWrap:'wrap'}}>
@@ -506,15 +506,15 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
                 fontSize:24, boxShadow:`0 0 16px ${t.color}25`,
               }}>{t.icon}</div>
               <div>
-                <div style={{fontSize:16,fontWeight:900,color:T.text,marginBottom:2}}>{t.label}</div>
-                <div style={{fontSize:11,color:T.sub}}>{t.sub}</div>
+                <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{t.label}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{t.sub}</div>
               </div>
             </div>
             <div style={{background:`${t.color}15`,border:`1px solid ${t.color}28`,borderRadius:10,padding:'4px 10px',fontSize:9,color:t.color,fontWeight:700,flexShrink:0}}>{t.badge}</div>
           </div>
 
           {/* Description */}
-          <div style={{fontSize:12,color:T.sub,lineHeight:1.65,marginBottom:14}}>{t.desc}</div>
+          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.65,marginBottom:14}}>{t.desc}</div>
 
           {/* Stats */}
           <div style={{display:'flex',gap:8,marginBottom:14}}>
@@ -528,7 +528,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
 
           {/* Open bar */}
           <div style={{background:`linear-gradient(135deg,${t.color}18,${t.color}08)`,border:`1px solid ${t.color}28`,borderRadius:12,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <span style={{fontSize:12,fontWeight:700,color:T.text}}>Open {t.label}</span>
+            <span style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>Open {t.label}</span>
             <span style={{fontSize:16,color:t.color}}>›</span>
           </div>
         </div>

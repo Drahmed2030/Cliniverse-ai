@@ -249,23 +249,23 @@ function ContactForm({ onClose }: { onClose: () => void }) {
   }
 
   if (sent) return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F }}>
-      <div style={{ background: 'linear-gradient(180deg,#1e3d52,#162e3e)', borderRadius: 24, padding: '40px 30px', maxWidth: 340, textAlign: 'center', border: `1px solid ${T.green}30` }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: F }}>
+      <div style={{ background:'var(--bg-base,#F7F9FC)', borderRadius: 24, padding: '40px 30px', maxWidth: 340, textAlign: 'center', border: `1px solid ${T.green}30` }}>
         <div style={{ fontSize: 52, marginBottom: 16 }}>✅</div>
         <div style={{ fontSize: 20, fontWeight: 900, color: T.green, marginBottom: 8 }}>Request Sent!</div>
-        <div style={{ fontSize: 13, color: T.sub, marginBottom: 24, lineHeight: 1.6 }}>Our enterprise team will contact you within 24 hours.</div>
-        <button onClick={onClose} style={{ background: `linear-gradient(135deg,${T.teal},${T.blue})`, border: 'none', borderRadius: 14, padding: '12px 24px', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>Done</button>
+        <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginBottom: 24, lineHeight: 1.6 }}>Our enterprise team will contact you within 24 hours.</div>
+        <button onClick={onClose} style={{ background: `linear-gradient(135deg,${T.teal},${T.blue})`, border: 'none', borderRadius: 14, padding: '12px 24px', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>Done</button>
       </div>
     </div>
   )
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
+          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
           <div>
-            <div style={{ fontSize: 17, fontWeight: 900, color: T.text }}>Enterprise Inquiry</div>
+            <div style={{ fontSize: 17, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>Enterprise Inquiry</div>
             <div style={{ fontSize: 11, color: T.teal }}>Cliniverse AI Partnership Team</div>
           </div>
         </div>
@@ -277,7 +277,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
         ].map(f => (
           <div key={f.key} style={{ marginBottom: 12 }}>
             <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1, marginBottom: 6 }}>{f.label}</div>
-            <input value={(form as any)[f.key]} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder} style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: `1px solid ${T.border}`, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={(form as any)[f.key]} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder} style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: `1px solid ${T.border}`, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
         ))}
 
@@ -301,10 +301,10 @@ function ContactForm({ onClose }: { onClose: () => void }) {
 
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1, marginBottom: 6 }}>MESSAGE (optional)</div>
-          <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))} placeholder="Tell us about your needs, number of users, specific requirements..." rows={4} style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: `1px solid ${T.border}`, background: T.glass, color: T.text, fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.6, boxSizing: 'border-box' }} />
+          <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))} placeholder="Tell us about your needs, number of users, specific requirements..." rows={4} style={{ width: '100%', padding: '12px 14px', borderRadius: 12, border: `1px solid ${T.border}`, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.6, boxSizing: 'border-box' }} />
         </div>
 
-        <button onClick={submit} disabled={sending || !form.org || !form.email} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: !form.org || !form.email ? 'rgba(0,196,180,0.15)' : `linear-gradient(135deg,${T.teal},${T.blue})`, color: '#fff', fontSize: 15, fontWeight: 800, cursor: !form.org || !form.email ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        <button onClick={submit} disabled={sending || !form.org || !form.email} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: !form.org || !form.email ? 'rgba(0,196,180,0.15)' : `linear-gradient(135deg,${T.teal},${T.blue})`, color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 800, cursor: !form.org || !form.email ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
           {sending ? <><div style={{ width: 18, height: 18, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Sending...</> : '🤝 Send Enterprise Inquiry'}
         </button>
 
@@ -332,10 +332,10 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 10, color: T.gold + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>CLINIVERSE AI · ENTERPRISE</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5, lineHeight: 1.1 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5, lineHeight: 1.1 }}>
           Partner with <span style={{ color: T.gold }}>Cliniverse</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>
           Hospitals · Universities · Pharma · Devices · Investors
         </div>
       </div>
@@ -359,7 +359,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
       <button onClick={() => setShowContact(true)} style={{
         width: '100%', padding: '16px', borderRadius: 20, border: 'none', marginBottom: 20,
         background: `linear-gradient(135deg,${T.gold},#B8860B)`,
-        color: '#fff', fontSize: 15, fontWeight: 900, cursor: 'pointer', fontFamily: F,
+        color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 900, cursor: 'pointer', fontFamily: F,
         boxShadow: `0 8px 28px rgba(212,168,71,0.40)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         animation: 'bioGlow 3s ease-in-out infinite',
@@ -384,14 +384,14 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
         <div>
           {activeSector && sector ? (
             <div style={{ animation: 'fadeIn 0.3s ease' }}>
-              <button onClick={() => setActiveSector(null)} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F, marginBottom: 16 }}>← All Sectors</button>
+              <button onClick={() => setActiveSector(null)} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F, marginBottom: 16 }}>← All Sectors</button>
 
               <div style={{ background: `${sector.color}10`, border: `1.5px solid ${sector.color}30`, borderRadius: 22, padding: '20px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: `radial-gradient(circle,${sector.color}15,transparent 70%)`, pointerEvents: 'none' }} />
                 <div style={{ fontSize: 36, marginBottom: 10 }}>{sector.icon}</div>
                 <div style={{ fontSize: 10, color: sector.color, fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>{sector.tagline.toUpperCase()}</div>
-                <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 4 }}>{sector.label}</div>
-                <div style={{ fontSize: 12, color: T.sub }}>{sector.pricing}</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>{sector.label}</div>
+                <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{sector.pricing}</div>
               </div>
 
               <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 10 }}>WHAT YOU GET</div>
@@ -399,12 +399,12 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
                 {sector.features.map((f, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${sector.color}15`, borderRadius: 14, padding: '12px 14px' }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: sector.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: 13, color: T.text, fontWeight: 600 }}>{f}</span>
+                    <span style={{ fontSize: 13, color:'var(--text-primary,#0A1628)', fontWeight: 600 }}>{f}</span>
                   </div>
                 ))}
               </div>
 
-              <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${sector.color},${sector.color}CC)`, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: `0 6px 24px ${sector.color}35` }}>
+              <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${sector.color},${sector.color}CC)`, color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: `0 6px 24px ${sector.color}35` }}>
                 🤝 Request {sector.label} Partnership
               </button>
             </div>
@@ -415,7 +415,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
                   <div style={{ position: 'absolute', top: 0, right: 0, width: 70, height: 70, borderRadius: '50%', background: `radial-gradient(circle,${s.color}08,transparent 70%)`, pointerEvents: 'none' }} />
                   <div style={{ width: 50, height: 50, borderRadius: 15, background: `${s.color}15`, border: `1px solid ${s.color}28`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>{s.icon}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: T.text, marginBottom: 2 }}>{s.label}</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{s.label}</div>
                     <div style={{ fontSize: 11, color: s.color, fontWeight: 600, marginBottom: 2 }}>{s.tagline}</div>
                     <div style={{ fontSize: 10, color: T.muted }}>{s.pricing}</div>
                   </div>
@@ -440,22 +440,22 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
               animation: plan.popular ? 'bioGlow 3s ease-in-out infinite' : 'none',
             }}>
               {plan.popular && (
-                <div style={{ position: 'absolute', top: 14, right: 14, background: plan.color, borderRadius: 20, padding: '4px 12px', fontSize: 9, color: '#fff', fontWeight: 800 }}>MOST POPULAR</div>
+                <div style={{ position: 'absolute', top: 14, right: 14, background: plan.color, borderRadius: 20, padding: '4px 12px', fontSize: 9, color: 'var(--text-primary,#0A1628)', fontWeight: 800 }}>MOST POPULAR</div>
               )}
               <div style={{ position: 'absolute', top: -25, right: -25, width: 100, height: 100, borderRadius: '50%', background: `radial-gradient(circle,${plan.color}12,transparent 70%)`, pointerEvents: 'none' }} />
 
               <div style={{ fontSize: 10, color: plan.color, fontWeight: 700, letterSpacing: 1.5, marginBottom: 6 }}>{plan.name.toUpperCase()}</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                <span style={{ fontSize: 28, fontWeight: 900, color: T.text }}>{plan.price}</span>
+                <span style={{ fontSize: 28, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>{plan.price}</span>
                 <span style={{ fontSize: 13, color: T.muted }}>{plan.period}</span>
               </div>
-              <div style={{ fontSize: 12, color: T.sub, marginBottom: 14 }}>{plan.desc}</div>
+              <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginBottom: 14 }}>{plan.desc}</div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
                 {plan.features.map((f, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ color: plan.color, fontSize: 12, fontWeight: 800 }}>✓</span>
-                    <span style={{ fontSize: 12, color: T.sub }}>{f}</span>
+                    <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{f}</span>
                   </div>
                 ))}
               </div>
@@ -467,7 +467,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
           ))}
 
           <div style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 16, padding: '14px', textAlign: 'center' }}>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>
               All plans include 30-day free trial · No credit card required
             </div>
           </div>
@@ -479,7 +479,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
         <div>
           <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.gold}25`, borderRadius: 18, padding: '16px', marginBottom: 16 }}>
             <div style={{ fontSize: 10, color: T.gold, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>⚖️ INTELLECTUAL PROPERTY FRAMEWORK</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.7 }}>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7 }}>
               Cliniverse AI maintains strict IP protection while enabling meaningful partnerships. Our framework is designed for the Saudi Vision 2030 digital health ecosystem.
             </div>
           </div>
@@ -491,7 +491,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
                   <span style={{ fontSize: 20 }}>{term.icon}</span>
                   <div style={{ fontSize: 13, fontWeight: 800, color: term.color }}>{term.title}</div>
                 </div>
-                <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.65 }}>{term.desc}</div>
+                <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.65 }}>{term.desc}</div>
               </div>
             ))}
           </div>
@@ -505,7 +505,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
               { role: 'Co-developers', share: '10%', color: T.green },
             ].map((r, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <span style={{ fontSize: 13, color: T.text, fontWeight: 600 }}>{r.role}</span>
+                <span style={{ fontSize: 13, color:'var(--text-primary,#0A1628)', fontWeight: 600 }}>{r.role}</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: parseInt(r.share) * 1.5, height: 8, borderRadius: 4, background: r.color + '80' }} />
                   <span style={{ fontSize: 13, fontWeight: 900, color: r.color }}>{r.share}</span>
@@ -514,7 +514,7 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
             ))}
           </div>
 
-          <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '14px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${T.gold},#B8860B)`, color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
+          <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '14px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${T.gold},#B8860B)`, color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
             📋 Request Full Legal Framework
           </button>
         </div>
@@ -525,11 +525,11 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
         <div>
           <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.teal}25`, borderRadius: 18, padding: '20px', marginBottom: 16, textAlign: 'center', animation: 'bioGlow 3s ease-in-out infinite' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🤝</div>
-            <div style={{ fontSize: 18, fontWeight: 900, color: T.text, marginBottom: 8 }}>Let's Build Together</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.7, marginBottom: 20 }}>
+            <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 8 }}>Let's Build Together</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, marginBottom: 20 }}>
               Whether you're a hospital, university, pharma company, or investor — we have a partnership model designed for you.
             </div>
-            <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${T.teal},${T.blue})`, color: '#fff', fontSize: 15, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: `0 6px 24px ${T.teal}35` }}>
+            <button onClick={() => setShowContact(true)} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: `linear-gradient(135deg,${T.teal},${T.blue})`, color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: `0 6px 24px ${T.teal}35` }}>
               📩 Start Enterprise Inquiry
             </button>
           </div>
@@ -545,14 +545,14 @@ export default function EnterprisePage({ onXP }: { onXP?: (n: number) => void })
                 <div style={{ width: 36, height: 36, borderRadius: 11, background: `${item.color}15`, border: `1px solid ${item.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>{item.icon}</div>
                 <div>
                   <div style={{ fontSize: 10, color: T.muted, fontWeight: 600, marginBottom: 2 }}>{item.label}</div>
-                  <div style={{ fontSize: 13, color: T.text, fontWeight: 700 }}>{item.value}</div>
+                  <div style={{ fontSize: 13, color:'var(--text-primary,#0A1628)', fontWeight: 700 }}>{item.value}</div>
                 </div>
               </div>
             ))}
           </div>
 
           <div style={{ marginTop: 16, background: `${T.gold}08`, border: `1px solid ${T.gold}18`, borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
-            <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.6 }}>
+            <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>
               🇸🇦 Proudly built in Saudi Arabia · Vision 2030 aligned · ZATCA registered
             </div>
           </div>

@@ -96,12 +96,12 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(10,22,40,0.90)', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
-          <div style={{ fontSize: 17, fontWeight: 900, color: T.text }}>📋 New Logbook Entry</div>
+          <button onClick={onClose} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Back</button>
+          <div style={{ fontSize: 17, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>📋 New Logbook Entry</div>
         </div>
 
         {/* Type */}
@@ -116,7 +116,7 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
 
         {/* Title */}
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 6 }}>TITLE *</div>
-        <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Central line insertion, STEMI management..." style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, marginBottom: 12, boxSizing: 'border-box' }} />
+        <input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Central line insertion, STEMI management..." style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, marginBottom: 12, boxSizing: 'border-box' }} />
 
         {/* Specialty + Date */}
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
@@ -130,7 +130,7 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>CPD HRS</div>
-            <input value={form.cpd_hours} onChange={e => setForm(p => ({ ...p, cpd_hours: e.target.value }))} type="number" min="0.5" step="0.5" style={{ width: '100%', padding: '8px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.cpd_hours} onChange={e => setForm(p => ({ ...p, cpd_hours: e.target.value }))} type="number" min="0.5" step="0.5" style={{ width: '100%', padding: '8px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
         </div>
 
@@ -138,11 +138,11 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>DATE</div>
-            <input value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))} type="date" style={{ width: '100%', padding: '9px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))} type="date" style={{ width: '100%', padding: '9px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>SUPERVISOR</div>
-            <input value={form.supervisor} onChange={e => setForm(p => ({ ...p, supervisor: e.target.value }))} placeholder="Name" style={{ width: '100%', padding: '9px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.supervisor} onChange={e => setForm(p => ({ ...p, supervisor: e.target.value }))} placeholder="Name" style={{ width: '100%', padding: '9px 10px', borderRadius: 10, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 12, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
         </div>
 
@@ -153,7 +153,7 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {COMPETENCY_LEVELS.map(cl => (
                 <div key={cl.id} onClick={() => setForm(p => ({ ...p, competency: cl.id }))} style={{ display: 'flex', alignItems: 'center', gap: 10, background: form.competency === cl.id ? cl.color + '15' : T.glass2, border: '1px solid ' + (form.competency === cl.id ? cl.color : T.border), borderRadius: 12, padding: '10px 14px', cursor: 'pointer', transition: 'all 0.15s' }}>
-                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: form.competency === cl.id ? cl.color : 'rgba(255,255,255,0.08)', border: '1.5px solid ' + (form.competency === cl.id ? cl.color : T.border), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#fff', flexShrink: 0 }}>{form.competency === cl.id ? '✓' : cl.id}</div>
+                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: form.competency === cl.id ? cl.color : 'rgba(255,255,255,0.08)', border: '1.5px solid ' + (form.competency === cl.id ? cl.color : T.border), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: 'var(--text-primary,#0A1628)', flexShrink: 0 }}>{form.competency === cl.id ? '✓' : cl.id}</div>
                   <span style={{ fontSize: 12, color: form.competency === cl.id ? T.text : T.sub, fontWeight: form.competency === cl.id ? 700 : 400 }}>{cl.label}</span>
                 </div>
               ))}
@@ -163,18 +163,18 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
 
         {/* Description */}
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 6 }}>DESCRIPTION</div>
-        <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Brief description of the activity..." rows={3} style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass, color: T.text, fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.6, marginBottom: 10, boxSizing: 'border-box' }} />
+        <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Brief description of the activity..." rows={3} style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.6, marginBottom: 10, boxSizing: 'border-box' }} />
 
         {/* AI Reflection */}
-        <button onClick={generateReflection} disabled={generating || !form.title} style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', background: generating || !form.title ? 'rgba(175,82,222,0.15)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: '#fff', fontSize: 12, fontWeight: 800, cursor: generating || !form.title ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 10 }}>
+        <button onClick={generateReflection} disabled={generating || !form.title} style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', background: generating || !form.title ? 'rgba(175,82,222,0.15)' : 'linear-gradient(135deg,' + T.purple + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 12, fontWeight: 800, cursor: generating || !form.title ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 10 }}>
           {generating ? <><div style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Generating reflection...</> : '🤖 AI Generate Gibbs Reflection'}
         </button>
 
         {form.reflection && (
-          <textarea value={form.reflection} onChange={e => setForm(p => ({ ...p, reflection: e.target.value }))} rows={5} style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.purple + '25', background: T.purple + '06', color: T.sub, fontSize: 12, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, marginBottom: 10, boxSizing: 'border-box' }} />
+          <textarea value={form.reflection} onChange={e => setForm(p => ({ ...p, reflection: e.target.value }))} rows={5} style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.purple + '25', background: T.purple + '06', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 12, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, marginBottom: 10, boxSizing: 'border-box' }} />
         )}
 
-        <button onClick={save} disabled={saving || !form.title} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !form.title ? 'rgba(0,196,180,0.15)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: '#fff', fontSize: 14, fontWeight: 800, cursor: !form.title ? 'not-allowed' : 'pointer', fontFamily: F }}>
+        <button onClick={save} disabled={saving || !form.title} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background: !form.title ? 'rgba(0,196,180,0.15)' : 'linear-gradient(135deg,' + T.teal + ',' + T.blue + ')', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: !form.title ? 'not-allowed' : 'pointer', fontFamily: F }}>
           {saving ? 'Saving...' : '💾 Save to Logbook'}
         </button>
       </div>
@@ -211,10 +211,10 @@ export default function ClinicalLogbook({ onXP }: { onXP?: (n: number) => void }
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.gold + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>CLINICAL LOGBOOK</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           My <span style={{ color: T.gold }}>Logbook</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>CPD · Procedures · Reflections · Revalidation</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>CPD · Procedures · Reflections · Revalidation</div>
       </div>
 
       {/* Stats */}
@@ -233,7 +233,7 @@ export default function ClinicalLogbook({ onXP }: { onXP?: (n: number) => void }
       </div>
 
       {/* Add button */}
-      <button onClick={() => setShowAdd(true)} style={{ width: '100%', padding: '14px', borderRadius: 18, border: 'none', background: 'linear-gradient(135deg,' + T.gold + ',#B8860B)', color: '#fff', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(212,168,71,0.35)', marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+      <button onClick={() => setShowAdd(true)} style={{ width: '100%', padding: '14px', borderRadius: 18, border: 'none', background: 'linear-gradient(135deg,' + T.gold + ',#B8860B)', color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: 'pointer', fontFamily: F, boxShadow: '0 6px 24px rgba(212,168,71,0.35)', marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
         ➕ Add Logbook Entry
       </button>
 
@@ -255,12 +255,12 @@ export default function ClinicalLogbook({ onXP }: { onXP?: (n: number) => void }
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.08)', borderTop: '3px solid ' + T.gold, animation: 'spin 0.8s linear infinite', margin: '0 auto 12px' }} />
-          <div style={{ fontSize: 13, color: T.sub }}>Loading logbook...</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Loading logbook...</div>
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: '1px solid ' + T.border }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>📋</div>
-          <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>{entries.length === 0 ? 'Logbook is empty' : 'No entries found'}</div>
+          <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>{entries.length === 0 ? 'Logbook is empty' : 'No entries found'}</div>
           <div style={{ fontSize: 12, color: T.muted }}>{entries.length === 0 ? 'Start documenting your clinical activities' : 'Try a different filter'}</div>
         </div>
       ) : filtered.map(entry => {
@@ -285,11 +285,11 @@ export default function ClinicalLogbook({ onXP }: { onXP?: (n: number) => void }
               </div>
             </div>
 
-            <div style={{ fontSize: 14, fontWeight: 800, color: T.text, marginBottom: 4 }}>{entry.title}</div>
+            <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>{entry.title}</div>
             <div style={{ fontSize: 10, color: pt.color, fontWeight: 600, marginBottom: entry.description ? 8 : 0 }}>{entry.specialty}{entry.supervisor ? ' · ' + entry.supervisor : ''}</div>
 
             {entry.description && (
-              <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.6, marginBottom: entry.reflection ? 8 : 0 }}>
+              <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6, marginBottom: entry.reflection ? 8 : 0 }}>
                 {isExpanded ? entry.description : entry.description.substring(0, 100) + (entry.description.length > 100 ? '...' : '')}
               </div>
             )}
@@ -297,7 +297,7 @@ export default function ClinicalLogbook({ onXP }: { onXP?: (n: number) => void }
             {entry.reflection && isExpanded && (
               <div style={{ background: T.purple + '08', border: '1px solid ' + T.purple + '18', borderRadius: 10, padding: '10px 12px', marginTop: 8 }}>
                 <div style={{ fontSize: 8, color: T.purple, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>💭 REFLECTION (Gibbs)</div>
-                <div style={{ fontSize: 11, color: T.sub, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{entry.reflection}</div>
+                <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{entry.reflection}</div>
               </div>
             )}
 

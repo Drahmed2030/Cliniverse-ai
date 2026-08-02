@@ -104,12 +104,12 @@ function ParentTalk({ caseName, onClose }: { caseName:string, onClose:()=>void }
   }
 
   return (
-    <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.90)',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column'}}>
+    <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-card,rgba(255,255,255,0.06))',backdropFilter:'blur(12px)',display:'flex',flexDirection:'column'}}>
       <div style={{padding:'16px 20px',display:'flex',alignItems:'center',gap:12,borderBottom:`1px solid ${T.border}`}}>
-        <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
+        <button onClick={onClose} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'8px 14px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
         <div>
-          <div style={{fontSize:15,fontWeight:900,color:T.text}}>👨‍👩‍👦 Talk to the Parent</div>
-          <div style={{fontSize:11,color:T.sub}}>AI-simulated parent consultation</div>
+          <div style={{fontSize:15,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>👨‍👩‍👦 Talk to the Parent</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>AI-simulated parent consultation</div>
         </div>
       </div>
 
@@ -121,7 +121,7 @@ function ParentTalk({ caseName, onClose }: { caseName:string, onClose:()=>void }
               background: m.role==='doctor' ? `linear-gradient(135deg,${T.teal},${T.blue})` : T.glass,
               backdropFilter:'blur(20px)',
               border: m.role==='parent' ? `1px solid ${T.border}` : 'none',
-              fontSize:13, color:T.text, lineHeight:1.6,
+              fontSize:13, color:'var(--text-primary,#0A1628)', lineHeight:1.6,
               borderBottomRightRadius: m.role==='doctor' ? 4 : 18,
               borderBottomLeftRadius: m.role==='parent' ? 4 : 18,
             }}>
@@ -143,7 +143,7 @@ function ParentTalk({ caseName, onClose }: { caseName:string, onClose:()=>void }
         <input value={input} onChange={e=>setInput(e.target.value)}
           onKeyDown={e=>e.key==='Enter'&&send()}
           placeholder="Type your response to the parent..."
-          style={{flex:1,padding:'12px 16px',borderRadius:14,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:T.text,fontSize:13,outline:'none',fontFamily:F}}
+          style={{flex:1,padding:'12px 16px',borderRadius:14,border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-primary,#0A1628)',fontSize:13,outline:'none',fontFamily:F}}
         />
         <button onClick={send} disabled={loading||!input.trim()} style={{padding:'12px 18px',borderRadius:14,border:'none',background:`linear-gradient(135deg,${T.teal},${T.blue})`,color:'var(--text-primary, #fff)',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>Send</button>
       </div>
@@ -167,10 +167,10 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
       <div style={{fontFamily:F}}>
         {/* Back */}
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
-          <button onClick={()=>{setSelected(null);setAnswered(null);setShowDosing(false)}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Cases</button>
+          <button onClick={()=>{setSelected(null);setAnswered(null);setShowDosing(false)}} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:12,padding:'9px 16px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Cases</button>
           <div>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>{selected.icon} {selected.title}</div>
-            <div style={{fontSize:11,color:T.sub}}>Age {selected.age}y · {selected.weight}kg · Temp {selected.temp}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{selected.icon} {selected.title}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Age {selected.age}y · {selected.weight}kg · Temp {selected.temp}</div>
           </div>
         </div>
 
@@ -178,7 +178,7 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
         <div style={{background:`${selected.color}08`,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:14,border:`1px solid ${selected.color}22`,position:'relative',overflow:'hidden'}}>
           <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:`radial-gradient(circle,${selected.color}18,transparent 70%)`,pointerEvents:'none'}}/>
           <div style={{fontSize:9,color:selected.color,fontWeight:700,letterSpacing:1,marginBottom:6}}>🧸 CLINICAL SCENARIO</div>
-          <div style={{fontSize:13,color:T.sub,lineHeight:1.75}}>{selected.scenario}</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75}}>{selected.scenario}</div>
         </div>
 
         {/* Age/weight badges */}
@@ -196,7 +196,7 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
         </div>
 
         {/* Question */}
-        <div style={{fontSize:14,fontWeight:800,color:T.text,marginBottom:12,lineHeight:1.5}}>
+        <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:12,lineHeight:1.5}}>
           What is the most appropriate immediate management?
         </div>
 
@@ -227,7 +227,7 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
                 }}>
                   {done?(isCorrectOpt?'✓':isSel?'✗':String.fromCharCode(65+i)):String.fromCharCode(65+i)}
                 </div>
-                <div style={{fontSize:13,color:T.text,fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
+                <div style={{fontSize:13,color:'var(--text-primary,#0A1628)',fontWeight:600,flex:1,lineHeight:1.5,paddingTop:2}}>{opt.text}</div>
               </button>
             )
           })}
@@ -240,12 +240,12 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
               <div style={{fontSize:14,fontWeight:900,color:isCorrect?T.green:T.red,marginBottom:8}}>
                 {isCorrect?'✅ Correct! +20 XP':'❌ Incorrect'}
               </div>
-              <div style={{fontSize:13,color:T.sub,lineHeight:1.7}}>{selected.options[answered].explanation}</div>
+              <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7}}>{selected.options[answered].explanation}</div>
             </div>
 
             <div style={{background:`${T.gold}08`,border:`1px solid ${T.gold}22`,borderRadius:14,padding:'12px 14px',marginBottom:14}}>
               <div style={{fontSize:9,color:T.gold,fontWeight:700,letterSpacing:1,marginBottom:6}}>⭐ PAEDIATRIC PEARL</div>
-              <div style={{fontSize:12,color:T.sub,lineHeight:1.6}}>{selected.pearl}</div>
+              <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>{selected.pearl}</div>
             </div>
 
             {/* Weight-based dosing */}
@@ -254,7 +254,7 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
               {selected.dosing.map((d,i)=>(
                 <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0',borderBottom:i<selected.dosing.length-1?`1px solid ${T.border}`:'none'}}>
                   <div>
-                    <div style={{fontSize:12,fontWeight:700,color:T.text}}>{d.drug}</div>
+                    <div style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>{d.drug}</div>
                     <div style={{fontSize:10,color:T.muted}}>{d.dose} · {d.route}</div>
                   </div>
                   <div style={{background:`${T.blue}18`,border:`1px solid ${T.blue}30`,borderRadius:10,padding:'4px 12px',fontSize:13,fontWeight:900,color:T.blue}}>
@@ -274,7 +274,7 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
               </button>
               <button onClick={()=>{setSelected(null);setAnswered(null)}} style={{
                 flex:1,padding:'13px',borderRadius:16,border:`1px solid ${T.border}`,
-                background:T.glass,backdropFilter:'blur(20px)',color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,
+                background:T.glass,backdropFilter:'blur(20px)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,
               }}>
                 Next Case →
               </button>
@@ -290,10 +290,10 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
       {/* Header */}
       <div style={{marginBottom:20}}>
         <div style={{fontSize:10,color:`${T.purple}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>PAEDIATRICS</div>
-        <div style={{fontSize:24,fontWeight:900,color:T.text,letterSpacing:-0.5}}>
+        <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5}}>
           The Little <span style={{color:T.purple}}>Patient</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4,lineHeight:1.5}}>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4,lineHeight:1.5}}>
           Paediatric emergency cases · Weight-based dosing · Talk to the parent
         </div>
       </div>
@@ -319,14 +319,14 @@ export default function PediatricsModule({ onXP }: { onXP?: (n:number)=>void }) 
             <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:10}}>
               <div style={{width:52,height:52,borderRadius:16,background:`${c.color}15`,border:`1.5px solid ${c.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,boxShadow:`0 0 16px ${c.color}25`}}>{c.icon}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:16,fontWeight:900,color:T.text,marginBottom:2}}>{c.title}</div>
-                <div style={{fontSize:11,color:T.sub}}>Age {c.age}y · {c.weight}kg · Temp {c.temp}</div>
+                <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{c.title}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Age {c.age}y · {c.weight}kg · Temp {c.temp}</div>
               </div>
               <div style={{background:`${c.color}18`,border:`1px solid ${c.color}30`,borderRadius:10,padding:'4px 10px',fontSize:9,color:c.color,fontWeight:700}}>+20 XP</div>
             </div>
-            <div style={{fontSize:12,color:T.sub,lineHeight:1.6,marginBottom:12}}>{c.scenario.substring(0,100)}...</div>
+            <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6,marginBottom:12}}>{c.scenario.substring(0,100)}...</div>
             <div style={{background:`linear-gradient(135deg,${c.color}18,${c.color}08)`,border:`1px solid ${c.color}28`,borderRadius:12,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-              <span style={{fontSize:12,fontWeight:700,color:T.text}}>Start Case</span>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>Start Case</span>
               <span style={{fontSize:16,color:c.color}}>›</span>
             </div>
           </div>

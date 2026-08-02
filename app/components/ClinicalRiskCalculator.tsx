@@ -168,7 +168,7 @@ function GCSCalculator({ onScore }: { onScore: (s: number) => void }) {
         { label: 'Motor Response (M)', value: motor, set: (v: number) => { setMotor(v); update(eye, verbal, v) }, options: MOTOR },
       ].map(row => (
         <div key={row.label} style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 11, color: T.sub, fontWeight: 700, marginBottom: 8 }}>{row.label}</div>
+          <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight: 700, marginBottom: 8 }}>{row.label}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {row.options.map(opt => (
               <div key={opt.v} onClick={() => row.set(opt.v)} style={{
@@ -200,7 +200,7 @@ function GCSCalculator({ onScore }: { onScore: (s: number) => void }) {
           <div style={{ fontSize: 10, color: T.muted }}>GCS TOTAL</div>
         </div>
         <div style={{ width: 1, height: 40, background: T.border }} />
-        <div style={{ fontSize: 12, color: T.sub }}>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>
           E{eye} + V{verbal} + M{motor}
         </div>
       </div>
@@ -272,11 +272,11 @@ Be direct, practical, evidence-based. No preamble.`
           <button onClick={() => setActiveCalc(null)} style={{
             background: T.glass, backdropFilter: 'blur(16px)',
             border: `1px solid ${T.border}`, borderRadius: 12,
-            padding: '9px 16px', color: T.sub, fontSize: 13,
+            padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13,
             fontWeight: 700, cursor: 'pointer', fontFamily: F,
           }}>← Back</button>
           <div>
-            <div style={{ fontSize: 17, fontWeight: 900, color: T.text }}>{activeCalc.icon} {activeCalc.name}</div>
+            <div style={{ fontSize: 17, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>{activeCalc.icon} {activeCalc.name}</div>
             <div style={{ fontSize: 11, color: activeCalc.color, fontWeight: 600 }}>{activeCalc.description}</div>
           </div>
         </div>
@@ -294,7 +294,7 @@ Be direct, practical, evidence-based. No preamble.`
           <div style={{ width: 1, height: 50, background: T.border }} />
           <div>
             <div style={{ fontSize: 13, fontWeight: 900, color: result.color, marginBottom: 4 }}>{result.risk} Risk</div>
-            <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.5 }}>{result.action}</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.5 }}>{result.action}</div>
             <div style={{ fontSize: 10, color: T.muted, marginTop: 4 }}>📊 {result.annual}</div>
           </div>
         </div>
@@ -318,7 +318,7 @@ Be direct, practical, evidence-based. No preamble.`
                     background: checked[c.id] ? activeCalc.color : 'rgba(255,255,255,0.08)',
                     border: `1.5px solid ${checked[c.id] ? activeCalc.color : T.border}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 12, color: '#fff', transition: 'all 0.15s',
+                    fontSize: 12, color: 'var(--text-primary,#0A1628)', transition: 'all 0.15s',
                   }}>
                     {checked[c.id] ? '✓' : ''}
                   </div>
@@ -341,7 +341,7 @@ Be direct, practical, evidence-based. No preamble.`
         <button onClick={getAI} disabled={aiLoading} style={{
           width: '100%', padding: '14px', borderRadius: 16, border: 'none',
           background: aiLoading ? 'rgba(175,82,222,0.15)' : `linear-gradient(135deg,${T.purple},${T.blue})`,
-          color: '#fff', fontSize: 13, fontWeight: 800,
+          color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800,
           cursor: aiLoading ? 'not-allowed' : 'pointer', fontFamily: F,
           boxShadow: aiLoading ? 'none' : `0 6px 20px ${T.purple}35`,
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -356,7 +356,7 @@ Be direct, practical, evidence-based. No preamble.`
         {aiText && (
           <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.purple}25`, borderRadius: 16, padding: '16px', marginBottom: 14 }}>
             <div style={{ fontSize: 9, color: T.purple, fontWeight: 700, letterSpacing: 1.5, marginBottom: 10 }}>🤖 AI INSIGHT</div>
-            <div style={{ fontSize: 13, color: T.sub, lineHeight: 1.8, whiteSpace: 'pre-line' }}>{aiText}</div>
+            <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.8, whiteSpace: 'pre-line' }}>{aiText}</div>
           </div>
         )}
 
@@ -374,10 +374,10 @@ Be direct, practical, evidence-based. No preamble.`
     <div style={{ fontFamily: F }}>
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: `${T.purple}CC`, fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>CLINICAL DECISION</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Risk <span style={{ color: T.purple }}>Calculators</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>6 validated scores · AI interpretation</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>6 validated scores · AI interpretation</div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -396,8 +396,8 @@ Be direct, practical, evidence-based. No preamble.`
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
             }}>{calc.icon}</div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 800, color: T.text, marginBottom: 2 }}>{calc.name}</div>
-              <div style={{ fontSize: 11, color: T.sub }}>{calc.description}</div>
+              <div style={{ fontSize: 15, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{calc.name}</div>
+              <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{calc.description}</div>
               <div style={{ fontSize: 10, color: calc.color, fontWeight: 600, marginTop: 3 }}>{calc.category}</div>
             </div>
             <div style={{

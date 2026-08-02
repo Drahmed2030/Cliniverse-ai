@@ -336,7 +336,7 @@ Return ONLY this JSON structure:
           {g.keyLearning.map((l,i)=>(
             <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
               <span style={{color:'#30d158',fontSize:12,flexShrink:0}}>✓</span>
-              <span style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{l}</span>
+              <span style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{l}</span>
             </div>
           ))}
         </div>

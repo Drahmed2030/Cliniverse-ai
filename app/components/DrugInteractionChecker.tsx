@@ -165,10 +165,10 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: `${T.orange}CC`, fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>DRUG SAFETY AI</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Drug <span style={{ color: T.orange }}>Interactions</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>AI-powered interaction checker · Up to 6 drugs</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>AI-powered interaction checker · Up to 6 drugs</div>
       </div>
 
       {/* Selected drugs */}
@@ -184,7 +184,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
                 background: `${T.blue}15`, border: `1.5px solid ${T.blue}35`,
                 borderRadius: 20, padding: '6px 12px',
               }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: T.text }}>{drug}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color:'var(--text-primary,#0A1628)' }}>{drug}</span>
                 <button onClick={() => removeDrug(drug)} style={{
                   background: 'rgba(255,59,48,0.15)', border: 'none',
                   borderRadius: '50%', width: 18, height: 18,
@@ -209,7 +209,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
               style={{
                 flex: 1, padding: '11px 14px', borderRadius: 14,
                 border: `1px solid ${T.border}`, background: T.glass,
-                backdropFilter: 'blur(16px)', color: T.text, fontSize: 13,
+                backdropFilter: 'blur(16px)', color:'var(--text-primary,#0A1628)', fontSize: 13,
                 outline: 'none', fontFamily: F,
               }}
             />
@@ -226,7 +226,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
                 <div key={drug} onClick={() => addDrug(drug)} style={{
                   padding: '10px 14px', cursor: 'pointer',
                   borderBottom: `1px solid rgba(255,255,255,0.05)`,
-                  fontSize: 13, color: T.text, fontWeight: 600,
+                  fontSize: 13, color:'var(--text-primary,#0A1628)', fontWeight: 600,
                 }}>
                   💊 {drug}
                 </div>
@@ -249,7 +249,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
               style={{
                 flex: 1, padding: '10px 14px', borderRadius: 14,
                 border: `1px solid ${T.border}`, background: T.glass2,
-                color: T.text, fontSize: 12, outline: 'none', fontFamily: F,
+                color:'var(--text-primary,#0A1628)', fontSize: 12, outline: 'none', fontFamily: F,
               }}
             />
             <button onClick={addCustom} style={{
@@ -271,7 +271,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
               <button key={drug} onClick={() => addDrug(drug)} style={{
                 background: T.glass2, border: `1px solid ${T.border}`,
                 borderRadius: 20, padding: '5px 12px', cursor: 'pointer',
-                fontFamily: F, color: T.sub, fontSize: 11, fontWeight: 600,
+                fontFamily: F, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 11, fontWeight: 600,
               }}>{drug}</button>
             ))}
           </div>
@@ -287,7 +287,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
           background: selectedDrugs.length < 2
             ? 'rgba(255,149,0,0.15)'
             : `linear-gradient(135deg,${T.orange},${T.red})`,
-          color: '#fff', fontSize: 15, fontWeight: 800,
+          color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 800,
           cursor: selectedDrugs.length < 2 ? 'not-allowed' : 'pointer',
           fontFamily: F,
           boxShadow: selectedDrugs.length >= 2 ? `0 8px 28px ${T.orange}35` : 'none',
@@ -320,7 +320,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
                   <div style={{ fontSize: 11, fontWeight: 800, color: cfg.color, letterSpacing: 1 }}>
                     HIGHEST SEVERITY
                   </div>
-                  <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>{cfg.label}</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>{cfg.label}</div>
                 </div>
               </div>
             )
@@ -343,7 +343,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
 
                 {/* Pair header */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                  <div style={{ fontSize: 14, fontWeight: 900, color: T.text }}>
+                  <div style={{ fontSize: 14, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>
                     {r.drug1} <span style={{ color: T.muted, fontWeight: 400 }}>+</span> {r.drug2}
                   </div>
                   <div style={{
@@ -362,7 +362,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
                 ].map(row => (
                   <div key={row.l} style={{ marginBottom: 10 }}>
                     <div style={{ fontSize: 9, color: T.muted, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>{row.l}</div>
-                    <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.6 }}>{row.v}</div>
+                    <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{row.v}</div>
                   </div>
                 ))}
 
@@ -370,7 +370,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
                 {r.clinicalPearl && (
                   <div style={{ background: `${T.gold}10`, border: `1px solid ${T.gold}20`, borderRadius: 12, padding: '10px 12px', marginTop: 8 }}>
                     <div style={{ fontSize: 9, color: T.gold, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>💎 CLINICAL PEARL</div>
-                    <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.6 }}>{r.clinicalPearl}</div>
+                    <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.6 }}>{r.clinicalPearl}</div>
                   </div>
                 )}
               </div>
@@ -383,7 +383,7 @@ export default function DrugInteractionChecker({ onXP }: { onXP?: (n: number) =>
         <div style={{ textAlign: 'center', padding: '30px', background: `${T.green}08`, border: `1px solid ${T.green}20`, borderRadius: 20 }}>
           <div style={{ fontSize: 36, marginBottom: 8 }}>✅</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: T.green, marginBottom: 4 }}>No Interactions Found</div>
-          <div style={{ fontSize: 12, color: T.sub }}>These drugs appear safe to use together.</div>
+          <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>These drugs appear safe to use together.</div>
         </div>
       )}
 

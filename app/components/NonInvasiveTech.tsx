@@ -87,7 +87,7 @@ Be concise and clinically practical.`}]
               </svg>
             </div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:T.text,marginBottom:2}}>{p.label}</div>
+              <div style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{p.label}</div>
               <div style={{fontSize:10,color:p.color,fontWeight:600}}>{p.rhythm} · {p.rate}</div>
             </div>
             <div style={{fontSize:16,color:selectedPattern===p.id?p.color:T.muted}}>›</div>
@@ -98,7 +98,7 @@ Be concise and clinically practical.`}]
       {analyzing && (
         <div style={{textAlign:'center',padding:'20px',background:T.glass,backdropFilter:'blur(30px)',borderRadius:16,border:`1px solid ${T.border}`}}>
           <div style={{width:40,height:40,borderRadius:'50%',border:`3px solid rgba(255,255,255,0.08)`,borderTop:`3px solid ${T.teal}`,animation:'spin 0.8s linear infinite',margin:'0 auto 10px'}}/>
-          <div style={{fontSize:13,color:T.sub}}>AI analyzing ECG pattern...</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>AI analyzing ECG pattern...</div>
           <style>{`@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}`}</style>
         </div>
       )}
@@ -109,7 +109,7 @@ Be concise and clinically practical.`}]
             <div style={{width:8,height:8,borderRadius:'50%',background:result.pattern.color}}/>
             <div style={{fontSize:10,color:result.pattern.color,fontWeight:700,letterSpacing:1}}>AI ECG INTERPRETATION</div>
           </div>
-          <div style={{fontSize:12,color:T.sub,lineHeight:1.8,whiteSpace:'pre-line'}}>{result.text}</div>
+          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.8,whiteSpace:'pre-line'}}>{result.text}</div>
         </div>
       )}
     </div>
@@ -169,7 +169,7 @@ Be concise and practical for a non-ophthalmologist.`}]
     <div>
       <div style={{background:`${T.purple}08`,border:`1px solid ${T.purple}18`,borderRadius:14,padding:'12px 14px',marginBottom:14}}>
         <div style={{fontSize:10,color:T.purple,fontWeight:700,marginBottom:4}}>👁️ AI RETINAL ANALYSIS</div>
-        <div style={{fontSize:11,color:T.sub,lineHeight:1.6}}>Select a retinal scan pattern to analyze. AI detects: diabetic retinopathy, hypertensive changes, glaucoma, and more — without an ophthalmologist.</div>
+        <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>Select a retinal scan pattern to analyze. AI detects: diabetic retinopathy, hypertensive changes, glaucoma, and more — without an ophthalmologist.</div>
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:14}}>
@@ -183,7 +183,7 @@ Be concise and practical for a non-ophthalmologist.`}]
             transition:'all 0.2s',
           }}>
             <div style={{fontSize:22,marginBottom:6}}>👁️</div>
-            <div style={{fontSize:12,fontWeight:800,color:T.text,marginBottom:2}}>{c.label}</div>
+            <div style={{fontSize:12,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{c.label}</div>
             <div style={{fontSize:9,color:c.color,fontWeight:600}}>{c.grade}</div>
           </div>
         ))}
@@ -192,7 +192,7 @@ Be concise and practical for a non-ophthalmologist.`}]
       {analyzing && (
         <div style={{textAlign:'center',padding:'20px',background:T.glass,backdropFilter:'blur(30px)',borderRadius:16,border:`1px solid ${T.border}`}}>
           <div style={{width:40,height:40,borderRadius:'50%',border:`3px solid rgba(255,255,255,0.08)`,borderTop:`3px solid ${T.purple}`,animation:'spin 0.8s linear infinite',margin:'0 auto 10px'}}/>
-          <div style={{fontSize:13,color:T.sub}}>Analyzing retinal scan...</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Analyzing retinal scan...</div>
         </div>
       )}
 
@@ -201,20 +201,20 @@ Be concise and practical for a non-ophthalmologist.`}]
           <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:16,padding:'14px',marginBottom:10,border:`1px solid ${result.case.color}22`}}>
             <div style={{fontSize:9,color:result.case.color,fontWeight:700,letterSpacing:1,marginBottom:6}}>📊 KEY FINDINGS</div>
             {result.case.findings.map((f:string,i:number)=>(
-              <div key={i} style={{fontSize:11,color:T.sub,padding:'3px 0'}}>• {f}</div>
+              <div key={i} style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'3px 0'}}>• {f}</div>
             ))}
           </div>
           {result.case.risks.length > 0 && (
             <div style={{background:'rgba(255,59,48,0.06)',border:`1px solid rgba(255,59,48,0.18)`,borderRadius:14,padding:'12px 14px',marginBottom:10}}>
               <div style={{fontSize:9,color:T.red,fontWeight:700,letterSpacing:1,marginBottom:6}}>⚠️ SYSTEMIC RISKS</div>
               {result.case.risks.map((r:string,i:number)=>(
-                <div key={i} style={{fontSize:11,color:T.sub,padding:'3px 0'}}>• {r}</div>
+                <div key={i} style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'3px 0'}}>• {r}</div>
               ))}
             </div>
           )}
           <div style={{background:`${result.case.color}08`,border:`1px solid ${result.case.color}22`,borderRadius:16,padding:'14px'}}>
             <div style={{fontSize:9,color:result.case.color,fontWeight:700,letterSpacing:1,marginBottom:8}}>🤖 AI INTERPRETATION</div>
-            <div style={{fontSize:12,color:T.sub,lineHeight:1.75,whiteSpace:'pre-line'}}>{result.text}</div>
+            <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75,whiteSpace:'pre-line'}}>{result.text}</div>
           </div>
         </div>
       )}
@@ -277,7 +277,7 @@ Be direct and practical for a GP/ED doctor.`}]
     <div>
       <div style={{background:`${T.orange}08`,border:`1px solid ${T.orange}18`,borderRadius:14,padding:'12px 14px',marginBottom:14}}>
         <div style={{fontSize:10,color:T.orange,fontWeight:700,marginBottom:4}}>🔬 AI DERMATOLOGY</div>
-        <div style={{fontSize:11,color:T.sub,lineHeight:1.6}}>Select a lesion pattern for AI dermoscopy analysis. Uses ABCDE criteria + dermoscopic features. For educational purposes — always refer suspicious lesions.</div>
+        <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>Select a lesion pattern for AI dermoscopy analysis. Uses ABCDE criteria + dermoscopic features. For educational purposes — always refer suspicious lesions.</div>
       </div>
 
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:14}}>
@@ -291,7 +291,7 @@ Be direct and practical for a GP/ED doctor.`}]
             transition:'all 0.2s',
           }}>
             <div style={{fontSize:22,marginBottom:6}}>🔬</div>
-            <div style={{fontSize:11,fontWeight:800,color:T.text,marginBottom:2}}>{l.label}</div>
+            <div style={{fontSize:11,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{l.label}</div>
             <div style={{display:'flex',gap:4,marginTop:4,flexWrap:'wrap'}}>
               {Object.values(l.abcde).slice(0,3).map((v,i)=>(
                 <span key={i} style={{fontSize:8,color:l.color,background:`${l.color}15`,borderRadius:6,padding:'1px 5px'}}>{v}</span>
@@ -304,7 +304,7 @@ Be direct and practical for a GP/ED doctor.`}]
       {analyzing && (
         <div style={{textAlign:'center',padding:'20px',background:T.glass,backdropFilter:'blur(30px)',borderRadius:16,border:`1px solid ${T.border}`}}>
           <div style={{width:40,height:40,borderRadius:'50%',border:`3px solid rgba(255,255,255,0.08)`,borderTop:`3px solid ${T.orange}`,animation:'spin 0.8s linear infinite',margin:'0 auto 10px'}}/>
-          <div style={{fontSize:13,color:T.sub}}>AI analyzing dermoscopy...</div>
+          <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>AI analyzing dermoscopy...</div>
         </div>
       )}
 
@@ -312,11 +312,11 @@ Be direct and practical for a GP/ED doctor.`}]
         <div>
           <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:16,padding:'14px',marginBottom:10,border:`1px solid ${result.lesion.color}22`}}>
             <div style={{fontSize:9,color:result.lesion.color,fontWeight:700,letterSpacing:1,marginBottom:6}}>🔍 DERMOSCOPY</div>
-            <div style={{fontSize:11,color:T.sub,lineHeight:1.6}}>{result.lesion.dermoscopy}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>{result.lesion.dermoscopy}</div>
           </div>
           <div style={{background:`${result.lesion.color}08`,border:`1px solid ${result.lesion.color}22`,borderRadius:16,padding:'14px'}}>
             <div style={{fontSize:9,color:result.lesion.color,fontWeight:700,letterSpacing:1,marginBottom:8}}>🤖 AI ANALYSIS</div>
-            <div style={{fontSize:12,color:T.sub,lineHeight:1.75,whiteSpace:'pre-line'}}>{result.text}</div>
+            <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75,whiteSpace:'pre-line'}}>{result.text}</div>
           </div>
         </div>
       )}
@@ -369,10 +369,10 @@ export default function NonInvasiveTech({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:F}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:18}}>
-          <button onClick={()=>setTool('menu')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:14,color:T.sub,padding:'9px 16px',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
+          <button onClick={()=>setTool('menu')} style={{background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,borderRadius:14,color:'var(--text-secondary,rgba(10,22,40,0.55))',padding:'9px 16px',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F}}>← Back</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:16,fontWeight:900,color:T.text}}>{t.icon} {t.label}</div>
-            <div style={{fontSize:11,color:T.sub}}>{t.tech}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{t.icon} {t.label}</div>
+            <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{t.tech}</div>
           </div>
           <div style={{fontSize:9,padding:'4px 10px',borderRadius:8,background:`${t.color}18`,color:t.color,fontWeight:800,border:`1px solid ${t.color}28`}}>{t.badge}</div>
         </div>
@@ -388,10 +388,10 @@ export default function NonInvasiveTech({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Header */}
       <div style={{marginBottom:20}}>
         <div style={{fontSize:10,color:`${T.teal}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>NON-INVASIVE TECHNOLOGY</div>
-        <div style={{fontSize:24,fontWeight:900,color:T.text,letterSpacing:-0.5,lineHeight:1.1}}>
+        <div style={{fontSize:24,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5,lineHeight:1.1}}>
           AI <span style={{color:T.teal}}>Diagnostics</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4,lineHeight:1.5}}>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4,lineHeight:1.5}}>
           ECG · Retinal · Skin · Wearables — AI-powered, non-invasive
         </div>
       </div>
@@ -428,14 +428,14 @@ export default function NonInvasiveTech({ onXP }: { onXP?: (n:number)=>void }) {
             <div style={{display:'flex',alignItems:'center',gap:12}}>
               <div style={{width:50,height:50,borderRadius:16,background:`${t.color}18`,border:`1.5px solid ${t.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,boxShadow:`0 0 16px ${t.color}25`}}>{t.icon}</div>
               <div>
-                <div style={{fontSize:15,fontWeight:900,color:T.text,marginBottom:2}}>{t.label}</div>
-                <div style={{fontSize:11,color:T.sub}}>{t.sub}</div>
+                <div style={{fontSize:15,fontWeight:900,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{t.label}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{t.sub}</div>
               </div>
             </div>
             <div style={{background:`${t.color}15`,border:`1px solid ${t.color}28`,borderRadius:10,padding:'4px 10px',fontSize:9,color:t.color,fontWeight:700,flexShrink:0}}>{t.badge}</div>
           </div>
 
-          <div style={{fontSize:12,color:T.sub,lineHeight:1.65,marginBottom:12}}>{t.desc}</div>
+          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.65,marginBottom:12}}>{t.desc}</div>
 
           <div style={{display:'flex',gap:8,marginBottom:12}}>
             {t.stats.map(s=>(
@@ -447,7 +447,7 @@ export default function NonInvasiveTech({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
 
           <div style={{background:`linear-gradient(135deg,${t.color}18,${t.color}08)`,border:`1px solid ${t.color}28`,borderRadius:12,padding:'10px 14px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-            <span style={{fontSize:12,fontWeight:700,color:T.text}}>Open {t.label}</span>
+            <span style={{fontSize:12,fontWeight:700,color:'var(--text-primary,#0A1628)'}}>Open {t.label}</span>
             <span style={{fontSize:16,color:t.color}}>›</span>
           </div>
         </div>

@@ -1,131 +1,109 @@
+
+/* ══════════════════════════════════════════════════
+   Pure Hospital Theme — Light clinical white
+   Applied when data-theme="hospital" on <html>
+══════════════════════════════════════════════════ */
+[data-theme='hospital'],
+[data-theme='hospital'] * {
+  --bg-base:           #F7F9FC;
+  --bg-card:           rgba(255, 255, 255, 0.88);
+  --bg-elevated:       #FFFFFF;
+  --bg-overlay:        rgba(247, 249, 252, 0.95);
+
+  --border-card:       rgba(0, 100, 180, 0.10);
+  --border-subtle:     rgba(0, 100, 180, 0.06);
+
+  --text-primary:      #0A1628;
+  --text-secondary:    rgba(10, 22, 40, 0.65);
+  --text-muted:        rgba(10, 22, 40, 0.38);
+  --text-inverse:      #F7F9FC;
+
+  --accent:            #0064B4;
+  --accent-soft:       rgba(0, 100, 180, 0.10);
+  --accent-glow:       rgba(0, 100, 180, 0.15);
+
+  --red:               #D93025;
+  --green:             #1A7F37;
+  --amber:             #B45309;
+  --purple:            #6B21A8;
+
+  --shadow-card:       0 2px 16px rgba(0, 100, 180, 0.08);
+  --shadow-elevated:   0 8px 32px rgba(0, 100, 180, 0.12);
+}
+
+/* ══════════════════════════════════════════════════
+   Dark Cyber Theme (default) — cosmic navy
+   Applied when data-theme="cyber" or no data-theme
+══════════════════════════════════════════════════ */
+:root,
+[data-theme='cyber'] {
+  --bg-base:           #0A1628;
+  --bg-card:           rgba(255, 255, 255, 0.04);
+  --bg-elevated:       rgba(255, 255, 255, 0.07);
+  --bg-overlay:        rgba(10, 22, 40, 0.95);
+
+  --border-card:       rgba(255, 255, 255, 0.09);
+  --border-subtle:     rgba(255, 255, 255, 0.05);
+
+  --text-primary:      #F2F8FC;
+  --text-secondary:    rgba(242, 248, 252, 0.55);
+  --text-muted:        rgba(242, 248, 252, 0.38);
+  --text-inverse:      #0A1628;
+
+  --accent:            #00C8B8;
+  --accent-soft:       rgba(0, 200, 184, 0.10);
+  --accent-glow:       rgba(0, 200, 184, 0.15);
+
+  --red:               #FF453A;
+  --green:             #30D158;
+  --amber:             #FF9F0A;
+  --purple:            #BF5AF2;
+
+  --shadow-card:       0 2px 16px rgba(0, 0, 0, 0.30);
+  --shadow-elevated:   0 8px 32px rgba(0, 0, 0, 0.40);
+}
+
+/* ══════════════════════════════════════════════════
+   Midnight Blue Theme
+══════════════════════════════════════════════════ */
+[data-theme='midnight'] {
+  --bg-base:           #05101F;
+  --bg-card:           rgba(255, 255, 255, 0.04);
+  --bg-elevated:       rgba(255, 255, 255, 0.06);
+  --bg-overlay:        rgba(5, 16, 31, 0.96);
+
+  --border-card:       rgba(100, 160, 255, 0.10);
+  --border-subtle:     rgba(100, 160, 255, 0.06);
+
+  --text-primary:      #E8F0FE;
+  --text-secondary:    rgba(232, 240, 254, 0.55);
+  --text-muted:        rgba(232, 240, 254, 0.38);
+  --text-inverse:      #05101F;
+
+  --accent:            #4A90E2;
+  --accent-soft:       rgba(74, 144, 226, 0.12);
+  --accent-glow:       rgba(74, 144, 226, 0.18);
+
+  --red:               #FF6B6B;
+  --green:             #51CF66;
+  --amber:             #FFD43B;
+  --purple:            #CC5DE8;
+
+  --shadow-card:       0 2px 16px rgba(0, 0, 0, 0.40);
+  --shadow-elevated:   0 8px 32px rgba(0, 0, 0, 0.55);
+}
+
 /* ═══════════════════════════════════════════════════════
    CLINIVERSE AI — Unified Theme System v3
    Single :root — No conflicts — CSS Variables only
    ═══════════════════════════════════════════════════════ */
 
-:root {
-  /* ── THEME: Dark (default) ── */
-  --bg-base:         #0d1828;
-  --bg-deep:         #080e1a;
-  --bg-card:         rgba(255,255,255,0.04);
-  --bg-card-2:       rgba(255,255,255,0.07);
-  --bg-glass:        rgba(13,24,40,0.85);
-  --bg-glass-2:      rgba(255,255,255,0.06);
 
-  /* ── ACCENT COLORS ── */
-  --accent:          #00C8B8;
-  --accent-glow:     rgba(0,200,184,0.20);
-  --accent-border:   rgba(0,200,184,0.30);
-
-  --gold:            #D4A847;
-  --gold-light:      #E8C060;
-  --gold-glow:       rgba(212,168,71,0.22);
-  --gold-border:     rgba(212,168,71,0.32);
-
-  --teal:            #00C8B8;
-  --teal-light:      #00DFD0;
-  --teal-glow:       rgba(0,200,184,0.20);
-  --teal-border:     rgba(0,200,184,0.30);
-
-  --emerald:         #30D158;
-  --emerald-glow:    rgba(48,209,88,0.20);
-
-  --amber:           #FF9F0A;
-  --amber-glow:      rgba(255,159,10,0.20);
-
-  --blue:            #1A8CFF;
-  --blue-glow:       rgba(26,140,255,0.20);
-
-  --purple:          #BF5AF2;
-  --purple-glow:     rgba(191,90,242,0.20);
-
-  --red:             #FF453A;
-  --red-glow:        rgba(255,69,58,0.20);
-
-  --danger:          #FF453A;
-  --danger-glow:     rgba(255,69,58,0.20);
-  --success:         #30D158;
-  --success-glow:    rgba(48,209,88,0.20);
-  --warning:         #FF9F0A;
-  --warning-glow:    rgba(255,159,10,0.20);
-
-  /* ── TEXT ── */
-  --text:            #F2F8FC;
-  --text-primary:    #F2F8FC;
-  --text-secondary:  rgba(242,248,252,0.60);
-  --text-dim:        rgba(242,248,252,0.55);
-  --text-muted:      rgba(242,248,252,0.35);
-
-  /* ── BORDERS ── */
-  --border:          rgba(255,255,255,0.09);
-  --border-card:     rgba(255,255,255,0.09);
-  --border-accent:   rgba(0,200,184,0.30);
-  --border-gold:     rgba(212,168,71,0.32);
-  --border-teal:     rgba(0,200,184,0.30);
-
-  /* ── NAV ── */
-  --nav-bg:          rgba(255,255,255,0.04);
-  --nav-border:      rgba(255,255,255,0.10);
-  --nav-active:      #00C8B8;
-  --tab-active:      rgba(0,200,184,0.14);
-  --tab-text:        #00C8B8;
-
-  /* ── SHADOWS ── */
-  --shadow:          0 8px 40px rgba(0,0,0,0.40);
-  --shadow-card:     0 8px 32px rgba(0,0,0,0.30);
-  --shadow-gold:     0 0 28px rgba(212,168,71,0.24);
-  --shadow-teal:     0 0 28px rgba(0,200,184,0.22);
-
-  /* ── RADII ── */
-  --radius-sm:       10px;
-  --radius-md:       14px;
-  --radius-lg:       20px;
-  --radius-xl:       28px;
-
-  /* ── AURORA ── */
-  --aurora: radial-gradient(ellipse at 50% 0%,rgba(0,200,184,0.10),rgba(26,140,255,0.06) 50%,transparent 75%);
-}
 
 /* ═══════════════════════════════════════════════════════
    THEME: Pure Hospital (Light)
    ═══════════════════════════════════════════════════════ */
-body[data-theme="hospital"] {
-  --bg-base:         #EAF4F8;
-  --bg-deep:         #DFF0F6;
-  --bg-card:         rgba(255,255,255,0.85);
-  --bg-card-2:       rgba(255,255,255,0.95);
-  --bg-glass:        rgba(240,250,255,0.90);
-  --bg-glass-2:      rgba(255,255,255,0.70);
-
-  --accent:          #007A6E;
-  --accent-glow:     rgba(0,122,110,0.15);
-  --accent-border:   rgba(0,122,110,0.30);
-  --teal:            #007A6E;
-  --teal-light:      #00A896;
-  --teal-glow:       rgba(0,122,110,0.15);
-  --teal-border:     rgba(0,122,110,0.25);
-
-  --text:            #071828;
-  --text-primary:    #071828;
-  --text-secondary:  rgba(7,24,40,0.68);
-  --text-dim:        rgba(7,24,40,0.65);
-  --text-muted:      rgba(7,24,40,0.42);
-
-  --border:          rgba(0,100,130,0.12);
-  --border-card:     rgba(0,100,130,0.12);
-  --border-accent:   rgba(0,122,110,0.30);
-
-  --nav-bg:          rgba(220,242,250,0.82);
-  --nav-border:      rgba(0,122,110,0.18);
-  --nav-active:      #007A6E;
-  --tab-active:      rgba(0,122,110,0.12);
-  --tab-text:        #007A6E;
-
-  --shadow:          0 8px 40px rgba(0,60,100,0.12);
-  --shadow-card:     0 4px 20px rgba(0,60,100,0.10);
-
-  --aurora: radial-gradient(ellipse at 50% 0%,rgba(0,122,110,0.07),rgba(0,90,150,0.04) 50%,transparent 75%);
-}
+body
 
 /* ═══════════════════════════════════════════════════════
    THEME: Adaptive Ambient
@@ -182,12 +160,7 @@ html, body {
 }
 
 /* Hospital body override */
-body[data-theme="hospital"] {
-  background-color: #EAF4F8;
-  background-image:
-    radial-gradient(ellipse at 20% 15%, rgba(0,122,110,0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 85%, rgba(0,90,150,0.05) 0%, transparent 50%);
-}
+body
 
 /* Ambient body override */
 body[data-theme="ambient"] {
@@ -217,22 +190,11 @@ body[data-theme="ambient"] {
 /* ═══════════════════════════════════════════════════════
    DYNAMIC NAV — theme-aware
    ═══════════════════════════════════════════════════════ */
-body[data-theme="hospital"] .cliniverse-nav {
-  background: rgba(220,242,250,0.82) !important;
-  border-color: rgba(0,122,110,0.18) !important;
-}
+body
 
-body[data-theme="hospital"] .cliniverse-nav svg path,
-body[data-theme="hospital"] .cliniverse-nav svg polyline,
-body[data-theme="hospital"] .cliniverse-nav svg circle,
-body[data-theme="hospital"] .cliniverse-nav svg rect {
-  stroke: rgba(7,24,40,0.35);
-}
+body
 
-body[data-theme="hospital"] .cliniverse-nav [data-active="true"] svg path,
-body[data-theme="hospital"] .cliniverse-nav [data-active="true"] svg polyline {
-  stroke: #007A6E;
-}
+body
 
 /* ═══════════════════════════════════════════════════════
    SAFE AREA

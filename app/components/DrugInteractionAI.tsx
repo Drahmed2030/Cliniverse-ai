@@ -70,7 +70,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
         border: '1px solid rgba(248,113,113,0.15)', borderRadius: 20, padding: '14px 18px', marginBottom: 16,
       }}>
         <div style={{ fontSize: 9, color: T.rose, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, marginBottom: 4 }}>AI Pharmacology</div>
-        <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>Drug Interaction Checker 💊</div>
+        <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>Drug Interaction Checker 💊</div>
         <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>Check interactions instantly — powered by AI</div>
       </div>
 
@@ -81,7 +81,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
           <input
             value={drug1} onChange={e => setDrug1(e.target.value)}
             placeholder="e.g. Warfarin"
-            style={{ width: '100%', background: T.card, border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 14px', color: T.text, fontSize: 14, fontFamily: F, outline: 'none', boxSizing: 'border-box' as const }}
+            style={{ width: '100%', background: T.card, border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 14px', color:'var(--text-primary,#0A1628)', fontSize: 14, fontFamily: F, outline: 'none', boxSizing: 'border-box' as const }}
           />
         </div>
         <div style={{ fontSize: 20, color: T.muted, marginTop: 18 }}>+</div>
@@ -90,7 +90,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
           <input
             value={drug2} onChange={e => setDrug2(e.target.value)}
             placeholder="e.g. Aspirin"
-            style={{ width: '100%', background: T.card, border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 14px', color: T.text, fontSize: 14, fontFamily: F, outline: 'none', boxSizing: 'border-box' as const }}
+            style={{ width: '100%', background: T.card, border: '1px solid rgba(248,113,113,0.2)', borderRadius: 14, padding: '12px 14px', color:'var(--text-primary,#0A1628)', fontSize: 14, fontFamily: F, outline: 'none', boxSizing: 'border-box' as const }}
           />
         </div>
       </div>
@@ -102,7 +102,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
           {COMMON.map((d, i) => (
             <button key={i} onClick={() => !drug1 ? setDrug1(d) : setDrug2(d)} style={{
               padding: '5px 12px', borderRadius: 10, border: '1px solid ' + T.border,
-              background: T.card, color: T.sub, fontSize: 11, fontWeight: 600,
+              background: T.card, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 11, fontWeight: 600,
               cursor: 'pointer', fontFamily: F,
             }}>{d}</button>
           ))}
@@ -113,7 +113,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
       <button onClick={check} disabled={loading || !drug1.trim() || !drug2.trim()} style={{
         width: '100%', padding: '15px', border: 'none', borderRadius: 16,
         background: loading || !drug1.trim() || !drug2.trim() ? 'rgba(255,255,255,0.12)' : 'linear-gradient(135deg, #f87171, #fbbf24)',
-        color: '#fff', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
+        color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: loading ? 'default' : 'pointer',
         fontFamily: F, marginBottom: 16,
         boxShadow: loading ? 'none' : '0 6px 24px rgba(248,113,113,0.25)',
       }}>
@@ -132,7 +132,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
           }}>
             <div style={{ fontSize: 24, marginBottom: 6 }}>{risk === 'severe' ? '⛔' : risk === 'moderate' ? '⚠️' : '✅'}</div>
             <div style={{ fontSize: 16, fontWeight: 900, color: riskColor, marginBottom: 4 }}>{riskLabel}</div>
-            <div style={{ fontSize: 12, color: T.sub }}>{drug1} + {drug2}</div>
+            <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{drug1} + {drug2}</div>
           </div>
 
           {/* Details */}
@@ -150,7 +150,7 @@ export default function DrugInteractionAI({ onXP }: { onXP?: (n: number) => void
                 <span style={{ fontSize: 16 }}>{item.icon}</span>
                 <span style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' as const }}>{item.label}</span>
               </div>
-              <p style={{ fontSize: 13, color: T.sub, lineHeight: 1.65, margin: 0 }}>{item.value}</p>
+              <p style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.65, margin: 0 }}>{item.value}</p>
             </div>
           ))}
 

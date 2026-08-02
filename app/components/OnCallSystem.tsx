@@ -125,7 +125,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
         {/* Rotating tip */}
         <div style={{background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
-          <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
+          <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             </div>
           </div>
 
-          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
+          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
             + Add Shift to Schedule
           </button>
 
@@ -262,7 +262,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
               {s.tips.map((tip,i)=>(
                 <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<s.tips.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
                   <div style={{width:6,height:6,borderRadius:'50%',background:s.color,flexShrink:0,marginTop:6,boxShadow:`0 0 6px ${s.color}`}}/>
-                  <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.6}}>{tip}</div>
+                  <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.6}}>{tip}</div>
                 </div>
               ))}
             </div>

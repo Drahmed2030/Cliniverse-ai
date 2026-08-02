@@ -110,10 +110,10 @@ Question: ${q}`,
       {/* Header */}
       <div style={{marginBottom:16}}>
         <div style={{fontSize:10,color:`${T.teal}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>AI CLINICAL CONSULTANT</div>
-        <div style={{fontSize:22,fontWeight:900,color:T.text,letterSpacing:-0.5}}>
+        <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5}}>
           Pocket <span style={{color:T.teal}}>Consultant</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4}}>Evidence-based · Guidelines 2025 · Instant AI answers</div>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4}}>Evidence-based · Guidelines 2025 · Instant AI answers</div>
       </div>
 
       {/* View toggle */}
@@ -149,7 +149,7 @@ Question: ${q}`,
                     transition:'all 0.2s',
                   }}>
                     <span style={{fontSize:16,flexShrink:0}}>{q.icon}</span>
-                    <span style={{fontSize:12,color:T.sub,fontWeight:600,flex:1}}>{q.q}</span>
+                    <span style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',fontWeight:600,flex:1}}>{q.q}</span>
                     <span style={{fontSize:14,color:q.color}}>›</span>
                   </button>
                 ))}
@@ -170,7 +170,7 @@ Question: ${q}`,
                     background:m.role==='user'?`linear-gradient(135deg,${T.teal},${T.blue})`:T.glass,
                     backdropFilter:m.role==='ai'?'blur(20px)':'none',
                     border:m.role==='ai'?`1px solid ${T.border}`:'none',
-                    fontSize:13,color:T.text,lineHeight:1.75,
+                    fontSize:13,color:'var(--text-primary,#0A1628)',lineHeight:1.75,
                     borderBottomRightRadius:m.role==='user'?4:18,
                     borderBottomLeftRadius:m.role==='ai'?4:18,
                     whiteSpace:'pre-wrap',
@@ -202,7 +202,7 @@ Question: ${q}`,
                 flex:1,padding:'13px 16px',borderRadius:18,
                 border:`1px solid ${T.border}`,
                 background:T.glass,backdropFilter:'blur(20px)',
-                color:T.text,fontSize:13,outline:'none',fontFamily:F,
+                color:'var(--text-primary,#0A1628)',fontSize:13,outline:'none',fontFamily:F,
               }}
             />
             <button onClick={()=>ask(input)} disabled={loading||!input.trim()} style={{
@@ -230,7 +230,7 @@ Question: ${q}`,
             <div>
               <button onClick={()=>{setSelGuideline(null);setGuideDetail('')}} style={{
                 background:T.glass,backdropFilter:'blur(20px)',border:`1px solid ${T.border}`,
-                borderRadius:12,padding:'8px 14px',color:T.sub,fontSize:13,fontWeight:700,
+                borderRadius:12,padding:'8px 14px',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,
                 cursor:'pointer',fontFamily:F,marginBottom:14,
               }}>← Guidelines</button>
 
@@ -238,23 +238,23 @@ Question: ${q}`,
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
                   <span style={{fontSize:22}}>{selGuideline.icon}</span>
                   <div>
-                    <div style={{fontSize:15,fontWeight:900,color:T.text}}>{selGuideline.org} {selGuideline.year}</div>
+                    <div style={{fontSize:15,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{selGuideline.org} {selGuideline.year}</div>
                     <div style={{fontSize:11,color:selGuideline.color,fontWeight:600}}>{selGuideline.topic}</div>
                   </div>
                 </div>
-                <div style={{fontSize:11,color:T.sub,marginTop:8,lineHeight:1.6}}>Key: {selGuideline.key}</div>
+                <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:8,lineHeight:1.6}}>Key: {selGuideline.key}</div>
               </div>
 
               {guideLoading ? (
                 <div style={{textAlign:'center',padding:'30px'}}>
                   <div style={{width:36,height:36,borderRadius:'50%',border:`3px solid rgba(255,255,255,0.08)`,borderTop:`3px solid ${selGuideline.color}`,animation:'spin 0.8s linear infinite',margin:'0 auto 10px'}}/>
-                  <div style={{fontSize:12,color:T.sub}}>Loading guidelines...</div>
+                  <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Loading guidelines...</div>
                   <style>{`@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}`}</style>
                 </div>
               ) : guideDetail ? (
                 <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',border:`1px solid ${selGuideline.color}20`}}>
                   <div style={{fontSize:9,color:selGuideline.color,fontWeight:700,letterSpacing:1,marginBottom:10}}>📋 GUIDELINE SUMMARY</div>
-                  <div style={{fontSize:12,color:T.sub,lineHeight:1.85,whiteSpace:'pre-wrap'}}>{guideDetail}</div>
+                  <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85,whiteSpace:'pre-wrap'}}>{guideDetail}</div>
                 </div>
               ) : null}
             </div>
@@ -275,7 +275,7 @@ Question: ${q}`,
                       <div style={{width:44,height:44,borderRadius:14,background:`${g.color}18`,border:`1px solid ${g.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{g.icon}</div>
                       <div style={{flex:1}}>
                         <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
-                          <span style={{fontSize:13,fontWeight:800,color:T.text}}>{g.org} {g.year}</span>
+                          <span style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)'}}>{g.org} {g.year}</span>
                           <span style={{fontSize:9,color:g.color,background:`${g.color}15`,border:`1px solid ${g.color}25`,borderRadius:6,padding:'1px 6px',fontWeight:700}}>{g.topic}</span>
                         </div>
                         <div style={{fontSize:11,color:T.muted,lineHeight:1.4}}>{g.key}</div>

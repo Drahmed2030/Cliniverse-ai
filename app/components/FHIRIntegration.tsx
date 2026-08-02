@@ -90,8 +90,8 @@ function PatientCard({ patient, onSelect, selected }: { patient: any, onSelect: 
         {gender === 'female' ? '👩' : '👨'}
       </div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: T.text, marginBottom: 2 }}>{name}</div>
-        <div style={{ fontSize: 11, color: T.sub }}>DOB: {dob} · {gender} · ID: {id?.substring(0, 8)}</div>
+        <div style={{ fontSize: 14, fontWeight: 800, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{name}</div>
+        <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>DOB: {dob} · {gender} · ID: {id?.substring(0, 8)}</div>
       </div>
       {selected && <span style={{ fontSize: 16, color: T.teal }}>✓</span>}
     </div>
@@ -114,7 +114,7 @@ function ObservationCard({ obs }: { obs: any }) {
       borderRadius: 12, padding: '10px 14px', marginBottom: 6,
     }}>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: T.text }}>{code}</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color:'var(--text-primary,#0A1628)' }}>{code}</div>
         <div style={{ fontSize: 10, color: T.muted }}>{date}</div>
       </div>
       <div style={{ fontSize: 14, fontWeight: 900, color: isAbnormal ? T.orange : T.teal }}>{value}</div>
@@ -133,8 +133,8 @@ function MedCard({ med }: { med: any }) {
     <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${statusColor}20`, borderRadius: 14, padding: '12px 14px', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
       <div style={{ width: 36, height: 36, borderRadius: 10, background: statusColor + '15', border: `1px solid ${statusColor}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>💊</div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 2 }}>{name.substring(0, 60)}</div>
-        <div style={{ fontSize: 10, color: T.sub }}>{date}</div>
+        <div style={{ fontSize: 13, fontWeight: 700, color:'var(--text-primary,#0A1628)', marginBottom: 2 }}>{name.substring(0, 60)}</div>
+        <div style={{ fontSize: 10, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>{date}</div>
       </div>
       <span style={{ fontSize: 9, fontWeight: 800, color: statusColor, background: statusColor + '12', borderRadius: 8, padding: '2px 8px' }}>{status.toUpperCase()}</span>
     </div>
@@ -213,10 +213,10 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.blue + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>HL7 FHIR R4</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           FHIR <span style={{ color: T.blue }}>Integration</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>Global EHR standard · HAPI FHIR Sandbox</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>Global EHR standard · HAPI FHIR Sandbox</div>
       </div>
 
       {/* Stats */}
@@ -249,8 +249,8 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
       {tab === 'search' && (
         <div>
           <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && searchPatients()} placeholder="Search patient by name..." style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.glass, color: T.text, fontSize: 13, outline: 'none', fontFamily: F }} />
-            <button onClick={searchPatients} disabled={loading || !searchQuery.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !searchQuery.trim() ? 'rgba(0,122,255,0.15)' : `linear-gradient(135deg,${T.blue},#0055CC)`, color: '#fff', fontSize: 13, fontWeight: 800, cursor: !searchQuery.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
+            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && searchPatients()} placeholder="Search patient by name..." style={{ flex: 1, padding: '12px 14px', borderRadius: 14, border: `1px solid ${T.border}`, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F }} />
+            <button onClick={searchPatients} disabled={loading || !searchQuery.trim()} style={{ padding: '12px 18px', borderRadius: 14, border: 'none', background: !searchQuery.trim() ? 'rgba(0,122,255,0.15)' : `linear-gradient(135deg,${T.blue},#0055CC)`, color: 'var(--text-primary,#0A1628)', fontSize: 13, fontWeight: 800, cursor: !searchQuery.trim() ? 'not-allowed' : 'pointer', fontFamily: F }}>
               {loading ? <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} /> : '🔍'}
             </button>
           </div>
@@ -260,7 +260,7 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
             <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>QUICK SEARCH</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {['Smith','Jones','Ahmed','Sarah','John','Mary'].map(name => (
-                <button key={name} onClick={() => { setSearchQuery(name); }} style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color: T.sub, fontSize: 11, fontWeight: 600 }}>{name}</button>
+                <button key={name} onClick={() => { setSearchQuery(name); }} style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 11, fontWeight: 600 }}>{name}</button>
               ))}
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
             ].map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                 <span style={{ fontSize: 16 }}>{item.icon}</span>
-                <span style={{ fontSize: 12, color: T.sub, lineHeight: 1.5 }}>{item.text}</span>
+                <span style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.5 }}>{item.text}</span>
               </div>
             ))}
           </div>
@@ -300,7 +300,7 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
           {!selected ? (
             <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: `1px solid ${T.border}` }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>👤</div>
-              <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>No patient selected</div>
+              <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>No patient selected</div>
               <div style={{ fontSize: 12, color: T.muted }}>Search and select a patient first</div>
               <button onClick={() => setTab('search')} style={{ marginTop: 14, background: T.glass, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 20px', color: T.teal, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Search Patients</button>
             </div>
@@ -309,13 +309,13 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
               {/* Patient header */}
               <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: `1px solid ${T.blue}25`, borderRadius: 18, padding: '14px', marginBottom: 16, animation: 'bioGlow 3s ease-in-out infinite' }}>
                 <div style={{ fontSize: 9, color: T.blue, fontWeight: 700, letterSpacing: 1.5, marginBottom: 6 }}>FHIR PATIENT RECORD</div>
-                <div style={{ fontSize: 16, fontWeight: 900, color: T.text, marginBottom: 3 }}>{patientName}</div>
-                <div style={{ fontSize: 11, color: T.sub }}>
+                <div style={{ fontSize: 16, fontWeight: 900, color:'var(--text-primary,#0A1628)', marginBottom: 3 }}>{patientName}</div>
+                <div style={{ fontSize: 11, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>
                   {selected.birthDate && `DOB: ${selected.birthDate} · `}
                   {selected.gender && `${selected.gender} · `}
                   ID: {selected.id?.substring(0, 12)}
                 </div>
-                <button onClick={() => setTab('prescribe')} style={{ marginTop: 12, background: `linear-gradient(135deg,${T.green},${T.teal})`, border: 'none', borderRadius: 12, padding: '9px 16px', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
+                <button onClick={() => setTab('prescribe')} style={{ marginTop: 12, background: `linear-gradient(135deg,${T.green},${T.teal})`, border: 'none', borderRadius: 12, padding: '9px 16px', color: 'var(--text-primary,#0A1628)', fontSize: 12, fontWeight: 800, cursor: 'pointer', fontFamily: F }}>
                   💊 Prescribe via FHIR →
                 </button>
               </div>
@@ -323,7 +323,7 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
               {loading && (
                 <div style={{ textAlign: 'center', padding: '30px' }}>
                   <div style={{ width: 36, height: 36, borderRadius: '50%', border: `3px solid rgba(255,255,255,0.08)`, borderTop: `3px solid ${T.blue}`, animation: 'spin 0.8s linear infinite', margin: '0 auto 10px' }} />
-                  <div style={{ fontSize: 12, color: T.sub }}>Loading FHIR record...</div>
+                  <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>Loading FHIR record...</div>
                 </div>
               )}
 
@@ -359,14 +359,14 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
           {!selected ? (
             <div style={{ textAlign: 'center', padding: '40px', background: T.glass, borderRadius: 20, border: `1px solid ${T.border}` }}>
               <div style={{ fontSize: 32, marginBottom: 8 }}>💊</div>
-              <div style={{ fontSize: 14, color: T.text, marginBottom: 4 }}>No patient selected</div>
+              <div style={{ fontSize: 14, color:'var(--text-primary,#0A1628)', marginBottom: 4 }}>No patient selected</div>
               <button onClick={() => setTab('search')} style={{ marginTop: 14, background: T.glass, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 20px', color: T.teal, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← Search Patients</button>
             </div>
           ) : rxSent ? (
             <div style={{ textAlign: 'center', padding: '40px', background: T.green + '10', borderRadius: 20, border: `1px solid ${T.green}25` }}>
               <div style={{ fontSize: 48, marginBottom: 12 }}>✅</div>
               <div style={{ fontSize: 18, fontWeight: 900, color: T.green, marginBottom: 8 }}>Prescription Sent!</div>
-              <div style={{ fontSize: 13, color: T.sub, marginBottom: 20 }}>MedicationRequest created in FHIR server</div>
+              <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginBottom: 20 }}>MedicationRequest created in FHIR server</div>
               <button onClick={() => { setRxSent(false); setRxText('') }} style={{ background: T.glass, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 20px', color: T.teal, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>
                 New Prescription
               </button>
@@ -377,18 +377,18 @@ export default function FHIRIntegration({ onXP }: { onXP?: (n: number) => void }
               <div style={{ background: T.glass2, border: `1px solid ${T.border}`, borderRadius: 14, padding: '12px 14px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span style={{ fontSize: 20 }}>{selected.gender === 'female' ? '👩' : '👨'}</span>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: T.text }}>{patientName}</div>
-                  <div style={{ fontSize: 10, color: T.sub }}>FHIR ID: {selected.id?.substring(0, 12)}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color:'var(--text-primary,#0A1628)' }}>{patientName}</div>
+                  <div style={{ fontSize: 10, color:'var(--text-secondary,rgba(10,22,40,0.55))' }}>FHIR ID: {selected.id?.substring(0, 12)}</div>
                 </div>
               </div>
 
               {/* Prescription input */}
               <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 8 }}>PRESCRIPTION</div>
-              <textarea value={rxText} onChange={e => setRxText(e.target.value)} placeholder="Enter prescription details...&#10;e.g. Metformin 500mg BD · Ramipril 5mg OD · Review in 4 weeks" rows={6} style={{ width: '100%', padding: '14px', borderRadius: 16, border: `1px solid ${T.border}`, background: T.glass, color: T.text, fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, boxSizing: 'border-box', marginBottom: 12 }} />
+              <textarea value={rxText} onChange={e => setRxText(e.target.value)} placeholder="Enter prescription details...&#10;e.g. Metformin 500mg BD · Ramipril 5mg OD · Review in 4 weeks" rows={6} style={{ width: '100%', padding: '14px', borderRadius: 16, border: `1px solid ${T.border}`, background: T.glass, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', resize: 'none', fontFamily: F, lineHeight: 1.7, boxSizing: 'border-box', marginBottom: 12 }} />
 
               {error && <div style={{ background: 'rgba(255,59,48,0.08)', border: `1px solid ${T.red}25`, borderRadius: 12, padding: '10px 14px', marginBottom: 12 }}><div style={{ fontSize: 12, color: T.red }}>⚠️ {error}</div></div>}
 
-              <button onClick={sendPrescription} disabled={rxSending || !rxText.trim()} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: !rxText.trim() ? 'rgba(52,199,89,0.15)' : `linear-gradient(135deg,${T.green},${T.teal})`, color: '#fff', fontSize: 14, fontWeight: 800, cursor: !rxText.trim() ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+              <button onClick={sendPrescription} disabled={rxSending || !rxText.trim()} style={{ width: '100%', padding: '15px', borderRadius: 18, border: 'none', background: !rxText.trim() ? 'rgba(52,199,89,0.15)' : `linear-gradient(135deg,${T.green},${T.teal})`, color: 'var(--text-primary,#0A1628)', fontSize: 14, fontWeight: 800, cursor: !rxText.trim() ? 'not-allowed' : 'pointer', fontFamily: F, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
                 {rxSending ? <><div style={{ width: 18, height: 18, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Sending to FHIR...</> : '🌐 Send MedicationRequest via FHIR'}
               </button>
 

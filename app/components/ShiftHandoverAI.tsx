@@ -63,7 +63,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
         border: '1px solid rgba(74,222,128,0.15)', borderRadius: 20, padding: '14px 18px', marginBottom: 16,
       }}>
         <div style={{ fontSize: 9, color: T.green, fontWeight: 800, letterSpacing: 2, textTransform: 'uppercase' as const, marginBottom: 4 }}>AI SBAR Generator</div>
-        <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>Shift Handover AI 📋</div>
+        <div style={{ fontSize: 18, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>Shift Handover AI 📋</div>
         <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>Generate professional SBAR handover in seconds</div>
       </div>
 
@@ -94,7 +94,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
           rows={5}
           style={{
             width: '100%', background: T.card, border: '1px solid rgba(74,222,128,0.2)',
-            borderRadius: 16, padding: '14px 16px', color: T.text, fontSize: 13,
+            borderRadius: 16, padding: '14px 16px', color:'var(--text-primary,#0A1628)', fontSize: 13,
             fontFamily: F, outline: 'none', resize: 'none' as const, boxSizing: 'border-box' as const,
             lineHeight: 1.6,
           }}
@@ -132,7 +132,7 @@ export default function ShiftHandoverAI({ onXP }: { onXP?: (n: number) => void }
               </button>
             </div>
             <pre style={{
-              fontSize: 12, color: T.sub, lineHeight: 1.7, margin: 0,
+              fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 1.7, margin: 0,
               whiteSpace: 'pre-wrap' as const, fontFamily: F,
             }}>{result}</pre>
           </div>

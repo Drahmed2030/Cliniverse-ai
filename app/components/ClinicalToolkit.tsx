@@ -173,7 +173,7 @@ function DrugCalculator() {
         ].map(p=>(
           <div key={p.label} style={{marginBottom:12}}>
             <div style={{display:'flex',justifyContent:'space-between',marginBottom:6}}>
-              <span style={{fontSize:11,color:T.sub,fontWeight:600}}>{p.label}</span>
+              <span style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',fontWeight:600}}>{p.label}</span>
               <span style={{fontSize:14,fontWeight:900,color:p.color}}>{p.value}</span>
             </div>
             <input type="range" min={p.min} max={p.max} step={p.step} value={p.value}
@@ -212,7 +212,7 @@ function DrugCalculator() {
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
           <div style={{width:48,height:48,borderRadius:15,background:`${selected.color}18`,border:`1.5px solid ${selected.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:24}}>{selected.icon}</div>
           <div>
-            <div style={{fontSize:15,fontWeight:900,color:T.text}}>{selected.label}</div>
+            <div style={{fontSize:15,fontWeight:900,color:'var(--text-primary,#0A1628)'}}>{selected.label}</div>
             <div style={{fontSize:10,color:selected.color,fontWeight:600}}>{selected.category}</div>
           </div>
         </div>
@@ -233,12 +233,12 @@ function DrugCalculator() {
 
         <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:12,padding:'10px 12px',marginBottom:10,border:`1px solid rgba(255,255,255,0.08)`}}>
           <div style={{fontSize:8,color:T.orange,fontWeight:700,letterSpacing:1,marginBottom:4}}>📊 MONITORING</div>
-          <div style={{fontSize:11,color:T.sub,lineHeight:1.5}}>{result.monitor}</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{result.monitor}</div>
         </div>
 
         <div style={{background:'rgba(255,59,48,0.06)',borderRadius:12,padding:'10px 12px',border:`1px solid rgba(255,59,48,0.15)`}}>
           <div style={{fontSize:8,color:T.red,fontWeight:700,letterSpacing:1,marginBottom:4}}>⚠️ CLINICAL NOTE</div>
-          <div style={{fontSize:11,color:T.sub,lineHeight:1.5}}>{selected.note}</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{selected.note}</div>
         </div>
       </div>
     </div>
@@ -407,7 +407,7 @@ function ClinicalScores() {
 
       {/* Score info */}
       <div style={{background:`${score.color}08`,borderRadius:16,padding:'12px 14px',marginBottom:14,border:`1px solid ${score.color}20`}}>
-        <div style={{fontSize:13,fontWeight:800,color:T.text,marginBottom:2}}>{score.label}</div>
+        <div style={{fontSize:13,fontWeight:800,color:'var(--text-primary,#0A1628)',marginBottom:2}}>{score.label}</div>
         <div style={{fontSize:11,color:score.color,fontWeight:600}}>{score.use}</div>
       </div>
 
@@ -425,7 +425,7 @@ function ClinicalScores() {
         </div>
         <div style={{flex:1,marginLeft:16}}>
           <div style={{fontSize:10,color:T.muted,fontWeight:700,letterSpacing:1,marginBottom:4}}>ACTION</div>
-          <div style={{fontSize:11,color:T.sub,lineHeight:1.5}}>{result.action}</div>
+          <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{result.action}</div>
           <div style={{fontSize:10,color:result.color,marginTop:6,fontWeight:700}}>{result.annual}</div>
         </div>
       </div>
@@ -467,7 +467,7 @@ function ClinicalScores() {
       <button onClick={resetScore} style={{
         width:'100%',padding:'13px',borderRadius:16,
         border:`1px solid ${T.border}`,background:T.glass,backdropFilter:'blur(20px)',
-        color:T.sub,fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,
+        color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:700,cursor:'pointer',fontFamily:F,
       }}>
         🔄 Reset Score
       </button>
@@ -484,10 +484,10 @@ export default function ClinicalToolkit({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Header */}
       <div style={{marginBottom:16}}>
         <div style={{fontSize:10,color:`${T.teal}CC`,fontWeight:700,letterSpacing:1.5,marginBottom:4}}>CLINICAL TOOLKIT</div>
-        <div style={{fontSize:22,fontWeight:900,color:T.text,letterSpacing:-0.5}}>
+        <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary,#0A1628)',letterSpacing:-0.5}}>
           Clinical <span style={{color:T.teal}}>Toolkit</span>
         </div>
-        <div style={{fontSize:12,color:T.sub,marginTop:4}}>Drug dosing · Renal adjustment · Clinical scores</div>
+        <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:4}}>Drug dosing · Renal adjustment · Clinical scores</div>
       </div>
 
       {/* Tab */}

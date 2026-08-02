@@ -128,9 +128,9 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
     return (
       <div style={{ fontFamily: F }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <button onClick={() => setStep('form')} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color: T.sub, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← New Rx</button>
+          <button onClick={() => setStep('form')} style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 12, padding: '9px 16px', color:'var(--text-secondary,rgba(10,22,40,0.55))', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>← New Rx</button>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 900, color: T.text }}>💊 Prescription</div>
+            <div style={{ fontSize: 15, fontWeight: 900, color:'var(--text-primary,#0A1628)' }}>💊 Prescription</div>
             <div style={{ fontSize: 11, color: T.teal }}>{dx} · {form.patientName || 'Patient'}</div>
           </div>
           <button onClick={copy} style={{ background: copied ? T.green + '20' : T.glass, border: '1px solid ' + (copied ? T.green : T.border), borderRadius: 12, padding: '8px 14px', color: copied ? T.green : T.muted, fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: F }}>
@@ -147,7 +147,7 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
             { l: 'eGFR',   v: form.egfr || '—' },
           ].map(s => (
             <div key={s.l} style={{ textAlign: 'center', flex: 1, minWidth: 60 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: T.text }}>{s.v}</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color:'var(--text-primary,#0A1628)' }}>{s.v}</div>
               <div style={{ fontSize: 9, color: T.muted, marginTop: 2 }}>{s.l}</div>
             </div>
           ))}
@@ -164,7 +164,7 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
         {/* Prescription */}
         <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.green + '25', borderRadius: 20, padding: '18px', marginBottom: 16 }}>
           <div style={{ fontSize: 9, color: T.green, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12 }}>💊 AI PRESCRIPTION</div>
-          <div style={{ fontSize: 13, color: T.sub, lineHeight: 2, whiteSpace: 'pre-line', direction: form.language === 'ar' ? 'rtl' : 'ltr' }}>{prescription}</div>
+          <div style={{ fontSize: 13, color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight: 2, whiteSpace: 'pre-line', direction: form.language === 'ar' ? 'rtl' : 'ltr' }}>{prescription}</div>
         </div>
 
         <div style={{ background: T.gold + '08', border: '1px solid ' + T.gold + '18', borderRadius: 12, padding: '10px 14px', textAlign: 'center' }}>
@@ -181,10 +181,10 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontSize: 10, color: T.green + 'CC', fontWeight: 700, letterSpacing: 1.5, marginBottom: 4 }}>AI PRESCRIPTION WRITER</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5 }}>
+        <div style={{ fontSize: 22, fontWeight: 900, color:'var(--text-primary,#0A1628)', letterSpacing: -0.5 }}>
           Rx <span style={{ color: T.green }}>Generator</span>
         </div>
-        <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>Evidence-based · Renal-adjusted · EN + AR</div>
+        <div style={{ fontSize: 12, color:'var(--text-secondary,rgba(10,22,40,0.55))', marginTop: 4 }}>Evidence-based · Renal-adjusted · EN + AR</div>
       </div>
 
       {/* Language toggle */}
@@ -198,20 +198,20 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
       <div style={{ background: T.glass, backdropFilter: 'blur(16px)', border: '1px solid ' + T.border, borderRadius: 20, padding: '16px', marginBottom: 14 }}>
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12 }}>PATIENT INFO</div>
 
-        <input value={form.patientName} onChange={e => setForm(p => ({ ...p, patientName: e.target.value }))} placeholder="Patient name (optional)" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, marginBottom: 10, boxSizing: 'border-box' }} />
+        <input value={form.patientName} onChange={e => setForm(p => ({ ...p, patientName: e.target.value }))} placeholder="Patient name (optional)" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, marginBottom: 10, boxSizing: 'border-box' }} />
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>AGE</div>
-            <input value={form.age} onChange={e => setForm(p => ({ ...p, age: e.target.value }))} placeholder="Years" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.age} onChange={e => setForm(p => ({ ...p, age: e.target.value }))} placeholder="Years" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>WEIGHT (kg)</div>
-            <input value={form.weight} onChange={e => setForm(p => ({ ...p, weight: e.target.value }))} placeholder="kg" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.weight} onChange={e => setForm(p => ({ ...p, weight: e.target.value }))} placeholder="kg" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>eGFR</div>
-            <input value={form.egfr} onChange={e => setForm(p => ({ ...p, egfr: e.target.value }))} placeholder="mL/min" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+            <input value={form.egfr} onChange={e => setForm(p => ({ ...p, egfr: e.target.value }))} placeholder="mL/min" type="number" style={{ width: '100%', padding: '10px 12px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
           </div>
         </div>
 
@@ -232,7 +232,7 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
             <button key={d} onClick={() => setForm(p => ({ ...p, diagnosis: p.diagnosis === d ? '' : d, customDiagnosis: '' }))} style={{ background: form.diagnosis === d ? T.green + '18' : T.glass2, border: '1px solid ' + (form.diagnosis === d ? T.green : T.border), borderRadius: 20, padding: '5px 12px', cursor: 'pointer', fontFamily: F, color: form.diagnosis === d ? T.green : T.muted, fontSize: 11, fontWeight: form.diagnosis === d ? 700 : 400 }}>{d}</button>
           ))}
         </div>
-        <input value={form.customDiagnosis} onChange={e => setForm(p => ({ ...p, customDiagnosis: e.target.value, diagnosis: '' }))} placeholder="Or type custom diagnosis..." style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + (form.customDiagnosis ? T.green : T.border), background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+        <input value={form.customDiagnosis} onChange={e => setForm(p => ({ ...p, customDiagnosis: e.target.value, diagnosis: '' }))} placeholder="Or type custom diagnosis..." style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1px solid ' + (form.customDiagnosis ? T.green : T.border), background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
       </div>
 
       {/* Allergies */}
@@ -252,16 +252,16 @@ Use standard medical abbreviations. Flag any drug interactions with current meds
         <div style={{ fontSize: 10, color: T.muted, fontWeight: 700, letterSpacing: 1.5, marginBottom: 12 }}>ADDITIONAL INFO</div>
         <div style={{ marginBottom: 10 }}>
           <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>COMORBIDITIES</div>
-          <input value={form.comorbidities} onChange={e => setForm(p => ({ ...p, comorbidities: e.target.value }))} placeholder="e.g. CKD, Heart failure, Diabetes..." style={{ width: '100%', padding: '10px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+          <input value={form.comorbidities} onChange={e => setForm(p => ({ ...p, comorbidities: e.target.value }))} placeholder="e.g. CKD, Heart failure, Diabetes..." style={{ width: '100%', padding: '10px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
         </div>
         <div>
           <div style={{ fontSize: 9, color: T.muted, fontWeight: 600, marginBottom: 4 }}>CURRENT MEDICATIONS</div>
-          <input value={form.currentMeds} onChange={e => setForm(p => ({ ...p, currentMeds: e.target.value }))} placeholder="e.g. Ramipril 5mg, Metformin 500mg..." style={{ width: '100%', padding: '10px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color: T.text, fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
+          <input value={form.currentMeds} onChange={e => setForm(p => ({ ...p, currentMeds: e.target.value }))} placeholder="e.g. Ramipril 5mg, Metformin 500mg..." style={{ width: '100%', padding: '10px 14px', borderRadius: 12, border: '1px solid ' + T.border, background: T.glass2, color:'var(--text-primary,#0A1628)', fontSize: 13, outline: 'none', fontFamily: F, boxSizing: 'border-box' }} />
         </div>
       </div>
 
       {/* Generate button */}
-      <button onClick={generate} disabled={generating || (!form.diagnosis && !form.customDiagnosis)} style={{ width: '100%', padding: '16px', borderRadius: 18, border: 'none', background: generating || (!form.diagnosis && !form.customDiagnosis) ? 'rgba(52,199,89,0.2)' : 'linear-gradient(135deg,' + T.green + ',#00A048)', color: '#fff', fontSize: 15, fontWeight: 800, cursor: generating || (!form.diagnosis && !form.customDiagnosis) ? 'not-allowed' : 'pointer', fontFamily: F, boxShadow: !form.diagnosis && !form.customDiagnosis ? 'none' : '0 8px 28px rgba(52,199,89,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+      <button onClick={generate} disabled={generating || (!form.diagnosis && !form.customDiagnosis)} style={{ width: '100%', padding: '16px', borderRadius: 18, border: 'none', background: generating || (!form.diagnosis && !form.customDiagnosis) ? 'rgba(52,199,89,0.2)' : 'linear-gradient(135deg,' + T.green + ',#00A048)', color: 'var(--text-primary,#0A1628)', fontSize: 15, fontWeight: 800, cursor: generating || (!form.diagnosis && !form.customDiagnosis) ? 'not-allowed' : 'pointer', fontFamily: F, boxShadow: !form.diagnosis && !form.customDiagnosis ? 'none' : '0 8px 28px rgba(52,199,89,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
         {generating
           ? <><div style={{ width: 18, height: 18, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTop: '2px solid white', animation: 'spin 0.8s linear infinite' }} />Generating prescription...</>
           : '💊 Generate Prescription'}
