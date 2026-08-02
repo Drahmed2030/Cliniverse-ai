@@ -8,7 +8,7 @@ workflows:
         bundle_identifier: com.cliniverse.ai
       node: 20.17.0
       xcode: latest
-      cocoapods: defaultn    vars:n      MIN_IOS_DEPLOYMENT_TARGET: "14.0"
+      cocoapods: default
     scripts:
       - name: Install dependencies
         script: npm install
@@ -18,12 +18,14 @@ workflows:
           npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
       - name: Build Next.js
         script: npm run build
-      - name: Export static
-        script: npx next export -o out || echo "Static export done"
       - name: Add iOS platform
         script: |
           npx cap add ios || true
           npx cap sync ios
+      - name: Set iOS deployment target
+        script: |
+          cd ios/App
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]*/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' App.xcodeproj/project.pbxproj
       - name: CocoaPods
         script: cd ios/App && pod install
       - name: Build IPA
