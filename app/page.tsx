@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
@@ -198,6 +198,17 @@ const Label = ({children, color=D.textMuted}: {children:React.ReactNode, color?:
 
 export default function Home() {
   const [tab, setTab]                   = useState('hub')
+  const _mTX = useRef(0)
+  const _mTY = useRef(0)
+  const MAIN_TABS = ['hub','tools','ward','net','profile']
+  const swipeMain = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - _mTX.current
+    const dy = e.changedTouches[0].clientY - _mTY.current
+    if (Math.abs(dx) < Math.abs(dy) * 1.5) return
+    const i = MAIN_TABS.indexOf(tab)
+    if (dx < -65 && i < MAIN_TABS.length-1) setTab(MAIN_TABS[i+1])
+    if (dx >  65 && i > 0)                  setTab(MAIN_TABS[i-1])
+  }
   const [toolTab, setToolTab]           = useState('codeblue')
   const [activeCase, setActiveCase]     = useState<string|null>(null)
   const [activeRad, setActiveRad]       = useState<string|null>(null)
@@ -641,7 +652,7 @@ export default function Home() {
       </header>
 
       {/* ── MAIN CONTENT ── */}
-      <main style={{
+      <main onTouchStart={e=>{_mTX.current=e.touches[0].clientX;_mTY.current=e.touches[0].clientY}} onTouchEnd={swipeMain} style={{
         flex:1, padding:'14px 16px', paddingBottom:140,
         maxWidth:700, margin:'0 auto', width:'100%',
         boxSizing:'border-box', position:'relative', zIndex:1,
