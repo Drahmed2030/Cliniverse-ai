@@ -3,6 +3,10 @@ import re
 with open('ios/App/Podfile', 'r') as f:
     content = f.read()
 
+# Fix platform version
+content = re.sub(r"platform :ios, '[0-9.]+'", "platform :ios, '14.0'", content)
+
+# Add post_install if not exists
 post_install = """
 post_install do |installer|
   installer.pods_project.targets.each do |target|
