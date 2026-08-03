@@ -50,7 +50,7 @@ const TIPS = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.14)',
+  card: 'rgba(255,255,255,0.92)',
   border: 'rgba(0,196,180,0.25)',
   text: '#EEF6FA',
   sub: 'rgba(255,255,255,0.45)',
@@ -124,7 +124,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
         </div>
         {/* Rotating tip */}
-        <div style={{background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
+        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>

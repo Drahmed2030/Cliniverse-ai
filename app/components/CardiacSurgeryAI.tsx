@@ -77,7 +77,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
   const s=active.steps[step],isLast=step===active.steps.length-1
   return(
     <div style={{padding:'0 4px'}}>
-      <button onClick={()=>setView('hub')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 16px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:14,fontWeight:600}}>← Back</button>
+      <button onClick={()=>setView('hub')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',color:'#0A1628',padding:'8px 16px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:14,fontWeight:600}}>← Back</button>
       <div style={{background:`linear-gradient(135deg,${active.color}18,rgba(0,0,0,0.3))`,borderRadius:20,padding:18,marginBottom:14,border:`1px solid ${active.color}25`}}>
         <div style={{fontSize:28,marginBottom:4}}>{active.icon}</div>
         <div style={{fontSize:17,fontWeight:900,color:'var(--text-primary, white)',marginBottom:3}}>{active.title}</div>
@@ -101,14 +101,14 @@ export default function CardiacSurgeryAI({onXP}:Props){
           <div style={{width:36,height:36,borderRadius:11,background:`${active.color}20`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{s.icon}</div>
           <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>{s.title}</div>
         </div>
-        <div style={{fontSize:14,color:'rgba(255,255,255,0.8)',lineHeight:1.75,marginBottom:12}}>{s.content}</div>
-        <button onClick={()=>setDetail(p=>!p)} style={{background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
-        {detail&&<div style={{marginTop:10,padding:'12px',background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:12,fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
+        <div style={{fontSize:14,color:'#0A1628',lineHeight:1.75,marginBottom:12}}>{s.content}</div>
+        <button onClick={()=>setDetail(p=>!p)} style={{background:'var(--bg-card,rgba(255,255,255,0.88))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:12,padding:'8px 14px',fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',cursor:'pointer',fontWeight:600}}>{detail?'▲ Hide':'▼ Detail'}</button>
+        {detail&&<div style={{marginTop:10,padding:'12px',background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:12,fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.7,borderLeft:`3px solid ${active.color}`}}>{s.detail}</div>}
       </div>
       <button onClick={()=>setShowAIPanel(p=>!p)} style={{width:'100%',padding:'12px',borderRadius:16,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(139,92,246,0.1)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',marginBottom:10,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>🤖 AI Consultant {showAIPanel?'▲':'▼'}</button>
       {showAIPanel&&(
-        <div style={{background:'var(--bg-card,rgba(255,255,255,0.06))',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(139,92,246,0.3)'}}>
-          {aiAnswer&&<div style={{background:'rgba(10,132,255,0.08)',borderRadius:12,padding:12,marginBottom:10,fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.7}}><span style={{fontSize:10,color:'#00C4B4',fontWeight:700,display:'block',marginBottom:4}}>🤖 AI</span>{aiAnswer}</div>}
+        <div style={{background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(139,92,246,0.3)'}}>
+          {aiAnswer&&<div style={{background:'rgba(10,132,255,0.08)',borderRadius:12,padding:12,marginBottom:10,fontSize:13,color:'#0A1628',lineHeight:1.7}}><span style={{fontSize:10,color:'#00C4B4',fontWeight:700,display:'block',marginBottom:4}}>🤖 AI</span>{aiAnswer}</div>}
           <div style={{display:'flex',gap:8}}>
             <input value={aiQ} onChange={e=>setAiQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ask()} placeholder="Ask cardiac surgery question..." style={{flex:1,padding:'11px 14px',borderRadius:13,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:13,outline:'none'}}/>
             <button onClick={ask} style={{width:44,height:44,borderRadius:13,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:18,cursor:'pointer',flexShrink:0}}>→</button>

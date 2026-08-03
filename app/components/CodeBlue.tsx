@@ -324,7 +324,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       <div style={{ display:'flex', gap:8, overflowX:'auto', paddingBottom:8, marginBottom:14, scrollbarWidth:'none' }}>
         {SCENARIOS.map((s, i) => (
           <button key={s.id} onClick={() => { if(phase!=='running'){setScenarioIdx(i);setPhase('intro')} }}
-            style={{ flexShrink:0, width:68, padding:'10px 6px', borderRadius:16, border: i===scenarioIdx?`2px solid ${s.color}`:'1px solid rgba(0,196,180,0.25)', background: i===scenarioIdx?`${s.color}18`:'rgba(255,255,255,0.14)', cursor:'pointer', backdropFilter:'blur(12px)', display:'flex', flexDirection:'column', alignItems:'center', gap:4, boxShadow: i===scenarioIdx?`0 4px 16px ${s.color}44`:'none', transition:'all 0.2s' }}>
+            style={{ flexShrink:0, width:68, padding:'10px 6px', borderRadius:16, border: i===scenarioIdx?`2px solid ${s.color}`:'1px solid rgba(0,196,180,0.25)', background: i===scenarioIdx?`${s.color}18`:'rgba(255,255,255,0.92)', cursor:'pointer', backdropFilter:'blur(12px)', display:'flex', flexDirection:'column', alignItems:'center', gap:4, boxShadow: i===scenarioIdx?`0 4px 16px ${s.color}44`:'none', transition:'all 0.2s' }}>
             <ScenarioIcon iconName={s.icon} color={i===scenarioIdx?s.color:'var(--text-secondary,rgba(10,22,40,0.55))'} size={28}/>
             <div style={{ fontSize:8, fontWeight:700, color:i===scenarioIdx?s.color:'var(--text-secondary,rgba(10,22,40,0.55))', lineHeight:1.2, textAlign:'center' }}>{s.title.split(' ')[0]}</div>
           </button>
@@ -333,7 +333,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
 
       {/* INTRO */}
       {phase==='intro'&&(
-        <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:20, padding:20, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 4px 24px rgba(0,0,0,0.07)' }}>
+        <div style={{ background:'rgba(255,255,255,0.92)', backdropFilter:'blur(20px)', borderRadius:20, padding:20, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 4px 24px rgba(0,0,0,0.07)' }}>
           <div style={{ display:'flex', justifyContent:'center', marginBottom:12 }}>
             <div style={{ width:72, height:72, borderRadius:22, background:`${scenario.color}12`, border:`2px solid ${scenario.color}25`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 8px 24px ${scenario.color}20` }}>
               <ScenarioIcon iconName={scenario.icon} color={scenario.color} size={40}/>
@@ -346,7 +346,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:14 }}>
             {Object.entries(scenario.vitals).map(([k,v])=>(
-              <div key={k} style={{ background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
+              <div key={k} style={{ background:'var(--bg-card,rgba(255,255,255,0.88))', borderRadius:12, padding:'10px 6px', textAlign:'center' }}>
                 <div style={{ fontSize:9, color:'var(--text-secondary,rgba(10,22,40,0.55))', fontWeight:700, letterSpacing:0.3, marginBottom:4 }}>{k.toUpperCase()}</div>
                 <div style={{ fontSize:12, fontWeight:800, color:(v.includes('0/0')||v==='---'||v==='0%')?'#ff453a':'white' }}>{v}</div>
               </div>
@@ -364,7 +364,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       {/* RUNNING */}
       {phase==='running'&&(
         <div>
-          <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:16, padding:14, marginBottom:10, border:'1px solid rgba(0,196,180,0.25)' }}>
+          <div style={{ background:'rgba(255,255,255,0.92)', backdropFilter:'blur(20px)', borderRadius:16, padding:14, marginBottom:10, border:'1px solid rgba(0,196,180,0.25)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
               <span style={{ fontSize:14, fontWeight:800, color:timerColor }}>⏱ {timeLeft}s</span>
               <div style={{ display:'flex', gap:10 }}>
@@ -372,7 +372,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
                 <span style={{ fontSize:12, color:'#ff3b30', fontWeight:700 }}>❌ {errors}/2</span>
               </div>
             </div>
-            <div style={{ height:6, background:'rgba(255,255,255,0.12)', borderRadius:3, overflow:'hidden' }}>
+            <div style={{ height:6, background:'rgba(255,255,255,0.88)', borderRadius:3, overflow:'hidden' }}>
               <div style={{ height:'100%', background:timerColor, width:`${timerPct}%`, transition:'width 1s linear', borderRadius:3, boxShadow:`0 0 8px ${timerColor}88` }}/>
             </div>
           </div>
@@ -384,11 +384,11 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           )}
 
           {/* Vitals Monitor */}
-          <div style={{ background:'var(--bg-card,#1e2d40)', borderRadius:14, padding:12, marginBottom:10, border:'1px solid rgba(0,255,157,0.15)' }}>
+          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.88))', borderRadius:14, padding:12, marginBottom:10, border:'1px solid rgba(0,255,157,0.15)' }}>
             <div style={{ display:'flex', justifyContent:'space-around' }}>
               {Object.entries(scenario.vitals).map(([k,v])=>(
                 <div key={k} style={{ textAlign:'center' }}>
-                  <div style={{ fontSize:9, color:'#00ff9d', fontWeight:700, letterSpacing:1 }}>{k.toUpperCase()}</div>
+                  <div style={{ fontSize:9, color:'#00875A', fontWeight:700, letterSpacing:1 }}>{k.toUpperCase()}</div>
                   <div style={{ fontSize:15, fontWeight:800, color:correctCount>2?'#30d158':'#ff3b30', marginTop:2 }}>{v}</div>
                 </div>
               ))}
@@ -401,7 +401,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
               const done = actions.includes(step.id)
               return(
                 <button key={step.id} onClick={()=>handleAction(step)} disabled={done}
-                  style={{ padding:'13px 16px', borderRadius:14, border:done?(step.correct?'2px solid #30d158':'2px solid #ff453a'):'1px solid rgba(139,92,246,0.3)', background:done?(step.correct?'rgba(48,209,88,0.12)':'rgba(255,69,58,0.12)'):'rgba(255,255,255,0.14)', backdropFilter:'blur(12px)', cursor:done?'default':'pointer', display:'flex', alignItems:'center', gap:12, textAlign:'left', opacity:done?0.85:1, transition:'all 0.2s', boxShadow:done?(step.correct?'0 4px 16px rgba(48,209,88,0.15)':'0 4px 16px rgba(255,69,58,0.15)'):'none' }}>
+                  style={{ padding:'13px 16px', borderRadius:14, border:done?(step.correct?'2px solid #30d158':'2px solid #ff453a'):'1px solid rgba(139,92,246,0.3)', background:done?(step.correct?'rgba(48,209,88,0.12)':'rgba(255,69,58,0.12)'):'rgba(255,255,255,0.92)', backdropFilter:'blur(12px)', cursor:done?'default':'pointer', display:'flex', alignItems:'center', gap:12, textAlign:'left', opacity:done?0.85:1, transition:'all 0.2s', boxShadow:done?(step.correct?'0 4px 16px rgba(48,209,88,0.15)':'0 4px 16px rgba(255,69,58,0.15)'):'none' }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:done?(step.correct?'rgba(48,209,88,0.15)':'rgba(255,69,58,0.15)'):step.correct?'rgba(0,196,180,0.10)':'rgba(255,59,48,0.1)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, border:done?(step.correct?'1px solid rgba(48,209,88,0.3)':'1px solid rgba(255,69,58,0.3)'):'1px solid rgba(255,255,255,0.18)' }}>
                     {done ? (step.correct ? Icons.check('#30d158') : Icons.cross('#ff453a')) : <ScenarioIcon iconName={step.icon} color={step.correct?'#00C4B4':'#ff453a'} size={22}/>}
                   </div>
@@ -418,13 +418,13 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
       {phase==='success'&&(
         <div style={{ background:'rgba(48,209,88,0.1)', backdropFilter:'blur(20px)', borderRadius:20, padding:24, textAlign:'center', border:'2px solid rgba(22,163,74,0.3)', animation:'fadeIn 0.5s ease' }}>
           <div style={{ fontSize:56, marginBottom:12 }}>🎉</div>
-          <h3 style={{ fontSize:20, fontWeight:800, color:'#86efac', marginBottom:8 }}>Emergency Managed!</h3>
+          <h3 style={{ fontSize:20, fontWeight:800, color:'#16a34a', marginBottom:8 }}>Emergency Managed!</h3>
           <p style={{ fontSize:14, color:'rgba(134,239,172,0.8)', lineHeight:1.7, marginBottom:14 }}>{scenario.successMessage}</p>
           <div style={{ background:'rgba(48,209,88,0.08)', borderRadius:14, padding:12, marginBottom:16 }}>
-            <div style={{ fontSize:13, color:'#86efac', fontWeight:700 }}>✅ {correctCount} correct · ❌ {errors} errors · +{scenario.xpReward} XP</div>
+            <div style={{ fontSize:13, color:'#16a34a', fontWeight:700 }}>✅ {correctCount} correct · ❌ {errors} errors · +{scenario.xpReward} XP</div>
           </div>
           <div style={{ display:'flex', gap:10 }}>
-            <button onClick={startScenario} style={{ flex:1, padding:'14px', borderRadius:14, border:'none', background:'rgba(22,163,74,0.2)', color:'#86efac', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Retry</button>
+            <button onClick={startScenario} style={{ flex:1, padding:'14px', borderRadius:14, border:'none', background:'rgba(22,163,74,0.2)', color:'#16a34a', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Retry</button>
             <button onClick={()=>{setScenarioIdx(i=>(i+1)%SCENARIOS.length);setPhase('intro')}} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'var(--bg-base,#F7F9FC)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>Next →</button>
           </div>
         </div>

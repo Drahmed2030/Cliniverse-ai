@@ -24,8 +24,8 @@ const T = {
 // ── INPUT COMPONENTS ──
 const inputStyle = {
   width:'100%', padding:'11px 14px', borderRadius:14,
-  border:'1px solid var(--border-card,rgba(255,255,255,0.12))',
-  background:'var(--bg-card,rgba(255,255,255,0.06))',
+  border:'1px solid var(--border-card,rgba(10,132,255,0.10))',
+  background:'var(--bg-card,rgba(255,255,255,0.88))',
   backdropFilter:'blur(20px)',
   color:'var(--text-primary, #EEF6FA)', fontSize:13, outline:'none',
   boxSizing:'border-box' as const, fontFamily:F,
@@ -519,7 +519,7 @@ export default function ClinicalWorkshop({ onXP }: { onXP?: (n:number)=>void }) 
           {/* Stats */}
           <div style={{display:'flex',gap:8,marginBottom:14}}>
             {t.stats.map(s=>(
-              <div key={s.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:10,padding:'7px 5px',textAlign:'center',border:'1px solid rgba(255,255,255,0.06)'}}>
+              <div key={s.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:10,padding:'7px 5px',textAlign:'center',border:'1px solid rgba(255,255,255,0.06)'}}>
                 <div style={{fontSize:11,fontWeight:900,color:t.color}}>{s.v}</div>
                 <div style={{fontSize:8,color:T.muted,marginTop:2,fontWeight:600}}>{s.l}</div>
               </div>

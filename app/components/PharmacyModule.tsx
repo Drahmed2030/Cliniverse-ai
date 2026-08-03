@@ -109,7 +109,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           {selectedInteraction===i&&(
             <div style={{borderTop:`1px solid rgba(36,63,82,0.65)`,paddingTop:10}}>
-              <div style={{marginBottom:8}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MECHANISM</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{int.mechanism}</div></div>
+              <div style={{marginBottom:8}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MECHANISM</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5}}>{int.mechanism}</div></div>
               <div style={{marginBottom:8}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>EFFECT</div><div style={{fontSize:12,color:'rgba(255,150,150,0.9)',lineHeight:1.5,fontWeight:600}}>{int.effect}</div></div>
               <div style={{background:'rgba(48,209,88,0.08)',borderRadius:10,padding:'8px 12px',border:'1px solid rgba(48,209,88,0.2)'}}><div style={{fontSize:9,color:'#30d158',fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(150,255,150,0.9)',lineHeight:1.5}}>{int.action}</div></div>
             </div>
@@ -135,9 +135,9 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
           {selectedDrug===i&&(
             <div style={{borderTop:`1px solid rgba(36,63,82,0.65)`,paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>🫘 RENAL ADJUSTMENT</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.renal}</div></div>
-              <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>📊 MONITORING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.monitoring}</div></div>
-              <div style={{background:'rgba(255,214,10,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,214,10,0.15)'}}><div style={{fontSize:9,color:'#ffd60a',fontWeight:700,marginBottom:3}}>⭐ SPECIAL NOTE</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{d.special}</div></div>
+              <div style={{background:'rgba(255,69,58,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,69,58,0.15)'}}><div style={{fontSize:9,color:'#ff453a',fontWeight:700,marginBottom:3}}>🫘 RENAL ADJUSTMENT</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5}}>{d.renal}</div></div>
+              <div style={{background:'rgba(10,132,255,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(0,196,180,0.15)'}}><div style={{fontSize:9,color:'#00C4B4',fontWeight:700,marginBottom:3}}>📊 MONITORING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5}}>{d.monitoring}</div></div>
+              <div style={{background:'rgba(255,214,10,0.08)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(255,214,10,0.15)'}}><div style={{fontSize:9,color:'#ffd60a',fontWeight:700,marginBottom:3}}>⭐ SPECIAL NOTE</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5}}>{d.special}</div></div>
             </div>
           )}
         </div>
@@ -160,7 +160,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           {c.points.map((p,j)=>(
             <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<c.points.length-1?`1px solid rgba(36,63,82,0.60)`:'none'}}>
               <div style={{width:22,height:22,borderRadius:7,background:`${c.color}18`,border:`1px solid ${c.color}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:c.color,flexShrink:0}}>{j+1}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{p}</div>
+              <div style={{fontSize:12,color:'#0A1628',lineHeight:1.6}}>{p}</div>
             </div>
           ))}
         </div>
@@ -208,7 +208,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.70)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -220,7 +220,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div>
             <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
+              <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.35)'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}

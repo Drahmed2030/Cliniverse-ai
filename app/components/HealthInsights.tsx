@@ -17,7 +17,7 @@ const Ring = ({ value, max, color, size=80, stroke=8, label, sublabel }: any) =>
       </svg>
       <div style={{ textAlign:'center', zIndex:1 }}>
         <div style={{ fontSize:13, fontWeight:900, color, lineHeight:1 }}>{value}</div>
-        <div style={{ fontSize:8, color:'rgba(255,255,255,0.3)', fontWeight:600, marginTop:1 }}>{sublabel}</div>
+        <div style={{ fontSize:8, color:'rgba(10,22,40,0.60)', fontWeight:600, marginTop:1 }}>{sublabel}</div>
       </div>
     </div>
   )
@@ -109,7 +109,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
     <div style={{ fontFamily:'-apple-system,sans-serif', paddingBottom:20 }}>
       <div style={{ marginBottom:16 }}>
         <h2 style={{ fontSize:22, fontWeight:800, color:'var(--text-primary, #0A1628)', margin:'0 0 4px', letterSpacing:-0.5 }}>Clinical Dashboard</h2>
-        <p style={{ fontSize:13, color:'rgba(255,255,255,0.45)', margin:0 }}>Health insights & drug interactions</p>
+        <p style={{ fontSize:13, color:'rgba(10,22,40,0.75)', margin:0 }}>Health insights & drug interactions</p>
       </div>
 
       {/* Tab Toggle */}
@@ -127,19 +127,19 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           {/* Activity Rings — Apple Health Style */}
           <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.18)', color:'var(--text-primary, #0A1628)', overflow:'hidden', position:'relative' }}>
             <div style={{ position:'absolute', top:-30, right:-30, width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.08),transparent)', pointerEvents:'none' }}/>
-            <div style={{ fontSize:11, color:'rgba(255,255,255,0.35)', letterSpacing:2, textTransform:'uppercase', marginBottom:16, fontWeight:700 }}>This Week's Activity</div>
+            <div style={{ fontSize:11, color:'rgba(10,22,40,0.65)', letterSpacing:2, textTransform:'uppercase', marginBottom:16, fontWeight:700 }}>This Week's Activity</div>
             <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', marginBottom:18 }}>
               <div style={{ textAlign:'center' }}>
                 {animated && <Ring value={casesCompleted} max={caseGoal} color="#ff3b30" size={88} stroke={9} sublabel="CASES"/>}
-                <div style={{ fontSize:10, color:'rgba(255,255,255,0.4)', marginTop:6, fontWeight:600 }}>Move</div>
+                <div style={{ fontSize:10, color:'rgba(10,22,40,0.70)', marginTop:6, fontWeight:600 }}>Move</div>
               </div>
               <div style={{ textAlign:'center' }}>
                 {animated && <Ring value={Math.min(weeklyXP, weeklyGoal)} max={weeklyGoal} color="#30d158" size={88} stroke={9} sublabel="XP"/>}
-                <div style={{ fontSize:10, color:'rgba(255,255,255,0.4)', marginTop:6, fontWeight:600 }}>Exercise</div>
+                <div style={{ fontSize:10, color:'rgba(10,22,40,0.70)', marginTop:6, fontWeight:600 }}>Exercise</div>
               </div>
               <div style={{ textAlign:'center' }}>
                 {animated && <Ring value={accuracy} max={100} color="#00C4B4" size={88} stroke={9} sublabel="%"/>}
-                <div style={{ fontSize:10, color:'rgba(255,255,255,0.4)', marginTop:6, fontWeight:600 }}>Accuracy</div>
+                <div style={{ fontSize:10, color:'rgba(10,22,40,0.70)', marginTop:6, fontWeight:600 }}>Accuracy</div>
               </div>
             </div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
@@ -150,7 +150,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
               ].map(s=>(
                 <div key={s.label} style={{ background:'rgba(255,255,255,0.14)', border:'1px solid rgba(36,63,82,0.65)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
                   <div style={{ fontSize:22, fontWeight:900, color:s.color, letterSpacing:-1 }}>{s.value}{s.unit}</div>
-                  <div style={{ fontSize:9, color:'rgba(255,255,255,0.35)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
+                  <div style={{ fontSize:9, color:'rgba(10,22,40,0.65)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
                   <div style={{ fontSize:9, color:'rgba(0,196,180,0.25)', marginTop:2 }}>{s.goal}</div>
                 </div>
               ))}
@@ -160,22 +160,22 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           {/* Streak + Rank Progress */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:14 }}>
             <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#ff9500', lineHeight:1 }}>{streak}</div>
-              <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>days in a row 🔥</div>
+              <div style={{ fontSize:11, color:'rgba(10,22,40,0.75)', marginTop:4 }}>days in a row 🔥</div>
               <div style={{ height:4, background:'rgba(0,0,0,0.06)', borderRadius:2, overflow:'hidden', marginTop:10 }}>
                 <div style={{ height:'100%', background:'linear-gradient(90deg,#ff9500,#ff6b35)', width:`${Math.min(streak/7,1)*100}%`, borderRadius:2 }}/>
               </div>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', marginTop:4 }}>Goal: 7-day streak</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', marginTop:4 }}>Goal: 7-day streak</div>
             </div>
             <div style={{ background:'rgba(255,255,255,0.14)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#00C4B4', lineHeight:1 }}>{xp}</div>
-              <div style={{ fontSize:11, color:'rgba(255,255,255,0.45)', marginTop:4 }}>clinical points</div>
+              <div style={{ fontSize:11, color:'rgba(10,22,40,0.75)', marginTop:4 }}>clinical points</div>
               <div style={{ height:4, background:'rgba(0,0,0,0.06)', borderRadius:2, overflow:'hidden', marginTop:10 }}>
                 <div style={{ height:'100%', background:'linear-gradient(90deg,#8b5cf6,#0a84ff)', width:`${Math.min(xp/1000,1)*100}%`, borderRadius:2 }}/>
               </div>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', marginTop:4 }}>Goal: 1000 XP</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', marginTop:4 }}>Goal: 1000 XP</div>
             </div>
           </div>
 
@@ -199,7 +199,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           {/* Clinical Tip of the Day */}
           <div style={{ background:'linear-gradient(135deg,rgba(10,132,255,0.08),rgba(139,92,246,0.06))', backdropFilter:'blur(12px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.15)' }}>
             <div style={{ fontSize:11, color:'#00C4B4', fontWeight:800, letterSpacing:1, marginBottom:8 }}>💡 CLINICAL TIP OF THE DAY</div>
-            <p style={{ fontSize:13, color:'rgba(255,255,255,0.75)', lineHeight:1.75, margin:0, fontWeight:500 }}>
+            <p style={{ fontSize:13, color:'rgba(10,22,40,0.85)', lineHeight:1.75, margin:0, fontWeight:500 }}>
               In STEMI with cardiogenic shock, primary PCI is preferred even if symptom onset is more than 12h. Intra-aortic balloon pump does not reduce 30-day mortality (IABP-SHOCK II trial) but remains an option for refractory cases.
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
             {/* Drug 1 */}
             <div style={{ marginBottom:12, position:'relative' }}>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 1</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 1</div>
               <input value={drug1||search1} onChange={e=>{setSearch1(e.target.value);setDrug1('');setShow1(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow1(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug1?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug1?'rgba(10,132,255,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug1?700:400, color:drug1?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show1 && search1 && !drug1 && filtered1.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
@@ -229,7 +229,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
             {/* Drug 2 */}
             <div style={{ marginBottom:16, position:'relative' }}>
-              <div style={{ fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 2</div>
+              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 2</div>
               <input value={drug2||search2} onChange={e=>{setSearch2(e.target.value);setDrug2('');setShow2(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow2(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug2?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug2?'rgba(0,196,180,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug2?700:400, color:drug2?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show2 && search2 && !drug2 && filtered2.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
@@ -276,7 +276,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
             <div style={{ background:'rgba(48,209,88,0.1)', backdropFilter:'blur(12px)', borderRadius:18, padding:18, border:'1px solid rgba(22,163,74,0.2)', textAlign:'center', animation:'fadeIn 0.4s ease' }}>
               <div style={{ fontSize:36, marginBottom:8 }}>✅</div>
               <div style={{ fontSize:15, fontWeight:700, color:'#86efac', marginBottom:6 }}>No Known Interaction</div>
-              <div style={{ fontSize:13, color:'rgba(255,255,255,0.45)' }}>{drug1} + {drug2} — No clinically significant interaction found in our database. Always verify with current formulary.</div>
+              <div style={{ fontSize:13, color:'rgba(10,22,40,0.75)' }}>{drug1} + {drug2} — No clinically significant interaction found in our database. Always verify with current formulary.</div>
             </div>
           )}
 

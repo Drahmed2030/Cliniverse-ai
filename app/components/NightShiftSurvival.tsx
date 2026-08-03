@@ -227,7 +227,7 @@ const SCENARIOS: ShiftScenario[] = [
 ]
 
 const C = {
-  card: 'rgba(255,255,255,0.14)',
+  card: 'rgba(255,255,255,0.92)',
   border: 'rgba(0,196,180,0.25)',
   text: '#EEF6FA',
   sub: 'rgba(255,255,255,0.45)',
@@ -323,7 +323,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Survive a full on-call shift. Manage your energy. Make the right calls. One wrong decision can cost a life — or your career.</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
           {[{icon:'⚡',label:'Energy System'},{icon:'⏱️',label:'Time Pressure'},{icon:'🏆',label:'Survival Score'}].map(t=>(
-            <div key={t.label} style={{background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(36,63,82,0.65)',textAlign:'center'}}>
+            <div key={t.label} style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px',border:'1px solid rgba(36,63,82,0.65)',textAlign:'center'}}>
               <div style={{fontSize:20,marginBottom:4}}>{t.icon}</div>
               <div style={{fontSize:9,color:C.muted,fontWeight:700}}>{t.label}</div>
             </div>
@@ -350,7 +350,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           </div>
           <div style={{display:'flex',gap:6}}>
             <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:`${s.color}12`,color:s.color,fontWeight:700,border:`1px solid ${s.color}20`}}>{s.cases.length} cases</span>
-            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'var(--bg-card,rgba(255,255,255,0.05))',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
+            <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:'var(--bg-card,rgba(255,255,255,0.88))',color:C.muted,fontWeight:600}}>⚡ Energy system</span>
           </div>
         </div>
       ))}
@@ -370,7 +370,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           <span style={{fontSize:12,color:C.sub,fontWeight:600}}>⚡ Energy</span>
           <span style={{fontSize:12,fontWeight:800,color:energyColor}}>{energy}%</span>
         </div>
-        <div style={{height:8,background:'rgba(255,255,255,0.12)',borderRadius:4,overflow:'hidden',marginBottom:8}}>
+        <div style={{height:8,background:'rgba(255,255,255,0.88)',borderRadius:4,overflow:'hidden',marginBottom:8}}>
           <div style={{height:'100%',width:`${energy}%`,background:`linear-gradient(90deg,${energyColor},${energyColor}aa)`,borderRadius:4,transition:'width 0.5s',boxShadow:`0 0 12px ${energyColor}66`}}/>
         </div>
         <div style={{display:'flex',justifyContent:'space-between'}}>
@@ -390,7 +390,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <div style={{fontSize:11,color:C.sub}}>{cc.dept} · {cc.patient}</div>
           </div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.14)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
+        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 SITUATION</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{cc.presentation}</div>
         </div>
@@ -432,7 +432,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <span style={{fontSize:11,color:C.sub,fontWeight:600}}>⚡ Energy</span>
             <span style={{fontSize:13,fontWeight:800,color:energyColor}}>{energy}%</span>
           </div>
-          <div style={{height:8,background:'rgba(255,255,255,0.12)',borderRadius:4,overflow:'hidden',marginBottom:6}}>
+          <div style={{height:8,background:'rgba(255,255,255,0.88)',borderRadius:4,overflow:'hidden',marginBottom:6}}>
             <div style={{height:'100%',width:`${energy}%`,background:`linear-gradient(90deg,${energyColor},${energyColor}aa)`,borderRadius:4,transition:'width 0.5s',boxShadow:`0 0 10px ${energyColor}66`}}/>
           </div>
           <div style={{fontSize:10,color:C.muted}}>Wrong decisions drain your energy</div>
@@ -470,7 +470,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           return (
             <div key={action.id} onClick={()=>!done&&handleAction(action)}
               style={{background:bg,borderRadius:16,padding:'14px 16px',border,cursor:done?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s',opacity:done&&!action.correct&&!isSelected?0.4:1}}>
-              <div style={{width:36,height:36,borderRadius:11,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
+              <div style={{width:36,height:36,borderRadius:11,background:'var(--bg-card,rgba(255,255,255,0.88))',border:'1px solid rgba(255,255,255,0.18)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0}}>
                 {done?(action.correct?'✅':isSelected?'❌':'○'):'▷'}
               </div>
               <div style={{flex:1}}>

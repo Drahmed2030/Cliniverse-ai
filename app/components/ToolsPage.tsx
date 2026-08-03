@@ -27,11 +27,11 @@ const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
 const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 
 const T = {
-  card: 'var(--bg-card,rgba(255,255,255,0.04))',
-  border: 'var(--border-card,rgba(255,255,255,0.08))',
-  text: 'var(--text-primary,#ffffff)',
-  sub: 'var(--text-secondary,rgba(255,255,255,0.65))',
-  muted: 'var(--text-muted,rgba(255,255,255,0.35))',
+  card: 'var(--bg-card,rgba(255,255,255,0.88))',
+  border: 'var(--border-card,rgba(10,132,255,0.10))',
+  text: 'var(--text-primary,#0A1628)',
+  sub: 'var(--text-secondary,rgba(10,22,40,0.60))',
+  muted: 'var(--text-muted,rgba(10,22,40,0.38))',
   F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
 }
 
@@ -224,7 +224,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
   if (view === 'section' && activeSection) return (
     <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-        <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
+        <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
         <div>
           <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>{activeSection.icon} {activeSection.label}</div>
           <div style={{ fontSize: 11, color: T.sub }}>{activeSection.tools.length} tools</div>
@@ -252,7 +252,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
 
   return (
     <div style={{ fontFamily: T.F }}>
-      <button onClick={goBack} style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${T.border}`, borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
+      <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
       <ToolRenderer toolId={activeTool} onXP={onXP} />
     </div>
   )

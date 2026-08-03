@@ -245,7 +245,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
       {/* Outcome */}
       <div style={{background:'rgba(255,69,58,0.08)',borderRadius:18,padding:'14px 16px',marginBottom:14,border:'1px solid rgba(255,69,58,0.2)'}}>
         <div style={{fontSize:10,color:'#ff453a',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 WHAT HAPPENED</div>
-        <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{c.outcome}</div>
+        <div style={{fontSize:13,color:'#0A1628',lineHeight:1.75}}>{c.outcome}</div>
       </div>
 
       {/* Tabs */}
@@ -295,7 +295,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
                 <div style={{width:10,height:10,borderRadius:'50%',background:e.color,boxShadow:`0 0 10px ${e.color}`,flexShrink:0}}/>
                 <div style={{fontSize:13,fontWeight:800,color:e.color}}>{e.type}</div>
               </div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.6}}>{e.description}</div>
+              <div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.6}}>{e.description}</div>
             </div>
           ))}
         </div>
@@ -306,18 +306,18 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div>
           <div style={{background:`${c.color}10`,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${c.color}25`}}>
             <div style={{fontSize:10,color:c.color,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 ROOT CAUSE</div>
-            <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.75,fontWeight:600}}>{c.rootCause}</div>
+            <div style={{fontSize:13,color:'#0A1628',lineHeight:1.75,fontWeight:600}}>{c.rootCause}</div>
           </div>
           <div style={{fontSize:10,color:C.muted,letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:8}}>Contributing Factors</div>
           {c.contributingFactors.map((f,i)=>(
             <div key={i} style={{display:'flex',gap:10,marginBottom:8,background:C.card,borderRadius:12,padding:'10px 14px',border:`1px solid ${C.border}`}}>
               <div style={{width:22,height:22,borderRadius:7,background:'rgba(255,159,10,0.2)',border:'1px solid rgba(255,159,10,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:'#ff9f0a',flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f}</div>
+              <div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5}}>{f}</div>
             </div>
           ))}
           <div style={{background:'rgba(10,132,255,0.08)',borderRadius:16,padding:'14px',marginTop:12,border:'1px solid rgba(0,196,180,0.20)'}}>
             <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>🔧 SYSTEM CHANGE</div>
-            <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{c.systemChange}</div>
+            <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{c.systemChange}</div>
           </div>
         </div>
       )}
@@ -347,7 +347,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
           {c.prevention.map((p,i)=>(
             <div key={i} style={{display:'flex',gap:10,marginBottom:8,background:C.card,borderRadius:12,padding:'12px 14px',border:`1px solid ${C.border}`}}>
               <span style={{color:'#30d158',flexShrink:0,fontSize:14}}>✓</span>
-              <span style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{p}</span>
+              <span style={{fontSize:12,color:'#0A1628',lineHeight:1.6}}>{p}</span>
             </div>
           ))}
 
@@ -388,7 +388,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.70)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -401,7 +401,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
           <div>
             <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
+              <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}}
               style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${c.color},${c.color}bb)`,color:'var(--text-primary, #0A1628)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 20px ${c.color}44`}}>

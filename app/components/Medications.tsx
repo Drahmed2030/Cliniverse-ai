@@ -35,19 +35,19 @@ export default function Medications() {
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
         <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>💊 New Medications</div>
-        <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>Latest FDA & EMA approvals · 2024-2026</div>
+        <div style={{fontSize:12,color:'rgba(10,22,40,0.70)'}}>Latest FDA & EMA approvals · 2024-2026</div>
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search medications..."
         style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:16,boxSizing:'border-box',fontFamily:'inherit'}}/>
 
       {loading ? (
-        <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>Loading...</div>
+        <div style={{textAlign:'center',padding:40,color:'rgba(10,22,40,0.60)'}}>Loading...</div>
       ) : filtered.length === 0 ? (
         <div style={{textAlign:'center',padding:40}}>
           <div style={{fontSize:32,marginBottom:12}}>💊</div>
-          <div style={{fontSize:14,color:'rgba(255,255,255,0.4)',marginBottom:20}}>No medications yet</div>
-          <div style={{fontSize:12,color:'rgba(255,255,255,0.25)'}}>Add medications via Admin Dashboard</div>
+          <div style={{fontSize:14,color:'rgba(10,22,40,0.70)',marginBottom:20}}>No medications yet</div>
+          <div style={{fontSize:12,color:'rgba(10,22,40,0.55)'}}>Add medications via Admin Dashboard</div>
         </div>
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
@@ -60,15 +60,15 @@ export default function Medications() {
                   <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:4}}>{m.name}</div>
                   <div style={{display:'flex',gap:6}}>
                     {m.class&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(48,209,88,0.1)',color:'#30d158',fontWeight:700}}>{m.class}</span>}
-                    {m.approval_date&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'rgba(255,255,255,0.4)'}}>{m.approval_date}</span>}
+                    {m.approval_date&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'rgba(10,22,40,0.70)'}}>{m.approval_date}</span>}
                   </div>
                 </div>
-                <span style={{color:'rgba(255,255,255,0.3)',fontSize:18,transition:'transform 0.2s',transform:expanded===m.id?'rotate(90deg)':'none'}}>›</span>
+                <span style={{color:'rgba(10,22,40,0.60)',fontSize:18,transition:'transform 0.2s',transform:expanded===m.id?'rotate(90deg)':'none'}}>›</span>
               </div>
               {expanded===m.id&&(
                 <div style={{marginTop:12,paddingTop:12,borderTop:'1px solid rgba(36,63,82,0.65)'}}>
-                  {m.indication&&<div style={{fontSize:13,color:'rgba(255,255,255,0.75)',lineHeight:1.7,marginBottom:8}}><span style={{color:'rgba(255,255,255,0.4)',fontWeight:600}}>Indication: </span>{m.indication}</div>}
-                  {m.notes&&<div style={{fontSize:12,color:'rgba(255,255,255,0.5)',lineHeight:1.6}}>{m.notes}</div>}
+                  {m.indication&&<div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.7,marginBottom:8}}><span style={{color:'rgba(10,22,40,0.70)',fontWeight:600}}>Indication: </span>{m.indication}</div>}
+                  {m.notes&&<div style={{fontSize:12,color:'rgba(10,22,40,0.75)',lineHeight:1.6}}>{m.notes}</div>}
                 </div>
               )}
             </div>
