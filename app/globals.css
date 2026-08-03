@@ -104,3 +104,9 @@ input::placeholder, textarea::placeholder {
 @keyframes fadeIn  { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }
 @keyframes pulse   { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
 @keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+
+/* Swipe transition */
+.swipe-enter { animation: swipeIn 0.28s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+.swipe-exit  { animation: swipeOut 0.28s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
+@keyframes swipeIn  { from { transform: translateX(40px); opacity:0; } to { transform: translateX(0); opacity:1; } }
+@keyframes swipeOut { from { transform: translateX(0); opacity:1; } to { transform: translateX(-40px); opacity:0; } }

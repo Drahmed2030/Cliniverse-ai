@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 
 const CodeBlue = dynamic(() => import('./CodeBlue'), { ssr: false })
@@ -150,6 +150,23 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
     else { setView('home') }
   }
 
+
+  const touchStartX = useRef(0)
+  const touchStartY = useRef(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent, onSwipeLeft?: () => void, onSwipeRight?: () => void) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    const dy = e.changedTouches[0].clientY - touchStartY.current
+    if (Math.abs(dx) < Math.abs(dy) * 1.5) return // vertical scroll, ignore
+    if (dx < -60 && onSwipeLeft) onSwipeLeft()
+    if (dx > 60 && onSwipeRight) onSwipeRight()
+  }
+
   const searchResults = search.length > 1
     ? SECTIONS.flatMap(s => s.tools.map(t => ({ ...t, sectionLabel: s.label }))).filter(t =>
         t.label.toLowerCase().includes(search.toLowerCase()) ||
@@ -222,7 +239,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
   )
 
   if (view === 'section' && activeSection) return (
-    <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
+    <div style={{ fontFamily: T.F, paddingBottom: 8 }} onTouchStart={handleTouchStart} onTouchEnd={(e) => handleTouchEnd(e, undefined, goBack)}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
         <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
         <div>
@@ -251,7 +268,7 @@ export default function ToolsPage({ onXP, initialTool }: Props) {
   )
 
   return (
-    <div style={{ fontFamily: T.F }}>
+    <div style={{ fontFamily: T.F }} onTouchStart={handleTouchStart} onTouchEnd={(e) => handleTouchEnd(e, undefined, goBack)}>
       <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
       <ToolRenderer toolId={activeTool} onXP={onXP} />
     </div>
