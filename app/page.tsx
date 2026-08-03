@@ -351,6 +351,7 @@ export default function Home() {
   // ── GUARDS ────────────────────────────────────────────────────────────
   if (showAdmin) return <AdminDashboard onClose={()=>setShowAdmin(false)}/>
 
+  if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />
   if (showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
       localStorage.setItem('onboarding_completed','1')
@@ -589,7 +590,6 @@ export default function Home() {
 
   return (
     <>
-    {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
     
     <div style={{
       minHeight:'100vh', width:'100vw',
