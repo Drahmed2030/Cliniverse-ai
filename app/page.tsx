@@ -5,6 +5,7 @@ import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
 import ProfilePage from './components/ProfilePage'
+import SplashScreen from './components/SplashScreen'
 const DynamicNav    = dynamic(() => import('./components/DynamicNav'),    { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
@@ -205,6 +206,7 @@ export default function Home() {
   const [casesCompleted, setCasesCompleted] = useState(0)
   const [mcqCorrect, setMcqCorrect]     = useState(0)
   const [mcqTotal, setMcqTotal]         = useState(0)
+  const [showSplash, setShowSplash] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
@@ -586,6 +588,9 @@ export default function Home() {
   const rank = getCurrentRank()
 
   return (
+    <>
+    {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+    
     <div style={{
       minHeight:'100vh', width:'100vw',
       background:D.bgBase,
@@ -829,5 +834,6 @@ export default function Home() {
         input::placeholder { color: rgba(10,31,60,0.35) }
       `}</style>
     </div>
+    </>
   )
 }
