@@ -285,7 +285,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
         {/* Case context */}
         <div style={{background:`${c.color}10`,borderRadius:16,padding:'12px 14px',marginBottom:12,border:`1px solid ${c.color}25`}}>
           <div style={{fontSize:11,color:c.color,fontWeight:700,marginBottom:3}}>{c.icon} {c.title}</div>
-          <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.5}}>{c.presentation}</div>
+          <div style={{fontSize:12,color:'rgba(10,22,40,0.75)',lineHeight:1.5}}>{c.presentation}</div>
         </div>
 
         {/* Question */}
@@ -310,7 +310,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>!showExplain&&handleAnswer('A',i)}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:showExplain?'default':'pointer',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:30,height:30,borderRadius:9,background:'rgba(255,255,255,0.14)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.5)',flexShrink:0}}>
+                <div style={{width:30,height:30,borderRadius:9,background:'rgba(255,255,255,0.14)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.60)',flexShrink:0}}>
                   {['A','B','C','D'][i]}
                 </div>
                 <div style={{fontSize:13,color,fontWeight:600,flex:1,lineHeight:1.4}}>{opt}</div>
@@ -325,7 +325,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
         {showExplain&&(
           <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',border:'1px solid rgba(0,196,180,0.20)',animation:'fadeIn 0.3s ease'}}>
             <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
-            <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{currentQ.explain}</div>
+            <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.7}}>{currentQ.explain}</div>
           </div>
         )}
 

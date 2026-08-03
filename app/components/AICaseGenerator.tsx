@@ -316,7 +316,7 @@ Return ONLY this JSON structure:
         {/* Presentation */}
         <div style={{background:C.card,borderRadius:16,padding:'14px',marginBottom:10,border:`1px solid ${C.border}`}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>PRESENTATION</div>
-          <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{g.presentation}</div>
+          <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.75}}>{g.presentation}</div>
         </div>
 
         {/* Management */}
@@ -325,7 +325,7 @@ Return ONLY this JSON structure:
           {g.management.map((m,i)=>(
             <div key={i} style={{display:'flex',gap:10,marginBottom:8,alignItems:'flex-start'}}>
               <div style={{width:22,height:22,borderRadius:'50%',background:`${g.color}22`,border:`1px solid ${g.color}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:g.color,flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{m}</div>
+              <div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.6}}>{m}</div>
             </div>
           ))}
         </div>
@@ -336,7 +336,7 @@ Return ONLY this JSON structure:
           {g.keyLearning.map((l,i)=>(
             <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
               <span style={{color:'#30d158',fontSize:12,flexShrink:0}}>✓</span>
-              <span style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{l}</span>
+              <span style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{l}</span>
             </div>
           ))}
         </div>
@@ -346,7 +346,7 @@ Return ONLY this JSON structure:
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>MCQs ({g.mcqs.length} questions included)</div>
           {g.mcqs.map((q,i)=>(
             <div key={i} style={{marginBottom:i<g.mcqs.length-1?12:0,paddingBottom:i<g.mcqs.length-1?12:0,borderBottom:i<g.mcqs.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',fontWeight:600,marginBottom:6}}>{i+1}. {q.q}</div>
+              <div style={{fontSize:12,color:'rgba(10,22,40,0.85)',fontWeight:600,marginBottom:6}}>{i+1}. {q.q}</div>
               {q.opts.map((o,j)=>(
                 <div key={j} style={{fontSize:11,color:j===q.correct?'#86efac':C.muted,padding:'4px 8px',borderRadius:8,background:j===q.correct?'rgba(48,209,88,0.1)':'transparent',marginBottom:3,border:j===q.correct?'1px solid rgba(48,209,88,0.2)':'none'}}>
                   {['A','B','C','D'][j]}. {o} {j===q.correct&&'✓'}

@@ -393,7 +393,7 @@ export default function STEMICase({ onXP }: { onXP?: (n:number)=>void }) {
       <button onClick={() => { setPhase('active'); setTimerActive(true) }} style={{
         width:'100%', padding:16, borderRadius:18, border:'none',
         background:'linear-gradient(135deg,#FF6B6B,#FF453A)',
-        color:'white', fontSize:15, fontWeight:800, cursor:'pointer',
+        color:'#0A1628', fontSize:15, fontWeight:800, cursor:'pointer',
         boxShadow:'0 8px 24px rgba(255,107,107,0.35)', fontFamily:F,
       }}>
         🚨 Start Emergency Protocol
@@ -520,7 +520,7 @@ export default function STEMICase({ onXP }: { onXP?: (n:number)=>void }) {
       }} style={{
         width:'100%', padding:16, borderRadius:18, border:'none',
         background:'linear-gradient(135deg,#0A84FF,#00C8B8)',
-        color:'white', fontSize:15, fontWeight:800, cursor:'pointer',
+        color:'#0A1628', fontSize:15, fontWeight:800, cursor:'pointer',
         boxShadow:'0 8px 24px rgba(10,132,255,0.30)', fontFamily:F,
       }}>
         🔄 Try Again

@@ -63,7 +63,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
         {['A — Airway: trachea midline?','B — Breathing: lung fields symmetric?','C — Cardiac: CTR, borders, shape','D — Diaphragm: right higher, no free air','E — Everything else: bones, soft tissue, lines'].map((s,i)=>(
           <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
             <span style={{color:'#ffd60a',fontWeight:800,fontSize:12,flexShrink:0}}>→</span>
-            <span style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{s}</span>
+            <span style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{s}</span>
           </div>
         ))}
       </div>
@@ -86,8 +86,8 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCXR===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{f.causes}</div></div>
-              <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
+              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{f.causes}</div></div>
+              <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
             </div>
           )}
         </div>
@@ -116,8 +116,8 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCT===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.5}}>{p.meaning}</div></div>
-              <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
+              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{p.meaning}</div></div>
+              <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
             </div>
           )}
         </div>
@@ -157,7 +157,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(255,255,255,0.4)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.55)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
@@ -169,7 +169,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           <div>
             <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px',marginBottom:12,border:'1px solid rgba(0,196,180,0.20)'}}>
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
+              <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:14,fontWeight:800,cursor:'pointer'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}

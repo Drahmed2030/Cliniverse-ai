@@ -35,7 +35,7 @@ export default function LabsReference() {
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
         <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>🧪 Labs Reference</div>
-        <div style={{fontSize:12,color:'rgba(255,255,255,0.4)'}}>Normal ranges · Updated 2026</div>
+        <div style={{fontSize:12,color:'rgba(10,22,40,0.55)'}}>Normal ranges · Updated 2026</div>
       </div>
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search lab test..."
         style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
@@ -48,7 +48,7 @@ export default function LabsReference() {
         ))}
       </div>
       {loading ? (
-        <div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>Loading...</div>
+        <div style={{textAlign:'center',padding:40,color:'rgba(10,22,40,0.45)'}}>Loading...</div>
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
           {filtered.map(lab=>(
@@ -58,7 +58,7 @@ export default function LabsReference() {
               </div>
               <div style={{flex:1}}>
                 <div style={{fontSize:14,fontWeight:700,color:'var(--text-primary, white)',marginBottom:2}}>{lab.name}</div>
-                <div style={{fontSize:11,color:'rgba(255,255,255,0.4)'}}>{lab.category}</div>
+                <div style={{fontSize:11,color:'rgba(10,22,40,0.55)'}}>{lab.category}</div>
               </div>
               <div style={{textAlign:'right'}}>
                 <div style={{fontSize:14,fontWeight:800,color:COLORS[lab.category]||'#00C4B4'}}>{lab.normal_range}</div>
@@ -66,7 +66,7 @@ export default function LabsReference() {
               </div>
             </div>
           ))}
-          {filtered.length===0&&<div style={{textAlign:'center',padding:40,color:'rgba(255,255,255,0.3)'}}>No results found</div>}
+          {filtered.length===0&&<div style={{textAlign:'center',padding:40,color:'rgba(10,22,40,0.45)'}}>No results found</div>}
         </div>
       )}
     </div>

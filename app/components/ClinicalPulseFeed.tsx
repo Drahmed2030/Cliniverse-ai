@@ -52,7 +52,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
           <div style={{width:7,height:7,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 8px #ff453a',animation:'pulse 1s infinite'}}/>
           <span style={{fontSize:10,color:'#ff453a',fontWeight:800,letterSpacing:2}}>GLOBAL CLINICAL FEED</span>
         </div>
-        <span style={{fontSize:10,color:'rgba(255,255,255,0.3)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
+        <span style={{fontSize:10,color:'rgba(10,22,40,0.45)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
       </div>
 
       <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
@@ -76,7 +76,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
             </div>
             {active===f.id&&(
               <div style={{marginTop:8,paddingTop:8,borderTop:'1px solid rgba(36,63,82,0.65)'}}>
-                <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',marginBottom:8}}>{f.detail}</div>
+                <div style={{fontSize:11,color:'rgba(10,22,40,0.70)',marginBottom:8}}>{f.detail}</div>
                 <div style={{display:'flex',gap:6}}>
                   <button onClick={e=>{e.stopPropagation();makeSBAR(f)}}
                     style={{flex:1,padding:'7px',borderRadius:10,border:'1px solid rgba(0,196,180,0.30)',background:'rgba(0,196,180,0.10)',color:'#00C4B4',fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
@@ -99,7 +99,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
             <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
             <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:12}}>📋 SBAR Report</div>
             <textarea readOnly value={sbar}
-              style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(255,255,255,0.8)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
+              style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(10,22,40,0.85)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
             <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
               style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
               Copy SBAR

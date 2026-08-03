@@ -107,7 +107,7 @@ export default function ClinicalNexus({ onXP }:Props) {
 
   if(phase==='intro'&&active) return(
     <div style={{padding:'0 4px'}}>
-      <button onClick={()=>setPhase('hub')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',color:'rgba(255,255,255,0.9)',padding:'8px 16px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:16,fontWeight:600}}>← Back</button>
+      <button onClick={()=>setPhase('hub')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',color:'#0A1628',padding:'8px 16px',borderRadius:20,fontSize:13,cursor:'pointer',marginBottom:16,fontWeight:600}}>← Back</button>
       <div style={{background:`linear-gradient(145deg,${active.color}12,rgba(10,0,21,0.95))`,borderRadius:24,padding:24,marginBottom:16,border:`1px solid ${active.color}25`,position:'relative',overflow:'hidden'}}>
         <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
           <div style={{width:8,height:8,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 10px #ff453a'}}/>
@@ -116,7 +116,7 @@ export default function ClinicalNexus({ onXP }:Props) {
         <div style={{fontSize:13,color:active.color,fontWeight:700,letterSpacing:1,marginBottom:8}}>{active.tag}</div>
         <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary, white)',marginBottom:14,letterSpacing:-0.5}}>{active.title}</div>
         <div style={{background:'rgba(255,255,255,0.14)',borderRadius:16,padding:16,border:'1px solid rgba(36,63,82,0.65)'}}>
-          <div style={{fontSize:14,color:'rgba(255,255,255,0.8)',lineHeight:1.8}}>{active.intro}</div>
+          <div style={{fontSize:14,color:'rgba(10,22,40,0.85)',lineHeight:1.8}}>{active.intro}</div>
         </div>
       </div>
       <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:16,marginBottom:16,border:'1px solid rgba(36,63,82,0.60)'}}>
@@ -170,7 +170,7 @@ export default function ClinicalNexus({ onXP }:Props) {
         {/* ECG */}
         <div style={{background:'rgba(48,209,88,0.06)',borderRadius:14,padding:'10px 14px',marginBottom:14,border:'1px solid rgba(48,209,88,0.15)'}}>
           <span style={{fontSize:10,color:'#30d158',fontWeight:700,letterSpacing:1}}>⚡ ECG: </span>
-          <span style={{fontSize:13,color:'rgba(255,255,255,0.8)'}}>{step.ecg}</span>
+          <span style={{fontSize:13,color:'rgba(10,22,40,0.85)'}}>{step.ecg}</span>
         </div>
 
         {/* Question */}
@@ -184,7 +184,7 @@ export default function ClinicalNexus({ onXP }:Props) {
           <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:14}}>
             {step.opts.map((opt,i)=>(
               <button key={i} onClick={()=>{setSelected(i);if(i===step.correct)setTotalScore(p=>p+1);setShowExplain(true)}}
-                style={{background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.85)',textAlign:'left',cursor:'pointer',display:'flex',alignItems:'center',gap:10}}>
+                style={{background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color:'rgba(10,22,40,0.88)',textAlign:'left',cursor:'pointer',display:'flex',alignItems:'center',gap:10}}>
                 <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>{String.fromCharCode(65+i)}</div>
                 {opt}
               </button>
@@ -209,7 +209,7 @@ export default function ClinicalNexus({ onXP }:Props) {
             {/* Explanation */}
             <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:14,marginBottom:12,border:'1px solid rgba(0,196,180,0.15)'}}>
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:800,marginBottom:6,letterSpacing:1}}>💡 CLINICAL REASONING</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.85)',lineHeight:1.7}}>{step.explain}</div>
+              <div style={{fontSize:13,color:'rgba(10,22,40,0.88)',lineHeight:1.7}}>{step.explain}</div>
             </div>
 
             {/* Global vote */}
@@ -250,14 +250,14 @@ export default function ClinicalNexus({ onXP }:Props) {
         <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:16,letterSpacing:-0.3}}>{active.title}</div>
         <div style={{background:'rgba(48,209,88,0.08)',borderRadius:16,padding:16,marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',textAlign:'left'}}>
           <div style={{fontSize:10,color:'#30d158',fontWeight:800,letterSpacing:1,marginBottom:8}}>WHAT HAPPENED</div>
-          <div style={{fontSize:14,color:'rgba(255,255,255,0.85)',lineHeight:1.8}}>{active.outcome}</div>
+          <div style={{fontSize:14,color:'rgba(10,22,40,0.88)',lineHeight:1.8}}>{active.outcome}</div>
         </div>
         <div style={{background:`linear-gradient(135deg,${active.color}15,rgba(255,214,10,0.08))`,borderRadius:16,padding:16,marginBottom:16,border:`1px solid ${active.color}25`,textAlign:'left'}}>
           <div style={{fontSize:10,color:'#ffd60a',fontWeight:800,letterSpacing:1,marginBottom:10}}>KEY LEARNING POINTS</div>
           {active.keyLearning.map((k,i)=>(
             <div key={i} style={{display:'flex',gap:10,marginBottom:10,alignItems:'flex-start'}}>
               <div style={{width:20,height:20,borderRadius:'50%',background:'rgba(255,214,10,0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'#ffd60a',flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{k}</div>
+              <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.6}}>{k}</div>
             </div>
           ))}
         </div>
