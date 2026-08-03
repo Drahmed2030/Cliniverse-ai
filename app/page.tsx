@@ -200,7 +200,7 @@ export default function Home() {
   const [tab, setTab]                   = useState('hub')
   const _mTX = useRef(0)
   const _mTY = useRef(0)
-  const MAIN_TABS = ['hub','tools','ward','net','profile']
+  const MAIN_TABS = ['hub','tools','ward','net']
   const swipeMain = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - _mTX.current
     const dy = e.changedTouches[0].clientY - _mTY.current
