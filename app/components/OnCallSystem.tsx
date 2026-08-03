@@ -107,14 +107,14 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
 
       {/* Header */}
-      <div style={{background:'linear-gradient(135deg,rgba(15,5,35,0.9),rgba(10,0,21,0.95))',borderRadius:22,padding:'18px 18px 14px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 8px 32px rgba(0,0,0,0.4)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px 18px 14px',marginBottom:14,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 8px 32px rgba(0,0,0,0.4)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
           <div>
             <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:4}}>
               {isNight ? '🌙 Night Shift' : '☀️ Day Shift'}
             </div>
-            <div style={{fontSize:36,fontWeight:900,color:'var(--text-primary, white)',letterSpacing:-1,lineHeight:1}}>{timeStr}</div>
+            <div style={{fontSize:36,fontWeight:900,color:'#0A1628',letterSpacing:-1,lineHeight:1}}>{timeStr}</div>
             <div style={{fontSize:12,color:C.sub,marginTop:4}}>{dateStr}</div>
           </div>
           <div style={{textAlign:'right'}}>
@@ -124,7 +124,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
           </div>
         </div>
         {/* Rotating tip */}
-        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
+        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(10,132,255,0.12)'}}>
           <div style={{fontSize:12,color:'rgba(10,22,40,0.70)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             </div>
           </div>
 
-          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
+          <button onClick={addShift} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)',marginBottom:16}}>
             + Add Shift to Schedule
           </button>
 
@@ -189,7 +189,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             <div key={s.id} style={{background:C.card,borderRadius:16,padding:'14px 16px',marginBottom:8,border:`1px solid ${s.color}25`,display:'flex',alignItems:'center',gap:12}}>
               <div style={{width:44,height:44,borderRadius:13,background:`${s.color}18`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{s.icon}</div>
               <div style={{flex:1}}>
-                <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)'}}>{s.day} · {s.time}</div>
+                <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{s.day} · {s.time}</div>
                 <div style={{fontSize:11,color:C.sub,marginTop:2}}>{s.dept} Department</div>
               </div>
               <div style={{display:'flex',alignItems:'center',gap:8}}>
@@ -208,7 +208,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
         <div>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
             <div>
-              <div style={{fontSize:16,fontWeight:900,color:'var(--text-primary, white)'}}>🚨 Active Cases</div>
+              <div style={{fontSize:16,fontWeight:900,color:'#0A1628'}}>🚨 Active Cases</div>
               <div style={{fontSize:11,color:C.sub,marginTop:2}}>Tap to mark as handled</div>
             </div>
             <div style={{background:'rgba(255,69,58,0.12)',border:'1px solid rgba(255,69,58,0.25)',borderRadius:12,padding:'6px 14px'}}>
@@ -257,7 +257,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
             <div key={s.title} style={{background:C.card,borderRadius:20,padding:'16px',marginBottom:10,border:`1px solid ${s.color}20`,boxShadow:`0 4px 16px ${s.color}08`}}>
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
                 <div style={{width:36,height:36,borderRadius:11,background:`${s.color}18`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>{s.icon}</div>
-                <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)'}}>{s.title}</div>
+                <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{s.title}</div>
               </div>
               {s.tips.map((tip,i)=>(
                 <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<s.tips.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>

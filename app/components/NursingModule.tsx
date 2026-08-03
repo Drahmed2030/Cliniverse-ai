@@ -44,7 +44,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
 
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(100,210,255,0.12),rgba(48,209,88,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(100,210,255,0.2)'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(100,210,255,0.2)'}}>
         <div style={{fontSize:11,color:'rgba(100,210,255,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🩺 NURSING</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Clinical Nursing</div>
         <div style={{fontSize:13,color:C.sub}}>Vitals · Skills · NEWS2 · Quiz</div>

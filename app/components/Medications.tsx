@@ -34,12 +34,12 @@ export default function Medications() {
   return (
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
-        <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>💊 New Medications</div>
+        <div style={{fontSize:20,fontWeight:900,color:'#0A1628',marginBottom:4}}>💊 New Medications</div>
         <div style={{fontSize:12,color:'rgba(10,22,40,0.70)'}}>Latest FDA & EMA approvals · 2024-2026</div>
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search medications..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:16,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'#0A1628',fontSize:14,outline:'none',marginBottom:16,boxSizing:'border-box',fontFamily:'inherit'}}/>
 
       {loading ? (
         <div style={{textAlign:'center',padding:40,color:'rgba(10,22,40,0.60)'}}>Loading...</div>
@@ -57,7 +57,7 @@ export default function Medications() {
               <div style={{display:'flex',alignItems:'center',gap:12}}>
                 <div style={{width:44,height:44,borderRadius:13,background:'rgba(48,209,88,0.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>💊</div>
                 <div style={{flex:1}}>
-                  <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:4}}>{m.name}</div>
+                  <div style={{fontSize:14,fontWeight:800,color:'#0A1628',marginBottom:4}}>{m.name}</div>
                   <div style={{display:'flex',gap:6}}>
                     {m.class&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(48,209,88,0.1)',color:'#30d158',fontWeight:700}}>{m.class}</span>}
                     {m.approval_date&&<span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.88)',color:'rgba(10,22,40,0.70)'}}>{m.approval_date}</span>}

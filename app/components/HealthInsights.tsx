@@ -125,7 +125,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
       {activeTab === 'insights' && (
         <div>
           {/* Activity Rings — Apple Health Style */}
-          <div style={{ background:'linear-gradient(145deg,rgba(15,23,42,0.95),rgba(10,15,30,0.98))', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.18)', color:'var(--text-primary, #0A1628)', overflow:'hidden', position:'relative' }}>
+          <div style={{ background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)', backdropFilter:'blur(40px)', borderRadius:22, padding:22, marginBottom:14, border:'1px solid rgba(255,255,255,0.18)', color:'var(--text-primary, #0A1628)', overflow:'hidden', position:'relative' }}>
             <div style={{ position:'absolute', top:-30, right:-30, width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle,rgba(0,196,180,0.08),transparent)', pointerEvents:'none' }}/>
             <div style={{ fontSize:11, color:'rgba(10,22,40,0.65)', letterSpacing:2, textTransform:'uppercase', marginBottom:16, fontWeight:700 }}>This Week's Activity</div>
             <div style={{ display:'flex', justifyContent:'space-around', alignItems:'center', marginBottom:18 }}>
@@ -148,7 +148,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 {label:'XP Earned', value:weeklyXP, unit:'', color:'#30d158', goal:`/${weeklyGoal} goal`},
                 {label:'MCQ Accuracy', value:`${accuracy}`, unit:'%', color:'#00C4B4', goal:`${mcqTotal} answered`},
               ].map(s=>(
-                <div key={s.label} style={{ background:'rgba(255,255,255,0.88)', border:'1px solid rgba(36,63,82,0.65)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
+                <div key={s.label} style={{ background:'rgba(255,255,255,0.88)', border:'1px solid rgba(10,132,255,0.12)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
                   <div style={{ fontSize:22, fontWeight:900, color:s.color, letterSpacing:-1 }}>{s.value}{s.unit}</div>
                   <div style={{ fontSize:9, color:'rgba(10,22,40,0.65)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
                   <div style={{ fontSize:9, color:'rgba(0,196,180,0.25)', marginTop:2 }}>{s.goal}</div>
@@ -197,7 +197,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           </div>
 
           {/* Clinical Tip of the Day */}
-          <div style={{ background:'linear-gradient(135deg,rgba(10,132,255,0.08),rgba(139,92,246,0.06))', backdropFilter:'blur(12px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.15)' }}>
+          <div style={{ background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)', backdropFilter:'blur(12px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.15)' }}>
             <div style={{ fontSize:11, color:'#00C4B4', fontWeight:800, letterSpacing:1, marginBottom:8 }}>💡 CLINICAL TIP OF THE DAY</div>
             <p style={{ fontSize:13, color:'rgba(10,22,40,0.85)', lineHeight:1.75, margin:0, fontWeight:500 }}>
               In STEMI with cardiogenic shock, primary PCI is preferred even if symptom onset is more than 12h. Intra-aortic balloon pump does not reduce 30-day mortality (IABP-SHOCK II trial) but remains an option for refractory cases.

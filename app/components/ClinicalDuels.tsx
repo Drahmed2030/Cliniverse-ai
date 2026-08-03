@@ -196,7 +196,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
   // ── LOBBY ──
   if (phase === 'lobby') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(255,69,58,0.12),rgba(139,92,246,0.1))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,69,58,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(255,69,58,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>⚔️ NEW</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Clinical Duels</div>
@@ -342,7 +342,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
     const pct = Math.round((correctCount/selectedCase.questions.length)*100)
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-        <div style={{background:'linear-gradient(145deg,rgba(255,214,10,0.12),rgba(0,196,180,0.08))',borderRadius:24,padding:'28px 20px',marginBottom:16,border:'1px solid rgba(255,214,10,0.2)',textAlign:'center',boxShadow:'0 8px 32px rgba(255,214,10,0.1)'}}>
+        <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:24,padding:'28px 20px',marginBottom:16,border:'1px solid rgba(255,214,10,0.2)',textAlign:'center',boxShadow:'0 8px 32px rgba(255,214,10,0.1)'}}>
           <div style={{fontSize:60,marginBottom:12,filter:`drop-shadow(0 0 24px ${pct>=80?'rgba(255,214,10,0.6)':'rgba(139,92,246,0.4)'})`}}>
             {mode==='vs'?winner==='A'?'🥇':winner==='B'?'🥈':'🤝':pct>=80?'🏆':pct>=60?'🎖️':'📚'}
           </div>
@@ -378,7 +378,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startDuel(selectedCase)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${selectedCase.color}30`,background:`${selectedCase.color}10`,color:selectedCase.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Rematch</button>
-          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
+          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'#0A1628',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
         </div>
       </div>
     )

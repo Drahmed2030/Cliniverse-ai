@@ -195,7 +195,7 @@ Return ONLY this JSON structure:
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
 
       {/* Header */}
-      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.25),rgba(0,196,180,0.10))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🤖 Powered by Claude AI</div>
         <div style={{fontSize:22,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>AI Case Generator</div>
@@ -253,12 +253,12 @@ Return ONLY this JSON structure:
         value={topic}
         onChange={e=>setTopic(e.target.value)}
         placeholder={`e.g. "STEMI in young patient" or "Drug interaction warfarin"`}
-        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'var(--bg-card,rgba(255,255,255,0.88))',color:'var(--text-primary, white)',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
+        style={{width:'100%',padding:'14px 16px',borderRadius:16,border:`1px solid ${C.border}`,background:'var(--bg-card,rgba(255,255,255,0.88))',color:'#0A1628',fontSize:13,outline:'none',boxSizing:'border-box',marginBottom:20}}
       />
 
       {/* Generate button */}
       <button onClick={generateCase} disabled={generating||audience.length===0}
-        style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:generating?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:16,fontWeight:800,cursor:generating?'not-allowed':'pointer',boxShadow:generating?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'all 0.3s'}}>
+        style={{width:'100%',padding:'18px',borderRadius:18,border:'none',background:generating?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'#0A1628',fontSize:16,fontWeight:800,cursor:generating?'not-allowed':'pointer',boxShadow:generating?'none':'0 8px 32px rgba(139,92,246,0.5)',display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'all 0.3s'}}>
         {generating ? (
           <>
             <div style={{width:20,height:20,borderRadius:'50%',border:'2px solid rgba(255,255,255,0.3)',borderTop:'2px solid white',animation:'spin 1s linear infinite'}}/>
@@ -331,7 +331,7 @@ Return ONLY this JSON structure:
         </div>
 
         {/* Key Learning */}
-        <div style={{background:'linear-gradient(135deg,rgba(10,132,255,0.08),rgba(0,196,180,0.05))',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(0,196,180,0.15)'}}>
+        <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:16,padding:'14px',marginBottom:10,border:'1px solid rgba(0,196,180,0.15)'}}>
           <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:8,letterSpacing:0.5}}>💡 KEY LEARNING</div>
           {g.keyLearning.map((l,i)=>(
             <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
@@ -363,7 +363,7 @@ Return ONLY this JSON structure:
             🔄 Regenerate
           </button>
           <button onClick={saveToSupabase} disabled={saving||saved}
-            style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:saved?'rgba(48,209,88,0.2)':saving?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:saved||saving?'not-allowed':'pointer',boxShadow:saved||saving?'none':'0 6px 20px rgba(48,209,88,0.4)'}}>
+            style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:saved?'rgba(48,209,88,0.2)':saving?'rgba(139,92,246,0.3)':'linear-gradient(135deg,#30d158,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:saved||saving?'not-allowed':'pointer',boxShadow:saved||saving?'none':'0 6px 20px rgba(48,209,88,0.4)'}}>
             {saved ? '✅ Saved to Library!' : saving ? 'Saving...' : '💾 Save to Library'}
           </button>
         </div>

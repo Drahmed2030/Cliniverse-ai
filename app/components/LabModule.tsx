@@ -71,7 +71,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
 
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(100,210,255,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.2)'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.2)'}}>
         <div style={{fontSize:11,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🔬 LABORATORY</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Lab Interpretation</div>
         <div style={{fontSize:13,color:C.sub}}>5 panels · Critical values · Clinical context</div>
@@ -138,7 +138,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
           <div style={{fontSize:14,color:'#bf5af2',fontWeight:700,marginBottom:20}}>+{xp} XP</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
+            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
           </div>
         </div>
       )
@@ -174,7 +174,7 @@ export default function LabModule({ onXP }:{ onXP?:(n:number)=>void }) {
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.7}}>{q.explain}</div>
             </div>
-            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>
+            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#bf5af2,#8b5cf6)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}
             </button>
           </div>

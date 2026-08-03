@@ -316,14 +316,14 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
   // ── MENU ──
   if (phase === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.25),rgba(15,5,35,0.9))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🌙 SURVIVAL MODE</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Night Shift Survival</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Survive a full on-call shift. Manage your energy. Make the right calls. One wrong decision can cost a life — or your career.</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
           {[{icon:'⚡',label:'Energy System'},{icon:'⏱️',label:'Time Pressure'},{icon:'🏆',label:'Survival Score'}].map(t=>(
-            <div key={t.label} style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px',border:'1px solid rgba(36,63,82,0.65)',textAlign:'center'}}>
+            <div key={t.label} style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px',border:'1px solid rgba(10,132,255,0.12)',textAlign:'center'}}>
               <div style={{fontSize:20,marginBottom:4}}>{t.icon}</div>
               <div style={{fontSize:9,color:C.muted,fontWeight:700}}>{t.label}</div>
             </div>
@@ -390,7 +390,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
             <div style={{fontSize:11,color:C.sub}}>{cc.dept} · {cc.patient}</div>
           </div>
         </div>
-        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
+        <div style={{background:'rgba(255,255,255,0.92)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(10,132,255,0.12)'}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 SITUATION</div>
           <div style={{fontSize:13,color:'#0A1628',lineHeight:1.75}}>{cc.presentation}</div>
         </div>
@@ -405,7 +405,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       )}
 
       <button onClick={startCase}
-        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${cc.color},${cc.color}bb)`,color:'var(--text-primary, white)',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${cc.color}44`,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+        style={{width:'100%',padding:'16px',borderRadius:18,border:'none',background:`linear-gradient(135deg,${cc.color},${cc.color}bb)`,color:'#0A1628',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:`0 6px 24px ${cc.color}44`,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
         <span>▶ Respond Now</span>
         <span style={{fontSize:12,opacity:0.8}}>({cc.timeLimit}s to decide)</span>
       </button>
@@ -494,7 +494,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{fontSize:13,color:C.sub,marginBottom:24}}>You lasted {caseIdx+1}/{sc.cases.length} cases · +{totalXP} XP</div>
       <div style={{display:'flex',gap:10,justifyContent:'center'}}>
         <button onClick={()=>startShift(sc)} style={{padding:'14px 24px',borderRadius:16,border:'1px solid rgba(255,69,58,0.3)',background:'rgba(255,69,58,0.1)',color:'#ff453a',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
+        <button onClick={()=>setPhase('menu')} style={{padding:'14px 24px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:700,cursor:'pointer'}}>📋 Shifts</button>
       </div>
     </div>
   )
@@ -530,7 +530,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
 
         <div style={{display:'flex',gap:10,marginTop:16}}>
           <button onClick={()=>startShift(sc)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${sc.color}30`,background:`${sc.color}10`,color:sc.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
+          <button onClick={()=>setPhase('menu')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>🌙 All Shifts</button>
         </div>
       </div>
     )

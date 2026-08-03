@@ -39,7 +39,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
 
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(255,214,10,0.12),rgba(255,159,10,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(255,214,10,0.2)'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(255,214,10,0.2)'}}>
         <div style={{fontSize:11,color:'rgba(255,214,10,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🩻 RADIOLOGY</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Radiology Interpretation</div>
         <div style={{fontSize:13,color:C.sub}}>CXR · CT patterns · Clinical context</div>
@@ -86,7 +86,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCXR===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{f.causes}</div></div>
+              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(10,132,255,0.12)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{f.causes}</div></div>
               <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
             </div>
           )}
@@ -116,7 +116,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCT===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{p.meaning}</div></div>
+              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(10,132,255,0.12)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{p.meaning}</div></div>
               <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
             </div>
           )}

@@ -182,7 +182,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
   // ── INTRO ──
   if (phase === 'intro') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.12),rgba(10,132,255,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.25),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🕵️ NEW MODE</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>

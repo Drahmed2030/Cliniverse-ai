@@ -34,11 +34,11 @@ export default function LabsReference() {
   return (
     <div style={{padding:'0 16px',paddingBottom:100}}>
       <div style={{marginBottom:16}}>
-        <div style={{fontSize:20,fontWeight:900,color:'var(--text-primary, white)',marginBottom:4}}>🧪 Labs Reference</div>
+        <div style={{fontSize:20,fontWeight:900,color:'#0A1628',marginBottom:4}}>🧪 Labs Reference</div>
         <div style={{fontSize:12,color:'rgba(10,22,40,0.55)'}}>Normal ranges · Updated 2026</div>
       </div>
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search lab test..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'#0A1628',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:16,paddingBottom:4,scrollbarWidth:'none'}}>
         {CATS.map(c=>(
           <button key={c} onClick={()=>setCat(c)}
@@ -52,12 +52,12 @@ export default function LabsReference() {
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:8}}>
           {filtered.map(lab=>(
-            <div key={lab.id} style={{background:'rgba(255,255,255,0.88)',borderRadius:16,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)',display:'flex',alignItems:'center',gap:12}}>
+            <div key={lab.id} style={{background:'rgba(255,255,255,0.88)',borderRadius:16,padding:'12px 14px',border:'1px solid rgba(10,132,255,0.12)',display:'flex',alignItems:'center',gap:12}}>
               <div style={{width:40,height:40,borderRadius:12,background:(COLORS[lab.category]||'#00C4B4')+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
                 <div style={{width:8,height:8,borderRadius:'50%',background:COLORS[lab.category]||'#00C4B4'}}/>
               </div>
               <div style={{flex:1}}>
-                <div style={{fontSize:14,fontWeight:700,color:'var(--text-primary, white)',marginBottom:2}}>{lab.name}</div>
+                <div style={{fontSize:14,fontWeight:700,color:'#0A1628',marginBottom:2}}>{lab.name}</div>
                 <div style={{fontSize:11,color:'rgba(10,22,40,0.55)'}}>{lab.category}</div>
               </div>
               <div style={{textAlign:'right'}}>

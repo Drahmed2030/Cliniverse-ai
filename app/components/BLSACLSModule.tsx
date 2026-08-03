@@ -143,7 +143,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           <span style={{fontSize:11}}>🫀</span>
           <span style={{fontSize:11,fontWeight:800,color:'#ff453a',letterSpacing:1}}>AHA 2020 GUIDELINES</span>
         </div>
-        <h1 style={{fontSize:26,fontWeight:900,color:'var(--text-primary, white)',margin:'0 0 4px',letterSpacing:-0.5}}>BLS / ACLS</h1>
+        <h1 style={{fontSize:26,fontWeight:900,color:'#0A1628',margin:'0 0 4px',letterSpacing:-0.5}}>BLS / ACLS</h1>
         <p style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',margin:0}}>Interactive algorithms · Drug reference · Quiz</p>
       </div>
 
@@ -154,7 +154,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           style={{...card,...glow(a.color),cursor:'pointer',display:'flex',alignItems:'center',gap:14,marginBottom:8}}>
           <div style={{width:50,height:50,borderRadius:15,background:`${a.color}20`,border:`1px solid ${a.color}35`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0}}>{a.icon}</div>
           <div style={{flex:1}}>
-            <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)',marginBottom:2}}>{a.title}</div>
+            <div style={{fontSize:15,fontWeight:800,color:'#0A1628',marginBottom:2}}>{a.title}</div>
             <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginBottom:4}}>{a.subtitle}</div>
             <div style={{display:'flex',gap:6}}>
               <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:`${a.color}20`,color:a.color,fontWeight:700,border:`1px solid ${a.color}30`}}>{a.steps.length} steps</span>
@@ -168,22 +168,22 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
       {/* Quick Reference */}
       <div style={{fontSize:10,color:'var(--text-secondary,rgba(10,22,40,0.55))',letterSpacing:2,textTransform:'uppercase',fontWeight:700,margin:'16px 0 10px'}}>Quick Reference</div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
-        <div onClick={()=>setView('h5t5')} style={{background:'linear-gradient(145deg,rgba(255,69,58,0.12),rgba(0,196,180,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,69,58,0.2)',cursor:'pointer',boxShadow:'0 4px 20px rgba(255,69,58,0.1)'}}>
+        <div onClick={()=>setView('h5t5')} style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,69,58,0.2)',cursor:'pointer',boxShadow:'0 4px 20px rgba(255,69,58,0.1)'}}>
           <div style={{fontSize:32,marginBottom:8}}>🔍</div>
-          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>5H · 5T</div>
+          <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>5H · 5T</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:3}}>Reversible causes of arrest</div>
         </div>
-        <div onClick={()=>setView('drugs')} style={{background:'linear-gradient(145deg,rgba(0,196,180,0.12),rgba(48,209,88,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(0,196,180,0.20)',cursor:'pointer',boxShadow:'0 4px 20px rgba(0,196,180,0.10)'}}>
+        <div onClick={()=>setView('drugs')} style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(0,196,180,0.20)',cursor:'pointer',boxShadow:'0 4px 20px rgba(0,196,180,0.10)'}}>
           <div style={{fontSize:32,marginBottom:8}}>💊</div>
-          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>Drug Doses</div>
+          <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>Drug Doses</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:3}}>8 ACLS drugs & doses</div>
         </div>
       </div>
       <div onClick={()=>{setView('quiz');setQIdx(0);setAns(null);setScore(0)}}
-        style={{background:'linear-gradient(135deg,rgba(255,214,10,0.12),rgba(255,107,53,0.08))',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,214,10,0.25)',cursor:'pointer',display:'flex',alignItems:'center',gap:14,boxShadow:'0 4px 20px rgba(255,214,10,0.1)'}}>
+        style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:20,padding:'18px 16px',border:'1px solid rgba(255,214,10,0.25)',cursor:'pointer',display:'flex',alignItems:'center',gap:14,boxShadow:'0 4px 20px rgba(255,214,10,0.1)'}}>
         <div style={{fontSize:36}}>🧠</div>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>ACLS Quiz</div>
+          <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>ACLS Quiz</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:3}}>8 clinical questions · Earn up to +80 XP</div>
         </div>
         <div style={{fontSize:22,color:'rgba(255,214,10,0.4)'}}>›</div>
@@ -200,7 +200,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
           <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:16,fontWeight:800,color:'var(--text-primary, white)'}}>{algo.icon} {algo.title}</div>
+            <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>{algo.icon} {algo.title}</div>
             <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{algo.subtitle}</div>
           </div>
         </div>
@@ -230,13 +230,13 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
               <span style={{fontSize:10,color:algo.color,fontWeight:800,letterSpacing:0.5}}>CRITICAL ACTION</span>
             </div>
           )}
-          <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary, white)',marginBottom:10,letterSpacing:-0.5,lineHeight:1.3}}>{s.id}. {s.action}</div>
+          <div style={{fontSize:22,fontWeight:900,color:'#0A1628',marginBottom:10,letterSpacing:-0.5,lineHeight:1.3}}>{s.id}. {s.action}</div>
           <div style={{fontSize:14,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.85}}>{s.detail}</div>
 
           {s.drug&&(
             <div style={{background:'rgba(255,214,10,0.08)',borderRadius:14,padding:'12px 14px',marginTop:14,border:'1px solid rgba(255,214,10,0.2)'}}>
               <div style={{fontSize:10,color:'#ffd60a',fontWeight:700,marginBottom:4,letterSpacing:0.5}}>💊 DRUG</div>
-              <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)'}}>{s.drug}</div>
+              <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{s.drug}</div>
               <div style={{fontSize:13,color:'rgba(255,214,10,0.9)',marginTop:2,fontWeight:600}}>{s.dose}</div>
             </div>
           )}
@@ -244,7 +244,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           {s.timer&&(
             <div style={{marginTop:12,display:'flex',alignItems:'center',gap:10}}>
               <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>⏱ {s.timer}s suggested</div>
-              <button onClick={()=>setTimerOn(!timerOn)} style={{padding:'6px 14px',borderRadius:10,border:'none',background:timerOn?'#ff453a':'#30d158',color:'var(--text-primary, white)',fontSize:11,fontWeight:700,cursor:'pointer',boxShadow:timerOn?'0 4px 12px rgba(255,69,58,0.4)':'0 4px 12px rgba(48,209,88,0.4)'}}>
+              <button onClick={()=>setTimerOn(!timerOn)} style={{padding:'6px 14px',borderRadius:10,border:'none',background:timerOn?'#ff453a':'#30d158',color:'#0A1628',fontSize:11,fontWeight:700,cursor:'pointer',boxShadow:timerOn?'0 4px 12px rgba(255,69,58,0.4)':'0 4px 12px rgba(48,209,88,0.4)'}}>
                 {timerOn?'⏹ Stop':'▶ Start'}
               </button>
             </div>
@@ -263,8 +263,8 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>setStep(s=>Math.max(0,s-1))} disabled={step===0} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(0,196,180,0.20)',background:'var(--bg-card,rgba(255,255,255,0.88))',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:14,fontWeight:700,cursor:'pointer',opacity:step===0?0.3:1}}>← Prev</button>
           {step<algo.steps.length-1
-            ? <button onClick={()=>setStep(s=>s+1)} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${algo.color},${algo.color}bb)`,color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${algo.color}44`}}>Next Step →</button>
-            : <button onClick={()=>{onXP&&onXP(60);setView('menu')}} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>✅ Complete +60 XP</button>
+            ? <button onClick={()=>setStep(s=>s+1)} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:`linear-gradient(135deg,${algo.color},${algo.color}bb)`,color:'#0A1628',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:`0 6px 20px ${algo.color}44`}}>Next Step →</button>
+            : <button onClick={()=>{onXP&&onXP(60);setView('menu')}} style={{flex:2,padding:'14px',borderRadius:16,border:'none',background:'var(--bg-base,#F7F9FC)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.4)'}}>✅ Complete +60 XP</button>
           }
         </div>
       </div>
@@ -277,7 +277,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
         <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
-          <div style={{fontSize:18,fontWeight:900,color:'var(--text-primary, white)'}}>🔍 5H · 5T</div>
+          <div style={{fontSize:18,fontWeight:900,color:'#0A1628'}}>🔍 5H · 5T</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Reversible causes of cardiac arrest</div>
         </div>
       </div>
@@ -285,7 +285,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.75}}>Always consider during arrest. Treat simultaneously with CPR. Finding and fixing these = best chance of ROSC.</div>
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-        <div style={{background:'linear-gradient(145deg,rgba(255,69,58,0.1),rgba(255,69,58,0.03))',borderRadius:22,padding:16,border:'1px solid rgba(255,69,58,0.2)',boxShadow:'0 4px 20px rgba(255,69,58,0.08)'}}>
+        <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:16,border:'1px solid rgba(255,69,58,0.2)',boxShadow:'0 4px 20px rgba(255,69,58,0.08)'}}>
           <div style={{fontSize:16,fontWeight:900,color:'#ff453a',marginBottom:14,letterSpacing:0.5}}>5H</div>
           {H5.map((h,i)=>(
             <div key={h} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
@@ -294,7 +294,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
             </div>
           ))}
         </div>
-        <div style={{background:'linear-gradient(145deg,rgba(139,92,246,0.1),rgba(139,92,246,0.03))',borderRadius:22,padding:16,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 4px 20px rgba(0,196,180,0.08)'}}>
+        <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:16,border:'1px solid rgba(139,92,246,0.3)',boxShadow:'0 4px 20px rgba(0,196,180,0.08)'}}>
           <div style={{fontSize:16,fontWeight:900,color:'#bf5af2',marginBottom:14,letterSpacing:0.5}}>5T</div>
           {T5.map((t,i)=>(
             <div key={t} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
@@ -313,7 +313,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
         <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
-          <div style={{fontSize:18,fontWeight:900,color:'var(--text-primary, white)'}}>💊 ACLS Drug Reference</div>
+          <div style={{fontSize:18,fontWeight:900,color:'#0A1628'}}>💊 ACLS Drug Reference</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Doses & indications</div>
         </div>
       </div>
@@ -321,11 +321,11 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         <div key={d.name} style={{background:'rgba(255,255,255,0.92)',borderRadius:18,padding:'14px 16px',marginBottom:8,border:`1px solid ${d.color}20`,boxShadow:`0 4px 16px ${d.color}08`}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
             <div style={{width:10,height:10,borderRadius:'50%',background:d.color,boxShadow:`0 0 10px ${d.color}`,flexShrink:0}}/>
-            <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>{d.name}</div>
+            <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>{d.name}</div>
           </div>
           <div style={{background:`${d.color}12`,borderRadius:12,padding:'10px 12px',marginBottom:8,border:`1px solid ${d.color}25`}}>
             <div style={{fontSize:9,color:d.color,fontWeight:700,marginBottom:3,letterSpacing:0.8}}>DOSE</div>
-            <div style={{fontSize:13,color:'var(--text-primary, white)',fontWeight:700}}>{d.dose}</div>
+            <div style={{fontSize:13,color:'#0A1628',fontWeight:700}}>{d.dose}</div>
           </div>
           <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',lineHeight:1.5}}>{d.ind}</div>
         </div>
@@ -338,13 +338,13 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
     if(qIdx>=QUIZ.length) return (
       <div style={{fontFamily:'-apple-system,sans-serif',textAlign:'center',padding:'40px 20px'}}>
         <div style={{fontSize:64,marginBottom:16,filter:`drop-shadow(0 0 24px ${score>=6?'rgba(255,214,10,0.6)':'rgba(255,69,58,0.4)'})`}}>{score>=6?'🏆':score>=4?'🎖️':'📚'}</div>
-        <div style={{fontSize:36,fontWeight:900,color:'var(--text-primary, white)',marginBottom:8,letterSpacing:-1}}>{score}/{QUIZ.length}</div>
+        <div style={{fontSize:36,fontWeight:900,color:'#0A1628',marginBottom:8,letterSpacing:-1}}>{score}/{QUIZ.length}</div>
         <div style={{fontSize:16,fontWeight:700,marginBottom:6,color:score>=6?'#30d158':score>=4?'#ff9f0a':'#ff453a'}}>
           {score>=6?'ACLS Ready! 🚀':score>=4?'Good — Review weak areas':'Study the algorithms'}
         </div>
         <div style={{fontSize:13,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginBottom:28}}>{score*10} XP earned</div>
         <div style={{display:'flex',gap:10}}>
-          <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(255,255,255,0.88)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
+          <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(255,255,255,0.88)',color:'#0A1628',fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
           <button onClick={()=>{onXP&&onXP(score*10);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,214,10,0.4)'}}>+{score*10} XP ✓</button>
         </div>
       </div>
@@ -356,7 +356,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
           <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>🧠 ACLS Quiz</div>
+            <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>🧠 ACLS Quiz</div>
             <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Q {qIdx+1}/{QUIZ.length} · Score: {score}</div>
           </div>
           <div style={{fontSize:13,fontWeight:700,color:'#ffd60a'}}>{score*10} XP</div>
@@ -367,7 +367,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         </div>
 
         <div style={{background:'rgba(255,255,255,0.92)',borderRadius:18,padding:'18px 16px',marginBottom:12,border:'1px solid rgba(255,255,255,0.18)'}}>
-          <div style={{fontSize:15,fontWeight:700,color:'var(--text-primary, white)',lineHeight:1.7}}>{q.q}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'#0A1628',lineHeight:1.7}}>{q.q}</div>
         </div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>

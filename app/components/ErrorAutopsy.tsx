@@ -193,7 +193,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
   // ── MENU ──
   if (phase === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(255,69,58,0.12),rgba(0,196,180,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,69,58,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(255,69,58,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>💀 NEW MODE</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Error Autopsy</div>
@@ -263,7 +263,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div>
           <div style={{fontSize:10,color:C.muted,letterSpacing:2,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>Tap events to explore</div>
           <div style={{position:'relative'}}>
-            <div style={{position:'absolute',left:20,top:0,bottom:0,width:2,background:'linear-gradient(180deg,rgba(255,69,58,0.4),rgba(139,92,246,0.3))',borderRadius:1}}/>
+            <div style={{position:'absolute',left:20,top:0,bottom:0,width:2,background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:1}}/>
             {c.timeline.map((ev,i)=>(
               <div key={ev.id} onClick={()=>setExpandedEvent(expandedEvent===ev.id?null:ev.id)}
                 style={{display:'flex',gap:14,marginBottom:12,cursor:'pointer',position:'relative'}}>
@@ -336,7 +336,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
       const xpEarned = Math.round((score/c.questions.length)*c.xpReward)
       return (
         <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-          <div style={{background:'linear-gradient(145deg,rgba(48,209,88,0.1),rgba(10,132,255,0.08))',borderRadius:24,padding:'28px 20px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',textAlign:'center'}}>
+          <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:24,padding:'28px 20px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',textAlign:'center'}}>
             <div style={{fontSize:60,marginBottom:12}}>{pct>=80?'🛡️':pct>=60?'📚':'🔄'}</div>
             <div style={{fontSize:26,fontWeight:900,color:'#0A1628',marginBottom:4}}>{pct}%</div>
             <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:4}}>{pct>=80?'Patient Safety Champion!':pct>=60?'Good — keep learning':'Review the case again'}</div>

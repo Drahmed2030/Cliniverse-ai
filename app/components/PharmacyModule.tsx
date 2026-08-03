@@ -58,7 +58,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
 
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-      <div style={{background:'linear-gradient(135deg,rgba(48,209,88,0.12),rgba(10,132,255,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',position:'relative',overflow:'hidden'}}>
+      <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(48,209,88,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(48,209,88,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>💊 PHARMACY</div>
         <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Clinical Pharmacology</div>
@@ -179,7 +179,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:20}}>+{xp} XP earned</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
-            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
+            <button onClick={()=>{onXP&&onXP(xp);setView('menu')}} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer'}}>+{xp} XP ✓</button>
           </div>
         </div>
       )
@@ -222,7 +222,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
               <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{q.explain}</div>
             </div>
-            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.35)'}}>
+            <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#30d158,#0a84ff)',color:'#0A1628',fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(48,209,88,0.35)'}}>
               {qIdx<QUIZ_Q.length-1?'Next →':'Results 🏆'}
             </button>
           </div>

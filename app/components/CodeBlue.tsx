@@ -339,7 +339,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
               <ScenarioIcon iconName={scenario.icon} color={scenario.color} size={40}/>
             </div>
           </div>
-          <h3 style={{ fontSize:18, fontWeight:800, color:'var(--text-primary, white)', textAlign:'center', marginBottom:6 }}>{scenario.title}</h3>
+          <h3 style={{ fontSize:18, fontWeight:800, color:'#0A1628', textAlign:'center', marginBottom:6 }}>{scenario.title}</h3>
           <div style={{ background:`${scenario.color}08`, borderRadius:14, padding:14, marginBottom:14, border:`1px solid ${scenario.color}20` }}>
             <div style={{ fontSize:10, color:scenario.color, fontWeight:800, marginBottom:6, letterSpacing:1 }}>📍 SCENARIO</div>
             <p style={{ fontSize:13, color:'#0A1628', lineHeight:1.7, margin:0 }}>{scenario.setting}</p>
@@ -355,7 +355,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <div style={{ fontSize:12, color:'var(--text-secondary,rgba(10,22,40,0.55))', textAlign:'center', marginBottom:14 }}>
             ⏱ <b style={{color:'#ff3b30'}}>{scenario.timeLimit}s</b> · 2 wrong = FAILED · <b style={{color:'#00C4B4'}}>+{scenario.xpReward} XP</b>
           </div>
-          <button onClick={startScenario} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${scenario.color},${scenario.color}bb)`, color:'var(--text-primary, white)', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:`0 6px 20px ${scenario.color}44` }}>
+          <button onClick={startScenario} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${scenario.color},${scenario.color}bb)`, color:'#0A1628', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:`0 6px 20px ${scenario.color}44` }}>
             🚨 Respond Now
           </button>
         </div>
@@ -425,7 +425,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
           <div style={{ display:'flex', gap:10 }}>
             <button onClick={startScenario} style={{ flex:1, padding:'14px', borderRadius:14, border:'none', background:'rgba(22,163,74,0.2)', color:'#16a34a', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Retry</button>
-            <button onClick={()=>{setScenarioIdx(i=>(i+1)%SCENARIOS.length);setPhase('intro')}} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'var(--bg-base,#F7F9FC)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>Next →</button>
+            <button onClick={()=>{setScenarioIdx(i=>(i+1)%SCENARIOS.length);setPhase('intro')}} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'var(--bg-base,#F7F9FC)', color:'#0A1628', fontSize:14, fontWeight:700, cursor:'pointer' }}>Next →</button>
           </div>
         </div>
       )}
@@ -437,7 +437,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <h3 style={{ fontSize:20, fontWeight:800, color:'#fca5a5', marginBottom:8 }}>Resuscitation Failed</h3>
           <p style={{ fontSize:14, color:'rgba(252,165,165,0.8)', lineHeight:1.7, marginBottom:14 }}>{scenario.failMessage}</p>
           <div style={{ display:'flex', gap:10 }}>
-            <button onClick={startScenario} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#ff3b30,#ff6b35)', color:'var(--text-primary, white)', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Try Again</button>
+            <button onClick={startScenario} style={{ flex:2, padding:'14px', borderRadius:14, border:'none', background:'linear-gradient(135deg,#ff3b30,#ff6b35)', color:'#0A1628', fontSize:14, fontWeight:700, cursor:'pointer' }}>🔄 Try Again</button>
             <button onClick={()=>setPhase('intro')} style={{ flex:1, padding:'14px', borderRadius:14, border:'1px solid rgba(220,38,38,0.2)', background:'transparent', color:'#dc2626', fontSize:13, fontWeight:600, cursor:'pointer' }}>Change</button>
           </div>
         </div>
