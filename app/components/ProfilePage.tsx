@@ -257,8 +257,8 @@ function PrivacyScreen({ onBack, onReset }: { onBack:()=>void; onReset:()=>void 
       <Card mb={20}>
         {[
           { icon:'📥', label:'Export My Data',   sub:'Download your clinical records' },
-          { icon:'🔗', label:'Privacy Policy',   sub:'How we handle your data' },
-          { icon:'⚖️', label:'Terms of Service', sub:'Legal agreement' },
+          { icon:'🔗', label:'Privacy Policy',   sub:'How we handle your data', onPress:()=>window.open('/privacy.html','_blank') },
+          { icon:'⚖️', label:'Terms of Service', sub:'Legal agreement', onPress:()=>window.open('/privacy.html','_blank') },
         ].map((item,i)=>(
           <div key={item.label} style={{ borderBottom: i<2 ? '1px solid rgba(10,132,255,0.09)' : 'none' }}>
             <RowItem icon={item.icon} label={item.label} sub={item.sub} onPress={()=>{}} />
