@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState , useRef } from 'react'
 
 const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 

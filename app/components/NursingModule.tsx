@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
@@ -42,6 +42,13 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   const [score, setScore] = useState(0)
   const [expandedSkill, setExpandedSkill] = useState<number|null>(null)
 
+  const _nX = React.useRef(0), _nY = React.useRef(0)
+  const nSwipe = (e: React.TouchEvent) => {
+    const dx=e.changedTouches[0].clientX-_nX.current
+    const dy=e.changedTouches[0].clientY-_nY.current
+    if(Math.abs(dx)<Math.abs(dy)*1.2) return
+    if(dx>55) setView('menu')
+  }
   if (view === 'menu') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(100,210,255,0.2)'}}>
@@ -68,7 +75,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   )
 
   if (view === 'vitals') return (
-    <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
+    <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}} onTouchStart={e=>{_nX.current=e.touches[0].clientX;_nY.current=e.touches[0].clientY}} onTouchEnd={nSwipe}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
         <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>❤️ Vital Signs Guide</div>
