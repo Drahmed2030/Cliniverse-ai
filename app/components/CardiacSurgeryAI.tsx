@@ -58,7 +58,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         </div>
       </div>
       {CASES.map(c=>(
-        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
+        <div key={c.id} onClick={()=>{setActive(c);setView('case');setStep(0);setDetail(false)}} style={{background:'rgba(255,255,255,0.88)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${c.color}22`,cursor:'pointer'}}>
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:48,height:48,borderRadius:15,background:`${c.color}18`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26}}>{c.icon}</div>
             <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>{c.title}</div><div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginTop:2}}>{c.sub}</div></div>
@@ -84,7 +84,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         <div style={{fontSize:12,color:'var(--text-secondary,rgba(10,22,40,0.55))',marginBottom:12}}>{active.scenario}</div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
           {Object.entries(active.vitals).map(([k,v])=>(
-            <div key={k} style={{background:'rgba(255,255,255,0.12)',borderRadius:12,padding:'8px 12px'}}>
+            <div key={k} style={{background:'rgba(255,255,255,0.88)',borderRadius:12,padding:'8px 12px'}}>
               <div style={{fontSize:9,color:'var(--text-secondary,rgba(10,22,40,0.55))',textTransform:'uppercase',marginBottom:2}}>{k}</div>
               <div style={{fontSize:13,fontWeight:700,color:'var(--text-primary, white)'}}>{v as string}</div>
             </div>
@@ -96,7 +96,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
           <div key={i} onClick={()=>{setStep(i);setDetail(false)}} style={{flexShrink:0,width:36,height:36,borderRadius:12,background:i===step?`${active.color}30`:i<step?'rgba(48,209,88,0.2)':'rgba(255,255,255,0.05)',border:`1.5px solid ${i===step?active.color:i<step?'rgba(48,209,88,0.5)':'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,cursor:'pointer',color:'var(--text-primary, white)'}}>{i<step?'✓':i+1}</div>
         ))}
       </div>
-      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
+      <div style={{background:'rgba(255,255,255,0.88)',borderRadius:20,padding:18,marginBottom:12,border:`1px solid ${active.color}20`}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
           <div style={{width:36,height:36,borderRadius:11,background:`${active.color}20`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{s.icon}</div>
           <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>{s.title}</div>
@@ -110,7 +110,7 @@ export default function CardiacSurgeryAI({onXP}:Props){
         <div style={{background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(139,92,246,0.3)'}}>
           {aiAnswer&&<div style={{background:'rgba(10,132,255,0.08)',borderRadius:12,padding:12,marginBottom:10,fontSize:13,color:'#0A1628',lineHeight:1.7}}><span style={{fontSize:10,color:'#00C4B4',fontWeight:700,display:'block',marginBottom:4}}>🤖 AI</span>{aiAnswer}</div>}
           <div style={{display:'flex',gap:8}}>
-            <input value={aiQ} onChange={e=>setAiQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ask()} placeholder="Ask cardiac surgery question..." style={{flex:1,padding:'11px 14px',borderRadius:13,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:13,outline:'none'}}/>
+            <input value={aiQ} onChange={e=>setAiQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ask()} placeholder="Ask cardiac surgery question..." style={{flex:1,padding:'11px 14px',borderRadius:13,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'var(--text-primary, white)',fontSize:13,outline:'none'}}/>
             <button onClick={ask} style={{width:44,height:44,borderRadius:13,border:'none',background:'var(--bg-base,#F7F9FC)',color:'var(--text-primary, white)',fontSize:18,cursor:'pointer',flexShrink:0}}>→</button>
           </div>
         </div>

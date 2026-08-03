@@ -96,7 +96,7 @@ function AddEntryModal({ onClose, onAdd }: { onClose: () => void, onAdd: (e: any
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.06))', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background:'var(--bg-card,rgba(255,255,255,0.88))', backdropFilter: 'blur(12px)', overflowY: 'auto', fontFamily: F }}>
       <div style={{ padding: '20px 16px 60px', maxWidth: 480, margin: '0 auto' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>

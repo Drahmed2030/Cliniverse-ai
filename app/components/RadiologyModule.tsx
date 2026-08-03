@@ -58,7 +58,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
         ))}
       </div>
-      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
+      <div style={{background:'rgba(255,255,255,0.88)',borderRadius:18,padding:'14px 16px',border:`1px solid ${C.border}`}}>
         <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>🎯 SYSTEMATIC CXR APPROACH</div>
         {['A — Airway: trachea midline?','B — Breathing: lung fields symmetric?','C — Cardiac: CTR, borders, shape','D — Diaphragm: right higher, no free air','E — Everything else: bones, soft tissue, lines'].map((s,i)=>(
           <div key={i} style={{display:'flex',gap:8,marginBottom:6}}>
@@ -86,7 +86,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCXR===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{f.causes}</div></div>
+              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>CAUSES</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{f.causes}</div></div>
               <div style={{background:`${f.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${f.color}25`}}><div style={{fontSize:9,color:f.color,fontWeight:700,marginBottom:3}}>NEXT STEP</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{f.nextStep}</div></div>
             </div>
           )}
@@ -116,7 +116,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
           </div>
           {expandedCT===i&&(
             <div style={{borderTop:'1px solid rgba(36,63,82,0.50)',paddingTop:10,display:'flex',flexDirection:'column',gap:8}}>
-              <div style={{background:'rgba(255,255,255,0.14)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{p.meaning}</div></div>
+              <div style={{background:'rgba(255,255,255,0.88)',borderRadius:10,padding:'10px 12px',border:'1px solid rgba(36,63,82,0.65)'}}><div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>MEANING</div><div style={{fontSize:12,color:'rgba(10,22,40,0.80)',lineHeight:1.5}}>{p.meaning}</div></div>
               <div style={{background:`${p.color}10`,borderRadius:10,padding:'10px 12px',border:`1px solid ${p.color}25`}}><div style={{fontSize:9,color:p.color,fontWeight:700,marginBottom:3}}>ACTION</div><div style={{fontSize:12,color:'rgba(10,22,40,0.85)',lineHeight:1.5,fontWeight:600}}>{p.action}</div></div>
             </div>
           )}
@@ -157,7 +157,7 @@ export default function RadiologyModule({ onXP }:{ onXP?:(n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.55)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.88)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.55)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}

@@ -342,7 +342,7 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <h3 style={{ fontSize:18, fontWeight:800, color:'var(--text-primary, white)', textAlign:'center', marginBottom:6 }}>{scenario.title}</h3>
           <div style={{ background:`${scenario.color}08`, borderRadius:14, padding:14, marginBottom:14, border:`1px solid ${scenario.color}20` }}>
             <div style={{ fontSize:10, color:scenario.color, fontWeight:800, marginBottom:6, letterSpacing:1 }}>📍 SCENARIO</div>
-            <p style={{ fontSize:13, color:'rgba(255,255,255,0.8)', lineHeight:1.7, margin:0 }}>{scenario.setting}</p>
+            <p style={{ fontSize:13, color:'#0A1628', lineHeight:1.7, margin:0 }}>{scenario.setting}</p>
           </div>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginBottom:14 }}>
             {Object.entries(scenario.vitals).map(([k,v])=>(

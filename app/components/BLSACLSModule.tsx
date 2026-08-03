@@ -254,7 +254,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
         {/* Step pills */}
         <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:14}}>
           {algo.steps.map((_,i)=>(
-            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(255,255,255,0.88)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(255,255,255,0.25)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
+            <div key={i} onClick={()=>setStep(i)} style={{width:30,height:30,borderRadius:9,background:i===step?algo.color:i<step?`${algo.color}35`:'rgba(255,255,255,0.88)',border:`1px solid ${i===step?algo.color:i<step?`${algo.color}40`:'rgba(255,255,255,0.18)'}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,color:i===step?'white':i<step?algo.color:'rgba(10,22,40,0.40)',cursor:'pointer',boxShadow:i===step?`0 4px 12px ${algo.color}55`:'none',transition:'all 0.2s'}}>
               {i<step?'✓':i+1}
             </div>
           ))}
@@ -290,7 +290,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           {H5.map((h,i)=>(
             <div key={h} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:'rgba(255,69,58,0.2)',border:'1px solid rgba(255,69,58,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:'#ff453a',flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',fontWeight:600,lineHeight:1.4}}>{h}</div>
+              <div style={{fontSize:12,color:'#0A1628',fontWeight:600,lineHeight:1.4}}>{h}</div>
             </div>
           ))}
         </div>
@@ -299,7 +299,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           {T5.map((t,i)=>(
             <div key={t} style={{display:'flex',gap:10,marginBottom:12,paddingBottom:12,borderBottom:i<4?'1px solid rgba(36,63,82,0.50)':'none'}}>
               <div style={{width:24,height:24,borderRadius:8,background:'rgba(139,92,246,0.3)',border:'1px solid rgba(139,92,246,0.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:900,color:'#bf5af2',flexShrink:0}}>{i+1}</div>
-              <div style={{fontSize:12,color:'rgba(255,255,255,0.8)',fontWeight:600,lineHeight:1.4}}>{t}</div>
+              <div style={{fontSize:12,color:'#0A1628',fontWeight:600,lineHeight:1.4}}>{t}</div>
             </div>
           ))}
         </div>
@@ -393,7 +393,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
           <div>
             <div style={{background:'rgba(10,132,255,0.08)',borderRadius:14,padding:'14px 16px',marginBottom:10,border:'1px solid rgba(0,196,180,0.20)',boxShadow:'0 4px 16px rgba(10,132,255,0.08)'}}>
               <div style={{fontSize:10,color:'#00C4B4',fontWeight:700,marginBottom:6,letterSpacing:0.5}}>💡 EXPLANATION</div>
-              <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{q.explain}</div>
+              <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{q.explain}</div>
             </div>
             <button onClick={()=>{setQIdx(i=>i+1);setAns(null)}} style={{width:'100%',padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#ffd60a,#ff9f0a)',color:'black',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 6px 20px rgba(255,214,10,0.35)'}}>
               {qIdx<QUIZ.length-1?'Next Question →':'See Results 🏆'}

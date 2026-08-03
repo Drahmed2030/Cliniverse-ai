@@ -55,7 +55,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         <span style={{fontSize:10,color:'rgba(10,22,40,0.45)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
       </div>
 
-      <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
+      <div style={{background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
         <div style={{display:'flex',alignItems:'center',gap:10}}>
           <div style={{width:8,height:8,borderRadius:'50%',background:current.color,boxShadow:'0 0 8px '+current.color,flexShrink:0}}/>
           <span style={{fontSize:12,color:current.color,fontWeight:700,flexShrink:0}}>{current.flag} {current.city}</span>
@@ -99,7 +99,7 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
             <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
             <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:12}}>📋 SBAR Report</div>
             <textarea readOnly value={sbar}
-              style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(10,22,40,0.85)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
+              style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.88))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(10,22,40,0.85)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
             <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
               style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
               Copy SBAR

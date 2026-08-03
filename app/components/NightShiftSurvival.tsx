@@ -392,7 +392,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
         </div>
         <div style={{background:'rgba(255,255,255,0.92)',borderRadius:14,padding:'12px 14px',border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:10,color:C.muted,fontWeight:700,marginBottom:6,letterSpacing:0.5}}>📋 SITUATION</div>
-          <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.75}}>{cc.presentation}</div>
+          <div style={{fontSize:13,color:'#0A1628',lineHeight:1.75}}>{cc.presentation}</div>
         </div>
       </div>
 
@@ -400,7 +400,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       {showTip&&(
         <div style={{background:'rgba(255,214,10,0.08)',borderRadius:14,padding:'12px 14px',marginBottom:14,border:'1px solid rgba(255,214,10,0.2)'}}>
           <div style={{fontSize:10,color:'#ffd60a',fontWeight:700,marginBottom:4}}>💡 NIGHT TIP</div>
-          <div style={{fontSize:12,color:'rgba(255,255,255,0.7)',lineHeight:1.5}}>{sc.tips[caseIdx % sc.tips.length]}</div>
+          <div style={{fontSize:12,color:'rgba(10,22,40,0.70)',lineHeight:1.5}}>{sc.tips[caseIdx % sc.tips.length]}</div>
         </div>
       )}
 
@@ -443,7 +443,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{background:`${cc.color}10`,borderRadius:18,padding:'14px',marginBottom:12,border:`1px solid ${cc.color}25`}}>
         <div style={{fontSize:11,color:cc.color,fontWeight:700,marginBottom:4}}>{cc.icon} {cc.time} · {cc.dept}</div>
         <div style={{fontSize:14,fontWeight:800,color:C.text,marginBottom:6}}>{cc.title} — {cc.patient}</div>
-        <div style={{fontSize:13,color:'rgba(255,255,255,0.8)',lineHeight:1.7}}>{cc.presentation}</div>
+        <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{cc.presentation}</div>
       </div>
 
       {/* Feedback */}
@@ -524,7 +524,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
         {sc.tips.map((tip,i)=>(
           <div key={i} style={{display:'flex',gap:10,marginBottom:8,background:C.card,borderRadius:12,padding:'12px 14px',border:`1px solid ${C.border}`}}>
             <span style={{color:'#ffd60a',flexShrink:0}}>💡</span>
-            <span style={{fontSize:12,color:'rgba(255,255,255,0.8)',lineHeight:1.6}}>{tip}</span>
+            <span style={{fontSize:12,color:'#0A1628',lineHeight:1.6}}>{tip}</span>
           </div>
         ))}
 

@@ -44,7 +44,7 @@ export default function Guidelines() {
       </div>
 
       <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search guidelines..."
-        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.12)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
+        style={{width:'100%',padding:'12px 16px',borderRadius:14,border:'1px solid rgba(0,196,180,0.20)',background:'rgba(255,255,255,0.88)',color:'var(--text-primary, white)',fontSize:14,outline:'none',marginBottom:12,boxSizing:'border-box',fontFamily:'inherit'}}/>
 
       <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:16,paddingBottom:4,scrollbarWidth:'none'}}>
         {SPECS.map(s=>(
@@ -61,7 +61,7 @@ export default function Guidelines() {
         <div style={{display:'flex',flexDirection:'column',gap:10}}>
           {filtered.map(g=>(
             <div key={g.id} onClick={()=>setExpanded(expanded===g.id?null:g.id)}
-              style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:16,border:'1px solid '+(COLORS[g.specialty]||'#00C4B4')+'20',cursor:'pointer',transition:'all 0.2s'}}>
+              style={{background:'rgba(255,255,255,0.88)',borderRadius:18,padding:16,border:'1px solid '+(COLORS[g.specialty]||'#00C4B4')+'20',cursor:'pointer',transition:'all 0.2s'}}>
               <div style={{display:'flex',alignItems:'flex-start',gap:12}}>
                 <div style={{width:44,height:44,borderRadius:13,background:(COLORS[g.specialty]||'#00C4B4')+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>
                   {g.specialty==='Cardiology'?'🫀':g.specialty==='Critical Care'?'🏥':g.specialty==='Respiratory'?'🫁':g.specialty==='Endocrine'?'💉':g.specialty==='Neurology'?'🧠':'⚕️'}
@@ -70,7 +70,7 @@ export default function Guidelines() {
                   <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:4}}>{g.title}</div>
                   <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
                     <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:(COLORS[g.specialty]||'#00C4B4')+'15',color:COLORS[g.specialty]||'#00C4B4',fontWeight:700}}>{g.specialty}</span>
-                    <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.12)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontWeight:600}}>{g.source} {g.year}</span>
+                    <span style={{fontSize:10,padding:'2px 8px',borderRadius:8,background:'rgba(255,255,255,0.88)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontWeight:600}}>{g.source} {g.year}</span>
                   </div>
                 </div>
                 <span style={{color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:18,transition:'transform 0.2s',transform:expanded===g.id?'rotate(90deg)':'none'}}>›</span>

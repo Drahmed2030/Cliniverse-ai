@@ -59,7 +59,7 @@ const CARD_STYLES = [
     label:'Floating',
     desc:'Depth · Elevated shadow',
     icon:'🃏',
-    preview:{ background:'#1a3050', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:20, boxShadow:'0 12px 36px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.30)' },
+    preview:{ background:'#1a3050', border:'1px solid var(--border-card,rgba(10,132,255,0.10))', borderRadius:20, boxShadow:'0 12px 36px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.30)' },
   },
 ]
 
@@ -181,7 +181,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
       {/* Header */}
       <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
         {onClose && (
-          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', border:'1px solid var(--border-card,rgba(255,255,255,0.12))', borderRadius:12, padding:'9px 16px', color:'var(--text-secondary,rgba(242,248,252,0.72))', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
+          <button onClick={onClose} style={{ background:'var(--bg-card-2,rgba(255,255,255,0.07))', border:'1px solid var(--border-card,rgba(10,132,255,0.10))', borderRadius:12, padding:'9px 16px', color:'var(--text-secondary,rgba(242,248,252,0.72))', fontSize:13, fontWeight:700, cursor:'pointer', fontFamily:F }}>← Back</button>
         )}
         <div>
           <div style={{ fontSize:10, color:'rgba(0,200,184,0.85)', fontWeight:700, letterSpacing:1.5, marginBottom:3 }}>APPEARANCE</div>
@@ -192,7 +192,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
       </div>
 
       {/* Tabs */}
-      <div style={{ display:'flex', gap:5, background:'var(--bg-card,rgba(255,255,255,0.05))', borderRadius:16, padding:4, marginBottom:18, border:'1px solid var(--border-card,rgba(255,255,255,0.08))' }}>
+      <div style={{ display:'flex', gap:5, background:'var(--bg-card,rgba(255,255,255,0.88))', borderRadius:16, padding:4, marginBottom:18, border:'1px solid var(--border-card,rgba(10,132,255,0.10))' }}>
         {([['text','Aa Text'],['cards','⬛ Cards'],['layout','📐 Layout'],['effects','✨ Effects']] as [string,string][]).map(([id,label])=>(
           <button key={id} onClick={()=>setTab(id as any)} style={{
             flex:1, padding:'9px 2px', cursor:'pointer', borderRadius:12, fontFamily:F,
@@ -240,7 +240,7 @@ export default function AppearanceSettings({ onClose }: { onClose?: ()=>void }) 
           </div>
 
           {/* Live preview */}
-          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.04))', border:'1px solid var(--border-card,rgba(255,255,255,0.08))', borderRadius:16, padding:'14px', marginTop:12 }}>
+          <div style={{ background:'var(--bg-card,rgba(255,255,255,0.88))', border:'1px solid var(--border-card,rgba(10,132,255,0.10))', borderRadius:16, padding:'14px', marginTop:12 }}>
             <div style={{ fontSize:9, color:'var(--text-muted, rgba(242,248,252,0.40))', fontWeight:700, letterSpacing:1, marginBottom:8 }}>PREVIEW</div>
             <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:14*( TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), fontWeight:800, color:'var(--text-primary, #F2F8FC)', marginBottom:4 }}>Clinical Excellence</div>
             <div style={{ ...FONTS.find(f=>f.id===s.font)?.style, fontSize:12*(TEXT_SIZES.find(t=>t.id===s.textSize)?.scale||1), color:'var(--text-secondary, rgba(242,248,252,0.60))' }}>Medical Intelligence Platform · 2026</div>

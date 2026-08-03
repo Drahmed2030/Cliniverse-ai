@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
 const T = {
-  glass:  'var(--bg-card,rgba(255,255,255,0.07))',
-  glass2: 'var(--bg-card,rgba(255,255,255,0.04))',
-  border: 'var(--border-card,rgba(255,255,255,0.10))',
+  glass:  'var(--bg-card,rgba(255,255,255,0.88))',
+  glass2: 'var(--bg-card,rgba(255,255,255,0.88))',
+  border: 'var(--border-card,rgba(10,132,255,0.10))',
   t1: '#F2F8FC',
   t2: 'rgba(242,248,252,0.75)',
   t3: 'rgba(242,248,252,0.50)',
@@ -213,7 +213,7 @@ export default function WeeklyClinicalPearl({ onXP }: { onXP?: (n:number)=>void 
         </div>
 
         {/* Pearl text */}
-        <div style={{background:'var(--bg-card,rgba(255,255,255,0.04))',border:`1px solid rgba(255,255,255,0.08)`,borderRadius:14,padding:'14px',marginBottom:12,position:'relative',zIndex:1}}>
+        <div style={{background:'var(--bg-card,rgba(255,255,255,0.88))',border:`1px solid rgba(255,255,255,0.08)`,borderRadius:14,padding:'14px',marginBottom:12,position:'relative',zIndex:1}}>
           <div style={{fontSize:13,color:T.t2,lineHeight:1.75}}>{pearl.pearl}</div>
         </div>
 

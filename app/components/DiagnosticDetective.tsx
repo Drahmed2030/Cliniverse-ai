@@ -188,15 +188,15 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Order investigations wisely. Every test costs money. Diagnose accurately with the least spend to maximise your score.</div>
         <div style={{display:'flex',gap:8}}>
-          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.88)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>💰</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Budget System</div>
           </div>
-          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.88)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🔬</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Order Tests</div>
           </div>
-          <div style={{flex:1,background:'rgba(255,255,255,0.14)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
+          <div style={{flex:1,background:'rgba(255,255,255,0.88)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
             <div style={{fontSize:18}}>🏆</div>
             <div style={{fontSize:10,color:C.muted,fontWeight:700,marginTop:4}}>Diagnose</div>
           </div>
@@ -270,7 +270,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
             <span style={{fontSize:12,color:C.sub,fontWeight:600}}>💰 Remaining Budget</span>
             <span style={{fontSize:14,fontWeight:800,color:budgetColor}}>{budget} pts</span>
           </div>
-          <div style={{height:6,background:'rgba(255,255,255,0.12)',borderRadius:3,overflow:'hidden'}}>
+          <div style={{height:6,background:'rgba(255,255,255,0.88)',borderRadius:3,overflow:'hidden'}}>
             <div style={{height:'100%',width:`${budgetPct}%`,background:`linear-gradient(90deg,${budgetColor},${budgetColor}aa)`,borderRadius:3,transition:'width 0.4s ease',boxShadow:`0 0 10px ${budgetColor}88`}}/>
           </div>
           <div style={{fontSize:10,color:C.muted,marginTop:4}}>{ordered.length} tests ordered · {c.budget - budget} pts spent</div>

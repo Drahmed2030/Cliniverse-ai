@@ -5,9 +5,9 @@ import { supabase } from '../supabase'
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
 const T = {
-  glass:  'var(--bg-card,rgba(255,255,255,0.07))',
-  glass2: 'var(--bg-card,rgba(255,255,255,0.04))',
-  border: 'var(--border-card,rgba(255,255,255,0.12))',
+  glass:  'var(--bg-card,rgba(255,255,255,0.88))',
+  glass2: 'var(--bg-card,rgba(255,255,255,0.88))',
+  border: 'var(--border-card,rgba(10,132,255,0.10))',
   text:   'var(--text-primary,#EEF6FA)',
   sub:    'var(--text-secondary,rgba(238,246,250,0.72))',
   muted:  'var(--text-muted,rgba(238,246,250,0.50))',

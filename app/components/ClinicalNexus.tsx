@@ -115,11 +115,11 @@ export default function ClinicalNexus({ onXP }:Props) {
         </div>
         <div style={{fontSize:13,color:active.color,fontWeight:700,letterSpacing:1,marginBottom:8}}>{active.tag}</div>
         <div style={{fontSize:22,fontWeight:900,color:'var(--text-primary, white)',marginBottom:14,letterSpacing:-0.5}}>{active.title}</div>
-        <div style={{background:'rgba(255,255,255,0.14)',borderRadius:16,padding:16,border:'1px solid rgba(36,63,82,0.65)'}}>
+        <div style={{background:'rgba(255,255,255,0.88)',borderRadius:16,padding:16,border:'1px solid rgba(36,63,82,0.65)'}}>
           <div style={{fontSize:14,color:'rgba(10,22,40,0.85)',lineHeight:1.8}}>{active.intro}</div>
         </div>
       </div>
-      <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:16,marginBottom:16,border:'1px solid rgba(36,63,82,0.60)'}}>
+      <div style={{background:'rgba(255,255,255,0.88)',borderRadius:18,padding:16,marginBottom:16,border:'1px solid rgba(36,63,82,0.60)'}}>
         <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))',letterSpacing:1.5,marginBottom:10,fontWeight:700}}>YOUR CHALLENGE</div>
         {['Make 4 critical decisions in real-time','See how the global medical community voted','AI Attending reveals what actually happened','Your decisions affect the patient outcome'].map((t,i)=>(
           <div key={i} style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:10}}>
@@ -152,7 +152,7 @@ export default function ClinicalNexus({ onXP }:Props) {
         </div>
 
         {/* Event */}
-        <div style={{background:'rgba(255,255,255,0.14)',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(36,63,82,0.60)'}}>
+        <div style={{background:'rgba(255,255,255,0.88)',borderRadius:18,padding:16,marginBottom:12,border:'1px solid rgba(36,63,82,0.60)'}}>
           <div style={{fontSize:10,color:'var(--text-secondary,rgba(10,22,40,0.55))',letterSpacing:1.5,marginBottom:6,fontWeight:700}}>SITUATION UPDATE</div>
           <div style={{fontSize:15,fontWeight:700,color:'var(--text-primary, white)',lineHeight:1.6}}>{step.event}</div>
         </div>
@@ -184,8 +184,8 @@ export default function ClinicalNexus({ onXP }:Props) {
           <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:14}}>
             {step.opts.map((opt,i)=>(
               <button key={i} onClick={()=>{setSelected(i);if(i===step.correct)setTotalScore(p=>p+1);setShowExplain(true)}}
-                style={{background:'rgba(255,255,255,0.14)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color:'rgba(10,22,40,0.88)',textAlign:'left',cursor:'pointer',display:'flex',alignItems:'center',gap:10}}>
-                <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(255,255,255,0.12)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>{String.fromCharCode(65+i)}</div>
+                style={{background:'rgba(255,255,255,0.88)',border:'1px solid rgba(255,255,255,0.18)',borderRadius:16,padding:'14px 16px',fontSize:14,fontWeight:600,color:'rgba(10,22,40,0.88)',textAlign:'left',cursor:'pointer',display:'flex',alignItems:'center',gap:10}}>
+                <div style={{width:28,height:28,borderRadius:'50%',background:'rgba(255,255,255,0.88)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'var(--text-secondary,rgba(10,22,40,0.55))',flexShrink:0}}>{String.fromCharCode(65+i)}</div>
                 {opt}
               </button>
             ))}
@@ -213,7 +213,7 @@ export default function ClinicalNexus({ onXP }:Props) {
             </div>
 
             {/* Global vote */}
-            <button onClick={()=>setShowGlobal(p=>!p)} style={{width:'100%',padding:'10px',borderRadius:14,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(255,255,255,0.14)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:600,cursor:'pointer',marginBottom:10}}>
+            <button onClick={()=>setShowGlobal(p=>!p)} style={{width:'100%',padding:'10px',borderRadius:14,border:'1px solid rgba(255,255,255,0.18)',background:'rgba(255,255,255,0.88)',color:'var(--text-secondary,rgba(10,22,40,0.55))',fontSize:13,fontWeight:600,cursor:'pointer',marginBottom:10}}>
               🌍 See how {viewers.toLocaleString()} doctors voted {showGlobal?'▲':'▼'}
             </button>
             {showGlobal&&(
@@ -224,7 +224,7 @@ export default function ClinicalNexus({ onXP }:Props) {
                       <span style={{fontSize:12,color:i===step.correct?'#30d158':'rgba(255,255,255,0.55)'}}>{opt}</span>
                       <span style={{fontSize:12,fontWeight:700,color:i===step.correct?'#30d158':'rgba(255,255,255,0.4)'}}>{step.globalVote[i]}%</span>
                     </div>
-                    <div style={{height:6,background:'rgba(255,255,255,0.12)',borderRadius:3,overflow:'hidden'}}>
+                    <div style={{height:6,background:'rgba(255,255,255,0.88)',borderRadius:3,overflow:'hidden'}}>
                       <div style={{height:'100%',background:i===step.correct?'#30d158':'rgba(255,255,255,0.12)',width:`${step.globalVote[i]}%`,borderRadius:3,transition:'width 0.8s ease'}}/>
                     </div>
                   </div>

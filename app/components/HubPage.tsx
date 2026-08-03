@@ -309,7 +309,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
           {/* Tags */}
           <div style={{display:'flex',gap:7,marginTop:12}}>
             {['2h/day saved','SOAP format','Arabic + English'].map(tag=>(
-              <span key={tag} style={{fontSize:10,color:D.t2,background:'var(--bg-card,rgba(255,255,255,0.06))',border:`1px solid ${D.border}`,borderRadius:8,padding:'3px 9px',fontWeight:600}}>{tag}</span>
+              <span key={tag} style={{fontSize:10,color:D.t2,background:'var(--bg-card,rgba(255,255,255,0.88))',border:`1px solid ${D.border}`,borderRadius:8,padding:'3px 9px',fontWeight:600}}>{tag}</span>
             ))}
           </div>
         </div>
@@ -348,7 +348,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
             {/* Case of the Day — 2/3 width */}
             <div onClick={()=>{setShowLive(true);onXP(5)}} style={{
               flex:2,
-              background:'var(--bg-card,rgba(255,255,255,0.05))',
+              background:'var(--bg-card,rgba(255,255,255,0.88))',
               backdropFilter:'blur(40px) saturate(180%)',
               WebkitBackdropFilter:'blur(40px) saturate(180%)',
               border:'1px solid rgba(255,69,58,0.20)',
@@ -469,7 +469,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
             ].map(c=>(
               <div key={c.label} style={{
                 flex:1,
-                background:'var(--bg-card,rgba(255,255,255,0.04))',
+                background:'var(--bg-card,rgba(255,255,255,0.88))',
                 backdropFilter:'blur(24px) saturate(160%)',
                 WebkitBackdropFilter:'blur(24px) saturate(160%)',
                 border:`1px solid ${c.color}20`,

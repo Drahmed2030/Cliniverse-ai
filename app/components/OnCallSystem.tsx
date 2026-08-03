@@ -125,7 +125,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
         {/* Rotating tip */}
         <div style={{background:'rgba(255,255,255,0.92)',borderRadius:12,padding:'10px 12px',marginTop:12,border:'1px solid rgba(36,63,82,0.65)'}}>
-          <div style={{fontSize:12,color:'rgba(255,255,255,0.6)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
+          <div style={{fontSize:12,color:'rgba(10,22,40,0.70)',lineHeight:1.5,transition:'all 0.5s'}}>{TIPS[tipIdx]}</div>
         </div>
       </div>
 
@@ -262,7 +262,7 @@ export default function OnCallSystem({ onXP }: { onXP?: (n:number)=>void }) {
               {s.tips.map((tip,i)=>(
                 <div key={i} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:i<s.tips.length-1?'1px solid rgba(36,63,82,0.50)':'none'}}>
                   <div style={{width:6,height:6,borderRadius:'50%',background:s.color,flexShrink:0,marginTop:6,boxShadow:`0 0 6px ${s.color}`}}/>
-                  <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',lineHeight:1.6}}>{tip}</div>
+                  <div style={{fontSize:12,color:'#0A1628',lineHeight:1.6}}>{tip}</div>
                 </div>
               ))}
             </div>

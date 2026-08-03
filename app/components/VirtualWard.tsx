@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
 const T = {
-  glass:  'var(--bg-card,rgba(255,255,255,0.07))',
-  glass2: 'var(--bg-card,rgba(255,255,255,0.04))',
-  border: 'var(--border-card,rgba(255,255,255,0.12))',
+  glass:  'var(--bg-card,rgba(255,255,255,0.88))',
+  glass2: 'var(--bg-card,rgba(255,255,255,0.88))',
+  border: 'var(--border-card,rgba(10,132,255,0.10))',
   text:   'var(--text-primary,#EEF6FA)',
   sub:    'var(--text-secondary,rgba(238,246,250,0.72))',
   muted:  'var(--text-muted,rgba(238,246,250,0.50))',
@@ -636,7 +636,7 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
                 {l:'SpO2', v:p.vitals.spo2+'%'},
                 {l:'Temp', v:p.vitals.temp},
               ].map(v=>(
-                <div key={v.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.04))',borderRadius:8,padding:'5px 4px',textAlign:'center',border:`1px solid rgba(255,255,255,0.07)`}}>
+                <div key={v.l} style={{flex:1,background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:8,padding:'5px 4px',textAlign:'center',border:`1px solid rgba(255,255,255,0.07)`}}>
                   <div style={{fontSize:11,fontWeight:800,color:T.text}}>{v.v}</div>
                   <div style={{fontSize:7,color:T.muted,marginTop:1}}>{v.l}</div>
                 </div>

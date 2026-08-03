@@ -192,7 +192,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🧠 Pharmacy Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length} · Score: {score}</div></div>
           <div style={{fontSize:13,fontWeight:700,color:'#30d158'}}>{score*20} XP</div>
         </div>
-        <div style={{height:3,background:'rgba(255,255,255,0.12)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
+        <div style={{height:3,background:'rgba(255,255,255,0.88)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/QUIZ_Q.length)*100}%`,background:'linear-gradient(90deg,#30d158,#0a84ff)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(48,209,88,0.5)'}}/>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
@@ -208,7 +208,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
             return (
               <div key={i} onClick={()=>{if(ans!==null)return;setAns(i);if(i===q.correct)setScore(s=>s+1)}}
                 style={{background:bg,borderRadius:14,padding:'14px 16px',border,cursor:ans===null?'pointer':'default',display:'flex',alignItems:'center',gap:12,transition:'all 0.2s'}}>
-                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.12)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.70)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
+                <div style={{width:28,height:28,borderRadius:8,background:'rgba(255,255,255,0.88)',border:'1px solid rgba(0,196,180,0.20)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:800,color:'rgba(10,22,40,0.70)',flexShrink:0}}>{['A','B','C','D'][i]}</div>
                 <div style={{fontSize:13,color:tc,fontWeight:500,flex:1,lineHeight:1.4}}>{opt}</div>
                 {ans!==null&&i===q.correct&&<span>✅</span>}
                 {ans!==null&&i===ans&&i!==q.correct&&<span>❌</span>}
