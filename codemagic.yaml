@@ -8,7 +8,9 @@ workflows:
         bundle_identifier: com.cliniverse.ai
       node: 20.17.0
       xcode: latest
-      cocoapods: defaultn      groups:n        - app_store
+      cocoapods: default
+      groups:
+        - app_store
     scripts:
       - name: Install dependencies
         script: npm install
