@@ -3,13 +3,7 @@ import { useState } from 'react'
 
 type View = 'menu' | 'interactions' | 'dosing' | 'quiz' | 'counselling'
 
-const C = {
-  card: 'rgba(255,255,255,0.14)',
-  border: 'rgba(0,196,180,0.25)',
-  text: '#EEF6FA',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.25)',
-}
+const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
 const INTERACTIONS = [
   { drug1:'Warfarin', drug2:'Amiodarone', severity:'Major', color:'#ff453a', icon:'⚠️', mechanism:'CYP2C9 inhibition → warfarin levels ↑↑↑', effect:'INR can triple. Life-threatening bleeding.', action:'Reduce warfarin 30-50%. Monitor INR weekly.' },

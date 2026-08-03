@@ -226,13 +226,7 @@ const SCENARIOS: ShiftScenario[] = [
   },
 ]
 
-const C = {
-  card: 'rgba(255,255,255,0.92)',
-  border: 'rgba(0,196,180,0.25)',
-  text: '#EEF6FA',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.25)',
-}
+const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
 const DIFF_COLOR: Record<string,string> = { Intern:'#30d158', Resident:'#ff9f0a', Senior:'#ff453a' }
 

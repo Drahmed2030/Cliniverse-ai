@@ -1,10 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 
-const C = {
-  card:'rgba(255,255,255,0.04)', border:'rgba(139,92,246,0.15)',
-  text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)',
-}
+const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
 const SPECIALTIES = [
   {id:'Cardiology',icon:'🫀',color:'#ff453a'},

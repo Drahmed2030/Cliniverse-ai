@@ -90,13 +90,7 @@ const DUEL_CASES: DuelCase[] = [
   },
 ]
 
-const C = {
-  card: 'rgba(255,255,255,0.14)',
-  border: 'rgba(0,196,180,0.25)',
-  text: '#EEF6FA',
-  sub: 'rgba(255,255,255,0.45)',
-  muted: 'rgba(255,255,255,0.25)',
-}
+const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
 export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
   const [phase, setPhase] = useState<DuelPhase>('lobby')
