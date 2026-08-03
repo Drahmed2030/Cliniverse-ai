@@ -61,7 +61,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
       <div style={{background:'linear-gradient(135deg,rgba(48,209,88,0.12),rgba(10,132,255,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(48,209,88,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(48,209,88,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>💊 PHARMACY</div>
-        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>Clinical Pharmacology</div>
+        <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Clinical Pharmacology</div>
         <div style={{fontSize:13,color:C.sub}}>Drug interactions · Dosing · Counselling · MCQs</div>
       </div>
 
@@ -75,7 +75,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div key={t.id} onClick={()=>{setView(t.id as View);setQIdx(0);setAns(null);setScore(0)}}
             style={{background:`${t.color}10`,borderRadius:20,padding:'16px',border:`1px solid ${t.color}25`,cursor:'pointer',boxShadow:`0 4px 20px ${t.color}08`}}>
             <div style={{fontSize:28,marginBottom:8}}>{t.icon}</div>
-            <div style={{fontSize:14,fontWeight:800,color:C.text,marginBottom:3}}>{t.label}</div>
+            <div style={{fontSize:14,fontWeight:800,color:'#0A1628',marginBottom:3}}>{t.label}</div>
             <div style={{fontSize:11,color:C.sub}}>{t.sub}</div>
           </div>
         ))}
@@ -86,8 +86,8 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
   if (view === 'interactions') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{flex:1}}><div style={{fontSize:16,fontWeight:800,color:C.text}}>⚡ Drug Interactions</div></div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{flex:1}}><div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>⚡ Drug Interactions</div></div>
       </div>
       <div style={{display:'flex',gap:6,marginBottom:14}}>
         {['All','Major','Moderate'].map(s=>(
@@ -102,7 +102,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:selectedInteraction===i?10:0}}>
             <div style={{fontSize:20,flexShrink:0}}>{int.icon}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:800,color:C.text}}>{int.drug1} + {int.drug2}</div>
+              <div style={{fontSize:13,fontWeight:800,color:'#0A1628'}}>{int.drug1} + {int.drug2}</div>
               <div style={{fontSize:10,padding:'2px 8px',borderRadius:6,background:`${int.color}20`,color:int.color,fontWeight:700,display:'inline-block',marginTop:3,border:`1px solid ${int.color}30`}}>{int.severity}</div>
             </div>
             <div style={{fontSize:16,color:`${int.color}60`}}>{selectedInteraction===i?'▲':'▼'}</div>
@@ -122,15 +122,15 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
   if (view === 'dosing') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{fontSize:16,fontWeight:800,color:C.text}}>💉 Drug Dosing Guide</div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>💉 Drug Dosing Guide</div>
       </div>
       {DOSING.map((d,i)=>(
         <div key={i} onClick={()=>setSelectedDrug(selectedDrug===i?null:i)}
           style={{background:selectedDrug===i?`${d.color}10`:C.card,borderRadius:18,padding:'14px 16px',marginBottom:10,border:`1px solid ${d.color}${selectedDrug===i?'35':'18'}`,cursor:'pointer',transition:'all 0.2s'}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:selectedDrug===i?10:0}}>
             <div style={{width:42,height:42,borderRadius:13,background:`${d.color}18`,border:`1px solid ${d.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:900,color:d.color,flexShrink:0}}>{d.route}</div>
-            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.text}}>{d.drug}</div><div style={{fontSize:11,color:C.sub,marginTop:2}}>{d.dose}</div></div>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{d.drug}</div><div style={{fontSize:11,color:C.sub,marginTop:2}}>{d.dose}</div></div>
             <div style={{fontSize:16,color:`${d.color}60`}}>{selectedDrug===i?'▲':'▼'}</div>
           </div>
           {selectedDrug===i&&(
@@ -148,14 +148,14 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
   if (view === 'counselling') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{fontSize:16,fontWeight:800,color:C.text}}>🗣️ Patient Counselling</div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>🗣️ Patient Counselling</div>
       </div>
       {COUNSELLING.map((c,i)=>(
         <div key={i} style={{background:C.card,borderRadius:20,padding:'16px',marginBottom:12,border:`1px solid ${c.color}25`}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
             <div style={{width:44,height:44,borderRadius:14,background:`${c.color}18`,border:`1px solid ${c.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22}}>{c.icon}</div>
-            <div style={{fontSize:15,fontWeight:800,color:C.text}}>{c.drug}</div>
+            <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>{c.drug}</div>
           </div>
           {c.points.map((p,j)=>(
             <div key={j} style={{display:'flex',gap:10,marginBottom:8,paddingBottom:8,borderBottom:j<c.points.length-1?`1px solid rgba(36,63,82,0.60)`:'none'}}>
@@ -175,7 +175,7 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
       return (
         <div style={{fontFamily:'-apple-system,sans-serif',textAlign:'center',padding:'40px 20px'}}>
           <div style={{fontSize:60,marginBottom:12}}>{pct>=80?'🏆':pct>=60?'🎖️':'📚'}</div>
-          <div style={{fontSize:28,fontWeight:900,color:C.text,marginBottom:4}}>{pct}%</div>
+          <div style={{fontSize:28,fontWeight:900,color:'#0A1628',marginBottom:4}}>{pct}%</div>
           <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:20}}>+{xp} XP earned</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
@@ -188,15 +188,15 @@ export default function PharmacyModule({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-          <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🧠 Pharmacy Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length} · Score: {score}</div></div>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>🧠 Pharmacy Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length} · Score: {score}</div></div>
           <div style={{fontSize:13,fontWeight:700,color:'#30d158'}}>{score*20} XP</div>
         </div>
         <div style={{height:3,background:'rgba(255,255,255,0.88)',borderRadius:2,overflow:'hidden',marginBottom:14}}>
           <div style={{height:'100%',width:`${(qIdx/QUIZ_Q.length)*100}%`,background:'linear-gradient(90deg,#30d158,#0a84ff)',borderRadius:2,transition:'width 0.4s',boxShadow:'0 0 8px rgba(48,209,88,0.5)'}}/>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
-          <div style={{fontSize:15,fontWeight:700,color:C.text,lineHeight:1.7}}>{q.q}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'#0A1628',lineHeight:1.7}}>{q.q}</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
           {q.opts.map((opt,i)=>{

@@ -319,7 +319,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.25),rgba(15,5,35,0.9))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🌙 SURVIVAL MODE</div>
-        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Night Shift Survival</div>
+        <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Night Shift Survival</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Survive a full on-call shift. Manage your energy. Make the right calls. One wrong decision can cost a life — or your career.</div>
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
           {[{icon:'⚡',label:'Energy System'},{icon:'⏱️',label:'Time Pressure'},{icon:'🏆',label:'Survival Score'}].map(t=>(
@@ -339,7 +339,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:54,height:54,borderRadius:17,background:`${s.color}18`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,flexShrink:0,boxShadow:`0 4px 16px ${s.color}25`}}>{s.icon}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:16,fontWeight:900,color:C.text,marginBottom:2}}>{s.title}</div>
+              <div style={{fontSize:16,fontWeight:900,color:'#0A1628',marginBottom:2}}>{s.title}</div>
               <div style={{fontSize:11,color:C.sub,marginBottom:4}}>{s.subtitle}</div>
               <div style={{fontSize:10,color:C.muted}}>⏰ {s.duration}</div>
             </div>
@@ -386,7 +386,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           <div style={{width:48,height:48,borderRadius:15,background:`${cc.color}20`,border:`1px solid ${cc.color}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26}}>{cc.icon}</div>
           <div>
             <div style={{fontSize:10,color:cc.color,fontWeight:700,letterSpacing:0.5}}>{cc.urgency==='Stat'?'🔴 STAT CALL':cc.urgency==='Urgent'?'🟡 URGENT':'🟢 ROUTINE'} · {cc.time}</div>
-            <div style={{fontSize:16,fontWeight:900,color:C.text}}>{cc.title}</div>
+            <div style={{fontSize:16,fontWeight:900,color:'#0A1628'}}>{cc.title}</div>
             <div style={{fontSize:11,color:C.sub}}>{cc.dept} · {cc.patient}</div>
           </div>
         </div>
@@ -442,7 +442,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
       {/* Case card */}
       <div style={{background:`${cc.color}10`,borderRadius:18,padding:'14px',marginBottom:12,border:`1px solid ${cc.color}25`}}>
         <div style={{fontSize:11,color:cc.color,fontWeight:700,marginBottom:4}}>{cc.icon} {cc.time} · {cc.dept}</div>
-        <div style={{fontSize:14,fontWeight:800,color:C.text,marginBottom:6}}>{cc.title} — {cc.patient}</div>
+        <div style={{fontSize:14,fontWeight:800,color:'#0A1628',marginBottom:6}}>{cc.title} — {cc.patient}</div>
         <div style={{fontSize:13,color:'#0A1628',lineHeight:1.7}}>{cc.presentation}</div>
       </div>
 
@@ -489,7 +489,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
   if (phase === 'gameover') return (
     <div style={{fontFamily:'-apple-system,sans-serif',textAlign:'center',padding:'40px 20px'}}>
       <div style={{fontSize:64,marginBottom:16,filter:'drop-shadow(0 0 24px rgba(255,69,58,0.6))'}}>😴</div>
-      <div style={{fontSize:24,fontWeight:900,color:C.text,marginBottom:8}}>Exhausted!</div>
+      <div style={{fontSize:24,fontWeight:900,color:'#0A1628',marginBottom:8}}>Exhausted!</div>
       <div style={{fontSize:14,color:'#ff453a',fontWeight:700,marginBottom:6}}>Energy depleted at {cc.time}</div>
       <div style={{fontSize:13,color:C.sub,marginBottom:24}}>You lasted {caseIdx+1}/{sc.cases.length} cases · +{totalXP} XP</div>
       <div style={{display:'flex',gap:10,justifyContent:'center'}}>
@@ -508,7 +508,7 @@ export default function NightShiftSurvival({ onXP }: { onXP?: (n:number)=>void }
           <div style={{fontSize:60,marginBottom:12,filter:`drop-shadow(0 0 24px ${pct>=80?'rgba(255,214,10,0.6)':'rgba(139,92,246,0.4)'})`}}>
             {pct>=80?'🏆':pct>=60?'🥇':'🎖️'}
           </div>
-          <div style={{fontSize:28,fontWeight:900,color:C.text,marginBottom:4}}>{sc.icon} Shift Complete!</div>
+          <div style={{fontSize:28,fontWeight:900,color:'#0A1628',marginBottom:4}}>{sc.icon} Shift Complete!</div>
           <div style={{fontSize:18,fontWeight:700,color:'#ffd60a',marginBottom:4}}>+{totalXP} XP</div>
           <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:8}}>
             {pct>=80?'Outstanding Doctor! 🌟':pct>=60?'Good Work — Review Mistakes':'Study the guidelines'}

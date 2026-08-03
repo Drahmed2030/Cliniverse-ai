@@ -198,7 +198,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:16,fontWeight:800,color:'var(--text-primary, white)'}}>{algo.icon} {algo.title}</div>
             <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>{algo.subtitle}</div>
@@ -275,7 +275,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
   if(view==='h5t5') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:'var(--text-primary, white)'}}>🔍 5H · 5T</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Reversible causes of cardiac arrest</div>
@@ -311,7 +311,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
   if(view==='drugs') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
           <div style={{fontSize:18,fontWeight:900,color:'var(--text-primary, white)'}}>💊 ACLS Drug Reference</div>
           <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Doses & indications</div>
@@ -354,7 +354,7 @@ export default function BLSACLSModule({ onXP }:{onXP?:(n:number)=>void}) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
             <div style={{fontSize:15,fontWeight:800,color:'var(--text-primary, white)'}}>🧠 ACLS Quiz</div>
             <div style={{fontSize:11,color:'var(--text-secondary,rgba(10,22,40,0.55))'}}>Q {qIdx+1}/{QUIZ.length} · Score: {score}</div>

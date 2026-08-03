@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 
-const C = { card:'rgba(255,255,255,0.14)', border:'rgba(0,196,180,0.25)', text:'white', sub:'rgba(255,255,255,0.45)', muted:'rgba(255,255,255,0.25)' }
+const C = { card:'rgba(255,255,255,0.88)', border:'rgba(10,132,255,0.12)', text:'#0A1628', sub:'rgba(10,22,40,0.60)', muted:'rgba(10,22,40,0.38)' }
 
 const VITALS_RANGES = [
   { param:'Heart Rate', normal:'60-100 bpm', concern:'< 50 or > 120', critical:'< 40 or > 150', icon:'❤️', color:'#ff453a', action:'Assess rhythm, check BP, escalate if symptomatic' },
@@ -46,7 +46,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{background:'linear-gradient(135deg,rgba(100,210,255,0.12),rgba(48,209,88,0.08))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(100,210,255,0.2)'}}>
         <div style={{fontSize:11,color:'rgba(100,210,255,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🩺 NURSING</div>
-        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>Clinical Nursing</div>
+        <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>Clinical Nursing</div>
         <div style={{fontSize:13,color:C.sub}}>Vitals · Skills · NEWS2 · Quiz</div>
       </div>
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
@@ -59,7 +59,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
           <div key={t.id} onClick={()=>{setView(t.id as any);setQIdx(0);setAns(null);setScore(0)}}
             style={{background:`${t.color}10`,borderRadius:20,padding:'16px',border:`1px solid ${t.color}25`,cursor:'pointer',boxShadow:`0 4px 20px ${t.color}08`}}>
             <div style={{fontSize:28,marginBottom:8}}>{t.icon}</div>
-            <div style={{fontSize:14,fontWeight:800,color:C.text,marginBottom:3}}>{t.label}</div>
+            <div style={{fontSize:14,fontWeight:800,color:'#0A1628',marginBottom:3}}>{t.label}</div>
             <div style={{fontSize:11,color:C.sub}}>{t.sub}</div>
           </div>
         ))}
@@ -70,14 +70,14 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'vitals') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{fontSize:16,fontWeight:800,color:C.text}}>❤️ Vital Signs Guide</div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>❤️ Vital Signs Guide</div>
       </div>
       {VITALS_RANGES.map((v,i)=>(
         <div key={i} style={{background:C.card,borderRadius:18,padding:'14px 16px',marginBottom:10,border:`1px solid ${v.color}20`}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
             <div style={{width:40,height:40,borderRadius:12,background:`${v.color}18`,border:`1px solid ${v.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>{v.icon}</div>
-            <div style={{fontSize:14,fontWeight:800,color:C.text}}>{v.param}</div>
+            <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{v.param}</div>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:6,marginBottom:10}}>
             {[{label:'Normal',value:v.normal,color:'#30d158'},{label:'Concern',value:v.concern,color:'#ff9f0a'},{label:'Critical',value:v.critical,color:'#ff453a'}].map(r=>(
@@ -98,15 +98,15 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'skills') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{fontSize:16,fontWeight:800,color:C.text}}>💉 Clinical Skills</div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>💉 Clinical Skills</div>
       </div>
       {SKILLS.map((s,i)=>(
         <div key={i} onClick={()=>setExpandedSkill(expandedSkill===i?null:i)}
           style={{background:expandedSkill===i?`${s.color}08`:C.card,borderRadius:18,padding:'14px 16px',marginBottom:10,border:`1px solid ${s.color}${expandedSkill===i?'35':'18'}`,cursor:'pointer',transition:'all 0.2s'}}>
           <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:expandedSkill===i?12:0}}>
             <div style={{width:44,height:44,borderRadius:14,background:`${s.color}18`,border:`1px solid ${s.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{s.icon}</div>
-            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:C.text}}>{s.title}</div></div>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{s.title}</div></div>
             <div style={{fontSize:16,color:`${s.color}60`}}>{expandedSkill===i?'▲':'▼'}</div>
           </div>
           {expandedSkill===i&&s.steps.map((step,j)=>(
@@ -123,8 +123,8 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
   if (view === 'news2') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-        <div style={{fontSize:16,fontWeight:800,color:C.text}}>📊 NEWS2 Score</div>
+        <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <div style={{fontSize:16,fontWeight:800,color:'#0A1628'}}>📊 NEWS2 Score</div>
       </div>
       <div style={{background:'rgba(255,255,255,0.88)',borderRadius:18,padding:'14px',marginBottom:14,border:`1px solid ${C.border}`,overflowX:'auto'}}>
         {NEWS2_TABLE.map((row,i)=>(
@@ -145,7 +145,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
         {[{score:'1-4',risk:'Low',color:'#30d158',action:'4-hourly obs'},{score:'5-6',risk:'Medium',color:'#ff9f0a',action:'Urgent review'},{score:'≥7',risk:'High',color:'#ff453a',action:'Continuous + ICU'}].map(r=>(
           <div key={r.risk} style={{background:`${r.color}10`,borderRadius:14,padding:'12px',border:`1px solid ${r.color}25`,textAlign:'center'}}>
             <div style={{fontSize:18,fontWeight:900,color:r.color,marginBottom:4}}>{r.score}</div>
-            <div style={{fontSize:11,fontWeight:700,color:C.text,marginBottom:4}}>{r.risk}</div>
+            <div style={{fontSize:11,fontWeight:700,color:'#0A1628',marginBottom:4}}>{r.risk}</div>
             <div style={{fontSize:10,color:C.sub,lineHeight:1.4}}>{r.action}</div>
           </div>
         ))}
@@ -159,7 +159,7 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
       return (
         <div style={{fontFamily:'-apple-system,sans-serif',textAlign:'center',padding:'40px 20px'}}>
           <div style={{fontSize:60,marginBottom:12}}>{score>=4?'🏆':'📚'}</div>
-          <div style={{fontSize:28,fontWeight:900,color:C.text,marginBottom:4}}>{Math.round((score/QUIZ_Q.length)*100)}%</div>
+          <div style={{fontSize:28,fontWeight:900,color:'#0A1628',marginBottom:4}}>{Math.round((score/QUIZ_Q.length)*100)}%</div>
           <div style={{fontSize:14,color:'#64d2ff',fontWeight:700,marginBottom:20}}>+{xp} XP</div>
           <div style={{display:'flex',gap:10}}>
             <button onClick={()=>{setQIdx(0);setAns(null);setScore(0)}} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${C.border}`,background:C.card,color:C.sub,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Retry</button>
@@ -172,11 +172,11 @@ export default function NursingModule({ onXP }:{ onXP?:(n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
-          <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:C.text}}>🧠 Nursing Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length}</div></div>
+          <button onClick={()=>setView('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <div style={{flex:1}}><div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>🧠 Nursing Quiz</div><div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{QUIZ_Q.length}</div></div>
         </div>
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
-          <div style={{fontSize:15,fontWeight:700,color:C.text,lineHeight:1.7}}>{q.q}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'#0A1628',lineHeight:1.7}}>{q.q}</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
           {q.opts.map((opt,i)=>{

@@ -196,7 +196,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
       <div style={{background:'linear-gradient(135deg,rgba(255,69,58,0.12),rgba(0,196,180,0.08))',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(255,69,58,0.2)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,69,58,0.2),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(255,69,58,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>💀 NEW MODE</div>
-        <div style={{fontSize:24,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:6}}>Error Autopsy</div>
+        <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Error Autopsy</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7}}>Analyse real medical errors. Find what went wrong. Learn without blame. Prevent future harm.</div>
         <div style={{display:'flex',gap:8,marginTop:12}}>
           {['🔍 Analyse','⚠️ No Blame','🛡️ Prevent'].map(t=>(
@@ -213,7 +213,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:52,height:52,borderRadius:16,background:`${c.color}18`,border:`1px solid ${c.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0}}>{c.icon}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:15,fontWeight:800,color:C.text,marginBottom:2}}>{c.title}</div>
+              <div style={{fontSize:15,fontWeight:800,color:'#0A1628',marginBottom:2}}>{c.title}</div>
               <div style={{fontSize:11,color:C.sub}}>{c.subtitle}</div>
             </div>
           </div>
@@ -234,9 +234,9 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
   if (phase === 'timeline') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setPhase('menu')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setPhase('menu')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:14,fontWeight:800,color:C.text}}>{c.icon} {c.title}</div>
+          <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>{c.icon} {c.title}</div>
           <div style={{fontSize:11,color:C.sub}}>{c.specialty}</div>
         </div>
         <span style={{fontSize:10,padding:'4px 10px',borderRadius:10,background:`${SEVERITY_COLOR[c.severity]}20`,color:SEVERITY_COLOR[c.severity],fontWeight:800,border:`1px solid ${SEVERITY_COLOR[c.severity]}30`}}>{c.severity}</span>
@@ -338,7 +338,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
           <div style={{background:'linear-gradient(145deg,rgba(48,209,88,0.1),rgba(10,132,255,0.08))',borderRadius:24,padding:'28px 20px',marginBottom:16,border:'1px solid rgba(48,209,88,0.2)',textAlign:'center'}}>
             <div style={{fontSize:60,marginBottom:12}}>{pct>=80?'🛡️':pct>=60?'📚':'🔄'}</div>
-            <div style={{fontSize:26,fontWeight:900,color:C.text,marginBottom:4}}>{pct}%</div>
+            <div style={{fontSize:26,fontWeight:900,color:'#0A1628',marginBottom:4}}>{pct}%</div>
             <div style={{fontSize:14,color:pct>=80?'#30d158':'#ff9f0a',fontWeight:700,marginBottom:4}}>{pct>=80?'Patient Safety Champion!':pct>=60?'Good — keep learning':'Review the case again'}</div>
             <div style={{fontSize:13,color:C.sub}}>+{xpEarned} XP earned</div>
           </div>
@@ -363,9 +363,9 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
+          <button onClick={()=>setPhase('timeline')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Case</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:14,fontWeight:800,color:C.text}}>🧠 Knowledge Check</div>
+            <div style={{fontSize:14,fontWeight:800,color:'#0A1628'}}>🧠 Knowledge Check</div>
             <div style={{fontSize:11,color:C.sub}}>Q{qIdx+1}/{c.questions.length} · Score: {score}</div>
           </div>
         </div>
@@ -375,7 +375,7 @@ export default function ErrorAutopsy({ onXP }: { onXP?: (n:number)=>void }) {
         </div>
 
         <div style={{background:C.card,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${C.border}`}}>
-          <div style={{fontSize:15,fontWeight:700,color:C.text,lineHeight:1.7}}>{q.q}</div>
+          <div style={{fontSize:15,fontWeight:700,color:'#0A1628',lineHeight:1.7}}>{q.q}</div>
         </div>
 
         <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>

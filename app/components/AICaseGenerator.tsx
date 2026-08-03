@@ -198,7 +198,7 @@ Return ONLY this JSON structure:
       <div style={{background:'linear-gradient(135deg,rgba(0,196,180,0.25),rgba(0,196,180,0.10))',borderRadius:22,padding:'18px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-30,right:-30,width:120,height:120,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(139,92,246,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🤖 Powered by Claude AI</div>
-        <div style={{fontSize:22,fontWeight:900,color:C.text,letterSpacing:-0.5,marginBottom:4}}>AI Case Generator</div>
+        <div style={{fontSize:22,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:4}}>AI Case Generator</div>
         <div style={{fontSize:13,color:C.sub}}>Generate unlimited clinical cases for any specialty, level & audience</div>
         <div style={{display:'flex',gap:8,marginTop:10}}>
           <button onClick={()=>{setView('library');loadLibrary()}} style={{padding:'8px 16px',borderRadius:12,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(139,92,246,0.1)',color:'#6ee7e1',fontSize:12,fontWeight:700,cursor:'pointer'}}>📚 Library</button>
@@ -281,9 +281,9 @@ Return ONLY this JSON structure:
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-          <button onClick={()=>setView('generator')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+          <button onClick={()=>setView('generator')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
           <div style={{flex:1}}>
-            <div style={{fontSize:15,fontWeight:800,color:C.text}}>Generated Case Preview</div>
+            <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>Generated Case Preview</div>
             <div style={{fontSize:11,color:C.sub}}>{g.specialty} · {g.difficulty}</div>
           </div>
         </div>
@@ -291,7 +291,7 @@ Return ONLY this JSON structure:
         {/* Case header */}
         <div style={{background:`${g.color}12`,borderRadius:22,padding:'20px',marginBottom:12,border:`1px solid ${g.color}30`,boxShadow:`0 6px 24px ${g.color}15`}}>
           <div style={{fontSize:40,marginBottom:8,textAlign:'center'}}>{g.icon}</div>
-          <div style={{fontSize:20,fontWeight:900,color:C.text,textAlign:'center',marginBottom:4}}>{g.title}</div>
+          <div style={{fontSize:20,fontWeight:900,color:'#0A1628',textAlign:'center',marginBottom:4}}>{g.title}</div>
           <div style={{fontSize:13,color:C.sub,textAlign:'center',marginBottom:12}}>{g.subtitle}</div>
           <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center'}}>
             <span style={{fontSize:10,padding:'3px 10px',borderRadius:8,background:`${diffColor}20`,color:diffColor,fontWeight:700,border:`1px solid ${diffColor}30`}}>{g.difficulty}</span>
@@ -307,7 +307,7 @@ Return ONLY this JSON structure:
             {Object.entries(g.vitals).map(([k,v])=>(
               <div key={k} style={{background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:10,padding:'8px',textAlign:'center'}}>
                 <div style={{fontSize:9,color:C.muted,fontWeight:700,marginBottom:3}}>{k.toUpperCase()}</div>
-                <div style={{fontSize:13,fontWeight:800,color:C.text}}>{v}</div>
+                <div style={{fontSize:13,fontWeight:800,color:'#0A1628'}}>{v}</div>
               </div>
             ))}
           </div>
@@ -375,9 +375,9 @@ Return ONLY this JSON structure:
   if (view === 'library') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
-        <button onClick={()=>setView('generator')} style={{background:'rgba(0,196,180,0.25)',border:'1px solid rgba(139,92,246,0.3)',borderRadius:12,color:'#6ee7e1',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setView('generator')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div>
-          <div style={{fontSize:18,fontWeight:900,color:C.text}}>📚 Case Library</div>
+          <div style={{fontSize:18,fontWeight:900,color:'#0A1628'}}>📚 Case Library</div>
           <div style={{fontSize:11,color:C.sub}}>AI-generated cases · {library.length} saved</div>
         </div>
       </div>
@@ -390,7 +390,7 @@ Return ONLY this JSON structure:
       ) : library.length === 0 ? (
         <div style={{background:C.card,borderRadius:20,padding:'32px',border:`1px solid ${C.border}`,textAlign:'center'}}>
           <div style={{fontSize:40,marginBottom:12}}>📭</div>
-          <div style={{fontSize:16,fontWeight:700,color:C.text,marginBottom:6}}>Library Empty</div>
+          <div style={{fontSize:16,fontWeight:700,color:'#0A1628',marginBottom:6}}>Library Empty</div>
           <div style={{fontSize:13,color:C.sub}}>Generate your first case to start building the library</div>
         </div>
       ) : library.map(c=>(
@@ -398,7 +398,7 @@ Return ONLY this JSON structure:
           <div style={{display:'flex',alignItems:'center',gap:12}}>
             <div style={{width:44,height:44,borderRadius:13,background:`${c.color||'#00C4B4'}18`,border:`1px solid ${c.color||'#00C4B4'}25`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{c.icon||'🏥'}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:2}}>{c.title}</div>
+              <div style={{fontSize:13,fontWeight:700,color:'#0A1628',marginBottom:2}}>{c.title}</div>
               <div style={{fontSize:11,color:C.sub,marginBottom:4}}>{c.subtitle}</div>
               <div style={{display:'flex',gap:6}}>
                 <span style={{fontSize:9,padding:'2px 8px',borderRadius:6,background:'rgba(0,196,180,0.25)',color:'#6ee7e1',fontWeight:700}}>{c.specialty}</span>
