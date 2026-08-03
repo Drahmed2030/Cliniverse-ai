@@ -6,7 +6,7 @@ const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 const SLIDES = [
   {
     id: 'welcome',
-    bg: ['#0A2540','#0D3060'],
+    bg: ['#F0F8FF','#E8F4FF'],
     accent: '#00C2B2',
     icon: null,
     svg: 'hospital',
@@ -16,7 +16,7 @@ const SLIDES = [
   },
   {
     id: 'cases',
-    bg: ['#0A1F3C','#0D2850'],
+    bg: ['#F5FBFF','#EAF5FF'],
     accent: '#0A84FF',
     icon: null,
     svg: 'ecg',
@@ -26,8 +26,8 @@ const SLIDES = [
   },
   {
     id: 'ai',
-    bg: ['#0D1F35','#0A2A48'],
-    accent: '#30D158',
+    bg: ['#F0FDF8','#E8FAF5'],
+    accent: '#00C2B2',
     icon: null,
     svg: 'brain',
     title: 'AI-Powered\nConsultant',
@@ -36,7 +36,7 @@ const SLIDES = [
   },
   {
     id: 'ranks',
-    bg: ['#1A0A3C','#2A0D5C'],
+    bg: ['#FFFBF0','#FFF5E0'],
     accent: '#FF9F0A',
     icon: null,
     svg: 'trophy',
@@ -393,11 +393,11 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
           {SLIDES.slice(0,-1).map((_,i)=>(
             <div key={i} style={{
               flex:1, height:2.5, borderRadius:2,
-              background:'rgba(255,255,255,0.18)', overflow:'hidden',
+              background:'rgba(10,132,255,0.15)', overflow:'hidden',
             }}>
               <div style={{
                 height:'100%', borderRadius:2,
-                background:'rgba(255,255,255,0.88)',
+                background:'rgba(10,132,255,0.80)',
                 width: i < slide ? '100%' : i === slide ? `${progress}%` : '0%',
                 transition: i === slide ? 'none' : 'none',
               }}/>
@@ -467,14 +467,14 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
 
           {/* Title */}
           <div style={{
-            fontSize:34, fontWeight:900, color:'white',
+            fontSize:34, fontWeight:900, color:'#0A1628',
             letterSpacing:-1, lineHeight:1.15, marginBottom:14,
             whiteSpace:'pre-line', animation:'fadeUp 0.5s ease',
           }}>{s.title}</div>
 
           {/* Subtitle */}
           <div style={{
-            fontSize:16, color:'rgba(255,255,255,0.60)',
+            fontSize:16, color:'rgba(10,22,40,0.55)',
             lineHeight:1.6, fontWeight:400, maxWidth:280,
             whiteSpace:'pre-line', animation:'fadeUp 0.6s ease',
           }}>{s.sub}</div>
@@ -490,7 +490,7 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
           {SLIDES.slice(0,-1).map((_,i)=>(
             <div key={i} style={{
               width: i===slide ? 20 : 6, height:6, borderRadius:3,
-              background: i===slide ? s.accent : 'rgba(255,255,255,0.25)',
+              background: i===slide ? s.accent : 'rgba(10,22,40,0.15)',
               transition:'all 0.3s ease',
             }}/>
           ))}
