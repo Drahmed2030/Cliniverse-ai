@@ -267,7 +267,7 @@ function NewPostModal({ onClose, onPost, doctorName, doctorSpecialty }: {
           {POST_TYPES.map(pt=>(
             <button key={pt.id} onClick={()=>setPostType(pt.id)} style={{
               background:postType===pt.id?`${pt.color}18`:T.glass2,
-              border:`1.5px solid ${postType===pt.id?pt.color:'rgba(255,255,255,0.08)'}`,
+              border:`1.5px solid ${postType===pt.id?pt.color:'rgba(10,22,40,0.38)'}`,
               borderRadius:20,padding:'6px 12px',cursor:'pointer',fontFamily:F,
               color:postType===pt.id?pt.color:T.muted,fontSize:11,fontWeight:700,
               display:'flex',alignItems:'center',gap:5,transition:'all 0.2s',

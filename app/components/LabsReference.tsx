@@ -62,7 +62,7 @@ export default function LabsReference() {
               </div>
               <div style={{textAlign:'right'}}>
                 <div style={{fontSize:14,fontWeight:800,color:COLORS[lab.category]||'#00C4B4'}}>{lab.normal_range}</div>
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.35)'}}>{lab.unit}</div>
+                <div style={{fontSize:10,color:'rgba(10,22,40,0.65)'}}>{lab.unit}</div>
               </div>
             </div>
           ))}

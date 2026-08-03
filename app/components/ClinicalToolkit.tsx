@@ -152,7 +152,7 @@ function DrugCalculator() {
           <button key={d.id} onClick={()=>setDrug(d.id)} style={{
             flexShrink:0,
             background:drug===d.id?`${d.color}18`:T.glass2,
-            border:`1.5px solid ${drug===d.id?d.color:'rgba(255,255,255,0.08)'}`,
+            border:`1.5px solid ${drug===d.id?d.color:'rgba(10,22,40,0.38)'}`,
             borderRadius:14,padding:'8px 12px',cursor:'pointer',fontFamily:F,
             transition:'all 0.2s',
             boxShadow:drug===d.id?`0 0 14px ${d.color}25`:'none',
@@ -394,7 +394,7 @@ function ClinicalScores() {
           <button key={s.id} onClick={()=>{setActiveScore(s.id);resetScore()}} style={{
             flexShrink:0,
             background:activeScore===s.id?`${s.color}18`:T.glass2,
-            border:`1.5px solid ${activeScore===s.id?s.color:'rgba(255,255,255,0.08)'}`,
+            border:`1.5px solid ${activeScore===s.id?s.color:'rgba(10,22,40,0.38)'}`,
             borderRadius:14,padding:'8px 12px',cursor:'pointer',fontFamily:F,
             transition:'all 0.2s',
             boxShadow:activeScore===s.id?`0 0 14px ${s.color}25`:'none',
@@ -438,15 +438,15 @@ function ClinicalScores() {
             display:'flex',alignItems:'center',gap:12,
             background:checked[f.id]?`${score.color}12`:T.glass,
             backdropFilter:'blur(20px)',
-            border:`1.5px solid ${checked[f.id]?score.color:'rgba(255,255,255,0.10)'}`,
+            border:`1.5px solid ${checked[f.id]?score.color:'rgba(10,22,40,0.40)'}`,
             borderRadius:14,padding:'12px 14px',cursor:'pointer',
             transition:'all 0.2s',
             boxShadow:checked[f.id]?`0 0 12px ${score.color}20`:'none',
           }}>
             <div style={{
               width:24,height:24,borderRadius:8,flexShrink:0,
-              background:checked[f.id]?score.color:'rgba(255,255,255,0.08)',
-              border:`1.5px solid ${checked[f.id]?score.color:'rgba(255,255,255,0.15)'}`,
+              background:checked[f.id]?score.color:'rgba(10,22,40,0.38)',
+              border:`1.5px solid ${checked[f.id]?score.color:'rgba(10,22,40,0.45)'}`,
               display:'flex',alignItems:'center',justifyContent:'center',
               fontSize:13,color:'var(--text-primary, white)',fontWeight:900,transition:'all 0.2s',
             }}>
@@ -454,7 +454,7 @@ function ClinicalScores() {
             </div>
             <div style={{flex:1,fontSize:12,color:checked[f.id]?T.text:T.sub,fontWeight:checked[f.id]?700:500,lineHeight:1.4}}>{f.label}</div>
             <div style={{
-              background:checked[f.id]?score.color:'rgba(255,255,255,0.08)',
+              background:checked[f.id]?score.color:'rgba(10,22,40,0.38)',
               borderRadius:8,padding:'2px 8px',
               fontSize:12,fontWeight:900,
               color:checked[f.id]?'white':T.muted,

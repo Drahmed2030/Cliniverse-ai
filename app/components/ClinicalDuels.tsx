@@ -378,7 +378,7 @@ export default function ClinicalDuels({ onXP }: { onXP?: (n:number)=>void }) {
 
         <div style={{display:'flex',gap:10}}>
           <button onClick={()=>startDuel(selectedCase)} style={{flex:1,padding:'14px',borderRadius:16,border:`1px solid ${selectedCase.color}30`,background:`${selectedCase.color}10`,color:selectedCase.color,fontSize:14,fontWeight:700,cursor:'pointer'}}>🔄 Rematch</button>
-          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#00C4B4,#0a84ff)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
+          <button onClick={()=>setPhase('lobby')} style={{flex:1,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'var(--text-primary, white)',fontSize:14,fontWeight:700,cursor:'pointer',boxShadow:'0 6px 20px rgba(139,92,246,0.4)'}}>⚔️ New Duel</button>
         </div>
       </div>
     )

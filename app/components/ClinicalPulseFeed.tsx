@@ -95,13 +95,13 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
 
       {sbar&&(
         <div style={{position:'fixed',inset:0,zIndex:400,background:'rgba(0,0,0,0.8)',backdropFilter:'blur(8px)',display:'flex',alignItems:'flex-end'}} onClick={()=>setSbar(null)}>
-          <div style={{width:'100%',maxWidth:480,margin:'0 auto',background:'linear-gradient(145deg,#12002a,#0a0015)',borderRadius:'24px 24px 0 0',padding:'20px 20px 40px',border:'1px solid rgba(0,196,180,0.30)'}} onClick={e=>e.stopPropagation()}>
+          <div style={{width:'100%',maxWidth:480,margin:'0 auto',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',borderRadius:'24px 24px 0 0',padding:'20px 20px 40px',border:'1px solid rgba(0,196,180,0.30)'}} onClick={e=>e.stopPropagation()}>
             <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
             <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:12}}>📋 SBAR Report</div>
             <textarea readOnly value={sbar}
               style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.05))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(10,22,40,0.85)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
             <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
-              style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#0a84ff,#8b5cf6)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
+              style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
               Copy SBAR
             </button>
           </div>
