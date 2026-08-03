@@ -262,8 +262,8 @@ export default function AdminDashboard({ onClose }: { onClose:()=>void }) {
             <div style={{background:T.glass,backdropFilter:'blur(30px)',borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${T.gold}22`}}>
               <div style={{fontSize:10,color:T.gold,fontWeight:700,letterSpacing:1,marginBottom:12}}>💰 REVENUE BREAKDOWN</div>
               {[
-                {label:'Monthly subscriptions',    value:`$${(stats.proUsers*9.99).toFixed(2)}`, pct:75},
-                {label:'Annual subscriptions',     value:`$${(stats.proUsers*0.3*49.99/12).toFixed(2)}`,pct:20},
+                {label:'Monthly subscriptions',    value:`$${(stats.proUsers*14.99).toFixed(2)}`, pct:75},
+                {label:'Annual subscriptions',     value:`$${(stats.proUsers*0.3*99.99/12).toFixed(2)}`,pct:20},
                 {label:'Other',                    value:'$12.00', pct:5},
               ].map(r=>(
                 <div key={r.label} style={{marginBottom:10}}>

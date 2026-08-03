@@ -5,14 +5,14 @@ import { useState } from 'react'
 const PLANS = {
   monthly: {
     name: 'Pro Monthly',
-    price: '$9.99',
+    price: '$14.99',
     period: 'per month',
     url: 'https://cliniverse.lemonsqueezy.com/checkout/buy/MONTHLY_ID_HERE',
     features: ['Unlimited AI Case Generation','All Surgical Modules','Clinical Nexus Global Room','Rapid Fire Mode','Priority Support'],
   },
   yearly: {
     name: 'Pro Annual',
-    price: '$79.99',
+    price: '$99.99',
     period: 'per year',
     url: 'https://cliniverse.lemonsqueezy.com/checkout/buy/YEARLY_ID_HERE',
     save: 'Save 33%',
