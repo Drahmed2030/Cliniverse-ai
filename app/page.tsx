@@ -198,6 +198,16 @@ const Label = ({children, color=D.textMuted}: {children:React.ReactNode, color?:
 
 export default function Home() {
   const [tab, setTab]                   = useState('hub')
+  const [isOnline, setIsOnline] = useState(true)
+
+  useEffect(() => {
+    setIsOnline(navigator.onLine)
+    const on  = () => setIsOnline(true)
+    const off = () => setIsOnline(false)
+    window.addEventListener('online',  on)
+    window.addEventListener('offline', off)
+    return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off) }
+  }, [])
   const _mTX = useRef(0)
   const _mTY = useRef(0)
   const MAIN_TABS = ['hub','tools','ward','net']
