@@ -6,243 +6,201 @@ const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 const SLIDES = [
   {
     id: 'welcome',
-    bg: ['#F0F8FF','#E8F4FF'],
+    bg: ['#EBF5FF','#F0FAFF'],
     accent: '#00C2B2',
-    icon: null,
-    svg: 'hospital',
+    emoji: '🏥',
+    tag: null,
     title: 'Welcome to\nCliniverse AI',
     sub: 'The world\'s most advanced\nclinical simulation platform',
-    badge: null,
   },
   {
     id: 'cases',
-    bg: ['#F5FBFF','#EAF5FF'],
+    bg: ['#EDF6FF','#F2F9FF'],
     accent: '#0A84FF',
-    icon: null,
-    svg: 'ecg',
-    title: 'Real Clinical\nScenarios',
-    sub: 'STEMI, Sepsis, Stroke — train with\nlife-like patient simulations',
-    badge: '50+ Cases',
+    emoji: '⚡',
+    tag: '50+ Real Cases',
+    title: 'Train with\nReal Scenarios',
+    sub: 'STEMI, Sepsis, Stroke —\nlife-like patient simulations',
   },
   {
     id: 'ai',
-    bg: ['#F0FDF8','#E8FAF5'],
+    bg: ['#EDFFF8','#F0FFF9'],
     accent: '#00C2B2',
-    icon: null,
-    svg: 'brain',
-    title: 'AI-Powered\nConsultant',
-    sub: 'Get instant clinical guidance\npowered by advanced AI',
-    badge: 'Powered by Claude',
+    emoji: '🤖',
+    tag: 'Powered by Claude',
+    title: 'AI Clinical\nConsultant',
+    sub: 'Get instant expert guidance\non any clinical decision',
   },
   {
     id: 'ranks',
-    bg: ['#FFFBF0','#FFF5E0'],
+    bg: ['#FFFBEE','#FFFDF5'],
     accent: '#FF9F0A',
-    icon: null,
-    svg: 'trophy',
-    title: 'Climb the\nClinical Ranks',
+    emoji: '🏆',
+    tag: '8 Clinical Ranks',
+    title: 'Climb the\nClinical Ladder',
     sub: 'From Clinical Clerk to\nChief of Medicine',
-    badge: '8 Ranks',
+  },
+  {
+    id: 'proof',
+    bg: ['#F5F0FF','#F8F5FF'],
+    accent: '#7C5CFC',
+    emoji: '👨‍⚕️',
+    tag: null,
+    title: 'Trusted by\nDoctors Worldwide',
+    sub: null,
   },
   {
     id: 'paywall',
     bg: ['#0A1628','#0A1628'],
     accent: '#00C2B2',
-    icon: null,
-    svg: 'pro',
+    emoji: null,
+    tag: null,
     title: null,
     sub: null,
-    badge: null,
   },
 ]
 
-function HospitalSVG({ color }: { color: string }) {
-  return (
-    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
-      <defs>
-        <radialGradient id="hBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.15"/>
-          <stop offset="100%" stopColor={color} stopOpacity="0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="80" cy="80" r="75" fill="url(#hBg)"/>
-      <rect x="35" y="55" width="90" height="75" rx="6" fill="none" stroke={color} strokeWidth="2.5" opacity="0.8"/>
-      <rect x="55" y="35" width="50" height="30" rx="4" fill="none" stroke={color} strokeWidth="2" opacity="0.6"/>
-      <line x1="65" y1="75" x2="95" y2="75" stroke={color} strokeWidth="3" strokeLinecap="round"/>
-      <line x1="80" y1="60" x2="80" y2="90" stroke={color} strokeWidth="3" strokeLinecap="round"/>
-      <rect x="60" y="100" width="40" height="30" rx="3" fill={color} opacity="0.2"/>
-      <rect x="72" y="105" width="16" height="25" rx="2" fill={color} opacity="0.5"/>
-      {[40,60,100,120].map((x,i)=>(
-        <rect key={i} x={x} y="60" width="12" height="14" rx="2" fill={color} opacity="0.15"/>
-      ))}
-    </svg>
-  )
-}
+const TESTIMONIALS = [
+  { name:'Dr. Sarah K.', role:'Cardiology Resident', flag:'🇸🇦', text:'The STEMI simulation saved a real patient. I knew exactly what to do.' },
+  { name:'Dr. Ahmed M.', role:'Emergency Medicine', flag:'🇦🇪', text:'Best clinical learning app I\'ve used. The AI consultant is incredible.' },
+  { name:'Dr. Priya R.', role:'Internal Medicine', flag:'🇬🇧', text:'Went from Clinical Clerk to Specialist rank in 3 weeks!' },
+]
 
-function ECGSvg({ color }: { color: string }) {
-  return (
-    <svg width="160" height="100" viewBox="0 0 160 100" fill="none">
-      <defs>
-        <linearGradient id="ecgG" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor={color} stopOpacity="0"/>
-          <stop offset="20%" stopColor={color}/>
-          <stop offset="80%" stopColor={color}/>
-          <stop offset="100%" stopColor={color} stopOpacity="0"/>
-        </linearGradient>
-        <filter id="ecgGlow">
-          <feGaussianBlur stdDeviation="2" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <polyline
-        points="0,50 20,50 28,50 34,24 40,76 46,36 52,62 58,50 80,50 88,50 94,26 100,74 106,38 112,50 160,50"
-        fill="none" stroke="url(#ecgG)" strokeWidth="3"
-        strokeLinecap="round" strokeLinejoin="round"
-        filter="url(#ecgGlow)">
-        <animate attributeName="stroke-dasharray" from="0 400" to="400 0" dur="2s" repeatCount="indefinite"/>
-      </polyline>
-      <circle cx="112" cy="50" r="4" fill={color} filter="url(#ecgGlow)">
-        <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/>
-      </circle>
-    </svg>
-  )
-}
+const FEATURES = [
+  { icon:'🏥', text:'Unlimited clinical cases — all specialties' },
+  { icon:'🤖', text:'AI Consultant — instant clinical guidance' },
+  { icon:'📜', text:'PDF Certificates for every completed case' },
+  { icon:'🏆', text:'Global leaderboard & clinical ranks' },
+  { icon:'📊', text:'Full performance analytics & insights' },
+  { icon:'🔔', text:'On-call reminders & clinical alerts' },
+]
 
-function BrainSVG({ color }: { color: string }) {
-  return (
-    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
-      <defs>
-        <radialGradient id="brBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.12"/>
-          <stop offset="100%" stopColor={color} stopOpacity="0"/>
-        </radialGradient>
-        <filter id="brGlow">
-          <feGaussianBlur stdDeviation="2.5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <circle cx="80" cy="80" r="75" fill="url(#brBg)"/>
-      <path d="M80 40 C60 38, 42 50, 40 68 C38 82, 45 92, 55 96 C65 100, 75 95, 80 90"
-        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" filter="url(#brGlow)" opacity="0.9"/>
-      <path d="M80 40 C100 38, 118 50, 120 68 C122 82, 115 92, 105 96 C95 100, 85 95, 80 90"
-        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" filter="url(#brGlow)" opacity="0.9"/>
-      <line x1="80" y1="40" x2="80" y2="90" stroke={color} strokeWidth="1.5" opacity="0.3"/>
-      {[[55,60],[65,50],[95,60],[105,55],[50,75],[110,72],[60,82],[100,80]].map(([x,y],i)=>(
-        <circle key={i} cx={x} cy={y} r="3" fill={color} opacity="0.5" filter="url(#brGlow)">
-          <animate attributeName="opacity" values="0.3;0.8;0.3" dur={`${1.5+i*0.2}s`} repeatCount="indefinite"/>
-        </circle>
-      ))}
-      {[[55,60,65,50],[65,50,80,55],[95,60,105,55],[80,55,95,60],[50,75,60,82],[110,72,100,80]].map(([x1,y1,x2,y2],i)=>(
-        <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth="1" opacity="0.25"/>
-      ))}
-    </svg>
-  )
-}
+interface Props { onComplete: (isPro: boolean) => void }
 
-function TrophySVG({ color }: { color: string }) {
+function ProofSlide({ accent }: { accent: string }) {
+  const [active, setActive] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setActive(a => (a+1)%TESTIMONIALS.length), 3000)
+    return () => clearInterval(t)
+  }, [])
   return (
-    <svg width="140" height="160" viewBox="0 0 140 160" fill="none">
-      <defs>
-        <linearGradient id="trG" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
-          <stop offset="0%" stopColor={color} stopOpacity="0.9"/>
-          <stop offset="100%" stopColor={color} stopOpacity="0.4"/>
-        </linearGradient>
-        <filter id="trGlow">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <path d="M45 30 L95 30 L90 80 C88 96, 52 96, 50 80 Z"
-        fill="none" stroke={color} strokeWidth="2.5" strokeLinejoin="round" filter="url(#trGlow)" opacity="0.9"/>
-      <path d="M45 45 C30 43, 22 55, 28 68 C32 76, 42 80, 50 78"
-        fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
-      <path d="M95 45 C110 43, 118 55, 112 68 C108 76, 98 80, 90 78"
-        fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" opacity="0.6"/>
-      <line x1="70" y1="96" x2="70" y2="118" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity="0.7"/>
-      <rect x="45" y="118" width="50" height="8" rx="4" fill={color} opacity="0.5" filter="url(#trGlow)"/>
-      <text x="70" y="65" textAnchor="middle" fill={color} fontSize="22" fontWeight="900" opacity="0.9"
-        style={{fontFamily:F}}>🏆</text>
-    </svg>
+    <div style={{ width:'100%', paddingBottom:20 }}>
+      {/* Stats */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:28 }}>
+        {[
+          { v:'12K+', l:'Doctors' },
+          { v:'48', l:'Countries' },
+          { v:'94%', l:'Pass Rate' },
+        ].map(s=>(
+          <div key={s.l} style={{
+            background:'rgba(255,255,255,0.90)', borderRadius:16, padding:'14px 8px',
+            textAlign:'center', border:'1px solid rgba(10,132,255,0.10)',
+            boxShadow:'0 2px 12px rgba(10,132,255,0.06)',
+          }}>
+            <div style={{ fontSize:22, fontWeight:900, color:accent }}>{s.v}</div>
+            <div style={{ fontSize:11, color:'rgba(10,22,40,0.50)', fontWeight:600, marginTop:2 }}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+      {/* Testimonial */}
+      <div style={{
+        background:'rgba(255,255,255,0.92)', borderRadius:20, padding:'20px 18px',
+        border:'1px solid rgba(10,132,255,0.10)',
+        boxShadow:'0 4px 20px rgba(10,132,255,0.08)',
+        minHeight:130,
+      }}>
+        <div style={{ fontSize:28, marginBottom:10 }}>"</div>
+        <div style={{ fontSize:14, color:'#0A1628', lineHeight:1.65, marginBottom:14, fontWeight:500 }}>
+          {TESTIMONIALS[active].text}
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{
+            width:36, height:36, borderRadius:'50%', fontSize:20,
+            background:`${accent}14`, display:'flex', alignItems:'center', justifyContent:'center',
+          }}>{TESTIMONIALS[active].flag}</div>
+          <div>
+            <div style={{ fontSize:13, fontWeight:700, color:'#0A1628' }}>{TESTIMONIALS[active].name}</div>
+            <div style={{ fontSize:11, color:'rgba(10,22,40,0.50)' }}>{TESTIMONIALS[active].role}</div>
+          </div>
+        </div>
+      </div>
+      {/* Dots */}
+      <div style={{ display:'flex', justifyContent:'center', gap:6, marginTop:16 }}>
+        {TESTIMONIALS.map((_,i)=>(
+          <div key={i} style={{
+            width: i===active ? 18 : 6, height:6, borderRadius:3,
+            background: i===active ? accent : 'rgba(10,22,40,0.15)',
+            transition:'all 0.3s',
+          }}/>
+        ))}
+      </div>
+    </div>
   )
 }
 
 function Paywall({ onSubscribe, onFree }: { onSubscribe:(plan:string)=>void; onFree:()=>void }) {
-  const [selected, setSelected] = useState<'monthly'|'annual'>('monthly')
+  const [selected, setSelected] = useState<'monthly'|'annual'>('annual')
   const [loading, setLoading] = useState(false)
 
   const plans = {
-    monthly: { label:'Monthly', price:'$14.99', period:'/month', save:null },
-    annual:  { label:'Annual',  price:'$99.99', period:'/year', save:'Save 44%' },
+    monthly: { label:'Monthly', price:'$14.99', period:'/month', save:null, per:'$14.99/mo' },
+    annual:  { label:'Annual',  price:'$99.99', period:'/year',  save:'Save 44%', per:'$8.33/mo' },
   }
 
   const handleSubscribe = () => {
     setLoading(true)
-    setTimeout(() => onSubscribe(selected), 1200)
+    setTimeout(() => onSubscribe(selected), 1000)
   }
 
   return (
-    <div style={{ width:'100%', maxWidth:400, margin:'0 auto', padding:'0 4px' }}>
-
-      {/* Logo + Title */}
-      <div style={{ textAlign:'center', marginBottom:28 }}>
+    <div style={{ width:'100%', maxWidth:400, margin:'0 auto', fontFamily:F }}>
+      {/* Header */}
+      <div style={{ textAlign:'center', marginBottom:24 }}>
         <div style={{
           display:'inline-flex', alignItems:'center', justifyContent:'center',
-          width:64, height:64, borderRadius:18, marginBottom:14,
+          width:68, height:68, borderRadius:20, marginBottom:14,
           background:'linear-gradient(135deg,#0A2540,#0D3060)',
           border:'1.5px solid rgba(0,194,178,0.30)',
           boxShadow:'0 8px 32px rgba(0,194,178,0.20)',
-        }}>
-          <span style={{ fontSize:28 }}>⚕️</span>
-        </div>
-        <div style={{ fontSize:26, fontWeight:900, color:'#F2F8FF', letterSpacing:-0.8, lineHeight:1.2, marginBottom:8 }}>
-          Cliniverse <span style={{
+          fontSize:32,
+        }}>⚕️</div>
+        <div style={{ fontSize:28, fontWeight:900, color:'#F2F8FF', letterSpacing:-0.8, marginBottom:6 }}>
+          Cliniverse{' '}
+          <span style={{
             background:'linear-gradient(135deg,#00C2B2,#0A84FF)',
             WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent',
           }}>PRO</span>
         </div>
-        <div style={{ fontSize:14, color:'rgba(242,248,255,0.55)', fontWeight:500, lineHeight:1.5 }}>
+        <div style={{ fontSize:13, color:'rgba(242,248,255,0.55)', lineHeight:1.5 }}>
           Unlimited access to every case,{'\n'}AI consultant & certificate
         </div>
       </div>
 
       {/* Features */}
       <div style={{
-        background:'rgba(255,255,255,0.05)', borderRadius:18,
-        border:'1px solid rgba(255,255,255,0.09)',
-        padding:'16px 18px', marginBottom:20,
+        background:'rgba(255,255,255,0.06)', borderRadius:18,
+        border:'1px solid rgba(255,255,255,0.09)', padding:'14px 16px', marginBottom:18,
       }}>
-        {[
-          { icon:'🏥', text:'Unlimited clinical cases — all specialties' },
-          { icon:'🤖', text:'AI Consultant — instant clinical guidance' },
-          { icon:'📜', text:'PDF Certificates for every case' },
-          { icon:'🏆', text:'Global leaderboard & clinical ranks' },
-          { icon:'📊', text:'Full performance analytics & stats' },
-          { icon:'🔔', text:'On-call reminders & clinical alerts' },
-        ].map((f,i)=>(
+        {FEATURES.map((f,i)=>(
           <div key={i} style={{
-            display:'flex', alignItems:'center', gap:12,
-            padding:'9px 0',
-            borderBottom: i<5 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+            display:'flex', alignItems:'center', gap:12, padding:'8px 0',
+            borderBottom: i<FEATURES.length-1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
           }}>
             <span style={{ fontSize:18, minWidth:24 }}>{f.icon}</span>
-            <span style={{ fontSize:14, color:'rgba(242,248,255,0.85)', fontWeight:500 }}>{f.text}</span>
-            <span style={{ marginLeft:'auto', color:'#00C2B2', fontSize:16 }}>✓</span>
+            <span style={{ fontSize:13, color:'rgba(242,248,255,0.85)', fontWeight:500, flex:1 }}>{f.text}</span>
+            <span style={{ color:'#00C2B2', fontSize:15 }}>✓</span>
           </div>
         ))}
       </div>
 
       {/* Plan selector */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:18 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
         {(Object.entries(plans) as [string, typeof plans.monthly][]).map(([key, plan])=>(
           <div key={key} onClick={()=>setSelected(key as 'monthly'|'annual')} style={{
-            borderRadius:16, padding:'14px 12px', cursor:'pointer',
-            border: selected===key
-              ? '2px solid #00C2B2'
-              : '1.5px solid rgba(255,255,255,0.10)',
-            background: selected===key
-              ? 'rgba(0,194,178,0.12)'
-              : 'rgba(255,255,255,0.04)',
-            textAlign:'center', position:'relative',
+            borderRadius:16, padding:'14px 12px', cursor:'pointer', textAlign:'center',
+            position:'relative',
+            border: selected===key ? '2px solid #00C2B2' : '1.5px solid rgba(255,255,255,0.10)',
+            background: selected===key ? 'rgba(0,194,178,0.12)' : 'rgba(255,255,255,0.04)',
             transition:'all 0.2s',
           }}>
             {plan.save && (
@@ -253,14 +211,13 @@ function Paywall({ onSubscribe, onFree }: { onSubscribe:(plan:string)=>void; onF
                 fontSize:10, fontWeight:800, color:'white', whiteSpace:'nowrap',
               }}>{plan.save}</div>
             )}
-            <div style={{ fontSize:12, color:'rgba(242,248,255,0.55)', fontWeight:600, marginBottom:4 }}>{plan.label}</div>
-            <div style={{ fontSize:22, fontWeight:900, color:'#F2F8FF', letterSpacing:-0.5 }}>{plan.price}</div>
-            <div style={{ fontSize:11, color:'rgba(242,248,255,0.40)' }}>{plan.period}</div>
+            <div style={{ fontSize:11, color:'rgba(242,248,255,0.50)', fontWeight:600, marginBottom:4 }}>{plan.label}</div>
+            <div style={{ fontSize:24, fontWeight:900, color:'#F2F8FF', letterSpacing:-0.5 }}>{plan.price}</div>
+            <div style={{ fontSize:10, color:'rgba(242,248,255,0.40)' }}>{plan.period}</div>
             {selected===key && (
               <div style={{
-                position:'absolute', top:10, right:10,
-                width:16, height:16, borderRadius:'50%',
-                background:'#00C2B2',
+                position:'absolute', top:8, right:8,
+                width:16, height:16, borderRadius:'50%', background:'#00C2B2',
                 display:'flex', alignItems:'center', justifyContent:'center',
                 fontSize:9, color:'white', fontWeight:900,
               }}>✓</div>
@@ -272,52 +229,42 @@ function Paywall({ onSubscribe, onFree }: { onSubscribe:(plan:string)=>void; onF
       {/* CTA */}
       <button onClick={handleSubscribe} disabled={loading} style={{
         width:'100%', padding:'16px', borderRadius:16, border:'none',
-        background: loading
-          ? 'rgba(0,194,178,0.5)'
-          : 'linear-gradient(135deg,#00C2B2 0%,#0A84FF 100%)',
+        background: loading ? 'rgba(0,194,178,0.5)' : 'linear-gradient(135deg,#00C2B2,#0A84FF)',
         color:'white', fontSize:17, fontWeight:800, cursor: loading ? 'default' : 'pointer',
-        boxShadow:'0 8px 32px rgba(0,194,178,0.30)',
-        transition:'all 0.2s', letterSpacing:-0.3,
-        marginBottom:12,
+        boxShadow:'0 8px 32px rgba(0,194,178,0.30)', marginBottom:12,
+        letterSpacing:-0.3, transition:'all 0.2s',
       }}>
-        {loading ? '⏳ Processing...' : `Start PRO — ${plans[selected].price}${plans[selected].period}`}
+        {loading ? '⏳ Processing...' : `Start PRO — ${plans[selected].per}`}
       </button>
 
-      {/* Free option */}
       <button onClick={onFree} style={{
         width:'100%', padding:'13px', borderRadius:14, border:'none',
-        background:'transparent', color:'rgba(242,248,255,0.40)',
+        background:'transparent', color:'rgba(242,248,255,0.35)',
         fontSize:14, fontWeight:600, cursor:'pointer',
-        transition:'color 0.2s',
       }}>
         Continue with Free — 1 case/day
       </button>
 
-      {/* Legal */}
       <div style={{
-        textAlign:'center', marginTop:14,
-        fontSize:10, color:'rgba(242,248,255,0.22)', lineHeight:1.6,
+        textAlign:'center', marginTop:12,
+        fontSize:10, color:'rgba(242,248,255,0.20)', lineHeight:1.6,
       }}>
         Auto-renews. Cancel anytime in Settings.{'\n'}
-        By subscribing you agree to our Terms & Privacy Policy.
+        Subscribing means you agree to our Terms & Privacy Policy.
       </div>
     </div>
   )
 }
 
-interface OnboardingProps {
-  onComplete: (isPro: boolean) => void
-}
-
-export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
+export default function OnboardingFunnel({ onComplete }: Props) {
   const [slide, setSlide]       = useState(0)
   const [progress, setProgress] = useState(0)
-  const [touching, setTouching] = useState(false)
-  const touchX = useRef(0)
+  const [animDir, setAnimDir]   = useState<'left'|'right'>('left')
   const timerRef = useRef<ReturnType<typeof setInterval>|null>(null)
-  const DURATION = 4500
-
+  const touchX   = useRef(0)
+  const DURATION = 5000
   const isPaywall = slide === SLIDES.length - 1
+  const isProof   = SLIDES[slide].id === 'proof'
 
   const startTimer = () => {
     if (isPaywall) return
@@ -328,7 +275,7 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
       setProgress(p => {
         if (p >= 100) {
           clearInterval(timerRef.current!)
-          setSlide(s => Math.min(s + 1, SLIDES.length - 1))
+          goNext()
           return 0
         }
         return p + step
@@ -343,62 +290,57 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
 
   const goNext = () => {
     if (timerRef.current) clearInterval(timerRef.current)
+    setAnimDir('left')
     setSlide(s => Math.min(s + 1, SLIDES.length - 1))
   }
   const goPrev = () => {
     if (slide === 0) return
     if (timerRef.current) clearInterval(timerRef.current)
+    setAnimDir('right')
     setSlide(s => Math.max(s - 1, 0))
   }
 
-  const handleTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; setTouching(true) }
-  const handleTouchEnd   = (e: React.TouchEvent) => {
-    const dx = e.changedTouches[0].clientX - touchX.current
-    if (dx < -40) goNext()
-    else if (dx > 40) goPrev()
-    setTouching(false)
-  }
   const handleClick = (e: React.MouseEvent) => {
     if (isPaywall) return
     const x = e.clientX; const w = window.innerWidth
-    if (x > w * 0.35) goNext(); else goPrev()
+    if (x > w * 0.3) goNext(); else goPrev()
   }
 
   const s = SLIDES[slide]
 
   return (
     <div
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       onClick={handleClick}
+      onTouchStart={e => { touchX.current = e.touches[0].clientX }}
+      onTouchEnd={e => {
+        const dx = e.changedTouches[0].clientX - touchX.current
+        if (dx < -50) goNext()
+        else if (dx > 50) goPrev()
+      }}
       style={{
-        position:'fixed', inset:0, zIndex:9999,
-        background: isPaywall
-          ? '#0A1628'
-          : `linear-gradient(160deg, ${s.bg[0]} 0%, ${s.bg[1]} 100%)`,
+        position:'fixed', inset:0, zIndex:9999, fontFamily:F,
+        background: isPaywall ? '#0A1628' : `linear-gradient(160deg, ${s.bg[0]} 0%, ${s.bg[1]} 100%)`,
         display:'flex', flexDirection:'column',
-        alignItems:'center', justifyContent:'center',
-        fontFamily:F, overflow:'hidden',
-        transition:'background 0.5s ease',
+        alignItems:'center', overflow:'hidden',
+        transition:'background 0.4s ease',
       }}
     >
-
-      {/* Progress bars — story style */}
+      {/* Progress bars */}
       {!isPaywall && (
         <div style={{
           position:'absolute', top:0, left:0, right:0,
-          display:'flex', gap:5, padding:'54px 20px 0',
-          zIndex:100,
+          display:'flex', gap:4, padding:'52px 16px 0', zIndex:100,
         }}>
           {SLIDES.slice(0,-1).map((_,i)=>(
             <div key={i} style={{
               flex:1, height:2.5, borderRadius:2,
-              background:'rgba(10,132,255,0.15)', overflow:'hidden',
+              background:'rgba(10,22,40,0.10)', overflow:'hidden',
             }}>
               <div style={{
                 height:'100%', borderRadius:2,
-                background:'rgba(10,132,255,0.80)',
+                background: i < slide ? s.accent : i === slide ? s.accent : 'transparent',
                 width: i < slide ? '100%' : i === slide ? `${progress}%` : '0%',
+                opacity: i < slide ? 0.5 : 1,
                 transition: i === slide ? 'none' : 'none',
               }}/>
             </div>
@@ -409,24 +351,22 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
       {/* Ambient glow */}
       {!isPaywall && (
         <div style={{
-          position:'absolute', top:'15%', left:'50%', transform:'translateX(-50%)',
-          width:400, height:400, borderRadius:'50%',
-          background:`radial-gradient(circle, ${s.accent}18 0%, transparent 70%)`,
-          filter:'blur(60px)', pointerEvents:'none', transition:'background 0.5s',
+          position:'absolute', top:'10%', left:'50%', transform:'translateX(-50%)',
+          width:350, height:350, borderRadius:'50%',
+          background:`radial-gradient(circle, ${s.accent}15 0%, transparent 70%)`,
+          filter:'blur(50px)', pointerEvents:'none',
         }}/>
       )}
 
       {/* Content */}
       {isPaywall ? (
         <div style={{
-          width:'100%', height:'100%',
+          width:'100%', height:'100%', overflowY:'auto',
           display:'flex', flexDirection:'column',
-          alignItems:'center', justifyContent:'center',
-          padding:'60px 20px 40px', overflowY:'auto',
+          alignItems:'center', padding:'60px 20px 40px',
         }}>
           <Paywall
             onSubscribe={(plan) => {
-              // Open payment
               if (typeof window !== 'undefined') {
                 window.open('https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d','_blank')
               }
@@ -438,73 +378,90 @@ export default function OnboardingFunnel({ onComplete }: OnboardingProps) {
       ) : (
         <div style={{
           display:'flex', flexDirection:'column', alignItems:'center',
-          padding:'100px 32px 80px', textAlign:'center', width:'100%',
-          pointerEvents:'none',
+          padding:'90px 28px 80px', textAlign:'center', width:'100%',
+          flex:1, justifyContent: isProof ? 'flex-start' : 'center',
         }}>
+          {/* Emoji illustration */}
+          {s.emoji && (
+            <div style={{
+              width:100, height:100, borderRadius:30, marginBottom:24,
+              background:`linear-gradient(135deg, ${s.accent}18, ${s.accent}08)`,
+              border:`1.5px solid ${s.accent}25`,
+              display:'flex', alignItems:'center', justifyContent:'center',
+              fontSize:52,
+              boxShadow:`0 8px 32px ${s.accent}20`,
+              animation:'emojiIn 0.5s cubic-bezier(0.34,1.56,0.64,1)',
+            }}>{s.emoji}</div>
+          )}
 
-          {/* Illustration */}
-          <div style={{
-            marginBottom:36,
-            filter:`drop-shadow(0 0 30px ${s.accent}50)`,
-            animation:'slideIn 0.5s cubic-bezier(0.34,1.56,0.64,1)',
-          }}>
-            {s.svg==='hospital' && <HospitalSVG color={s.accent}/>}
-            {s.svg==='ecg'      && <ECGSvg color={s.accent}/>}
-            {s.svg==='brain'    && <BrainSVG color={s.accent}/>}
-            {s.svg==='trophy'   && <TrophySVG color={s.accent}/>}
-          </div>
-
-          {/* Badge */}
-          {s.badge && (
+          {/* Tag */}
+          {s.tag && (
             <div style={{
               display:'inline-flex', alignItems:'center', gap:6,
-              background:`${s.accent}20`, border:`1px solid ${s.accent}40`,
-              borderRadius:20, padding:'5px 14px', marginBottom:16,
+              background:`${s.accent}14`, border:`1px solid ${s.accent}30`,
+              borderRadius:20, padding:'5px 14px', marginBottom:14,
               fontSize:12, fontWeight:700, color:s.accent,
-              animation:'fadeUp 0.4s ease',
-            }}>{s.badge}</div>
+            }}>{s.tag}</div>
           )}
 
           {/* Title */}
-          <div style={{
-            fontSize:34, fontWeight:900, color:'#0A1628',
-            letterSpacing:-1, lineHeight:1.15, marginBottom:14,
-            whiteSpace:'pre-line', animation:'fadeUp 0.5s ease',
-          }}>{s.title}</div>
+          {s.title && (
+            <div style={{
+              fontSize:34, fontWeight:900, color:'#0A1628',
+              letterSpacing:-1, lineHeight:1.15, marginBottom:14,
+              whiteSpace:'pre-line',
+            }}>{s.title}</div>
+          )}
 
           {/* Subtitle */}
-          <div style={{
-            fontSize:16, color:'rgba(10,22,40,0.55)',
-            lineHeight:1.6, fontWeight:400, maxWidth:280,
-            whiteSpace:'pre-line', animation:'fadeUp 0.6s ease',
-          }}>{s.sub}</div>
+          {s.sub && (
+            <div style={{
+              fontSize:16, color:'rgba(10,22,40,0.55)',
+              lineHeight:1.65, fontWeight:400, maxWidth:290,
+              whiteSpace:'pre-line',
+            }}>{s.sub}</div>
+          )}
+
+          {/* Proof slide content */}
+          {isProof && <ProofSlide accent={s.accent} />}
         </div>
       )}
 
-      {/* Dot indicators */}
+      {/* Bottom dots + Next button */}
       {!isPaywall && (
         <div style={{
-          position:'absolute', bottom:50,
-          display:'flex', gap:6, alignItems:'center',
+          position:'absolute', bottom:40,
+          display:'flex', flexDirection:'column', alignItems:'center', gap:16, width:'100%', padding:'0 24px',
         }}>
-          {SLIDES.slice(0,-1).map((_,i)=>(
-            <div key={i} style={{
-              width: i===slide ? 20 : 6, height:6, borderRadius:3,
-              background: i===slide ? s.accent : 'rgba(10,22,40,0.15)',
-              transition:'all 0.3s ease',
-            }}/>
-          ))}
+          {/* Next button on last non-paywall slide */}
+          {slide === SLIDES.length - 2 && (
+            <button onClick={e=>{e.stopPropagation();goNext()}} style={{
+              width:'100%', maxWidth:320, padding:'16px', borderRadius:16, border:'none',
+              background:`linear-gradient(135deg, ${s.accent}, #0A84FF)`,
+              color:'white', fontSize:17, fontWeight:800, cursor:'pointer',
+              boxShadow:`0 8px 28px ${s.accent}35`, letterSpacing:-0.3,
+            }}>
+              Get Started →
+            </button>
+          )}
+
+          {/* Dots */}
+          <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+            {SLIDES.slice(0,-1).map((_,i)=>(
+              <div key={i} style={{
+                width: i===slide ? 20 : 6, height:6, borderRadius:3,
+                background: i===slide ? s.accent : 'rgba(10,22,40,0.15)',
+                transition:'all 0.3s',
+              }}/>
+            ))}
+          </div>
         </div>
       )}
 
       <style>{`
-        @keyframes slideIn {
-          from { opacity:0; transform:scale(0.85) translateY(20px); }
+        @keyframes emojiIn {
+          from { opacity:0; transform:scale(0.7) translateY(10px); }
           to   { opacity:1; transform:scale(1) translateY(0); }
-        }
-        @keyframes fadeUp {
-          from { opacity:0; transform:translateY(16px); }
-          to   { opacity:1; transform:translateY(0); }
         }
       `}</style>
     </div>
