@@ -8,6 +8,7 @@ import ProfilePage from './components/ProfilePage'
 import SplashScreen from './components/SplashScreen'
 const DynamicNav    = dynamic(() => import('./components/DynamicNav'),    { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
+const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 import ToolsPage from './components/ToolsPage'
@@ -244,6 +245,7 @@ export default function Home() {
   const [mcqTotal, setMcqTotal]         = useState(0)
   const [showSplash, setShowSplash] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(true)
+  const [showAuth, setShowAuth] = useState(false)
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
@@ -257,6 +259,7 @@ export default function Home() {
   useEffect(() => {
     const seen = localStorage.getItem('onboarding_completed')
     if (seen) setShowOnboarding(false)
+      setShowAuth(true)
   }, [])
 
   // ── DATA ──────────────────────────────────────────────────────────────
@@ -388,6 +391,8 @@ export default function Home() {
   if (showAdmin) return <AdminDashboard onClose={()=>setShowAdmin(false)}/>
 
   if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />
+  if (showAuth) return (<AuthScreen onComplete={() => setShowAuth(false)} />)
+
   if (showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
       localStorage.setItem('onboarding_completed','1')
