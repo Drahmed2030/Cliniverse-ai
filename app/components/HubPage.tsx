@@ -7,6 +7,10 @@ const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const PulseAcademy   = dynamic(() => import('./PulseAcademy'),   { ssr: false })
 const AmbientScribe       = dynamic(() => import('./AmbientScribe'),       { ssr: false })
 const HealthStatusHeader  = dynamic(() => import('./HealthStatusHeader'), { ssr: false })
+const Leaderboard         = dynamic(() => import('./Leaderboard'),        { ssr: false })
+const SocialHub           = dynamic(() => import('./SocialHub'),           { ssr: false })
+const TeleconsultModule   = dynamic(() => import('./TeleconsultModule'),  { ssr: false })
+const BoardExam           = dynamic(() => import('./BoardExam'),           { ssr: false })
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
 
@@ -196,6 +200,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   const [showScribe,setShowScribe] = useState(false)
   const [showAcademy,setShowAcademy] = useState(false)
   const [waitlist,setWaitlist]     = useState<string[]>([])
+  const [activeFeature,setActiveFeature] = useState<string|null>(null)
 
   useEffect(()=>{
     const t = setInterval(()=>setLiveCount(n=>Math.max(900,Math.min(1600,n+Math.floor(Math.random()*5)-2))),3500)
@@ -580,14 +585,21 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
             <div style={{height:'1px',flex:1,background:`linear-gradient(90deg,transparent,${D.tealBd},transparent)`}}/>
           </div>
 
+          {/* ── ACTIVE FEATURES ── */}
           {[
-            {id:'reports',icon:'📋',title:'Medical Reports AI',sub:'Discharge · Referral · Handover',desc:'Generate professional medical reports in seconds with AI assistance.',color:D.teal,count:847,stats:[{l:'Types',v:'12+'},{l:'Languages',v:'EN·AR'},{l:'Time saved',v:'40min'}]},
-            {id:'nit',    icon:'🔬',title:'Non-Invasive Tech', sub:'ECG AI · Retinal · Skin lesion',desc:'AI-powered diagnostic tools for clinical decision support.',color:D.purple,count:1203,stats:[{l:'Tools',v:'8+'},{l:'Accuracy',v:'94%'},{l:'Validated',v:'FDA×3'}]},
-          ].map((card)=>(
-            <div key={card.id} style={{
+            {id:'leaderboard',icon:'🏆',title:'Global Leaderboard',sub:'Top doctors worldwide',desc:'See how you rank against doctors globally. Compete, climb, and earn recognition.',color:D.gold,action:()=>setActiveFeature('leaderboard'),stats:[{l:'Doctors',v:'12K+'},{l:'Countries',v:'48'},{l:'Updated',v:'Live'}]},
+            {id:'social',icon:'👥',title:'Clinical Social Hub',sub:'Cases · Discussions · Network',desc:'Connect with doctors globally. Share clinical insights and discuss complex cases.',color:D.blue,action:()=>setActiveFeature('social'),stats:[{l:'Members',v:'8.4K'},{l:'Posts/day',v:'240+'},{l:'Specialties',v:'22'}]},
+            {id:'teleconsult',icon:'📹',title:'Teleconsultation',sub:'Live · Async · Secure',desc:'Consult with specialists remotely. Secure video and async messaging for complex cases.',color:D.teal,action:()=>setActiveFeature('teleconsult'),stats:[{l:'Specialists',v:'320+'},{l:'Response',v:'<2h'},{l:'Secure',v:'E2E'}]},
+            {id:'board',icon:'📚',title:'Board Exam Prep',sub:'USMLE · MRCP · Saudi Boards',desc:'Comprehensive exam preparation with AI-powered practice questions and explanations.',color:D.purple,action:()=>setActiveFeature('board'),stats:[{l:'Questions',v:'5K+'},{l:'Pass rate',v:'94%'},{l:'Exams',v:'12'}]},
+            {id:'reports',icon:'📋',title:'Medical Reports AI',sub:'Discharge · Referral · Handover',desc:'Generate professional medical reports in seconds with AI assistance.',color:'#00C2B2',count:847,action:null,stats:[{l:'Types',v:'12+'},{l:'Languages',v:'EN·AR'},{l:'Time saved',v:'40min'}]},
+            {id:'nit',    icon:'🔬',title:'Non-Invasive Tech', sub:'ECG AI · Retinal · Skin lesion',desc:'AI-powered diagnostic tools for clinical decision support.',color:D.purple,count:1203,action:null,stats:[{l:'Tools',v:'8+'},{l:'Accuracy',v:'94%'},{l:'Validated',v:'FDA×3'}]},
+          ].map((card:any)=>(
+            <div key={card.id} onClick={card.action||undefined} style={{
               background:D.bg2,border:`1.5px solid ${card.color}18`,
               borderRadius:24,padding:'18px',marginBottom:12,
               position:'relative',overflow:'hidden',
+              cursor: card.action ? 'pointer' : 'default',
+              transition:'transform 0.15s',
             }}>
               <div style={{position:'absolute',top:-35,right:-35,width:130,height:130,borderRadius:'50%',background:`radial-gradient(circle,${card.color}08,transparent 70%)`,pointerEvents:'none'}}/>
 
@@ -599,8 +611,14 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
                     <div style={{fontSize:11,color:D.t2}}>{card.sub}</div>
                   </div>
                 </div>
-                <div style={{background:D.glass,border:`1px solid ${D.border}`,borderRadius:20,padding:'4px 10px'}}>
-                  <span style={{fontSize:9,fontWeight:800,color:D.t4,letterSpacing:0.5}}>COMING SOON</span>
+                <div style={{
+                  background: card.action ? `${card.color}14` : D.glass,
+                  border:`1px solid ${card.action ? card.color+'35' : D.border}`,
+                  borderRadius:20,padding:'4px 12px'
+                }}>
+                  <span style={{fontSize:9,fontWeight:800,color:card.action?card.color:D.t4,letterSpacing:0.5}}>
+                    {card.action ? '● LIVE' : 'COMING SOON'}
+                  </span>
                 </div>
               </div>
 
@@ -615,24 +633,65 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
                 ))}
               </div>
 
-              <button onClick={e=>{e.stopPropagation();if(!waitlist.includes(card.id))setWaitlist(w=>[...w,card.id])}} style={{
-                width:'100%',
-                background:waitlist.includes(card.id)?`${card.color}12`:D.glass,
-                border:`1.5px solid ${card.color}${waitlist.includes(card.id)?'35':'18'}`,
-                borderRadius:14,padding:'12px 16px',
-                display:'flex',alignItems:'center',justifyContent:'center',gap:8,
-                cursor:'pointer',fontFamily:F,transition:'all 0.2s',
-              }}>
-                <span style={{fontSize:14}}>{waitlist.includes(card.id)?'✓':'🔔'}</span>
-                <span style={{fontSize:12,fontWeight:800,color:waitlist.includes(card.id)?card.color:D.t1}}>
-                  {waitlist.includes(card.id)?"You're on the waitlist!":`Join Waitlist · ${card.count.toLocaleString()} waiting`}
-                </span>
-              </button>
+              {card.action ? (
+                <button onClick={e=>{e.stopPropagation();card.action&&card.action()}} style={{
+                  width:'100%',
+                  background:`linear-gradient(135deg,${card.color},${card.color}bb)`,
+                  border:'none',
+                  borderRadius:14,padding:'13px 16px',
+                  display:'flex',alignItems:'center',justifyContent:'center',gap:8,
+                  cursor:'pointer',fontFamily:F,transition:'all 0.2s',
+                  boxShadow:`0 6px 20px ${card.color}30`,
+                }}>
+                  <span style={{fontSize:14}}>→</span>
+                  <span style={{fontSize:13,fontWeight:800,color:'white'}}>Open {card.title.split(' ')[0]}</span>
+                </button>
+              ) : (
+                <button onClick={e=>{e.stopPropagation();if(!waitlist.includes(card.id))setWaitlist(w=>[...w,card.id])}} style={{
+                  width:'100%',
+                  background:waitlist.includes(card.id)?`${card.color}12`:D.glass,
+                  border:`1.5px solid ${card.color}${waitlist.includes(card.id)?'35':'18'}`,
+                  borderRadius:14,padding:'12px 16px',
+                  display:'flex',alignItems:'center',justifyContent:'center',gap:8,
+                  cursor:'pointer',fontFamily:F,transition:'all 0.2s',
+                }}>
+                  <span style={{fontSize:14}}>{waitlist.includes(card.id)?'✓':'🔔'}</span>
+                  <span style={{fontSize:12,fontWeight:800,color:waitlist.includes(card.id)?card.color:D.t1}}>
+                    {waitlist.includes(card.id)?"You're on the waitlist!":`Join Waitlist · ${(card.count||0).toLocaleString()} waiting`}
+                  </span>
+                </button>
+              )}
             </div>
           ))}
         </div>
 
       </main>
+
+      {/* ── FEATURE MODALS ── */}
+      {activeFeature==='leaderboard' && (
+        <div style={{position:'fixed',inset:0,zIndex:999,background:'#F0F6FF',overflowY:'auto',padding:'60px 16px 100px'}}>
+          <button onClick={()=>setActiveFeature(null)} style={{position:'fixed',top:16,left:16,zIndex:1000,background:'rgba(255,255,255,0.92)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:14,padding:'10px 18px',fontSize:14,fontWeight:700,color:'#0A84FF',cursor:'pointer',backdropFilter:'blur(12px)'}}>‹ Back</button>
+          <Leaderboard currentXP={xp} currentRank={''} />
+        </div>
+      )}
+      {activeFeature==='social' && (
+        <div style={{position:'fixed',inset:0,zIndex:999,background:'#F0F6FF',overflowY:'auto',padding:'60px 16px 100px'}}>
+          <button onClick={()=>setActiveFeature(null)} style={{position:'fixed',top:16,left:16,zIndex:1000,background:'rgba(255,255,255,0.92)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:14,padding:'10px 18px',fontSize:14,fontWeight:700,color:'#0A84FF',cursor:'pointer',backdropFilter:'blur(12px)'}}>‹ Back</button>
+          <SocialHub onXP={onXP} />
+        </div>
+      )}
+      {activeFeature==='teleconsult' && (
+        <div style={{position:'fixed',inset:0,zIndex:999,background:'#F0F6FF',overflowY:'auto',padding:'60px 16px 100px'}}>
+          <button onClick={()=>setActiveFeature(null)} style={{position:'fixed',top:16,left:16,zIndex:1000,background:'rgba(255,255,255,0.92)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:14,padding:'10px 18px',fontSize:14,fontWeight:700,color:'#0A84FF',cursor:'pointer',backdropFilter:'blur(12px)'}}>‹ Back</button>
+          <TeleconsultModule />
+        </div>
+      )}
+      {activeFeature==='board' && (
+        <div style={{position:'fixed',inset:0,zIndex:999,background:'#F0F6FF',overflowY:'auto',padding:'60px 16px 100px'}}>
+          <button onClick={()=>setActiveFeature(null)} style={{position:'fixed',top:16,left:16,zIndex:1000,background:'rgba(255,255,255,0.92)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:14,padding:'10px 18px',fontSize:14,fontWeight:700,color:'#0A84FF',cursor:'pointer',backdropFilter:'blur(12px)'}}>‹ Back</button>
+          <BoardExam onXP={onXP} />
+        </div>
+      )}
 
       {openSection&&(
         <SectionModal section={openSection} onClose={()=>setOpenSection(null)} onCase={setActiveCase} isPro={isPro} setShowUpgrade={setShowUpgrade}/>
