@@ -1,5 +1,5 @@
 'use client'
-import { useState , useRef } from 'react'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
 const CertificateGenerator = dynamic(() => import('./CertificateGenerator'), { ssr: false })
@@ -361,14 +361,6 @@ function FeedbackScreen({ onBack }: { onBack:()=>void }) {
 // ── MAIN ──────────────────────────────────────────────────────────
 export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, name, onUpgrade, onReset }: ProfileProps) {
   const [activeTab, setActiveTab] = useState<'profile'|'stats'|'settings'>('profile')
-  const _tX = React.useRef(0)
-  const _tY = React.useRef(0)
-  const TABS: ('profile'|'stats'|'settings')[] = ['profile','stats','settings']
-  const swipeTab = (dir: 'left'|'right') => {
-    const i = TABS.indexOf(activeTab)
-    if (dir==='left'  && i < TABS.length-1) setActiveTab(TABS[i+1])
-    if (dir==='right' && i > 0)             setActiveTab(TABS[i-1])
-  }
   const [subScreen, setSubScreen] = useState<string|null>(null)
   const [showCert, setShowCert]   = useState(false)
   const [notif, setNotif]         = useState(true)
