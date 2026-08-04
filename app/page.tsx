@@ -196,6 +196,21 @@ const Label = ({children, color=D.textMuted}: {children:React.ReactNode, color?:
   }}>{children}</div>
 )
 
+function LoadingSpinner({ color = '#00C2B2' }: { color?: string }) {
+  return (
+    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:40, gap:16 }}>
+      <div style={{
+        width:36, height:36, borderRadius:'50%',
+        border:`3px solid ${color}20`,
+        borderTop:`3px solid ${color}`,
+        animation:'spin 0.8s linear infinite',
+      }}/>
+      <div style={{ fontSize:13, color:'rgba(10,22,40,0.40)', fontWeight:600 }}>Loading...</div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  )
+}
+
 export default function Home() {
   const [tab, setTab]                   = useState('hub')
   const [isOnline, setIsOnline] = useState(true)
