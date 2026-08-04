@@ -39,7 +39,7 @@ function PhoneMockup({ src, alt }: { src: string; alt: string }) {
 const SLIDES = [
   { id:'stemi',       img:'/screenshots/stemi.png',       bg:'#FFFFFF', accent:'#FF453A', title:'Real Emergency\nSimulations',      sub:'Train with life-like STEMI, Sepsis & Stroke cases. Know exactly what to do when it matters.' },
   { id:'detective',   img:'/screenshots/detective.png',   bg:'#FAFBFF', accent:'#7C5CFC', title:'Diagnose Like\na Detective',       sub:'Order investigations wisely. Every test costs money. Diagnose accurately to maximize your score.' },
-  { id:'nexus',       img:'/screenshots/nexus.png',       bg:'#F8F5FF', accent:'#0A84FF', title:'The Global\nMedical Room',         sub:'Vote on real cases with 12,000+ doctors worldwide — in real time. See how you compare globally.' },
+  { id:'nexus',       img:'/screenshots/nexus.png',       bg:'#F8F5FF', accent:'#0A84FF', title:'The Global\nMedical Room',         sub:'Vote on real cases with doctors worldwide — in real time. See how you compare globally.' },
   { id:'calculators', img:'/screenshots/calculators.png', bg:'#F0F8FF', accent:'#00C2B2', title:'Clinical Tools\nAt Your Fingertips',sub:'ASCVD, CHA₂DS₂-VASc, TIMI, Wells Score — evidence-based calculators for every decision.' },
   { id:'paywall',     img:'',                             bg:'#0A1628', accent:'#00C2B2', title:null,                               sub:null },
 ]
@@ -68,7 +68,7 @@ function Paywall({ onSubscribe, onFree }: { onSubscribe:(p:string)=>void; onFree
           Cliniverse{' '}
           <span style={{ background:'linear-gradient(135deg,#00C2B2,#0A84FF)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>PRO</span>
         </div>
-        <div style={{ fontSize:13, color:'rgba(242,248,255,0.55)' }}>Join 12,000+ doctors worldwide</div>
+        <div style={{ fontSize:13, color:'rgba(242,248,255,0.55)' }}>Trusted by doctors worldwide</div>
       </div>
       <div style={{ background:'rgba(255,255,255,0.06)', borderRadius:18, border:'1px solid rgba(255,255,255,0.09)', padding:'12px 16px', marginBottom:14 }}>
         {FEATURES.map((f,i)=>(
