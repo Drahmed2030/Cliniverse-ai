@@ -1,11 +1,13 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { C, A } from '../lib/ds'
+import { Icons } from '../lib/icons'
 
 const TABS = [
-  { id:'pulse', icon:'⚡', label:'Today' },
-  { id:'ward',  icon:'🏥', label:'Clinic' },
-  { id:'tools', icon:'🔬', label:'Tools' },
-  { id:'me',    icon:'👤', label:'Me' },
+  { id:'pulse', label:'Today',  Icon: Icons.pulse },
+  { id:'ward',  label:'Clinic', Icon: Icons.ward  },
+  { id:'tools', label:'Tools',  Icon: Icons.tools },
+  { id:'me',    label:'Me',     Icon: Icons.me    },
 ]
 
 export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:string)=>void }) {
@@ -17,108 +19,85 @@ export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:str
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY
-      const going = y > lastY.current
+      const down = y > lastY.current
       lastY.current = y
-
-      if (going && y > 80) {
-        setVisible(false)
-        setDot(true)
-      } else {
-        setVisible(true)
-        setDot(false)
-      }
-
+      if (down && y > 80) { setVisible(false); setDot(true) }
+      else { setVisible(true); setDot(false) }
       clearTimeout(timer.current)
-      timer.current = setTimeout(() => {
-        setVisible(true)
-        setDot(false)
-      }, 2000)
+      timer.current = setTimeout(() => { setVisible(true); setDot(false) }, 2500)
     }
     window.addEventListener('scroll', onScroll, { passive:true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const activeTab = TABS.find(t =>
+  const active = TABS.find(t =>
     t.id === tab ||
-    (t.id === 'pulse' && tab === 'hub') ||
-    (t.id === 'ward'  && tab === 'net')
+    (t.id === 'pulse' && (tab === 'hub')) ||
+    (t.id === 'ward'  && tab === 'net') ||
+    (t.id === 'me'    && tab === 'profile')
   )?.id || 'pulse'
 
   return (
     <>
-      {/* ── FLOATING PILL ── */}
       <div style={{
-        position:'fixed', bottom:32, left:'50%',
-        transform:`translateX(-50%) translateY(${visible?'0':'120px'})`,
+        position:'fixed', bottom:36, left:'50%',
+        transform:`translateX(-50%) translateY(${visible?'0':'110px'})`,
         opacity: visible ? 1 : 0,
-        transition:'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease',
+        transition: A.spring,
         zIndex:1000,
-        display:'flex', alignItems:'center',
-        background:'rgba(15,24,36,0.85)',
-        backdropFilter:'blur(32px) saturate(200%)',
-        WebkitBackdropFilter:'blur(32px) saturate(200%)',
-        border:'1px solid rgba(255,255,255,0.10)',
-        borderRadius:40,
-        padding:'6px 8px',
-        gap:4,
-        boxShadow:'0 8px 40px rgba(0,0,0,0.60), 0 0 0 1px rgba(0,212,200,0.08)',
       }}>
-        {TABS.map(t => {
-          const isActive = t.id === activeTab
-          return (
-            <button key={t.id} onClick={() => {
-              if (t.id === 'ward') {
-                setTab('ward')
-              } else if (t.id === 'pulse') {
-                setTab('pulse')
-              } else {
-                setTab(t.id)
-              }
-            }} style={{
-              display:'flex', flexDirection:'column',
-              alignItems:'center', justifyContent:'center',
-              gap:3, border:'none', cursor:'pointer',
-              borderRadius:32,
-              padding: isActive ? '10px 22px' : '10px 16px',
-              transition:'all 0.3s cubic-bezier(0.34,1.56,0.64,1)',
-              background: isActive
-                ? 'linear-gradient(135deg,#00D4C8,#4F8EF7)'
-                : 'transparent',
-              boxShadow: isActive ? '0 4px 16px rgba(0,212,200,0.35)' : 'none',
-              minWidth: isActive ? 80 : 52,
-            }}>
-              <span style={{ fontSize:18, lineHeight:1 }}>{t.icon}</span>
-              <span style={{
-                fontSize:10, fontWeight: isActive ? 700 : 500,
-                color: isActive ? 'white' : 'rgba(232,244,253,0.45)',
-                fontFamily:'var(--font)',
-                letterSpacing:0.3,
-                transition:'color 0.2s',
-              }}>{t.label}</span>
-            </button>
-          )
-        })}
+        <div style={{
+          display:'flex', alignItems:'center',
+          background:'rgba(13,21,32,0.94)',
+          backdropFilter:'blur(40px) saturate(200%)',
+          WebkitBackdropFilter:'blur(40px) saturate(200%)',
+          border:'1px solid rgba(255,255,255,0.10)',
+          borderRadius:50, padding:'5px 6px', gap:2,
+          boxShadow:'0 8px 40px rgba(0,0,0,0.70), 0 0 0 1px rgba(0,210,200,0.06)',
+        }}>
+          {TABS.map(t => {
+            const isActive = t.id === active
+            const iconColor = isActive ? 'white' : 'rgba(240,248,255,0.35)'
+            return (
+              <button key={t.id} onClick={() => setTab(t.id)} style={{
+                display:'flex', flexDirection:'column',
+                alignItems:'center', justifyContent:'center',
+                gap:3, border:'none', cursor:'pointer',
+                borderRadius:44,
+                padding: isActive ? '9px 22px' : '9px 16px',
+                minWidth: isActive ? 84 : 52,
+                background: isActive ? C.gradPrimary : 'transparent',
+                boxShadow: isActive ? '0 4px 20px rgba(0,210,200,0.40)' : 'none',
+                transition: A.spring,
+              }}>
+                <t.Icon color={iconColor} size={20}/>
+                <span style={{
+                  fontSize:10, fontWeight:700, letterSpacing:0.3,
+                  fontFamily:C.font,
+                  color: isActive ? 'white' : 'rgba(240,248,255,0.38)',
+                  transition: A.smooth,
+                  marginTop:1,
+                }}>{t.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {/* ── DOT (Nav مخفي) ── */}
       {dot && (
-        <div
-          onClick={() => { setVisible(true); setDot(false) }}
-          style={{
-            position:'fixed', bottom:40, left:'50%',
-            transform:'translateX(-50%)',
-            width:32, height:8, borderRadius:8,
-            background:'rgba(0,212,200,0.50)',
-            border:'1px solid rgba(0,212,200,0.30)',
-            cursor:'pointer', zIndex:1000,
-            boxShadow:'0 0 12px rgba(0,212,200,0.30)',
-            transition:'all 0.3s',
-          }}
-        />
+        <div onClick={() => { setVisible(true); setDot(false) }} style={{
+          position:'fixed', bottom:44, left:'50%',
+          transform:'translateX(-50%)',
+          width:40, height:5, borderRadius:5,
+          background:'rgba(0,210,200,0.40)',
+          border:'1px solid rgba(0,210,200,0.20)',
+          cursor:'pointer', zIndex:1000,
+          boxShadow:'0 0 16px rgba(0,210,200,0.30)',
+          transition: A.smooth,
+        }}/>
       )}
 
-      {/* spacer */}
-      <div style={{height:120}}/>
+      <div style={{height:130}}/>
     </>
   )
 }
