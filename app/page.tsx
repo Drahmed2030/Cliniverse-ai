@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
 import PulsePage from './components/PulsePage'
 import ProfilePage from './components/ProfilePage'
+import MePage from './components/MePage'
 import SplashScreen from './components/SplashScreen'
 const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
@@ -711,8 +712,8 @@ export default function Home() {
         {tab==='tools' && <ToolsPage onXP={addXP}/>}
 
         {/* PROFILE */}
-        {tab==='profile' && (
-          <ProfilePage
+        {(tab==='profile'||tab==='me') && (
+          <MePage
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro} name={userName}
             onUpgrade={()=>setShowUpgrade(true)}
