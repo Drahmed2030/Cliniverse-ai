@@ -19,8 +19,93 @@ const T = {
   gold:   '#D4A847',
 }
 
-// ── VIRTUAL PATIENTS ──
-const PATIENTS = [
+
+// ── DYNAMIC PATIENT GENERATOR ──
+const DIAGNOSES = [
+  { dx:"Anterior STEMI — Post PCI", status:"critical", specialty:"Cardiology",
+    vitals:{bp:"108/70",hr:"95",spo2:"96",temp:"37.2",rr:"18"},
+    meds:["Aspirin 75mg OD","Ticagrelor 90mg BD","Atorvastatin 80mg ON","Bisoprolol 2.5mg OD"],
+    tasks:["Echo review","Cardiology review","Rehab referral"] },
+  { dx:"Severe Sepsis — UTI source", status:"urgent", specialty:"Internal Medicine",
+    vitals:{bp:"92/58",hr:"118",spo2:"94",temp:"38.9",rr:"22"},
+    meds:["Pip-Taz 4.5g TDS IV","IV Fluids 1L NaCl","Paracetamol 1g QDS"],
+    tasks:["Culture results","Fluid balance","Step-down antibiotics"] },
+  { dx:"COPD Exacerbation — Infective", status:"stable", specialty:"Respiratory",
+    vitals:{bp:"138/86",hr:"92",spo2:"91",temp:"37.4",rr:"20"},
+    meds:["Salbutamol Neb QDS","Prednisolone 40mg OD","Doxycycline 200mg OD"],
+    tasks:["Sputum culture","ABG review","Physiotherapy"] },
+  { dx:"Hypertensive Emergency", status:"critical", specialty:"Cardiology",
+    vitals:{bp:"210/120",hr:"102",spo2:"97",temp:"37.0",rr:"16"},
+    meds:["IV Labetalol","Amlodipine 10mg OD","Furosemide 40mg OD"],
+    tasks:["Echo","Renal function","Ophthalmology review"] },
+  { dx:"Diabetic Ketoacidosis", status:"urgent", specialty:"Endocrinology",
+    vitals:{bp:"104/68",hr:"112",spo2:"98",temp:"37.1",rr:"24"},
+    meds:["IV Insulin infusion","IV Fluids","Potassium replacement"],
+    tasks:["Hourly glucose","VBG q2h","Identify trigger"] },
+  { dx:"Acute Pulmonary Embolism", status:"urgent", specialty:"Respiratory",
+    vitals:{bp:"98/62",hr:"122",spo2:"88",temp:"37.3",rr:"26"},
+    meds:["Apixaban 10mg BD","O2 therapy","Analgesia"],
+    tasks:["CTPA review","Echo","Lower limb Doppler"] },
+  { dx:"Community Acquired Pneumonia", status:"stable", specialty:"Respiratory",
+    vitals:{bp:"128/78",hr:"88",spo2:"93",temp:"38.2",rr:"20"},
+    meds:["Amoxicillin-Clav 625mg TDS","Clarithromycin 500mg BD","Paracetamol"],
+    tasks:["CXR review","Blood cultures","CURB-65 score"] },
+  { dx:"Acute Kidney Injury — Stage 2", status:"urgent", specialty:"Nephrology",
+    vitals:{bp:"158/94",hr:"78",spo2:"97",temp:"37.0",rr:"16"},
+    meds:["IV Fluids","Hold nephrotoxics","Furosemide if overloaded"],
+    tasks:["Renal USS","Urine output hourly","Nephrology review"] },
+  { dx:"Stroke — Ischemic MCA territory", status:"critical", specialty:"Neurology",
+    vitals:{bp:"178/98",hr:"82",spo2:"96",temp:"37.1",rr:"16"},
+    meds:["Aspirin 300mg OD","Atorvastatin 80mg ON","IV fluids"],
+    tasks:["MRI brain","Swallow assessment","Physio referral"] },
+  { dx:"Acute Pancreatitis — Moderate", status:"stable", specialty:"Surgery",
+    vitals:{bp:"122/76",hr:"96",spo2:"97",temp:"37.8",rr:"18"},
+    meds:["IV Fluids aggressive","Analgesia","NBM initially"],
+    tasks:["CT abdomen","LFTs","Surgical review"] },
+];
+
+const FIRST_NAMES_M = ["James","Omar","David","Ahmed","Carlos","Wei","Yusuf","Michael","Hassan","Tariq"];
+const FIRST_NAMES_F = ["Sarah","Fatima","Emma","Aisha","Maria","Priya","Amira","Sophie","Layla","Nour"];
+const LAST_INITIALS = ["A","B","C","D","E","F","G","H","K","M","N","R","S","T"];
+
+function getDailyPatients() {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+  const pseudo = (n: number) => ((seed * 1103515245 + n * 12345) & 0x7fffffff) % 100;
+  
+  const beds = ["4A","4B","4C","4D","4E"];
+  return beds.map((bed, i) => {
+    const dxIndex = pseudo(i * 7) % DIAGNOSES.length;
+    const dx = DIAGNOSES[dxIndex];
+    const isFemale = pseudo(i * 13) % 2 === 0;
+    const names = isFemale ? FIRST_NAMES_F : FIRST_NAMES_M;
+    const firstName = names[pseudo(i * 17) % names.length];
+    const lastName = LAST_INITIALS[pseudo(i * 23) % LAST_INITIALS.length];
+    const age = 25 + (pseudo(i * 31) % 60);
+    const title = isFemale ? "Ms." : "Mr.";
+    
+    return {
+      id: `p${i+1}`,
+      bed,
+      name: `${title} ${firstName} ${lastName}.`,
+      age,
+      sex: isFemale ? "F" : "M",
+      diagnosis: dx.dx,
+      status: dx.status,
+      statusColor: dx.status === "critical" ? "#FF3B30" : dx.status === "urgent" ? "#FF9500" : "#007AFF",
+      vitals: dx.vitals,
+      meds: dx.meds,
+      notes: `Day ${1 + (pseudo(i*41) % 5)} admission. Monitoring closely. Plan reviewed.`,
+      tasks: dx.tasks,
+      specialty: dx.specialty,
+      labs: {},
+    };
+  });
+}
+
+
+// ── VIRTUAL PATIENTS (now dynamic) ──
+const PATIENTS_STATIC = [
   {
     id: 'p1', bed: '4A', name: 'Mr. Hassan A.', age: 58, sex: 'M',
     diagnosis: 'Anterior STEMI — Post PCI Day 2',
