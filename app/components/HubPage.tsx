@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { supabase } from '../supabase'
 
-const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr: false })
 const PulseAcademy   = dynamic(() => import('./PulseAcademy'),   { ssr: false })
 const AmbientScribe       = dynamic(() => import('./AmbientScribe'),       { ssr: false })
 const HealthStatusHeader  = dynamic(() => import('./HealthStatusHeader'), { ssr: false })
@@ -250,7 +249,9 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   // Full modals
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
-  return (
+  if(showLive) {
+    const LiveCaseViewer = require('./LiveCaseViewer').default
+    return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
       <div style={{padding:'20px 16px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${D.border}`}}>
         <span style={{color:D.t1,fontWeight:800,fontSize:16,fontFamily:F}}>Live Case</span>
@@ -258,7 +259,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
       </div>
       <LiveCaseViewer specialty="Emergency Medicine" difficulty="Intermediate" onXP={onXP}/>
     </div>
-  )
+  )}
 
 
   return (
