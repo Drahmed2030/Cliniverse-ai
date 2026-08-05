@@ -650,16 +650,7 @@ export default function Home() {
       <OceanBg/>
 
       {/* ── HEADER ── */}
-      <header style={{
-        background:'rgba(15,24,36,0.95)',
-        backdropFilter:'blur(40px) saturate(200%)',
-        WebkitBackdropFilter:'blur(40px) saturate(200%)',
-        padding:'0 16px', height:52,
-        display:'flex', justifyContent:'space-between', alignItems:'center',
-        position:'sticky', top:0, zIndex:100,
-        borderBottom:'0.5px solid rgba(255,255,255,0.08)',
-        boxShadow:'0 1px 12px rgba(10,132,255,0.06)',
-      }}>
+      <header style={{display:'none'}}>
         {/* Logo */}
         <div style={{display:'flex', alignItems:'center', gap:8, flexShrink:0}}>
           <div style={{
@@ -692,7 +683,7 @@ export default function Home() {
 
       {/* ── MAIN CONTENT ── */}
       <main onTouchStart={e=>{_mTX.current=e.touches[0].clientX;_mTY.current=e.touches[0].clientY}} onTouchEnd={swipeMain} style={{
-        flex:1, padding:'14px 16px', paddingBottom:140,
+        flex:1, padding:'0px 0px', paddingBottom:140,
         maxWidth:700, margin:'0 auto', width:'100%',
         boxSizing:'border-box', position:'relative', zIndex:1,
       }}>
