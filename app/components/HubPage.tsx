@@ -250,6 +250,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   // Full modals
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
+  if(showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
@@ -261,8 +262,6 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
     </div>
   )
 
-
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{minHeight:'100vh',background:'var(--bg-base, #0a1828)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
