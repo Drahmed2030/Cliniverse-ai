@@ -9,6 +9,7 @@ import SplashScreen from './components/SplashScreen'
 const DynamicNav    = dynamic(() => import('./components/DynamicNav'),    { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
 const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
+const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 import ToolsPage from './components/ToolsPage'
@@ -246,6 +247,8 @@ export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [showAuth, setShowAuth] = useState(false)
+  const [showAfia, setShowAfia] = useState(false)
+  const [userType, setUserType] = useState<string|null>(null)
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
@@ -391,7 +394,9 @@ export default function Home() {
   if (showAdmin) return <AdminDashboard onClose={()=>setShowAdmin(false)}/>
 
   if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />
-  if (showAuth) return (<AuthScreen onComplete={() => setShowAuth(false)} />)
+  if (showAfia) return (<AfiaHome onSelect={(type, skip) => { if(type){ setUserType(type); localStorage.setItem('afia_user_type', type); } setShowAfia(false); }} savedType={userType as any} />)
+
+  if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); setShowAfia(true); }} />)
 
   if (showOnboarding) return (
     <OnboardingFunnel onComplete={()=>{
