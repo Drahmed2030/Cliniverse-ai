@@ -244,7 +244,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   ]
 
   const sections = [
-    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU · Daily Cases', onPress:()=>setShowCritical(true),          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
+    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU · Daily Cases', action:()=>setShowCritical(true),          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
     {key:'sports',  icon:'⚽',title:'Sports Medicine',sub:'Pitch-side · Evidence-based',  color:D.green, tag:'NEW',        cases:sportsCases,  badge:'NEW'},
     {key:'peds',    icon:'🧸',title:'Pediatrics',     sub:'Febrile · Vaccines · Growth',    color:D.purple,tag:'PEDIATRICS', cases:pedsCases,    badge:'NEW'},
   ]
