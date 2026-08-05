@@ -4,6 +4,7 @@ import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
+import PulsePage from './components/PulsePage'
 import ProfilePage from './components/ProfilePage'
 import SplashScreen from './components/SplashScreen'
 const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
