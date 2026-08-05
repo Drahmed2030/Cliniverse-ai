@@ -1,91 +1,116 @@
-'use client'
-import { useState, useEffect } from 'react'
+"use client";
+import { useState, useEffect } from "react";
 
-const FEED = [
-  {id:1,city:'Riyadh',flag:'🇸🇦',color:'#ff453a',level:'CRITICAL',title:'52M — Anterior STEMI',detail:'Door-to-balloon: 67 min · Cath Lab activated',status:'LIVE'},
-  {id:2,city:'London',flag:'🇬🇧',color:'#ff9f0a',level:'URGENT',title:'34F — Status Epilepticus',detail:'IV Lorazepam given · Neuro team called',status:'LIVE'},
-  {id:3,city:'Dubai',flag:'🇦🇪',color:'#30d158',level:'RESOLVED',title:'61M — Massive PE',detail:'Systemic thrombolysis successful · ICU',status:'SOLVED'},
-  {id:4,city:'Toronto',flag:'🇨🇦',color:'#ff453a',level:'CRITICAL',title:'28F — Septic Shock',detail:'Noradrenaline started · Cultures sent',status:'LIVE'},
-  {id:5,city:'Cairo',flag:'🇪🇬',color:'#ff9f0a',level:'URGENT',title:'71M — Acute Stroke',detail:'NIHSS 14 · CT clear · tPA candidate',status:'LIVE'},
-  {id:6,city:'Paris',flag:'🇫🇷',color:'#30d158',level:'RESOLVED',title:'45M — DKA severe',detail:'pH 7.18 to 7.36 · Insulin protocol done',status:'SOLVED'},
-]
+const CITIES = [
+  {city:"Riyadh",flag:"🇸🇦"},{city:"London",flag:"🇬🇧"},
+  {city:"Dubai",flag:"🇦🇪"},{city:"Toronto",flag:"🇨🇦"},
+  {city:"Cairo",flag:"🇪🇬"},{city:"Paris",flag:"🇫🇷"},
+  {city:"New York",flag:"🇺🇸"},{city:"Sydney",flag:"🇦🇺"},
+  {city:"Tokyo",flag:"🇯🇵"},{city:"Berlin",flag:"🇩🇪"},
+];
 
-interface Props { onCase: (id: string) => void }
+const CASES = [
+  {level:"CRITICAL",color:"#FF453A",title:"52M — Anterior STEMI",detail:"Door-to-balloon: 67 min · Cath Lab activated",specialty:"Cardiology"},
+  {level:"URGENT",color:"#FF9F0A",title:"34F — Status Epilepticus",detail:"IV Lorazepam given · Neuro team called",specialty:"Neurology"},
+  {level:"CRITICAL",color:"#FF453A",title:"28F — Septic Shock",detail:"Noradrenaline started · Cultures sent",specialty:"ICU"},
+  {level:"URGENT",color:"#FF9F0A",title:"71M — Acute Stroke",detail:"NIHSS 14 · CT clear · tPA candidate",specialty:"Neurology"},
+  {level:"CRITICAL",color:"#FF453A",title:"65M — Massive PE",detail:"BP 85/50 · ECHO RV strain · Thrombolysis",specialty:"Respiratory"},
+  {level:"URGENT",color:"#FF9F0A",title:"45F — DKA severe",detail:"pH 7.18 · Insulin protocol · ICU referral",specialty:"Endocrinology"},
+  {level:"CRITICAL",color:"#FF453A",title:"78M — COPD Exacerbation",detail:"SpO2 82% · BiPAP started · ABG pending",specialty:"Respiratory"},
+  {level:"URGENT",color:"#FF9F0A",title:"55F — Hypertensive Emergency",detail:"BP 210/120 · IV Labetalol · Echo ordered",specialty:"Cardiology"},
+  {level:"CRITICAL",color:"#FF453A",title:"42M — Anaphylaxis",detail:"Epi 0.5mg IM · Airway secured · Improving",specialty:"Emergency"},
+  {level:"URGENT",color:"#FF9F0A",title:"33F — Eclampsia",detail:"MgSO4 loading · OB team called · CTG",specialty:"Obstetrics"},
+  {level:"RESOLVED",color:"#30D158",title:"61M — AKI Stage 3",detail:"Dialysis initiated · K+ normalised",specialty:"Nephrology"},
+  {level:"RESOLVED",color:"#30D158",title:"49F — Pneumonia severe",detail:"Antibiotics day 3 · Improving · HDU step-down",specialty:"Respiratory"},
+];
+
+function getDailyFeed() {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+  const pseudo = (n: number) => ((seed * 1103515245 + n * 12345) & 0x7fffffff) % 100;
+  
+  return Array.from({length: 8}, (_, i) => {
+    const caseIdx = pseudo(i * 7) % CASES.length;
+    const cityIdx = pseudo(i * 13) % CITIES.length;
+    const c = CASES[caseIdx];
+    const city = CITIES[cityIdx];
+    return {
+      id: i + 1,
+      ...c,
+      ...city,
+      status: c.level === "RESOLVED" ? "SOLVED" : "LIVE",
+      timeAgo: `${pseudo(i * 17) % 55 + 1}m ago`,
+    };
+  });
+}
+
+interface Props { onCase?: (id: string) => void }
 
 export default function ClinicalPulseFeed({ onCase }: Props) {
-  const [active, setActive] = useState<number|null>(null)
-  const [tick, setTick] = useState(0)
-  const [sbar, setSbar] = useState<string|null>(null)
+  const [feed, setFeed] = useState(getDailyFeed());
+  const [tick, setTick] = useState(0);
+  const [expanded, setExpanded] = useState<number|null>(null);
 
-  useEffect(()=>{
-    const t = setInterval(()=>setTick(p=>p+1), 3000)
-    return()=>clearInterval(t)
-  },[])
+  useEffect(() => {
+    const t = setInterval(() => setTick(p => p + 1), 4000);
+    return () => clearInterval(t);
+  }, []);
 
-  const current = FEED[tick % FEED.length]
+  // Refresh feed every hour
+  useEffect(() => {
+    const t = setInterval(() => setFeed(getDailyFeed()), 3600000);
+    return () => clearInterval(t);
+  }, []);
 
-  const makeSBAR = (f: typeof FEED[0]) => {
-    const text = [
-      'SBAR — ' + f.title,
-      '',
-      'S (Situation):',
-      'Patient: ' + f.title + '. ' + f.detail,
-      '',
-      'B (Background):',
-      'See clinical notes.',
-      '',
-      'A (Assessment):',
-      'Level: ' + f.level + '. Immediate action required.',
-      '',
-      'R (Recommendation):',
-      f.detail,
-      '',
-      '— Generated via Cliniverse AI'
-    ].join('\n')
-    setSbar(text)
-  }
+  const current = feed[tick % feed.length];
+  const live = feed.filter(f => f.status === "LIVE").length;
 
   return (
-    <div style={{marginBottom:14}}>
-      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
-        <div style={{display:'flex',alignItems:'center',gap:6}}>
-          <div style={{width:7,height:7,borderRadius:'50%',background:'#ff453a',boxShadow:'0 0 8px #ff453a',animation:'pulse 1s infinite'}}/>
-          <span style={{fontSize:10,color:'#ff453a',fontWeight:800,letterSpacing:2}}>GLOBAL CLINICAL FEED</span>
+    <div style={{marginBottom:16}}>
+      
+      {/* Live header */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          <div style={{width:7,height:7,borderRadius:"50%",background:"#FF453A",boxShadow:"0 0 8px #FF453A",animation:"pulse 1s infinite"}}/>
+          <span style={{fontSize:11,color:"#FF453A",fontWeight:800,letterSpacing:1.5}}>LIVE CLINICAL FEED</span>
         </div>
-        <span style={{fontSize:10,color:'rgba(10,22,40,0.45)'}}>{FEED.filter(f=>f.status==='LIVE').length} live now</span>
-      </div>
-
-      <div style={{background:'var(--bg-card,rgba(255,255,255,0.88))',borderRadius:16,padding:12,marginBottom:10,border:'1px solid rgba(36,63,82,0.65)'}}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <div style={{width:8,height:8,borderRadius:'50%',background:current.color,boxShadow:'0 0 8px '+current.color,flexShrink:0}}/>
-          <span style={{fontSize:12,color:current.color,fontWeight:700,flexShrink:0}}>{current.flag} {current.city}</span>
-          <span style={{fontSize:12,color:'var(--text-primary, white)',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{current.title}</span>
-          <span style={{fontSize:9,padding:'2px 8px',borderRadius:10,background:current.color+'18',color:current.color,fontWeight:700,flexShrink:0,border:'1px solid '+current.color+'30'}}>{current.status}</span>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <span style={{fontSize:11,color:"rgba(60,60,67,0.5)"}}>{live} live · {feed.length - live} resolved</span>
         </div>
       </div>
 
-      <div style={{display:'flex',flexDirection:'column',gap:6}}>
-        {FEED.slice(0,4).map((f)=>(
-          <div key={f.id} onClick={()=>setActive(active===f.id?null:f.id)}
-            style={{background:active===f.id?f.color+'10':'rgba(255,255,255,0.04)',borderRadius:14,padding:'10px 12px',border:'1px solid '+(active===f.id?f.color+'30':'rgba(255,255,255,0.05)'),cursor:'pointer',transition:'all 0.2s'}}>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <div style={{width:7,height:7,borderRadius:'50%',background:f.color,flexShrink:0,boxShadow:f.status==='LIVE'?'0 0 6px '+f.color:'none'}}/>
-              <span style={{fontSize:11,color:f.color,fontWeight:700,flexShrink:0}}>{f.flag} {f.city}</span>
-              <span style={{fontSize:12,color:'var(--text-primary, white)',fontWeight:600,flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{f.title}</span>
-              <span style={{fontSize:9,padding:'2px 7px',borderRadius:8,background:f.color+'15',color:f.color,fontWeight:700,flexShrink:0}}>{f.level}</span>
+      {/* Current rotating case */}
+      <div style={{background:"rgba(255,255,255,0.85)",backdropFilter:"blur(20px)",border:`1.5px solid ${current.color}30`,borderRadius:16,padding:14,marginBottom:12,boxShadow:`0 4px 20px ${current.color}15`}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <div style={{width:8,height:8,borderRadius:"50%",background:current.color,boxShadow:`0 0 10px ${current.color}`,flexShrink:0,animation:current.status==="LIVE"?"pulse 1s infinite":"none"}}/>
+          <span style={{fontSize:11,color:current.color,fontWeight:800,letterSpacing:1}}>{current.level}</span>
+          <span style={{fontSize:11,color:"rgba(60,60,67,0.4)",marginLeft:"auto"}}>{current.flag} {current.city}</span>
+        </div>
+        <div style={{color:"#1c1c1e",fontSize:15,fontWeight:700,margin:"8px 0 4px",lineHeight:1.3}}>{current.title}</div>
+        <div style={{color:"rgba(60,60,67,0.6)",fontSize:13,lineHeight:1.5}}>{current.detail}</div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:8}}>
+          <span style={{background:`${current.color}15`,color:current.color,fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:6}}>{current.specialty}</span>
+          <span style={{color:"rgba(60,60,67,0.4)",fontSize:11}}>{current.timeAgo}</span>
+        </div>
+      </div>
+
+      {/* Feed list */}
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {feed.slice(0,5).map((f,i)=>(
+          <div key={f.id}
+            onClick={()=>setExpanded(expanded===f.id?null:f.id)}
+            style={{background:"rgba(255,255,255,0.7)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:14,padding:"10px 14px",cursor:"pointer",transition:"all 0.2s"}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <div style={{width:6,height:6,borderRadius:"50%",background:f.color,flexShrink:0}}/>
+              <span style={{color:"#1c1c1e",fontSize:14,fontWeight:600,flex:1,lineHeight:1.3}}>{f.title}</span>
+              <span style={{fontSize:12}}>{f.flag}</span>
             </div>
-            {active===f.id&&(
-              <div style={{marginTop:8,paddingTop:8,borderTop:'1px solid rgba(36,63,82,0.65)'}}>
-                <div style={{fontSize:11,color:'rgba(10,22,40,0.70)',marginBottom:8}}>{f.detail}</div>
-                <div style={{display:'flex',gap:6}}>
-                  <button onClick={e=>{e.stopPropagation();makeSBAR(f)}}
-                    style={{flex:1,padding:'7px',borderRadius:10,border:'1px solid rgba(0,196,180,0.30)',background:'rgba(0,196,180,0.10)',color:'#00C4B4',fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
-                    📋 SBAR
-                  </button>
-                  <button onClick={e=>{e.stopPropagation();onCase('stemi')}}
-                    style={{flex:1,padding:'7px',borderRadius:10,border:'1px solid rgba(139,92,246,0.3)',background:'rgba(139,92,246,0.1)',color:'#00C4B4',fontSize:11,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
-                    🏥 Train
-                  </button>
+            {expanded===f.id && (
+              <div style={{marginTop:8,paddingTop:8,borderTop:"1px solid rgba(0,0,0,0.06)"}}>
+                <div style={{color:"rgba(60,60,67,0.7)",fontSize:13,lineHeight:1.5,marginBottom:6}}>{f.detail}</div>
+                <div style={{display:"flex",justifyContent:"space-between"}}>
+                  <span style={{background:`${f.color}15`,color:f.color,fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:6}}>{f.specialty}</span>
+                  <span style={{color:"rgba(60,60,67,0.4)",fontSize:11}}>{f.city} · {f.timeAgo}</span>
                 </div>
               </div>
             )}
@@ -93,20 +118,19 @@ export default function ClinicalPulseFeed({ onCase }: Props) {
         ))}
       </div>
 
-      {sbar&&(
-        <div style={{position:'fixed',inset:0,zIndex:400,background:'rgba(0,0,0,0.8)',backdropFilter:'blur(8px)',display:'flex',alignItems:'flex-end'}} onClick={()=>setSbar(null)}>
-          <div style={{width:'100%',maxWidth:480,margin:'0 auto',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',borderRadius:'24px 24px 0 0',padding:'20px 20px 40px',border:'1px solid rgba(0,196,180,0.30)'}} onClick={e=>e.stopPropagation()}>
-            <div style={{width:40,height:4,background:'rgba(0,196,180,0.25)',borderRadius:2,margin:'0 auto 16px'}}/>
-            <div style={{fontSize:14,fontWeight:800,color:'var(--text-primary, white)',marginBottom:12}}>📋 SBAR Report</div>
-            <textarea readOnly value={sbar}
-              style={{width:'100%',height:200,background:'var(--bg-card,rgba(255,255,255,0.88))',border:'1px solid rgba(0,196,180,0.20)',borderRadius:14,padding:12,color:'rgba(10,22,40,0.85)',fontSize:12,lineHeight:1.7,resize:'none',outline:'none',fontFamily:'monospace',boxSizing:'border-box'}}/>
-            <button onClick={()=>{navigator.clipboard.writeText(sbar);setSbar(null)}}
-              style={{width:'100%',marginTop:12,padding:'14px',borderRadius:16,border:'none',background:'linear-gradient(135deg,#F0F8FF,#E8F4FF)',color:'var(--text-primary, white)',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'inherit'}}>
-              Copy SBAR
-            </button>
+      {/* Stats */}
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        {[
+          {label:"Cases Today",value:feed.length,color:"#0A84FF"},
+          {label:"Live",value:live,color:"#FF453A"},
+          {label:"Resolved",value:feed.length-live,color:"#30D158"},
+        ].map((s,i)=>(
+          <div key={i} style={{flex:1,background:"rgba(255,255,255,0.7)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:12,padding:"10px 8px",textAlign:"center"}}>
+            <div style={{color:s.color,fontSize:20,fontWeight:800}}>{s.value}</div>
+            <div style={{color:"rgba(60,60,67,0.5)",fontSize:10,fontWeight:600,marginTop:2}}>{s.label}</div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
-  )
+  );
 }
