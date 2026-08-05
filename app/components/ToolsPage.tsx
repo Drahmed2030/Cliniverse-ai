@@ -15,14 +15,15 @@ const RadiologyModule = dynamic(() => import('./RadiologyModule'), { ssr: false 
 const HealthInsights = dynamic(() => import('./HealthInsights'), { ssr: false })
 const EcgChallenge = dynamic(() => import('./EcgChallenge'), { ssr: false })
 const MedCalculators = dynamic(() => import('./ClinicalCalculators'), { ssr: false })
+const LabRef = dynamic(() => import('./LabReference'), { ssr: false })
 const CardiacSurgeryAI = dynamic(() => import('./CardiacSurgeryAI'), { ssr: false })
 const NeuroSurgeryAI = dynamic(() => import('./NeuroSurgeryAI'), { ssr: false })
 const GeneralSurgeryAI = dynamic(() => import('./GeneralSurgeryAI'), { ssr: false })
 const ClinicalNexus = dynamic(() => import('./ClinicalNexus'), { ssr: false })
 const RapidFire = dynamic(() => import('./RapidFire'), { ssr: false })
 const LabsReference = dynamic(() => import('./LabsReference'), { ssr: false })
-const Guidelines = dynamic(() => import('./Guidelines'), { ssr: false })
-const Medications = dynamic(() => import('./Medications'), { ssr: false })
+const Guidelines = dynamic(() => import('./GuidelinesSection'), { ssr: false })
+const Medications = dynamic(() => import('./MedicationsDB'), { ssr: false })
 const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
 const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
 
@@ -118,6 +119,7 @@ function ToolRenderer({ toolId, onXP }: { toolId: string, onXP: (n: number) => v
     guidelines: <Guidelines />,
     labs: <LabsReference />,
     medications: <Medications />,
+    lab: <LabRef />,
     calc: <MedCalculators onXP={onXP} />,
     aigen: <AICaseGenerator onXP={onXP} />,
     duels: <ClinicalDuels onXP={onXP} />,
