@@ -651,13 +651,13 @@ export default function Home() {
 
       {/* ── HEADER ── */}
       <header style={{
-        background:'rgba(255,255,255,0.82)',
+        background:'rgba(15,24,36,0.95)',
         backdropFilter:'blur(40px) saturate(200%)',
         WebkitBackdropFilter:'blur(40px) saturate(200%)',
         padding:'0 16px', height:52,
         display:'flex', justifyContent:'space-between', alignItems:'center',
         position:'sticky', top:0, zIndex:100,
-        borderBottom:'0.5px solid rgba(10,132,255,0.10)',
+        borderBottom:'0.5px solid rgba(255,255,255,0.08)',
         boxShadow:'0 1px 12px rgba(10,132,255,0.06)',
       }}>
         {/* Logo */}
@@ -668,7 +668,7 @@ export default function Home() {
             display:'flex', alignItems:'center', justifyContent:'center',
             fontSize:15, boxShadow:`0 2px 8px ${D.cobalt}30`,
           }}>⚕️</div>
-          <b style={{fontSize:17, color:D.text, letterSpacing:-0.5}}>
+          <b style={{fontSize:17, color:'#E8F4FD', letterSpacing:-0.5}}>
             C<span style={{background:`linear-gradient(135deg,${D.cobalt},${D.teal})`,WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>AI</span>
           </b>
         </div>
