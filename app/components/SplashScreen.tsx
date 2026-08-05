@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
+export default function SplashScreen({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
   const [textIndex, setTextIndex] = useState(0);
   const [showLogo, setShowLogo] = useState(false);
@@ -28,7 +28,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
 
     const doneTimer = setTimeout(() => {
       clearInterval(textInterval);
-      onComplete();
+      onDone();
     }, 3200);
 
     return () => { 
