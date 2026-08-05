@@ -4,6 +4,10 @@ import dynamic from "next/dynamic";
 const MotherSection = dynamic(() => import("./MotherSection"), { ssr: false });
 const PatientSection = dynamic(() => import("./PatientSection"), { ssr: false });
 const PharmacySection = dynamic(() => import("./PharmacySection"), { ssr: false });
+const EyesSection = dynamic(() => import("./EyesSection"), { ssr: false });
+const DentalSection = dynamic(() => import("./DentalSection"), { ssr: false });
+const RehabSection = dynamic(() => import("./RehabSection"), { ssr: false });
+const MedicalStores = dynamic(() => import("./MedicalStores"), { ssr: false });
 
 type UserType = "doctor"|"mother"|"pharmacy"|"patient"|"eyes"|"dental"|"rehab"|"stores"|null;
 
@@ -13,230 +17,82 @@ const BG_IMAGES = [
   "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80",
 ];
 
+const SVG_ICONS: Record<string, JSX.Element> = {
+  doctor: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="10" r="6" stroke="white" strokeWidth="2" fill="none"/>
+      <path d="M4 28c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <circle cx="23" cy="23" r="4" stroke="white" strokeWidth="1.5" fill="none"/>
+      <line x1="23" y1="20" x2="23" y2="26" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="20" y1="23" x2="26" y2="23" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  mother: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M16 4 C16 4, 10 8, 10 14 C10 18, 13 21, 16 22 C19 21, 22 18, 22 14 C22 8, 16 4, 16 4Z" stroke="white" strokeWidth="2" fill="none"/>
+      <circle cx="16" cy="10" r="2.5" fill="white" opacity="0.6"/>
+      <path d="M8 28 C8 24, 11 22, 16 22 C21 22, 24 24, 24 28" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <circle cx="22" cy="8" r="2" fill="white" opacity="0.8"/>
+    </svg>
+  ),
+  pharmacy: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect x="6" y="12" width="20" height="12" rx="6" stroke="white" strokeWidth="2" fill="none"/>
+      <line x1="16" y1="12" x2="16" y2="24" stroke="white" strokeWidth="2"/>
+      <rect x="11" y="6" width="10" height="8" rx="2" stroke="white" strokeWidth="1.5" fill="none"/>
+      <line x1="13" y1="17" x2="15" y2="19" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  patient: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="9" r="5" stroke="white" strokeWidth="2" fill="none"/>
+      <path d="M6 28 C6 22, 10 18, 16 18 C22 18, 26 22, 26 28" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <polyline points="8,22 11,19 13,22 15,18 17,22 19,20 21,22" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+    </svg>
+  ),
+  eyes: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M4 16 C4 16, 8 8, 16 8 C24 8, 28 16, 28 16 C28 16, 24 24, 16 24 C8 24, 4 16, 4 16Z" stroke="white" strokeWidth="2" fill="none"/>
+      <circle cx="16" cy="16" r="4" stroke="white" strokeWidth="2" fill="none"/>
+      <circle cx="16" cy="16" r="1.5" fill="white"/>
+    </svg>
+  ),
+  dental: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M10 6 C8 6, 6 8, 6 11 C6 14, 8 16, 10 18 L12 28 C12 28, 13 30, 16 28 C19 30, 20 28, 20 28 L22 18 C24 16, 26 14, 26 11 C26 8, 24 6, 22 6 C20 6, 18 8, 16 8 C14 8, 12 6, 10 6Z" stroke="white" strokeWidth="2" fill="none"/>
+      <line x1="12" y1="14" x2="20" y2="14" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  rehab: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="20" cy="6" r="3" stroke="white" strokeWidth="2" fill="none"/>
+      <path d="M20 9 L18 16 L12 20 L14 24" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <path d="M18 16 L22 20 L26 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      <path d="M14 24 L12 28" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M14 24 L18 28" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+    </svg>
+  ),
+  stores: (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect x="6" y="14" width="20" height="14" rx="2" stroke="white" strokeWidth="2" fill="none"/>
+      <path d="M10 14 L10 10 C10 8, 11 6, 13 6 L19 6 C21 6, 22 8, 22 10 L22 14" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <line x1="16" y1="19" x2="16" y2="25" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+      <line x1="13" y1="22" x2="19" y2="22" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+};
+
 const USER_TYPES = [
-  { id:"doctor",   label:"طبيب",    sublabel:"Doctor",       emoji:"👨‍⚕️", color:"#0A84FF", grad:"linear-gradient(135deg,#0A84FF,#0066CC)" },
-  { id:"mother",   label:"الأم",    sublabel:"Mother",       emoji:"👩‍", color:"#FF2D55", grad:"linear-gradient(135deg,#FF2D55,#C0004A)" },
-  { id:"pharmacy", label:"صيدلية",  sublabel:"Pharmacy",     emoji:"💊",  color:"#30D158", grad:"linear-gradient(135deg,#30D158,#00A83A)" },
-  { id:"patient",  label:"مريض",    sublabel:"Patient",      emoji:"🏥",  color:"#FF9F0A", grad:"linear-gradient(135deg,#FF9F0A,#FF6B00)" },
-  { id:"eyes",     label:"عيون",    sublabel:"Ophthalmology",emoji:"👁️",  color:"#64D2FF", grad:"linear-gradient(135deg,#64D2FF,#0A84FF)" },
-  { id:"dental",   label:"أسنان",   sublabel:"Dentistry",    emoji:"🦷",  color:"#BF5AF2", grad:"linear-gradient(135deg,#BF5AF2,#9B00E8)" },
-  { id:"rehab",    label:"تأهيل",   sublabel:"Rehabilitation",emoji:"🏃", color:"#FF6B35", grad:"linear-gradient(135deg,#FF6B35,#FF2D00)" },
-  { id:"stores",   label:"محلات",   sublabel:"Medical Stores",emoji:"🏪", color:"#00C7BE", grad:"linear-gradient(135deg,#00C7BE,#007AFF)" },
+  { id:"doctor",   en:"Doctor",       ar:"طبيب",    color:"#0A84FF", grad:"linear-gradient(135deg,#0A84FF,#0066CC)" },
+  { id:"mother",   en:"Mother & Child",ar:"الأم والطفل", color:"#FF2D55", grad:"linear-gradient(135deg,#FF2D55,#C0004A)" },
+  { id:"pharmacy", en:"Pharmacy",     ar:"صيدلية",  color:"#30D158", grad:"linear-gradient(135deg,#30D158,#00A83A)" },
+  { id:"patient",  en:"Patient Guide",ar:"مريض",    color:"#FF9F0A", grad:"linear-gradient(135deg,#FF9F0A,#FF6B00)" },
+  { id:"eyes",     en:"Ophthalmology",ar:"عيون",    color:"#64D2FF", grad:"linear-gradient(135deg,#64D2FF,#0A84FF)" },
+  { id:"dental",   en:"Dentistry",    ar:"أسنان",   color:"#BF5AF2", grad:"linear-gradient(135deg,#BF5AF2,#9B00E8)" },
+  { id:"rehab",    en:"Rehabilitation",ar:"تأهيل",  color:"#FF6B35", grad:"linear-gradient(135deg,#FF6B35,#FF2D00)" },
+  { id:"stores",   en:"Medical Stores",ar:"محلات طبية", color:"#00C7BE", grad:"linear-gradient(135deg,#00C7BE,#007AFF)" },
 ];
 
-// ============ SECTION COMPONENTS ============
-
-function DoctorSection({ onBack }: { onBack: () => void }) {
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#f0f4ff 0%,#e8f0fe 60%,#f5f0ff 100%)",fontFamily:"-apple-system,sans-serif"}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:"rgba(10,132,255,0.1)",border:"none",borderRadius:10,padding:"8px 14px",color:"#0A84FF",fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>👨‍⚕️ Doctor Portal</div>
-      </div>
-      <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",gap:12}}>
-        {[
-          {emoji:"📋",title:"Clinical Cases",desc:"WARD cases updated daily",color:"#0A84FF"},
-          {emoji:"🧮",title:"Calculators",desc:"TIMI, Wells, HEART scores",color:"#FF9F0A"},
-          {emoji:"📚",title:"Guidelines 2026",desc:"ESC · AHA · ADA",color:"#30D158"},
-          {emoji:"🔬",title:"Medical AI",desc:"Evidence-based answers",color:"#BF5AF2"},
-          {emoji:"💊",title:"Drug Search",desc:"FDA + PubMed + Trials",color:"#FF453A"},
-          {emoji:"🧪",title:"Lab Reference",desc:"Normal ranges · Critical values",color:"#64D2FF"},
-        ].map((item,i)=>(
-          <div key={i} style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:18,padding:"18px 20px",display:"flex",alignItems:"center",gap:16,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
-            <div style={{width:52,height:52,borderRadius:14,background:`linear-gradient(135deg,${item.color},${item.color}99)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>{item.emoji}</div>
-            <div><div style={{color:"#1c1c1e",fontSize:16,fontWeight:700}}>{item.title}</div><div style={{color:"rgba(60,60,67,0.55)",fontSize:13}}>{item.desc}</div></div>
-            <div style={{marginLeft:"auto",color:"rgba(60,60,67,0.3)",fontSize:20}}>›</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function EyesSection({ onBack }: { onBack: () => void }) {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/pubmed?q=ophthalmology+guidelines+2026")
-      .then(r=>r.json())
-      .then(d=>{ setArticles(d.results||[]); setLoading(false); });
-  }, []);
-
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#e8f4ff 0%,#f0f8ff 60%,#e8f0ff 100%)",fontFamily:"-apple-system,sans-serif"}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:"rgba(100,210,255,0.15)",border:"none",borderRadius:10,padding:"8px 14px",color:"#64D2FF",fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>👁️ Ophthalmology</div>
-      </div>
-      <div style={{padding:"20px 16px"}}>
-        <div style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:18,padding:20,marginBottom:16,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
-          <div style={{color:"#64D2FF",fontSize:13,fontWeight:700,marginBottom:12}}>👁️ COMMON CONDITIONS</div>
-          {["Glaucoma","Diabetic Retinopathy","Cataract","Macular Degeneration","Dry Eye Disease","Uveitis"].map((c,i)=>(
-            <div key={i} style={{padding:"10px 0",borderBottom:i<5?"1px solid rgba(0,0,0,0.06)":"none",color:"#1c1c1e",fontSize:15,display:"flex",justifyContent:"space-between"}}>
-              {c}<span style={{color:"rgba(60,60,67,0.4)"}}>›</span>
-            </div>
-          ))}
-        </div>
-        <div style={{color:"rgba(60,60,67,0.6)",fontSize:13,fontWeight:700,marginBottom:10}}>LATEST RESEARCH — PubMed 2026</div>
-        {loading ? <div style={{textAlign:"center",padding:20,color:"rgba(60,60,67,0.4)"}}>Loading...</div> :
-          articles.map((a,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:14,padding:"14px 16px",marginBottom:10,boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
-              <div style={{color:"#1c1c1e",fontSize:14,fontWeight:600,marginBottom:4,lineHeight:1.4}}>{a.title}</div>
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-                <span style={{color:"rgba(60,60,67,0.45)",fontSize:12}}>{a.journal} · {a.year}</span>
-                <a href={a.url} target="_blank" rel="noreferrer" style={{color:"#64D2FF",fontSize:12,fontWeight:600}}>Read →</a>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  );
-}
-
-function DentalSection({ onBack }: { onBack: () => void }) {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/pubmed?q=dentistry+oral+health+guidelines+2026")
-      .then(r=>r.json())
-      .then(d=>{ setArticles(d.results||[]); setLoading(false); });
-  }, []);
-
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#f5f0ff 0%,#ede8ff 60%,#f0f4ff 100%)",fontFamily:"-apple-system,sans-serif"}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:"rgba(191,90,242,0.12)",border:"none",borderRadius:10,padding:"8px 14px",color:"#BF5AF2",fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>🦷 Dentistry</div>
-      </div>
-      <div style={{padding:"20px 16px"}}>
-        <div style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:18,padding:20,marginBottom:16}}>
-          <div style={{color:"#BF5AF2",fontSize:13,fontWeight:700,marginBottom:12}}>🦷 DENTAL CONDITIONS</div>
-          {["Dental Caries","Periodontal Disease","Dental Abscess","Malocclusion","Oral Cancer Screening","Tooth Sensitivity","TMJ Disorders","Dry Socket"].map((c,i)=>(
-            <div key={i} style={{padding:"10px 0",borderBottom:i<7?"1px solid rgba(0,0,0,0.06)":"none",color:"#1c1c1e",fontSize:15,display:"flex",justifyContent:"space-between"}}>
-              {c}<span style={{color:"rgba(60,60,67,0.4)"}}>›</span>
-            </div>
-          ))}
-        </div>
-        <div style={{color:"rgba(60,60,67,0.6)",fontSize:13,fontWeight:700,marginBottom:10}}>LATEST RESEARCH — PubMed 2026</div>
-        {loading ? <div style={{textAlign:"center",padding:20,color:"rgba(60,60,67,0.4)"}}>Loading...</div> :
-          articles.map((a,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:14,padding:"14px 16px",marginBottom:10}}>
-              <div style={{color:"#1c1c1e",fontSize:14,fontWeight:600,marginBottom:4,lineHeight:1.4}}>{a.title}</div>
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-                <span style={{color:"rgba(60,60,67,0.45)",fontSize:12}}>{a.journal} · {a.year}</span>
-                <a href={a.url} target="_blank" rel="noreferrer" style={{color:"#BF5AF2",fontSize:12,fontWeight:600}}>Read →</a>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  );
-}
-
-function RehabSection({ onBack }: { onBack: () => void }) {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/pubmed?q=rehabilitation+medicine+physiotherapy+2026")
-      .then(r=>r.json())
-      .then(d=>{ setArticles(d.results||[]); setLoading(false); });
-  }, []);
-
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#fff4f0 0%,#ffe8e0 60%,#fff0f4 100%)",fontFamily:"-apple-system,sans-serif"}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:"rgba(255,107,53,0.12)",border:"none",borderRadius:10,padding:"8px 14px",color:"#FF6B35",fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>🏃 Rehabilitation</div>
-      </div>
-      <div style={{padding:"20px 16px"}}>
-        <div style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:18,padding:20,marginBottom:16}}>
-          <div style={{color:"#FF6B35",fontSize:13,fontWeight:700,marginBottom:12}}>🏃 REHAB PROGRAMS</div>
-          {["Cardiac Rehabilitation","Stroke Recovery","Post-Surgical Rehab","Pulmonary Rehab","Orthopedic Rehab","Neurological Rehab","Sports Medicine","Pain Management"].map((c,i)=>(
-            <div key={i} style={{padding:"10px 0",borderBottom:i<7?"1px solid rgba(0,0,0,0.06)":"none",color:"#1c1c1e",fontSize:15,display:"flex",justifyContent:"space-between"}}>
-              {c}<span style={{color:"rgba(60,60,67,0.4)"}}>›</span>
-            </div>
-          ))}
-        </div>
-        <div style={{color:"rgba(60,60,67,0.6)",fontSize:13,fontWeight:700,marginBottom:10}}>LATEST RESEARCH — PubMed 2026</div>
-        {loading ? <div style={{textAlign:"center",padding:20,color:"rgba(60,60,67,0.4)"}}>Loading...</div> :
-          articles.map((a,i)=>(
-            <div key={i} style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:14,padding:"14px 16px",marginBottom:10}}>
-              <div style={{color:"#1c1c1e",fontSize:14,fontWeight:600,marginBottom:4,lineHeight:1.4}}>{a.title}</div>
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-                <span style={{color:"rgba(60,60,67,0.45)",fontSize:12}}>{a.journal} · {a.year}</span>
-                <a href={a.url} target="_blank" rel="noreferrer" style={{color:"#FF6B35",fontSize:12,fontWeight:600}}>Read →</a>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  );
-}
-
-function MedicalStores({ onBack }: { onBack: () => void }) {
-  const STORES = [
-    {name:"Medical Equipment",emoji:"🏥",items:["Blood Pressure Monitors","Glucometers","Pulse Oximeters","Nebulizers","Wheelchairs","Hospital Beds"]},
-    {name:"Pharmacy Supplies",emoji:"💊",items:["OTC Medications","Vitamins & Supplements","First Aid Kits","Wound Care","Diagnostic Tests","Baby Health"]},
-    {name:"Optical Supplies",emoji:"👁️",items:["Prescription Glasses","Contact Lenses","Eye Drops","Reading Glasses","Safety Goggles","Lens Solutions"]},
-    {name:"Dental Supplies",emoji:"🦷",items:["Toothbrushes","Dental Floss","Mouthwash","Whitening Kits","Orthodontic Care","Dental Pain Relief"]},
-    {name:"Rehabilitation",emoji:"🏃",items:["Exercise Equipment","Support Braces","TENS Machines","Massage Devices","Walking Aids","Compression Stockings"]},
-  ];
-
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#e8fff8 0%,#f0fff8 60%,#e8f4ff 100%)",fontFamily:"-apple-system,sans-serif",paddingBottom:100}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:"rgba(0,199,190,0.12)",border:"none",borderRadius:10,padding:"8px 14px",color:"#00C7BE",fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>🏪 Medical Stores</div>
-      </div>
-      <div style={{padding:"20px 16px",display:"flex",flexDirection:"column",gap:14}}>
-        {STORES.map((s,i)=>(
-          <div key={i} style={{background:"rgba(255,255,255,0.75)",backdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.9)",borderRadius:18,padding:18,boxShadow:"0 2px 12px rgba(0,0,0,0.04)"}}>
-            <div style={{color:"#1c1c1e",fontSize:16,fontWeight:700,marginBottom:12}}>{s.emoji} {s.name}</div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
-              {s.items.map((item,j)=>(
-                <span key={j} style={{background:"rgba(0,199,190,0.1)",border:"1px solid rgba(0,199,190,0.2)",borderRadius:20,padding:"5px 12px",color:"#00C7BE",fontSize:13,fontWeight:600}}>{item}</span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ComingSoon({ type, onBack }: { type: string, onBack: () => void }) {
-  const info: Record<string, any> = {
-    mother: { emoji:"👩‍👧", title:"Mother & Child", color:"#FF2D55", desc:"Child health tracking, vaccination schedules, growth charts" },
-    pharmacy: { emoji:"💊", title:"Pharmacy", color:"#30D158", desc:"Complete drug database, interactions, dosing calculator" },
-    patient: { emoji:"🏥", title:"Patient Portal", color:"#FF9F0A", desc:"Symptom checker, emergency guide, medication reminders" },
-  };
-  const item = info[type] || { emoji:"🔜", title:"Coming Soon", color:"#0A84FF", desc:"This section is being built" };
-
-  return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#f0f4ff 0%,#e8f0fe 60%,#f5f0ff 100%)",fontFamily:"-apple-system,sans-serif",display:"flex",flexDirection:"column"}}>
-      <div style={{padding:"16px 20px",display:"flex",alignItems:"center",gap:12,background:"rgba(255,255,255,0.8)",backdropFilter:"blur(20px)",borderBottom:"1px solid rgba(0,0,0,0.06)"}}>
-        <button onClick={onBack} style={{background:`rgba(${item.color === '#FF2D55' ? '255,45,85' : item.color === '#30D158' ? '48,209,88' : '255,159,10'},0.12)`,border:"none",borderRadius:10,padding:"8px 14px",color:item.color,fontSize:15,fontWeight:600,cursor:"pointer"}}>← Back</button>
-        <div style={{color:"#1c1c1e",fontSize:18,fontWeight:700}}>{item.emoji} {item.title}</div>
-      </div>
-      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:32,textAlign:"center"}}>
-        <div style={{fontSize:72,marginBottom:24}}>{item.emoji}</div>
-        <div style={{color:"#1c1c1e",fontSize:24,fontWeight:800,marginBottom:8}}>{item.title}</div>
-        <div style={{color:"rgba(60,60,67,0.6)",fontSize:16,lineHeight:1.6,marginBottom:24}}>{item.desc}</div>
-        <div style={{background:`linear-gradient(135deg,${item.color},${item.color}99)`,borderRadius:16,padding:"12px 24px"}}>
-          <span style={{color:"#fff",fontSize:15,fontWeight:700}}>🚀 Coming Soon</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ============ MAIN AFIA COMPONENT ============
 export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: string|null, skip?: boolean) => void, savedType?: string|null }) {
   const [selected, setSelected] = useState<UserType>(null);
   const [bgIndex, setBgIndex] = useState(0);
@@ -250,17 +106,17 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
   }, []);
 
   const hour = new Date().getHours();
-  const greeting = hour<12?"صباح الخير ☀️":hour<17?"مساء النور 🌤️":"مساء الخير 🌙";
+  const greeting = hour<12?"Good Morning":hour<17?"Good Afternoon":"Good Evening";
+  const greetingAr = hour<12?"صباح الخير":hour<17?"مساء النور":"مساء الخير";
 
-  // Render selected section
   if (selected === "doctor") { onSelect("doctor", true); return null; }
+  if (selected === "mother") return <MotherSection onBack={()=>setSelected(null)} />;
+  if (selected === "patient") return <PatientSection onBack={()=>setSelected(null)} />;
+  if (selected === "pharmacy") return <PharmacySection onBack={()=>setSelected(null)} />;
   if (selected === "eyes") return <EyesSection onBack={()=>setSelected(null)} />;
   if (selected === "dental") return <DentalSection onBack={()=>setSelected(null)} />;
   if (selected === "rehab") return <RehabSection onBack={()=>setSelected(null)} />;
   if (selected === "stores") return <MedicalStores onBack={()=>setSelected(null)} />;
-  if (selected === "mother") return <MotherSection onBack={()=>setSelected(null)} />;
-  if (selected === "patient") return <PatientSection onBack={()=>setSelected(null)} />;
-  if (selected === "pharmacy") return <PharmacySection onBack={()=>setSelected(null)} />;
 
   return (
     <div style={{minHeight:"100vh",position:"relative",overflow:"hidden",fontFamily:"-apple-system,SF Pro Display,sans-serif"}}>
@@ -268,7 +124,7 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
       {/* Background */}
       <div style={{position:"absolute",inset:0}}>
         <img src={BG_IMAGES[bgIndex]} alt="" style={{width:"100%",height:"100%",objectFit:"cover",transition:"opacity 1.5s"}}/>
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.8) 100%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.5) 40%,rgba(0,0,0,0.82) 100%)"}}/>
       </div>
 
       <div style={{position:"relative",zIndex:1,minHeight:"100vh",display:"flex",flexDirection:"column",padding:"52px 20px 40px"}}>
@@ -278,21 +134,23 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
           <div style={{display:"inline-flex",alignItems:"center",gap:10,background:"rgba(255,255,255,0.12)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",border:"1px solid rgba(255,255,255,0.25)",borderRadius:20,padding:"10px 20px",marginBottom:16}}>
             <span style={{fontSize:22}}>⚕️</span>
             <div style={{textAlign:"left"}}>
-              <div style={{color:"#fff",fontSize:20,fontWeight:800}}>عافية</div>
-              <div style={{color:"rgba(255,255,255,0.55)",fontSize:10,fontWeight:500,letterSpacing:1}}>AFIA HEALTH</div>
+              <div style={{color:"#fff",fontSize:20,fontWeight:800,letterSpacing:-0.3}}>Afia</div>
+              <div style={{color:"rgba(255,255,255,0.45)",fontSize:10,letterSpacing:2}}>عافية · HEALTH</div>
             </div>
           </div>
-          <div style={{color:"rgba(255,255,255,0.75)",fontSize:16,marginBottom:4}}>{greeting}</div>
-          <div style={{color:"#fff",fontSize:24,fontWeight:800,lineHeight:1.2}}>رفيقك الصحي الذكي</div>
-          <div style={{color:"rgba(255,255,255,0.55)",fontSize:13,marginTop:4}}>Your intelligent health companion</div>
+          <div style={{color:"rgba(255,255,255,0.65)",fontSize:15,marginBottom:4}}>{greeting} 👋</div>
+          <div style={{color:"rgba(255,255,255,0.4)",fontSize:12}}>{greetingAr}</div>
+          <div style={{color:"#fff",fontSize:22,fontWeight:800,lineHeight:1.2,marginTop:8}}>Your intelligent health companion</div>
+          <div style={{color:"rgba(255,255,255,0.45)",fontSize:13,marginTop:4}}>رفيقك الصحي الذكي</div>
         </div>
 
         <div style={{flex:1}}/>
 
-        {/* Who are you label */}
+        {/* Who are you */}
         <div style={{textAlign:"center",marginBottom:14}}>
           <div style={{display:"inline-block",background:"rgba(255,255,255,0.1)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,0.18)",borderRadius:20,padding:"5px 14px"}}>
-            <span style={{color:"rgba(255,255,255,0.85)",fontSize:13,fontWeight:600}}>من أنت؟ • Who are you?</span>
+            <span style={{color:"rgba(255,255,255,0.85)",fontSize:13,fontWeight:600}}>Who are you? </span>
+            <span style={{color:"rgba(255,255,255,0.45)",fontSize:12}}>· من أنت؟</span>
           </div>
         </div>
 
@@ -306,22 +164,28 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
               onMouseUp={()=>setPressed(null)}
               onClick={()=>setSelected(u.id as UserType)}
               style={{
-                background:"rgba(255,255,255,0.1)",
+                background:"rgba(255,255,255,0.08)",
                 backdropFilter:"blur(20px)",
                 WebkitBackdropFilter:"blur(20px)",
-                border:"1px solid rgba(255,255,255,0.18)",
-                borderRadius:18,
-                padding:"16px 12px",
+                border:"1px solid rgba(255,255,255,0.15)",
+                borderRadius:20,
+                padding:"18px 14px",
                 cursor:"pointer",
                 textAlign:"center",
                 transform:pressed===u.id?"scale(0.94)":"scale(1)",
                 transition:"all 0.15s ease",
                 boxShadow:pressed===u.id?`0 0 0 2px ${u.color},0 4px 20px ${u.color}40`:"0 2px 12px rgba(0,0,0,0.15)"
               }}>
-              <div style={{fontSize:28,marginBottom:8}}>{u.emoji}</div>
-              <div style={{color:"#fff",fontSize:16,fontWeight:800,marginBottom:2}}>{u.label}</div>
-              <div style={{color:"rgba(255,255,255,0.55)",fontSize:11,marginBottom:8}}>{u.sublabel}</div>
-              <div style={{background:u.grad,borderRadius:8,padding:"3px 0"}}>
+              {/* SVG Icon */}
+              <div style={{width:52,height:52,borderRadius:16,background:u.grad,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",boxShadow:`0 4px 16px ${u.color}50`}}>
+                {SVG_ICONS[u.id]}
+              </div>
+              {/* English — big */}
+              <div style={{color:"#fff",fontSize:14,fontWeight:700,marginBottom:3,letterSpacing:-0.2}}>{u.en}</div>
+              {/* Arabic — small */}
+              <div style={{color:"rgba(255,255,255,0.4)",fontSize:11,fontWeight:400,marginBottom:10}}>{u.ar}</div>
+              {/* Enter button */}
+              <div style={{background:u.grad,borderRadius:8,padding:"4px 0",boxShadow:`0 2px 8px ${u.color}40`}}>
                 <span style={{color:"#fff",fontSize:11,fontWeight:700}}>Enter →</span>
               </div>
             </button>
@@ -330,9 +194,14 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
 
         {/* Badges */}
         <div style={{display:"flex",justifyContent:"center",gap:8,flexWrap:"wrap"}}>
-          {["🔬 Evidence-Based","🤖 AI-Powered","📚 PubMed Live"].map(b=>(
-            <div key={b} style={{background:"rgba(255,255,255,0.08)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:20,padding:"4px 10px"}}>
-              <span style={{color:"rgba(255,255,255,0.65)",fontSize:11,fontWeight:500}}>{b}</span>
+          {[
+            {en:"Evidence-Based",ar:"مبني على الأدلة"},
+            {en:"AI-Powered",ar:"بالذكاء الاصطناعي"},
+            {en:"PubMed Live",ar:"PubMed حي"},
+          ].map(b=>(
+            <div key={b.en} style={{background:"rgba(255,255,255,0.08)",backdropFilter:"blur(10px)",border:"1px solid rgba(255,255,255,0.12)",borderRadius:20,padding:"5px 12px"}}>
+              <span style={{color:"rgba(255,255,255,0.7)",fontSize:11,fontWeight:600}}>🔬 {b.en} </span>
+              <span style={{color:"rgba(255,255,255,0.3)",fontSize:10}}>{b.ar}</span>
             </div>
           ))}
         </div>
