@@ -254,7 +254,9 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
   if (selected === "dental") return <DentalSection onBack={()=>setSelected(null)} />;
   if (selected === "rehab") return <RehabSection onBack={()=>setSelected(null)} />;
   if (selected === "stores") return <MedicalStores onBack={()=>setSelected(null)} />;
-  if (selected === "mother" || selected === "pharmacy" || selected === "patient") return <ComingSoon type={selected} onBack={()=>setSelected(null)} />;
+  if (selected === "mother") return <MotherSection onBack={()=>setSelected(null)} />;
+  if (selected === "patient") return <PatientSection onBack={()=>setSelected(null)} />;
+  if (selected === "pharmacy") return <PharmacySection onBack={()=>setSelected(null)} />;
 
   return (
     <div style={{minHeight:"100vh",position:"relative",overflow:"hidden",fontFamily:"-apple-system,SF Pro Display,sans-serif"}}>
