@@ -111,8 +111,6 @@ function Ticker({xp,streak,live}:{xp:number,streak:number,live:number}) {
     {k:'CASES',v:'25+ today',c:D.blue},
     {k:'BOARDS',v:'Saudi · USMLE · MRCP',c:D.purple},
   ]
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
-
   return (
     <div style={{overflow:'hidden',borderRadius:10,background:D.glass,border:`1px solid ${D.border}`,padding:'6px 0',marginBottom:14}}>
       <div style={{display:'flex',animation:'ticker 20s linear infinite',width:'max-content'}}>
@@ -206,6 +204,8 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   const [showAcademy,setShowAcademy] = useState(false)
   const [waitlist,setWaitlist]     = useState<string[]>([])
   const [activeFeature,setActiveFeature] = useState<string|null>(null)
+
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   useEffect(()=>{
     const t = setInterval(()=>setLiveCount(n=>Math.max(900,Math.min(1600,n+Math.floor(Math.random()*5)-2))),3500)
