@@ -111,6 +111,8 @@ function Ticker({xp,streak,live}:{xp:number,streak:number,live:number}) {
     {k:'CASES',v:'25+ today',c:D.blue},
     {k:'BOARDS',v:'Saudi · USMLE · MRCP',c:D.purple},
   ]
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
+
   return (
     <div style={{overflow:'hidden',borderRadius:10,background:D.glass,border:`1px solid ${D.border}`,padding:'6px 0',marginBottom:14}}>
       <div style={{display:'flex',animation:'ticker 20s linear infinite',width:'max-content'}}>
@@ -129,6 +131,8 @@ function Ticker({xp,streak,live}:{xp:number,streak:number,live:number}) {
 
 // ── SECTION MODAL ──
 function SectionModal({section,onClose,onCase,isPro,setShowUpgrade}:any) {
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
+
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.82)',backdropFilter:'blur(16px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}} onClick={onClose}>
       <div onClick={e=>e.stopPropagation()} style={{background:`linear-gradient(180deg,${D.bg2},${D.bg1})`,borderRadius:'28px 28px 0 0',border:`1px solid ${D.borderHi}`,padding:'24px 20px 44px',maxHeight:'78vh',overflowY:'auto',animation:'fadeUp 0.28s ease'}}>
@@ -161,6 +165,8 @@ function SectionModal({section,onClose,onCase,isPro,setShowUpgrade}:any) {
 
 // ── FULL MODAL WRAPPER ──
 function FullModal({onBack,label,children}:{onBack:()=>void,label:string,children:React.ReactNode}) {
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
+
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:D.bg0,overflowY:'auto'}}>
       <div style={{padding:'20px 16px 120px',maxWidth:520,margin:'0 auto'}}>
@@ -175,6 +181,8 @@ function FullModal({onBack,label,children}:{onBack:()=>void,label:string,childre
 
 // ── QUICK TOOL PILL ──
 function QuickTool({icon,label,color,onClick}:{icon:string,label:string,color:string,onClick:()=>void}) {
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
+
   return (
     <div onClick={onClick} style={{
       flexShrink:0,
@@ -239,7 +247,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   ]
 
   const sections = [
-    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU · Daily Cases',          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
+    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU · Daily Cases', onPress:()=>setShowCritical(true),          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
     {key:'sports',  icon:'⚽',title:'Sports Medicine',sub:'Pitch-side · Evidence-based',  color:D.green, tag:'NEW',        cases:sportsCases,  badge:'NEW'},
     {key:'peds',    icon:'🧸',title:'Pediatrics',     sub:'Febrile · Vaccines · Growth',    color:D.purple,tag:'PEDIATRICS', cases:pedsCases,    badge:'NEW'},
   ]
@@ -247,7 +255,9 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   // Full modals
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
-  if(showLive)    return (
+  if(showLive)    if (showCritical) return <CriticalCareSection onXP={onXP} />
+
+  return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
       <div style={{padding:'20px 16px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${D.border}`}}>
         <span style={{color:D.t1,fontWeight:800,fontSize:16,fontFamily:F}}>Live Case</span>
@@ -256,6 +266,8 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
       <LiveCaseViewer specialty="Emergency Medicine" difficulty="Intermediate" onXP={onXP}/>
     </div>
   )
+
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{minHeight:'100vh',background:'var(--bg-base, #0a1828)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
