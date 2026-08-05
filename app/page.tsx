@@ -698,8 +698,8 @@ export default function Home() {
       }}>
 
         {/* HUB */}
-        {tab==='hub'||tab==='pulse' && (
-          <HubPage
+        {(tab==='hub'||tab==='pulse') && (
+          <PulsePage
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro}
             criticalCases={criticalCases} sportsCases={sportsCases} pedsCases={pedsCases}
