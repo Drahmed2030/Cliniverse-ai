@@ -552,6 +552,7 @@ function PatientDetail({ patient, onBack }: { patient:Patient, onBack:()=>void }
 
 // ── MAIN VIRTUAL WARD ──
 const _PATIENTS_TYPE = getDailyPatients();
+const PATIENTS_DEFAULT = _PATIENTS_TYPE;
 type Patient = typeof _PATIENTS_TYPE[0];
 
 export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
@@ -572,7 +573,8 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
 
   // WARD→TOOLS Integration — broadcast active patient specialty
   useEffect(() => {
-    const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
+    const PATIENTS = getDailyPatients()
+  const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
     if (criticalPatients.length > 0) {
       localStorage.setItem('cliniverse-tools-suggest', JSON.stringify({
         specialty: criticalPatients[0].specialty,
@@ -590,7 +592,8 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
 
   // WARD→PULSE Integration — broadcast critical patients
   useEffect(() => {
-    const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
+    const PATIENTS = getDailyPatients()
+  const criticalPatients = PATIENTS.filter(p => p.status === 'critical')
     if (criticalPatients.length > 0) {
       localStorage.setItem('cliniverse-ward-alert', JSON.stringify({
         count: criticalPatients.length,
@@ -611,6 +614,7 @@ export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
 
   if (selected) return <PatientDetail patient={selected} onBack={()=>setSelected(null)}/>
 
+  const PATIENTS = getDailyPatients()
   const critical = PATIENTS.filter(p=>p.status==='critical').length
   const urgent   = PATIENTS.filter(p=>p.status==='urgent').length
   const stable   = PATIENTS.filter(p=>p.status==='stable').length
