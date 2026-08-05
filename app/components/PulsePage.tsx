@@ -1,6 +1,9 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
+import { C, A, T } from '../lib/ds'
+import { Icons } from '../lib/icons'
+import { glass, S } from '../lib/glass'
 
 const AmbientScribe = dynamic(() => import('./AmbientScribe'), { ssr:false })
 const LiveCaseViewer = dynamic(() => import('./LiveCaseViewer'), { ssr:false })

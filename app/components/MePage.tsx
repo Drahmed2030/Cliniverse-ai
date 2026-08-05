@@ -1,5 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { C, A, T } from '../lib/ds'
+import { Icons } from '../lib/icons'
+import { glass, S } from '../lib/glass'
 import dynamic from 'next/dynamic'
 const CertificateGenerator = dynamic(() => import('./CertificateGenerator'), { ssr:false })
 
