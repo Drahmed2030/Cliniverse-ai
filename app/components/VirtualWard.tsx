@@ -196,7 +196,7 @@ const VitalBadge = ({ label, value, alert }: { label:string, value:string, alert
 )
 
 // ── PROGRESS NOTE GENERATOR ──
-function ProgressNoteModal({ patient, onClose }: { patient:typeof PATIENTS[0], onClose:()=>void }) {
+function ProgressNoteModal({ patient, onClose }: { patient:Patient, onClose:()=>void }) {
   const [generating, setGenerating] = useState(false)
   const [note, setNote] = useState('')
 
@@ -351,7 +351,7 @@ Give brief, constructive feedback (2-3 points max). What's good? What's missing?
 }
 
 // ── DISCHARGE MODAL ──
-function DischargeModal({ patient, onClose }: { patient:typeof PATIENTS[0], onClose:()=>void }) {
+function DischargeModal({ patient, onClose }: { patient:Patient, onClose:()=>void }) {
   const [generating, setGenerating] = useState(false)
   const [summary, setSummary] = useState('')
   const [copied, setCopied] = useState(false)
@@ -428,7 +428,7 @@ Write a complete discharge summary including: admission reason, hospital course,
 }
 
 // ── PATIENT DETAIL VIEW ──
-function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack:()=>void }) {
+function PatientDetail({ patient, onBack }: { patient:Patient, onBack:()=>void }) {
   const [showNote, setShowNote] = useState(false)
   const [showDischarge, setShowDischarge] = useState(false)
   const [activeTab, setActiveTab] = useState<'overview'|'labs'|'meds'|'tasks'>('overview')
@@ -551,8 +551,11 @@ function PatientDetail({ patient, onBack }: { patient:typeof PATIENTS[0], onBack
 }
 
 // ── MAIN VIRTUAL WARD ──
+const _PATIENTS_TYPE = getDailyPatients();
+type Patient = typeof _PATIENTS_TYPE[0];
+
 export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
-  const [selected, setSelected] = useState<typeof PATIENTS[0]|null>(null)
+  const [selected, setSelected] = useState<Patient|null>(null)
   const [researchBanner, setResearchBanner] = useState<{title:string,specialty:string,source:string}|null>(null)
 
   // NET→WARD Integration
