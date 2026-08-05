@@ -137,6 +137,10 @@ export default function PatientSection({ onBack }: { onBack: () => void }) {
           </div>
         )}
       </div>
+              <div style={{background:"rgba(255,159,10,0.08)",border:"1px solid rgba(255,159,10,0.2)",borderRadius:12,padding:"10px 14px",margin:"12px 16px",display:"flex",gap:8,alignItems:"flex-start"}}>
+            <span style={{fontSize:14,flexShrink:0}}>⚕️</span>
+            <span style={{color:"rgba(60,60,67,0.6)",fontSize:12,lineHeight:1.5}}>For educational purposes only. Not a medical device. Always consult a qualified healthcare professional.</span>
+          </div>
     </div>
   );
 }
