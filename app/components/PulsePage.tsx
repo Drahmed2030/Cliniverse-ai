@@ -73,7 +73,7 @@ function TodayIsland({ xp, streak, isPro }:any) {
         position:'absolute',inset:0,
         backgroundImage:`url(${IMGS.hospital})`,
         backgroundSize:'cover',backgroundPosition:'center',
-        opacity:0.12,
+        opacity:0.18,
       }}/>
       {/* Gradient overlay */}
       <div style={{
@@ -178,8 +178,13 @@ function ActionsIsland({ onScribe, onCase, setTab, setToolTab }:any) {
               width:52,height:52,borderRadius:16,flexShrink:0,
               background:'rgba(255,255,255,0.06)',
               border:`1px solid ${a.border}`,
-              display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,
-            }}>{a.icon}</div>
+              display:'flex',alignItems:'center',justifyContent:'center',
+            }}>
+              {a.IconEl==='mic'   && <Icons.mic   color='#00D2C8' size={26}/>}
+              {a.IconEl==='book'  && <Icons.flask color='#F06B6B' size={26}/>}
+              {a.IconEl==='tools' && <Icons.tools color='#9B7AF5' size={26}/>}
+              {!a.IconEl && a.icon}
+            </div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:15,fontWeight:800,color:'#E8F4FD',marginBottom:3}}>{a.label}</div>
               <div style={{fontSize:12,color:'rgba(232,244,253,0.55)',marginBottom:8}}>{a.sub}</div>
@@ -424,7 +429,7 @@ export default function PulsePage(props:Props) {
 
       <div style={{
         position:'relative',zIndex:1,
-        padding:'16px 16px 140px',
+        padding:'16px 16px 160px',
         maxWidth:560,margin:'0 auto',
         animation:'fadeUp 0.5s ease',
       }}>
