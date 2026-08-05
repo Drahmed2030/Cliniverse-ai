@@ -249,7 +249,7 @@ export default function AfiaHome({ onSelect, savedType }: { onSelect: (type: str
   const greeting = hour<12?"صباح الخير ☀️":hour<17?"مساء النور 🌤️":"مساء الخير 🌙";
 
   // Render selected section
-  if (selected === "doctor") return <DoctorSection onBack={()=>setSelected(null)} />;
+  if (selected === "doctor") { onSelect("doctor", true); return null; }
   if (selected === "eyes") return <EyesSection onBack={()=>setSelected(null)} />;
   if (selected === "dental") return <DentalSection onBack={()=>setSelected(null)} />;
   if (selected === "rehab") return <RehabSection onBack={()=>setSelected(null)} />;
