@@ -131,7 +131,6 @@ function Ticker({xp,streak,live}:{xp:number,streak:number,live:number}) {
 
 // ── SECTION MODAL ──
 function SectionModal({section,onClose,onCase,isPro,setShowUpgrade}:any) {
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.82)',backdropFilter:'blur(16px)',display:'flex',flexDirection:'column',justifyContent:'flex-end'}} onClick={onClose}>
@@ -165,7 +164,6 @@ function SectionModal({section,onClose,onCase,isPro,setShowUpgrade}:any) {
 
 // ── FULL MODAL WRAPPER ──
 function FullModal({onBack,label,children}:{onBack:()=>void,label:string,children:React.ReactNode}) {
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:D.bg0,overflowY:'auto'}}>
@@ -181,7 +179,6 @@ function FullModal({onBack,label,children}:{onBack:()=>void,label:string,childre
 
 // ── QUICK TOOL PILL ──
 function QuickTool({icon,label,color,onClick}:{icon:string,label:string,color:string,onClick:()=>void}) {
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div onClick={onClick} style={{
@@ -255,7 +252,6 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   // Full modals
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
-  if(showLive)    if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
@@ -267,7 +263,6 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
     </div>
   )
 
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{minHeight:'100vh',background:'var(--bg-base, #0a1828)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
@@ -600,7 +595,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
           {/* ── ACTIVE FEATURES ── */}
           {[
             {id:'leaderboard',icon:'🏆',title:'Global Leaderboard',sub:'Top doctors worldwide',desc:'See how you rank against doctors globally. Compete, climb, and earn recognition.',color:D.gold,action:()=>setActiveFeature('leaderboard'),stats:[{l:'Doctors',v:'12K+'},{l:'Countries',v:'48'},{l:'Updated',v:'Live'}]},
-            {id:'social',icon:'👥',title:'Clinical Social Hub',sub:'Cases · Discussions · Network',desc:'Connect with doctors globally. Share clinical insights and discuss complex cases.',color:D.blue,action:()=>setActiveFeature('social'),stats:[{l:'Members',v:str(len(criticalCases) + len(sportsCases) + len(pedsCases))},{l:'Updated',v:'Daily'},{l:'Specialties',v:'3+'}]},
+            {id:'social',icon:'👥',title:'Clinical Social Hub',sub:'Cases · Discussions · Network',desc:'Connect with doctors globally. Share clinical insights and discuss complex cases.',color:D.blue,action:()=>setActiveFeature('social'),stats:[{l:'Members',v:'Live'},{l:'Updated',v:'Daily'},{l:'Specialties',v:'3+'}]},
             {id:'teleconsult',icon:'📹',title:'Teleconsultation',sub:'Live · Async · Secure',desc:'Consult with specialists remotely. Secure video and async messaging for complex cases.',color:D.teal,action:()=>setActiveFeature('teleconsult'),stats:[{l:'AI',v:'Powered'},{l:'Evidence',v:'Based'},{l:'PubMed',v:'Live'}]},
             {id:'board',icon:'📚',title:'Board Exam Prep',sub:'USMLE · MRCP · Saudi Boards',desc:'Comprehensive exam preparation with AI-powered practice questions and explanations.',color:D.purple,action:()=>setActiveFeature('board'),stats:[{l:'Questions',v:'5K+'},{l:'Pass rate',v:'94%'},{l:'Exams',v:'12'}]},
             {id:'reports',icon:'📋',title:'Medical Reports AI',sub:'Discharge · Referral · Handover',desc:'Generate professional medical reports in seconds with AI assistance.',color:'#00C2B2',count:847,action:null,stats:[{l:'Types',v:'12+'},{l:'Languages',v:'EN·AR'},{l:'Time saved',v:'40min'}]},
