@@ -1,5 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+const MotherSection = dynamic(() => import("./MotherSection"), { ssr: false });
+const PatientSection = dynamic(() => import("./PatientSection"), { ssr: false });
+const PharmacySection = dynamic(() => import("./PharmacySection"), { ssr: false });
 
 type UserType = "doctor"|"mother"|"pharmacy"|"patient"|"eyes"|"dental"|"rehab"|"stores"|null;
 
