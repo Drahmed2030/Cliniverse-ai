@@ -16,6 +16,7 @@ const HealthInsights = dynamic(() => import('./HealthInsights'), { ssr: false })
 const EcgChallenge = dynamic(() => import('./EcgChallenge'), { ssr: false })
 const MedCalculators = dynamic(() => import('./ClinicalCalculators'), { ssr: false })
 const LabRef = dynamic(() => import('./LabReference'), { ssr: false })
+const DrugSearch = dynamic(() => import('./DrugSearch'), { ssr: false })
 const CardiacSurgeryAI = dynamic(() => import('./CardiacSurgeryAI'), { ssr: false })
 const NeuroSurgeryAI = dynamic(() => import('./NeuroSurgeryAI'), { ssr: false })
 const GeneralSurgeryAI = dynamic(() => import('./GeneralSurgeryAI'), { ssr: false })
@@ -84,6 +85,7 @@ const SECTIONS = [
       { id: 'guidelines', label: 'Guidelines', icon: '📋', desc: 'ESC · NICE · AHA 2024', color: '#f59e0b' },
       { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#8b5cf6' },
       { id: 'medications', label: 'Medications', icon: '💉', desc: 'Drug database · Doses', color: '#10b981' },
+      { id: 'drugsearch', label: 'Drug Search', icon: '🔍', desc: 'FDA · PubMed · Trials', color: '#0A84FF' },
       { id: 'calc', label: 'Calculators', icon: '🧮', desc: 'GFR · BMI · Scores', color: '#06b6d4' },
     ]
   },
@@ -120,6 +122,7 @@ function ToolRenderer({ toolId, onXP }: { toolId: string, onXP: (n: number) => v
     labs: <LabsReference />,
     medications: <Medications />,
     lab: <LabRef />,
+    drugsearch: <DrugSearch />,
     calc: <MedCalculators onXP={onXP} />,
     aigen: <AICaseGenerator onXP={onXP} />,
     duels: <ClinicalDuels onXP={onXP} />,
