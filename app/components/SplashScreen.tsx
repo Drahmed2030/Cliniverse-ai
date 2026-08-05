@@ -8,7 +8,7 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
   const [showText, setShowText] = useState(false);
   const [showSub, setShowSub] = useState(false);
 
-  const texts = ["Health", "عافية", "Santé", "Salud"];
+  const texts = ["Health", "عافية", "Santé"];
 
   useEffect(() => {
     setTimeout(() => setShowLogo(true), 300);
@@ -26,12 +26,18 @@ export default function SplashScreen({ onComplete }: { onComplete: () => void })
       setTextIndex(i => (i + 1) % texts.length);
     }, 800);
 
-    setTimeout(() => {
+    const doneTimer = setTimeout(() => {
       clearInterval(textInterval);
       onComplete();
-    }, 3000);
+    }, 3200);
 
-    return () => { clearInterval(progressInterval); clearInterval(textInterval); };
+    return () => { 
+      clearInterval(progressInterval); 
+      clearInterval(textInterval);
+      clearTimeout(doneTimer);
+    };
+
+
   }, []);
 
   return (
