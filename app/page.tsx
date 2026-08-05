@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
 import ProfilePage from './components/ProfilePage'
 import SplashScreen from './components/SplashScreen'
-const DynamicNav    = dynamic(() => import('./components/DynamicNav'),    { ssr:false })
+const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
 const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
 const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
@@ -214,7 +214,7 @@ function LoadingSpinner({ color = '#00C2B2' }: { color?: string }) {
 }
 
 export default function Home() {
-  const [tab, setTab]                   = useState('hub')
+  const [tab, setTab]                   = useState('pulse')
   const [isOnline, setIsOnline] = useState(true)
 
   useEffect(() => {
@@ -696,7 +696,7 @@ export default function Home() {
       }}>
 
         {/* HUB */}
-        {tab==='hub' && (
+        {tab==='hub'||tab==='pulse' && (
           <HubPage
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro}
@@ -870,7 +870,7 @@ export default function Home() {
       </main>
 
       {/* ── NAV ── */}
-      <DynamicNav tab={tab} setTab={setTab} setToolTab={setToolTab} liveCount={1247} isPro={isPro}/>
+      <FloatingNav tab={tab} setTab={setTab}/>
       <div style={{height:120}}/>
       <PWAInstall/>
 
