@@ -408,7 +408,7 @@ export default function PulsePage(props:Props) {
   return (
     <div style={{
       minHeight:'100vh',
-      background:'var(--bg-base,#0F1824)',
+      background:'#0F1824',
       fontFamily:F,
     }}>
       {/* Background glow */}

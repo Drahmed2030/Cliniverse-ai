@@ -223,7 +223,7 @@ export default function MePage({ xp, streak, casesCompleted, mcqCorrect, isPro, 
   )
 
   return (
-    <div style={{minHeight:'100vh',background:'var(--bg-base,#0F1824)',fontFamily:F}}>
+    <div style={{minHeight:'100vh',background:'#0F1824',fontFamily:F}}>
       {/* BG glow */}
       <div style={{position:'fixed',top:-150,right:-100,width:400,height:400,borderRadius:'50%',
         background:'radial-gradient(circle,rgba(79,142,247,0.06),transparent 70%)',
