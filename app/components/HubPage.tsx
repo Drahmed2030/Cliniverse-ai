@@ -242,7 +242,7 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   ]
 
   const sections = [
-    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU · Daily Cases', action:()=>setShowCritical(true),          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
+    {key:'critical',icon:'🏥',title:'Critical Care',  sub:'ED · ICU · CCU',          color:D.red,   tag:'INTENSIVE',  cases:criticalCases},
     {key:'sports',  icon:'⚽',title:'Sports Medicine',sub:'Pitch-side · Evidence-based',  color:D.green, tag:'NEW',        cases:sportsCases,  badge:'NEW'},
     {key:'peds',    icon:'🧸',title:'Pediatrics',     sub:'Febrile · Vaccines · Growth',    color:D.purple,tag:'PEDIATRICS', cases:pedsCases,    badge:'NEW'},
   ]
@@ -250,8 +250,6 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   // Full modals
   if(showScribe)  return <FullModal onBack={()=>setShowScribe(false)}  label="Pulse"><AmbientScribe  onXP={onXP}/></FullModal>
   if(showAcademy) return <FullModal onBack={()=>setShowAcademy(false)} label="Pulse"><PulseAcademy   onXP={onXP}/></FullModal>
-  if(showCritical) return <CriticalCareSection onXP={onXP} />
-
   return (
     <div style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(10,22,40,0.92)',backdropFilter:'blur(16px)'}}>
       <div style={{padding:'20px 16px',display:'flex',justifyContent:'space-between',alignItems:'center',borderBottom:`1px solid ${D.border}`}}>
