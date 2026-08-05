@@ -1,0 +1,38 @@
+export const C = {
+  void:    '#060A12',
+  base:    '#0D1520',
+  surface: '#131E2E',
+  raised:  '#1A2840',
+  borderCard: 'rgba(255,255,255,0.09)',
+  borderHi:   'rgba(0,210,200,0.22)',
+  text:    '#F0F8FF',
+  textSub: 'rgba(240,248,255,0.60)',
+  textMuted:'rgba(240,248,255,0.35)',
+  teal:    '#00D2C8',
+  tealDim: 'rgba(0,210,200,0.10)',
+  blue:    '#4D8EF5',
+  green:   '#2ECC8E',
+  amber:   '#F5B731',
+  coral:   '#F06B6B',
+  violet:  '#9B7AF5',
+  gold:    '#F0C040',
+  gradPrimary: 'linear-gradient(135deg, #00D2C8 0%, #4D8EF5 100%)',
+  shadowMd:  '0 8px 32px rgba(0,0,0,0.50)',
+  glowTeal:  '0 0 32px rgba(0,210,200,0.28)',
+  rSm:10, rMd:16, rLg:22, rXl:30,
+  font: '-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",sans-serif',
+}
+export const T = {
+  display: { fontSize:34, fontWeight:900, letterSpacing:-1.0 },
+  h1:      { fontSize:28, fontWeight:800, letterSpacing:-0.6 },
+  h2:      { fontSize:22, fontWeight:800, letterSpacing:-0.4 },
+  title:   { fontSize:15, fontWeight:700, letterSpacing:-0.1 },
+  body:    { fontSize:14, fontWeight:500, letterSpacing: 0.0 },
+  caption: { fontSize:12, fontWeight:500, letterSpacing: 0.1 },
+  label:   { fontSize:10, fontWeight:700, letterSpacing: 1.2 },
+}
+export const A = {
+  spring: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+  smooth: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  fast:   'all 0.15s ease',
+}
