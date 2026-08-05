@@ -205,8 +205,6 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
   const [waitlist,setWaitlist]     = useState<string[]>([])
   const [activeFeature,setActiveFeature] = useState<string|null>(null)
 
-  if (showCritical) return <CriticalCareSection onXP={onXP} />
-
   useEffect(()=>{
     const t = setInterval(()=>setLiveCount(n=>Math.max(900,Math.min(1600,n+Math.floor(Math.random()*5)-2))),3500)
     supabase.from('daily_cases').select('*').order('created_at',{ascending:false}).limit(1).single().then(({data})=>{if(data)setDailyCase(data)})
@@ -263,6 +261,8 @@ export default function HubPage({xp,streak,casesCompleted,mcqCorrect,isPro,criti
     </div>
   )
 
+
+  if (showCritical) return <CriticalCareSection onXP={onXP} />
 
   return (
     <div style={{minHeight:'100vh',background:'var(--bg-base, #0a1828)',fontFamily:F,overflowX:'hidden',position:'relative'}}>
