@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react'
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
-import HubPage from './components/HubPage'
 import PulsePage from './components/PulsePage'
 import PulseIndex from './components/pulse'
 import ProfilePage from './components/ProfilePage'
@@ -231,7 +230,7 @@ export default function Home() {
   }, [])
   const _mTX = useRef(0)
   const _mTY = useRef(0)
-  const MAIN_TABS = ['hub','tools','ward','net']
+  const MAIN_TABS = ['pulse','tools','ward','me']
   const swipeMain = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - _mTX.current
     const dy = e.changedTouches[0].clientY - _mTY.current
