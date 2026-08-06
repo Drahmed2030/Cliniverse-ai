@@ -38,12 +38,6 @@ export default function PulseIndex(props:Props) {
     } catch { setAiAnswer('Connection error.') }
   }
 
-  const sections = [
-    { icon:'🏥', label:'Critical Care',   sub:'ED · ICU · CCU',       color:'#DC2626', cases:criticalCases },
-    { icon:'⚽', label:'Sports Medicine', sub:'Pitch-side · Evidence', color:'#059669', cases:sportsCases  },
-    { icon:'🧸', label:'Pediatrics',      sub:'Febrile · Vaccines',    color:'#7C3AED', cases:pedsCases    },
-  ]
-
   return (
     <div style={{ minHeight:'100vh', background:'#F8FAFC', fontFamily:L.font }}>
       <div style={{ padding:'16px 16px 160px', maxWidth:560, margin:'0 auto' }}>
@@ -86,6 +80,31 @@ export default function PulseIndex(props:Props) {
           onTools={()=>setTab('tools')}
         />
 
+        {/* Global Room */}
+        <div onClick={()=>setShowNexus(true)} style={{
+          backgroundImage:'url(https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80)',
+          backgroundSize:'cover',backgroundPosition:'center',
+          borderRadius:24,overflow:'hidden',marginBottom:16,cursor:'pointer',
+          boxShadow:'0 4px 20px rgba(124,58,237,0.20)',
+          position:'relative',height:140,
+        }}>
+          <div style={{position:'absolute',inset:0,background:'linear-gradient(160deg,rgba(124,58,237,0.70),rgba(15,23,42,0.85))'}}/>
+          <div style={{position:'absolute',inset:0,padding:'16px'}}>
+            <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:8}}>
+              <div style={{width:6,height:6,borderRadius:'50%',background:'#EF4444'}}/>
+              <span style={{fontSize:10,color:'#FCA5A5',fontWeight:700,letterSpacing:1}}>LIVE WORLDWIDE</span>
+            </div>
+            <div style={{fontSize:11,color:'#A78BFA',fontWeight:700,letterSpacing:2,marginBottom:4}}>🌐 CLINICAL NEXUS</div>
+            <div style={{fontSize:22,fontWeight:900,color:'white',letterSpacing:-0.5,lineHeight:1.1}}>The Global<br/>Medical Room</div>
+            <div style={{position:'absolute',bottom:16,right:16,
+              background:'rgba(255,255,255,0.20)',backdropFilter:'blur(8px)',
+              border:'1px solid rgba(255,255,255,0.30)',
+              borderRadius:20,padding:'6px 14px',
+              fontSize:12,fontWeight:700,color:'white',
+            }}>Enter →</div>
+          </div>
+        </div>
+
         {/* Stats */}
         <div style={{ marginBottom:16 }}>
           <div style={{ fontSize:10, fontWeight:700, letterSpacing:2, color:L.textMuted, marginBottom:10, textTransform:'uppercase' }}>
@@ -109,35 +128,6 @@ export default function PulseIndex(props:Props) {
             ))}
           </div>
         </div>
-
-        {/* Case Library */}
-        <div style={{ marginBottom:16 }}>
-          <div style={{ fontSize:10, fontWeight:700, letterSpacing:2, color:L.textMuted, marginBottom:10, textTransform:'uppercase' }}>
-            🏨 Case Library
-          </div>
-          {sections.map((s,i)=>(
-            <div key={i} onClick={()=>setTab('tools')} style={{
-              background:'#FFFFFF', border:`1px solid ${L.border}`,
-              borderLeft:`3px solid ${s.color}`,
-              borderRadius:18, padding:'14px 16px', marginBottom:8,
-              cursor:'pointer', display:'flex', alignItems:'center', gap:12,
-              boxShadow:L.shadowSm,
-            }}>
-              <div style={{
-                width:44, height:44, borderRadius:14, flexShrink:0,
-                background:`${s.color}10`,
-                display:'flex', alignItems:'center', justifyContent:'center', fontSize:22,
-              }}>{s.icon}</div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:15, fontWeight:700, color:L.text }}>{s.label}</div>
-                <div style={{ fontSize:12, color:L.textSub }}>{s.sub}</div>
-              </div>
-              <span style={{ color:L.textMuted, fontSize:18 }}>›</span>
-            </div>
-          ))}
-        </div>
-
-      </div>
 
       {/* Sheets */}
       <Sheet open={showScribe} onClose={()=>setShowScribe(false)} title="AI Scribe" size="lg">
