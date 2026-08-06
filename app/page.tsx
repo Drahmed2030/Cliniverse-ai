@@ -4,6 +4,7 @@ import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import PulsePage from './components/PulsePage'
+const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
 import PulseIndex from './components/pulse'
 import ProfilePage from './components/ProfilePage'
 import MePage from './components/MePage'
@@ -175,7 +176,18 @@ const VitalBadge = ({label,value,unit,critical}:{label:string,value:string,unit:
     }}>{value}</div>
     <div style={{fontSize:9, color: critical ? 'rgba(229,62,62,0.7)' : D.textMuted, marginTop:2}}>{unit}</div>
     {critical && <div style={{fontSize:8, color:'#E53E3E', fontWeight:700, marginTop:3}}>⚠ CRITICAL</div>}
-  </div>
+  
+      {showNexus && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-base)',overflowY:'auto'}}>
+          <button onClick={()=>setShowNexus(false)} style={{
+            position:'fixed',top:16,left:16,zIndex:10000,
+            background:'rgba(0,212,200,0.15)',border:'1px solid rgba(0,212,200,0.3)',
+            borderRadius:12,padding:'8px 16px',color:'#00D4C8',cursor:'pointer',fontSize:14
+          }}>← Back</button>
+          <ClinicalNexus />
+        </div>
+      )}
+</div>
 )
 
 // ── GLASS CARD COMPONENT ─────────────────────────────────────────────────
@@ -190,7 +202,18 @@ const GCard = ({children, accent, style={}}: {children:React.ReactNode, accent?:
     ...style,
   }}>
     {children}
-  </div>
+  
+      {showNexus && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-base)',overflowY:'auto'}}>
+          <button onClick={()=>setShowNexus(false)} style={{
+            position:'fixed',top:16,left:16,zIndex:10000,
+            background:'rgba(0,212,200,0.15)',border:'1px solid rgba(0,212,200,0.3)',
+            borderRadius:12,padding:'8px 16px',color:'#00D4C8',cursor:'pointer',fontSize:14
+          }}>← Back</button>
+          <ClinicalNexus />
+        </div>
+      )}
+</div>
 )
 
 // ── LABEL ────────────────────────────────────────────────────────────────
@@ -198,7 +221,18 @@ const Label = ({children, color=D.textMuted}: {children:React.ReactNode, color?:
   <div style={{
     fontSize:9, fontWeight:700, letterSpacing:1.5,
     textTransform:'uppercase' as const, color, marginBottom:8,
-  }}>{children}</div>
+  }}>{children}
+      {showNexus && (
+        <div style={{position:'fixed',inset:0,zIndex:9999,background:'var(--bg-base)',overflowY:'auto'}}>
+          <button onClick={()=>setShowNexus(false)} style={{
+            position:'fixed',top:16,left:16,zIndex:10000,
+            background:'rgba(0,212,200,0.15)',border:'1px solid rgba(0,212,200,0.3)',
+            borderRadius:12,padding:'8px 16px',color:'#00D4C8',cursor:'pointer',fontSize:14
+          }}>← Back</button>
+          <ClinicalNexus />
+        </div>
+      )}
+</div>
 )
 
 function LoadingSpinner({ color = '#00C2B2' }: { color?: string }) {
@@ -240,6 +274,7 @@ export default function Home() {
     if (dx >  65 && i > 0)                  setTab(MAIN_TABS[i-1])
   }
   const [toolTab, setToolTab]           = useState('codeblue')
+  const [showNexus, setShowNexus] = useState(false)
   const [activeCase, setActiveCase]     = useState<string|null>(null)
   const [activeRad, setActiveRad]       = useState<string|null>(null)
   const [xp, setXp]                     = useState(0)

@@ -132,7 +132,7 @@ function TodayIsland({ xp, streak, isPro }:any) {
 }
 
 // ── ISLAND 2: ACTIONS ──
-function ActionsIsland({ onScribe, onCase, setTab, setToolTab }:any) {
+function ActionsIsland({ onScribe, onCase, setTab, setToolTab, onNexus }:any) {
   const actions = [
     {
       icon:'🎙️', label:'AI Scribe', sub:'Record → SOAP note · EN+AR',
