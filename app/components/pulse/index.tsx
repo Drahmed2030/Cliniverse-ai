@@ -13,15 +13,13 @@ const LiveCaseViewer = dynamic(() => import('../LiveCaseViewer'), { ssr:false })
 
 interface Props {
   xp:number; streak:number; casesCompleted:number; mcqCorrect:number
-  isPro:boolean; criticalCases:any[]; sportsCases:any[]; pedsCases:any[]
-  setActiveCase:(id:string)=>void; setShowUpgrade:(v:boolean)=>void
+  isPro:boolean
   setTab:(t:string)=>void; setToolTab:(t:string)=>void; onXP:(n:number)=>void
 }
 
 export default function PulseIndex(props:Props) {
   const { xp, streak, casesCompleted, mcqCorrect, isPro,
-    criticalCases, sportsCases, pedsCases,
-    setActiveCase, setShowUpgrade, setTab, setToolTab, onXP } = props
+    setTab, setToolTab, onXP } = props
 
   const [showScribe, setShowScribe] = useState(false)
   const [showCase,   setShowCase]   = useState(false)
