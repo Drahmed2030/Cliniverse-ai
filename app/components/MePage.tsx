@@ -279,7 +279,7 @@ export default function MePage({ xp, streak, casesCompleted, mcqCorrect, isPro, 
               {/* Unsplash Hero */}
               <div style={{
                 height:120,
-                backgroundImage:'url(https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80)',
+                backgroundImage:'url(https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80)',
                 backgroundSize:'cover',backgroundPosition:'center top',
                 position:'relative',
               }}>
