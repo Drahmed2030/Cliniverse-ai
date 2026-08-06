@@ -14,7 +14,7 @@ export function Card({ children, accent, elevated, onClick, style={} }: CardProp
       background: elevated ? L.raised : L.surface,
       border: `1px solid ${accent ? accent+'30' : L.border}`,
       borderRadius: L.rLg,
-      boxShadow: accent ? `${L.shadowMd}, 0 0 0 1px ${accent}15` : L.shadowSm,
+      boxShadow: accent ? L.shadowMd : L.shadowSm,
       overflow: 'hidden',
       cursor: onClick ? 'pointer' : 'default',
       transition: 'all 0.2s ease',
