@@ -1,13 +1,12 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { C, A } from '../lib/ds'
-import { Icons } from '../lib/icons'
+import { L } from '../lib/tokens'
 
 const TABS = [
-  { id:'pulse', label:'Today',  Icon: Icons.pulse },
-  { id:'ward',  label:'Clinic', Icon: Icons.ward  },
-  { id:'tools', label:'Tools',  Icon: Icons.tools },
-  { id:'me',    label:'Me',     Icon: Icons.me    },
+  { id:'pulse', label:'Today',  icon:'⚡' },
+  { id:'ward',  label:'Clinic', icon:'🏥' },
+  { id:'tools', label:'Tools',  icon:'🔬' },
+  { id:'me',    label:'Me',     icon:'👤' },
 ]
 
 export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:string)=>void }) {
@@ -32,32 +31,34 @@ export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:str
 
   const active = TABS.find(t =>
     t.id === tab ||
-    (t.id === 'pulse' && (tab === 'hub')) ||
+    (t.id === 'pulse' && tab === 'hub') ||
     (t.id === 'ward'  && tab === 'net') ||
     (t.id === 'me'    && tab === 'profile')
   )?.id || 'pulse'
 
   return (
     <>
+      {/* FLOATING PILL */}
       <div style={{
-        position:'fixed', bottom:36, left:'50%',
+        position:'fixed', bottom:32, left:'50%',
         transform:`translateX(-50%) translateY(${visible?'0':'110px'})`,
         opacity: visible ? 1 : 0,
-        transition: A.spring,
+        transition:'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease',
         zIndex:1000,
       }}>
         <div style={{
           display:'flex', alignItems:'center',
-          background:'rgba(13,21,32,0.94)',
+          background:'rgba(255,255,255,0.88)',
           backdropFilter:'blur(40px) saturate(200%)',
           WebkitBackdropFilter:'blur(40px) saturate(200%)',
-          border:'1px solid rgba(255,255,255,0.10)',
-          borderRadius:50, padding:'5px 6px', gap:2,
-          boxShadow:'0 8px 40px rgba(0,0,0,0.70), 0 0 0 1px rgba(0,210,200,0.06)',
+          border:`1px solid ${L.border}`,
+          borderRadius:50,
+          padding:'5px 6px',
+          gap:3,
+          boxShadow:`${L.shadowLg}, 0 0 0 1px rgba(13,148,136,0.08)`,
         }}>
           {TABS.map(t => {
             const isActive = t.id === active
-            const iconColor = isActive ? 'white' : 'rgba(240,248,255,0.35)'
             return (
               <button key={t.id} onClick={() => setTab(t.id)} style={{
                 display:'flex', flexDirection:'column',
@@ -66,17 +67,16 @@ export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:str
                 borderRadius:44,
                 padding: isActive ? '9px 22px' : '9px 16px',
                 minWidth: isActive ? 84 : 52,
-                background: isActive ? C.gradPrimary : 'transparent',
-                boxShadow: isActive ? '0 4px 20px rgba(0,210,200,0.40)' : 'none',
-                transition: A.spring,
+                background: isActive ? L.gradPrimary : 'transparent',
+                boxShadow: isActive ? L.shadowMd : 'none',
+                transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
               }}>
-                <t.Icon color={iconColor} size={20}/>
+                <span style={{fontSize:18, lineHeight:1}}>{t.icon}</span>
                 <span style={{
                   fontSize:10, fontWeight:700, letterSpacing:0.3,
-                  fontFamily:C.font,
-                  color: isActive ? 'white' : 'rgba(240,248,255,0.38)',
-                  transition: A.smooth,
-                  marginTop:1,
+                  fontFamily:L.font,
+                  color: isActive ? 'white' : L.textMuted,
+                  transition:'color 0.2s',
                 }}>{t.label}</span>
               </button>
             )
@@ -84,16 +84,17 @@ export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:str
         </div>
       </div>
 
+      {/* DOT */}
       {dot && (
         <div onClick={() => { setVisible(true); setDot(false) }} style={{
-          position:'fixed', bottom:44, left:'50%',
+          position:'fixed', bottom:40, left:'50%',
           transform:'translateX(-50%)',
           width:40, height:5, borderRadius:5,
-          background:'rgba(0,210,200,0.40)',
-          border:'1px solid rgba(0,210,200,0.20)',
+          background:`rgba(13,148,136,0.40)`,
+          border:`1px solid rgba(13,148,136,0.20)`,
           cursor:'pointer', zIndex:1000,
-          boxShadow:'0 0 16px rgba(0,210,200,0.30)',
-          transition: A.smooth,
+          boxShadow:L.glowTeal,
+          transition:'all 0.3s ease',
         }}/>
       )}
 
