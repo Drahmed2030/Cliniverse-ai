@@ -130,6 +130,7 @@ export default function PulseIndex(props:Props) {
           </div>
         </div>
 
+        </div>
       {/* Sheets */}
       <Sheet open={showScribe} onClose={()=>setShowScribe(false)} title="AI Scribe" size="lg">
         <AmbientScribe onXP={onXP}/>
