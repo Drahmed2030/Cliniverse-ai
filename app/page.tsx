@@ -757,7 +757,39 @@ export default function Home() {
         )}
 
         {/* WARD */}
-        {tab==='ward' && <VirtualWard onXP={addXP}/>}
+        {tab==='ward' && (
+          <div>
+            <div style={{
+              display:'flex',gap:4,
+              background:'rgba(255,255,255,0.90)',
+              border:'1px solid #E2E8F0',
+              borderRadius:16,padding:4,marginBottom:14,
+              boxShadow:'0 1px 3px rgba(15,23,42,0.08)',
+            }}>
+              {[
+                {id:'ward', label:'🏥 Ward'},
+                {id:'feed', label:'📰 MedFeed'},
+                {id:'net',  label:'🌐 ClinicalNet'},
+              ].map(t=>(
+                <button key={t.id}
+                  onClick={()=>setToolTab(t.id)}
+                  style={{
+                    flex:1,padding:'9px',border:'none',cursor:'pointer',
+                    borderRadius:12,fontWeight:700,fontSize:11,
+                    fontFamily:'-apple-system,sans-serif',
+                    background: toolTab===t.id
+                      ? 'linear-gradient(135deg,#0D9488,#1E40AF)'
+                      : 'transparent',
+                    color: toolTab===t.id ? 'white' : '#94A3B8',
+                    transition:'all 0.25s',
+                  }}>{t.label}</button>
+              ))}
+            </div>
+            {(toolTab==='ward'||!['feed','net'].includes(toolTab)) && <VirtualWard onXP={addXP}/>}
+            {toolTab==='feed' && <MedFeed onXP={addXP}/>}
+            {toolTab==='net'  && <ClinicalNet onXP={addXP}/>}
+          </div>
+        )}
 
         {/* BOARD */}
         {tab==='board' && <BoardExam onXP={addXP}/>}
