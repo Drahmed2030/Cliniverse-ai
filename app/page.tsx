@@ -5,6 +5,7 @@ import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
 import HubPage from './components/HubPage'
 import PulsePage from './components/PulsePage'
+import PulseIndex from './components/pulse'
 import ProfilePage from './components/ProfilePage'
 import MePage from './components/MePage'
 import SplashScreen from './components/SplashScreen'
@@ -690,7 +691,7 @@ export default function Home() {
 
         {/* HUB */}
         {(tab==='hub'||tab==='pulse') && (
-          <PulsePage
+          <PulseIndex
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro}
             criticalCases={criticalCases} sportsCases={sportsCases} pedsCases={pedsCases}
