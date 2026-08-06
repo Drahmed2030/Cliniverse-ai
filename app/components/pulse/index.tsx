@@ -8,6 +8,7 @@ import { AIAmbient } from './AIAmbient'
 import { Sheet } from '../ui/Sheet'
 
 const AmbientScribe  = dynamic(() => import('../AmbientScribe'),  { ssr:false })
+const ClinicalNexus  = dynamic(() => import('../ClinicalNexus'),  { ssr:false })
 const LiveCaseViewer = dynamic(() => import('../LiveCaseViewer'), { ssr:false })
 
 interface Props {
@@ -24,6 +25,7 @@ export default function PulseIndex(props:Props) {
 
   const [showScribe, setShowScribe] = useState(false)
   const [showCase,   setShowCase]   = useState(false)
+  const [showNexus,  setShowNexus]  = useState(false)
   const [aiAnswer,   setAiAnswer]   = useState('')
 
   const handleAI = async (q:string) => {
@@ -132,6 +134,9 @@ export default function PulseIndex(props:Props) {
       {/* Sheets */}
       <Sheet open={showScribe} onClose={()=>setShowScribe(false)} title="AI Scribe" size="lg">
         <AmbientScribe onXP={onXP}/>
+      </Sheet>
+      <Sheet open={showNexus} onClose={()=>setShowNexus(false)} title="🌐 Global Medical Room" size="lg">
+        <ClinicalNexus onXP={onXP}/>
       </Sheet>
       <Sheet open={showCase} onClose={()=>setShowCase(false)} title="Today's Case" size="lg">
         <LiveCaseViewer specialty="Emergency Medicine" difficulty="Intermediate" onXP={onXP}/>
