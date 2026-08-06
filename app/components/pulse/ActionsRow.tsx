@@ -2,6 +2,21 @@
 import { L } from '../../lib/tokens'
 
 // SVG Icons 2026 — Lucide style + Gradient
+
+const NexusIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="nxG" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#7C3AED"/>
+        <stop offset="100%" stopColor="#4F46E5"/>
+      </linearGradient>
+    </defs>
+    <circle cx="12" cy="12" r="10" stroke="url(#nxG)" strokeWidth="1.5" fill="none"/>
+    <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke="url(#nxG)" strokeWidth="1.5" fill="none"/>
+    <circle cx="12" cy="12" r="3" fill="url(#nxG)"/>
+  </svg>
+)
+
 const MicIcon = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
     <defs>
@@ -58,9 +73,10 @@ interface Props {
   onScribe: () => void
   onCase: () => void
   onTools: () => void
+  onNexus: () => void
 }
 
-export function ActionsRow({ onScribe, onCase, onTools }: Props) {
+export function ActionsRow({ onScribe, onCase, onTools, onNexus }: Props) {
   const actions: Action[] = [
     {
       IconEl: MicIcon,
@@ -73,6 +89,12 @@ export function ActionsRow({ onScribe, onCase, onTools }: Props) {
       label:"Today's Case", sub:'AI simulation · +30 XP',
       color:'#DC2626', tags:['Interactive','Evidence'],
       onClick: onCase,
+    },
+    {
+      IconEl: NexusIcon,
+      label:'Global Room', sub:'1,247 doctors · Live cases',
+      color:'#7C3AED', tags:['Real-time','Global votes'],
+      onClick: onNexus,
     },
     {
       IconEl: ToolsIcon,
