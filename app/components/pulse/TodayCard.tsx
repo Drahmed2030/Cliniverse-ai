@@ -1,8 +1,69 @@
 'use client'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { L } from '../../lib/tokens'
 import { Card } from '../ui/Card'
 import { Badge } from '../ui/Badge'
+
+
+// ── Vital SVG Icons 2026 ──
+const HeartIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="hG" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#EF4444"/>
+        <stop offset="100%" stopColor="#F97316"/>
+      </linearGradient>
+    </defs>
+    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" fill="url(#hG)"/>
+  </svg>
+)
+
+const LungIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3B82F6"/>
+        <stop offset="100%" stopColor="#06B6D4"/>
+      </linearGradient>
+    </defs>
+    <path d="M12 2v10M12 2C12 2 8 4 8 8v8c0 2 1 3 3 3s3-1 3-3M12 2C12 2 16 4 16 8v8c0 2-1 3-3 3" stroke="url(#lG)" strokeWidth="1.8" strokeLinecap="round"/>
+    <circle cx="8" cy="14" r="2" fill="url(#lG)" opacity="0.6"/>
+    <circle cx="16" cy="14" r="2" fill="url(#lG)" opacity="0.6"/>
+  </svg>
+)
+
+const TempIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="tpG" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stopColor="#F59E0B"/>
+        <stop offset="100%" stopColor="#EF4444"/>
+      </linearGradient>
+    </defs>
+    <path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z" stroke="url(#tpG)" strokeWidth="1.8" strokeLinecap="round"/>
+    <circle cx="11.5" cy="17.5" r="2" fill="url(#tpG)"/>
+  </svg>
+)
+
+const FireIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="fG" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stopColor="#F97316"/>
+        <stop offset="100%" stopColor="#FBBF24"/>
+      </linearGradient>
+    </defs>
+    <path d="M12 2C12 2 8 6 8 10c0 1.5.5 3 2 4-1-2 0-4 2-4 2 0 3 2 2 4 1.5-1 2.5-2.5 2.5-4C16.5 6 12 2 12 2z" fill="url(#fG)"/>
+    <path d="M12 22c-3.31 0-6-2.69-6-6 0-2 1-4 3-5-1 2 0 4 2 4s3-2 2-4c2 1 3 3 3 5 0 3.31-2.69 6-6 6z" fill="url(#fG)" opacity="0.8"/>
+  </svg>
+)
+
+const VITAL_ICONS: Record<string, React.FC> = {
+  '🫀': HeartIcon,
+  '🫁': LungIcon,
+  '🌡️': TempIcon,
+  '🔥': FireIcon,
+}
 
 const HOSPITAL = 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80'
 
@@ -92,7 +153,9 @@ export function TodayCard({ xp, streak, isPro }: Props) {
             borderRadius:16, padding:'10px 8px',
             textAlign:'center',
           }}>
-            <div style={{fontSize:18,marginBottom:3}}>{v.icon}</div>
+            <div style={{marginBottom:3,display:'flex',justifyContent:'center'}}>
+              {VITAL_ICONS[v.icon] ? React.createElement(VITAL_ICONS[v.icon]) : v.icon}
+            </div>
             <div style={{fontSize:16,fontWeight:800,color:L.text,lineHeight:1}}>{v.value}</div>
             <div style={{fontSize:8,color:L.textMuted,marginTop:2,letterSpacing:0.5}}>{v.unit}</div>
             <div style={{fontSize:7,color:L.textMuted,letterSpacing:0.8}}>{v.label}</div>
