@@ -271,17 +271,24 @@ export default function MePage({ xp, streak, casesCompleted, mcqCorrect, isPro, 
             <div style={{
               background:L.surface,
               border:`1px solid ${L.border}`,
-              borderRadius:28,padding:'28px 20px 20px',
+              borderRadius:28,
               marginBottom:14,textAlign:'center',
               boxShadow:L.shadowMd,
               position:'relative',overflow:'hidden',
             }}>
+              {/* Unsplash Hero */}
               <div style={{
-                position:'absolute',top:-40,right:-40,width:160,height:160,
-                borderRadius:'50%',
-                background:'radial-gradient(circle,rgba(13,148,136,0.06),transparent 70%)',
-                pointerEvents:'none',
-              }}/>
+                height:120,
+                backgroundImage:'url(https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80)',
+                backgroundSize:'cover',backgroundPosition:'center top',
+                position:'relative',
+              }}>
+                <div style={{
+                  position:'absolute',inset:0,
+                  background:'linear-gradient(180deg,rgba(248,250,252,0.10) 0%,rgba(248,250,252,0.95) 100%)',
+                }}/>
+              </div>
+              <div style={{padding:'0 20px 20px',marginTop:-20}}>
 
               <RankRing xp={xp} rank={rank}/>
 
@@ -322,6 +329,7 @@ export default function MePage({ xp, streak, casesCompleted, mcqCorrect, isPro, 
                 borderRadius:12,padding:'6px 16px',display:'inline-block',
                 fontSize:12,fontWeight:800,color:'white',marginTop:4,
               }}>⭐ PRO Member</div>}
+            </div>
             </div>
 
             {/* Quick Stats */}
