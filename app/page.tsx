@@ -41,6 +41,7 @@ const ClinicalWorkshop    = dynamic(() => import('./components/ClinicalWorkshop'
 const ClinicalNet         = dynamic(() => import('./components/ClinicalNet'),         { ssr:false })
 const MedFeed             = dynamic(() => import('./components/MedFeed'),             { ssr:false })
 const VirtualWard         = dynamic(() => import('./components/VirtualWard'),         { ssr:false })
+import WardIndex from './components/ward'
 const LiveCasesSystem     = dynamic(() => import('./components/LiveCasesSystem'),     { ssr:false })
 const HealthInsights      = dynamic(() => import('./components/HealthInsights'),      { ssr:false })
 
@@ -758,6 +759,9 @@ export default function Home() {
 
         {/* WARD */}
         {tab==='ward' && (
+          <WardIndex onXP={addXP}/>
+        )}
+        {tab==='ward_old' && (
           <div>
             <div style={{
               display:'flex',gap:4,
