@@ -1,281 +1,377 @@
 'use client'
-import React, { useState, useRef } from 'react'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { L } from '../lib/tokens'
 
-const CodeBlue = dynamic(() => import('./CodeBlue'), { ssr: false })
-const AICaseGenerator = dynamic(() => import('./AICaseGenerator'), { ssr: false })
-const ClinicalDuels = dynamic(() => import('./ClinicalDuels'), { ssr: false })
-const DiagnosticDetective = dynamic(() => import('./DiagnosticDetective'), { ssr: false })
-const ErrorAutopsy = dynamic(() => import('./ErrorAutopsy'), { ssr: false })
-const NightShiftSurvival = dynamic(() => import('./NightShiftSurvival'), { ssr: false })
-const PharmacyModule = dynamic(() => import('./PharmacyModule'), { ssr: false })
-const NursingModule = dynamic(() => import('./NursingModule'), { ssr: false })
-const LabModule = dynamic(() => import('./LabModule'), { ssr: false })
-const RadiologyModule = dynamic(() => import('./RadiologyModule'), { ssr: false })
-const HealthInsights = dynamic(() => import('./HealthInsights'), { ssr: false })
-const EcgChallenge = dynamic(() => import('./EcgChallenge'), { ssr: false })
-const MedCalculators = dynamic(() => import('./ClinicalCalculators'), { ssr: false })
-const LabRef = dynamic(() => import('./LabReference'), { ssr: false })
-const DrugSearch = dynamic(() => import('./DrugSearch'), { ssr: false })
-const CardiacSurgeryAI = dynamic(() => import('./CardiacSurgeryAI'), { ssr: false })
-const NeuroSurgeryAI = dynamic(() => import('./NeuroSurgeryAI'), { ssr: false })
-const GeneralSurgeryAI = dynamic(() => import('./GeneralSurgeryAI'), { ssr: false })
-const ClinicalNexus = dynamic(() => import('./ClinicalNexus'), { ssr: false })
-const RapidFire = dynamic(() => import('./RapidFire'), { ssr: false })
-const LabsReference = dynamic(() => import('./LabsReference'), { ssr: false })
-const Guidelines = dynamic(() => import('./GuidelinesSection'), { ssr: false })
-const Medications = dynamic(() => import('./MedicationsDB'), { ssr: false })
-const BLSACLSModule = dynamic(() => import('./BLSACLSModule'), { ssr: false })
-const OnCallSystem = dynamic(() => import('./OnCallSystem'), { ssr: false })
+const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
+const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
+const BLSACLSModule    = dynamic(() => import('./BLSACLSModule'),    { ssr:false })
+const OnCallSystem     = dynamic(() => import('./OnCallSystem'),     { ssr:false })
+const NightShiftSurvival = dynamic(() => import('./NightShiftSurvival'), { ssr:false })
+const MedCalculators   = dynamic(() => import('./MedCalculators'),   { ssr:false })
+const PharmacyModule   = dynamic(() => import('./PharmacyModule'),   { ssr:false })
+const NursingModule    = dynamic(() => import('./NursingModule'),    { ssr:false })
+const LabModule        = dynamic(() => import('./LabModule'),        { ssr:false })
+const RadiologyModule  = dynamic(() => import('./RadiologyModule'),  { ssr:false })
+const AICaseGenerator  = dynamic(() => import('./AICaseGenerator'),  { ssr:false })
+const ClinicalDuels    = dynamic(() => import('./ClinicalDuels'),    { ssr:false })
+const DiagnosticDetective = dynamic(() => import('./DiagnosticDetective'), { ssr:false })
+const ErrorAutopsy     = dynamic(() => import('./ErrorAutopsy'),     { ssr:false })
+const HealthInsights   = dynamic(() => import('./HealthInsights'),   { ssr:false })
+const BoardExam        = dynamic(() => import('./BoardExam'),        { ssr:false })
 
-const T = {
-  card: 'var(--bg-card,rgba(255,255,255,0.88))',
-  border: 'var(--border-card,rgba(10,132,255,0.10))',
-  text: 'var(--text-primary,#0A1628)',
-  sub: 'var(--text-secondary,rgba(10,22,40,0.60))',
-  muted: 'var(--text-muted,rgba(10,22,40,0.38))',
-  F: '"Inter", -apple-system, "SF Pro Display", sans-serif',
+// Unsplash images per section
+const IMGS = {
+  clinical: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80',
+  reference:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80',
+  gaming:   'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80',
 }
 
-const SECTIONS = [
-  {
-    id: 'emergency', label: 'Emergency & Critical', icon: '🚨', color: '#ef4444',
-    desc: 'Code Blue · BLS/ACLS · Rapid Fire',
-    tools: [
-      { id: 'codeblue', label: 'Code Blue', icon: '🔴', desc: 'Resuscitation protocols', color: '#ef4444' },
-      { id: 'rapid', label: 'Rapid Fire', icon: '⚡', desc: 'Quick-fire clinical cases', color: '#f59e0b' },
-      { id: 'bls', label: 'BLS / ACLS', icon: '💊', desc: 'Life support algorithms', color: '#ef4444' },
-      { id: 'oncall', label: 'On-Call', icon: '📞', desc: 'Night shift call system', color: '#8b5cf6' },
-      { id: 'nightshift', label: 'Night Shift', icon: '🌙', desc: 'Survival mode · Triage', color: '#8b5cf6' },
+const SECTIONS = {
+  clinical: {
+    label:'🔬 Clinical Tools',
+    color:'#EF4444',
+    img: IMGS.clinical,
+    desc:'Emergency protocols · Procedures · Simulation',
+    categories: [
+      {
+        id:'emergency', icon:'🚨', label:'Emergency & Critical',
+        sub:'Code Blue · BLS/ACLS · Rapid Fire', color:'#EF4444', count:5,
+        tools:[
+          {id:'codeblue',  icon:'🔴', label:'Code Blue',    sub:'Resuscitation protocols',     color:'#EF4444'},
+          {id:'blsacls',   icon:'💊', label:'BLS / ACLS',   sub:'Life support algorithms',     color:'#EF4444'},
+          {id:'oncall',    icon:'📞', label:'On-Call',      sub:'Night shift call system',     color:'#7C3AED'},
+          {id:'nightshift',icon:'🌙', label:'Night Shift',  sub:'Survival mode · Triage',      color:'#7C3AED'},
+          {id:'rapidfire', icon:'⚡', label:'Rapid Fire',   sub:'Quick-fire clinical cases',   color:'#F59E0B'},
+        ]
+      },
+      {
+        id:'cardiac', icon:'🫀', label:'Cardiac & Neuro',
+        sub:'ECG · Surgery · AI Reasoning', color:'#EF4444', count:4,
+        tools:[
+          {id:'ecg',    icon:'📈', label:'ECG Challenge',    sub:'Interpret real ECGs',        color:'#EF4444'},
+          {id:'calc',   icon:'🧮', label:'Med Calculators',  sub:'GFR · BMI · Scores',         color:'#3B82F6'},
+        ]
+      },
+      {
+        id:'specialties', icon:'🎓', label:'Specialties',
+        sub:'Pharmacy · Nursing · Lab · Radiology', color:'#10B981', count:4,
+        tools:[
+          {id:'pharmacy', icon:'💊', label:'Pharmacy',    sub:'Drug interactions · Dosing',   color:'#10B981'},
+          {id:'nursing',  icon:'🩺', label:'Nursing',     sub:'Vitals · NEWS2 · Skills',      color:'#3B82F6'},
+          {id:'lab',      icon:'🧪', label:'Laboratory',  sub:'5 panels · Critical values',   color:'#7C3AED'},
+          {id:'radiology',icon:'🩻', label:'Radiology',   sub:'CXR · CT patterns · Echo',     color:'#F59E0B'},
+        ]
+      },
     ]
   },
-  {
-    id: 'cardiac', label: 'Cardiac & Neuro', icon: '🫀', color: '#3b82f6',
-    desc: 'ECG · Cardiac Surgery · Neuro AI',
-    tools: [
-      { id: 'ecg', label: 'ECG Challenge', icon: '📈', desc: 'Interpret real ECGs', color: '#3b82f6' },
-      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#ef4444' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#8b5cf6' },
-      { id: 'nexus', label: 'Clinical Nexus', icon: '🔗', desc: 'AI clinical reasoning', color: '#06b6d4' },
+  reference: {
+    label:'📚 References',
+    color:'#3B82F6',
+    img: IMGS.reference,
+    desc:'Guidelines 2026 · Drug database · Calculators',
+    categories: [
+      {
+        id:'ref_main', icon:'📋', label:'Clinical Reference',
+        sub:'Guidelines · Labs · Medications · Calculators', color:'#3B82F6', count:5,
+        tools:[
+          {id:'calc',     icon:'🧮', label:'Calculators',  sub:'GFR · BMI · Clinical scores', color:'#3B82F6'},
+          {id:'pharmacy', icon:'💊', label:'Medications',  sub:'Drug database · Doses',        color:'#10B981'},
+          {id:'lab',      icon:'🧪', label:'Lab Reference',sub:'Normal ranges · Critical',     color:'#7C3AED'},
+          {id:'board',    icon:'📖', label:'Board Exam',   sub:'USMLE · MRCP · Saudi Boards',  color:'#F59E0B'},
+          {id:'insights', icon:'📊', label:'Health Stats', sub:'Your clinical progress',       color:'#EF4444'},
+        ]
+      },
     ]
   },
-  {
-    id: 'surgical', label: 'Surgical AI', icon: '🔪', color: '#06b6d4',
-    desc: 'General · Cardiac · Neuro Surgery',
-    tools: [
-      { id: 'general', label: 'General Surgery AI', icon: '🔪', desc: 'Appendix · Cholecyst · Hernia', color: '#06b6d4' },
-      { id: 'cardiac', label: 'Cardiac Surgery AI', icon: '🫀', desc: 'CABG · Valve · LVAD', color: '#ef4444' },
-      { id: 'neuro', label: 'Neuro Surgery AI', icon: '🧠', desc: 'Craniotomy · Spine', color: '#8b5cf6' },
+  gaming: {
+    label:'🎮 Gaming & AI',
+    color:'#7C3AED',
+    img: IMGS.gaming,
+    desc:'Clinical duels · AI cases · Mystery diagnosis',
+    categories: [
+      {
+        id:'gaming_main', icon:'🎮', label:'AI & Gaming',
+        sub:'Duels · Detective · AI Generator', color:'#7C3AED', count:5,
+        tools:[
+          {id:'aicasegen',  icon:'🤖', label:'AI Case Generator', sub:'Unlimited AI cases',         color:'#0D9488'},
+          {id:'duels',      icon:'⚔️', label:'Clinical Duels',    sub:'Race against time',           color:'#EF4444'},
+          {id:'detective',  icon:'🔍', label:'Diagnostic Detective',sub:'Mystery cases',             color:'#7C3AED'},
+          {id:'autopsy',    icon:'⚠️', label:'Error Autopsy',     sub:'Learn from medical errors',   color:'#F59E0B'},
+          {id:'insights',   icon:'📊', label:'Health Insights',   sub:'Your stats & progress',       color:'#3B82F6'},
+        ]
+      },
     ]
   },
-  {
-    id: 'specialties', label: 'Specialties', icon: '🎓', color: '#10b981',
-    desc: 'Pharmacy · Nursing · Lab · Radiology',
-    tools: [
-      { id: 'pharmacy', label: 'Pharmacy', icon: '💊', desc: 'Drug interactions · Dosing', color: '#10b981' },
-      { id: 'nursing', label: 'Nursing', icon: '🩺', desc: 'Vitals · NEWS2 · Skills', color: '#64d2ff' },
-      { id: 'lab', label: 'Laboratory', icon: '🔬', desc: '5 panels · Critical values', color: '#8b5cf6' },
-      { id: 'radiology', label: 'Radiology', icon: '🩻', desc: 'CXR · CT patterns · Echo', color: '#f59e0b' },
-    ]
-  },
-  {
-    id: 'reference', label: 'Clinical Reference', icon: '📚', color: '#f59e0b',
-    desc: 'Guidelines · Labs · Medications · Calculators',
-    tools: [
-      { id: 'guidelines', label: 'Guidelines', icon: '📋', desc: 'ESC · NICE · AHA 2024', color: '#f59e0b' },
-      { id: 'labs', label: 'Lab Reference', icon: '🔬', desc: 'Normal ranges · Critical', color: '#8b5cf6' },
-      { id: 'medications', label: 'Medications', icon: '💉', desc: 'Drug database · Doses', color: '#10b981' },
-      { id: 'drugsearch', label: 'Drug Search', icon: '🔍', desc: 'FDA · PubMed · Trials', color: '#0A84FF' },
-      { id: 'calc', label: 'Calculators', icon: '🧮', desc: 'GFR · BMI · Scores', color: '#06b6d4' },
-    ]
-  },
-  {
-    id: 'gaming', label: 'AI & Gaming', icon: '⚔️', color: '#bf5af2',
-    desc: 'Duels · Detective · AI Generator',
-    tools: [
-      { id: 'aigen', label: 'AI Case Generator', icon: '🤖', desc: 'Unlimited AI cases', color: '#06b6d4' },
-      { id: 'duels', label: 'Clinical Duels', icon: '⚔️', desc: 'Compete globally', color: '#ef4444' },
-      { id: 'detective', label: 'Diagnostic Detective', icon: '🔍', desc: 'Mystery cases', color: '#bf5af2' },
-      { id: 'autopsy', label: 'Error Autopsy', icon: '⚠️', desc: 'Learn from errors', color: '#f59e0b' },
-      { id: 'insights', label: 'Health Insights', icon: '📊', desc: 'Your stats & progress', color: '#bf5af2' },
-    ]
-  },
-]
-
-function ToolRenderer({ toolId, onXP }: { toolId: string, onXP: (n: number) => void }) {
-  const map: Record<string, React.ReactNode> = {
-    codeblue: <CodeBlue onXP={onXP} />,
-    rapid: <RapidFire onXP={onXP} />,
-    bls: <BLSACLSModule onXP={onXP} />,
-    oncall: <OnCallSystem />,
-    nightshift: <NightShiftSurvival onXP={onXP} />,
-    ecg: <EcgChallenge onXP={onXP} />,
-    cardiac: <CardiacSurgeryAI onXP={onXP} />,
-    neuro: <NeuroSurgeryAI onXP={onXP} />,
-    nexus: <ClinicalNexus onXP={onXP} />,
-    general: <GeneralSurgeryAI onXP={onXP} />,
-    pharmacy: <PharmacyModule onXP={onXP} />,
-    nursing: <NursingModule onXP={onXP} />,
-    lab: <LabModule onXP={onXP} />,
-    radiology: <RadiologyModule onXP={onXP} />,
-    guidelines: <Guidelines />,
-    labs: <LabsReference />,
-    medications: <Medications />,
-    lab: <LabRef />,
-    drugsearch: <DrugSearch />,
-    calc: <MedCalculators onXP={onXP} />,
-    aigen: <AICaseGenerator onXP={onXP} />,
-    duels: <ClinicalDuels onXP={onXP} />,
-    detective: <DiagnosticDetective onXP={onXP} />,
-    autopsy: <ErrorAutopsy onXP={onXP} />,
-    insights: <HealthInsights />,
-  }
-  return <>{map[toolId] || <div style={{ padding: 40, textAlign: 'center', color: T.sub, fontFamily: T.F }}>Coming soon...</div>}</>
 }
 
-interface Props {
-  onXP: (n: number) => void
-  initialTool?: string
+const TOOL_COMPONENTS: Record<string,any> = {
+  codeblue:  CodeBlue,
+  ecg:       EcgChallenge,
+  calc:      MedCalculators,
+  blsacls:   BLSACLSModule,
+  oncall:    OnCallSystem,
+  nightshift:NightShiftSurvival,
+  pharmacy:  PharmacyModule,
+  nursing:   NursingModule,
+  lab:       LabModule,
+  radiology: RadiologyModule,
+  aicasegen: AICaseGenerator,
+  duels:     ClinicalDuels,
+  detective: DiagnosticDetective,
+  autopsy:   ErrorAutopsy,
+  insights:  HealthInsights,
+  board:     BoardExam,
+  rapidfire: CodeBlue,
 }
 
-export default function ToolsPage({ onXP, initialTool }: Props) {
-  const [view, setView] = useState<'home' | 'section' | 'tool'>(initialTool ? 'tool' : 'home')
-  const [activeSection, setActiveSection] = useState<typeof SECTIONS[0] | null>(null)
-  const [activeTool, setActiveTool] = useState<string>(initialTool || '')
-  const [search, setSearch] = useState('')
+interface Props { onXP: (n:number) => void }
 
-  React.useEffect(() => {
-    if (initialTool) { setActiveTool(initialTool); setView('tool') }
-  }, [initialTool])
+export default function ToolsPage({ onXP }: Props) {
+  const [activeSection, setActiveSection] = useState<string|null>(null)
+  const [activeCat,     setActiveCat]     = useState<string|null>(null)
+  const [activeTool,    setActiveTool]    = useState<string|null>(null)
 
-  const openSection = (s: typeof SECTIONS[0]) => { setActiveSection(s); setView('section') }
-  const openTool = (id: string) => { setActiveTool(id); setView('tool') }
-  const goBack = () => {
-    if (view === 'tool') { setView(activeSection ? 'section' : 'home') }
-    else { setView('home') }
-  }
-
-
-  const touchStartX = useRef(0)
-  const touchStartY = useRef(0)
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent, onSwipeLeft?: () => void, onSwipeRight?: () => void) => {
-    const dx = e.changedTouches[0].clientX - touchStartX.current
-    const dy = e.changedTouches[0].clientY - touchStartY.current
-    if (Math.abs(dx) < Math.abs(dy) * 1.5) return // vertical scroll, ignore
-    if (dx < -60 && onSwipeLeft) onSwipeLeft()
-    if (dx > 60 && onSwipeRight) onSwipeRight()
-  }
-
-  const searchResults = search.length > 1
-    ? SECTIONS.flatMap(s => s.tools.map(t => ({ ...t, sectionLabel: s.label }))).filter(t =>
-        t.label.toLowerCase().includes(search.toLowerCase()) ||
-        t.desc.toLowerCase().includes(search.toLowerCase())
-      )
-    : []
-
-  if (view === 'home') return (
-    <div style={{ fontFamily: T.F, paddingBottom: 8 }}>
-      <div style={{ marginBottom: 16 }}>
-        <div style={{ fontSize: 22, fontWeight: 900, color: T.text, letterSpacing: -0.5, marginBottom: 4 }}>
-          Clinical <span style={{ color: '#06b6d4' }}>Tools</span>
+  // Tool view
+  if (activeTool) {
+    const Comp = TOOL_COMPONENTS[activeTool]
+    return (
+      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+        <div style={{
+          padding:'16px 16px 12px',
+          background:L.surface,
+          borderBottom:`1px solid ${L.border}`,
+          display:'flex',alignItems:'center',gap:12,
+        }}>
+          <button onClick={()=>setActiveTool(null)} style={{
+            background:L.raised,border:`1px solid ${L.border}`,
+            borderRadius:20,padding:'8px 16px',
+            fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
+          }}>← Back</button>
         </div>
-        <div style={{ fontSize: 12, color: T.sub }}>6 categories · 24+ tools</div>
+        {Comp ? <Comp onXP={onXP}/> : <div style={{padding:20,color:L.textMuted}}>Coming soon...</div>}
       </div>
+    )
+  }
 
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 10,
-        background: T.card, borderRadius: 16, border: `1px solid ${T.border}`,
-        padding: '12px 16px', marginBottom: 20
-      }}>
-        <span style={{ fontSize: 16 }}>🔍</span>
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search tools..."
-          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: T.text, fontSize: 14, fontFamily: T.F }} />
-        {search && <span onClick={() => setSearch('')} style={{ color: T.muted, cursor: 'pointer', fontSize: 18 }}>×</span>}
-      </div>
-
-      {search.length > 1 ? (
-        <div>
-          {searchResults.length === 0
-            ? <div style={{ textAlign: 'center', color: T.sub, padding: 20, fontSize: 13 }}>No tools found</div>
-            : searchResults.map(t => (
-              <div key={t.id + t.sectionLabel} onClick={() => openTool(t.id)} style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: T.card, borderRadius: 16, padding: '14px 16px',
-                border: `1px solid ${t.color}20`, cursor: 'pointer', marginBottom: 8
-              }}>
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: `${t.color}18`, border: `1px solid ${t.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>{t.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{t.label}</div>
-                  <div style={{ fontSize: 11, color: T.sub }}>{t.sectionLabel} · {t.desc}</div>
-                </div>
-                <span style={{ fontSize: 18, color: T.muted }}>›</span>
-              </div>
-            ))
-          }
+  // Category view
+  if (activeCat && activeSection) {
+    const sec = SECTIONS[activeSection as keyof typeof SECTIONS]
+    const cat = sec.categories.find(c=>c.id===activeCat)
+    if (!cat) { setActiveCat(null); return null }
+    return (
+      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+        {/* Hero */}
+        <div style={{
+          height:120,
+          backgroundImage:`url(${sec.img})`,
+          backgroundSize:'cover',backgroundPosition:'center',
+          position:'relative',
+        }}>
+          <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(248,250,252,0.20) 0%,rgba(248,250,252,0.96) 100%)'}}/>
+          <button onClick={()=>setActiveCat(null)} style={{
+            position:'absolute',top:16,left:16,
+            background:'rgba(255,255,255,0.90)',backdropFilter:'blur(12px)',
+            border:`1px solid ${L.border}`,borderRadius:20,
+            padding:'8px 16px',fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
+          }}>← Back</button>
         </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {SECTIONS.map(s => (
-            <div key={s.id} onClick={() => openSection(s)} style={{
-              background: T.card, borderRadius: 20, padding: '18px',
-              border: `1px solid ${s.color}20`, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 14,
-              boxShadow: `0 2px 20px ${s.color}08`, position: 'relative', overflow: 'hidden'
-            }}>
-              <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `${s.color}08`, filter: 'blur(16px)', pointerEvents: 'none' }} />
-              <div style={{ width: 52, height: 52, borderRadius: 16, flexShrink: 0, background: `${s.color}15`, border: `1px solid ${s.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{s.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary,#071828)', marginBottom: 3 }}>{s.label}</div>
-                <div style={{ fontSize: 11, color: T.sub }}>{s.desc}</div>
-                <div style={{ fontSize: 10, color: `${s.color}90`, fontWeight: 700, marginTop: 4 }}>{s.tools.length} tools</div>
+
+        <div style={{padding:'16px 16px 160px'}}>
+          {/* Header */}
+          <div style={{marginBottom:20}}>
+            <div style={{fontSize:11,color:cat.color,fontWeight:700,letterSpacing:2,marginBottom:4}}>
+              {cat.icon} {cat.label.toUpperCase()}
+            </div>
+            <div style={{fontSize:13,color:L.textMuted}}>{cat.count} tools available</div>
+          </div>
+
+          {/* Tools list */}
+          {cat.tools.map(t=>(
+            <div key={t.id} onClick={()=>setActiveTool(t.id)} style={{
+              background:L.surface,
+              border:`1px solid ${L.border}`,
+              borderLeft:`4px solid ${t.color}`,
+              borderRadius:18,padding:'14px 16px',marginBottom:10,
+              cursor:'pointer',display:'flex',alignItems:'center',gap:14,
+              boxShadow:L.shadowSm,
+              transition:'all 0.2s',
+            }}
+            onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
+            onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
+            >
+              <div style={{
+                width:52,height:52,borderRadius:16,flexShrink:0,
+                background:`${t.color}10`,border:`1px solid ${t.color}20`,
+                display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,
+              }}>{t.icon}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:15,fontWeight:700,color:L.text}}>{t.label}</div>
+                <div style={{fontSize:12,color:L.textSub,marginTop:2}}>{t.sub}</div>
               </div>
-              <div style={{ fontSize: 22, color: `${s.color}50` }}>›</div>
+              <div style={{
+                background:t.color,borderRadius:20,
+                padding:'6px 14px',fontSize:12,fontWeight:700,color:'white',
+              }}>Open →</div>
             </div>
           ))}
         </div>
-      )}
-    </div>
-  )
+      </div>
+    )
+  }
 
-  if (view === 'section' && activeSection) return (
-    <div style={{ fontFamily: T.F, paddingBottom: 8 }} onTouchStart={handleTouchStart} onTouchEnd={(e) => handleTouchEnd(e, undefined, goBack)}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-        <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 14px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F }}>← Back</button>
-        <div>
-          <div style={{ fontSize: 18, fontWeight: 900, color: T.text }}>{activeSection.icon} {activeSection.label}</div>
-          <div style={{ fontSize: 11, color: T.sub }}>{activeSection.tools.length} tools</div>
+  // Section view
+  if (activeSection) {
+    const sec = SECTIONS[activeSection as keyof typeof SECTIONS]
+    return (
+      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+        {/* Hero */}
+        <div style={{
+          height:160,
+          backgroundImage:`url(${sec.img})`,
+          backgroundSize:'cover',backgroundPosition:'center',
+          position:'relative',marginBottom:0,
+        }}>
+          <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(248,250,252,0.10) 0%,rgba(248,250,252,0.96) 100%)'}}/>
+          <button onClick={()=>setActiveSection(null)} style={{
+            position:'absolute',top:16,left:16,
+            background:'rgba(255,255,255,0.90)',backdropFilter:'blur(12px)',
+            border:`1px solid ${L.border}`,borderRadius:20,
+            padding:'8px 16px',fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
+          }}>← Back</button>
+          <div style={{position:'absolute',bottom:20,left:16}}>
+            <div style={{fontSize:22,fontWeight:900,color:L.text}}>{sec.label}</div>
+            <div style={{fontSize:12,color:L.textSub}}>{sec.desc}</div>
+          </div>
+        </div>
+
+        <div style={{padding:'20px 16px 160px'}}>
+          {sec.categories.map(cat=>(
+            <div key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{
+              background:L.surface,
+              border:`1px solid ${L.border}`,
+              borderLeft:`4px solid ${cat.color}`,
+              borderRadius:20,padding:'16px',marginBottom:12,
+              cursor:'pointer',display:'flex',alignItems:'center',gap:14,
+              boxShadow:L.shadowSm,
+            }}
+            onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
+            onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
+            >
+              <div style={{
+                width:56,height:56,borderRadius:18,flexShrink:0,
+                background:`${cat.color}10`,border:`1px solid ${cat.color}20`,
+                display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,
+              }}>{cat.icon}</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:16,fontWeight:700,color:L.text}}>{cat.label}</div>
+                <div style={{fontSize:12,color:L.textSub,marginTop:2}}>{cat.sub}</div>
+                <div style={{
+                  display:'inline-block',marginTop:6,
+                  fontSize:10,fontWeight:700,color:cat.color,
+                  background:`${cat.color}10`,border:`1px solid ${cat.color}20`,
+                  borderRadius:8,padding:'2px 8px',
+                }}>{cat.count} tools</div>
+              </div>
+              <span style={{color:L.textMuted,fontSize:20}}>›</span>
+            </div>
+          ))}
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {activeSection.tools.map(t => (
-          <div key={t.id} onClick={() => openTool(t.id)} style={{
-            display: 'flex', alignItems: 'center', gap: 14,
-            background: T.card, borderRadius: 20, padding: '16px 18px',
-            border: `1px solid ${t.color}20`, cursor: 'pointer',
-            boxShadow: `0 2px 16px ${t.color}08`
-          }}>
-            <div style={{ width: 52, height: 52, borderRadius: 16, flexShrink: 0, background: `${t.color}15`, border: `1px solid ${t.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>{t.icon}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-primary,#071828)', marginBottom: 3 }}>{t.label}</div>
-              <div style={{ fontSize: 12, color: T.sub }}>{t.desc}</div>
+    )
+  }
+
+  // Main view — 3 sections
+  return (
+    <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+
+      {/* Header */}
+      <div style={{padding:'20px 16px 16px'}}>
+        <div style={{fontSize:11,color:L.teal,fontWeight:700,letterSpacing:2,marginBottom:4}}>CLINIVERSE AI</div>
+        <div style={{fontSize:28,fontWeight:900,color:L.text,letterSpacing:-0.5,marginBottom:4}}>
+          Clinical <span style={{color:L.teal}}>Tools</span>
+        </div>
+        <div style={{fontSize:13,color:L.textSub}}>3 sections · 24+ professional tools</div>
+      </div>
+
+      {/* Search */}
+      <div style={{padding:'0 16px',marginBottom:20}}>
+        <div style={{
+          background:L.surface,border:`1px solid ${L.border}`,
+          borderRadius:16,padding:'12px 16px',
+          display:'flex',alignItems:'center',gap:10,
+          boxShadow:L.shadowSm,
+        }}>
+          <span style={{fontSize:18,color:L.textMuted}}>🔍</span>
+          <span style={{fontSize:14,color:L.textMuted}}>Search tools...</span>
+        </div>
+      </div>
+
+      <div style={{padding:'0 16px 160px'}}>
+        {/* 3 Main Sections */}
+        {Object.entries(SECTIONS).map(([key, sec])=>(
+          <div key={key} onClick={()=>setActiveSection(key)} style={{
+            borderRadius:24,marginBottom:16,
+            overflow:'hidden',cursor:'pointer',
+            boxShadow:L.shadowMd,
+            border:`1px solid ${L.border}`,
+          }}
+          onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
+          onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
+          >
+            {/* Image */}
+            <div style={{
+              height:140,
+              backgroundImage:`url(${sec.img})`,
+              backgroundSize:'cover',backgroundPosition:'center',
+              position:'relative',
+            }}>
+              <div style={{
+                position:'absolute',inset:0,
+                background:`linear-gradient(160deg, ${sec.color}30 0%, rgba(15,23,42,0.70) 100%)`,
+              }}/>
+              <div style={{
+                position:'absolute',bottom:16,left:16,right:16,
+              }}>
+                <div style={{fontSize:22,fontWeight:900,color:'white',letterSpacing:-0.3}}>{sec.label}</div>
+                <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',marginTop:2}}>{sec.desc}</div>
+              </div>
+              {/* Tools count */}
+              <div style={{
+                position:'absolute',top:12,right:12,
+                background:'rgba(255,255,255,0.20)',
+                backdropFilter:'blur(8px)',
+                border:'1px solid rgba(255,255,255,0.30)',
+                borderRadius:12,padding:'4px 12px',
+              }}>
+                <span style={{fontSize:11,fontWeight:700,color:'white'}}>
+                  {sec.categories.reduce((a,c)=>a+c.count,0)} tools
+                </span>
+              </div>
             </div>
-            <div style={{ background: `${t.color}15`, border: `1px solid ${t.color}25`, borderRadius: 10, padding: '6px 12px', fontSize: 12, color: t.color, fontWeight: 700 }}>Open →</div>
+
+            {/* Category pills */}
+            <div style={{
+              background:L.surface,padding:'12px 14px',
+              display:'flex',gap:6,flexWrap:'wrap',
+            }}>
+              {sec.categories.map(cat=>(
+                <div key={cat.id} style={{
+                  background:`${cat.color}10`,
+                  border:`1px solid ${cat.color}20`,
+                  borderRadius:10,padding:'4px 10px',
+                  fontSize:10,fontWeight:700,color:cat.color,
+                }}>{cat.icon} {cat.label}</div>
+              ))}
+              <div style={{
+                marginLeft:'auto',
+                display:'flex',alignItems:'center',
+                fontSize:13,color:L.textMuted,
+              }}>Explore →</div>
+            </div>
           </div>
         ))}
       </div>
-    </div>
-  )
-
-  return (
-    <div style={{ fontFamily: T.F }} onTouchStart={handleTouchStart} onTouchEnd={(e) => handleTouchEnd(e, undefined, goBack)}>
-      <button onClick={goBack} style={{ background: 'rgba(10,132,255,0.07)', border: '1px solid rgba(10,132,255,0.15)', borderRadius: 12, padding: '8px 16px', color: T.text, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: T.F, marginBottom: 16 }}>← Back</button>
-      <ToolRenderer toolId={activeTool} onXP={onXP} />
     </div>
   )
 }
