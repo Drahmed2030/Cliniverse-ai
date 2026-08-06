@@ -53,8 +53,65 @@ export default function ClinicalNexus({ onXP }:Props) {
   },[])
 
   if(phase==='hub') return(
-    <div style={{padding:'0 4px'}}>
-      {/* Hero */}
+    <div style={{minHeight:'100vh',background:'#F8FAFC',fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif'}}>
+      {/* Unsplash Hero */}
+      <div style={{
+        height:260,
+        backgroundImage:'url(https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80)',
+        backgroundSize:'cover',backgroundPosition:'center',
+        position:'relative',
+      }}>
+        <div style={{
+          position:'absolute',inset:0,
+          background:'linear-gradient(180deg,rgba(15,23,42,0.40) 0%,rgba(15,23,42,0.85) 100%)',
+        }}/>
+        {/* Live badge */}
+        <div style={{position:'absolute',top:20,left:16,display:'flex',alignItems:'center',gap:6,
+          background:'rgba(239,68,68,0.20)',backdropFilter:'blur(12px)',
+          border:'1px solid rgba(239,68,68,0.40)',borderRadius:20,padding:'5px 12px',
+        }}>
+          <div style={{width:6,height:6,borderRadius:'50%',background:'#EF4444',animation:'pulse 1.5s infinite'}}/>
+          <span style={{fontSize:10,color:'#FCA5A5',fontWeight:700,letterSpacing:1}}>LIVE WORLDWIDE</span>
+          <span style={{fontSize:10,color:'rgba(255,255,255,0.60)',marginLeft:4}}>{viewers.toLocaleString()} online</span>
+        </div>
+        {/* Title */}
+        <div style={{position:'absolute',bottom:24,left:16,right:16}}>
+          <div style={{fontSize:11,color:'#A78BFA',fontWeight:700,letterSpacing:2,marginBottom:6}}>🌐 CLINICAL NEXUS</div>
+          <div style={{fontSize:28,fontWeight:900,color:'white',letterSpacing:-0.8,lineHeight:1.1,marginBottom:8}}>
+            The Global<br/>Medical Room
+          </div>
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.70)',lineHeight:1.6}}>
+            Real cases · Real doctors · Real-time global votes
+          </div>
+        </div>
+      </div>
+
+      <div style={{padding:'20px 16px 160px'}}>
+        {/* Stats row */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:10,marginBottom:20}}>
+          {[
+            {icon:'🌍',label:'Global Votes',value:'Real-time',color:'#7C3AED'},
+            {icon:'🤖',label:'AI Attending',value:'Live',color:'#0D9488'},
+            {icon:'📊',label:'Your Rank',value:'vs World',color:'#1E40AF'},
+          ].map(s=>(
+            <div key={s.label} style={{
+              background:'#FFFFFF',border:'1px solid #E2E8F0',
+              borderRadius:18,padding:'14px 10px',textAlign:'center',
+              boxShadow:'0 1px 3px rgba(15,23,42,0.08)',
+            }}>
+              <div style={{fontSize:24,marginBottom:6}}>{s.icon}</div>
+              <div style={{fontSize:11,fontWeight:700,color:'#0F172A'}}>{s.label}</div>
+              <div style={{fontSize:10,color:s.color,fontWeight:600,marginTop:2}}>{s.value}</div>
+            </div>
+          ))}
+        </div>
+
+      {/* Cases */}
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:'#94A3B8',marginBottom:12}}>
+        GLOBAL CASES
+      </div>
+      <div style={{padding:'0 4px'}}>
+      {/* Original hub content below */}
       <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:24,padding:24,marginBottom:16,border:'1px solid rgba(139,92,246,0.3)',position:'relative',overflow:'hidden',boxShadow:'0 12px 48px rgba(139,92,246,0.3)'}}>
         <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle,rgba(139,92,246,0.3),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{position:'absolute',bottom:-30,left:-30,width:150,height:150,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,69,58,0.15),transparent 70%)',pointerEvents:'none'}}/>
