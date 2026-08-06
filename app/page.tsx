@@ -695,8 +695,6 @@ export default function Home() {
           <PulseIndex
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro}
-            criticalCases={criticalCases} sportsCases={sportsCases} pedsCases={pedsCases}
-            setActiveCase={setActiveCase} setShowUpgrade={setShowUpgrade}
             setTab={setTab} setToolTab={setToolTab} onXP={addXP}
           />
         )}
