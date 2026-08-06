@@ -57,7 +57,7 @@ const CASES = [
     tags:['STEMI','Cardiology'],
     tagColor:'#EF4444',
     icon:<HeartIcon/>,
-    img:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
+    img:'https://images.unsplash.com/photo-1628348070889-cb656235b4eb?w=800&q=80',
     votes:{ pci:61, lytics:18, medical:21 },
     totalVotes:1284,
     countries:['🇸🇦','🇬🇧','🇺🇸','🇩🇪','🇯🇵'],

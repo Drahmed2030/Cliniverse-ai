@@ -135,7 +135,7 @@ export default function PulseIndex(props:Props) {
       <Sheet open={showScribe} onClose={()=>setShowScribe(false)} title="AI Scribe" size="lg">
         <AmbientScribe onXP={onXP}/>
       </Sheet>
-      <Sheet open={showNexus} onClose={()=>setShowNexus(false)} title="🌐 Global Medical Room" size="lg">
+      <Sheet open={showNexus} onClose={()=>setShowNexus(false)} title="🌐 Global Medical Room" size="full">
         <ClinicalNexus onXP={onXP}/>
       </Sheet>
       <Sheet open={showCase} onClose={()=>setShowCase(false)} title="Today's Case" size="lg">
