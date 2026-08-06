@@ -78,6 +78,7 @@ export default function PulseIndex(props:Props) {
           onScribe={()=>setShowScribe(true)}
           onCase={()=>setShowCase(true)}
           onTools={()=>setTab('tools')}
+          onNexus={()=>setShowNexus(true)}
         />
 
         {/* Global Room */}
