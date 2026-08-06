@@ -20,29 +20,28 @@ const MicIcon = () => (
 const CaseIcon = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
     <defs>
-      <linearGradient id="caseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <linearGradient id="cG" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#DC2626"/>
         <stop offset="100%" stopColor="#EA580C"/>
       </linearGradient>
     </defs>
-    <rect x="3" y="3" width="18" height="18" rx="4" fill="url(#caseGrad)" opacity="0.15"/>
-    <rect x="3" y="3" width="18" height="18" rx="4" stroke="url(#caseGrad)" strokeWidth="1.5"/>
-    <line x1="12" y1="8" x2="12" y2="16" stroke="url(#caseGrad)" strokeWidth="2" strokeLinecap="round"/>
-    <line x1="8" y1="12" x2="16" y2="12" stroke="url(#caseGrad)" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="url(#cG)" strokeWidth="1.8" strokeLinecap="round"/>
+    <rect x="9" y="3" width="6" height="4" rx="1.5" fill="url(#cG)" opacity="0.3" stroke="url(#cG)" strokeWidth="1.5"/>
+    <line x1="9" y1="12" x2="15" y2="12" stroke="url(#cG)" strokeWidth="1.8" strokeLinecap="round"/>
+    <line x1="9" y1="15" x2="13" y2="15" stroke="url(#cG)" strokeWidth="1.8" strokeLinecap="round"/>
   </svg>
 )
 
 const ToolsIcon = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
     <defs>
-      <linearGradient id="toolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <linearGradient id="tG" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#7C3AED"/>
         <stop offset="100%" stopColor="#4F46E5"/>
       </linearGradient>
     </defs>
-    <circle cx="12" cy="12" r="3" fill="url(#toolGrad)"/>
-    <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
-      stroke="url(#toolGrad)" strokeWidth="2" strokeLinecap="round"/>
+    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"
+      stroke="url(#tG)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
 
