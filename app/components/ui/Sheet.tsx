@@ -7,11 +7,11 @@ interface SheetProps {
   onClose: () => void
   title?: string
   children: React.ReactNode
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'full'
 }
 
 export function Sheet({ open, onClose, title, children, size='md' }: SheetProps) {
-  const heights = { sm:'40vh', md:'65vh', lg:'90vh' }
+  const heights = { sm:'40vh', md:'65vh', lg:'90vh', full:'100vh' }
 
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden'
