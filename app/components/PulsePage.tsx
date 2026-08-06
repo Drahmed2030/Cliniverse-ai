@@ -241,18 +241,39 @@ function StatsIsland({ xp, streak, casesCompleted, mcqCorrect }:any) {
 }
 
 // ── ISLAND 4: CASE LIBRARY ──
-function CaseLibraryIsland({ criticalCases, sportsCases, pedsCases, setActiveCase, setShowUpgrade, isPro }:any) {
-  const sections = [
-    { key:'critical', icon:'🏥', label:'Critical Care', sub:'ED · ICU · CCU', color:'#F87171', cases:criticalCases },
-    { key:'sports',   icon:'⚽', label:'Sports Medicine', sub:'Pitch-side · Evidence', color:'#34D399', cases:sportsCases, badge:'NEW' },
-    { key:'peds',     icon:'🧸', label:'Pediatrics', sub:'Febrile · Vaccines', color:'#A78BFA', cases:pedsCases, badge:'NEW' },
-  ]
+function CaseLibraryIsland({ onNexus }:any) {
+  const sections:any[] = []
   const [open, setOpen] = useState<string|null>(null)
 
   return (
     <div style={{marginBottom:20}}>
-      <SectionLabel>🏨 Case Library</SectionLabel>
+      <SectionLabel>🌐 Global Room</SectionLabel>
       <div style={{display:'flex',flexDirection:'column',gap:8}}>
+        <div onClick={onNexus} style={{
+          background:'#FFFFFF',
+          border:'1px solid #E2E8F0',
+          borderLeft:'4px solid #0D9488',
+          borderRadius:20,padding:'16px 18px',
+          cursor:'pointer',
+          display:'flex',alignItems:'center',gap:14,
+          boxShadow:'0 1px 3px rgba(15,23,42,0.08)',
+          transition:'all 0.3s cubic-bezier(0.4,0,0.2,1)',
+        }}>
+          <div style={{
+            width:48,height:48,borderRadius:14,flexShrink:0,
+            background:'linear-gradient(135deg,#0D9488,#1E40AF)',
+            display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,
+          }}>🌐</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:15,fontWeight:700,color:'#0F172A',letterSpacing:-0.1}}>Clinical Nexus</div>
+            <div style={{fontSize:12,color:'#475569',marginTop:2}}>Global · Real-time · Voting</div>
+          </div>
+          <div style={{
+            background:'linear-gradient(135deg,#0D9488,#1E40AF)',
+            borderRadius:8,padding:'4px 10px',
+            fontSize:10,fontWeight:700,color:'white',letterSpacing:1.2
+          }}>LIVE</div>
+        </div>
         {sections.map(s=>(
           <div key={s.key}>
             <div onClick={()=>setOpen(open===s.key?null:s.key)} style={{
