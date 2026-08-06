@@ -17,7 +17,7 @@ const Ring = ({ value, max, color, size=80, stroke=8, label, sublabel }: any) =>
       </svg>
       <div style={{ textAlign:'center', zIndex:1 }}>
         <div style={{ fontSize:13, fontWeight:900, color, lineHeight:1 }}>{value}</div>
-        <div style={{ fontSize:8, color:'rgba(10,22,40,0.60)', fontWeight:600, marginTop:1 }}>{sublabel}</div>
+        <div style={{ fontSize:8, color:'#475569', fontWeight:600, marginTop:1 }}>{sublabel}</div>
       </div>
     </div>
   )
@@ -148,7 +148,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
                 {label:'XP Earned', value:weeklyXP, unit:'', color:'#30d158', goal:`/${weeklyGoal} goal`},
                 {label:'MCQ Accuracy', value:`${accuracy}`, unit:'%', color:'#00C4B4', goal:`${mcqTotal} answered`},
               ].map(s=>(
-                <div key={s.label} style={{ background:'rgba(255,255,255,0.88)', border:'1px solid rgba(10,132,255,0.12)', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
+                <div key={s.label} style={{ background:'rgba(255,255,255,0.88)', border:'1px solid #E2E8F0', borderRadius:14, padding:'12px 10px', textAlign:'center' }}>
                   <div style={{ fontSize:22, fontWeight:900, color:s.color, letterSpacing:-1 }}>{s.value}{s.unit}</div>
                   <div style={{ fontSize:9, color:'rgba(10,22,40,0.65)', marginTop:3, fontWeight:600, textTransform:'uppercase', letterSpacing:0.3 }}>{s.label}</div>
                   <div style={{ fontSize:9, color:'rgba(0,196,180,0.25)', marginTop:2 }}>{s.goal}</div>
@@ -160,22 +160,22 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
           {/* Streak + Rank Progress */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:14 }}>
             <div style={{ background:'rgba(255,255,255,0.88)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
+              <div style={{ fontSize:10, color:'#475569', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Daily Streak</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#ff9500', lineHeight:1 }}>{streak}</div>
               <div style={{ fontSize:11, color:'rgba(10,22,40,0.75)', marginTop:4 }}>days in a row 🔥</div>
               <div style={{ height:4, background:'rgba(0,0,0,0.06)', borderRadius:2, overflow:'hidden', marginTop:10 }}>
                 <div style={{ height:'100%', background:'linear-gradient(90deg,#ff9500,#ff6b35)', width:`${Math.min(streak/7,1)*100}%`, borderRadius:2 }}/>
               </div>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', marginTop:4 }}>Goal: 7-day streak</div>
+              <div style={{ fontSize:10, color:'#475569', marginTop:4 }}>Goal: 7-day streak</div>
             </div>
             <div style={{ background:'rgba(255,255,255,0.88)', backdropFilter:'blur(20px)', borderRadius:18, padding:16, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'none' }}>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
+              <div style={{ fontSize:10, color:'#475569', fontWeight:700, letterSpacing:1, marginBottom:8, textTransform:'uppercase' }}>Total XP</div>
               <div style={{ fontSize:36, fontWeight:900, color:'#00C4B4', lineHeight:1 }}>{xp}</div>
               <div style={{ fontSize:11, color:'rgba(10,22,40,0.75)', marginTop:4 }}>clinical points</div>
               <div style={{ height:4, background:'rgba(0,0,0,0.06)', borderRadius:2, overflow:'hidden', marginTop:10 }}>
                 <div style={{ height:'100%', background:'linear-gradient(90deg,#8b5cf6,#0a84ff)', width:`${Math.min(xp/1000,1)*100}%`, borderRadius:2 }}/>
               </div>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', marginTop:4 }}>Goal: 1000 XP</div>
+              <div style={{ fontSize:10, color:'#475569', marginTop:4 }}>Goal: 1000 XP</div>
             </div>
           </div>
 
@@ -214,7 +214,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
             {/* Drug 1 */}
             <div style={{ marginBottom:12, position:'relative' }}>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 1</div>
+              <div style={{ fontSize:10, color:'#475569', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 1</div>
               <input value={drug1||search1} onChange={e=>{setSearch1(e.target.value);setDrug1('');setShow1(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow1(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug1?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug1?'rgba(10,132,255,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug1?700:400, color:drug1?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show1 && search1 && !drug1 && filtered1.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>
@@ -229,7 +229,7 @@ export default function HealthInsights({ xp=0, casesCompleted=0, mcqCorrect=0, m
 
             {/* Drug 2 */}
             <div style={{ marginBottom:16, position:'relative' }}>
-              <div style={{ fontSize:10, color:'rgba(10,22,40,0.60)', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 2</div>
+              <div style={{ fontSize:10, color:'#475569', fontWeight:700, letterSpacing:1, marginBottom:6, textTransform:'uppercase' }}>Drug 2</div>
               <input value={drug2||search2} onChange={e=>{setSearch2(e.target.value);setDrug2('');setShow2(true);setInteraction(null);setNoInteraction(false)}} onFocus={()=>setShow2(true)} placeholder="Search drug..." style={{ width:'100%', padding:'12px 16px', borderRadius:12, border:`2px solid ${drug2?'#00C4B4':'rgba(0,0,0,0.08)'}`, background:drug2?'rgba(0,196,180,0.05)':'rgba(255,255,255,0.05)', fontSize:14, fontWeight:drug2?700:400, color:drug2?'#00C4B4':'rgba(255,255,255,0.35)', outline:'none', boxSizing:'border-box' }}/>
               {show2 && search2 && !drug2 && filtered2.length > 0 && (
                 <div style={{ position:'absolute', top:'100%', left:0, right:0, background:'rgba(28,10,50,0.97)', backdropFilter:'blur(20px)', borderRadius:14, border:'1px solid rgba(0,196,180,0.25)', boxShadow:'0 8px 32px rgba(0,0,0,0.6)', zIndex:50, marginTop:4, overflow:'hidden' }}>

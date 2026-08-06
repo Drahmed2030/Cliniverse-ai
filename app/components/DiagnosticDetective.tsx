@@ -136,8 +136,8 @@ const CASES: DetectiveCase[] = [
 ]
 
 const C = {
-  card: 'var(--bg-card, rgba(255,255,255,0.72))',
-  border: 'var(--border-card, rgba(10,132,255,0.12))',
+  card: '#FFFFFF',
+  border: 'var(--border-card, #E2E8F0)',
   text: 'var(--text-primary, #0A1628)',
   sub: 'var(--text-secondary, rgba(10,22,40,0.55))',
   muted: 'var(--text-muted, rgba(10,22,40,0.40))',
@@ -185,7 +185,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
       <div style={{background:'linear-gradient(145deg,#F0F6FF,#E8F4FF)',borderRadius:22,padding:'20px',marginBottom:16,border:'1px solid rgba(0,196,180,0.25)',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',top:-20,right:-20,width:100,height:100,borderRadius:'50%',background:'radial-gradient(circle,rgba(0,196,180,0.25),transparent 70%)',pointerEvents:'none'}}/>
         <div style={{fontSize:11,color:'rgba(0,196,180,0.8)',fontWeight:700,letterSpacing:1,textTransform:'uppercase',marginBottom:6}}>🕵️ NEW MODE</div>
-        <div style={{fontSize:24,fontWeight:900,color:'#0A1628',letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>
+        <div style={{fontSize:24,fontWeight:900,color:'#F8FAFC',letterSpacing:-0.5,marginBottom:6}}>Diagnostic Detective</div>
         <div style={{fontSize:13,color:C.sub,lineHeight:1.7,marginBottom:12}}>Order investigations wisely. Every test costs money. Diagnose accurately with the least spend to maximise your score.</div>
         <div style={{display:'flex',gap:8}}>
           <div style={{flex:1,background:'rgba(255,255,255,0.88)',borderRadius:12,padding:'10px',border:'1px solid rgba(255,255,255,0.18)',textAlign:'center'}}>
@@ -211,7 +211,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
           <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
             <div style={{width:52,height:52,borderRadius:16,background:`${c.color}18`,border:`1px solid ${c.color}30`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,flexShrink:0}}>{c.icon}</div>
             <div style={{flex:1}}>
-              <div style={{fontSize:15,fontWeight:800,color:'#0A1628',marginBottom:2}}>{c.title}</div>
+              <div style={{fontSize:15,fontWeight:800,color:'#F8FAFC',marginBottom:2}}>{c.title}</div>
               <div style={{fontSize:11,color:C.sub}}>{c.chiefComplaint}</div>
             </div>
           </div>
@@ -232,16 +232,16 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
   if (phase === 'history') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setPhase('intro')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
+        <button onClick={()=>setPhase('intro')} style={{background:'#E2E8F0',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← Back</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>{c.icon} {c.title}</div>
+          <div style={{fontSize:15,fontWeight:800,color:'#F8FAFC'}}>{c.icon} {c.title}</div>
           <div style={{fontSize:11,color:C.sub}}>{c.specialty}</div>
         </div>
       </div>
 
       <div style={{background:`${c.color}10`,borderRadius:20,padding:'18px',marginBottom:14,border:`1px solid ${c.color}30`,boxShadow:`0 6px 24px ${c.color}10`}}>
         <div style={{fontSize:10,color:c.color,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>📋 PATIENT PRESENTATION</div>
-        <div style={{fontSize:14,fontWeight:700,color:'#0A1628',marginBottom:8}}>{c.chiefComplaint}</div>
+        <div style={{fontSize:14,fontWeight:700,color:'#F8FAFC',marginBottom:8}}>{c.chiefComplaint}</div>
         <div style={{fontSize:13,color:'rgba(10,22,40,0.85)',lineHeight:1.85}}>{c.initialHistory}</div>
       </div>
 
@@ -333,9 +333,9 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
   if (phase === 'diagnose') return (
     <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
       <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
-        <button onClick={()=>setPhase('investigate')} style={{background:'rgba(10,132,255,0.08)',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← More Tests</button>
+        <button onClick={()=>setPhase('investigate')} style={{background:'#E2E8F0',border:'1px solid rgba(10,132,255,0.15)',borderRadius:12,color:'#0A84FF',padding:'8px 14px',fontSize:13,cursor:'pointer',fontWeight:600}}>← More Tests</button>
         <div style={{flex:1}}>
-          <div style={{fontSize:15,fontWeight:800,color:'#0A1628'}}>🩺 Make Your Diagnosis</div>
+          <div style={{fontSize:15,fontWeight:800,color:'#F8FAFC'}}>🩺 Make Your Diagnosis</div>
           <div style={{fontSize:11,color:C.sub}}>Remaining budget: {budget} pts</div>
         </div>
       </div>
@@ -371,9 +371,9 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
     const xpEarned = correct ? c.xpReward + Math.round((budget/c.budget)*50) : 20
     return (
       <div style={{fontFamily:'-apple-system,sans-serif',paddingBottom:20}}>
-        <div style={{background:correct?'linear-gradient(145deg,rgba(48,209,88,0.15),rgba(10,132,255,0.08))':'linear-gradient(145deg,rgba(255,69,58,0.15),rgba(0,196,180,0.08))',borderRadius:24,padding:'28px 20px',marginBottom:16,border:correct?'1px solid rgba(48,209,88,0.25)':'1px solid rgba(255,69,58,0.25)',textAlign:'center',boxShadow:correct?'0 8px 32px rgba(48,209,88,0.15)':'0 8px 32px rgba(255,69,58,0.15)'}}>
+        <div style={{background:correct?'linear-gradient(145deg,rgba(48,209,88,0.15),#E2E8F0)':'linear-gradient(145deg,rgba(255,69,58,0.15),rgba(0,196,180,0.08))',borderRadius:24,padding:'28px 20px',marginBottom:16,border:correct?'1px solid rgba(48,209,88,0.25)':'1px solid rgba(255,69,58,0.25)',textAlign:'center',boxShadow:correct?'0 8px 32px rgba(48,209,88,0.15)':'0 8px 32px rgba(255,69,58,0.15)'}}>
           <div style={{fontSize:60,marginBottom:12}}>{correct?'🎯':'❌'}</div>
-          <div style={{fontSize:22,fontWeight:900,color:'#0A1628',marginBottom:6}}>
+          <div style={{fontSize:22,fontWeight:900,color:'#F8FAFC',marginBottom:6}}>
             {correct ? 'Correct Diagnosis!' : 'Not Quite'}
           </div>
           <div style={{fontSize:16,fontWeight:700,color:correct?'#30d158':'#ff453a',marginBottom:8}}>{c.hiddenDx}</div>
@@ -396,7 +396,7 @@ export default function DiagnosticDetective({ onXP }: { onXP?: (n:number)=>void 
         {/* Final advice */}
         <div style={{background:`${c.color}08`,borderRadius:18,padding:'16px',marginBottom:12,border:`1px solid ${c.color}20`}}>
           <div style={{fontSize:10,color:c.color,fontWeight:700,marginBottom:8,letterSpacing:0.5}}>💊 MANAGEMENT</div>
-          <div style={{fontSize:13,color:'#0A1628',lineHeight:1.8}}>{c.finalAdvice}</div>
+          <div style={{fontSize:13,color:'#F8FAFC',lineHeight:1.8}}>{c.finalAdvice}</div>
         </div>
 
         {/* Key learning */}
