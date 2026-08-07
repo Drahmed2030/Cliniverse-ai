@@ -2,9 +2,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { L } from '../lib/tokens'
 
-const TABS = [
+const TABS_LEFT  = [
   { id:'pulse', label:'Today',  icon:'⚡' },
   { id:'ward',  label:'Clinic', icon:'🏥' },
+]
+const TABS_RIGHT = [
   { id:'tools', label:'Tools',  icon:'🔬' },
   { id:'me',    label:'Me',     icon:'👤' },
 ]
@@ -57,7 +59,59 @@ export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:str
           gap:3,
           boxShadow:`${L.shadowLg}, 0 0 0 1px rgba(13,148,136,0.08)`,
         }}>
-          {TABS.map(t => {
+          {/* Left tabs */}
+          {TABS_LEFT.map(t => {
+            const isActive = t.id === active
+            return (
+              <button key={t.id} onClick={() => setTab(t.id)} style={{
+                display:'flex', flexDirection:'column',
+                alignItems:'center', justifyContent:'center',
+                gap:3, border:'none', cursor:'pointer',
+                borderRadius:44,
+                padding: isActive ? '9px 22px' : '9px 16px',
+                minWidth: isActive ? 84 : 52,
+                background: isActive ? L.gradPrimary : 'transparent',
+                boxShadow: isActive ? L.shadowMd : 'none',
+                transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              }}>
+                <span style={{fontSize:18, lineHeight:1}}>{t.icon}</span>
+                <span style={{
+                  fontSize:10, fontWeight:700, letterSpacing:0.3,
+                  fontFamily:L.font,
+                  color: isActive ? 'white' : L.textMuted,
+                  transition:'color 0.2s',
+                }}>{t.label}</span>
+              </button>
+            )
+          })}
+
+          {/* Center PulseRoom button */}
+          <button onClick={() => setTab('pulseroom')} style={{
+            display:'flex', flexDirection:'column',
+            alignItems:'center', justifyContent:'center',
+            gap:2, border:'none', cursor:'pointer',
+            borderRadius:'50%',
+            width:52, height:52,
+            marginTop:-18,
+            background: active==='pulseroom'
+              ? 'linear-gradient(135deg,#EF4444,#F97316)'
+              : 'linear-gradient(135deg,#0D9488,#1E40AF)',
+            boxShadow: active==='pulseroom'
+              ? '0 4px 20px rgba(239,68,68,0.45), 0 0 0 3px rgba(239,68,68,0.15)'
+              : '0 4px 20px rgba(13,148,136,0.45), 0 0 0 3px rgba(13,148,136,0.15)',
+            transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+            transform: active==='pulseroom' ? 'scale(1.12) translateY(-2px)' : 'scale(1) translateY(0)',
+            flexShrink:0,
+          }}>
+            <span style={{fontSize:20, lineHeight:1}}>🧠</span>
+            <span style={{
+              fontSize:8, fontWeight:800, letterSpacing:0.5,
+              color:'white', marginTop:1,
+            }}>PULSE</span>
+          </button>
+
+          {/* Right tabs */}
+          {TABS_RIGHT.map(t => {
             const isActive = t.id === active
             return (
               <button key={t.id} onClick={() => setTab(t.id)} style={{

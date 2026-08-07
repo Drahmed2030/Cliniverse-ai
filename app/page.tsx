@@ -16,6 +16,7 @@ const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 import ToolsPage from './components/ToolsPage'
+const PulseRoom = dynamic(() => import('./components/PulseRoom'), { ssr:false })
 const STEMICase = dynamic(() => import('./components/STEMICase'), { ssr:false })
 
 const EcgChallenge        = dynamic(() => import('./components/EcgChallenge'),        { ssr:false })
@@ -264,7 +265,7 @@ export default function Home() {
   }, [])
   const _mTX = useRef(0)
   const _mTY = useRef(0)
-  const MAIN_TABS = ['pulse','tools','ward','me']
+  const MAIN_TABS = ['pulse','ward','pulseroom','tools','me']
   const swipeMain = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - _mTX.current
     const dy = e.changedTouches[0].clientY - _mTY.current
@@ -735,6 +736,7 @@ export default function Home() {
 
         {/* TOOLS */}
         {tab==='tools' && <ToolsPage onXP={addXP}/>}
+        {tab==='pulseroom' && <PulseRoom onXP={addXP}/>}
 
         {/* PROFILE */}
         {(tab==='profile'||tab==='me') && (
