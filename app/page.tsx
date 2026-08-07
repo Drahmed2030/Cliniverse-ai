@@ -458,9 +458,46 @@ export default function Home() {
   if (showUpgrade) return (
     <div style={{
       position:'fixed', inset:0, zIndex:999,
-      background:'rgba(10,31,60,0.60)', backdropFilter:'blur(24px)',
-      display:'flex', alignItems:'center', justifyContent:'center', padding:20,
+      fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif',
+      overflow:'hidden',
     }}>
+      <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+        alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}/>
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.3) 0%,rgba(15,23,42,0.97) 45%)'}}/>
+      <button onClick={()=>setShowUpgrade(false)} style={{position:'absolute',top:16,right:16,zIndex:10,width:36,height:36,borderRadius:'50%',background:'rgba(255,255,255,0.15)',backdropFilter:'blur(12px)',border:'1px solid rgba(255,255,255,0.2)',color:'white',fontSize:18,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}>×</button>
+      <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'0 20px 48px',overflowY:'auto'}}>
+        <div style={{display:'inline-flex',alignSelf:'center',background:'linear-gradient(135deg,#0D9488,#1E40AF)',borderRadius:99,padding:'6px 20px',marginBottom:16,fontSize:12,fontWeight:800,color:'white',letterSpacing:1.5}}>⭐ CLINIVERSE PRO</div>
+        <div style={{fontSize:34,fontWeight:900,color:'white',textAlign:'center',letterSpacing:-1,marginBottom:6}}>Unlock Everything</div>
+        <div style={{fontSize:14,color:'rgba(255,255,255,0.65)',textAlign:'center',marginBottom:24}}>Trusted by 47,000+ doctors worldwide</div>
+        <div style={{background:'rgba(255,255,255,0.08)',backdropFilter:'blur(20px)',border:'1px solid rgba(255,255,255,0.15)',borderRadius:20,padding:'16px 20px',marginBottom:20}}>
+          {[{icon:'🌐',text:'Global Nexus — live case voting'},{icon:'🧠',text:'Clinical Pulse Room — daily MCQ'},{icon:'💊',text:'Drug Interaction Checker'},{icon:'🤖',text:'AI Clinical Consultant'},{icon:'📄',text:'PDF Logbook & Certificates'},{icon:'🏆',text:'Global Leaderboard'},{icon:'🔬',text:'30+ Emergency Cases'}].map((f,i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:i<6?'1px solid rgba(255,255,255,0.08)':'none'}}>
+              <span style={{fontSize:18}}>{f.icon}</span>
+              <span style={{fontSize:14,fontWeight:600,color:'rgba(255,255,255,0.90)'}}>{f.text}</span>
+              <div style={{marginLeft:'auto',width:18,height:18,borderRadius:'50%',background:'rgba(16,185,129,0.2)',border:'1px solid #10B981',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,color:'#10B981',fontWeight:900}}>✓</div>
+            </div>
+          ))}
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
+          <div style={{background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',borderRadius:16,padding:'14px 12px',textAlign:'center'}}>
+            <div style={{fontSize:11,color:'rgba(255,255,255,0.6)',marginBottom:4}}>Monthly</div>
+            <div style={{fontSize:26,fontWeight:900,color:'white'}}>$14.99</div>
+            <div style={{fontSize:10,color:'rgba(255,255,255,0.5)'}}>/month</div>
+          </div>
+          <div style={{background:'rgba(13,148,136,0.20)',border:'1.5px solid #0D9488',borderRadius:16,padding:'14px 12px',textAlign:'center'}}>
+            <div style={{fontSize:10,fontWeight:800,color:'#10B981',marginBottom:4}}>⭐ BEST VALUE</div>
+            <div style={{fontSize:26,fontWeight:900,color:'white'}}>$99.99</div>
+            <div style={{fontSize:10,color:'rgba(255,255,255,0.5)'}}>/year · Save 44%</div>
+          </div>
+        </div>
+        <button onClick={()=>{window.open('https://cliniverse-ai.lemonsqueezy.com/checkout/buy/54d78f45-acc7-48ca-a5df-17bfbc03df3d','_blank');setShowUpgrade(false)}} style={{width:'100%',padding:'17px',borderRadius:20,border:'none',cursor:'pointer',background:'linear-gradient(135deg,#0D9488,#1E40AF)',color:'white',fontSize:16,fontWeight:800,boxShadow:'0 4px 20px rgba(13,148,136,0.40)',marginBottom:12}}>
+          🚀 Start PRO — $8.33/mo
+        </button>
+        <button onClick={()=>setShowUpgrade(false)} style={{width:'100%',padding:'14px',borderRadius:16,cursor:'pointer',background:'rgba(255,255,255,0.08)',border:'1px solid rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.6)',fontSize:14,fontWeight:600}}>
+          Continue Free — 1 case/day
+        </button>
+        <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',textAlign:'center',marginTop:12}}>Auto-renews · Cancel anytime in Settings</div>
+      </div>
       <div style={{
         ...D.glass, padding:32, maxWidth:380, width:'100%',
         borderRadius:28, position:'relative', overflow:'hidden',
