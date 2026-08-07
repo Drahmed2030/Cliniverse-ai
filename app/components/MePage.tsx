@@ -675,6 +675,7 @@ const SECTIONS = [
   { id:'health',    label:'Health',    icon:'💊' },
   { id:'world',     label:'World',     icon:'🌍' },
   { id:'xp',        label:'Progress',  icon:'⭐' },
+  { id:'settings',  label:'Settings',  icon:'⚙️' },
 ]
 
 export default function MePage({
@@ -866,6 +867,101 @@ export default function MePage({
             <GlobalCensus/>
             <FutureLetter/>
           </>
+        )}
+
+
+        {section==='settings' && (
+          <div>
+            {/* Account */}
+            <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:20,padding:18,marginBottom:14,boxShadow:L.shadowSm}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:14}}>ACCOUNT</div>
+              {[
+                {icon:'👨‍⚕️', label:'Edit Profile',      sub:'Name, specialty, country'},
+                {icon:'🔔', label:'Notifications',     sub:'Push alerts, reminders'},
+                {icon:'🔒', label:'Privacy & Security', sub:'Data, biometrics'},
+                {icon:'⭐', label:'Upgrade to PRO',    sub:'Unlock all features', color:L.teal},
+              ].map((item,i)=>(
+                <div key={i} style={{
+                  display:'flex',alignItems:'center',gap:12,
+                  padding:'13px 0',
+                  borderBottom:i<3?`1px solid ${L.border}`:'none',
+                  cursor:'pointer',
+                }}>
+                  <div style={{width:40,height:40,borderRadius:12,background:item.color?`${item.color}10`:L.raised,border:`1px solid ${item.color?item.color+'25':L.border}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>
+                    {item.icon}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:14,fontWeight:700,color:item.color||L.textPrimary}}>{item.label}</div>
+                    <div style={{fontSize:11,color:L.textMuted}}>{item.sub}</div>
+                  </div>
+                  <span style={{fontSize:18,color:L.textMuted}}>›</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Preferences */}
+            <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:20,padding:18,marginBottom:14,boxShadow:L.shadowSm}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:14}}>PREFERENCES</div>
+              {[
+                {icon:'🌐', label:'Language',          sub:'English / العربية'},
+                {icon:'📏', label:'Units',             sub:'Metric / Imperial'},
+                {icon:'🎨', label:'Appearance',        sub:'Light / Dark / Auto'},
+                {icon:'♿', label:'Accessibility',     sub:'Font size, contrast'},
+              ].map((item,i)=>(
+                <div key={i} style={{
+                  display:'flex',alignItems:'center',gap:12,
+                  padding:'13px 0',
+                  borderBottom:i<3?`1px solid ${L.border}`:'none',
+                  cursor:'pointer',
+                }}>
+                  <div style={{width:40,height:40,borderRadius:12,background:L.raised,border:`1px solid ${L.border}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>
+                    {item.icon}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:14,fontWeight:700,color:L.textPrimary}}>{item.label}</div>
+                    <div style={{fontSize:11,color:L.textMuted}}>{item.sub}</div>
+                  </div>
+                  <span style={{fontSize:18,color:L.textMuted}}>›</span>
+                </div>
+              ))}
+            </div>
+
+            {/* About */}
+            <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:20,padding:18,marginBottom:14,boxShadow:L.shadowSm}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:14}}>ABOUT</div>
+              {[
+                {icon:'📋', label:'Terms of Service',  sub:'Legal'},
+                {icon:'🔐', label:'Privacy Policy',    sub:'Data protection'},
+                {icon:'⭐', label:'Rate the App',      sub:'App Store review'},
+                {icon:'💬', label:'Contact Support',   sub:'help@cliniverseai.com'},
+              ].map((item,i)=>(
+                <div key={i} style={{
+                  display:'flex',alignItems:'center',gap:12,
+                  padding:'13px 0',
+                  borderBottom:i<3?`1px solid ${L.border}`:'none',
+                  cursor:'pointer',
+                }}>
+                  <div style={{width:40,height:40,borderRadius:12,background:L.raised,border:`1px solid ${L.border}`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>
+                    {item.icon}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{fontSize:14,fontWeight:700,color:L.textPrimary}}>{item.label}</div>
+                    <div style={{fontSize:11,color:L.textMuted}}>{item.sub}</div>
+                  </div>
+                  <span style={{fontSize:18,color:L.textMuted}}>›</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Version + Reset */}
+            <div style={{textAlign:'center',padding:'8px 0 20px'}}>
+              <div style={{fontSize:12,color:L.textMuted,marginBottom:8}}>Cliniverse AI v1.1 · Build 2026</div>
+              <button onClick={()=>{localStorage.clear();window.location.reload()}}
+                style={{background:'none',border:'none',cursor:'pointer',color:L.red,fontSize:13,fontWeight:600}}>
+                Sign Out
+              </button>
+            </div>
+          </div>
         )}
 
         {section==='xp' && (
