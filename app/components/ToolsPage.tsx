@@ -1,5 +1,24 @@
 'use client'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+
+const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
+const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
+const BLSACLSModule    = dynamic(() => import('./BLSACLSModule'),    { ssr:false })
+const OnCallSystem     = dynamic(() => import('./OnCallSystem'),     { ssr:false })
+const NightShiftSurvival = dynamic(() => import('./NightShiftSurvival'), { ssr:false })
+const MedCalculators   = dynamic(() => import('./MedCalculators'),   { ssr:false })
+const PharmacyModule   = dynamic(() => import('./PharmacyModule'),   { ssr:false })
+const NursingModule    = dynamic(() => import('./NursingModule'),    { ssr:false })
+const LabModule        = dynamic(() => import('./LabModule'),        { ssr:false })
+const RadiologyModule  = dynamic(() => import('./RadiologyModule'),  { ssr:false })
+const AICaseGenerator  = dynamic(() => import('./AICaseGenerator'),  { ssr:false })
+const ClinicalDuels    = dynamic(() => import('./ClinicalDuels'),    { ssr:false })
+const DiagnosticDetective = dynamic(() => import('./DiagnosticDetective'), { ssr:false })
+const ErrorAutopsy     = dynamic(() => import('./ErrorAutopsy'),     { ssr:false })
+const HealthInsights   = dynamic(() => import('./HealthInsights'),   { ssr:false })
+const BoardExam        = dynamic(() => import('./BoardExam'),        { ssr:false })
+
 
 const L = {
   canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
@@ -615,6 +634,19 @@ function ICD11Tool() {
 
 // ── MAIN ARSENAL ──────────────────────────────────────
 const TOOLS = [
+  { id:'codeblue',   label:'Code Blue',      icon:'🔴', color:'#EF4444' },
+  { id:'blsacls',    label:'BLS/ACLS',       icon:'💊', color:'#EF4444' },
+  { id:'oncall',     label:'On-Call',         icon:'📞', color:'#7C3AED' },
+  { id:'nightshift', label:'Night Shift',     icon:'🌙', color:'#7C3AED' },
+  { id:'calc',       label:'Calculators',     icon:'🧮', color:'#0D9488' },
+  { id:'pharmacy',   label:'Pharmacy',        icon:'💊', color:'#10B981' },
+  { id:'nursing',    label:'Nursing',         icon:'👩‍⚕️', color:'#DB2777' },
+  { id:'lab',        label:'Lab',             icon:'🧪', color:'#1E40AF' },
+  { id:'radiology',  label:'Radiology',       icon:'🩻', color:'#475569' },
+  { id:'aigame',     label:'AI Gaming',       icon:'🎮', color:'#F59E0B' },
+  { id:'duels',      label:'Clinical Duels',  icon:'⚔️', color:'#EF4444' },
+  { id:'detective',  label:'Diagnostic Det.', icon:'🔍', color:'#7C3AED' },
+  { id:'board',      label:'Board Exam',      icon:'📋', color:'#1E40AF' },
   { id:'drug',     label:'Drug Reference',  icon:'💊', color:'#0D9488' },
   { id:'trials',   label:'Clinical Trials', icon:'🔬', color:'#1E40AF' },
   { id:'ecg',      label:'ECG AI',          icon:'📈', color:'#EF4444' },
@@ -667,6 +699,20 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
       </div>
 
       <div style={{padding:'0 16px'}}>
+
+        {active==='codeblue'   && <CodeBlue/>}
+        {active==='blsacls'    && <BLSACLSModule/>}
+        {active==='oncall'     && <OnCallSystem/>}
+        {active==='nightshift' && <NightShiftSurvival/>}
+        {active==='calc'       && <MedCalculators/>}
+        {active==='pharmacy'   && <PharmacyModule/>}
+        {active==='nursing'    && <NursingModule/>}
+        {active==='lab'        && <LabModule/>}
+        {active==='radiology'  && <RadiologyModule/>}
+        {active==='aigame'     && <AICaseGenerator onXP={onXP}/>}
+        {active==='duels'      && <ClinicalDuels onXP={onXP}/>}
+        {active==='detective'  && <DiagnosticDetective onXP={onXP}/>}
+        {active==='board'      && <BoardExam onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
         {active==='ecg'       && <ECGInterpreter onXP={onXP}/>}
