@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import WorldMap from './WorldMap'
 import { supabase } from '../supabase'
 
 const L = {
@@ -359,23 +360,8 @@ export default function PulseRoom({ onXP, setTab }:{ onXP?:(n:number)=>void, set
           </div>
         )}
 
-        {/* Global stats */}
         {revealed && (
-          <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:20,padding:'16px 18px',marginBottom:14,boxShadow:L.shadowSm}}>
-            <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:12}}>GLOBAL RESULTS</div>
-            <div style={{display:'flex',gap:8}}>
-              {[
-                {label:'Answered',  value:totalAnswers, color:L.teal},
-                {label:'Correct',   value:`${Math.round(((answers[question?.correct_key]||0)/total)*100)}%`, color:L.sage},
-                {label:'Your Streak',value:`${streak}🔥`, color:L.amber},
-              ].map(s=>(
-                <div key={s.label} style={{flex:1,background:L.raised,borderRadius:14,padding:'12px 8px',textAlign:'center',border:`1px solid ${L.border}`}}>
-                  <div style={{fontSize:20,fontWeight:900,color:s.color}}>{s.value}</div>
-                  <div style={{fontSize:9,fontWeight:700,color:L.textMuted,marginTop:2}}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <WorldMap votes={answers} accentColor={L.teal} height={200} title='Global Results' liveCount={totalAnswers}/>
         )}
 
         {/* Disclaimer */}

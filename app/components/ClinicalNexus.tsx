@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import WorldMap from './WorldMap'
 import { supabase } from '../supabase'
 
 const L = {
