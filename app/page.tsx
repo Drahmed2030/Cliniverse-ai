@@ -271,8 +271,11 @@ export default function Home() {
     const dy = e.changedTouches[0].clientY - _mTY.current
     if (Math.abs(dx) < Math.abs(dy) * 1.5) return
     const i = MAIN_TABS.indexOf(tab)
+    const target = e.target as HTMLElement
+    const inScroll = target.closest('[data-no-swipe]')
+    if(inScroll) return
     if (dx < -65 && i < MAIN_TABS.length-1) setTab(MAIN_TABS[i+1])
-    if (dx >  65 && i > 0)                  setTab(MAIN_TABS[i-1])
+    if (dx >  65 && i > 0) setTab(MAIN_TABS[i-1])
   }
   const [toolTab, setToolTab]           = useState('codeblue')
   const [showNexus, setShowNexus] = useState(false)
