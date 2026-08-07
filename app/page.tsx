@@ -736,7 +736,7 @@ export default function Home() {
 
         {/* TOOLS */}
         {tab==='tools' && <ToolsPage onXP={addXP}/>}
-        {tab==='pulseroom' && <PulseRoom onXP={addXP}/>}
+        {tab==='pulseroom' && <PulseRoom onXP={addXP} setTab={setTab}/>}
 
         {/* PROFILE */}
         {(tab==='profile'||tab==='me') && (

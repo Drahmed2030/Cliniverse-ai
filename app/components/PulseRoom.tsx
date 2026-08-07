@@ -35,7 +35,7 @@ const FALLBACK_Q = {
   expires_at: new Date(Date.now()+86400000).toISOString(),
 }
 
-export default function PulseRoom({ onXP }:{ onXP?:(n:number)=>void }) {
+export default function PulseRoom({ onXP, setTab }:{ onXP?:(n:number)=>void, setTab?:(t:string)=>void }) {
   const [question, setQuestion]     = useState<any>(FALLBACK_Q)
   const [answers, setAnswers]       = useState<Record<string,number>>({})
   const [myAnswer, setMyAnswer]     = useState<string|null>(null)
@@ -180,53 +180,49 @@ export default function PulseRoom({ onXP }:{ onXP?:(n:number)=>void }) {
   return (
     <div style={{minHeight:'100vh',background:L.canvas,paddingBottom:120,fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",sans-serif'}}>
 
-      {/* Header */}
-      <div style={{
-        background:L.gradient, padding:'20px 20px 28px',
-        position:'relative', overflow:'hidden',
-      }}>
-        {/* BG decoration */}
-        <div style={{position:'absolute',top:-40,right:-40,width:160,height:160,borderRadius:'50%',background:'rgba(255,255,255,0.06)'}}/>
-        <div style={{position:'absolute',bottom:-20,left:-20,width:100,height:100,borderRadius:'50%',background:'rgba(255,255,255,0.04)'}}/>
+      {/* Hero Unsplash */}
+      <div style={{position:'relative',height:220,overflow:'hidden'}}>
+        <img
+          src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}
+        />
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.2),rgba(15,23,42,0.88))'}}/>
 
-        <div style={{position:'relative',zIndex:1}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <div style={{width:10,height:10,borderRadius:'50%',background:pulse?'#10B981':'rgba(16,185,129,0.3)',boxShadow:pulse?'0 0 12px #10B981':'none',transition:smooth}}/>
-              <span style={{fontSize:12,fontWeight:700,color:'rgba(255,255,255,0.9)',letterSpacing:1.5}}>PULSE ROOM — LIVE</span>
-            </div>
-            <div style={{display:'flex',gap:6}}>
-              {liveFlags.slice(-3).map((f,i)=>(
-                <span key={i} style={{fontSize:18,filter:'drop-shadow(0 2px 4px rgba(0,0,0,0.2))',opacity:0.9}}>{f}</span>
-              ))}
-            </div>
+        {/* Back + Live */}
+        <div style={{position:'absolute',top:16,left:16,right:16,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <div style={{width:10,height:10,borderRadius:'50%',background:pulse?'#10B981':'rgba(16,185,129,0.3)',boxShadow:pulse?'0 0 12px #10B981':'none',transition:smooth}}/>
+            <span style={{fontSize:11,fontWeight:700,color:'white',letterSpacing:1.5}}>PULSE ROOM — LIVE</span>
           </div>
+          <div style={{display:'flex',gap:6}}>
+            {liveFlags.slice(-3).map((f,i)=>(
+              <span key={i} style={{fontSize:18,opacity:0.9}}>{f}</span>
+            ))}
+          </div>
+        </div>
 
-          <div style={{fontSize:28,fontWeight:900,color:'white',letterSpacing:-0.6,marginBottom:4}}>
+        {/* Title bottom */}
+        <div style={{position:'absolute',bottom:16,left:16,right:16}}>
+          <div style={{fontSize:26,fontWeight:900,color:'white',letterSpacing:-0.6,marginBottom:6}}>
             Clinical Pulse Room
           </div>
-          <div style={{fontSize:13,color:'rgba(255,255,255,0.75)'}}>
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.75)',marginBottom:10}}>
             {totalAnswers} doctors answered · {formatTime(timeLeft)} left
           </div>
-
-          {/* Stats row */}
-          <div style={{display:'flex',gap:10,marginTop:14}}>
+          {/* Stats */}
+          <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
             {[
-              {label:'Streak', value:`${streak}🔥`, show: streak>0},
-              {label:'Correct', value:`${totalCorrect}✓`, show: totalCorrect>0},
-              {label:'Answered', value:`${totalAnswers}`, show: true},
+              {label:'Streak', value:`${streak}🔥`, show:streak>0},
+              {label:'Correct', value:`${totalCorrect}✓`, show:totalCorrect>0},
+              {label:'Answered', value:`${totalAnswers}`, show:true},
             ].filter(s=>s.show).map(s=>(
-              <div key={s.label} style={{
-                background:'rgba(255,255,255,0.15)', backdropFilter:'blur(12px)',
-                borderRadius:12, padding:'6px 14px',
-                border:'1px solid rgba(255,255,255,0.2)',
-              }}>
+              <div key={s.label} style={{background:'rgba(255,255,255,0.15)',backdropFilter:'blur(12px)',borderRadius:12,padding:'5px 12px',border:'1px solid rgba(255,255,255,0.2)'}}>
                 <span style={{fontSize:13,fontWeight:800,color:'white'}}>{s.value}</span>
                 <span style={{fontSize:10,color:'rgba(255,255,255,0.65)',marginLeft:4}}>{s.label}</span>
               </div>
             ))}
             {streak>=3 && (
-              <div style={{background:'rgba(245,183,49,0.25)',backdropFilter:'blur(12px)',borderRadius:12,padding:'6px 14px',border:'1px solid rgba(245,183,49,0.4)'}}>
+              <div style={{background:'rgba(245,183,49,0.25)',backdropFilter:'blur(12px)',borderRadius:12,padding:'5px 12px',border:'1px solid rgba(245,183,49,0.4)'}}>
                 <span style={{fontSize:13,fontWeight:800,color:L.amber}}>×2 XP!</span>
               </div>
             )}
