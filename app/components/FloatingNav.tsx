@@ -10,6 +10,7 @@ const TABS_RIGHT = [
   { id:'tools', label:'Tools',  icon:'🔬' },
   { id:'me',    label:'Me',     icon:'👤' },
 ]
+const TABS = [...TABS_LEFT, { id:'pulseroom', label:'PULSE', icon:'🧠' }, ...TABS_RIGHT]
 
 export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:string)=>void }) {
   const [visible, setVisible] = useState(true)

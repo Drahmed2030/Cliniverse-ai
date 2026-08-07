@@ -445,7 +445,7 @@ export default function Home() {
   // ── UPGRADE MODAL ─────────────────────────────────────────────────────
   if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); setShowAfia(true); }} />)
 
-  if (showAfia) return (<AfiaHome onSelect={(type, skip) => { if(type){ setUserType(type); localStorage.setItem('afia_user_type', type); } setShowAfia(false); }} savedType={userType as any} />)
+  if (showAfia) return (<AfiaHome onSelect={(type, skip) => { setTimeout(() => { if(type){ setUserType(type); localStorage.setItem('afia_user_type', type); } setShowAfia(false); }, 0); }} savedType={userType as any} />)
 
   if (showUpgrade) return (
     <div style={{
