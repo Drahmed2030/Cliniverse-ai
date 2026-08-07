@@ -1,186 +1,167 @@
-"use client";
-import { useEffect, useState } from "react";
+'use client'
+import { useEffect, useState } from 'react'
 
-export default function SplashScreen({ onDone }: { onDone: () => void }) {
-  const [progress, setProgress] = useState(0);
-  const [textIndex, setTextIndex] = useState(0);
-  const [showLogo, setShowLogo] = useState(false);
-  const [showText, setShowText] = useState(false);
-  const [showSub, setShowSub] = useState(false);
+const VITALS = [
+  { value:'47,284', label:'Doctors Online Now',    emoji:'👨‍⚕️' },
+  { value:'1,847',  label:'Cases Solved Today',    emoji:'🏥' },
+  { value:'63',     label:'Countries Learning',    emoji:'🌍' },
+  { value:'94%',    label:'Clinical Accuracy',     emoji:'🎯' },
+]
 
-  const texts = ["Health", "عافية", "Santé"];
+export default function SplashScreen({ onDone }:{ onDone:()=>void }) {
+  const [vitalIdx, setVitalIdx] = useState(0)
+  const [showLogo, setShowLogo] = useState(false)
+  const [pulse, setPulse]       = useState(true)
+  const [progress, setProgress] = useState(0)
 
-  useEffect(() => {
-    setTimeout(() => setShowLogo(true), 300);
-    setTimeout(() => setShowText(true), 800);
-    setTimeout(() => setShowSub(true), 1200);
+  useEffect(()=>{
+    // Vitals animation — كل 400ms vital جديد
+    const vitalsTimer = setInterval(()=>{
+      setVitalIdx(i=>{
+        if(i >= VITALS.length-1){ clearInterval(vitalsTimer); setShowLogo(true); return i }
+        return i+1
+      })
+    }, 450)
 
-    const progressInterval = setInterval(() => {
-      setProgress(p => {
-        if (p >= 100) { clearInterval(progressInterval); return 100; }
-        return p + 2;
-      });
-    }, 50);
+    // Progress bar
+    const prog = setInterval(()=>setProgress(p=>Math.min(p+1.5,100)), 35)
 
-    const textInterval = setInterval(() => {
-      setTextIndex(i => (i + 1) % texts.length);
-    }, 800);
+    // Pulse
+    const pulseT = setInterval(()=>setPulse(p=>!p), 700)
 
-    const doneTimer = setTimeout(() => {
-      clearInterval(textInterval);
-      onDone();
-    }, 3200);
+    // Done
+    const done = setTimeout(onDone, 2600)
 
-    return () => { 
-      clearInterval(progressInterval); 
-      clearInterval(textInterval);
-      clearTimeout(doneTimer);
-    };
-
-
-  }, []);
+    return ()=>{ clearInterval(vitalsTimer); clearInterval(prog); clearInterval(pulseT); clearTimeout(done) }
+  },[])
 
   return (
     <div style={{
-      position:"fixed", inset:0, zIndex:9999,
-      fontFamily:"-apple-system, SF Pro Display, sans-serif",
-      overflow:"hidden"
+      position:'fixed', inset:0, zIndex:9999,
+      fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif',
+      overflow:'hidden',
     }}>
-      {/* Background Image */}
+      {/* Unsplash Hospital BG */}
       <img
-        src="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=800&q=80"
+        src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
         alt=""
-        style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}
       />
-
-      {/* Gradient Overlay */}
+      {/* Gradient overlay */}
       <div style={{
-        position:"absolute", inset:0,
-        background:"linear-gradient(180deg,rgba(5,10,25,0.7) 0%,rgba(5,10,25,0.85) 50%,rgba(5,10,25,0.95) 100%)"
+        position:'absolute', inset:0,
+        background:'linear-gradient(to bottom, rgba(15,23,42,0.55) 0%, rgba(15,23,42,0.80) 50%, rgba(15,23,42,0.95) 100%)',
       }}/>
 
-      {/* Ambient glow */}
-      <div style={{
-        position:"absolute", top:"30%", left:"50%",
-        transform:"translateX(-50%)",
-        width:300, height:300,
-        background:"radial-gradient(circle,rgba(10,132,255,0.2) 0%,transparent 70%)",
-        pointerEvents:"none"
-      }}/>
+      {/* ECG line top */}
+      <div style={{position:'absolute',top:0,left:0,right:0,height:3,overflow:'hidden'}}>
+        <div style={{
+          height:'100%',
+          width:`${progress}%`,
+          background:'linear-gradient(90deg,#0D9488,#1E40AF)',
+          transition:'width 0.035s linear',
+          boxShadow:'0 0 12px rgba(13,148,136,0.8)',
+        }}/>
+      </div>
 
       {/* Content */}
       <div style={{
-        position:"relative", zIndex:1,
-        height:"100vh", display:"flex",
-        flexDirection:"column",
-        alignItems:"center", justifyContent:"center",
-        padding:"0 32px"
+        position:'absolute', inset:0,
+        display:'flex', flexDirection:'column',
+        alignItems:'center', justifyContent:'center',
+        padding:'0 32px',
       }}>
 
-        {/* Logo */}
-        <div style={{
-          opacity: showLogo ? 1 : 0,
-          transform: showLogo ? "scale(1)" : "scale(0.8)",
-          transition: "all 0.6s cubic-bezier(0.34,1.56,0.64,1)",
-          marginBottom: 32
-        }}>
-          {/* SVG Logo */}
-          <svg width="90" height="90" viewBox="0 0 90 90">
-            <defs>
-              <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#0A84FF" stopOpacity="0.3"/>
-                <stop offset="100%" stopColor="#0A84FF" stopOpacity="0"/>
-              </radialGradient>
-              <linearGradient id="circleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0A84FF"/>
-                <stop offset="100%" stopColor="#30D158"/>
-              </linearGradient>
-            </defs>
-            {/* Outer glow */}
-            <circle cx="45" cy="45" r="44" fill="url(#glow)"/>
-            {/* Circle border */}
-            <circle cx="45" cy="45" r="40" fill="none" stroke="url(#circleGrad)" strokeWidth="1.5" opacity="0.6"/>
-            {/* Inner circle */}
-            <circle cx="45" cy="45" r="34" fill="rgba(10,132,255,0.08)" stroke="rgba(10,132,255,0.2)" strokeWidth="1"/>
-            {/* ECG Line */}
-            <polyline
-              points="12,45 20,45 24,35 28,55 32,38 36,52 40,45 50,45 54,30 58,60 62,45 70,45 78,45"
-              fill="none" stroke="url(#circleGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            />
-            {/* Center dot */}
-            <circle cx="45" cy="45" r="3" fill="#0A84FF" opacity="0.8"/>
-          </svg>
-        </div>
-
-        {/* App Name */}
-        <div style={{
-          opacity: showText ? 1 : 0,
-          transform: showText ? "translateY(0)" : "translateY(20px)",
-          transition: "all 0.6s ease",
-          textAlign: "center",
-          marginBottom: 12
-        }}>
+        {/* Vitals counter */}
+        {!showLogo && (
           <div style={{
-            color: "#fff",
-            fontSize: 36,
-            fontWeight: 800,
-            letterSpacing: -1,
-            marginBottom: 4
+            textAlign:'center',
+            animation:'fadeUp 0.35s cubic-bezier(0.34,1.56,0.64,1)',
           }}>
-            Cliniverse AI
-          </div>
-          <div style={{
-            color: "rgba(255,255,255,0.5)",
-            fontSize: 13,
-            fontWeight: 400,
-            letterSpacing: 3,
-            textTransform: "uppercase"
-          }}>
-            Virtual Hospital
-          </div>
-        </div>
-
-        {/* Rotating subtitle */}
-        <div style={{
-          opacity: showSub ? 1 : 0,
-          transition: "all 0.5s ease",
-          marginBottom: 60
-        }}>
-          <div style={{
-            color: "#0A84FF",
-            fontSize: 18,
-            fontWeight: 600,
-            textAlign: "center",
-            minWidth: 120,
-            transition: "all 0.3s ease"
-          }}>
-            {texts[textIndex]}
-          </div>
-        </div>
-
-        {/* Loading bar */}
-        <div style={{
-          position: "absolute",
-          bottom: 60,
-          left: 40, right: 40
-        }}>
-          <div style={{
-            height: 2,
-            background: "rgba(255,255,255,0.1)",
-            borderRadius: 1,
-            overflow: "hidden"
-          }}>
+            <div style={{fontSize:64,marginBottom:12}}>{VITALS[vitalIdx].emoji}</div>
             <div style={{
-              height: "100%",
-              width: `${progress}%`,
-              background: "linear-gradient(90deg,#0A84FF,#30D158)",
-              borderRadius: 1,
-              transition: "width 0.05s linear",
-              boxShadow: "0 0 8px rgba(10,132,255,0.6)"
-            }}/>
+              fontSize:52, fontWeight:900, color:'white',
+              letterSpacing:-2, lineHeight:1,
+              marginBottom:10,
+              textShadow:'0 2px 20px rgba(13,148,136,0.5)',
+            }}>
+              {VITALS[vitalIdx].value}
+            </div>
+            <div style={{
+              fontSize:16, fontWeight:600,
+              color:'rgba(255,255,255,0.75)',
+              letterSpacing:0.5,
+            }}>
+              {VITALS[vitalIdx].label}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Logo — يظهر بعد الـ vitals */}
+        {showLogo && (
+          <div style={{
+            textAlign:'center',
+            animation:'fadeUp 0.5s cubic-bezier(0.34,1.56,0.64,1)',
+          }}>
+            {/* Logo mark */}
+            <div style={{
+              width:88, height:88, borderRadius:28,
+              background:'linear-gradient(135deg,#0D9488,#1E40AF)',
+              display:'flex', alignItems:'center', justifyContent:'center',
+              margin:'0 auto 20px',
+              boxShadow:`0 8px 40px rgba(13,148,136,0.50), 0 0 0 ${pulse?8:4}px rgba(13,148,136,0.15)`,
+              transition:'box-shadow 0.6s ease',
+            }}>
+              <svg width="48" height="32" viewBox="0 0 48 32" fill="none">
+                <polyline
+                  points="0,16 6,16 10,4 14,28 18,10 22,22 26,16 36,16 40,10 44,16 48,16"
+                  stroke="white" strokeWidth="2.5"
+                  strokeLinecap="round" strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            <div style={{
+              fontSize:32, fontWeight:900, color:'white',
+              letterSpacing:-0.8, marginBottom:6,
+            }}>
+              Cliniverse AI
+            </div>
+            <div style={{
+              fontSize:12, fontWeight:700, color:'rgba(255,255,255,0.55)',
+              letterSpacing:3, textTransform:'uppercase',
+            }}>
+              Virtual Hospital · 2026
+            </div>
+
+            {/* Live indicator */}
+            <div style={{
+              display:'inline-flex', alignItems:'center', gap:6,
+              marginTop:20,
+              background:'rgba(16,185,129,0.15)', backdropFilter:'blur(12px)',
+              border:'1px solid rgba(16,185,129,0.3)',
+              borderRadius:99, padding:'6px 16px',
+            }}>
+              <div style={{
+                width:7, height:7, borderRadius:'50%',
+                background:'#10B981',
+                boxShadow:pulse?'0 0 10px #10B981':'none',
+                transition:'box-shadow 0.6s ease',
+              }}/>
+              <span style={{fontSize:12,fontWeight:700,color:'#10B981',letterSpacing:1}}>
+                47,284 DOCTORS LIVE
+              </span>
+            </div>
+          </div>
+        )}
       </div>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity:0; transform:translateY(20px) scale(0.95); }
+          to   { opacity:1; transform:translateY(0)    scale(1);    }
+        }
+      `}</style>
     </div>
-  );
+  )
 }
