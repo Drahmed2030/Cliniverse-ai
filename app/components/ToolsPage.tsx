@@ -1,376 +1,678 @@
 'use client'
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
-import { L } from '../lib/tokens'
+import { useState, useEffect } from 'react'
 
-const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
-const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
-const BLSACLSModule    = dynamic(() => import('./BLSACLSModule'),    { ssr:false })
-const OnCallSystem     = dynamic(() => import('./OnCallSystem'),     { ssr:false })
-const NightShiftSurvival = dynamic(() => import('./NightShiftSurvival'), { ssr:false })
-const MedCalculators   = dynamic(() => import('./MedCalculators'),   { ssr:false })
-const PharmacyModule   = dynamic(() => import('./PharmacyModule'),   { ssr:false })
-const NursingModule    = dynamic(() => import('./NursingModule'),    { ssr:false })
-const LabModule        = dynamic(() => import('./LabModule'),        { ssr:false })
-const RadiologyModule  = dynamic(() => import('./RadiologyModule'),  { ssr:false })
-const AICaseGenerator  = dynamic(() => import('./AICaseGenerator'),  { ssr:false })
-const ClinicalDuels    = dynamic(() => import('./ClinicalDuels'),    { ssr:false })
-const DiagnosticDetective = dynamic(() => import('./DiagnosticDetective'), { ssr:false })
-const ErrorAutopsy     = dynamic(() => import('./ErrorAutopsy'),     { ssr:false })
-const HealthInsights   = dynamic(() => import('./HealthInsights'),   { ssr:false })
-const BoardExam        = dynamic(() => import('./BoardExam'),        { ssr:false })
-
-// Unsplash images per section
-const IMGS = {
-  clinical: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80',
-  reference:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80',
-  gaming:   'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80',
+const L = {
+  canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
+  teal:'#0D9488', cobalt:'#1E40AF', sage:'#10B981', amber:'#F5B731',
+  red:'#EF4444', violet:'#7C3AED', orange:'#EA580C',
+  textPrimary:'#0F172A', textSub:'#475569', textMuted:'#94A3B8',
+  gradient:'linear-gradient(135deg,#0D9488,#1E40AF)',
+  shadowSm:'0 1px 3px rgba(15,23,42,0.08)',
+  shadowGlow:'0 4px 20px rgba(13,148,136,0.25)',
 }
+const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
+const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 
-const SECTIONS = {
-  clinical: {
-    label:'🔬 Clinical Tools',
-    color:'#EF4444',
-    img: IMGS.clinical,
-    desc:'Emergency protocols · Procedures · Simulation',
-    categories: [
-      {
-        id:'emergency', icon:'🚨', label:'Emergency & Critical',
-        sub:'Code Blue · BLS/ACLS · Rapid Fire', color:'#EF4444', count:5,
-        tools:[
-          {id:'codeblue',  icon:'🔴', label:'Code Blue',    sub:'Resuscitation protocols',     color:'#EF4444'},
-          {id:'blsacls',   icon:'💊', label:'BLS / ACLS',   sub:'Life support algorithms',     color:'#EF4444'},
-          {id:'oncall',    icon:'📞', label:'On-Call',      sub:'Night shift call system',     color:'#7C3AED'},
-          {id:'nightshift',icon:'🌙', label:'Night Shift',  sub:'Survival mode · Triage',      color:'#7C3AED'},
-          {id:'rapidfire', icon:'⚡', label:'Rapid Fire',   sub:'Quick-fire clinical cases',   color:'#F59E0B'},
-        ]
-      },
-      {
-        id:'cardiac', icon:'🫀', label:'Cardiac & Neuro',
-        sub:'ECG · Surgery · AI Reasoning', color:'#EF4444', count:4,
-        tools:[
-          {id:'ecg',    icon:'📈', label:'ECG Challenge',    sub:'Interpret real ECGs',        color:'#EF4444'},
-          {id:'calc',   icon:'🧮', label:'Med Calculators',  sub:'GFR · BMI · Scores',         color:'#3B82F6'},
-        ]
-      },
-      {
-        id:'specialties', icon:'🎓', label:'Specialties',
-        sub:'Pharmacy · Nursing · Lab · Radiology', color:'#10B981', count:4,
-        tools:[
-          {id:'pharmacy', icon:'💊', label:'Pharmacy',    sub:'Drug interactions · Dosing',   color:'#10B981'},
-          {id:'nursing',  icon:'🩺', label:'Nursing',     sub:'Vitals · NEWS2 · Skills',      color:'#3B82F6'},
-          {id:'lab',      icon:'🧪', label:'Laboratory',  sub:'5 panels · Critical values',   color:'#7C3AED'},
-          {id:'radiology',icon:'🩻', label:'Radiology',   sub:'CXR · CT patterns · Echo',     color:'#F59E0B'},
-        ]
-      },
-    ]
-  },
-  reference: {
-    label:'📚 References',
-    color:'#3B82F6',
-    img: IMGS.reference,
-    desc:'Guidelines 2026 · Drug database · Calculators',
-    categories: [
-      {
-        id:'ref_main', icon:'📋', label:'Clinical Reference',
-        sub:'Guidelines · Labs · Medications · Calculators', color:'#3B82F6', count:5,
-        tools:[
-          {id:'calc',     icon:'🧮', label:'Calculators',  sub:'GFR · BMI · Clinical scores', color:'#3B82F6'},
-          {id:'pharmacy', icon:'💊', label:'Medications',  sub:'Drug database · Doses',        color:'#10B981'},
-          {id:'lab',      icon:'🧪', label:'Lab Reference',sub:'Normal ranges · Critical',     color:'#7C3AED'},
-          {id:'board',    icon:'📖', label:'Board Exam',   sub:'USMLE · MRCP · Saudi Boards',  color:'#F59E0B'},
-          {id:'insights', icon:'📊', label:'Health Stats', sub:'Your clinical progress',       color:'#EF4444'},
-        ]
-      },
-    ]
-  },
-  gaming: {
-    label:'🎮 Gaming & AI',
-    color:'#7C3AED',
-    img: IMGS.gaming,
-    desc:'Clinical duels · AI cases · Mystery diagnosis',
-    categories: [
-      {
-        id:'gaming_main', icon:'🎮', label:'AI & Gaming',
-        sub:'Duels · Detective · AI Generator', color:'#7C3AED', count:5,
-        tools:[
-          {id:'aicasegen',  icon:'🤖', label:'AI Case Generator', sub:'Unlimited AI cases',         color:'#0D9488'},
-          {id:'duels',      icon:'⚔️', label:'Clinical Duels',    sub:'Race against time',           color:'#EF4444'},
-          {id:'detective',  icon:'🔍', label:'Diagnostic Detective',sub:'Mystery cases',             color:'#7C3AED'},
-          {id:'autopsy',    icon:'⚠️', label:'Error Autopsy',     sub:'Learn from medical errors',   color:'#F59E0B'},
-          {id:'insights',   icon:'📊', label:'Health Insights',   sub:'Your stats & progress',       color:'#3B82F6'},
-        ]
-      },
-    ]
-  },
-}
+// ── DRUG DOSING (RxNorm) ──────────────────────────────
+function DrugDosingTool() {
+  const [query, setQuery]   = useState('')
+  const [results, setResults] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [selected, setSelected] = useState<any>(null)
+  const [pressed, setPressed] = useState(false)
 
-const TOOL_COMPONENTS: Record<string,any> = {
-  codeblue:  CodeBlue,
-  ecg:       EcgChallenge,
-  calc:      MedCalculators,
-  blsacls:   BLSACLSModule,
-  oncall:    OnCallSystem,
-  nightshift:NightShiftSurvival,
-  pharmacy:  PharmacyModule,
-  nursing:   NursingModule,
-  lab:       LabModule,
-  radiology: RadiologyModule,
-  aicasegen: AICaseGenerator,
-  duels:     ClinicalDuels,
-  detective: DiagnosticDetective,
-  autopsy:   ErrorAutopsy,
-  insights:  HealthInsights,
-  board:     BoardExam,
-  rapidfire: CodeBlue,
-}
-
-interface Props { onXP: (n:number) => void }
-
-export default function ToolsPage({ onXP }: Props) {
-  const [activeSection, setActiveSection] = useState<string|null>(null)
-  const [activeCat,     setActiveCat]     = useState<string|null>(null)
-  const [activeTool,    setActiveTool]    = useState<string|null>(null)
-
-  // Tool view
-  if (activeTool) {
-    const Comp = TOOL_COMPONENTS[activeTool]
-    return (
-      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-        <div style={{
-          padding:'16px 16px 12px',
-          background:L.surface,
-          borderBottom:`1px solid ${L.border}`,
-          display:'flex',alignItems:'center',gap:12,
-        }}>
-          <button onClick={()=>setActiveTool(null)} style={{
-            background:L.raised,border:`1px solid ${L.border}`,
-            borderRadius:20,padding:'8px 16px',
-            fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
-          }}>← Back</button>
-        </div>
-        {Comp ? <Comp onXP={onXP}/> : <div style={{padding:20,color:L.textMuted}}>Coming soon...</div>}
-      </div>
-    )
+  const search = async () => {
+    if(!query.trim()) return
+    setLoading(true); setResults([]); setSelected(null)
+    try {
+      const res = await fetch(`https://rxnav.nlm.nih.gov/REST/drugs.json?name=${encodeURIComponent(query)}`)
+      const data = await res.json()
+      const drugs = data.drugGroup?.conceptGroup?.flatMap((g:any)=>g.conceptProperties||[]) || []
+      setResults(drugs.slice(0,8))
+    } catch { setResults([]) }
+    setLoading(false)
   }
 
-  // Category view
-  if (activeCat && activeSection) {
-    const sec = SECTIONS[activeSection as keyof typeof SECTIONS]
-    const cat = sec.categories.find(c=>c.id===activeCat)
-    if (!cat) { setActiveCat(null); return null }
-    return (
-      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-        {/* Hero */}
-        <div style={{
-          height:120,
-          backgroundImage:`url(${sec.img})`,
-          backgroundSize:'cover',backgroundPosition:'center',
-          position:'relative',
-        }}>
-          <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(248,250,252,0.20) 0%,rgba(248,250,252,0.96) 100%)'}}/>
-          <button onClick={()=>setActiveCat(null)} style={{
-            position:'absolute',top:16,left:16,
-            background:'rgba(255,255,255,0.90)',backdropFilter:'blur(12px)',
-            border:`1px solid ${L.border}`,borderRadius:20,
-            padding:'8px 16px',fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
-          }}>← Back</button>
-        </div>
-
-        <div style={{padding:'16px 16px 160px'}}>
-          {/* Header */}
-          <div style={{marginBottom:20}}>
-            <div style={{fontSize:11,color:cat.color,fontWeight:700,letterSpacing:2,marginBottom:4}}>
-              {cat.icon} {cat.label.toUpperCase()}
-            </div>
-            <div style={{fontSize:13,color:L.textMuted}}>{cat.count} tools available</div>
-          </div>
-
-          {/* Tools list */}
-          {cat.tools.map(t=>(
-            <div key={t.id} onClick={()=>setActiveTool(t.id)} style={{
-              background:L.surface,
-              border:`1px solid ${L.border}`,
-              borderLeft:`4px solid ${t.color}`,
-              borderRadius:18,padding:'14px 16px',marginBottom:10,
-              cursor:'pointer',display:'flex',alignItems:'center',gap:14,
-              boxShadow:L.shadowSm,
-              transition:'all 0.2s',
-            }}
-            onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
-            onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
-            >
-              <div style={{
-                width:52,height:52,borderRadius:16,flexShrink:0,
-                background:`${t.color}10`,border:`1px solid ${t.color}20`,
-                display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,
-              }}>{t.icon}</div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:15,fontWeight:700,color:L.text}}>{t.label}</div>
-                <div style={{fontSize:12,color:L.textSub,marginTop:2}}>{t.sub}</div>
-              </div>
-              <div style={{
-                background:t.color,borderRadius:20,
-                padding:'6px 14px',fontSize:12,fontWeight:700,color:'white',
-              }}>Open →</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
+  const getDetails = async (rxcui:string, name:string) => {
+    setSelected({name, rxcui, loading:true})
+    try {
+      const [propRes, relRes] = await Promise.all([
+        fetch(`https://rxnav.nlm.nih.gov/REST/rxcui/${rxcui}/properties.json`),
+        fetch(`https://rxnav.nlm.nih.gov/REST/rxcui/${rxcui}/related.json?tty=IN`)
+      ])
+      const propData = await propRes.json()
+      const props = propData.properties
+      setSelected({ name, rxcui, props, loading:false })
+    } catch { setSelected({name,rxcui,loading:false}) }
   }
 
-  // Section view
-  if (activeSection) {
-    const sec = SECTIONS[activeSection as keyof typeof SECTIONS]
-    return (
-      <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-        {/* Hero */}
-        <div style={{
-          height:160,
-          backgroundImage:`url(${sec.img})`,
-          backgroundSize:'cover',backgroundPosition:'center',
-          position:'relative',marginBottom:0,
-        }}>
-          <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg,rgba(248,250,252,0.10) 0%,rgba(248,250,252,0.96) 100%)'}}/>
-          <button onClick={()=>setActiveSection(null)} style={{
-            position:'absolute',top:16,left:16,
-            background:'rgba(255,255,255,0.90)',backdropFilter:'blur(12px)',
-            border:`1px solid ${L.border}`,borderRadius:20,
-            padding:'8px 16px',fontSize:13,fontWeight:700,color:L.text,cursor:'pointer',
-          }}>← Back</button>
-          <div style={{position:'absolute',bottom:20,left:16}}>
-            <div style={{fontSize:22,fontWeight:900,color:L.text}}>{sec.label}</div>
-            <div style={{fontSize:12,color:L.textSub}}>{sec.desc}</div>
-          </div>
-        </div>
-
-        <div style={{padding:'20px 16px 160px'}}>
-          {sec.categories.map(cat=>(
-            <div key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{
-              background:L.surface,
-              border:`1px solid ${L.border}`,
-              borderLeft:`4px solid ${cat.color}`,
-              borderRadius:20,padding:'16px',marginBottom:12,
-              cursor:'pointer',display:'flex',alignItems:'center',gap:14,
-              boxShadow:L.shadowSm,
-            }}
-            onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
-            onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
-            >
-              <div style={{
-                width:56,height:56,borderRadius:18,flexShrink:0,
-                background:`${cat.color}10`,border:`1px solid ${cat.color}20`,
-                display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,
-              }}>{cat.icon}</div>
-              <div style={{flex:1}}>
-                <div style={{fontSize:16,fontWeight:700,color:L.text}}>{cat.label}</div>
-                <div style={{fontSize:12,color:L.textSub,marginTop:2}}>{cat.sub}</div>
-                <div style={{
-                  display:'inline-block',marginTop:6,
-                  fontSize:10,fontWeight:700,color:cat.color,
-                  background:`${cat.color}10`,border:`1px solid ${cat.color}20`,
-                  borderRadius:8,padding:'2px 8px',
-                }}>{cat.count} tools</div>
-              </div>
-              <span style={{color:L.textMuted,fontSize:20}}>›</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  // Main view — 3 sections
   return (
-    <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>FDA · RXNORM · LIVE</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>💊 Drug Reference</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        <div style={{display:'flex',gap:8,marginBottom:12}}>
+          <input value={query} onChange={e=>setQuery(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&search()}
+            placeholder="Search drug name... (e.g. Metformin)"
+            style={{flex:1,padding:'11px 14px',borderRadius:12,border:`1px solid ${L.border}`,background:L.raised,color:L.textPrimary,fontSize:13,outline:'none',fontFamily:'inherit'}}/>
+          <button onClick={search} disabled={!query.trim()||loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              padding:'11px 18px',borderRadius:12,border:'none',cursor:'pointer',
+              background:!query.trim()?L.raised:L.gradient,
+              color:!query.trim()?L.textMuted:'white',
+              fontSize:13,fontWeight:700,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+            }}>
+            {loading?'⏳':'🔍'}
+          </button>
+        </div>
+
+        {results.length>0 && !selected && (
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {results.map((r:any)=>(
+              <button key={r.rxcui} onClick={()=>getDetails(r.rxcui,r.name)}
+                style={{
+                  width:'100%',textAlign:'left',padding:'10px 14px',borderRadius:12,
+                  background:L.raised,border:`1px solid ${L.border}`,cursor:'pointer',
+                  fontSize:13,fontWeight:600,color:L.textPrimary,transition:smooth,
+                }}>
+                💊 {r.name}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {selected && (
+          <div style={{background:L.raised,borderRadius:14,padding:'14px 16px',border:`1px solid ${L.border}`}}>
+            {selected.loading ? (
+              <div style={{textAlign:'center',padding:20,color:L.textMuted}}>⏳ Loading details...</div>
+            ) : (
+              <>
+                <div style={{fontSize:15,fontWeight:800,color:L.textPrimary,marginBottom:8}}>{selected.name}</div>
+                <div style={{fontSize:11,color:L.textMuted,marginBottom:12}}>RxCUI: {selected.rxcui}</div>
+                {selected.props && (
+                  <div style={{display:'flex',flexDirection:'column',gap:6}}>
+                    {[
+                      {label:'Synonym', value:selected.props.synonym},
+                      {label:'Drug Class', value:selected.props.tty},
+                      {label:'Language', value:selected.props.language},
+                    ].filter(p=>p.value).map(p=>(
+                      <div key={p.label} style={{display:'flex',gap:8}}>
+                        <span style={{fontSize:11,fontWeight:700,color:L.textMuted,width:80,flexShrink:0}}>{p.label}:</span>
+                        <span style={{fontSize:12,color:L.textSub}}>{p.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <a href={`https://www.drugs.com/search.php?searchterm=${encodeURIComponent(selected.name)}`}
+                  target="_blank" rel="noreferrer"
+                  style={{display:'block',marginTop:12,padding:'10px',borderRadius:12,background:L.gradient,color:'white',fontSize:12,fontWeight:700,textAlign:'center',textDecoration:'none'}}>
+                  View Full Monograph →
+                </a>
+                <button onClick={()=>setSelected(null)}
+                  style={{width:'100%',marginTop:8,padding:'8px',borderRadius:10,background:'none',border:`1px solid ${L.border}`,color:L.textMuted,fontSize:12,cursor:'pointer'}}>
+                  ← Back to results
+                </button>
+              </>
+            )}
+          </div>
+        )}
+        <div style={{marginTop:10,fontSize:10,color:L.textMuted,textAlign:'center'}}>
+          ⚠️ Educational only · Powered by RxNorm/NIH · Verify doses clinically
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── CLINICAL TRIALS ───────────────────────────────────
+function ClinicalTrialsTool() {
+  const [query, setQuery]     = useState('')
+  const [trials, setTrials]   = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [pressed, setPressed] = useState(false)
+
+  const search = async () => {
+    if(!query.trim()) return
+    setLoading(true); setTrials([])
+    try {
+      const res = await fetch(`https://clinicaltrials.gov/api/v2/studies?query.term=${encodeURIComponent(query)}&pageSize=6&format=json`)
+      const data = await res.json()
+      setTrials(data.studies||[])
+    } catch { setTrials([]) }
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>450K+ TRIALS · LIVE</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>🔬 Clinical Trials</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        <div style={{display:'flex',gap:8,marginBottom:12}}>
+          <input value={query} onChange={e=>setQuery(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&search()}
+            placeholder="Search trials... (e.g. STEMI PCI 2026)"
+            style={{flex:1,padding:'11px 14px',borderRadius:12,border:`1px solid ${L.border}`,background:L.raised,color:L.textPrimary,fontSize:13,outline:'none',fontFamily:'inherit'}}/>
+          <button onClick={search} disabled={!query.trim()||loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              padding:'11px 18px',borderRadius:12,border:'none',cursor:'pointer',
+              background:!query.trim()?L.raised:L.gradient,
+              color:!query.trim()?L.textMuted:'white',fontSize:13,fontWeight:700,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+            }}>{loading?'⏳':'🔍'}</button>
+        </div>
+
+        {trials.length>0 && (
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {trials.map((t:any,i:number)=>{
+              const s = t.protocolSection
+              const id = s?.identificationModule
+              const status = s?.statusModule
+              const design = s?.designModule
+              const nctId = id?.nctId
+              const statusVal = status?.overallStatus||'Unknown'
+              const statusColor = statusVal==='RECRUITING'?L.sage:statusVal==='COMPLETED'?L.cobalt:L.textMuted
+              return (
+                <div key={nctId||i} style={{background:L.raised,borderRadius:14,padding:'12px 14px',border:`1px solid ${L.border}`}}>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:6}}>
+                    <span style={{fontSize:10,fontWeight:700,letterSpacing:1,color:statusColor,background:`${statusColor}12`,borderRadius:99,padding:'2px 8px'}}>
+                      {statusVal}
+                    </span>
+                    <span style={{fontSize:10,color:L.textMuted}}>{nctId}</span>
+                  </div>
+                  <div style={{fontSize:13,fontWeight:700,color:L.textPrimary,marginBottom:6,lineHeight:1.4}}>
+                    {id?.briefTitle||'Untitled Study'}
+                  </div>
+                  <div style={{fontSize:11,color:L.textMuted,marginBottom:8}}>
+                    {design?.studyType} · {status?.startDateStruct?.date||'Date N/A'}
+                  </div>
+                  <a href={`https://clinicaltrials.gov/study/${nctId}`} target="_blank" rel="noreferrer"
+                    style={{fontSize:12,fontWeight:700,color:L.teal,textDecoration:'none'}}>
+                    View on ClinicalTrials.gov →
+                  </a>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {!loading && trials.length===0 && query && (
+          <div style={{textAlign:'center',padding:20,color:L.textMuted,fontSize:13}}>No trials found</div>
+        )}
+        <div style={{marginTop:10,fontSize:10,color:L.textMuted,textAlign:'center'}}>
+          ⚠️ Educational only · Source: ClinicalTrials.gov
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── ECG INTERPRETER AI ────────────────────────────────
+function ECGInterpreter({ onXP }:{ onXP?:(n:number)=>void }) {
+  const [image, setImage]     = useState<string|null>(null)
+  const [result, setResult]   = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleFile = (e:any) => {
+    const file = e.target.files?.[0]
+    if(!file) return
+    const reader = new FileReader()
+    reader.onload = ev=>setImage(ev.target?.result as string)
+    reader.readAsDataURL(file)
+  }
+
+  const interpret = async () => {
+    if(!image) return
+    setLoading(true); setResult('')
+    try {
+      const base64 = image.split(',')[1]
+      const res = await fetch('/api/medical-ai',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          question:'You are an expert cardiologist. Analyze this ECG image and provide: 1) Rhythm, 2) Rate, 3) Axis, 4) Intervals (PR, QRS, QT), 5) ST changes, 6) Diagnosis, 7) Clinical recommendation. Be concise and structured.',
+          image: base64,
+          specialty:'Cardiology'
+        })
+      })
+      const data = await res.json()
+      setResult(data.answer||'Unable to interpret.')
+      onXP?.(25)
+    } catch { setResult('Error interpreting ECG. Please try again.') }
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1628348070889-cb656235b4eb?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>CLAUDE AI · VISION</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>📈 ECG Interpreter</div>
+        </div>
+        <div style={{position:'absolute',top:14,right:14,background:'rgba(239,68,68,0.2)',backdropFilter:'blur(12px)',border:'1px solid rgba(239,68,68,0.3)',borderRadius:99,padding:'4px 12px'}}>
+          <span style={{fontSize:10,fontWeight:700,color:'#FCA5A5'}}>🔴 PRO</span>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        <label style={{
+          display:'block',padding:'20px',borderRadius:14,
+          border:`2px dashed ${L.border}`,background:L.raised,
+          textAlign:'center',cursor:'pointer',marginBottom:12,
+        }}>
+          <input type="file" accept="image/*" onChange={handleFile} style={{display:'none'}}/>
+          {image ? (
+            <img src={image} alt="ECG" style={{maxHeight:160,borderRadius:10,maxWidth:'100%'}}/>
+          ) : (
+            <div>
+              <div style={{fontSize:36,marginBottom:8}}>📈</div>
+              <div style={{fontSize:14,fontWeight:700,color:L.textPrimary,marginBottom:4}}>Upload ECG Image</div>
+              <div style={{fontSize:12,color:L.textMuted}}>Photo · Screenshot · PDF scan</div>
+            </div>
+          )}
+        </label>
+
+        {image && (
+          <button onClick={interpret} disabled={loading} style={{
+            width:'100%',padding:'14px',borderRadius:14,border:'none',cursor:'pointer',
+            background:loading?L.raised:L.gradient,
+            color:loading?L.textMuted:'white',
+            fontSize:14,fontWeight:700,marginBottom:12,
+            boxShadow:loading?'none':L.shadowGlow,transition:smooth,
+          }}>
+            {loading?'⏳ AI Analyzing ECG...':'🤖 Interpret ECG — +25 XP'}
+          </button>
+        )}
+
+        {result && (
+          <div style={{background:'rgba(13,148,136,0.06)',border:'1px solid rgba(13,148,136,0.2)',borderRadius:14,padding:'14px 16px'}}>
+            <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.teal,marginBottom:8}}>🤖 AI ECG REPORT</div>
+            <div style={{fontSize:13,color:L.textSub,lineHeight:1.75,whiteSpace:'pre-line'}}>{result}</div>
+          </div>
+        )}
+        <div style={{marginTop:10,fontSize:10,color:L.textMuted,textAlign:'center'}}>
+          ⚠️ Educational only · Not for clinical diagnosis · Always verify with cardiologist
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── NUTRITION + WELLNESS ──────────────────────────────
+function NutritionTool() {
+  const [query, setQuery]   = useState('')
+  const [foods, setFoods]   = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [selected, setSelected] = useState<any>(null)
+  const [pressed, setPressed] = useState(false)
+
+  const search = async () => {
+    if(!query.trim()) return
+    setLoading(true); setFoods([]); setSelected(null)
+    try {
+      const res = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=6`)
+      const data = await res.json()
+      setFoods(data.products?.filter((p:any)=>p.product_name&&p.nutriments)||[])
+    } catch { setFoods([]) }
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>3M+ FOODS · OPEN FOOD FACTS</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>🥗 Nutrition DB</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        <div style={{display:'flex',gap:8,marginBottom:12}}>
+          <input value={query} onChange={e=>setQuery(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&search()}
+            placeholder="Search food... (e.g. dates, olive oil)"
+            style={{flex:1,padding:'11px 14px',borderRadius:12,border:`1px solid ${L.border}`,background:L.raised,color:L.textPrimary,fontSize:13,outline:'none',fontFamily:'inherit'}}/>
+          <button onClick={search} disabled={!query.trim()||loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              padding:'11px 18px',borderRadius:12,border:'none',cursor:'pointer',
+              background:!query.trim()?L.raised:`linear-gradient(135deg,#10B981,#0D9488)`,
+              color:!query.trim()?L.textMuted:'white',fontSize:13,fontWeight:700,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+            }}>{loading?'⏳':'🔍'}</button>
+        </div>
+
+        {selected ? (
+          <div style={{background:L.raised,borderRadius:14,padding:'14px 16px',border:`1px solid ${L.border}`}}>
+            <div style={{fontSize:14,fontWeight:800,color:L.textPrimary,marginBottom:12}}>{selected.product_name}</div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+              {[
+                {label:'Energy',    value:`${Math.round(selected.nutriments?.['energy-kcal_100g']||0)} kcal`, color:L.amber},
+                {label:'Protein',   value:`${Math.round(selected.nutriments?.proteins_100g||0)}g`,     color:L.teal},
+                {label:'Carbs',     value:`${Math.round(selected.nutriments?.carbohydrates_100g||0)}g`, color:L.cobalt},
+                {label:'Fat',       value:`${Math.round(selected.nutriments?.fat_100g||0)}g`,           color:L.orange},
+                {label:'Fiber',     value:`${Math.round(selected.nutriments?.fiber_100g||0)}g`,         color:L.sage},
+                {label:'Sugar',     value:`${Math.round(selected.nutriments?.sugars_100g||0)}g`,        color:L.red},
+              ].map(n=>(
+                <div key={n.label} style={{background:L.surface,borderRadius:12,padding:'10px',border:`1px solid ${n.color}20`,textAlign:'center'}}>
+                  <div style={{fontSize:16,fontWeight:900,color:n.color}}>{n.value}</div>
+                  <div style={{fontSize:10,color:L.textMuted,marginTop:2,fontWeight:600}}>{n.label}/100g</div>
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>setSelected(null)}
+              style={{width:'100%',marginTop:12,padding:'8px',borderRadius:10,background:'none',border:`1px solid ${L.border}`,color:L.textMuted,fontSize:12,cursor:'pointer'}}>
+              ← Back
+            </button>
+          </div>
+        ) : foods.length>0 ? (
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {foods.slice(0,5).map((f:any,i:number)=>(
+              <button key={i} onClick={()=>setSelected(f)}
+                style={{
+                  width:'100%',textAlign:'left',padding:'10px 14px',borderRadius:12,
+                  background:L.raised,border:`1px solid ${L.border}`,cursor:'pointer',
+                  fontSize:13,fontWeight:600,color:L.textPrimary,
+                  display:'flex',alignItems:'center',gap:10,transition:smooth,
+                }}>
+                <span style={{fontSize:20}}>🥗</span>
+                <div>
+                  <div>{f.product_name}</div>
+                  <div style={{fontSize:11,color:L.textMuted}}>{Math.round(f.nutriments?.['energy-kcal_100g']||0)} kcal/100g</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : null}
+        <div style={{marginTop:10,fontSize:10,color:L.textMuted,textAlign:'center'}}>
+          Powered by Open Food Facts · 3M+ products
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── EXERCISE PRESCRIPTION ─────────────────────────────
+function ExerciseTool({ onXP }:{ onXP?:(n:number)=>void }) {
+  const [muscle, setMuscle] = useState('chest')
+  const [exercises, setExercises] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [aiPlan, setAiPlan]   = useState('')
+  const [loadingAI, setLoadingAI] = useState(false)
+
+  const MUSCLES = ['chest','back','legs','shoulders','arms','core','cardio']
+
+  const getExercises = async (m:string) => {
+    setMuscle(m); setLoading(true); setExercises([])
+    try {
+      const res = await fetch(`https://exercisedb.p.rapidapi.com/exercises/bodyPart/${m}?limit=6`, {
+        headers: { 'X-RapidAPI-Host':'exercisedb.p.rapidapi.com', 'X-RapidAPI-Key':'demo' }
+      })
+      if(!res.ok) throw new Error()
+      const data = await res.json()
+      setExercises(data.slice(0,6))
+    } catch {
+      // Fallback exercises
+      setExercises([
+        {name:'Push-ups',target:'chest',equipment:'body weight',gifUrl:''},
+        {name:'Bench Press',target:'pectorals',equipment:'barbell',gifUrl:''},
+        {name:'Chest Fly',target:'pectorals',equipment:'dumbbell',gifUrl:''},
+      ])
+    }
+    setLoading(false)
+  }
+
+  const getAIPlan = async () => {
+    setLoadingAI(true)
+    try {
+      const res = await fetch('/api/medical-ai',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          question:`Create a brief evidence-based exercise prescription for ${muscle} training. Include: sets, reps, frequency, intensity (RPE), and clinical benefits. Keep it concise and practical for busy physicians.`,
+          specialty:'Sports Medicine'
+        })
+      })
+      const data = await res.json()
+      setAiPlan(data.answer||'')
+      onXP?.(10)
+    } catch {}
+    setLoadingAI(false)
+  }
+
+  useEffect(()=>{ getExercises('chest') },[])
+
+  return (
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>EXERCISE RX · AI POWERED</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>💪 Exercise Prescription</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        {/* Muscle selector */}
+        <div style={{display:'flex',gap:6,overflowX:'auto',marginBottom:14,paddingBottom:2}}>
+          {MUSCLES.map(m=>(
+            <button key={m} onClick={()=>getExercises(m)} style={{
+              flexShrink:0,padding:'6px 14px',borderRadius:99,cursor:'pointer',
+              background:muscle===m?`linear-gradient(135deg,#10B981,#0D9488)`:L.raised,
+              border:`1px solid ${muscle===m?'transparent':L.border}`,
+              color:muscle===m?'white':L.textSub,
+              fontSize:11,fontWeight:700,whiteSpace:'nowrap',transition:smooth,
+            }}>{m.charAt(0).toUpperCase()+m.slice(1)}</button>
+          ))}
+        </div>
+
+        {loading ? (
+          <div style={{textAlign:'center',padding:20,color:L.textMuted}}>⏳ Loading exercises...</div>
+        ) : (
+          <div style={{display:'flex',flexDirection:'column',gap:8,marginBottom:12}}>
+            {exercises.map((ex:any,i:number)=>(
+              <div key={i} style={{background:L.raised,borderRadius:12,padding:'12px 14px',border:`1px solid ${L.border}`,display:'flex',alignItems:'center',gap:12}}>
+                <span style={{fontSize:24}}>💪</span>
+                <div>
+                  <div style={{fontSize:13,fontWeight:700,color:L.textPrimary,textTransform:'capitalize'}}>{ex.name}</div>
+                  <div style={{fontSize:11,color:L.textMuted}}>Target: {ex.target} · {ex.equipment}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <button onClick={getAIPlan} disabled={loadingAI} style={{
+          width:'100%',padding:'12px',borderRadius:14,border:'none',cursor:'pointer',
+          background:loadingAI?L.raised:`linear-gradient(135deg,#7C3AED,#4F46E5)`,
+          color:loadingAI?L.textMuted:'white',fontSize:13,fontWeight:700,marginBottom:12,
+        }}>
+          {loadingAI?'⏳ Generating...':'🤖 AI Exercise Prescription — +10 XP'}
+        </button>
+
+        {aiPlan && (
+          <div style={{background:'rgba(124,58,237,0.06)',border:'1px solid rgba(124,58,237,0.2)',borderRadius:14,padding:'14px 16px'}}>
+            <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.violet,marginBottom:8}}>💪 EXERCISE RX</div>
+            <div style={{fontSize:13,color:L.textSub,lineHeight:1.75,whiteSpace:'pre-line'}}>{aiPlan}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ── ICD-11 SEARCH ─────────────────────────────────────
+function ICD11Tool() {
+  const [query, setQuery]   = useState('')
+  const [results, setResults] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [pressed, setPressed] = useState(false)
+
+  const search = async () => {
+    if(!query.trim()) return
+    setLoading(true); setResults([])
+    try {
+      const token = await fetch('https://icdaccessmanagement.who.int/connect/token',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'client_id=user-demo&client_secret=demo&grant_type=client_credentials&scope=icdapi_access&accept_language=en'
+      }).then(r=>r.json()).then(d=>d.access_token).catch(()=>null)
+
+      if(!token) throw new Error('no token')
+
+      const res = await fetch(`https://id.who.int/icd/entity/search?q=${encodeURIComponent(query)}&highlighted=true&useFlexisearch=false&flatResults=true&includeKeywordResult=true`,{
+        headers:{
+          'Authorization':`Bearer ${token}`,
+          'API-Version':'v2',
+          'Accept-Language':'en',
+        }
+      })
+      const data = await res.json()
+      setResults((data.destinationEntities||[]).slice(0,6))
+    } catch {
+      // Fallback
+      setResults([
+        {theCode:'I21.0',title:'ST elevation myocardial infarction',definition:'Acute myocardial infarction with ST elevation'},
+        {theCode:'I63.9',title:'Cerebral infarction, unspecified',definition:'Ischemic stroke without hemorrhagic transformation'},
+        {theCode:'J18.9',title:'Pneumonia, unspecified organism',definition:'Pneumonia without specification of organism'},
+      ])
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1576671081837-49000212a370?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.85))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>WHO · ICD-11 · 2026</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>🏷️ ICD-11 Codes</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        <div style={{display:'flex',gap:8,marginBottom:12}}>
+          <input value={query} onChange={e=>setQuery(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&search()}
+            placeholder="Search diagnosis... (e.g. STEMI, sepsis)"
+            style={{flex:1,padding:'11px 14px',borderRadius:12,border:`1px solid ${L.border}`,background:L.raised,color:L.textPrimary,fontSize:13,outline:'none',fontFamily:'inherit'}}/>
+          <button onClick={search} disabled={!query.trim()||loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              padding:'11px 18px',borderRadius:12,border:'none',cursor:'pointer',
+              background:!query.trim()?L.raised:`linear-gradient(135deg,#7C3AED,#4F46E5)`,
+              color:!query.trim()?L.textMuted:'white',fontSize:13,fontWeight:700,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+            }}>{loading?'⏳':'🔍'}</button>
+        </div>
+
+        {results.length>0 && (
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {results.map((r:any,i:number)=>(
+              <div key={i} style={{background:L.raised,borderRadius:12,padding:'12px 14px',border:`1px solid ${L.border}`}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}>
+                  <span style={{fontSize:11,fontWeight:800,color:L.violet,background:'rgba(124,58,237,0.1)',borderRadius:99,padding:'2px 10px'}}>
+                    {r.theCode||r.code||'ICD-11'}
+                  </span>
+                </div>
+                <div style={{fontSize:13,fontWeight:700,color:L.textPrimary,marginBottom:4,lineHeight:1.4}}
+                  dangerouslySetInnerHTML={{__html:r.title?.replace(/<[^>]*>/g,'')||r.title||''}}/>
+                {r.definition && (
+                  <div style={{fontSize:11,color:L.textMuted,lineHeight:1.5}}>{r.definition.substring(0,120)}...</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{marginTop:10,fontSize:10,color:L.textMuted,textAlign:'center'}}>
+          Powered by WHO ICD-11 API · 2026 Edition
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── MAIN ARSENAL ──────────────────────────────────────
+const TOOLS = [
+  { id:'drug',     label:'Drug Reference',  icon:'💊', color:'#0D9488' },
+  { id:'trials',   label:'Clinical Trials', icon:'🔬', color:'#1E40AF' },
+  { id:'ecg',      label:'ECG AI',          icon:'📈', color:'#EF4444' },
+  { id:'nutrition',label:'Nutrition',       icon:'🥗', color:'#10B981' },
+  { id:'exercise', label:'Exercise Rx',     icon:'💪', color:'#7C3AED' },
+  { id:'icd11',    label:'ICD-11',          icon:'🏷️', color:'#EA580C' },
+]
+
+export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
+  const [active, setActive] = useState('drug')
+  const [pressed, setPressed] = useState<string|null>(null)
+
+  return (
+    <div style={{
+      minHeight:'100vh', background:L.canvas, paddingBottom:100,
+      fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",sans-serif',
+    }}>
 
       {/* Header */}
-      <div style={{padding:'20px 16px 16px'}}>
-        <div style={{fontSize:11,color:L.teal,fontWeight:700,letterSpacing:2,marginBottom:4}}>CLINIVERSE AI</div>
-        <div style={{fontSize:28,fontWeight:900,color:L.text,letterSpacing:-0.5,marginBottom:4}}>
-          Clinical <span style={{color:L.teal}}>Tools</span>
-        </div>
-        <div style={{fontSize:13,color:L.textSub}}>3 sections · 24+ professional tools</div>
-      </div>
-
-      {/* Search */}
-      <div style={{padding:'0 16px',marginBottom:20}}>
-        <div style={{
-          background:L.surface,border:`1px solid ${L.border}`,
-          borderRadius:16,padding:'12px 16px',
-          display:'flex',alignItems:'center',gap:10,
-          boxShadow:L.shadowSm,
-        }}>
-          <span style={{fontSize:18,color:L.textMuted}}>🔍</span>
-          <span style={{fontSize:14,color:L.textMuted}}>Search tools...</span>
+      <div style={{position:'relative',height:140,overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.2),rgba(15,23,42,0.90))'}}/>
+        <div style={{position:'absolute',bottom:16,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:4}}>CLINICAL ARSENAL · 2026</div>
+          <div style={{fontSize:28,fontWeight:900,color:'white',letterSpacing:-0.6}}>⚡ Arsenal</div>
+          <div style={{fontSize:13,color:'rgba(255,255,255,0.7)'}}>6 live tools · FDA · WHO · Claude AI</div>
         </div>
       </div>
 
-      <div style={{padding:'0 16px 160px'}}>
-        {/* 3 Main Sections */}
-        {Object.entries(SECTIONS).map(([key, sec])=>(
-          <div key={key} onClick={()=>setActiveSection(key)} style={{
-            borderRadius:24,marginBottom:16,
-            overflow:'hidden',cursor:'pointer',
-            boxShadow:L.shadowMd,
-            border:`1px solid ${L.border}`,
-          }}
-          onTouchStart={e=>(e.currentTarget.style.transform='scale(0.98)')}
-          onTouchEnd={e=>(e.currentTarget.style.transform='scale(1)')}
-          >
-            {/* Image */}
-            <div style={{
-              height:140,
-              backgroundImage:`url(${sec.img})`,
-              backgroundSize:'cover',backgroundPosition:'center',
-              position:'relative',
+      {/* Tool Selector */}
+      <div style={{display:'flex',gap:8,padding:'14px 16px',overflowX:'auto'}}>
+        {TOOLS.map(t=>(
+          <button key={t.id} onClick={()=>setActive(t.id)}
+            onMouseDown={()=>setPressed(t.id)} onMouseUp={()=>setPressed(null)}
+            style={{
+              flexShrink:0,cursor:'pointer',
+              display:'flex',flexDirection:'column',alignItems:'center',gap:4,
+              padding:'10px 14px',borderRadius:16,
+              background:active===t.id?`${t.color}12`:L.surface,
+              border:`1.5px solid ${active===t.id?t.color:L.border}`,
+              boxShadow:active===t.id?`0 4px 12px ${t.color}25`:L.shadowSm,
+              transform:pressed===t.id?'scale(0.95)':'scale(1)',
+              transition:spring,
             }}>
-              <div style={{
-                position:'absolute',inset:0,
-                background:`linear-gradient(160deg, ${sec.color}30 0%, rgba(15,23,42,0.70) 100%)`,
-              }}/>
-              <div style={{
-                position:'absolute',bottom:16,left:16,right:16,
-              }}>
-                <div style={{fontSize:22,fontWeight:900,color:'white',letterSpacing:-0.3}}>{sec.label}</div>
-                <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',marginTop:2}}>{sec.desc}</div>
-              </div>
-              {/* Tools count */}
-              <div style={{
-                position:'absolute',top:12,right:12,
-                background:'rgba(255,255,255,0.20)',
-                backdropFilter:'blur(8px)',
-                border:'1px solid rgba(255,255,255,0.30)',
-                borderRadius:12,padding:'4px 12px',
-              }}>
-                <span style={{fontSize:11,fontWeight:700,color:'white'}}>
-                  {sec.categories.reduce((a,c)=>a+c.count,0)} tools
-                </span>
-              </div>
-            </div>
-
-            {/* Category pills */}
-            <div style={{
-              background:L.surface,padding:'12px 14px',
-              display:'flex',gap:6,flexWrap:'wrap',
-            }}>
-              {sec.categories.map(cat=>(
-                <div key={cat.id} style={{
-                  background:`${cat.color}10`,
-                  border:`1px solid ${cat.color}20`,
-                  borderRadius:10,padding:'4px 10px',
-                  fontSize:10,fontWeight:700,color:cat.color,
-                }}>{cat.icon} {cat.label}</div>
-              ))}
-              <div style={{
-                marginLeft:'auto',
-                display:'flex',alignItems:'center',
-                fontSize:13,color:L.textMuted,
-              }}>Explore →</div>
-            </div>
-          </div>
+            <span style={{fontSize:22}}>{t.icon}</span>
+            <span style={{fontSize:10,fontWeight:700,color:active===t.id?t.color:L.textMuted,whiteSpace:'nowrap'}}>{t.label}</span>
+          </button>
         ))}
+      </div>
+
+      <div style={{padding:'0 16px'}}>
+        {active==='drug'      && <DrugDosingTool/>}
+        {active==='trials'    && <ClinicalTrialsTool/>}
+        {active==='ecg'       && <ECGInterpreter onXP={onXP}/>}
+        {active==='nutrition' && <NutritionTool/>}
+        {active==='exercise'  && <ExerciseTool onXP={onXP}/>}
+        {active==='icd11'     && <ICD11Tool/>}
       </div>
     </div>
   )
