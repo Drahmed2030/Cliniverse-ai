@@ -436,14 +436,21 @@ export default function Home() {
   if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />
 
   if (showOnboarding) return (
-    <OnboardingFunnel onComplete={()=>{
+    <OnboardingFunnel onComplete={(type?:string)=>{
+      if(type==='patient'){
+        setUserType('patient')
+        localStorage.setItem('afia_user_type','patient')
+        setShowOnboarding(false)
+        setShowAfia(true)
+        return
+      }
       localStorage.setItem('onboarding_completed','1')
       setShowOnboarding(false)
     }}/>
   )
 
   // ── UPGRADE MODAL ─────────────────────────────────────────────────────
-  if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); setShowAfia(true); }} />)
+  if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); }} />)
 
   if (showAfia) return (<AfiaHome onSelect={(type, skip) => { setTimeout(() => { if(type){ setUserType(type); localStorage.setItem('afia_user_type', type); } setShowAfia(false); }, 0); }} savedType={userType as any} />)
 

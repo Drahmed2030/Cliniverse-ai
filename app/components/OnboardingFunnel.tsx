@@ -37,7 +37,7 @@ export default function OnboardingFunnel({ onComplete }:{ onComplete:(type?:stri
   const [idx, setIdx]       = useState(0)
   const [pressed, setPressed] = useState<string|null>(null)
   const slide = SLIDES[idx]
-  const isLast = idx === SLIDES.length-1
+  const isLast = idx >= SLIDES.length
 
   return (
     <div style={{
@@ -85,48 +85,79 @@ export default function OnboardingFunnel({ onComplete }:{ onComplete:(type?:stri
           {slide.sub}
         </div>
 
-        {!isLast ? (
-          /* Next button */
+        {idx < SLIDES.length-1 ? (
           <button onClick={()=>setIdx(i=>i+1)}
             onMouseDown={()=>setPressed('next')} onMouseUp={()=>setPressed(null)}
             style={{
               width:'100%', padding:'17px', borderRadius:20, border:'none', cursor:'pointer',
-              background:'rgba(255,255,255,0.95)',
-              color:'#0F172A', fontSize:16, fontWeight:800,
-              transform:pressed==='next'?'scale(0.97)':'scale(1)',
-              transition:spring,
+              background:'rgba(255,255,255,0.95)', color:'#0F172A',
+              fontSize:16, fontWeight:800,
+              transform:pressed==='next'?'scale(0.97)':'scale(1)', transition:spring,
             }}>
             Next →
           </button>
-        ) : (
-          /* Final screen — who are you? */
+        ) : idx === SLIDES.length-1 ? (
+          /* Who are you screen */
           <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            <div style={{fontSize:13,fontWeight:700,color:'rgba(255,255,255,0.7)',textAlign:'center',marginBottom:4,letterSpacing:1}}>
-              WHO ARE YOU?
-            </div>
-            <button onClick={()=>onComplete('doctor')}
+            <div style={{fontSize:13,fontWeight:700,color:'rgba(255,255,255,0.7)',textAlign:'center',marginBottom:4,letterSpacing:1}}>WHO ARE YOU?</div>
+            <button onClick={()=>setIdx(SLIDES.length)}
               onMouseDown={()=>setPressed('doc')} onMouseUp={()=>setPressed(null)}
               style={{
-                width:'100%', padding:'17px', borderRadius:20, border:'none', cursor:'pointer',
-                background:L.gradient, color:'white', fontSize:16, fontWeight:800,
-                transform:pressed==='doc'?'scale(0.97)':'scale(1)',
-                transition:spring, boxShadow:L.shadowGlow,
-                display:'flex', alignItems:'center', justifyContent:'center', gap:10,
+                width:'100%',padding:'17px',borderRadius:20,border:'none',cursor:'pointer',
+                background:L.gradient,color:'white',fontSize:16,fontWeight:800,
+                transform:pressed==='doc'?'scale(0.97)':'scale(1)',transition:spring,
+                boxShadow:L.shadowGlow,display:'flex',alignItems:'center',justifyContent:'center',gap:10,
               }}>
               <span style={{fontSize:22}}>👨‍⚕️</span> I'm a Doctor / Medical Student
             </button>
             <button onClick={()=>onComplete('patient')}
               onMouseDown={()=>setPressed('pat')} onMouseUp={()=>setPressed(null)}
               style={{
-                width:'100%', padding:'17px', borderRadius:20, cursor:'pointer',
-                background:'rgba(255,255,255,0.15)', backdropFilter:'blur(20px)',
+                width:'100%',padding:'17px',borderRadius:20,cursor:'pointer',
+                background:'rgba(255,255,255,0.15)',backdropFilter:'blur(20px)',
                 border:'1px solid rgba(255,255,255,0.3)',
-                color:'white', fontSize:16, fontWeight:700,
-                transform:pressed==='pat'?'scale(0.97)':'scale(1)',
-                transition:spring,
-                display:'flex', alignItems:'center', justifyContent:'center', gap:10,
+                color:'white',fontSize:16,fontWeight:700,
+                transform:pressed==='pat'?'scale(0.97)':'scale(1)',transition:spring,
+                display:'flex',alignItems:'center',justifyContent:'center',gap:10,
               }}>
-              <span style={{fontSize:22}}>🏥</span> I'm a Patient / Family Member
+              <span style={{fontSize:22}}>🏥</span> Patient / Family Member
+            </button>
+          </div>
+        ) : (
+          /* Paywall screen */
+          <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            <div style={{
+              background:'rgba(255,255,255,0.12)',backdropFilter:'blur(20px)',
+              border:'1px solid rgba(255,255,255,0.2)',borderRadius:20,padding:'16px',
+              marginBottom:4,
+            }}>
+              <div style={{fontSize:13,fontWeight:800,color:'rgba(255,255,255,0.6)',letterSpacing:1.5,marginBottom:12,textAlign:'center'}}>
+                CLINIVERSE PRO
+              </div>
+              {['🌐 Global Nexus — live case voting','🧠 Clinical Pulse Room — daily quiz','💊 Drug Interaction Checker','🏆 Global Leaderboard','📄 PDF Clinical Logbook','🤖 AI Clinical Consultant'].map(f=>(
+                <div key={f} style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
+                  <div style={{width:6,height:6,borderRadius:'50%',background:'#10B981',flexShrink:0}}/>
+                  <span style={{fontSize:13,fontWeight:600,color:'rgba(255,255,255,0.85)'}}>{f}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={()=>onComplete('doctor')}
+              onMouseDown={()=>setPressed('pro')} onMouseUp={()=>setPressed(null)}
+              style={{
+                width:'100%',padding:'17px',borderRadius:20,border:'none',cursor:'pointer',
+                background:L.gradient,color:'white',fontSize:16,fontWeight:800,
+                transform:pressed==='pro'?'scale(0.97)':'scale(1)',transition:spring,
+                boxShadow:L.shadowGlow,
+              }}>
+              🚀 Start PRO — $14.99/mo
+            </button>
+            <button onClick={()=>onComplete('doctor')}
+              style={{
+                width:'100%',padding:'14px',borderRadius:20,cursor:'pointer',
+                background:'rgba(255,255,255,0.10)',border:'1px solid rgba(255,255,255,0.2)',
+                color:'rgba(255,255,255,0.6)',fontSize:14,fontWeight:600,
+              }}>
+              Continue Free
             </button>
           </div>
         )}

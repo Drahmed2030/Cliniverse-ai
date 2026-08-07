@@ -2,10 +2,14 @@
 import { useEffect, useState } from 'react'
 
 const VITALS = [
-  { value:'47,284', label:'Doctors Online Now',    emoji:'👨‍⚕️' },
-  { value:'1,847',  label:'Cases Solved Today',    emoji:'🏥' },
-  { value:'63',     label:'Countries Learning',    emoji:'🌍' },
-  { value:'94%',    label:'Clinical Accuracy',     emoji:'🎯' },
+  { value:'47,284', label:'Doctors Online Now',    color:'#0D9488',
+    ecg:'M0,20 L8,20 L12,4 L16,36 L20,12 L24,28 L28,20 L60,20' },
+  { value:'1,847',  label:'Cases Solved Today',    color:'#1E40AF',
+    ecg:'M0,20 L10,20 L14,8 L18,32 L22,14 L26,26 L30,20 L60,20' },
+  { value:'63',     label:'Countries Learning',    color:'#10B981',
+    ecg:'M0,20 L12,20 L16,6 L20,34 L24,10 L28,30 L32,20 L60,20' },
+  { value:'94%',    label:'Clinical Accuracy',     color:'#7C3AED',
+    ecg:'M0,20 L6,20 L10,2 L14,38 L18,8 L22,32 L26,20 L60,20' },
 ]
 
 export default function SplashScreen({ onDone }:{ onDone:()=>void }) {
@@ -21,10 +25,10 @@ export default function SplashScreen({ onDone }:{ onDone:()=>void }) {
         if(i >= VITALS.length-1){ clearInterval(vitalsTimer); setShowLogo(true); return i }
         return i+1
       })
-    }, 450)
+    }, 700)
 
     // Progress bar
-    const prog = setInterval(()=>setProgress(p=>Math.min(p+1.5,100)), 35)
+    const prog = setInterval(()=>setProgress(p=>Math.min(p+0.8,100)), 30)
 
     // Pulse
     const pulseT = setInterval(()=>setPulse(p=>!p), 700)
@@ -78,12 +82,27 @@ export default function SplashScreen({ onDone }:{ onDone:()=>void }) {
             textAlign:'center',
             animation:'fadeUp 0.35s cubic-bezier(0.34,1.56,0.64,1)',
           }}>
-            <div style={{fontSize:64,marginBottom:12}}>{VITALS[vitalIdx].emoji}</div>
+            <div style={{marginBottom:20,position:'relative'}}>
+              <svg width="120" height="40" viewBox="0 0 60 40" fill="none"
+                style={{filter:`drop-shadow(0 0 8px ${VITALS[vitalIdx].color})`}}>
+                <path
+                  d={VITALS[vitalIdx].ecg}
+                  stroke={VITALS[vitalIdx].color}
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeDasharray="120"
+                  strokeDashoffset={pulse ? 0 : 120}
+                  style={{transition:'stroke-dashoffset 0.5s ease'}}
+                />
+              </svg>
+            </div>
             <div style={{
-              fontSize:52, fontWeight:900, color:'white',
+              fontSize:58, fontWeight:900, color:'white',
               letterSpacing:-2, lineHeight:1,
               marginBottom:10,
-              textShadow:'0 2px 20px rgba(13,148,136,0.5)',
+              textShadow:`0 2px 20px ${VITALS[vitalIdx].color}80`,
+              transition:'text-shadow 0.3s ease',
             }}>
               {VITALS[vitalIdx].value}
             </div>
