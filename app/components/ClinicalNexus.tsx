@@ -43,7 +43,9 @@ function VoteBar({pct,color}:{pct:number,color:string}) {
 }
 
 export default function ClinicalNexus({ onXP }:{ onXP?:(n:number)=>void }) {
+  const [cases, setCases]             = useState<any[]>([FALLBACK_CASE])
   const [activeCase, setActiveCase]   = useState<any>(FALLBACK_CASE)
+  const [caseIdx, setCaseIdx]         = useState(0)
   const [votes, setVotes]             = useState<Record<string,number>>({})
   const [myVote, setMyVote]           = useState<string|null>(null)
   const [messages, setMessages]       = useState<any[]>([])
@@ -282,8 +284,28 @@ export default function ClinicalNexus({ onXP }:{ onXP?:(n:number)=>void }) {
         </div>
       </div>
 
+      {/* Case Selector */}
+      {cases.length > 1 && (
+        <div style={{display:'flex',gap:8,padding:'12px 16px 0',overflowX:'auto'}}>
+          {cases.map((c:any,i:number)=>(
+            <button key={c.id} onClick={()=>switchCase(i)}
+              style={{
+                flexShrink:0, padding:'7px 16px', borderRadius:99, cursor:'pointer',
+                background: caseIdx===i ? L.gradient : L.surface,
+                border:`1.5px solid ${caseIdx===i ? 'transparent' : L.border}`,
+                color: caseIdx===i ? 'white' : L.textSub,
+                fontSize:12, fontWeight:700,
+                boxShadow: caseIdx===i ? L.shadowGlow : L.shadowSm,
+                transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              }}>
+              Case {i+1}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Tabs */}
-      <div style={{display:'flex',gap:0,margin:'14px 16px 0',background:L.raised,borderRadius:16,padding:4,border:`1px solid ${L.border}`}}>
+      <div style={{display:'flex',gap:0,margin:'12px 16px 0',background:L.raised,borderRadius:16,padding:4,border:`1px solid ${L.border}`}}>
         {(['vote','discuss'] as const).map(t=>(
           <button key={t} onClick={()=>setTab(t)}
             onMouseDown={()=>setPressed(t)} onMouseUp={()=>setPressed(null)}
