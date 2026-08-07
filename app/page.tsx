@@ -446,6 +446,7 @@ export default function Home() {
       }
       localStorage.setItem('onboarding_completed','1')
       setShowOnboarding(false)
+      setShowAuth(true)
     }}/>
   )
 
