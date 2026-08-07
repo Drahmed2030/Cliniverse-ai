@@ -10,6 +10,7 @@ import { Sheet } from '../ui/Sheet'
 const AmbientScribe  = dynamic(() => import('../AmbientScribe'),  { ssr:false })
 const ClinicalNexus  = dynamic(() => import('../ClinicalNexus'),  { ssr:false })
 const LiveCaseViewer = dynamic(() => import('../LiveCaseViewer'), { ssr:false })
+const ClinicalStrip  = dynamic(() => import('../ClinicalStrip'),  { ssr:false })
 
 interface Props {
   xp:number; streak:number; casesCompleted:number; mcqCorrect:number
@@ -131,6 +132,8 @@ export default function PulseIndex(props:Props) {
         </div>
 
         </div>
+      <ClinicalStrip onXP={props.onXP}/>
+
       {/* Sheets */}
       <Sheet open={showScribe} onClose={()=>setShowScribe(false)} title="AI Scribe" size="lg">
         <AmbientScribe onXP={onXP}/>
