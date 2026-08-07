@@ -1,12 +1,12 @@
 {
   "crons": [
     {
-      "path": "/api/cron-case",
-      "schedule": "0 6 * * *"
+      "path": "/api/cron-pulse?secret=cliniverse2026secret",
+      "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/cron-pubmed",
-      "schedule": "0 7 * * *"
+      "path": "/api/cron-nexus?secret=cliniverse2026secret",
+      "schedule": "0 1 * * *"
     }
   ]
 }
