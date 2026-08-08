@@ -6,6 +6,7 @@ const ClinicalLibrary      = dynamic(()=>import('./ClinicalLibrary'),{ssr:false}
 const AIIntelligenceHub    = dynamic(()=>import('./AIIntelligenceHub'),{ssr:false})
 const GlobalStandards      = dynamic(()=>import('./GlobalStandards'),{ssr:false})
 const MedicalTechnology    = dynamic(()=>import('./MedicalTechnology'),{ssr:false})
+const ClinicalAcademy      = dynamic(()=>import('./ClinicalAcademy'),{ssr:false})
 
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
@@ -803,6 +804,16 @@ function AtlasCards({ onCardSelect }:{ onCardSelect:(id:string)=>void }) {
       badge:'BETA',
     },
     {
+      id:'academy',
+      tag:'MRCP · USMLE · PACES · BASIC SCI',
+      title:'Clinical\nAcademy',
+      sub:'Board prep · AI MCQs · Seminars · 9,700+ questions',
+      img:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+      color:'#1E40AF',
+      icon:'🎓',
+      badge:'AI',
+    },
+    {
       id:'clinical_library',
       tag:'CLINICAL LIBRARY · 500+ CASES',
       title:'Global Case\nLibrary',
@@ -968,6 +979,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='ai_hub'          && <AIIntelligenceHub onXP={onXP}/>}
         {active==='global'          && <GlobalStandards/>}
         {active==='medtech'         && <MedicalTechnology/>}
+        {active==='academy'         && <ClinicalAcademy onXP={onXP}/>}
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
