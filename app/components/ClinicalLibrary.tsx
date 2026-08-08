@@ -1,4 +1,5 @@
 'use client'
+import { useIntelligence } from '../hooks/useIntelligence'
 import { useState, useEffect } from 'react'
 
 const L = {
@@ -322,6 +323,7 @@ const CASES: Record<string, any[]> = {
 }
 
 export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
+  const { track } = useIntelligence('guest', 'General')
   const [specialty, setSpecialty] = useState<string|null>(null)
   const [activeCase, setActiveCase] = useState<any>(null)
   const [activeTab, setActiveTab] = useState<'history'|'labs'|'imaging'|'management'|'teaching'>('history')
@@ -583,7 +585,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
             <div style={{display:'flex',flexDirection:'column',gap:10}}>
               {filtered.map(c=>(
                 <div key={c.id}
-                  onClick={()=>setActiveCase(c)}
+                  onClick={()=>{ setActiveCase(c); track('ClinicalLibrary','open_case',{title:c.title}) }}
                   onMouseDown={()=>setPressed(c.id)} onMouseUp={()=>setPressed(null)}
                   style={{
                     position:'relative',height:130,borderRadius:20,overflow:'hidden',cursor:'pointer',
@@ -652,7 +654,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
           {SPECIALTIES.map(spec=>(
             <div key={spec.id}
-              onClick={()=>setSpecialty(spec.id)}
+              onClick={()=>{ setSpecialty(spec.id); track('ClinicalLibrary','select_specialty',{specialty:spec.id}) }}
               onMouseDown={()=>setPressed(spec.id)} onMouseUp={()=>setPressed(null)}
               style={{
                 position:'relative',height:110,borderRadius:18,overflow:'hidden',cursor:'pointer',

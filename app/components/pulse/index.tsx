@@ -1,4 +1,5 @@
 'use client'
+import { useIntelligence } from '../../hooks/useIntelligence'
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { L } from '../../lib/tokens'
@@ -24,6 +25,7 @@ export default function PulseIndex(props:Props) {
 
   const [showScribe, setShowScribe] = useState(false)
   const [showCase,   setShowCase]   = useState(false)
+  const { track } = useIntelligence('guest','Cardiology')
   const [showNexus,  setShowNexus]  = useState(false)
   const [aiAnswer,   setAiAnswer]   = useState('')
 

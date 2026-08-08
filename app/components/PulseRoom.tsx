@@ -1,4 +1,5 @@
 'use client'
+import { useIntelligence } from '../hooks/useIntelligence'
 import { useState, useEffect, useRef } from 'react'
 import WorldMap from './WorldMap'
 import { supabase } from '../supabase'
@@ -37,6 +38,7 @@ const FALLBACK_Q = {
 }
 
 export default function PulseRoom({ onXP, setTab }:{ onXP?:(n:number)=>void, setTab?:(t:string)=>void }) {
+  const { track } = useIntelligence('guest', 'General')
   const [question, setQuestion]     = useState<any>(FALLBACK_Q)
   const [answers, setAnswers]       = useState<Record<string,number>>({})
   const [myAnswer, setMyAnswer]     = useState<string|null>(null)
@@ -125,6 +127,7 @@ export default function PulseRoom({ onXP, setTab }:{ onXP?:(n:number)=>void, set
     if(myAnswer) return
     const responseMs = Date.now() - startTime.current
     setMyAnswer(key)
+    track('PulseRoom','answer',{key,correct:key===question?.correct_key,specialty:question?.specialty})
     setAnswers(prev=>({...prev,[key]:(prev[key]||0)+1}))
     setTotal(n=>n+1)
 

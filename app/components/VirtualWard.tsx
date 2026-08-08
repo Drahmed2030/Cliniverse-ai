@@ -1,4 +1,5 @@
 'use client'
+import { useIntelligence } from '../hooks/useIntelligence'
 import { useState, useEffect } from 'react'
 
 const F = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
@@ -555,7 +556,8 @@ const _PATIENTS_TYPE = getDailyPatients();
 const PATIENTS_DEFAULT = _PATIENTS_TYPE;
 type Patient = typeof _PATIENTS_TYPE[0];
 
-export default function VirtualWard({ onXP }: { onXP?: (n:number)=>void }) {
+export default function VirtualWard({
+  onXP }: { onXP?: (n:number)=>void }) {
   const [selected, setSelected] = useState<Patient|null>(null)
   const [researchBanner, setResearchBanner] = useState<{title:string,specialty:string,source:string}|null>(null)
 
