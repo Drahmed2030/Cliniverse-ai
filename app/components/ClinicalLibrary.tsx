@@ -431,6 +431,43 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
                 <div style={{fontSize:13,color:L.textSub,lineHeight:1.6}}>{val}</div>
               </div>
             ))}
+
+            {/* NIH Open-i Reference Images */}
+            <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:16,padding:'14px 16px',boxShadow:L.shadowSm}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:1.2,color:L.teal,marginBottom:10}}>📚 NIH OPEN-I REFERENCE IMAGES</div>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+                {[
+                  {label:'CXR Reference',url:`https://openi.nlm.nih.gov/imgs/512/1/1-s2.0-S1369526613000927-gr1.png`},
+                  {label:'ECG Reference',url:`https://openi.nlm.nih.gov/imgs/512/145/3952225/3952225_rcrj-7-16-g001.png`},
+                ].map((img,i)=>(
+                  <div key={i} style={{borderRadius:12,overflow:'hidden',border:`1px solid ${L.border}`}}>
+                    <img src={img.url} alt={img.label}
+                      style={{width:'100%',height:100,objectFit:'cover'}}
+                      onError={(e:any)=>e.target.style.display='none'}/>
+                    <div style={{padding:'6px 8px',fontSize:10,fontWeight:600,color:L.textMuted,background:L.raised}}>{img.label}</div>
+                  </div>
+                ))}
+              </div>
+              <a href={`https://openi.nlm.nih.gov/search?q=${encodeURIComponent(activeCase.title)}`}
+                target="_blank" rel="noreferrer"
+                style={{display:'block',marginTop:10,padding:'8px',borderRadius:10,background:'rgba(13,148,136,0.08)',border:'1px solid rgba(13,148,136,0.2)',color:L.teal,fontSize:11,fontWeight:700,textAlign:'center',textDecoration:'none'}}>
+                Search NIH Open-i Library →
+              </a>
+            </div>
+
+            {/* YouTube Clinical Videos */}
+            <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:16,padding:'14px 16px',boxShadow:L.shadowSm}}>
+              <div style={{fontSize:10,fontWeight:700,letterSpacing:1.2,color:'#EF4444',marginBottom:10}}>▶️ CLINICAL VIDEOS</div>
+              <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(activeCase.title+' clinical teaching')}`}
+                target="_blank" rel="noreferrer"
+                style={{display:'flex',alignItems:'center',gap:10,padding:'12px',borderRadius:12,background:'rgba(239,68,68,0.06)',border:'1px solid rgba(239,68,68,0.2)',textDecoration:'none'}}>
+                <div style={{width:44,height:44,borderRadius:10,background:'#EF4444',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>▶️</div>
+                <div>
+                  <div style={{fontSize:13,fontWeight:700,color:L.textPrimary}}>{activeCase.title} — Teaching Videos</div>
+                  <div style={{fontSize:11,color:L.textMuted}}>YouTube Medical Education</div>
+                </div>
+              </a>
+            </div>
           </div>
         )}
 
