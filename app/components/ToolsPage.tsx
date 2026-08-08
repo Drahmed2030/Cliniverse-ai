@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
+const EmergencyNexus = dynamic(()=>import('./EmergencyNexus'),{ssr:false})
 
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
@@ -948,6 +949,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='detective'  && <DiagnosticDetective onXP={onXP}/>}
         {active==='board'      && <BoardExam onXP={onXP}/>}
         {active==='atlas'     && <AtlasCards onCardSelect={(id)=>{setAtlasCard(id); setActive(id)}}/> }
+        {active==='emergency'  && <EmergencyNexus/>}
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
