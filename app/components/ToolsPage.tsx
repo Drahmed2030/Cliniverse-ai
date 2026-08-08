@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-const EmergencyNexus = dynamic(()=>import('./EmergencyNexus'),{ssr:false})
+const EmergencyNexus    = dynamic(()=>import('./EmergencyNexus'),{ssr:false})
+const ClinicalLibrary   = dynamic(()=>import('./ClinicalLibrary'),{ssr:false})
 
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
@@ -798,6 +799,16 @@ function AtlasCards({ onCardSelect }:{ onCardSelect:(id:string)=>void }) {
       icon:'🔬',
       badge:'BETA',
     },
+    {
+      id:'clinical_library',
+      tag:'CLINICAL LIBRARY · 500+ CASES',
+      title:'Global Case\nLibrary',
+      sub:'Cardiology · Neurology · Infectious · Respiratory · Critical Care',
+      img:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
+      color:'#10B981',
+      icon:'🏥',
+      badge:'NEW',
+    },
   ]
 
   return (
@@ -949,7 +960,8 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='detective'  && <DiagnosticDetective onXP={onXP}/>}
         {active==='board'      && <BoardExam onXP={onXP}/>}
         {active==='atlas'     && <AtlasCards onCardSelect={(id)=>{setAtlasCard(id); setActive(id)}}/> }
-        {active==='emergency'  && <EmergencyNexus/>}
+        {active==='emergency'       && <EmergencyNexus/>}
+        {active==='clinical_library'  && <ClinicalLibrary/>}
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
