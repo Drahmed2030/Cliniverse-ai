@@ -13,6 +13,78 @@ const L = {
 const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
 const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 
+
+function UniversalVitals() {
+  const [platform, setPlatform] = useState<'apple'|'google'>('apple')
+  const [pulse, setPulse] = useState(true)
+
+  useEffect(()=>{
+    const t = setInterval(()=>setPulse(p=>!p),900)
+    return ()=>clearInterval(t)
+  },[])
+
+  const VITALS = [
+    {icon:'❤️',label:'Heart Rate',   value:'72',  unit:'bpm',  color:L.red,    normal:true},
+    {icon:'🩸',label:'SpO2',         value:'98',  unit:'%',    color:L.cobalt, normal:true},
+    {icon:'🌡️',label:'Temperature',  value:'36.6',unit:'°C',   color:L.amber,  normal:true},
+    {icon:'👟',label:'Steps Today',  value:'4,280',unit:'steps',color:L.sage,   normal:true},
+    {icon:'😴',label:'Sleep',        value:'7.2', unit:'hrs',  color:L.violet, normal:true},
+    {icon:'🔥',label:'Calories',     value:'1,840',unit:'kcal', color:L.orange, normal:true},
+  ]
+
+  return (
+    <div style={{marginBottom:16}}>
+      <div style={{position:'relative',height:130,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1539794830467-1f1755804d13?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.88))'}}/>
+        <div style={{position:'absolute',top:14,left:16,display:'flex',alignItems:'center',gap:6,background:'rgba(15,23,42,0.55)',backdropFilter:'blur(12px)',border:'1px solid rgba(255,255,255,0.15)',borderRadius:99,padding:'5px 12px'}}>
+          <div style={{width:7,height:7,borderRadius:'50%',background:pulse?L.sage:'rgba(16,185,129,0.2)',boxShadow:pulse?`0 0 8px ${L.sage}`:'none',transition:'all 0.3s'}}/>
+          <span style={{fontSize:10,fontWeight:700,color:'white',letterSpacing:1}}>LIVE VITALS</span>
+        </div>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>APPLE HEALTH · GOOGLE FIT</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>💪 Universal Vitals</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm}}>
+        {/* Platform toggle */}
+        <div style={{display:'flex',gap:0,background:L.raised,borderRadius:12,padding:3,marginBottom:14,border:`1px solid ${L.border}`}}>
+          {[{id:'apple',label:'🍎 Apple Health'},{id:'google',label:'🤖 Google Fit'}].map(p=>(
+            <button key={p.id} onClick={()=>setPlatform(p.id as any)} style={{
+              flex:1,padding:'8px',borderRadius:10,border:'none',cursor:'pointer',
+              background:platform===p.id?L.gradient:'transparent',
+              color:platform===p.id?'white':L.textMuted,
+              fontSize:12,fontWeight:700,transition:spring,
+            }}>{p.label}</button>
+          ))}
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+          {VITALS.map(v=>(
+            <div key={v.label} style={{
+              background:L.raised,borderRadius:14,padding:'12px 10px',
+              border:`1px solid ${v.color}15`,
+            }}>
+              <div style={{fontSize:22,marginBottom:4}}>{v.icon}</div>
+              <div style={{fontSize:20,fontWeight:900,color:v.color}}>{v.value}</div>
+              <div style={{fontSize:9,color:L.textMuted,fontWeight:600}}>{v.unit}</div>
+              <div style={{fontSize:10,fontWeight:700,color:L.textMuted,marginTop:2}}>{v.label}</div>
+              <div style={{width:6,height:6,borderRadius:'50%',background:v.normal?L.sage:L.red,marginTop:4}}/>
+            </div>
+          ))}
+        </div>
+
+        <div style={{marginTop:12,padding:'10px 14px',background:'rgba(13,148,136,0.06)',borderRadius:12,border:'1px solid rgba(13,148,136,0.15)',textAlign:'center'}}>
+          <div style={{fontSize:12,color:L.teal,fontWeight:700}}>
+            ⌚ Connect {platform==='apple'?'Apple Watch':'Google Fit'} for real-time data
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── VITALITY SCORE ────────────────────────────────────
 function VitalityRing({ score, size=120 }:{ score:number, size?:number }) {
   const r = size/2 - 12
@@ -825,6 +897,8 @@ export default function MePage({
           <>
             <MedicationsVault/>
             <LabVault onXP={onXP}/>
+
+            <UniversalVitals/>
 
             {/* Apple Watch */}
             <div style={{background:L.surface,border:`1px solid ${L.border}`,borderLeft:`4px solid ${L.teal}`,borderRadius:20,padding:18,marginBottom:14,boxShadow:L.shadowSm}}>

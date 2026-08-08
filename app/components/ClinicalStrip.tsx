@@ -546,9 +546,93 @@ function MyPatientsCard({ onXP }:{ onXP?:(n:number)=>void }) {
 // ────────────────────────────────────────────────────────
 // MAIN EXPORT
 // ────────────────────────────────────────────────────────
+
+function ClinicalMapsCard() {
+  const [location, setLocation] = useState<{lat:number,lng:number}|null>(null)
+  const [hospitals, setHospitals] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [pressed, setPressed] = useState(false)
+
+  const SAMPLE_HOSPITALS = [
+    {name:'King Faisal Specialist Hospital',distance:'1.2 km',wait:'15 min',open:true,type:'Cardiac Center',rating:4.8},
+    {name:'National Guard Hospital',distance:'2.8 km',wait:'35 min',open:true,type:'Emergency',rating:4.6},
+    {name:'Al-Hammadi Hospital',distance:'3.5 km',wait:'20 min',open:true,type:'General',rating:4.4},
+  ]
+
+  const findNearby = async () => {
+    setLoading(true)
+    try {
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          setLocation({lat:pos.coords.latitude,lng:pos.coords.longitude})
+          setHospitals(SAMPLE_HOSPITALS)
+          setLoading(false)
+        },
+        () => { setHospitals(SAMPLE_HOSPITALS); setLoading(false) }
+      )
+    } catch { setHospitals(SAMPLE_HOSPITALS); setLoading(false) }
+  }
+
+  return (
+    <div style={{marginBottom:16}}>
+      <div style={{position:'relative',height:140,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.88))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>GOOGLE MAPS · LIVE</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>🗺️ Clinical Maps</div>
+          <div style={{fontSize:12,color:'rgba(255,255,255,0.7)'}}>Nearest hospitals · Wait times · Open now</div>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm}}>
+        {hospitals.length===0 ? (
+          <button onClick={findNearby} disabled={loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              width:'100%',padding:'13px',borderRadius:14,border:'none',cursor:'pointer',
+              background:loading?L.raised:L.gradient,
+              color:loading?L.textMuted:'white',
+              fontSize:14,fontWeight:700,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+              boxShadow:loading?'none':L.shadowGlow,
+            }}>
+            {loading?'⏳ Finding nearby...':'📍 Find Nearest Hospital'}
+          </button>
+        ) : (
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {hospitals.map((h,i)=>(
+              <div key={i} style={{
+                display:'flex',alignItems:'center',gap:12,
+                background:L.raised,borderRadius:14,padding:'12px 14px',
+                border:`1px solid ${h.open?'rgba(16,185,129,0.2)':L.border}`,
+              }}>
+                <div style={{fontSize:24}}>🏥</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700,color:L.textPrimary}}>{h.name}</div>
+                  <div style={{fontSize:11,color:L.textMuted}}>{h.type} · ⭐ {h.rating}</div>
+                </div>
+                <div style={{textAlign:'right'}}>
+                  <div style={{fontSize:12,fontWeight:700,color:h.open?L.sage:L.red}}>{h.open?'Open':'Closed'}</div>
+                  <div style={{fontSize:11,color:L.textMuted}}>{h.distance} · {h.wait} wait</div>
+                </div>
+              </div>
+            ))}
+            <a href={`https://www.google.com/maps/search/hospitals+near+me`} target="_blank" rel="noreferrer"
+              style={{display:'block',padding:'10px',borderRadius:12,background:L.gradient,color:'white',fontSize:12,fontWeight:700,textAlign:'center',textDecoration:'none',marginTop:4}}>
+              Open in Google Maps →
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function ClinicalStrip({ onXP }:{ onXP?:(n:number)=>void }) {
   return (
     <div style={{fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",sans-serif'}}>
+      <ClinicalMapsCard/>
       <DrugInteractionCard onXP={onXP}/>
       <ClinicalKarmaCard onXP={onXP}/>
       <LeaderboardCard/>

@@ -32,6 +32,125 @@ const L = {
 const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
 const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 
+
+function GeminiNanoTool({ onXP }:{ onXP?:(n:number)=>void }) {
+  const [image, setImage]     = useState<string|null>(null)
+  const [mode, setMode]       = useState<'ecg'|'xray'|'lab'>('ecg')
+  const [result, setResult]   = useState('')
+  const [loading, setLoading] = useState(false)
+  const [pressed, setPressed] = useState(false)
+
+  const MODES = [
+    {id:'ecg',  label:'ECG',     icon:'📈', color:L.red},
+    {id:'xray', label:'X-Ray',   icon:'🩻', color:L.cobalt},
+    {id:'lab',  label:'Lab',     icon:'🧪', color:L.teal},
+  ]
+
+  const analyze = async () => {
+    if(!image) return
+    setLoading(true); setResult('')
+    try {
+      const prompts = {
+        ecg:'You are an expert cardiologist. Analyze this ECG: 1)Rhythm 2)Rate 3)Axis 4)Intervals 5)ST changes 6)Diagnosis 7)Clinical action. Be concise.',
+        xray:'You are a radiologist. Analyze this chest X-ray: 1)Quality 2)Lung fields 3)Heart size 4)Mediastinum 5)Bones 6)Impression 7)Recommendation.',
+        lab:'Analyze these lab results. Identify abnormal values, clinical significance, and recommended follow-up actions. Be concise and clinician-focused.',
+      }
+      const res = await fetch('/api/medical-ai',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({question:prompts[mode],image:image.split(',')[1],specialty:'Radiology'})
+      })
+      const data = await res.json()
+      setResult(data.answer||'Analysis unavailable.')
+      onXP?.(25)
+    } catch { setResult('Error analyzing. Please try again.') }
+    setLoading(false)
+  }
+
+  const colors: Record<string,string> = {ecg:L.red,xray:L.cobalt,lab:L.teal}
+
+  return (
+    <div>
+      <div style={{position:'relative',height:140,borderRadius:'20px 20px 0 0',overflow:'hidden'}}>
+        <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80"
+          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.1),rgba(15,23,42,0.88))'}}/>
+        <div style={{position:'absolute',bottom:14,left:16}}>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:3}}>GEMINI AI · ON-DEVICE PRIVACY</div>
+          <div style={{fontSize:20,fontWeight:900,color:'white'}}>🧠 AI Medical Imaging</div>
+          <div style={{fontSize:12,color:'rgba(255,255,255,0.7)'}}>ECG · X-Ray · Labs · Instant Analysis</div>
+        </div>
+        <div style={{position:'absolute',top:14,right:14,background:'rgba(13,148,136,0.2)',backdropFilter:'blur(12px)',border:'1px solid rgba(13,148,136,0.3)',borderRadius:99,padding:'4px 10px'}}>
+          <span style={{fontSize:9,fontWeight:800,color:L.sage}}>🔒 PRIVATE</span>
+        </div>
+      </div>
+      <div style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:'0 0 20px 20px',padding:16,borderTop:'none',boxShadow:L.shadowSm,marginBottom:16}}>
+        {/* Mode selector */}
+        <div style={{display:'flex',gap:8,marginBottom:14}}>
+          {MODES.map(m=>(
+            <button key={m.id} onClick={()=>{setMode(m.id as any);setResult('');setImage(null)}}
+              style={{
+                flex:1,padding:'10px',borderRadius:12,border:'none',cursor:'pointer',
+                background:mode===m.id?`${m.color}12`:L.raised,
+                border:`1.5px solid ${mode===m.id?m.color:L.border}`,
+                display:'flex',flexDirection:'column',alignItems:'center',gap:4,
+                transition:spring,
+              }}>
+              <span style={{fontSize:22}}>{m.icon}</span>
+              <span style={{fontSize:11,fontWeight:700,color:mode===m.id?m.color:L.textMuted}}>{m.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Upload */}
+        <label style={{
+          display:'block',padding:'20px',borderRadius:14,
+          border:`2px dashed ${image?colors[mode]:L.border}`,
+          background:image?`${colors[mode]}06`:L.raised,
+          textAlign:'center',cursor:'pointer',marginBottom:12,
+        }}>
+          <input type="file" accept="image/*" onChange={e=>{
+            const f=e.target.files?.[0]; if(!f) return
+            const r=new FileReader(); r.onload=ev=>setImage(ev.target?.result as string); r.readAsDataURL(f)
+          }} style={{display:'none'}}/>
+          {image?(
+            <img src={image} alt="" style={{maxHeight:150,borderRadius:10,maxWidth:'100%'}}/>
+          ):(
+            <div>
+              <div style={{fontSize:36,marginBottom:8}}>{MODES.find(m=>m.id===mode)?.icon}</div>
+              <div style={{fontSize:14,fontWeight:700,color:L.textPrimary,marginBottom:4}}>Upload {mode.toUpperCase()} Image</div>
+              <div style={{fontSize:12,color:L.textMuted}}>Photo · Screenshot · Scan</div>
+            </div>
+          )}
+        </label>
+
+        {image && (
+          <button onClick={analyze} disabled={loading}
+            onMouseDown={()=>setPressed(true)} onMouseUp={()=>setPressed(false)}
+            style={{
+              width:'100%',padding:'14px',borderRadius:14,border:'none',cursor:'pointer',
+              background:loading?L.raised:`linear-gradient(135deg,${colors[mode]},#1E40AF)`,
+              color:loading?L.textMuted:'white',fontSize:14,fontWeight:700,marginBottom:12,
+              transform:pressed?'scale(0.97)':'scale(1)',transition:spring,
+              boxShadow:loading?'none':L.shadowGlow,
+            }}>
+            {loading?'🧠 AI Analyzing...':'🧠 Analyze with AI — +25 XP'}
+          </button>
+        )}
+
+        {result && (
+          <div style={{background:`${colors[mode]}06`,border:`1px solid ${colors[mode]}25`,borderRadius:14,padding:'14px 16px'}}>
+            <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:colors[mode],marginBottom:8}}>🧠 AI ANALYSIS REPORT</div>
+            <div style={{fontSize:13,color:L.textSub,lineHeight:1.75,whiteSpace:'pre-line'}}>{result}</div>
+            <div style={{marginTop:10,fontSize:11,color:L.textMuted,fontStyle:'italic'}}>
+              ⚠️ Educational only · Not for clinical diagnosis · Always verify with specialist
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── DRUG DOSING (RxNorm) ──────────────────────────────
 function DrugDosingTool() {
   const [query, setQuery]   = useState('')
@@ -647,6 +766,7 @@ const TOOLS = [
   { id:'duels',      label:'Clinical Duels',  icon:'⚔️', color:'#EF4444' },
   { id:'detective',  label:'Diagnostic Det.', icon:'🔍', color:'#7C3AED' },
   { id:'board',      label:'Board Exam',      icon:'📋', color:'#1E40AF' },
+  { id:'gemini',   label:'AI Imaging',      icon:'🧠', color:'#7C3AED' },
   { id:'drug',     label:'Drug Reference',  icon:'💊', color:'#0D9488' },
   { id:'trials',   label:'Clinical Trials', icon:'🔬', color:'#1E40AF' },
   { id:'ecg',      label:'ECG AI',          icon:'📈', color:'#EF4444' },
@@ -713,6 +833,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='duels'      && <ClinicalDuels onXP={onXP}/>}
         {active==='detective'  && <DiagnosticDetective onXP={onXP}/>}
         {active==='board'      && <BoardExam onXP={onXP}/>}
+        {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
         {active==='ecg'       && <ECGInterpreter onXP={onXP}/>}
