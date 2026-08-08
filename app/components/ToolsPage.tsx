@@ -751,6 +751,118 @@ function ICD11Tool() {
   )
 }
 
+
+// ── ATLAS CARDS ───────────────────────────────────────
+function AtlasCards({ onCardSelect }:{ onCardSelect:(id:string)=>void }) {
+  const [pressed, setPressed] = useState<string|null>(null)
+
+  const CARDS = [
+    {
+      id:'emergency',
+      tag:'EMERGENCY NEXUS',
+      title:'Triage &\nEmergency Systems',
+      sub:'START · MTS · ESI · CTAS · Mass Casualty',
+      img:'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80',
+      color:'#EF4444',
+      icon:'🚨',
+      badge:'LIVE',
+    },
+    {
+      id:'ai_hub',
+      tag:'AI INTELLIGENCE HUB',
+      title:'Multi-AI\nConsensus',
+      sub:'Claude · Gemini · GPT-4o · Medical consensus',
+      img:'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+      color:'#7C3AED',
+      icon:'🤖',
+      badge:'NEW',
+    },
+    {
+      id:'global',
+      tag:'GLOBAL STANDARDS',
+      title:'International\nGuidelines',
+      sub:'🇺🇸 AHA · 🇪🇺 ESC · 🇨🇦 CAEP · 🇦🇺 ACEM',
+      img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80',
+      color:'#1E40AF',
+      icon:'🌍',
+      badge:'2026',
+    },
+    {
+      id:'medtech',
+      tag:'MEDICAL TECHNOLOGY',
+      title:'Future of\nMedicine 2026',
+      sub:'AI diagnostics · Robotics · Wearables · AR/VR',
+      img:'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&q=80',
+      color:'#0D9488',
+      icon:'🔬',
+      badge:'BETA',
+    },
+  ]
+
+  return (
+    <div style={{marginBottom:16}}>
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'#94A3B8',marginBottom:12,paddingLeft:4}}>
+        ATLAS INTELLIGENCE GRID
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        {CARDS.map(card=>(
+          <div key={card.id}
+            onClick={()=>onCardSelect(card.id)}
+            onMouseDown={()=>setPressed(card.id)}
+            onMouseUp={()=>setPressed(null)}
+            style={{
+              position:'relative',height:160,borderRadius:24,overflow:'hidden',cursor:'pointer',
+              transform:pressed===card.id?'scale(0.98)':'scale(1)',
+              transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow:`0 4px 20px ${card.color}25`,
+            }}>
+            {/* Unsplash BG */}
+            <img src={card.img} alt=""
+              style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}/>
+            <div style={{position:'absolute',inset:0,background:`linear-gradient(135deg,${card.color}CC 0%,rgba(15,23,42,0.85) 100%)`}}/>
+
+            {/* Badge */}
+            <div style={{
+              position:'absolute',top:14,right:14,
+              background:'rgba(255,255,255,0.2)',backdropFilter:'blur(12px)',
+              border:'1px solid rgba(255,255,255,0.3)',
+              borderRadius:99,padding:'4px 12px',
+              fontSize:9,fontWeight:800,color:'white',letterSpacing:1.5,
+            }}>{card.badge}</div>
+
+            {/* Content */}
+            <div style={{position:'absolute',inset:0,padding:'16px 18px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+              <div style={{
+                display:'inline-flex',alignSelf:'flex-start',
+                background:'rgba(255,255,255,0.15)',backdropFilter:'blur(8px)',
+                borderRadius:99,padding:'3px 12px',marginBottom:8,
+                fontSize:9,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.9)',
+              }}>{card.icon} {card.tag}</div>
+              <div style={{
+                fontSize:22,fontWeight:900,color:'white',
+                letterSpacing:-0.6,lineHeight:1.15,marginBottom:6,
+                whiteSpace:'pre-line',
+              }}>{card.title}</div>
+              <div style={{fontSize:12,color:'rgba(255,255,255,0.75)',fontWeight:500}}>
+                {card.sub}
+              </div>
+            </div>
+
+            {/* Arrow */}
+            <div style={{
+              position:'absolute',bottom:16,right:16,
+              width:32,height:32,borderRadius:'50%',
+              background:'rgba(255,255,255,0.2)',backdropFilter:'blur(8px)',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              fontSize:16,color:'white',
+            }}>›</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── MAIN ARSENAL ──────────────────────────────────────
 const TOOLS = [
   { id:'codeblue',   label:'Code Blue',      icon:'🔴', color:'#EF4444' },
@@ -766,6 +878,7 @@ const TOOLS = [
   { id:'duels',      label:'Clinical Duels',  icon:'⚔️', color:'#EF4444' },
   { id:'detective',  label:'Diagnostic Det.', icon:'🔍', color:'#7C3AED' },
   { id:'board',      label:'Board Exam',      icon:'📋', color:'#1E40AF' },
+  { id:'atlas',    label:'Atlas Grid',      icon:'🌍', color:'#0D9488' },
   { id:'gemini',   label:'AI Imaging',      icon:'🧠', color:'#7C3AED' },
   { id:'drug',     label:'Drug Reference',  icon:'💊', color:'#0D9488' },
   { id:'trials',   label:'Clinical Trials', icon:'🔬', color:'#1E40AF' },
@@ -776,7 +889,8 @@ const TOOLS = [
 ]
 
 export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
-  const [active, setActive] = useState('drug')
+  const [active, setActive] = useState('atlas')
+  const [atlasCard, setAtlasCard] = useState<string|null>(null)
   const [pressed, setPressed] = useState<string|null>(null)
 
   return (
@@ -833,6 +947,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='duels'      && <ClinicalDuels onXP={onXP}/>}
         {active==='detective'  && <DiagnosticDetective onXP={onXP}/>}
         {active==='board'      && <BoardExam onXP={onXP}/>}
+        {active==='atlas'     && <AtlasCards onCardSelect={(id)=>{setAtlasCard(id); setActive(id)}}/> }
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
