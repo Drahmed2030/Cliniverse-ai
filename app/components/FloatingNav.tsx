@@ -1,159 +1,149 @@
-'use client'
-import { useState, useEffect, useRef } from 'react'
-import { L } from '../lib/tokens'
 
-const TABS_LEFT  = [
-  { id:'pulse', label:'Today',  icon:'⚡' },
-  { id:'ward',  label:'Clinic', icon:'🏥' },
-]
-const TABS_RIGHT = [
-  { id:'tools', label:'Tools',  icon:'🔬' },
-  { id:'me',    label:'Me',     icon:'👤' },
-]
-const TABS = [...TABS_LEFT, { id:'pulseroom', label:'PULSE', icon:'🧠' }, ...TABS_RIGHT]
+'use client';
+import { useState, useEffect, useRef } from 'react';
 
-export default function FloatingNav({ tab, setTab }: { tab:string, setTab:(t:string)=>void }) {
-  const [visible, setVisible] = useState(true)
-  const [dot, setDot] = useState(false)
-  const lastY = useRef(0)
-  const timer = useRef<any>(null)
+export type Tab = 'pulse' | 'ward' | 'atlas' | 'oracle' | 'life';
+
+interface Props { active: Tab; onChange: (t: Tab) => void; }
+
+const GRAD = (id: string) => (
+  <defs>
+    <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#0D9488"/>
+      <stop offset="100%" stopColor="#1E40AF"/>
+    </linearGradient>
+  </defs>
+);
+
+const TABS = [
+  {
+    id: 'pulse', label: 'Today',
+    svg: (a: boolean) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke={a ? 'url(#g1)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
+        {GRAD('g1')}
+        <path d="M3 12h4l3-9 4 18 3-9h4"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'ward', label: 'Ward',
+    svg: (a: boolean) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke={a ? 'url(#g2)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
+        {GRAD('g2')}
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <path d="M8 12h8M12 8v8"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'oracle', label: '', center: true,
+    svg: (a: boolean) => (
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <defs>
+          <linearGradient id="og" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#0D9488"/>
+            <stop offset="100%" stopColor="#7C3AED"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="28" cy="28" r="26"
+          fill={a ? 'url(#og)' : '#F1F5F9'}
+          stroke={a ? 'none' : '#E2E8F0'} strokeWidth="1.5"
+          filter={a ? 'url(#glow)' : 'none'}
+        />
+        <text x="28" y="36" textAnchor="middle" fontSize="22">🔮</text>
+      </svg>
+    ),
+  },
+  {
+    id: 'atlas', label: 'Atlas',
+    svg: (a: boolean) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke={a ? 'url(#g3)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
+        {GRAD('g3')}
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'life', label: 'Life',
+    svg: (a: boolean) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+        stroke={a ? 'url(#g4)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
+        {GRAD('g4')}
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    ),
+  },
+] as const;
+
+export default function FloatingNav({ active, onChange }: Props) {
+  const [visible, setVisible] = useState(true);
+  const last = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY
-      const down = y > lastY.current
-      lastY.current = y
-      if (down && y > 80) { setVisible(false); setDot(true) }
-      else { setVisible(true); setDot(false) }
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => { setVisible(true); setDot(false) }, 2500)
-    }
-    window.addEventListener('scroll', onScroll, { passive:true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  const active = TABS.find(t =>
-    t.id === tab ||
-    (t.id === 'pulse' && tab === 'hub') ||
-    (t.id === 'ward'  && tab === 'net') ||
-    (t.id === 'me'    && tab === 'profile')
-  )?.id || 'pulse'
+    const h = () => {
+      const y = window.scrollY;
+      setVisible(y < last.current || y < 60);
+      last.current = y;
+    };
+    window.addEventListener('scroll', h, { passive: true });
+    return () => window.removeEventListener('scroll', h);
+  }, []);
 
   return (
-    <>
-      {/* FLOATING PILL */}
-      <div style={{
-        position:'fixed', bottom:32, left:'50%',
-        transform:`translateX(-50%) translateY(${visible?'0':'110px'})`,
-        opacity: visible ? 1 : 0,
-        transition:'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease',
-        zIndex:1000,
-      }}>
-        <div style={{
-          display:'flex', alignItems:'center',
-          background:'rgba(255,255,255,0.88)',
-          backdropFilter:'blur(40px) saturate(200%)',
-          WebkitBackdropFilter:'blur(40px) saturate(200%)',
-          border:`1px solid ${L.border}`,
-          borderRadius:50,
-          padding:'5px 6px',
-          gap:3,
-          boxShadow:`${L.shadowLg}, 0 0 0 1px rgba(13,148,136,0.08)`,
-        }}>
-          {/* Left tabs */}
-          {TABS_LEFT.map(t => {
-            const isActive = t.id === active
-            return (
-              <button key={t.id} onClick={() => setTab(t.id)} style={{
-                display:'flex', flexDirection:'column',
-                alignItems:'center', justifyContent:'center',
-                gap:3, border:'none', cursor:'pointer',
-                borderRadius:44,
-                padding: isActive ? '9px 22px' : '9px 16px',
-                minWidth: isActive ? 84 : 52,
-                background: isActive ? L.gradPrimary : 'transparent',
-                boxShadow: isActive ? L.shadowMd : 'none',
-                transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-              }}>
-                <span style={{fontSize:18, lineHeight:1}}>{t.icon}</span>
+    <div style={{
+      position:'fixed', bottom:20, left:'50%',
+      transform:`translateX(-50%) translateY(${visible?0:120}px)`,
+      transition:'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+      zIndex:9999,
+      display:'flex', alignItems:'center', gap:2,
+      background:'rgba(255,255,255,0.92)',
+      backdropFilter:'blur(40px)', WebkitBackdropFilter:'blur(40px)',
+      border:'1px solid #E2E8F0', borderRadius:50,
+      padding:'8px 10px',
+      boxShadow:'0 8px 40px rgba(15,23,42,0.14)',
+    }}>
+      {TABS.map(tab => {
+        const a = active === tab.id;
+        const isCenter = 'center' in tab && tab.center;
+        return (
+          <button key={tab.id} onClick={() => onChange(tab.id as Tab)}
+            style={{
+              display:'flex', flexDirection:'column', alignItems:'center',
+              justifyContent:'center', gap:2,
+              padding: isCenter ? '0' : '4px 10px',
+              marginTop: isCenter ? -24 : 0,
+              background: isCenter ? 'none' : a ? '#0D948812' : 'transparent',
+              border:'none', borderRadius: isCenter ? '50%' : 22,
+              cursor:'pointer',
+              transition:'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              transform: a && !isCenter ? 'scale(1.06)' : 'scale(1)',
+              minWidth: isCenter ? 56 : 52,
+            }}>
+            {tab.svg(a)}
+            {!isCenter && (
+              <>
                 <span style={{
-                  fontSize:10, fontWeight:700, letterSpacing:0.3,
-                  fontFamily:L.font,
-                  color: isActive ? 'white' : L.textMuted,
-                  transition:'color 0.2s',
-                }}>{t.label}</span>
-              </button>
-            )
-          })}
-
-          {/* Center PulseRoom button */}
-          <button onClick={() => setTab('pulseroom')} style={{
-            display:'flex', flexDirection:'column',
-            alignItems:'center', justifyContent:'center',
-            gap:2, border:'none', cursor:'pointer',
-            borderRadius:'50%',
-            width:52, height:52,
-            marginTop:-18,
-            background: active==='pulseroom'
-              ? 'linear-gradient(135deg,#EF4444,#F97316)'
-              : 'linear-gradient(135deg,#0D9488,#1E40AF)',
-            boxShadow: active==='pulseroom'
-              ? '0 4px 20px rgba(239,68,68,0.45), 0 0 0 3px rgba(239,68,68,0.15)'
-              : '0 4px 20px rgba(13,148,136,0.45), 0 0 0 3px rgba(13,148,136,0.15)',
-            transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-            transform: active==='pulseroom' ? 'scale(1.12) translateY(-2px)' : 'scale(1) translateY(0)',
-            flexShrink:0,
-          }}>
-            <span style={{fontSize:20, lineHeight:1}}>🧠</span>
-            <span style={{
-              fontSize:8, fontWeight:800, letterSpacing:0.5,
-              color:'white', marginTop:1,
-            }}>PULSE</span>
+                  fontSize:10, fontWeight: a ? 700 : 500,
+                  color: a ? '#0D9488' : '#94A3B8',
+                  fontFamily:'-apple-system,"SF Pro Text",sans-serif',
+                }}>{tab.label}</span>
+                {a && <div style={{
+                  width:4, height:4, borderRadius:'50%',
+                  background:'linear-gradient(135deg,#0D9488,#1E40AF)',
+                }}/>}
+              </>
+            )}
           </button>
-
-          {/* Right tabs */}
-          {TABS_RIGHT.map(t => {
-            const isActive = t.id === active
-            return (
-              <button key={t.id} onClick={() => setTab(t.id)} style={{
-                display:'flex', flexDirection:'column',
-                alignItems:'center', justifyContent:'center',
-                gap:3, border:'none', cursor:'pointer',
-                borderRadius:44,
-                padding: isActive ? '9px 22px' : '9px 16px',
-                minWidth: isActive ? 84 : 52,
-                background: isActive ? L.gradPrimary : 'transparent',
-                boxShadow: isActive ? L.shadowMd : 'none',
-                transition:'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
-              }}>
-                <span style={{fontSize:18, lineHeight:1}}>{t.icon}</span>
-                <span style={{
-                  fontSize:10, fontWeight:700, letterSpacing:0.3,
-                  fontFamily:L.font,
-                  color: isActive ? 'white' : L.textMuted,
-                  transition:'color 0.2s',
-                }}>{t.label}</span>
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* DOT */}
-      {dot && (
-        <div onClick={() => { setVisible(true); setDot(false) }} style={{
-          position:'fixed', bottom:40, left:'50%',
-          transform:'translateX(-50%)',
-          width:40, height:5, borderRadius:5,
-          background:`rgba(13,148,136,0.40)`,
-          border:`1px solid rgba(13,148,136,0.20)`,
-          cursor:'pointer', zIndex:1000,
-          boxShadow:L.glowTeal,
-          transition:'all 0.3s ease',
-        }}/>
-      )}
-
-      <div style={{height:130}}/>
-    </>
-  )
+        );
+      })}
+    </div>
+  );
 }
