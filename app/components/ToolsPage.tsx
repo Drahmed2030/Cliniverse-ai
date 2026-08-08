@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 const EmergencyNexus    = dynamic(()=>import('./EmergencyNexus'),{ssr:false})
-const ClinicalLibrary   = dynamic(()=>import('./ClinicalLibrary'),{ssr:false})
+const ClinicalLibrary      = dynamic(()=>import('./ClinicalLibrary'),{ssr:false})
+const AIIntelligenceHub    = dynamic(()=>import('./AIIntelligenceHub'),{ssr:false})
 
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
@@ -962,6 +963,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='atlas'     && <AtlasCards onCardSelect={(id)=>{setAtlasCard(id); setActive(id)}}/> }
         {active==='emergency'       && <EmergencyNexus/>}
         {active==='clinical_library'  && <ClinicalLibrary/>}
+        {active==='ai_hub'          && <AIIntelligenceHub onXP={onXP}/>}
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
