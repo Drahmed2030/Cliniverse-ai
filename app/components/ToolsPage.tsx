@@ -5,6 +5,7 @@ const EmergencyNexus    = dynamic(()=>import('./EmergencyNexus'),{ssr:false})
 const ClinicalLibrary      = dynamic(()=>import('./ClinicalLibrary'),{ssr:false})
 const AIIntelligenceHub    = dynamic(()=>import('./AIIntelligenceHub'),{ssr:false})
 const GlobalStandards      = dynamic(()=>import('./GlobalStandards'),{ssr:false})
+const MedicalTechnology    = dynamic(()=>import('./MedicalTechnology'),{ssr:false})
 
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
@@ -966,6 +967,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='clinical_library'  && <ClinicalLibrary/>}
         {active==='ai_hub'          && <AIIntelligenceHub onXP={onXP}/>}
         {active==='global'          && <GlobalStandards/>}
+        {active==='medtech'         && <MedicalTechnology/>}
         {active==='gemini'    && <GeminiNanoTool onXP={onXP}/>}
         {active==='drug'      && <DrugDosingTool/>}
         {active==='trials'    && <ClinicalTrialsTool/>}
