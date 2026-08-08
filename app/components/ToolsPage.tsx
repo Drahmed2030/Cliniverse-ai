@@ -787,7 +787,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
 
       {/* Header */}
       <div style={{position:'relative',height:140,overflow:'hidden'}}>
-        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
           alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.2),rgba(15,23,42,0.90))'}}/>
         <div style={{position:'absolute',bottom:16,left:16}}>
