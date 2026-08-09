@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import ClinicalOracle from '@/components/ClinicalOracle';
+import ClinicalOracle from './components/ClinicalOracle'
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
