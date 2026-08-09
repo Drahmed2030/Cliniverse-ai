@@ -4,20 +4,13 @@ import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/app/lib/embeddings';
 
 export const maxDuration = 60;
+const CODE_VERSION = 'v3-debug-' + Date.now();
 
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-/**
- * pgvector expects a string literal like "[0.1,0.2,0.3]" when sent
- * through PostgREST (which is what supabase-js uses under the hood).
- * Sending a raw JS number[] can silently fail to persist correctly
- * depending on the PostgREST/pgvector version combination — this
- * was the root cause of "seeded" being reported for rows that
- * still held their placeholder zero-vectors.
- */
 function toVectorLiteral(embedding: number[]): string {
   return `[${embedding.join(',')}]`;
 }
@@ -25,87 +18,57 @@ function toVectorLiteral(embedding: number[]): string {
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret');
   if (secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized', version: CODE_VERSION }, { status: 401 });
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return NextResponse.json({ error: 'OPENAI_API_KEY is not configured on the server' }, { status: 500 });
-  }
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return NextResponse.json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server' }, { status: 500 });
-  }
+  const db = sb();
 
-  let db;
-  try {
-    db = sb();
-  } catch (e: any) {
-    return NextResponse.json({ error: `Supabase client init failed: ${e.message}` }, { status: 500 });
-  }
+  const { data: rows, error: fetchError } = await db
+    .from('clinical_case_embeddings')
+    .select('id, case_summary')
+    .neq('id', 1); // skip the manually-set row 1 for this test
 
-  let rows;
-  try {
-    const { data, error } = await db
-      .from('clinical_case_embeddings')
-      .select('id, case_summary');
-    if (error) throw new Error(error.message);
-    rows = data;
-  } catch (e: any) {
-    return NextResponse.json({ error: `Supabase query failed: ${e.message}` }, { status: 500 });
+  if (fetchError) {
+    return NextResponse.json({ error: `Fetch failed: ${fetchError.message}`, version: CODE_VERSION }, { status: 500 });
   }
 
   if (!rows?.length) {
-    return NextResponse.json({ message: 'No rows to seed', processed: 0 });
+    return NextResponse.json({ message: 'No rows found', version: CODE_VERSION });
   }
 
-  const results: any[] = [];
+  // Only process the FIRST row, with FULL raw error detail
+  const row = rows[0];
+  const debug: any = { rowId: row.id, version: CODE_VERSION };
 
-  for (const row of rows) {
-    try {
-      const embedding = await generateEmbedding(row.case_summary);
-      const vectorLiteral = toVectorLiteral(embedding);
+  try {
+    const embedding = await generateEmbedding(row.case_summary);
+    debug.embeddingGenerated = true;
+    debug.embeddingLength = embedding.length;
+    debug.embeddingSample = embedding.slice(0, 3);
 
-      const { error: updateError } = await db
-        .from('clinical_case_embeddings')
-        .update({ embedding: vectorLiteral })
-        .eq('id', row.id);
+    const vectorLiteral = toVectorLiteral(embedding);
+    debug.vectorLiteralPreview = vectorLiteral.slice(0, 50);
 
-      if (updateError) {
-        results.push({ id: row.id, status: 'error', error: updateError.message });
-        continue;
-      }
+    const updateResult = await db
+      .from('clinical_case_embeddings')
+      .update({ embedding: vectorLiteral })
+      .eq('id', row.id)
+      .select(); // .select() forces return of updated row — reveals more
 
-      // Verify the write actually persisted — don't trust a clean
-      // response alone, given the silent-failure history here.
-      const { data: verifyRow, error: verifyError } = await db
-        .from('clinical_case_embeddings')
-        .select('embedding')
-        .eq('id', row.id)
-        .single();
+    debug.updateError = updateResult.error ? {
+      message: updateResult.error.message,
+      details: updateResult.error.details,
+      hint: updateResult.error.hint,
+      code: updateResult.error.code,
+    } : null;
+    debug.updateData = updateResult.data;
+    debug.updateStatus = updateResult.status;
+    debug.updateStatusText = updateResult.statusText;
 
-      if (verifyError) {
-        results.push({ id: row.id, status: 'error', error: `Verify failed: ${verifyError.message}` });
-        continue;
-      }
-
-      const embeddingStr = String(verifyRow?.embedding ?? '');
-      const isStillZero = embeddingStr.startsWith('[0,0,0') || embeddingStr.startsWith('{0,0,0');
-
-      if (isStillZero) {
-        results.push({ id: row.id, status: 'error', error: 'Update reported success but embedding is still zero-vector' });
-        continue;
-      }
-
-      results.push({ id: row.id, status: 'seeded' });
-    } catch (e: any) {
-      results.push({ id: row.id, status: 'error', error: e.message });
-    }
+  } catch (e: any) {
+    debug.caughtException = e.message;
+    debug.stack = e.stack?.slice(0, 500);
   }
 
-  return NextResponse.json({
-    stage: 'knowledge_graph_seed',
-    processed: results.length,
-    seeded: results.filter(r => r.status === 'seeded').length,
-    failed: results.filter(r => r.status === 'error').length,
-    results,
-  });
+  return NextResponse.json(debug);
 }
