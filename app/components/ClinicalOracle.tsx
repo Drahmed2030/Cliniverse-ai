@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const MODELS_META = [
   { id: 'claude',   name: 'Claude',    icon: '🔵', color: '#0D9488', desc: 'Evidence reasoning' },
-  { id: 'gemini',   name: 'Gemini',    icon: '🟠', color: '#F59E0B', desc: 'Google Research' },
+  { id: 'gemini',   name: 'GPT-OSS 20B', icon: '⚪', color: '#64748B', desc: 'OpenAI open-weight' },
   { id: 'deepseek', name: 'DeepSeek',  icon: '🟢', color: '#10B981', desc: 'Guidelines expert' },
   { id: 'llama',    name: 'Llama 70B', icon: '🟣', color: '#7C3AED', desc: 'Medical knowledge' },
 ];

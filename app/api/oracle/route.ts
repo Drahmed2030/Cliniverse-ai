@@ -7,7 +7,7 @@ const AN_KEY  = process.env.ANTHROPIC_API_KEY!;
 
 const MODELS: Record<string, any> = {
   claude:   { name: 'Claude 3.5',   icon: '🔵', color: '#0D9488', desc: 'Evidence reasoning',  type: 'anthropic' },
-  gemini:   { name: 'Gemini 2.0',   icon: '🟠', color: '#F59E0B', desc: 'Google Research',     type: 'openrouter', model: 'google/gemini-2.0-flash-thinking-exp:free' },
+  gemini:   { name: 'GPT-OSS 20B',   icon: '🟠', color: '#F59E0B', desc: 'OpenAI open-weight',     type: 'openrouter', model: 'openai/gpt-oss-20b:free' },
   deepseek: { name: 'DeepSeek V3',  icon: '🟢', color: '#10B981', desc: 'Guidelines expert',   type: 'openrouter', model: 'deepseek/deepseek-chat-v3-0324' },
   llama:    { name: 'Llama 3.1 70B',icon: '🟣', color: '#7C3AED', desc: 'Medical knowledge',   type: 'openrouter', model: 'meta-llama/llama-3.1-70b-instruct' },
 };
