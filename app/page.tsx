@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import DocAnalyzer from './components/DocAnalyzer';
 import ClinicalOracle from './components/ClinicalOracle'
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
@@ -988,6 +989,10 @@ export default function Home() {
       
 
         {tab==='oracle' && <ClinicalOracle onXP={addXP}/>}
+
+      
+
+        {tab==='docs' && <DocAnalyzer/>}
 
       </main>
 

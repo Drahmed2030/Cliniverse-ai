@@ -82,6 +82,7 @@ export default function PulseIndex(props:Props) {
           onCase={()=>setShowCase(true)}
           onTools={()=>setTab('tools')}
           onNexus={()=>setShowNexus(true)}
+          onDocAnalyzer={()=>setTab('docs')}
         />
 
         {/* Global Room */}

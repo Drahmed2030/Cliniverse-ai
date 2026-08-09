@@ -60,6 +60,21 @@ const ToolsIcon = () => (
   </svg>
 )
 
+const DocIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="docG" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#0D9488"/>
+        <stop offset="100%" stopColor="#1E40AF"/>
+      </linearGradient>
+    </defs>
+    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="url(#docG)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M14 2v6h6" stroke="url(#docG)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="9" y1="13" x2="15" y2="13" stroke="url(#docG)" strokeWidth="1.8" strokeLinecap="round"/>
+    <line x1="9" y1="17" x2="13" y2="17" stroke="url(#docG)" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+)
+
 interface Action {
   IconEl: React.FC
   label: string
@@ -74,9 +89,10 @@ interface Props {
   onCase: () => void
   onTools: () => void
   onNexus: () => void
+  onDocAnalyzer: () => void
 }
 
-export function ActionsRow({ onScribe, onCase, onTools, onNexus }: Props) {
+export function ActionsRow({ onScribe, onCase, onTools, onNexus, onDocAnalyzer }: Props) {
   const actions: Action[] = [
     {
       IconEl: MicIcon,
@@ -89,6 +105,12 @@ export function ActionsRow({ onScribe, onCase, onTools, onNexus }: Props) {
       label:"Today's Case", sub:'AI simulation · +30 XP',
       color:'#DC2626', tags:['Interactive','Evidence'],
       onClick: onCase,
+    },
+    {
+      IconEl: DocIcon,
+      label:'Doc Analyzer', sub:'Upload report → AI insights',
+      color:'#0D9488', tags:['PDF/DOCX','Similar cases'],
+      onClick: onDocAnalyzer,
     },
     {
       IconEl: NexusIcon,
