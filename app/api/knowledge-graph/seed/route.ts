@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/app/lib/embeddings';
 
-export const maxDuration = 60; // Vercel function timeout ceiling
+export const maxDuration = 60;
 
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -11,12 +11,17 @@ const sb = () => createClient(
 );
 
 /**
- * One-time seeding endpoint: finds all clinical_case_embeddings rows
- * with placeholder zero-vectors and replaces them with real OpenAI
- * embeddings generated from their case_summary text.
- *
- * Every code path below returns a JSON response — no silent hangs.
+ * pgvector expects a string literal like "[0.1,0.2,0.3]" when sent
+ * through PostgREST (which is what supabase-js uses under the hood).
+ * Sending a raw JS number[] can silently fail to persist correctly
+ * depending on the PostgREST/pgvector version combination — this
+ * was the root cause of "seeded" being reported for rows that
+ * still held their placeholder zero-vectors.
  */
+function toVectorLiteral(embedding: number[]): string {
+  return `[${embedding.join(',')}]`;
+}
+
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret');
   if (secret !== process.env.CRON_SECRET) {
@@ -57,16 +62,40 @@ export async function GET(req: NextRequest) {
   for (const row of rows) {
     try {
       const embedding = await generateEmbedding(row.case_summary);
+      const vectorLiteral = toVectorLiteral(embedding);
+
       const { error: updateError } = await db
         .from('clinical_case_embeddings')
-        .update({ embedding })
+        .update({ embedding: vectorLiteral })
         .eq('id', row.id);
 
-      results.push({
-        id: row.id,
-        status: updateError ? 'error' : 'seeded',
-        error: updateError?.message,
-      });
+      if (updateError) {
+        results.push({ id: row.id, status: 'error', error: updateError.message });
+        continue;
+      }
+
+      // Verify the write actually persisted — don't trust a clean
+      // response alone, given the silent-failure history here.
+      const { data: verifyRow, error: verifyError } = await db
+        .from('clinical_case_embeddings')
+        .select('embedding')
+        .eq('id', row.id)
+        .single();
+
+      if (verifyError) {
+        results.push({ id: row.id, status: 'error', error: `Verify failed: ${verifyError.message}` });
+        continue;
+      }
+
+      const embeddingStr = String(verifyRow?.embedding ?? '');
+      const isStillZero = embeddingStr.startsWith('[0,0,0') || embeddingStr.startsWith('{0,0,0');
+
+      if (isStillZero) {
+        results.push({ id: row.id, status: 'error', error: 'Update reported success but embedding is still zero-vector' });
+        continue;
+      }
+
+      results.push({ id: row.id, status: 'seeded' });
     } catch (e: any) {
       results.push({ id: row.id, status: 'error', error: e.message });
     }
