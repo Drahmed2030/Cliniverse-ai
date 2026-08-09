@@ -14,9 +14,14 @@ async function extractText(file: File): Promise<string> {
   const name = file.name.toLowerCase();
 
   if (name.endsWith('.pdf')) {
-    const pdfParse = (await import('pdf-parse')).default;
-    const data = await pdfParse(buffer);
-    return data.text;
+    // unpdf is built for serverless/edge Node runtimes — no DOM
+    // dependency (unlike pdf-parse, which needs DOMMatrix/Canvas
+    // from pdfjs-dist and fails with "DOMMatrix is not defined"
+    // on Vercel's server environment).
+    const { extractText } = await import('unpdf');
+    const uint8 = new Uint8Array(buffer);
+    const { text } = await extractText(uint8, { mergePages: true });
+    return Array.isArray(text) ? text.join('\n') : text;
   }
 
   if (name.endsWith('.docx') || name.endsWith('.doc')) {
