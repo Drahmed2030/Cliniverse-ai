@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/app/lib/embeddings';
 
+export const maxDuration = 60; // Vercel function timeout ceiling
+
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -12,21 +14,43 @@ const sb = () => createClient(
  * One-time seeding endpoint: finds all clinical_case_embeddings rows
  * with placeholder zero-vectors and replaces them with real OpenAI
  * embeddings generated from their case_summary text.
- * Protected by CRON_SECRET — same pattern as content engine routes.
+ *
+ * Every code path below returns a JSON response — no silent hangs.
  */
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret');
-  if (secret !== process.env.CRON_SECRET)
+  if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const db = sb();
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: 'OPENAI_API_KEY is not configured on the server' }, { status: 500 });
+  }
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server' }, { status: 500 });
+  }
 
-  const { data: rows, error } = await db
-    .from('clinical_case_embeddings')
-    .select('id, case_summary');
+  let db;
+  try {
+    db = sb();
+  } catch (e: any) {
+    return NextResponse.json({ error: `Supabase client init failed: ${e.message}` }, { status: 500 });
+  }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  if (!rows?.length) return NextResponse.json({ message: 'No rows to seed' });
+  let rows;
+  try {
+    const { data, error } = await db
+      .from('clinical_case_embeddings')
+      .select('id, case_summary');
+    if (error) throw new Error(error.message);
+    rows = data;
+  } catch (e: any) {
+    return NextResponse.json({ error: `Supabase query failed: ${e.message}` }, { status: 500 });
+  }
+
+  if (!rows?.length) {
+    return NextResponse.json({ message: 'No rows to seed', processed: 0 });
+  }
 
   const results: any[] = [];
 
@@ -38,7 +62,11 @@ export async function GET(req: NextRequest) {
         .update({ embedding })
         .eq('id', row.id);
 
-      results.push({ id: row.id, status: updateError ? 'error' : 'seeded', error: updateError?.message });
+      results.push({
+        id: row.id,
+        status: updateError ? 'error' : 'seeded',
+        error: updateError?.message,
+      });
     } catch (e: any) {
       results.push({ id: row.id, status: 'error', error: e.message });
     }
@@ -48,6 +76,7 @@ export async function GET(req: NextRequest) {
     stage: 'knowledge_graph_seed',
     processed: results.length,
     seeded: results.filter(r => r.status === 'seeded').length,
+    failed: results.filter(r => r.status === 'error').length,
     results,
   });
 }
