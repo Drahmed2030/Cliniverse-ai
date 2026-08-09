@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import SymptomChecker from './SymptomChecker'
 
 const L = {
   canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
@@ -17,6 +18,11 @@ const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 // ── PATIENT HOME ──────────────────────────────────────
 function PatientHome({ onBack }:{ onBack:()=>void }) {
   const [pressed, setPressed] = useState<string|null>(null)
+  const [showSymptomChecker, setShowSymptomChecker] = useState(false)
+
+  if (showSymptomChecker) {
+    return <SymptomChecker onBack={()=>setShowSymptomChecker(false)}/>
+  }
 
   const SERVICES = [
     {
@@ -136,6 +142,7 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
           {SERVICES.map(s=>(
             <div key={s.id}
+              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true) }}
               onMouseDown={()=>setPressed(s.id)} onMouseUp={()=>setPressed(null)}
               style={{
                 position:'relative',height:120,borderRadius:18,overflow:'hidden',cursor:'pointer',
