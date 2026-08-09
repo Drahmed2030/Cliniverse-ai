@@ -266,7 +266,7 @@ export default function Home() {
   }, [])
   const _mTX = useRef(0)
   const _mTY = useRef(0)
-  const MAIN_TABS = ['hub','ward','oracle','tools','me']
+  const MAIN_TABS = ['pulse','ward','pulseroom','tools','me']
   const swipeMain = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - _mTX.current
     const dy = e.changedTouches[0].clientY - _mTY.current
@@ -757,7 +757,7 @@ export default function Home() {
             background:`${D.teal}12`, border:`1px solid ${D.teal}25`,
             borderRadius:10, padding:'4px 10px',
           }}>{rank.icon} {xp} XP</div>
-          <div onClick={()=>setTab('me')} style={{
+          <div onClick={()=>setTab('profile')} style={{
             width:32, height:32, borderRadius:'50%',
             background:`linear-gradient(135deg,${D.teal},${D.cobalt})`,
             display:'flex', alignItems:'center', justifyContent:'center',
