@@ -1,7 +1,8 @@
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 
-export type Tab = 'hub' | 'ward' | 'oracle' | 'tools' | 'me';
+export type Tab = 'pulse' | 'ward' | 'atlas' | 'oracle' | 'life';
 
 interface Props { active: Tab; onChange: (t: Tab) => void; }
 
@@ -16,7 +17,7 @@ const GRAD = (id: string) => (
 
 const TABS = [
   {
-    id: 'hub' as Tab, label: 'Today',
+    id: 'pulse', label: 'Today',
     svg: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={a ? 'url(#g1)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
@@ -26,7 +27,7 @@ const TABS = [
     ),
   },
   {
-    id: 'ward' as Tab, label: 'Ward',
+    id: 'ward', label: 'Ward',
     svg: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={a ? 'url(#g2)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
@@ -37,7 +38,7 @@ const TABS = [
     ),
   },
   {
-    id: 'oracle' as Tab, label: '', center: true,
+    id: 'oracle', label: '', center: true,
     svg: (a: boolean) => (
       <svg width="56" height="56" viewBox="0 0 56 56">
         <defs>
@@ -60,7 +61,7 @@ const TABS = [
     ),
   },
   {
-    id: 'tools' as Tab, label: 'Atlas',
+    id: 'atlas', label: 'Atlas',
     svg: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={a ? 'url(#g3)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
@@ -71,7 +72,7 @@ const TABS = [
     ),
   },
   {
-    id: 'me' as Tab, label: 'Life',
+    id: 'life', label: 'Life',
     svg: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={a ? 'url(#g4)' : '#94A3B8'} strokeWidth="2.2" strokeLinecap="round">
@@ -80,7 +81,7 @@ const TABS = [
       </svg>
     ),
   },
-];
+] as const;
 
 export default function FloatingNav({ active, onChange }: Props) {
   const [visible, setVisible] = useState(true);
@@ -113,7 +114,7 @@ export default function FloatingNav({ active, onChange }: Props) {
         const a = active === tab.id;
         const isCenter = 'center' in tab && tab.center;
         return (
-          <button key={tab.id} onClick={() => onChange(tab.id)}
+          <button key={tab.id} onClick={() => onChange(tab.id as Tab)}
             style={{
               display:'flex', flexDirection:'column', alignItems:'center',
               justifyContent:'center', gap:2,
