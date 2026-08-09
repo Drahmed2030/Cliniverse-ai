@@ -297,7 +297,7 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [showAuth, setShowAuth] = useState(false)
   const [showAfia, setShowAfia] = useState(false)
-  const [userType, setUserType] = useState<string|null>(null)
+  const [userType, setUserType] = useState<string|null>(() => { if (typeof window !== 'undefined') return localStorage.getItem('afia_user_type'); return null; })
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
