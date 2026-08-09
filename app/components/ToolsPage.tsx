@@ -975,6 +975,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='board'      && <BoardExam onXP={onXP}/>}
         {active==='atlas'     && <AtlasCards onCardSelect={(id)=>{setAtlasCard(id); setActive(id)}}/> }
         {active==='emergency'       && <EmergencyNexus/>}
+        {active==='ai_hub'          && <AIIntelligenceHub onXP={onXP}/>}
         {active==='clinical_library'  && <ClinicalLibrary/>}
         {active==='ai_hub'          && <AIIntelligenceHub onXP={onXP}/>}
         {active==='global'          && <GlobalStandards/>}
