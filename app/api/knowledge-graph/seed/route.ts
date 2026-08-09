@@ -4,7 +4,6 @@ import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/app/lib/embeddings';
 
 export const maxDuration = 60;
-const CODE_VERSION = 'v3-debug-' + Date.now();
 
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,57 +17,69 @@ function toVectorLiteral(embedding: number[]): string {
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret');
   if (secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized', version: CODE_VERSION }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json({ error: 'OPENAI_API_KEY is not configured' }, { status: 500 });
   }
 
   const db = sb();
 
   const { data: rows, error: fetchError } = await db
     .from('clinical_case_embeddings')
-    .select('id, case_summary')
-    .neq('id', 1); // skip the manually-set row 1 for this test
+    .select('id, case_summary');
 
   if (fetchError) {
-    return NextResponse.json({ error: `Fetch failed: ${fetchError.message}`, version: CODE_VERSION }, { status: 500 });
+    return NextResponse.json({ error: `Fetch failed: ${fetchError.message}` }, { status: 500 });
   }
-
   if (!rows?.length) {
-    return NextResponse.json({ message: 'No rows found', version: CODE_VERSION });
+    return NextResponse.json({ message: 'No rows to seed', processed: 0 });
   }
 
-  // Only process the FIRST row, with FULL raw error detail
-  const row = rows[0];
-  const debug: any = { rowId: row.id, version: CODE_VERSION };
+  const results: any[] = [];
 
-  try {
-    const embedding = await generateEmbedding(row.case_summary);
-    debug.embeddingGenerated = true;
-    debug.embeddingLength = embedding.length;
-    debug.embeddingSample = embedding.slice(0, 3);
+  for (const row of rows) {
+    // Force explicit Number type — root cause of silent update failures
+    // was row.id being a string/mismatched type against the bigint column,
+    // causing .eq('id', row.id) to match zero rows despite HTTP 200.
+    const numericId = Number(row.id);
 
-    const vectorLiteral = toVectorLiteral(embedding);
-    debug.vectorLiteralPreview = vectorLiteral.slice(0, 50);
+    try {
+      const embedding = await generateEmbedding(row.case_summary);
+      const vectorLiteral = toVectorLiteral(embedding);
 
-    const updateResult = await db
-      .from('clinical_case_embeddings')
-      .update({ embedding: vectorLiteral })
-      .eq('id', row.id)
-      .select(); // .select() forces return of updated row — reveals more
+      const { data: updateData, error: updateError, status } = await db
+        .from('clinical_case_embeddings')
+        .update({ embedding: vectorLiteral })
+        .eq('id', numericId)
+        .select('id');
 
-    debug.updateError = updateResult.error ? {
-      message: updateResult.error.message,
-      details: updateResult.error.details,
-      hint: updateResult.error.hint,
-      code: updateResult.error.code,
-    } : null;
-    debug.updateData = updateResult.data;
-    debug.updateStatus = updateResult.status;
-    debug.updateStatusText = updateResult.statusText;
+      if (updateError) {
+        results.push({ id: numericId, status: 'error', error: updateError.message });
+        continue;
+      }
 
-  } catch (e: any) {
-    debug.caughtException = e.message;
-    debug.stack = e.stack?.slice(0, 500);
+      if (!updateData || updateData.length === 0) {
+        results.push({
+          id: numericId,
+          status: 'error',
+          error: `Update matched 0 rows (HTTP ${status}) — id type mismatch or row missing`,
+        });
+        continue;
+      }
+
+      results.push({ id: numericId, status: 'seeded' });
+    } catch (e: any) {
+      results.push({ id: numericId, status: 'error', error: e.message });
+    }
   }
 
-  return NextResponse.json(debug);
+  return NextResponse.json({
+    stage: 'knowledge_graph_seed',
+    processed: results.length,
+    seeded: results.filter(r => r.status === 'seeded').length,
+    failed: results.filter(r => r.status === 'error').length,
+    results,
+  });
 }
