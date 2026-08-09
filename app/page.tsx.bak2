@@ -983,7 +983,7 @@ export default function Home() {
       </main>
 
       {/* ── NAV ── */}
-      <FloatingNav active={tab} onChange={setTab}/>
+      <FloatingNav tab={tab} setTab={setTab}/>
       <div style={{height:120}}/>
       <PWAInstall/>
 
