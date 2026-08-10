@@ -22,11 +22,18 @@ workflows:
         script: npx cap add ios || true
       - name: Copy web assets
         script: npx cap copy ios
+      - name: Show iOS structure
+        script: find ios -name "*.xcodeproj" -o -name "Podfile" 2>/dev/null | head -20
       - name: CocoaPods
         script: |
           cd ios/App
-          ls -la
-          find . -name "*.xcodeproj" | head -5
+          XCPROJ=$(find . -name "*.xcodeproj" -maxdepth 3 | head -1)
+          if [ -z "$XCPROJ" ]; then
+            echo "No xcodeproj found — running xcodegen or cap sync"
+            cd ../..
+            npx cap update ios
+            cd ios/App
+          fi
           pod install --repo-update
       - name: Build IPA
         script: xcode-project use-profiles && xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
