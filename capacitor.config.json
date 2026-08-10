@@ -1,7 +1,7 @@
 {
   "appId": "com.cliniverse.ai",
   "appName": "CLiniverse AI",
-  "webDir": "out",
+  "webDir": "public",
   "server": {
     "url": "https://cliniverseai.com",
     "cleartext": true
