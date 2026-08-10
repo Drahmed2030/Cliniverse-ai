@@ -3,7 +3,8 @@
   "appName": "CLiniverse AI",
   "webDir": "out",
   "server": {
-    "androidScheme": "https"
+    "url": "https://cliniverseai.com",
+    "cleartext": true
   },
   "ios": {
     "scheme": "App"
