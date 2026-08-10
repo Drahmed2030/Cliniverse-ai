@@ -24,9 +24,12 @@ workflows:
         script: npx cap copy ios
       - name: Fix Podfile
         script: |
-          cat > ios/App/Podfile << 'PODEOF'
+          XCPROJ=$(find ios/App -name "*.xcodeproj" | head -1 | sed 's|ios/App/||' | sed 's|\.xcodeproj||')
+          echo "Found project: $XCPROJ"
+          cat > ios/App/Podfile << PODEOF
           platform :ios, '14.0'
           use_frameworks!
+          project '$XCPROJ'
           target 'App' do
             pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
             pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
