@@ -23,6 +23,11 @@ workflows:
           rm -rf ios
           npx cap add ios
           npx cap copy ios
+      - name: Set build number
+        script: |
+          cd ios/App
+          agvtool new-version -all $(($(agvtool what-version -terse) + 1)) || \
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion 3" App/Info.plist
       - name: CocoaPods
         script: cd ios/App && pod install --repo-update
       - name: Build IPA
