@@ -1,3 +1,4 @@
+import NutritionCard from './NutritionCard'
 'use client'
 import { useState } from 'react'
 import MentalWellness from './MentalWellness'
@@ -21,6 +22,7 @@ const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 // ── PATIENT HOME ──────────────────────────────────────
 function PatientHome({ onBack }:{ onBack:()=>void }) {
   const [pressed, setPressed] = useState<string|null>(null)
+  const [showNutrition, setShowNutrition] = useState(false)
   const [showSymptomChecker, setShowSymptomChecker] = useState(false)
   const [showMentalWellness, setShowMentalWellness] = useState(false)
   const [showMyMedications, setShowMyMedications] = useState(false)
@@ -33,6 +35,7 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
     return <MentalWellness onBack={() => setShowMentalWellness(false)} />
   }
 
+  if (showNutrition) return <NutritionCard onBack={() => setShowNutrition(false)} />
   if (showSymptomChecker) {
     return <SymptomChecker onBack={()=>setShowSymptomChecker(false)}/>
   }
