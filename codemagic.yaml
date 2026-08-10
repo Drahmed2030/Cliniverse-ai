@@ -18,8 +18,16 @@ workflows:
         script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0
       - name: Build Next.js
         script: npm run build
-      - name: Capacitor Sync
-        script: npx cap sync ios
+      - name: Add iOS platform
+        script: npx cap add ios || true
+      - name: Copy web assets
+        script: npx cap copy ios
+      - name: CocoaPods
+        script: |
+          cd ios/App
+          ls -la
+          find . -name "*.xcodeproj" | head -5
+          pod install --repo-update
       - name: Build IPA
         script: xcode-project use-profiles && xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
     artifacts:
