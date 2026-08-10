@@ -812,7 +812,7 @@ export default function Home() {
 
         {/* PROFILE */}
         {(tab==='profile'||tab==='me') && (
-          userType === 'patient'
+          userType === 'patient' && localStorage.getItem('afia_user_type') !== 'doctor'
             ? <AfiaHome
                 key={userType}
                 savedType="patient"
