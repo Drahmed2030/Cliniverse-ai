@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import MentalWellness from './MentalWellness'
 import MyMedications from './MyMedications'
+import FamilySwitcher from './FamilySwitcher'
 import SymptomChecker from './SymptomChecker'
 
 const L = {
@@ -125,6 +126,8 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
       </div>
 
       <div style={{padding:'14px 16px'}}>
+
+        <FamilySwitcher />
 
         {/* Travel & Mobility — Most needed globally */}
         <div style={{background:L.surface,border:`1px solid ${L.border}`,
