@@ -18,23 +18,20 @@ workflows:
         script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0
       - name: Build Next.js
         script: npm run build
+      - name: Prepare web dir
+        script: |
+          mkdir -p out
+          echo "<html><body></body></html>" > out/index.html
       - name: Capacitor Add and Sync
         script: |
-          npx cap add ios 2>/dev/null || true
-          npx cap copy ios 2>/dev/null || true
+          npx cap add ios || true
+          npx cap copy ios || true
       - name: CocoaPods
-        script: |
-          cd ios/App
-          pod install --repo-update
-          echo "=== xcworkspace files ==="
-          find . -name "*.xcworkspace" | head -10
-          find . -name "*.xcodeproj" | head -10
+        script: cd ios/App && pod install --repo-update
       - name: Build IPA
         script: |
-          WORKSPACE=$(find ios -name "*.xcworkspace" | grep -v xcodeproj | head -1)
-          echo "Using workspace: $WORKSPACE"
           xcode-project use-profiles
-          xcode-project build-ipa --workspace "$WORKSPACE" --scheme App
+          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
