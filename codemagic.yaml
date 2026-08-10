@@ -18,25 +18,23 @@ workflows:
         script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0
       - name: Build Next.js
         script: npm run build
-      - name: Add iOS platform
-        script: npx cap add ios || true
-      - name: Copy web assets
-        script: npx cap copy ios
-      - name: Show iOS structure
-        script: find ios -name "*.xcodeproj" -o -name "Podfile" 2>/dev/null | head -20
+      - name: Capacitor Add and Sync
+        script: |
+          npx cap add ios 2>/dev/null || true
+          npx cap copy ios 2>/dev/null || true
+          ls -la ios/App/ || true
+          find ios -name "*.xcodeproj" 2>/dev/null || true
       - name: CocoaPods
         script: |
           cd ios/App
-          XCPROJ=$(find . -name "*.xcodeproj" -maxdepth 3 | head -1)
-          if [ -z "$XCPROJ" ]; then
-            echo "No xcodeproj found — running xcodegen or cap sync"
-            cd ../..
-            npx cap update ios
-            cd ios/App
-          fi
-          pod install --repo-update
+          pod install --repo-update || true
       - name: Build IPA
-        script: xcode-project use-profiles && xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+        script: |
+          find ios -name "*.xcworkspace" | head -3
+          xcode-project use-profiles
+          xcode-project build-ipa \
+            --workspace ios/App/App.xcworkspace \
+            --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
