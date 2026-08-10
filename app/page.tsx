@@ -44,8 +44,8 @@ const ClinicalWorkshop    = dynamic(() => import('./components/ClinicalWorkshop'
 const ClinicalNet         = dynamic(() => import('./components/ClinicalNet'),         { ssr:false })
 const MedFeed             = dynamic(() => import('./components/MedFeed'),             { ssr:false })
 const VirtualWard         = dynamic(() => import('./components/VirtualWard'),         { ssr:false })
-import WardIndex from './components/ward'
-import AfiaSkeletonScreen from './components/AfiaSkeletonScreen'
+const WardIndex = dynamic(() => import('./components/ward'), { ssr:false })
+const AfiaSkeletonScreen = dynamic(() => import('./components/AfiaSkeletonScreen'), { ssr:false })
 const LiveCasesSystem     = dynamic(() => import('./components/LiveCasesSystem'),     { ssr:false })
 const HealthInsights      = dynamic(() => import('./components/HealthInsights'),      { ssr:false })
 
@@ -812,12 +812,24 @@ export default function Home() {
 
         {/* PROFILE */}
         {(tab==='profile'||tab==='me') && (
-          <MePage
-            xp={xp} streak={streak} casesCompleted={casesCompleted}
-            mcqCorrect={mcqCorrect} isPro={isPro} name={userName}
-            onUpgrade={()=>setShowUpgrade(true)}
-            onReset={()=>{localStorage.removeItem('onboarding_completed');setShowOnboarding(true)}}
-          />
+          userType === 'patient'
+            ? <AfiaHome
+                key={userType}
+                savedType="patient"
+                onSelect={(type) => {
+                  if (type) {
+                    setUserType(type);
+                    localStorage.setItem('afia_user_type', type);
+                  }
+                }}
+                onClose={() => setTab('hub')}
+              />
+            : <MePage
+                xp={xp} streak={streak} casesCompleted={casesCompleted}
+                mcqCorrect={mcqCorrect} isPro={isPro} name={userName}
+                onUpgrade={()=>setShowUpgrade(true)}
+                onReset={()=>{localStorage.removeItem('onboarding_completed');setShowOnboarding(true)}}
+              />
         )}
 
         {/* LEADERBOARD */}
