@@ -1,12 +1,11 @@
 {
   "appId": "com.cliniverse.ai",
-  "appName": "Cliniverse AI",
+  "appName": "CLiniverse AI",
   "webDir": "out",
-  "ios": {
-    "minVersion": "14.0"
-  },
   "server": {
-    "url": "https://cliniverse-ai-u7gi.vercel.app",
-    "cleartext": true
+    "androidScheme": "https"
+  },
+  "ios": {
+    "scheme": "App"
   }
 }
