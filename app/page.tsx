@@ -453,7 +453,11 @@ export default function Home() {
         setUserType('patient')
         localStorage.setItem('afia_user_type','patient')
         setShowOnboarding(false)
-        setShowAfia(true)
+        (() => {
+        const saved = localStorage.getItem('afia_user_type');
+        if (saved) setUserType(saved);
+        setShowAfia(true);
+      })()
         return
       }
       localStorage.setItem('onboarding_completed','1')
@@ -468,6 +472,7 @@ export default function Home() {
   if (showAfia && afiaLoading) return <AfiaSkeletonScreen />
   if (showAfia) return (
   <AfiaHome
+    key={userType || 'new'}
     onSelect={(type) => {
       if (type) {
         setUserType(type);
