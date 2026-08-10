@@ -160,7 +160,7 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
           {SERVICES.map(s=>(
             <div key={s.id}
-              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true); if (s.id==='mental') setShowMentalWellness(true); if (s.id==='medications') setShowMyMedications(true) }}
+              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true); if (s.id==='mental') setShowMentalWellness(true); if (s.id==='medications') setShowMyMedications(true); if (s.id==='nutrition') setShowNutrition(true) }}
               onMouseDown={()=>setPressed(s.id)} onMouseUp={()=>setPressed(null)}
               style={{
                 position:'relative',height:120,borderRadius:18,overflow:'hidden',cursor:'pointer',
