@@ -452,12 +452,9 @@ export default function Home() {
       if(type==='patient'){
         setUserType('patient')
         localStorage.setItem('afia_user_type','patient')
+        localStorage.setItem('onboarding_completed','1')
         setShowOnboarding(false)
-        (() => {
-        const saved = localStorage.getItem('afia_user_type');
-        if (saved) setUserType(saved);
-        setShowAfia(true);
-      })()
+        setTab('me')
         return
       }
       localStorage.setItem('onboarding_completed','1')
