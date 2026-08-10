@@ -18,14 +18,11 @@ workflows:
         script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0
       - name: Build Next.js
         script: npm run build
-      - name: Prepare web dir
-        script: |
-          mkdir -p out
-          echo "<html><body></body></html>" > out/index.html
       - name: Capacitor Add and Sync
         script: |
-          npx cap add ios || true
-          npx cap copy ios || true
+          rm -rf ios
+          npx cap add ios
+          npx cap copy ios
       - name: CocoaPods
         script: cd ios/App && pod install --repo-update
       - name: Build IPA
