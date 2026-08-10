@@ -1026,7 +1026,7 @@ export default function Home() {
       </main>
 
       {/* ── NAV ── */}
-      <FloatingNav active={tab} onChange={setTab}/>
+      {userType !== 'patient' && <FloatingNav active={tab} onChange={setTab}/>}
       <div style={{height:120}}/>
       <PWAInstall/>
 
