@@ -229,7 +229,7 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
 }
 
 // ── AFIA HOME — Main Entry ────────────────────────────
-export default function AfiaHome({ onSelect, savedType }:{ onSelect:(type:string,skip?:boolean)=>void, savedType?:string }) {
+export default function AfiaHome({ onSelect, savedType, onClose }:{ onSelect:(type:string,skip?:boolean)=>void, savedType?:string, onClose?:()=>void }) {
   const [view, setView]     = useState<'home'|'patient'|'register'>(savedType==='patient' ? 'patient' : 'home')
   const [pressed, setPressed] = useState<string|null>(null)
 

@@ -45,6 +45,7 @@ const ClinicalNet         = dynamic(() => import('./components/ClinicalNet'),   
 const MedFeed             = dynamic(() => import('./components/MedFeed'),             { ssr:false })
 const VirtualWard         = dynamic(() => import('./components/VirtualWard'),         { ssr:false })
 import WardIndex from './components/ward'
+import AfiaSkeletonScreen from './components/AfiaSkeletonScreen'
 const LiveCasesSystem     = dynamic(() => import('./components/LiveCasesSystem'),     { ssr:false })
 const HealthInsights      = dynamic(() => import('./components/HealthInsights'),      { ssr:false })
 
@@ -297,6 +298,7 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [showAuth, setShowAuth] = useState(false)
   const [showAfia, setShowAfia] = useState(false)
+  const [afiaLoading, setAfiaLoading] = useState(false)
   const [userType, setUserType] = useState<string|null>(() => { if (typeof window !== 'undefined') return localStorage.getItem('afia_user_type'); return null; })
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
@@ -463,7 +465,20 @@ export default function Home() {
   // ── UPGRADE MODAL ─────────────────────────────────────────────────────
   if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); }} />)
 
-  if (showAfia) return (<AfiaHome onSelect={(type, skip) => { setTimeout(() => { if(type){ setUserType(type); localStorage.setItem('afia_user_type', type); } setShowAfia(false); }, 0); }} savedType={userType as any} />)
+  if (showAfia && afiaLoading) return <AfiaSkeletonScreen />
+  if (showAfia) return (
+  <AfiaHome
+    onSelect={(type) => {
+      if (type) {
+        setUserType(type);
+        localStorage.setItem('afia_user_type', type);
+      }
+      // لا نغلق عافية — المستخدم يتنقل داخلها
+    }}
+    savedType={userType as any}
+    onClose={() => setShowAfia(false)}
+  />
+)
 
   if (showUpgrade) return (
     <div style={{
