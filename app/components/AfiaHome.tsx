@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import MentalWellness from './MentalWellness'
+import MyMedications from './MyMedications'
 import SymptomChecker from './SymptomChecker'
 
 const L = {
@@ -21,6 +22,11 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
   const [pressed, setPressed] = useState<string|null>(null)
   const [showSymptomChecker, setShowSymptomChecker] = useState(false)
   const [showMentalWellness, setShowMentalWellness] = useState(false)
+  const [showMyMedications, setShowMyMedications] = useState(false)
+
+  if (showMyMedications) {
+    return <MyMedications onBack={() => setShowMyMedications(false)} />
+  }
 
   if (showMentalWellness) {
     return <MentalWellness onBack={() => setShowMentalWellness(false)} />
@@ -148,7 +154,7 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
           {SERVICES.map(s=>(
             <div key={s.id}
-              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true); if (s.id==='mental') setShowMentalWellness(true) }}
+              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true); if (s.id==='mental') setShowMentalWellness(true); if (s.id==='medications') setShowMyMedications(true) }}
               onMouseDown={()=>setPressed(s.id)} onMouseUp={()=>setPressed(null)}
               style={{
                 position:'relative',height:120,borderRadius:18,overflow:'hidden',cursor:'pointer',
