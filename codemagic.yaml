@@ -15,35 +15,11 @@ workflows:
       - name: Install dependencies
         script: npm install
       - name: Install Capacitor
-        script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0 && npx cap init CliniverseAI com.cliniverse.ai --web-dir=out
+        script: npm install @capacitor/core@5.7.0 @capacitor/ios@5.7.0 @capacitor/cli@5.7.0
       - name: Build Next.js
         script: npm run build
-      - name: Add iOS platform
-        script: npx cap add ios || true
-      - name: Sync iOS
-        script: npx cap copy ios
-      - name: Fix Podfile
-        script: |
-          XCPROJ=$(find ios/App -name "*.xcodeproj" | head -1 | sed 's|ios/App/||' | sed 's|\.xcodeproj||')
-          echo "Found project: $XCPROJ"
-          cat > ios/App/Podfile << PODEOF
-          platform :ios, '14.0'
-          use_frameworks!
-          project '$XCPROJ'
-          target 'App' do
-            pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
-            pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-          end
-          post_install do |installer|
-            installer.pods_project.targets.each do |target|
-              target.build_configurations.each do |config|
-                config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
-              end
-            end
-          end
-          PODEOF
-      - name: CocoaPods
-        script: cd ios/App && pod install
+      - name: Capacitor Sync
+        script: npx cap sync ios
       - name: Build IPA
         script: xcode-project use-profiles && xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
     artifacts:
