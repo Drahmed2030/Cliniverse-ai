@@ -82,56 +82,139 @@ export default function OnboardingFunnel({ onComplete }:{ onComplete:(type?:stri
 
   const slide = SLIDES[Math.min(idx, SLIDES.length-1)]
 
-  // شاشة Who Are You؟
+  // شاشة Who Are You؟ — محسّنة
   if(idx === SLIDES.length) return (
     <div style={{
       position:'fixed', inset:0, zIndex:9998,
       fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif',
+      overflowY:'auto',
     }}>
+      {/* Hero Background */}
       <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
-        alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}/>
-      <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.2),rgba(15,23,42,0.95))'}}/>
-      <div style={{position:'absolute',inset:0,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'0 24px 60px'}}>
-        <div style={{textAlign:'center',marginBottom:32}}>
-          <div style={{fontSize:38,fontWeight:900,color:'white',letterSpacing:-1,marginBottom:10}}>
-            Who Are You?
+        alt="" style={{position:'fixed',inset:0,width:'100%',height:'100%',objectFit:'cover',zIndex:0}}/>
+      <div style={{position:'fixed',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.3) 0%,rgba(15,23,42,0.97) 50%)',zIndex:1}}/>
+
+      <div style={{position:'relative',zIndex:2,display:'flex',flexDirection:'column',minHeight:'100dvh',padding:'0 24px 48px'}}>
+        {/* Top badge */}
+        <div style={{paddingTop:60,textAlign:'center'}}>
+          <div style={{
+            display:'inline-flex',alignItems:'center',gap:8,
+            background:'rgba(13,148,136,0.25)',border:'1px solid rgba(13,148,136,0.4)',
+            borderRadius:99,padding:'6px 16px',marginBottom:24,
+          }}>
+            <div style={{width:6,height:6,borderRadius:'50%',background:'#0D9488',boxShadow:'0 0 8px #0D9488'}}/>
+            <span style={{fontSize:12,color:'rgba(255,255,255,0.9)',fontWeight:600,letterSpacing:1}}>PERSONALIZE YOUR EXPERIENCE</span>
           </div>
-          <div style={{fontSize:15,color:'rgba(255,255,255,0.65)'}}>
-            We'll personalize your experience
+          <div style={{fontSize:36,fontWeight:900,color:'white',letterSpacing:-1,lineHeight:1.1,marginBottom:10}}>
+            Choose Your Path
+          </div>
+          <div style={{fontSize:15,color:'rgba(255,255,255,0.6)',marginBottom:32}}>
+            Cliniverse adapts to who you are
           </div>
         </div>
-        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+
+        {/* Cards */}
+        <div style={{display:'flex',flexDirection:'column',gap:12,flex:1,justifyContent:'center'}}>
+
+          {/* Doctor */}
           <button onClick={()=>onComplete('doctor')}
             onMouseDown={()=>setPressed('doc')} onMouseUp={()=>setPressed(null)}
             style={{
-              width:'100%',padding:'18px',borderRadius:20,border:'none',cursor:'pointer',
-              background:L.gradient,color:'white',fontSize:17,fontWeight:800,
-              transform:pressed==='doc'?'scale(0.97)':'scale(1)',transition:spring,
-              boxShadow:L.shadowGlow,
-              display:'flex',alignItems:'center',justifyContent:'center',gap:12,
+              width:'100%',padding:'18px 20px',borderRadius:22,border:'2px solid rgba(255,255,255,0.15)',
+              cursor:'pointer',background:'linear-gradient(135deg,rgba(13,148,136,0.5),rgba(30,64,175,0.5))',
+              backdropFilter:'blur(20px)',color:'white',
+              transform:pressed==='doc'?'scale(0.97)':'scale(1)',transition:'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow:pressed==='doc'?'none':'0 8px 32px rgba(13,148,136,0.35)',
+              display:'flex',alignItems:'center',gap:16,textAlign:'left',
             }}>
-            <span style={{fontSize:26}}>👨‍⚕️</span>
-            <div style={{textAlign:'left'}}>
-              <div>Doctor / Medical Student</div>
-              <div style={{fontSize:12,opacity:0.8,fontWeight:500}}>Clinical cases · Global room · Board prep</div>
+            <div style={{
+              width:52,height:52,borderRadius:16,flexShrink:0,
+              background:'linear-gradient(135deg,#0D9488,#1E40AF)',
+              display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,
+            }}>👨‍⚕️</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:17,fontWeight:800,marginBottom:3}}>Doctor / Medical Student</div>
+              <div style={{fontSize:12,opacity:0.75,fontWeight:500,lineHeight:1.5}}>Clinical cases · Oracle AI · Board prep · Global room</div>
             </div>
+            <div style={{fontSize:18,opacity:0.6}}>›</div>
           </button>
+
+          {/* Patient */}
           <button onClick={()=>onComplete('patient')}
             onMouseDown={()=>setPressed('pat')} onMouseUp={()=>setPressed(null)}
             style={{
-              width:'100%',padding:'18px',borderRadius:20,cursor:'pointer',
-              background:'rgba(255,255,255,0.12)',backdropFilter:'blur(20px)',
-              border:'1px solid rgba(255,255,255,0.25)',
-              color:'white',fontSize:17,fontWeight:700,
-              transform:pressed==='pat'?'scale(0.97)':'scale(1)',transition:spring,
-              display:'flex',alignItems:'center',justifyContent:'center',gap:12,
+              width:'100%',padding:'18px 20px',borderRadius:22,cursor:'pointer',
+              background:'rgba(255,255,255,0.10)',backdropFilter:'blur(20px)',
+              border:'2px solid rgba(255,255,255,0.2)',
+              color:'white',
+              transform:pressed==='pat'?'scale(0.97)':'scale(1)',transition:'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              display:'flex',alignItems:'center',gap:16,textAlign:'left',
             }}>
-            <span style={{fontSize:26}}>🏥</span>
-            <div style={{textAlign:'left'}}>
-              <div>Patient / Family Member</div>
-              <div style={{fontSize:12,opacity:0.7,fontWeight:500}}>Health guide · Pharmacy · Mother & child</div>
+            <div style={{
+              width:52,height:52,borderRadius:16,flexShrink:0,
+              background:'linear-gradient(135deg,rgba(16,185,129,0.6),rgba(13,148,136,0.6))',
+              display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,
+            }}>🏥</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:17,fontWeight:800,marginBottom:3}}>Patient / Family Member</div>
+              <div style={{fontSize:12,opacity:0.7,fontWeight:500,lineHeight:1.5}}>AI Health guide · Symptoms · Medications · Nutrition</div>
             </div>
+            <div style={{fontSize:18,opacity:0.6}}>›</div>
           </button>
+
+          {/* General Public */}
+          <button onClick={()=>onComplete('patient')}
+            onMouseDown={()=>setPressed('pub')} onMouseUp={()=>setPressed(null)}
+            style={{
+              width:'100%',padding:'16px 20px',borderRadius:22,cursor:'pointer',
+              background:'rgba(255,255,255,0.07)',backdropFilter:'blur(20px)',
+              border:'1.5px solid rgba(255,255,255,0.15)',
+              color:'white',
+              transform:pressed==='pub'?'scale(0.97)':'scale(1)',transition:'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              display:'flex',alignItems:'center',gap:16,textAlign:'left',
+            }}>
+            <div style={{
+              width:46,height:46,borderRadius:14,flexShrink:0,
+              background:'rgba(99,102,241,0.4)',
+              display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,
+            }}>🌍</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>General Public</div>
+              <div style={{fontSize:12,opacity:0.65,fontWeight:500}}>Wellness · Travel health · Mental health · Fitness</div>
+            </div>
+            <div style={{fontSize:18,opacity:0.4}}>›</div>
+          </button>
+
+          {/* Medical Student / Nurse */}
+          <button onClick={()=>onComplete('doctor')}
+            onMouseDown={()=>setPressed('nur')} onMouseUp={()=>setPressed(null)}
+            style={{
+              width:'100%',padding:'16px 20px',borderRadius:22,cursor:'pointer',
+              background:'rgba(255,255,255,0.07)',backdropFilter:'blur(20px)',
+              border:'1.5px solid rgba(255,255,255,0.15)',
+              color:'white',
+              transform:pressed==='nur'?'scale(0.97)':'scale(1)',transition:'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+              display:'flex',alignItems:'center',gap:16,textAlign:'left',
+            }}>
+            <div style={{
+              width:46,height:46,borderRadius:14,flexShrink:0,
+              background:'rgba(245,158,11,0.35)',
+              display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,
+            }}>📚</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>Medical Student / Nurse</div>
+              <div style={{fontSize:12,opacity:0.65,fontWeight:500}}>Clinical training · MCQs · Board exam prep</div>
+            </div>
+            <div style={{fontSize:18,opacity:0.4}}>›</div>
+          </button>
+
+        </div>
+
+        {/* Footer */}
+        <div style={{textAlign:'center',paddingTop:24}}>
+          <div style={{fontSize:11,color:'rgba(255,255,255,0.35)',lineHeight:1.6}}>
+            🔒 Your choice is saved locally · No account required to explore
+          </div>
         </div>
       </div>
     </div>
