@@ -22,19 +22,19 @@ workflows:
         script: |
           npx cap add ios 2>/dev/null || true
           npx cap copy ios 2>/dev/null || true
-          ls -la ios/App/ || true
-          find ios -name "*.xcodeproj" 2>/dev/null || true
       - name: CocoaPods
         script: |
           cd ios/App
-          pod install --repo-update || true
+          pod install --repo-update
+          echo "=== xcworkspace files ==="
+          find . -name "*.xcworkspace" | head -10
+          find . -name "*.xcodeproj" | head -10
       - name: Build IPA
         script: |
-          find ios -name "*.xcworkspace" | head -3
+          WORKSPACE=$(find ios -name "*.xcworkspace" | grep -v xcodeproj | head -1)
+          echo "Using workspace: $WORKSPACE"
           xcode-project use-profiles
-          xcode-project build-ipa \
-            --workspace ios/App/App.xcworkspace \
-            --scheme App
+          xcode-project build-ipa --workspace "$WORKSPACE" --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
