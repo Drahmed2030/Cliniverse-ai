@@ -822,7 +822,7 @@ export default function Home() {
                     localStorage.setItem('afia_user_type', type);
                   }
                 }}
-                onClose={() => setTab('hub')}
+                onClose={() => { setUserType(null); localStorage.removeItem('afia_user_type'); setShowOnboarding(true); setTab('hub'); }}
               />
             : <MePage
                 xp={xp} streak={streak} casesCompleted={casesCompleted}
