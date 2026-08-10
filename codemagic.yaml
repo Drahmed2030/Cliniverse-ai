@@ -20,8 +20,6 @@ workflows:
         script: npm run build
       - name: Add iOS platform
         script: npx cap add ios || true
-      - name: Fix Podfile
-        script: python3 fix_podfile.py
       - name: Sync iOS
         script: npx cap copy ios
       - name: CocoaPods
