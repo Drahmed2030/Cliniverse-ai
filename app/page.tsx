@@ -1,23 +1,23 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
-import DocAnalyzer from './components/DocAnalyzer';
-import ClinicalOracle from './components/ClinicalOracle'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+const DocAnalyzer = dynamic(() => import('./components/DocAnalyzer'), { ssr:false })
+const ClinicalOracle = dynamic(() => import('./components/ClinicalOracle'), { ssr:false })
 import { ClinicalProvider } from './components/ClinicalContext'
 import CliniverseLogo from './components/Logo'
 import dynamic from 'next/dynamic'
-import PulsePage from './components/PulsePage'
+const PulsePage = dynamic(() => import('./components/PulsePage'), { ssr:false })
 const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr: false })
-import PulseIndex from './components/pulse'
+const PulseIndex = dynamic(() => import('./components/pulse'), { ssr:false })
 import ProfilePage from './components/ProfilePage'
-import MePage from './components/MePage'
-import SplashScreen from './components/SplashScreen'
+const MePage = dynamic(() => import('./components/MePage'), { ssr:false })
+const SplashScreen = dynamic(() => import('./components/SplashScreen'), { ssr:false })
 const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
 const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
 const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
-import ToolsPage from './components/ToolsPage'
+const ToolsPage = dynamic(() => import('./components/ToolsPage'), { ssr:false })
 const PulseRoom = dynamic(() => import('./components/PulseRoom'), { ssr:false })
 const STEMICase = dynamic(() => import('./components/STEMICase'), { ssr:false })
 
