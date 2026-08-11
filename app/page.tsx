@@ -15,6 +15,7 @@ const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
 const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
 const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
+const PaywallScreen = dynamic(() => import('./components/PaywallScreen'), { ssr:false })
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 const ToolsPage = dynamic(() => import('./components/ToolsPage'), { ssr:false })
@@ -301,6 +302,7 @@ export default function Home() {
   const [afiaLoading, setAfiaLoading] = useState(false)
   const [userType, setUserType] = useState<string|null>(() => { if (typeof window !== 'undefined') return localStorage.getItem('afia_user_type'); return null; })
   const [showAdmin, setShowAdmin]       = useState(false)
+  const [showPaywall, setShowPaywall] = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
   const [aiQuestion, setAiQuestion]     = useState('')
@@ -464,6 +466,7 @@ export default function Home() {
   )
 
   // ── UPGRADE MODAL ─────────────────────────────────────────────────────
+  if (showPaywall) return <PaywallScreen onClose={() => setShowPaywall(false)} onSubscribe={(plan) => { window.open(plan === 'yearly' ? 'https://cliniverse.lemonsqueezy.com/checkout/buy/pro-yearly' : 'https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly', '_blank'); setShowPaywall(false); }} />
   if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); }} />)
 
   if (showAfia && afiaLoading) return <AfiaSkeletonScreen />
