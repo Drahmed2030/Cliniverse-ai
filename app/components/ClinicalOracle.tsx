@@ -1,5 +1,6 @@
 
 'use client';
+import OracleResponseCard from './OracleResponseCard'
 import { useState, useEffect, useRef } from 'react';
 
 const MODELS_META = [
@@ -20,6 +21,7 @@ const EXAMPLES = [
 export default function ClinicalOracle() {
   const [q, setQ] = useState('');
   const [sel, setSel] = useState(['claude', 'gemini', 'deepseek', 'llama']);
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
