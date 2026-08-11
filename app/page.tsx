@@ -134,14 +134,14 @@ const OceanBg = () => (
 
 // ── RANKS & BADGES ───────────────────────────────────────────────────────
 const RANKS = [
-  { name:'Clinical Clerk',     icon:'🩺', color:'#64748b', xpNeeded:0 },
-  { name:'Junior Resident',    icon:'📋', color:'#00B8A9', xpNeeded:100 },
-  { name:'Senior Resident',    icon:'🔬', color:'#30D158', xpNeeded:300 },
-  { name:'Registrar',          icon:'⚕️', color:'#FFB347', xpNeeded:600 },
-  { name:'Specialist',         icon:'🏥', color:'#0A84FF', xpNeeded:1000 },
-  { name:'Consultant',         icon:'👨‍⚕️', color:'#FF6B6B', xpNeeded:1500 },
-  { name:'Senior Consultant',  icon:'🎓', color:'#FFD60A', xpNeeded:2200 },
-  { name:'Chief of Medicine',  icon:'🌟', color:'#7C5CFC', xpNeeded:3000 },
+  { name:'Clinical Clerk',     icon:'🩺', color:'#647280', xpNeeded:0 },
+  { name:'Junior Resident',    icon:'📋', color:'#00B4A6', xpNeeded:100 },
+  { name:'Senior Resident',    icon:'🔬', color:'#22C55E', xpNeeded:300 },
+  { name:'Registrar',          icon:'⚕️', color:'#F59E0B', xpNeeded:600 },
+  { name:'Specialist',         icon:'🏥', color:'#2B6DE5', xpNeeded:1000 },
+  { name:'Consultant',         icon:'👨‍⚕️', color:'#EF4444', xpNeeded:1500 },
+  { name:'Senior Consultant',  icon:'🎓', color:'#AF52DE', xpNeeded:2200 },
+  { name:'Chief of Medicine',  icon:'🌟', color:'#5856D6', xpNeeded:3000 },
 ]
 
 const BADGES = [

@@ -7,14 +7,26 @@ import FamilySwitcher from './FamilySwitcher'
 import SymptomChecker from './SymptomChecker'
 
 const L = {
-  canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
-  teal:'#0D9488', cobalt:'#1E40AF', sage:'#10B981', amber:'#F5B731',
-  red:'#EF4444', violet:'#7C3AED', pink:'#DB2777', orange:'#EA580C',
-  textPrimary:'#0F172A', textSub:'#475569', textMuted:'#94A3B8',
-  gradient:'linear-gradient(135deg,#0D9488,#1E40AF)',
-  gradientWarm:'linear-gradient(135deg,#DB2777,#EA580C)',
-  shadowSm:'0 1px 3px rgba(15,23,42,0.08)',
-  shadowGlow:'0 4px 20px rgba(13,148,136,0.25)',
+  // Brand & Semantic — Afia 2026
+  teal:    '#00B4A6',
+  deepTeal:'#008F84',
+  cobalt:  '#2B6DE5',
+  sage:    '#22C55E',
+  violet:  '#AF52DE',
+  purple:  '#5856D6',
+  cyan:    '#32ADE6',
+  orange:  '#F59E0B',
+  red:     '#EF4444',
+  // Neutrals
+  canvas:  '#F7FAFA',
+  surface: '#FFFFFF',
+  border:  '#E6ECF0',
+  muted:   '#647280',
+  text:    '#1F2937',
+  subtext: '#4B5563',
+  // Gradients
+  gradient:'linear-gradient(135deg,#00B4A6,#2B6DE5)',
+  gradientSoft:'linear-gradient(135deg,rgba(0,180,166,0.12),rgba(43,109,229,0.12))',
 }
 const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
 const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
@@ -42,54 +54,72 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
 
   const SERVICES = [
     {
-      id:'symptoms', icon:'🔍', label:'Symptom Checker',
-      sub:'AI-powered symptom analysis', color:L.teal,
+      id:'symptoms',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>',
+      label:'Symptom Checker',
+      sub:'AI-powered symptom analysis',
+      color:'#00B4A6',
       img:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80',
-      free:true,
     },
     {
-      id:'medications', icon:'💊', label:'My Medications',
-      sub:'Track meds · Set reminders', color:L.cobalt,
+      id:'medications',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M9 3h6l1 4H8L9 3zM4 7h16v2a9 9 0 0 1-9 9 9 9 0 0 1-9-9V7z"/></svg>',
+      label:'My Medications',
+      sub:'Track meds · Set reminders',
+      color:'#2B6DE5',
       img:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&q=80',
-      free:true,
     },
     {
-      id:'nutrition', icon:'🥗', label:'Nutrition Guide',
-      sub:'Personalized diet · Calories', color:L.sage,
+      id:'nutrition',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-4.03 9-9 9S3 15.97 3 11a9 9 0 0 1 9-9z"/><path d="M12 6v6l4 2"/></svg>',
+      label:'Nutrition Guide',
+      sub:'Personalized diet · Calories',
+      color:'#22C55E',
       img:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&q=80',
-      free:true,
     },
     {
-      id:'mental', icon:'🧠', label:'Mental Wellness',
-      sub:'Stress · Sleep · Mindfulness', color:L.violet,
+      id:'mental',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M9.5 2A6.5 6.5 0 0 1 16 8.5c0 2.5-1.5 4.5-3.5 5.5v2a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-2C5.5 13 4 11 4 8.5A6.5 6.5 0 0 1 9.5 2z"/><path d="M8 18h8"/></svg>',
+      label:'Mental Wellness',
+      sub:'Stress · Sleep · Mindfulness',
+      color:'#AF52DE',
       img:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400&q=80',
-      free:true,
     },
     {
-      id:'exercise', icon:'💪', label:'Exercise Rx',
-      sub:'Personalized workout plan', color:L.orange,
+      id:'exercise',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><circle cx="13" cy="5" r="2"/><path d="m20 12-5-3-2 5-4-2-4 6"/></svg>',
+      label:'Exercise Rx',
+      sub:'Personalized workout plan',
+      color:'#F59E0B',
       img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
-      free:true,
     },
     {
-      id:'hospital', icon:'🗺', label:'Find Hospital',
-      sub:'Nearest + wait times · Open now', color:L.red,
+      id:'hospital',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
+      label:'Find Hospital',
+      sub:'Nearest + wait times · Open now',
+      color:'#EF4444',
       img:'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400&q=80',
-      free:true,
     },
     {
-      id:'teleconsult', icon:'📱', label:'Teleconsultation',
-      sub:'Video consult with a doctor', color:L.pink,
+      id:'teleconsult',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+      label:'Teleconsultation',
+      sub:'Video · Chat · Voice',
+      color:'#5856D6',
       img:'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=400&q=80',
-      free:false,
+      badge:'PRO',
     },
     {
-      id:'labs', icon:'🧪', label:'Lab Results',
-      sub:'Upload & AI analyze results', color:L.amber,
+      id:'labs',
+      icon:'<svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M14.5 2v9.5l4 7a2 2 0 0 1-1.8 3H7.3a2 2 0 0 1-1.8-3l4-7V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>',
+      label:'Lab Results',
+      sub:'Upload · Analyze · Track',
+      color:'#32ADE6',
       img:'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400&q=80',
-      free:false,
+      badge:'PRO',
     },
-  ]
+]
 
   const TRAVEL_HEALTH = [
     { icon:'✈️', label:'Flight Health', sub:'DVT prevention · Jet lag', color:L.cobalt },
@@ -160,26 +190,64 @@ function PatientHome({ onBack }:{ onBack:()=>void }) {
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:16}}>
           {SERVICES.map(s=>(
             <div key={s.id}
-              onClick={()=>{ if (s.id==='symptoms') setShowSymptomChecker(true); if (s.id==='mental') setShowMentalWellness(true); if (s.id==='medications') setShowMyMedications(true); if (s.id==='nutrition') setShowNutrition(true) }}
+              onClick={()=>{
+                if (s.id==='symptoms') setShowSymptomChecker(true);
+                if (s.id==='mental') setShowMentalWellness(true);
+                if (s.id==='medications') setShowMyMedications(true);
+                if (s.id==='nutrition') setShowNutrition(true);
+              }}
               onMouseDown={()=>setPressed(s.id)} onMouseUp={()=>setPressed(null)}
               style={{
-                position:'relative',height:120,borderRadius:18,overflow:'hidden',cursor:'pointer',
-                transform:pressed===s.id?'scale(0.97)':'scale(1)',
-                transition:spring,boxShadow:L.shadowSm,
+                position:'relative',
+                borderRadius:20,
+                overflow:'hidden',
+                cursor:'pointer',
+                background:'#FFFFFF',
+                border:'1px solid #E6ECF0',
+                boxShadow: pressed===s.id
+                  ? '0 1px 4px rgba(0,0,0,0.08)'
+                  : '0 2px 12px rgba(0,0,0,0.06)',
+                transform: pressed===s.id ? 'scale(0.97)' : 'scale(1)',
+                transition:'all 0.2s cubic-bezier(0.25,0.1,0.25,1)',
               }}>
-              <img src={s.img} alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover'}}/>
-              <div style={{position:'absolute',inset:0,
-                background:`linear-gradient(135deg,${s.color}CC,rgba(15,23,42,0.75))`}}/>
-              {!s.free && (
-                <div style={{position:'absolute',top:8,right:8,
-                  background:'rgba(245,183,49,0.9)',borderRadius:99,padding:'2px 8px',
-                  fontSize:8,fontWeight:800,color:'#0F172A'}}>PRO</div>
+              {/* Background image */}
+              <img src={s.img} alt=""
+                style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:0.18}}/>
+              {/* Color overlay */}
+              <div style={{
+                position:'absolute',inset:0,
+                background:`linear-gradient(135deg,${s.color}22,${s.color}08)`,
+              }}/>
+              {/* PRO badge */}
+              {s.badge && (
+                <div style={{
+                  position:'absolute',top:10,right:10,zIndex:2,
+                  background:'linear-gradient(135deg,#F59E0B,#EF4444)',
+                  color:'white',fontSize:9,fontWeight:800,
+                  padding:'2px 7px',borderRadius:99,letterSpacing:0.5,
+                }}>PRO</div>
               )}
-              <div style={{position:'absolute',inset:0,padding:'12px',
-                display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-                <div style={{fontSize:20,marginBottom:4}}>{s.icon}</div>
-                <div style={{fontSize:12,fontWeight:800,color:'white'}}>{s.label}</div>
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.7)'}}>{s.sub}</div>
+              {/* Content */}
+              <div style={{position:'relative',zIndex:1,padding:'16px 14px 14px'}}>
+                {/* Icon */}
+                <div style={{
+                  width:40,height:40,borderRadius:12,marginBottom:10,
+                  background:`linear-gradient(135deg,${s.color},${s.color}cc)`,
+                  display:'flex',alignItems:'center',justifyContent:'center',
+                  boxShadow:`0 4px 12px ${s.color}40`,
+                }}
+                  dangerouslySetInnerHTML={{__html:s.icon.replace(/strokeWidth="2"/g,'strokeWidth="2" width="20" height="20"')}}
+                />
+                {/* Labels */}
+                <div style={{
+                  fontSize:13,fontWeight:700,
+                  color:'#1F2937',marginBottom:3,lineHeight:1.2,
+                }}>
+                  {s.label}
+                </div>
+                <div style={{fontSize:11,color:'#647280',lineHeight:1.4}}>
+                  {s.sub}
+                </div>
               </div>
             </div>
           ))}
