@@ -1,5 +1,6 @@
 
 'use client';
+import ConsensusResult from './ConsensusResult'
 import OracleResponseCard from './OracleResponseCard'
 import { useState, useEffect, useRef } from 'react';
 
