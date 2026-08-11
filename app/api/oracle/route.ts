@@ -18,11 +18,6 @@ const MODELS: Record<string, any> = {
     desc: 'Real-time medical knowledge', type: 'xai',
     model: 'grok-2-latest', weight: 0.90,
   },
-  grok2: {
-    name: 'Grok 2', icon: '⚡', color: '#1DA1F2',
-    desc: 'Multimodal clinical analysis', type: 'xai',
-    model: 'grok-2-latest', weight: 0.85,
-  },
   deepseek: {
     name: 'DeepSeek V3', icon: '🟢', color: '#10B981',
     desc: 'Guidelines & literature', type: 'openrouter',
