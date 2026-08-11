@@ -48,7 +48,32 @@ export default function ClinicalOracle() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: q, models: sel }),
       });
-      setResult(await res.json());
+      const raw = await res.json();
+      // حوّل الـ raw response لـ ConsensusData format
+      if (raw.responses) {
+        const consensusData = {
+          consensus_score: raw.consensus?.score ?? 0,
+          status: raw.consensus?.hasConsensus
+            ? (raw.consensus.score >= 80 ? 'agreed' : 'low')
+            : 'conflicting',
+          question: raw.question ?? q,
+          individual_responses: (raw.responses ?? []).map((r: any) => ({
+            model: { name: r.name ?? r.id, version: r.desc ?? '' },
+            score: r.confidence ?? 0,
+            answer: r.answer ?? '',
+            status: r.status === 'ok' && r.confidence >= 60 ? 'agreed' : 'conflict',
+            tags: [
+              r.evidence && r.evidence !== 'Clinical judgment' ? `📚 ${r.evidence.slice(0,30)}` : null,
+              r.caution && r.caution !== 'None' && r.caution.length > 3 ? `⚠️ ${r.caution.slice(0,25)}` : null,
+            ].filter(Boolean) as string[],
+          })),
+          summary: raw.summary ?? '',
+          recommendation: raw.recommendation ?? '',
+        };
+        setResult(consensusData);
+      } else {
+        setResult(raw);
+      }
     } catch {
       setResult({ error: 'Network error — please try again' });
     } finally {
