@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import ErrorBoundary from './components/ErrorBoundary'
 const DocAnalyzer = dynamic(() => import('./components/DocAnalyzer'), { ssr:false })
 const ClinicalOracle = dynamic(() => import('./components/ClinicalOracle'), { ssr:false })
 import { ClinicalProvider } from './components/ClinicalContext'
@@ -1020,7 +1021,7 @@ export default function Home() {
 
       
 
-        {tab==='oracle' && <ClinicalOracle onXP={addXP}/>}
+        {tab==='oracle' && <ErrorBoundary section="Oracle"><ClinicalOracle onXP={addXP}/></ErrorBoundary>}
 
       
 
