@@ -18,10 +18,10 @@ const MODELS: Record<string, any> = {
     desc: 'Real-time medical knowledge', type: 'xai',
     model: 'grok-2-latest', weight: 0.90,
   },
-  gemini: {
-    name: 'Gemini 2.0', icon: '🟠', color: '#F59E0B',
-    desc: 'Multimodal clinical analysis', type: 'gemini',
-    model: 'gemini-2.0-flash', weight: 0.85,
+  grok2: {
+    name: 'Grok 2', icon: '⚡', color: '#1DA1F2',
+    desc: 'Multimodal clinical analysis', type: 'xai',
+    model: 'grok-2-latest', weight: 0.85,
   },
   deepseek: {
     name: 'DeepSeek V3', icon: '🟢', color: '#10B981',
