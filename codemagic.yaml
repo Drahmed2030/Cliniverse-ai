@@ -23,11 +23,17 @@ workflows:
           rm -rf ios
           npx cap add ios
           npx cap copy ios
+      - name: Add PrivacyInfo to frameworks
+        script: |
+          PRIVACY_CONTENT='<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>NSPrivacyAccessedAPITypes</key><array/><key>NSPrivacyCollectedDataTypes</key><array/><key>NSPrivacyTracking</key><false/><key>NSPrivacyTrackingDomains</key><array/></dict></plist>'
+          mkdir -p ios/App/App
+          echo $PRIVACY_CONTENT > ios/App/App/PrivacyInfo.xcprivacy
+          find ios -name "Capacitor.framework" -type d 2>/dev/null | while read d; do echo $PRIVACY_CONTENT > "$d/PrivacyInfo.xcprivacy"; done
+          find ios -name "Cordova.framework" -type d 2>/dev/null | while read d; do echo $PRIVACY_CONTENT > "$d/PrivacyInfo.xcprivacy"; done
+          find ios -name "PrivacyInfo.xcprivacy" | head -10
       - name: Set build number
         script: |
-          cd ios/App
-          agvtool new-version -all $(($(agvtool what-version -terse) + 1)) || \
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion 3" App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion 4" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 4" ios/App/App/Info.plist
       - name: CocoaPods
         script: cd ios/App && pod install --repo-update
       - name: Build IPA
