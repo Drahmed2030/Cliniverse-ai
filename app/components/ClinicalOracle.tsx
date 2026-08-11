@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const MODELS_META = [
   { id: 'claude',   name: 'Claude',    icon: '🔵', color: '#0D9488', desc: 'Evidence reasoning' },
-  { id: 'gemini',   name: 'GPT-OSS 20B', icon: '⚪', color: '#64748B', desc: 'OpenAI open-weight' },
+  { id: 'grok', name: 'Grok 2', icon: '⚡', color: '#1DA1F2', desc: 'Real-time medical knowledge' },
   { id: 'deepseek', name: 'DeepSeek',  icon: '🟢', color: '#10B981', desc: 'Guidelines expert' },
   { id: 'llama',    name: 'Llama 70B', icon: '🟣', color: '#7C3AED', desc: 'Medical knowledge' },
 ];
@@ -21,7 +21,7 @@ const EXAMPLES = [
 
 export default function ClinicalOracle() {
   const [q, setQ] = useState('');
-  const [sel, setSel] = useState(['claude', 'gemini', 'deepseek', 'llama']);
+  const [sel, setSel] = useState(['claude', 'grok', 'deepseek', 'llama']);
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
