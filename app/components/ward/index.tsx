@@ -146,7 +146,7 @@ function PatientDetail({ p, onBack }:any) {
   const s = STATUS[p.status as keyof typeof STATUS]
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-      <WardHome onSelectPatient={(id) => { const p = PATIENTS.find((x:any) => x.id === id); if(p) setSelected(p); }} />
+      <WardHome onSelectPatient={function(id) { const p = MOCK_PATIENTS.find(function(x) { return x.id === id }); if(p) setSelected(p); }} />
       {/* Hero */}
       <div style={{
         height:140,
@@ -300,10 +300,10 @@ export default function WardIndex({ onXP }: Props) {
 
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-      <WardHome onSelectPatient={(id) => { const p = PATIENTS.find((x:any) => x.id === id); if(p) setSelected(p); }} />
+      <WardHome onSelectPatient={function(id) { const p = MOCK_PATIENTS.find(function(x) { return x.id === id }); if(p) setSelected(p); }} />
 
       {/* Hero Image */}
-      {sub==='ward' && (
+      {false && (
         <div style={{
           height:160,
           backgroundImage:`url(${HOSPITAL_ICU})`,
@@ -354,7 +354,7 @@ export default function WardIndex({ onXP }: Props) {
         </div>
 
         {/* WARD content */}
-        {sub==='ward' && (
+        {false && (
           <div>
             {/* Stats */}
             <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8,marginBottom:16}}>
