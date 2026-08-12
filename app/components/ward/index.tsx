@@ -146,7 +146,6 @@ function PatientDetail({ p, onBack }:any) {
   const s = STATUS[p.status as keyof typeof STATUS]
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
-      <WardHome onSelectPatient={function(id) { const p = MOCK_PATIENTS.find(function(x) { return x.id === id }); if(p) setSelected(p); }} />
       {/* Hero */}
       <div style={{
         height:140,
