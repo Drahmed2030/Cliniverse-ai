@@ -65,6 +65,163 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
         </span>
         <span style={{ fontSize: 11, color: T.muted, fontWeight: 600 }}>/100</span>
       </div>
+      {/* ── Settings Bottom Sheet ── */}
+      {showSettings && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)",
+        }} onClick={() => setShowSettings(false)}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: T.white, borderRadius: "24px 24px 0 0",
+              padding: "0 0 40px",
+              maxHeight: "85dvh", overflowY: "auto",
+              fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+            }}
+          >
+            {/* Handle */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+            </div>
+
+            {/* Title */}
+            <div style={{
+              padding: "12px 20px 16px",
+              borderBottom: `1px solid ${T.border}`,
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
+              <button onClick={() => setShowSettings(false)} style={{
+                width: 28, height: 28, borderRadius: "50%",
+                background: T.border, border: "none",
+                fontSize: 14, cursor: "pointer", color: T.sub,
+              }}>×</button>
+            </div>
+
+            {/* ── Profile ── */}
+            <div style={{ padding: "16px 20px 0" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "14px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+              }}>
+                <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    placeholder="Dr. Your Name"
+                    style={{
+                      flex: 1, padding: "8px 12px", borderRadius: 10,
+                      border: `1px solid ${T.border}`, fontSize: 14,
+                      outline: "none", background: T.white,
+                    }}
+                  />
+                  <button onClick={() => {
+                    localStorage.setItem("cliniverse_user_name", editName);
+                    setShowSettings(false);
+                  }} style={{
+                    padding: "8px 16px", borderRadius: 10, border: "none",
+                    background: T.teal, color: "white", fontSize: 13,
+                    fontWeight: 700, cursor: "pointer",
+                  }}>Save</button>
+                </div>
+              </div>
+
+              {/* ── PRO Subscription ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
+              <div style={{
+                borderRadius: 14, marginBottom: 16, overflow: "hidden",
+                border: `1px solid ${T.border}`,
+              }}>
+                <div style={{
+                  padding: "14px 16px",
+                  background: isPro
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
+                    : "#F7FAFA",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 22 }}>{isPro ? "💎" : "⭐"}</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>
+                        {isPro ? "PRO Active" : "Free Plan"}
+                      </div>
+                      <div style={{ fontSize: 11, color: T.muted }}>
+                        {isPro ? "Full clinical intelligence unlocked" : "Upgrade for unlimited access"}
+                      </div>
+                    </div>
+                  </div>
+                  {!isPro && (
+                    <button onClick={() => { setShowSettings(false); onUpgrade(); }} style={{
+                      padding: "6px 14px", borderRadius: 10, border: "none",
+                      background: "linear-gradient(135deg,#0D9488,#1E40AF)",
+                      color: "white", fontSize: 12, fontWeight: 700, cursor: "pointer",
+                    }}>Upgrade</button>
+                  )}
+                </div>
+              </div>
+
+              {/* ── Appearance ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "4px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                display: "flex", gap: 4,
+              }}>
+                {(["light", "dark"] as const).map(mode => (
+                  <button key={mode} onClick={() => setAppearance(mode)} style={{
+                    flex: 1, padding: "10px", borderRadius: 10, border: "none",
+                    background: appearance === mode ? T.white : "transparent",
+                    boxShadow: appearance === mode ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                    fontSize: 13, fontWeight: 600,
+                    color: appearance === mode ? T.teal : T.muted,
+                    cursor: "pointer", textTransform: "capitalize",
+                  }}>
+                    {mode === "light" ? "☀️ Light" : "🌙 Dark"}
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Privacy & Legal ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14,
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                overflow: "hidden",
+              }}>
+                {[
+                  { icon: "🔒", label: "Privacy Policy", action: () => window.open("https://cliniverseai.com/privacy", "_blank") },
+                  { icon: "📄", label: "Terms of Service", action: () => window.open("https://cliniverseai.com/terms", "_blank") },
+                  { icon: "📧", label: "Contact Support", action: () => window.open("mailto:support@cliniverseai.com") },
+                ].map((item, i, arr) => (
+                  <button key={i} onClick={item.action} style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 12,
+                    padding: "13px 16px", background: "none", border: "none",
+                    cursor: "pointer", textAlign: "left",
+                    borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
+                  }}>
+                    <span style={{ fontSize: 16 }}>{item.icon}</span>
+                    <span style={{ fontSize: 13, color: T.text, fontWeight: 500, flex: 1 }}>{item.label}</span>
+                    <span style={{ color: T.muted, fontSize: 14 }}>›</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Danger Zone ── */}
+              <button onClick={() => { setShowSettings(false); onReset(); }} style={{
+                width: "100%", padding: "14px", borderRadius: 14,
+                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
+              }}>
+                🔄 Reset & Choose Role Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -102,6 +259,163 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
         }}/>
       </div>
       <div style={{ fontSize: 11, color: T.sub }}>{detail}</div>
+      {/* ── Settings Bottom Sheet ── */}
+      {showSettings && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)",
+        }} onClick={() => setShowSettings(false)}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: T.white, borderRadius: "24px 24px 0 0",
+              padding: "0 0 40px",
+              maxHeight: "85dvh", overflowY: "auto",
+              fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+            }}
+          >
+            {/* Handle */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+            </div>
+
+            {/* Title */}
+            <div style={{
+              padding: "12px 20px 16px",
+              borderBottom: `1px solid ${T.border}`,
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
+              <button onClick={() => setShowSettings(false)} style={{
+                width: 28, height: 28, borderRadius: "50%",
+                background: T.border, border: "none",
+                fontSize: 14, cursor: "pointer", color: T.sub,
+              }}>×</button>
+            </div>
+
+            {/* ── Profile ── */}
+            <div style={{ padding: "16px 20px 0" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "14px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+              }}>
+                <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    placeholder="Dr. Your Name"
+                    style={{
+                      flex: 1, padding: "8px 12px", borderRadius: 10,
+                      border: `1px solid ${T.border}`, fontSize: 14,
+                      outline: "none", background: T.white,
+                    }}
+                  />
+                  <button onClick={() => {
+                    localStorage.setItem("cliniverse_user_name", editName);
+                    setShowSettings(false);
+                  }} style={{
+                    padding: "8px 16px", borderRadius: 10, border: "none",
+                    background: T.teal, color: "white", fontSize: 13,
+                    fontWeight: 700, cursor: "pointer",
+                  }}>Save</button>
+                </div>
+              </div>
+
+              {/* ── PRO Subscription ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
+              <div style={{
+                borderRadius: 14, marginBottom: 16, overflow: "hidden",
+                border: `1px solid ${T.border}`,
+              }}>
+                <div style={{
+                  padding: "14px 16px",
+                  background: isPro
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
+                    : "#F7FAFA",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 22 }}>{isPro ? "💎" : "⭐"}</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>
+                        {isPro ? "PRO Active" : "Free Plan"}
+                      </div>
+                      <div style={{ fontSize: 11, color: T.muted }}>
+                        {isPro ? "Full clinical intelligence unlocked" : "Upgrade for unlimited access"}
+                      </div>
+                    </div>
+                  </div>
+                  {!isPro && (
+                    <button onClick={() => { setShowSettings(false); onUpgrade(); }} style={{
+                      padding: "6px 14px", borderRadius: 10, border: "none",
+                      background: "linear-gradient(135deg,#0D9488,#1E40AF)",
+                      color: "white", fontSize: 12, fontWeight: 700, cursor: "pointer",
+                    }}>Upgrade</button>
+                  )}
+                </div>
+              </div>
+
+              {/* ── Appearance ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "4px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                display: "flex", gap: 4,
+              }}>
+                {(["light", "dark"] as const).map(mode => (
+                  <button key={mode} onClick={() => setAppearance(mode)} style={{
+                    flex: 1, padding: "10px", borderRadius: 10, border: "none",
+                    background: appearance === mode ? T.white : "transparent",
+                    boxShadow: appearance === mode ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                    fontSize: 13, fontWeight: 600,
+                    color: appearance === mode ? T.teal : T.muted,
+                    cursor: "pointer", textTransform: "capitalize",
+                  }}>
+                    {mode === "light" ? "☀️ Light" : "🌙 Dark"}
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Privacy & Legal ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14,
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                overflow: "hidden",
+              }}>
+                {[
+                  { icon: "🔒", label: "Privacy Policy", action: () => window.open("https://cliniverseai.com/privacy", "_blank") },
+                  { icon: "📄", label: "Terms of Service", action: () => window.open("https://cliniverseai.com/terms", "_blank") },
+                  { icon: "📧", label: "Contact Support", action: () => window.open("mailto:support@cliniverseai.com") },
+                ].map((item, i, arr) => (
+                  <button key={i} onClick={item.action} style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 12,
+                    padding: "13px 16px", background: "none", border: "none",
+                    cursor: "pointer", textAlign: "left",
+                    borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
+                  }}>
+                    <span style={{ fontSize: 16 }}>{item.icon}</span>
+                    <span style={{ fontSize: 13, color: T.text, fontWeight: 500, flex: 1 }}>{item.label}</span>
+                    <span style={{ color: T.muted, fontSize: 14 }}>›</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Danger Zone ── */}
+              <button onClick={() => { setShowSettings(false); onReset(); }} style={{
+                width: "100%", padding: "14px", borderRadius: 14,
+                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
+              }}>
+                🔄 Reset & Choose Role Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -120,6 +434,163 @@ function StatBadge({ icon, value, label, sub }: {
       <div style={{ fontSize: 16, fontWeight: 800, color: T.text }}>{value}</div>
       <div style={{ fontSize: 11, fontWeight: 600, color: T.sub, marginBottom: 2 }}>{label}</div>
       <div style={{ fontSize: 10, color: T.muted }}>{sub}</div>
+      {/* ── Settings Bottom Sheet ── */}
+      {showSettings && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)",
+        }} onClick={() => setShowSettings(false)}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: T.white, borderRadius: "24px 24px 0 0",
+              padding: "0 0 40px",
+              maxHeight: "85dvh", overflowY: "auto",
+              fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+            }}
+          >
+            {/* Handle */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+            </div>
+
+            {/* Title */}
+            <div style={{
+              padding: "12px 20px 16px",
+              borderBottom: `1px solid ${T.border}`,
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
+              <button onClick={() => setShowSettings(false)} style={{
+                width: 28, height: 28, borderRadius: "50%",
+                background: T.border, border: "none",
+                fontSize: 14, cursor: "pointer", color: T.sub,
+              }}>×</button>
+            </div>
+
+            {/* ── Profile ── */}
+            <div style={{ padding: "16px 20px 0" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "14px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+              }}>
+                <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    placeholder="Dr. Your Name"
+                    style={{
+                      flex: 1, padding: "8px 12px", borderRadius: 10,
+                      border: `1px solid ${T.border}`, fontSize: 14,
+                      outline: "none", background: T.white,
+                    }}
+                  />
+                  <button onClick={() => {
+                    localStorage.setItem("cliniverse_user_name", editName);
+                    setShowSettings(false);
+                  }} style={{
+                    padding: "8px 16px", borderRadius: 10, border: "none",
+                    background: T.teal, color: "white", fontSize: 13,
+                    fontWeight: 700, cursor: "pointer",
+                  }}>Save</button>
+                </div>
+              </div>
+
+              {/* ── PRO Subscription ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
+              <div style={{
+                borderRadius: 14, marginBottom: 16, overflow: "hidden",
+                border: `1px solid ${T.border}`,
+              }}>
+                <div style={{
+                  padding: "14px 16px",
+                  background: isPro
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
+                    : "#F7FAFA",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 22 }}>{isPro ? "💎" : "⭐"}</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>
+                        {isPro ? "PRO Active" : "Free Plan"}
+                      </div>
+                      <div style={{ fontSize: 11, color: T.muted }}>
+                        {isPro ? "Full clinical intelligence unlocked" : "Upgrade for unlimited access"}
+                      </div>
+                    </div>
+                  </div>
+                  {!isPro && (
+                    <button onClick={() => { setShowSettings(false); onUpgrade(); }} style={{
+                      padding: "6px 14px", borderRadius: 10, border: "none",
+                      background: "linear-gradient(135deg,#0D9488,#1E40AF)",
+                      color: "white", fontSize: 12, fontWeight: 700, cursor: "pointer",
+                    }}>Upgrade</button>
+                  )}
+                </div>
+              </div>
+
+              {/* ── Appearance ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "4px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                display: "flex", gap: 4,
+              }}>
+                {(["light", "dark"] as const).map(mode => (
+                  <button key={mode} onClick={() => setAppearance(mode)} style={{
+                    flex: 1, padding: "10px", borderRadius: 10, border: "none",
+                    background: appearance === mode ? T.white : "transparent",
+                    boxShadow: appearance === mode ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                    fontSize: 13, fontWeight: 600,
+                    color: appearance === mode ? T.teal : T.muted,
+                    cursor: "pointer", textTransform: "capitalize",
+                  }}>
+                    {mode === "light" ? "☀️ Light" : "🌙 Dark"}
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Privacy & Legal ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14,
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                overflow: "hidden",
+              }}>
+                {[
+                  { icon: "🔒", label: "Privacy Policy", action: () => window.open("https://cliniverseai.com/privacy", "_blank") },
+                  { icon: "📄", label: "Terms of Service", action: () => window.open("https://cliniverseai.com/terms", "_blank") },
+                  { icon: "📧", label: "Contact Support", action: () => window.open("mailto:support@cliniverseai.com") },
+                ].map((item, i, arr) => (
+                  <button key={i} onClick={item.action} style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 12,
+                    padding: "13px 16px", background: "none", border: "none",
+                    cursor: "pointer", textAlign: "left",
+                    borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
+                  }}>
+                    <span style={{ fontSize: 16 }}>{item.icon}</span>
+                    <span style={{ fontSize: 13, color: T.text, fontWeight: 500, flex: 1 }}>{item.label}</span>
+                    <span style={{ color: T.muted, fontSize: 14 }}>›</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Danger Zone ── */}
+              <button onClick={() => { setShowSettings(false); onReset(); }} style={{
+                width: "100%", padding: "14px", borderRadius: 14,
+                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
+              }}>
+                🔄 Reset & Choose Role Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -134,6 +605,9 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
   const [sleepHours, setSleepHours] = useState(() => parseFloat(localStorage.getItem("life_sleep") || "0"));
   const [activeMin, setActiveMin]  = useState(() => parseInt(localStorage.getItem("life_active") || "0"));
   const [showEdit, setShowEdit]    = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [appearance, setAppearance]   = useState<'light'|'dark'>('light');
+  const [editName, setEditName]       = useState(name || '');
 
   // ── Compute score ─────────────────────────────────────────
   const score = computeLifeScore({
@@ -362,6 +836,163 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
         </div>
 
       </div>
+      {/* ── Settings Bottom Sheet ── */}
+      {showSettings && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200,
+          background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)",
+        }} onClick={() => setShowSettings(false)}>
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              background: T.white, borderRadius: "24px 24px 0 0",
+              padding: "0 0 40px",
+              maxHeight: "85dvh", overflowY: "auto",
+              fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+            }}
+          >
+            {/* Handle */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+            </div>
+
+            {/* Title */}
+            <div style={{
+              padding: "12px 20px 16px",
+              borderBottom: `1px solid ${T.border}`,
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+            }}>
+              <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
+              <button onClick={() => setShowSettings(false)} style={{
+                width: 28, height: 28, borderRadius: "50%",
+                background: T.border, border: "none",
+                fontSize: 14, cursor: "pointer", color: T.sub,
+              }}>×</button>
+            </div>
+
+            {/* ── Profile ── */}
+            <div style={{ padding: "16px 20px 0" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "14px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+              }}>
+                <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    value={editName}
+                    onChange={e => setEditName(e.target.value)}
+                    placeholder="Dr. Your Name"
+                    style={{
+                      flex: 1, padding: "8px 12px", borderRadius: 10,
+                      border: `1px solid ${T.border}`, fontSize: 14,
+                      outline: "none", background: T.white,
+                    }}
+                  />
+                  <button onClick={() => {
+                    localStorage.setItem("cliniverse_user_name", editName);
+                    setShowSettings(false);
+                  }} style={{
+                    padding: "8px 16px", borderRadius: 10, border: "none",
+                    background: T.teal, color: "white", fontSize: 13,
+                    fontWeight: 700, cursor: "pointer",
+                  }}>Save</button>
+                </div>
+              </div>
+
+              {/* ── PRO Subscription ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
+              <div style={{
+                borderRadius: 14, marginBottom: 16, overflow: "hidden",
+                border: `1px solid ${T.border}`,
+              }}>
+                <div style={{
+                  padding: "14px 16px",
+                  background: isPro
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
+                    : "#F7FAFA",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 22 }}>{isPro ? "💎" : "⭐"}</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>
+                        {isPro ? "PRO Active" : "Free Plan"}
+                      </div>
+                      <div style={{ fontSize: 11, color: T.muted }}>
+                        {isPro ? "Full clinical intelligence unlocked" : "Upgrade for unlimited access"}
+                      </div>
+                    </div>
+                  </div>
+                  {!isPro && (
+                    <button onClick={() => { setShowSettings(false); onUpgrade(); }} style={{
+                      padding: "6px 14px", borderRadius: 10, border: "none",
+                      background: "linear-gradient(135deg,#0D9488,#1E40AF)",
+                      color: "white", fontSize: 12, fontWeight: 700, cursor: "pointer",
+                    }}>Upgrade</button>
+                  )}
+                </div>
+              </div>
+
+              {/* ── Appearance ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14, padding: "4px",
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                display: "flex", gap: 4,
+              }}>
+                {(["light", "dark"] as const).map(mode => (
+                  <button key={mode} onClick={() => setAppearance(mode)} style={{
+                    flex: 1, padding: "10px", borderRadius: 10, border: "none",
+                    background: appearance === mode ? T.white : "transparent",
+                    boxShadow: appearance === mode ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+                    fontSize: 13, fontWeight: 600,
+                    color: appearance === mode ? T.teal : T.muted,
+                    cursor: "pointer", textTransform: "capitalize",
+                  }}>
+                    {mode === "light" ? "☀️ Light" : "🌙 Dark"}
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Privacy & Legal ── */}
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
+              <div style={{
+                background: "#F7FAFA", borderRadius: 14,
+                border: `1px solid ${T.border}`, marginBottom: 16,
+                overflow: "hidden",
+              }}>
+                {[
+                  { icon: "🔒", label: "Privacy Policy", action: () => window.open("https://cliniverseai.com/privacy", "_blank") },
+                  { icon: "📄", label: "Terms of Service", action: () => window.open("https://cliniverseai.com/terms", "_blank") },
+                  { icon: "📧", label: "Contact Support", action: () => window.open("mailto:support@cliniverseai.com") },
+                ].map((item, i, arr) => (
+                  <button key={i} onClick={item.action} style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 12,
+                    padding: "13px 16px", background: "none", border: "none",
+                    cursor: "pointer", textAlign: "left",
+                    borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
+                  }}>
+                    <span style={{ fontSize: 16 }}>{item.icon}</span>
+                    <span style={{ fontSize: 13, color: T.text, fontWeight: 500, flex: 1 }}>{item.label}</span>
+                    <span style={{ color: T.muted, fontSize: 14 }}>›</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* ── Danger Zone ── */}
+              <button onClick={() => { setShowSettings(false); onReset(); }} style={{
+                width: "100%", padding: "14px", borderRadius: 14,
+                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
+              }}>
+                🔄 Reset & Choose Role Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
