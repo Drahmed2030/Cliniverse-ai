@@ -316,9 +316,9 @@ export default function Home() {
 
   useEffect(() => {
     const seen = localStorage.getItem('onboarding_completed')
-    if (seen) setShowOnboarding(false)
-      setShowAuth(true)
-      setShowAuth(true)
+    if (seen) {
+      setShowOnboarding(false)
+    }
   }, [])
 
   // ── DATA ──────────────────────────────────────────────────────────────
