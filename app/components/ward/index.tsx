@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { L } from '../../lib/tokens'
 import dynamic from 'next/dynamic'
+import WardHome from './WardHome'
 
 const MedFeed     = dynamic(() => import('../MedFeed'),     { ssr:false })
 const ClinicalNet = dynamic(() => import('../ClinicalNet'), { ssr:false })
@@ -143,6 +144,7 @@ function PatientDetail({ p, onBack }:any) {
   const s = STATUS[p.status as keyof typeof STATUS]
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+      <WardHome onSelectPatient={(id) => { const p = PATIENTS.find((x:any) => x.id === id); if(p) setSelected(p); }} />
       {/* Hero */}
       <div style={{
         height:140,
@@ -296,6 +298,7 @@ export default function WardIndex({ onXP }: Props) {
 
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
+      <WardHome onSelectPatient={(id) => { const p = PATIENTS.find((x:any) => x.id === id); if(p) setSelected(p); }} />
 
       {/* Hero Image */}
       {sub==='ward' && (
