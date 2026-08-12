@@ -75,21 +75,26 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
             onClick={e => e.stopPropagation()}
             style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
-              background: T.white, borderRadius: "24px 24px 0 0",
+              background: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              borderRadius: "28px 28px 0 0",
               padding: "0 0 40px",
               maxHeight: "85dvh", overflowY: "auto",
               fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+              border: "1px solid rgba(255,255,255,0.6)",
+              borderBottom: "none",
             }}
           >
             {/* Handle */}
             <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
-              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(0,0,0,0.12)" }}/>
             </div>
 
             {/* Title */}
             <div style={{
               padding: "12px 20px 16px",
-              borderBottom: `1px solid ${T.border}`,
+              borderBottom: "1px solid rgba(0,0,0,0.06)",
               display: "flex", justifyContent: "space-between", alignItems: "center",
             }}>
               <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
@@ -104,8 +109,13 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
             <div style={{ padding: "16px 20px 0" }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "14px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "14px",
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+                marginBottom: 16,
               }}>
                 <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -134,13 +144,16 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
               <div style={{
                 borderRadius: 14, marginBottom: 16, overflow: "hidden",
-                border: `1px solid ${T.border}`,
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 4px 20px rgba(13,148,136,0.12)",
               }}>
                 <div style={{
                   padding: "14px 16px",
                   background: isPro
-                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
-                    : "#F7FAFA",
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.25),rgba(30,64,175,0.18))"
+                    : "rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -167,8 +180,13 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
               {/* ── Appearance ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "4px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "4px",
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                marginBottom: 16,
                 display: "flex", gap: 4,
               }}>
                 {(["light", "dark"] as const).map(mode => (
@@ -188,8 +206,13 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
               {/* ── Privacy & Legal ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14,
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                marginBottom: 16,
                 overflow: "hidden",
               }}>
                 {[
@@ -213,7 +236,11 @@ function ScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
               {/* ── Danger Zone ── */}
               <button onClick={() => { setShowSettings(false); onReset(); }} style={{
                 width: "100%", padding: "14px", borderRadius: 14,
-                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                background: "rgba(239,68,68,0.08)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                boxShadow: "0 2px 12px rgba(239,68,68,0.06)",
                 color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
               }}>
                 🔄 Reset & Choose Role Again
@@ -269,21 +296,26 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
             onClick={e => e.stopPropagation()}
             style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
-              background: T.white, borderRadius: "24px 24px 0 0",
+              background: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              borderRadius: "28px 28px 0 0",
               padding: "0 0 40px",
               maxHeight: "85dvh", overflowY: "auto",
               fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+              border: "1px solid rgba(255,255,255,0.6)",
+              borderBottom: "none",
             }}
           >
             {/* Handle */}
             <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
-              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(0,0,0,0.12)" }}/>
             </div>
 
             {/* Title */}
             <div style={{
               padding: "12px 20px 16px",
-              borderBottom: `1px solid ${T.border}`,
+              borderBottom: "1px solid rgba(0,0,0,0.06)",
               display: "flex", justifyContent: "space-between", alignItems: "center",
             }}>
               <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
@@ -298,8 +330,13 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
             <div style={{ padding: "16px 20px 0" }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "14px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "14px",
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+                marginBottom: 16,
               }}>
                 <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -328,13 +365,16 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
               <div style={{
                 borderRadius: 14, marginBottom: 16, overflow: "hidden",
-                border: `1px solid ${T.border}`,
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 4px 20px rgba(13,148,136,0.12)",
               }}>
                 <div style={{
                   padding: "14px 16px",
                   background: isPro
-                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
-                    : "#F7FAFA",
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.25),rgba(30,64,175,0.18))"
+                    : "rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -361,8 +401,13 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
               {/* ── Appearance ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "4px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "4px",
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                marginBottom: 16,
                 display: "flex", gap: 4,
               }}>
                 {(["light", "dark"] as const).map(mode => (
@@ -382,8 +427,13 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
               {/* ── Privacy & Legal ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14,
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                marginBottom: 16,
                 overflow: "hidden",
               }}>
                 {[
@@ -407,7 +457,11 @@ function PillarCard({ icon, label, sub, score, color, detail }: {
               {/* ── Danger Zone ── */}
               <button onClick={() => { setShowSettings(false); onReset(); }} style={{
                 width: "100%", padding: "14px", borderRadius: 14,
-                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                background: "rgba(239,68,68,0.08)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                boxShadow: "0 2px 12px rgba(239,68,68,0.06)",
                 color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
               }}>
                 🔄 Reset & Choose Role Again
@@ -444,21 +498,26 @@ function StatBadge({ icon, value, label, sub }: {
             onClick={e => e.stopPropagation()}
             style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
-              background: T.white, borderRadius: "24px 24px 0 0",
+              background: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              borderRadius: "28px 28px 0 0",
               padding: "0 0 40px",
               maxHeight: "85dvh", overflowY: "auto",
               fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+              border: "1px solid rgba(255,255,255,0.6)",
+              borderBottom: "none",
             }}
           >
             {/* Handle */}
             <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
-              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(0,0,0,0.12)" }}/>
             </div>
 
             {/* Title */}
             <div style={{
               padding: "12px 20px 16px",
-              borderBottom: `1px solid ${T.border}`,
+              borderBottom: "1px solid rgba(0,0,0,0.06)",
               display: "flex", justifyContent: "space-between", alignItems: "center",
             }}>
               <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
@@ -473,8 +532,13 @@ function StatBadge({ icon, value, label, sub }: {
             <div style={{ padding: "16px 20px 0" }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "14px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "14px",
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+                marginBottom: 16,
               }}>
                 <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -503,13 +567,16 @@ function StatBadge({ icon, value, label, sub }: {
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
               <div style={{
                 borderRadius: 14, marginBottom: 16, overflow: "hidden",
-                border: `1px solid ${T.border}`,
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 4px 20px rgba(13,148,136,0.12)",
               }}>
                 <div style={{
                   padding: "14px 16px",
                   background: isPro
-                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
-                    : "#F7FAFA",
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.25),rgba(30,64,175,0.18))"
+                    : "rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -536,8 +603,13 @@ function StatBadge({ icon, value, label, sub }: {
               {/* ── Appearance ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "4px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "4px",
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                marginBottom: 16,
                 display: "flex", gap: 4,
               }}>
                 {(["light", "dark"] as const).map(mode => (
@@ -557,8 +629,13 @@ function StatBadge({ icon, value, label, sub }: {
               {/* ── Privacy & Legal ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14,
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                marginBottom: 16,
                 overflow: "hidden",
               }}>
                 {[
@@ -582,7 +659,11 @@ function StatBadge({ icon, value, label, sub }: {
               {/* ── Danger Zone ── */}
               <button onClick={() => { setShowSettings(false); onReset(); }} style={{
                 width: "100%", padding: "14px", borderRadius: 14,
-                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                background: "rgba(239,68,68,0.08)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                boxShadow: "0 2px 12px rgba(239,68,68,0.06)",
                 color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
               }}>
                 🔄 Reset & Choose Role Again
@@ -846,21 +927,26 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
             onClick={e => e.stopPropagation()}
             style={{
               position: "absolute", bottom: 0, left: 0, right: 0,
-              background: T.white, borderRadius: "24px 24px 0 0",
+              background: "rgba(255,255,255,0.75)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              borderRadius: "28px 28px 0 0",
               padding: "0 0 40px",
               maxHeight: "85dvh", overflowY: "auto",
               fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+              border: "1px solid rgba(255,255,255,0.6)",
+              borderBottom: "none",
             }}
           >
             {/* Handle */}
             <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
-              <div style={{ width: 36, height: 4, borderRadius: 99, background: T.border }}/>
+              <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(0,0,0,0.12)" }}/>
             </div>
 
             {/* Title */}
             <div style={{
               padding: "12px 20px 16px",
-              borderBottom: `1px solid ${T.border}`,
+              borderBottom: "1px solid rgba(0,0,0,0.06)",
               display: "flex", justifyContent: "space-between", alignItems: "center",
             }}>
               <div style={{ fontSize: 17, fontWeight: 700, color: T.text }}>Settings</div>
@@ -875,8 +961,13 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
             <div style={{ padding: "16px 20px 0" }}>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Profile</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "14px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "14px",
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+                marginBottom: 16,
               }}>
                 <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Display Name</div>
                 <div style={{ display: "flex", gap: 8 }}>
@@ -905,13 +996,16 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Subscription</div>
               <div style={{
                 borderRadius: 14, marginBottom: 16, overflow: "hidden",
-                border: `1px solid ${T.border}`,
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 4px 20px rgba(13,148,136,0.12)",
               }}>
                 <div style={{
                   padding: "14px 16px",
                   background: isPro
-                    ? "linear-gradient(135deg,rgba(13,148,136,0.1),rgba(30,64,175,0.08))"
-                    : "#F7FAFA",
+                    ? "linear-gradient(135deg,rgba(13,148,136,0.25),rgba(30,64,175,0.18))"
+                    : "rgba(255,255,255,0.5)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -938,8 +1032,13 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
               {/* ── Appearance ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Appearance</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14, padding: "4px",
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16, padding: "4px",
+                border: "1px solid rgba(255,255,255,0.7)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+                marginBottom: 16,
                 display: "flex", gap: 4,
               }}>
                 {(["light", "dark"] as const).map(mode => (
@@ -959,8 +1058,13 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
               {/* ── Privacy & Legal ── */}
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", color: T.muted, marginBottom: 8, textTransform: "uppercase" }}>Privacy & Legal</div>
               <div style={{
-                background: "#F7FAFA", borderRadius: 14,
-                border: `1px solid ${T.border}`, marginBottom: 16,
+                background: "rgba(255,255,255,0.6)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                borderRadius: 16,
+                border: "1px solid rgba(255,255,255,0.8)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                marginBottom: 16,
                 overflow: "hidden",
               }}>
                 {[
@@ -984,7 +1088,11 @@ export default function LifeScreen({ xp, streak, casesCompleted, isPro, name, on
               {/* ── Danger Zone ── */}
               <button onClick={() => { setShowSettings(false); onReset(); }} style={{
                 width: "100%", padding: "14px", borderRadius: 14,
-                background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)",
+                background: "rgba(239,68,68,0.08)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(239,68,68,0.2)",
+                boxShadow: "0 2px 12px rgba(239,68,68,0.06)",
                 color: T.red, fontSize: 14, fontWeight: 700, cursor: "pointer",
               }}>
                 🔄 Reset & Choose Role Again
