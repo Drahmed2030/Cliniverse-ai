@@ -19,6 +19,7 @@ const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false 
 const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
 const PaywallScreen = dynamic(() => import('./components/PaywallScreen'), { ssr:false })
 import PaywallSheet from './components/PaywallSheet'
+import SettingsSheet from './components/SettingsSheet'
 import ReviewPromptModal from './components/ReviewPromptModal'
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
@@ -308,6 +309,7 @@ export default function Home() {
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showPaywall, setShowPaywall] = useState(false)
   const [showReview, setShowReview] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
   const [aiQuestion, setAiQuestion]     = useState('')
@@ -1034,6 +1036,8 @@ export default function Home() {
       </main>
 
       {/* ── NAV ── */}
+      {showSettings ? <SettingsSheet open={showSettings} isPro={isPro} onClose={function() { setShowSettings(false) }} onUpgrade={function() { setShowSettings(false); setShowPaywall(true) }} onSignOut={function() { setShowSettings(false) }} /> : null}
+      {userType !== 'patient' ? <button onClick={function() { setShowSettings(true) }} style={{ position: 'fixed', top: 12, right: 12, zIndex: 40, border: '1px solid #E2E8F0', background: '#fff', borderRadius: 99, padding: '8px 12px', fontSize: 12, fontWeight: 700, color: '#475569' }}>Settings</button> : null}
       {userType !== 'patient' && <FloatingNav active={tab} onChange={setTab}/>}
       <div style={{height:120}}/>
       <PWAInstall/>
