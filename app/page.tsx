@@ -817,7 +817,7 @@ export default function Home() {
 
         {/* PROFILE */}
         {(tab==='profile'||tab==='me') && (
-          userType === 'patient' && localStorage.getItem('afia_user_type') !== 'doctor'
+          userType === 'patient'
             ? <AfiaHome
                 key={userType}
                 savedType="patient"
