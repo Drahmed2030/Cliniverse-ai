@@ -258,7 +258,7 @@ function LoadingSpinner({ color = '#00C2B2' }: { color?: string }) {
 }
 
 export default function Home() {
-  const [tab, setTab]                   = useState('pulse')
+  const [tab, setTab]                   = useState('hub')
   const [isOnline, setIsOnline] = useState(true)
 
   useEffect(() => {
