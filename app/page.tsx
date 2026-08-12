@@ -11,7 +11,7 @@ const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr:
 const PulseIndex = dynamic(() => import('./components/pulse'), { ssr:false })
 import ProfilePage from './components/ProfilePage'
 const MePage = dynamic(() => import('./components/MePage'), { ssr:false })
-const LifeScreen = dynamic(() => import('./components/LifeScreen'), { ssr:false })
+const LifeScreen = dynamic(() => import('./components/LifeScreen').catch(e => { console.error('LifeScreen load error:', e); return { default: () => <div style={{padding:40,color:'red'}}>LifeScreen Error: {String(e)}</div> } }), { ssr:false })
 const SplashScreen = dynamic(() => import('./components/SplashScreen'), { ssr:false })
 const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
