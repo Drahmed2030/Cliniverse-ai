@@ -18,6 +18,8 @@ const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), 
 const AuthScreen = dynamic(() => import('./components/AuthScreen'), { ssr:false })
 const AfiaHome = dynamic(() => import('./components/AfiaHome'), { ssr:false })
 const PaywallScreen = dynamic(() => import('./components/PaywallScreen'), { ssr:false })
+import PaywallSheet from './components/PaywallSheet'
+import ReviewPromptModal from './components/ReviewPromptModal'
 const PWAInstall    = dynamic(() => import('./components/PWAInstall'),    { ssr:false })
 const DynamicMCQ    = dynamic(() => import('./components/DynamicMCQ'),   { ssr:false })
 const ToolsPage = dynamic(() => import('./components/ToolsPage'), { ssr:false })
@@ -305,6 +307,7 @@ export default function Home() {
   const [userType, setUserType] = useState<string|null>(() => { if (typeof window !== 'undefined') return localStorage.getItem('afia_user_type'); return null; })
   const [showAdmin, setShowAdmin]       = useState(false)
   const [showPaywall, setShowPaywall] = useState(false)
+  const [showReview, setShowReview] = useState(false)
   const [showUpgrade, setShowUpgrade]   = useState(false)
   const [showAI, setShowAI]             = useState(false)
   const [aiQuestion, setAiQuestion]     = useState('')
