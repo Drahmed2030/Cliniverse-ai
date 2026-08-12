@@ -73,25 +73,16 @@ export default function PatientJourney({
         position: "fixed",
         inset: 0,
         zIndex: 80,
-        background: "rgba(15,23,42,0.45)",
-        display: "flex",
-        alignItems: "flex-end",
-        justifyContent: "center",
+        background: T.bg,
+        overflowY: "auto",
       }}
-      onClick={onClose}
     >
       <div
-        onClick={function (e) {
-          e.stopPropagation();
-        }}
         style={{
           width: "100%",
-          maxWidth: 480,
-          maxHeight: "92dvh",
-          overflowY: "auto",
-          background: T.bg,
-          borderRadius: "24px 24px 0 0",
-          paddingBottom: 28,
+          maxWidth: 600,
+          margin: "0 auto",
+          paddingBottom: 100,
         }}
       >
         {/* Handle */}
