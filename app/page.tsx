@@ -803,7 +803,7 @@ export default function Home() {
 
         {/* HUB */}
         {(tab==='hub'||tab==='pulse') && (
-          <PulseIndex
+          <PulseIndex userName={userName}
             xp={xp} streak={streak} casesCompleted={casesCompleted}
             mcqCorrect={mcqCorrect} isPro={isPro}
             setTab={setTab} setToolTab={setToolTab} onXP={addXP}
