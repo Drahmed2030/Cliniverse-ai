@@ -11,6 +11,7 @@ const ClinicalNexus = dynamic(() => import('./components/ClinicalNexus'), { ssr:
 const PulseIndex = dynamic(() => import('./components/pulse'), { ssr:false })
 import ProfilePage from './components/ProfilePage'
 const MePage = dynamic(() => import('./components/MePage'), { ssr:false })
+const LifeScreen = dynamic(() => import('./components/LifeScreen'), { ssr:false })
 const SplashScreen = dynamic(() => import('./components/SplashScreen'), { ssr:false })
 const FloatingNav   = dynamic(() => import('./components/FloatingNav'),   { ssr:false })
 const OnboardingFunnel = dynamic(() => import('./components/OnboardingFunnel'), { ssr:false })
@@ -828,7 +829,7 @@ export default function Home() {
                 }}
                 onClose={() => { setUserType(null); localStorage.removeItem('afia_user_type'); setShowOnboarding(true); setTab('hub'); }}
               />
-            : <MePage
+            : <LifeScreen
                 xp={xp} streak={streak} casesCompleted={casesCompleted}
                 mcqCorrect={mcqCorrect} isPro={isPro} name={userName}
                 onUpgrade={()=>setShowUpgrade(true)}
