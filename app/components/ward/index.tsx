@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { L } from '../../lib/tokens'
 import dynamic from 'next/dynamic'
 import WardHome from './WardHome'
+import PatientJourney from './PatientJourney'
+import { MOCK_PATIENTS } from '../../lib/ward'
 
 const MedFeed     = dynamic(() => import('../MedFeed'),     { ssr:false })
 const ClinicalNet = dynamic(() => import('../ClinicalNet'), { ssr:false })
@@ -294,7 +296,7 @@ export default function WardIndex({ onXP }: Props) {
   const urgent   = PATIENTS.filter(p=>p.status==='urgent').length
   const stable   = PATIENTS.filter(p=>p.status==='stable').length
 
-  if(selected) return <PatientDetail p={selected} onBack={()=>setSelected(null)}/>
+  if(selected) { const full = MOCK_PATIENTS.find(function(x) { return x.id === selected.id }) || null; if(full) return <PatientJourney patient={full} onClose={function() { setSelected(null) }} onRequestConsult={function(id) { console.log(id) }} /> }
 
   return (
     <div style={{minHeight:'100vh',background:L.canvas,fontFamily:L.font}}>
