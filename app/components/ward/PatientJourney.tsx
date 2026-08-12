@@ -1,4 +1,7 @@
 "use client";
+import { useState } from "react";
+import ClinicalPanel from "./ClinicalPanel";
+import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
 
 import type {
   WardPatient,
@@ -400,6 +403,11 @@ export default function PatientJourney({
             </div>
           </div>
 
+          <ClinicalPanel
+            patientName={patient.name}
+            bundle={patient.templateId === "stemi_anterior" ? STEMI_CLINICAL_BUNDLE : { metrics: [], medications: [], soapNotes: [], alerts: [] }}
+            canDischarge={patient.status === "ready_for_discharge" || patient.status === "discharged"}
+          />
           <div
             style={{
               fontSize: 11,
