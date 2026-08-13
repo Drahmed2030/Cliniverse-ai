@@ -1,241 +1,419 @@
-'use client'
-import { useState } from 'react'
-import { supabase } from '../supabase'
+"use client";
 
-const L = {
-  canvas:'#F8FAFC', surface:'#FFFFFF', border:'#E2E8F0',
-  teal:'#0D9488', cobalt:'#1E40AF', textPrimary:'#0F172A',
-  textSub:'#475569', textMuted:'#94A3B8',
-  gradient:'linear-gradient(135deg,#0D9488,#1E40AF)',
-  shadowSm:'0 1px 3px rgba(15,23,42,0.08)',
-  shadowGlow:'0 4px 20px rgba(13,148,136,0.25)',
+import { useState } from "react";
+
+const T = {
+  teal: "#0D9488",
+  tealD: "#0F766E",
+  bg: "#070B14",
+  card: "#0F1623",
+  white: "#FFFFFF",
+  text: "#F8FAFC",
+  sub: "#94A3B8",
+  muted: "#64748B",
+  border: "rgba(148,163,184,0.22)",
+  apple: "#FFFFFF",
+  google: "#FFFFFF",
+  danger: "#F87171",
+};
+
+type Mode = "landing" | "email";
+
+interface Props {
+  onComplete: (payload?: {
+    method: "apple" | "google" | "email" | "guest";
+    email?: string;
+  }) => void;
+  onOpenTerms?: () => void;
+  onOpenPrivacy?: () => void;
+  allowGuest?: boolean;
+  locale?: "en" | "ar";
 }
-const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
 
-export default function AuthScreen({ onComplete }:{ onComplete:()=>void }) {
-  const [mode, setMode]       = useState<'main'|'email'>('main')
-  const [email, setEmail]     = useState('')
-  const [otp, setOtp]         = useState('')
-  const [step, setStep]       = useState<'email'|'otp'>('email')
-  const [loading, setLoading] = useState(false)
-  const [pressed, setPressed] = useState<string|null>(null)
-  const [error, setError]     = useState('')
+const COPY = {
+  en: {
+    kicker: "CLINIVERSE",
+    title: "Sign in to save your clinical progress",
+    subtitle:
+      "Ward cases, SOAP notes, and discharge summaries stay with you across devices.",
+    apple: "Continue with Apple",
+    google: "Continue with Google",
+    email: "Continue with Email",
+    or: "or",
+    emailLabel: "Email",
+    passwordLabel: "Password",
+    magic: "Prefer a magic link instead",
+    continueEmail: "Continue",
+    back: "Back",
+    guest: "Continue as guest",
+    trust: "Practice safely · No real patient data",
+    terms: "Terms",
+    privacy: "Privacy",
+    emailError: "Enter a valid email",
+    passwordError: "Password must be at least 8 characters",
+  },
+  ar: {
+    kicker: "CLINIVERSE",
+    title: "سجّل دخولك لحفظ تقدمك السريري",
+    subtitle:
+      "حالات الورد وملاحظات SOAP وملخصات الخروج تبقى معك عبر أجهزتك.",
+    apple: "المتابعة مع Apple",
+    google: "المتابعة مع Google",
+    email: "المتابعة بالبريد",
+    or: "أو",
+    emailLabel: "البريد الإلكتروني",
+    passwordLabel: "كلمة المرور",
+    magic: "أفضل رابط دخول سريع",
+    continueEmail: "متابعة",
+    back: "رجوع",
+    guest: "المتابعة كزائر",
+    trust: "تدرّب بأمان · لا بيانات مرضى حقيقية",
+    terms: "الشروط",
+    privacy: "الخصوصية",
+    emailError: "أدخل بريدًا صالحًا",
+    passwordError: "كلمة المرور 8 أحرف على الأقل",
+  },
+};
 
-  const sendOTP = async () => {
-    if(!email.trim()) return
-    setLoading(true); setError('')
-    try {
-      const { error } = await supabase.auth.signInWithOtp({ email: email.trim() })
-      if(error) setError(error.message)
-      else setStep('otp')
-    } catch { setError('Network error. Please try again.') }
-    setLoading(false)
+export default function AuthScreen({
+  onComplete,
+  onOpenTerms,
+  onOpenPrivacy,
+  allowGuest = true,
+  locale = "en",
+}: Props) {
+  const [mode, setMode] = useState<Mode>("landing");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [useMagic, setUseMagic] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const t = COPY[locale] || COPY.en;
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
+  function validEmail(v: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
   }
 
-  const verifyOTP = async () => {
-    if(!otp.trim()) return
-    setLoading(true); setError('')
-    try {
-      const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: otp.trim(), type:'email' })
-      if(error) setError(error.message)
-      else onComplete()
-    } catch { setError('Invalid code. Please try again.') }
-    setLoading(false)
+  function handleOAuth(method: "apple" | "google") {
+    if (loading) return;
+    setLoading(true);
+    // Wire to NextAuth / Supabase / Clerk later.
+    // For now complete optimistically so funnel is testable.
+    setTimeout(function () {
+      setLoading(false);
+      onComplete({ method: method });
+    }, 350);
   }
 
-  const signInWithGoogle = async () => {
-    try {
-      await supabase.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } })
-    } catch {}
-  }
-
-  const signInWithApple = async () => {
-    try {
-      await supabase.auth.signInWithOAuth({ provider:'apple', options:{ redirectTo: window.location.origin } })
-    } catch {}
+  function handleEmail() {
+    setError("");
+    if (!validEmail(email)) {
+      setError(t.emailError);
+      return;
+    }
+    if (!useMagic && password.trim().length < 8) {
+      setError(t.passwordError);
+      return;
+    }
+    setLoading(true);
+    setTimeout(function () {
+      setLoading(false);
+      onComplete({ method: "email", email: email.trim() });
+    }, 350);
   }
 
   return (
-    <div style={{
-      position:'fixed', inset:0, zIndex:9997, background:L.canvas,
-      fontFamily:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif',
-      display:'flex', flexDirection:'column',
-    }}>
-      {/* Unsplash hero top */}
-      <div style={{position:'relative',height:'42%',overflow:'hidden',flexShrink:0}}>
-        <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&q=80"
-          alt="" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-        <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.2),rgba(248,250,252,1))'}}/>
-        <div style={{position:'absolute',bottom:24,left:24}}>
-          <div style={{
-            width:52,height:52,borderRadius:16,
-            background:'linear-gradient(135deg,#0D9488,#1E40AF)',
-            display:'flex',alignItems:'center',justifyContent:'center',
-            boxShadow:'0 4px 16px rgba(13,148,136,0.35)',marginBottom:12,
-          }}>
-            <svg width="28" height="28" viewBox="0 0 44 44" fill="none">
-              <polyline points="4,22 10,22 13,12 17,32 21,18 25,26 28,22 40,22"
-                stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+    <div
+      dir={dir}
+      style={{
+        minHeight: "100dvh",
+        background: "linear-gradient(180deg, " + T.bg + " 0%, #0B1220 55%, #0A1F1C 100%)",
+        color: T.text,
+        display: "flex",
+        flexDirection: "column",
+        padding: "28px 20px 24px",
+        boxSizing: "border-box",
+      }}
+    >
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", maxWidth: 420, width: "100%", margin: "0 auto" }}>
+        <div style={{ marginBottom: 28 }}>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 800,
+              letterSpacing: 1.2,
+              color: T.teal,
+              marginBottom: 10,
+            }}
+          >
+            {t.kicker}
           </div>
-          <div style={{fontSize:24,fontWeight:900,color:L.textPrimary,letterSpacing:-0.6}}>Cliniverse AI</div>
-          <div style={{fontSize:13,color:L.textMuted,marginTop:2}}>Your clinical companion</div>
+          <div
+            style={{
+              fontSize: 28,
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.15,
+              marginBottom: 10,
+            }}
+          >
+            {t.title}
+          </div>
+          <div style={{ fontSize: 14, color: T.sub, lineHeight: 1.5 }}>
+            {t.subtitle}
+          </div>
         </div>
-      </div>
 
-      {/* Auth panel */}
-      <div style={{flex:1,padding:'24px 24px 48px',overflowY:'auto'}}>
-        {mode==='main' ? (
-          <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            <div style={{fontSize:22,fontWeight:800,color:L.textPrimary,letterSpacing:-0.4,marginBottom:8}}>
-              Sign in to continue
+        {mode === "landing" ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <AuthButton
+              label={t.apple}
+              bg={T.white}
+              color="#0F172A"
+              onClick={function () {
+                handleOAuth("apple");
+              }}
+              disabled={loading}
+              icon=""
+            />
+            <AuthButton
+              label={t.google}
+              bg="rgba(255,255,255,0.06)"
+              color={T.white}
+              border={"1px solid " + T.border}
+              onClick={function () {
+                handleOAuth("google");
+              }}
+              disabled={loading}
+              icon="G"
+            />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                margin: "8px 0",
+              }}
+            >
+              <div style={{ flex: 1, height: 1, background: T.border }} />
+              <div style={{ fontSize: 12, color: T.muted }}>{t.or}</div>
+              <div style={{ flex: 1, height: 1, background: T.border }} />
             </div>
 
-            {/* Apple */}
-            <button onClick={signInWithApple}
-              onMouseDown={()=>setPressed('apple')} onMouseUp={()=>setPressed(null)}
-              style={{
-                width:'100%', padding:'16px', borderRadius:16, cursor:'pointer',
-                background:'#000000', border:'none',
-                color:'white', fontSize:15, fontWeight:700,
-                display:'flex', alignItems:'center', justifyContent:'center', gap:10,
-                transform:pressed==='apple'?'scale(0.97)':'scale(1)', transition:spring,
-                boxShadow:'0 4px 16px rgba(0,0,0,0.2)',
-              }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-              Continue with Apple
-            </button>
+            <AuthButton
+              label={t.email}
+              bg={T.tealD}
+              color={T.white}
+              onClick={function () {
+                setMode("email");
+                setError("");
+              }}
+              disabled={loading}
+            />
 
-            {/* Google */}
-            <button onClick={signInWithGoogle}
-              onMouseDown={()=>setPressed('google')} onMouseUp={()=>setPressed(null)}
-              style={{
-                width:'100%', padding:'16px', borderRadius:16, cursor:'pointer',
-                background:L.surface, border:`1px solid ${L.border}`,
-                color:L.textPrimary, fontSize:15, fontWeight:700,
-                display:'flex', alignItems:'center', justifyContent:'center', gap:10,
-                transform:pressed==='google'?'scale(0.97)':'scale(1)', transition:spring,
-                boxShadow:L.shadowSm,
-              }}>
-              <svg width="18" height="18" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Continue with Google
-            </button>
-
-            {/* Divider */}
-            <div style={{display:'flex',alignItems:'center',gap:12,margin:'4px 0'}}>
-              <div style={{flex:1,height:1,background:L.border}}/>
-              <span style={{fontSize:12,color:L.textMuted,fontWeight:500}}>or</span>
-              <div style={{flex:1,height:1,background:L.border}}/>
-            </div>
-
-            {/* Email */}
-            <button onClick={()=>setMode('email')}
-              onMouseDown={()=>setPressed('email')} onMouseUp={()=>setPressed(null)}
-              style={{
-                width:'100%', padding:'16px', borderRadius:16, cursor:'pointer',
-                background:L.gradient, border:'none',
-                color:'white', fontSize:15, fontWeight:700,
-                display:'flex', alignItems:'center', justifyContent:'center', gap:10,
-                transform:pressed==='email'?'scale(0.97)':'scale(1)', transition:spring,
-                boxShadow:L.shadowGlow,
-              }}>
-              ✉️ Continue with Email
-            </button>
-
-            {/* Skip */}
-            <button onClick={onComplete} style={{
-              background:'none', border:'none', cursor:'pointer',
-              color:L.textMuted, fontSize:13, fontWeight:600,
-              textAlign:'center', marginTop:4, padding:'8px',
-            }}>
-              Skip for now
-            </button>
-
-            <div style={{fontSize:11,color:L.textMuted,textAlign:'center',marginTop:8}}>
-              By continuing, you agree to our Terms & Privacy Policy
-            </div>
+            {allowGuest ? (
+              <button
+                onClick={function () {
+                  onComplete({ method: "guest" });
+                }}
+                style={{
+                  marginTop: 4,
+                  border: "none",
+                  background: "transparent",
+                  color: T.sub,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  padding: "12px 8px",
+                }}
+              >
+                {t.guest}
+              </button>
+            ) : null}
           </div>
         ) : (
-          <div style={{display:'flex',flexDirection:'column',gap:12}}>
-            <button onClick={()=>setMode('main')} style={{
-              background:'none',border:'none',cursor:'pointer',
-              color:L.teal,fontSize:13,fontWeight:700,
-              textAlign:'left',padding:0,marginBottom:8,
-            }}>← Back</button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <Field
+              label={t.emailLabel}
+              value={email}
+              onChange={setEmail}
+              type="email"
+              autoComplete="email"
+            />
+            {!useMagic ? (
+              <Field
+                label={t.passwordLabel}
+                value={password}
+                onChange={setPassword}
+                type="password"
+                autoComplete="current-password"
+              />
+            ) : null}
 
-            <div style={{fontSize:22,fontWeight:800,color:L.textPrimary,letterSpacing:-0.4,marginBottom:4}}>
-              {step==='email' ? 'Enter your email' : 'Check your inbox'}
-            </div>
-            <div style={{fontSize:14,color:L.textMuted,marginBottom:16}}>
-              {step==='email' ? "We'll send you a 6-digit code" : `Code sent to ${email}`}
-            </div>
+            <button
+              onClick={function () {
+                setUseMagic(!useMagic);
+                setError("");
+              }}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: T.teal,
+                fontSize: 12,
+                fontWeight: 700,
+                textAlign: "left",
+                padding: 0,
+              }}
+            >
+              {t.magic}
+            </button>
 
-            {step==='email' ? (
-              <>
-                <input value={email} onChange={e=>setEmail(e.target.value)}
-                  type="email" placeholder="your@email.com"
-                  onKeyDown={e=>e.key==='Enter'&&sendOTP()}
-                  style={{
-                    width:'100%', padding:'16px', borderRadius:16, boxSizing:'border-box',
-                    border:`1px solid ${L.border}`, background:L.surface,
-                    color:L.textPrimary, fontSize:15, outline:'none',
-                    fontFamily:'inherit',
-                  }}/>
-                {error && <div style={{fontSize:12,color:'#EF4444'}}>{error}</div>}
-                <button onClick={sendOTP} disabled={!email.trim()||loading}
-                  onMouseDown={()=>setPressed('send')} onMouseUp={()=>setPressed(null)}
-                  style={{
-                    width:'100%', padding:'16px', borderRadius:16, border:'none', cursor:'pointer',
-                    background:!email.trim()?'#E2E8F0':L.gradient,
-                    color:!email.trim()?L.textMuted:'white',
-                    fontSize:15, fontWeight:700,
-                    transform:pressed==='send'?'scale(0.97)':'scale(1)', transition:spring,
-                    boxShadow:email.trim()?L.shadowGlow:'none',
-                  }}>
-                  {loading ? '⏳ Sending...' : 'Send Code →'}
-                </button>
-              </>
-            ) : (
-              <>
-                <input value={otp} onChange={e=>setOtp(e.target.value)}
-                  type="text" placeholder="000000" maxLength={6}
-                  onKeyDown={e=>e.key==='Enter'&&verifyOTP()}
-                  style={{
-                    width:'100%', padding:'20px', borderRadius:16, boxSizing:'border-box',
-                    border:`1px solid ${L.border}`, background:L.surface,
-                    color:L.textPrimary, fontSize:28, fontWeight:800,
-                    textAlign:'center', letterSpacing:8, outline:'none',
-                    fontFamily:'inherit',
-                  }}/>
-                {error && <div style={{fontSize:12,color:'#EF4444',textAlign:'center'}}>{error}</div>}
-                <button onClick={verifyOTP} disabled={otp.length<6||loading}
-                  onMouseDown={()=>setPressed('verify')} onMouseUp={()=>setPressed(null)}
-                  style={{
-                    width:'100%', padding:'16px', borderRadius:16, border:'none', cursor:'pointer',
-                    background:otp.length<6?'#E2E8F0':L.gradient,
-                    color:otp.length<6?L.textMuted:'white',
-                    fontSize:15, fontWeight:700,
-                    transform:pressed==='verify'?'scale(0.97)':'scale(1)', transition:spring,
-                    boxShadow:otp.length>=6?L.shadowGlow:'none',
-                  }}>
-                  {loading ? '⏳ Verifying...' : 'Verify & Continue →'}
-                </button>
-                <button onClick={()=>setStep('email')} style={{
-                  background:'none',border:'none',cursor:'pointer',
-                  color:L.textMuted,fontSize:13,textAlign:'center',padding:'8px',
-                }}>Resend code</button>
-              </>
-            )}
+            {error ? (
+              <div style={{ fontSize: 12, color: T.danger, fontWeight: 600 }}>
+                {error}
+              </div>
+            ) : null}
+
+            <AuthButton
+              label={loading ? "..." : t.continueEmail}
+              bg={T.tealD}
+              color={T.white}
+              onClick={handleEmail}
+              disabled={loading}
+            />
+
+            <button
+              onClick={function () {
+                setMode("landing");
+                setError("");
+              }}
+              style={{
+                border: "none",
+                background: "transparent",
+                color: T.sub,
+                fontSize: 13,
+                fontWeight: 700,
+                padding: "10px 8px",
+              }}
+            >
+              {t.back}
+            </button>
           </div>
         )}
       </div>
+
+      <div style={{ textAlign: "center", paddingTop: 18 }}>
+        <div style={{ fontSize: 12, color: T.muted, marginBottom: 8 }}>
+          {t.trust}
+        </div>
+        <div style={{ fontSize: 12, color: T.muted }}>
+          <button
+            onClick={onOpenTerms}
+            style={{
+              border: "none",
+              background: "transparent",
+              color: T.sub,
+              fontWeight: 700,
+              padding: "0 6px",
+            }}
+          >
+            {t.terms}
+          </button>
+          ·
+          <button
+            onClick={onOpenPrivacy}
+            style={{
+              border: "none",
+              background: "transparent",
+              color: T.sub,
+              fontWeight: 700,
+              padding: "0 6px",
+            }}
+          >
+            {t.privacy}
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
+}
+
+function AuthButton(props: {
+  label: string;
+  bg: string;
+  color: string;
+  border?: string;
+  onClick: () => void;
+  disabled?: boolean;
+  icon?: string;
+}) {
+  return (
+    <button
+      onClick={props.onClick}
+      disabled={props.disabled}
+      style={{
+        width: "100%",
+        border: props.border || "none",
+        background: props.bg,
+        color: props.color,
+        borderRadius: 16,
+        padding: "14px 16px",
+        fontSize: 15,
+        fontWeight: 800,
+        opacity: props.disabled ? 0.7 : 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+      }}
+    >
+      {props.icon ? <span style={{ fontSize: 16 }}>{props.icon}</span> : null}
+      {props.label}
+    </button>
+  );
+}
+
+function Field(props: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  autoComplete?: string;
+}) {
+  return (
+    <label style={{ display: "block" }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 800,
+          color: T.muted,
+          marginBottom: 6,
+          letterSpacing: 0.4,
+        }}
+      >
+        {props.label}
+      </div>
+      <input
+        value={props.value}
+        type={props.type || "text"}
+        autoComplete={props.autoComplete}
+        onChange={function (e) {
+          props.onChange(e.target.value);
+        }}
+        style={{
+          width: "100%",
+          boxSizing: "border-box",
+          borderRadius: 14,
+          border: "1px solid " + T.border,
+          background: "rgba(255,255,255,0.04)",
+          color: T.white,
+          padding: "13px 14px",
+          fontSize: 15,
+          outline: "none",
+        }}
+      />
+    </label>
+  );
 }

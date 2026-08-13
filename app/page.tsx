@@ -320,10 +320,10 @@ export default function Home() {
   const [userName]                      = useState('')
 
   useEffect(() => {
-    const seen = localStorage.getItem('onboarding_completed')
-    if (seen) {
-      setShowOnboarding(false)
-    }
+    var onboardingDone = localStorage.getItem('onboarding_completed') === '1'
+    var authDone = localStorage.getItem('auth_completed') === '1'
+    setShowOnboarding(!onboardingDone)
+    setShowAuth(onboardingDone && !authDone)
   }, [])
 
   // ── DATA ──────────────────────────────────────────────────────────────
@@ -474,7 +474,7 @@ export default function Home() {
 
   // ── UPGRADE MODAL ─────────────────────────────────────────────────────
   if (showPaywall) return <PaywallScreen onClose={() => setShowPaywall(false)} onSubscribe={(plan) => { window.open(plan === 'yearly' ? 'https://cliniverse.lemonsqueezy.com/checkout/buy/pro-yearly' : 'https://cliniverse.lemonsqueezy.com/checkout/buy/pro-monthly', '_blank'); setShowPaywall(false); }} />
-  if (showAuth) return (<AuthScreen onComplete={() => { setShowAuth(false); }} />)
+  if (showAuth) return (<AuthScreen locale='en' allowGuest={true} onComplete={function(payload) { localStorage.setItem('auth_completed', '1'); if(payload && payload.method) { localStorage.setItem('auth_method', payload.method) } setShowAuth(false) }} onOpenTerms={function() { window.open('/privacy', '_blank') }} onOpenPrivacy={function() { window.open('/privacy', '_blank') }} />)
 
   if (showAfia && afiaLoading) return <AfiaSkeletonScreen />
   if (showAfia) return (
