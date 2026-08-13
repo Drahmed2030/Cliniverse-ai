@@ -965,7 +965,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
         {active==='blsacls'    && <CodeLabHub
           isPro={!!isPro}
           onUpgrade={() => setShowPaywall && setShowPaywall(true)}
-          onBack={() => setActive && setActive(null)}
+          onBack={() => setActive('atlas')}
         />}
         {active==='oncall'     && <OnCallSystem/>}
         {active==='nightshift' && <NightShiftSurvival/>}
