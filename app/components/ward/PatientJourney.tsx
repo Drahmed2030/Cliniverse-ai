@@ -1,4 +1,5 @@
 "use client";
+import RelatedEvidencePanel from "./RelatedEvidencePanel";
 import { useState } from "react";
 import ClinicalPanelV2 from "./ClinicalPanelV2";
 import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
@@ -274,6 +275,16 @@ export default function PatientJourney({
             ) : (
               <Empty text="No workup items" />
             )}
+          </Section>
+
+          {/* Related Evidence — P2 */}
+          <Section title="Related Evidence">
+            <RelatedEvidencePanel
+              templateId={patient.templateId}
+              diagnosis={patient.diagnosis}
+              isPro={isPro}
+              onUpgrade={onUpgrade}
+            />
           </Section>
 
           {/* Orders */}
