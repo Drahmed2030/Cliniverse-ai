@@ -963,7 +963,7 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
 
         {active==='codeblue'   && <CodeBlue/>}
         {active==='blsacls'    && <CodeLabHub
-          isPro={!!isPro}
+          isPro={false}
           onUpgrade={() => setShowPaywall && setShowPaywall(true)}
           onBack={() => setActive('atlas')}
         />}
