@@ -11,6 +11,7 @@ const ClinicalAcademy      = dynamic(()=>import('./ClinicalAcademy'),{ssr:false}
 const CodeBlue         = dynamic(() => import('./CodeBlue'),         { ssr:false })
 const EcgChallenge     = dynamic(() => import('./EcgChallenge'),     { ssr:false })
 const BLSACLSModule    = dynamic(() => import('./BLSACLSModule'),    { ssr:false })
+const CodeLabHub       = dynamic(() => import('./ward/CodeLabHub'),  { ssr:false })
 const OnCallSystem     = dynamic(() => import('./OnCallSystem'),     { ssr:false })
 const NightShiftSurvival = dynamic(() => import('./NightShiftSurvival'), { ssr:false })
 const MedCalculators   = dynamic(() => import('./MedCalculators'),   { ssr:false })
@@ -892,7 +893,7 @@ function AtlasCards({ onCardSelect }:{ onCardSelect:(id:string)=>void }) {
 // ── MAIN ARSENAL ──────────────────────────────────────
 const TOOLS = [
   { id:'codeblue',   label:'Code Blue',      icon:'🔴', color:'#EF4444' },
-  { id:'blsacls',    label:'BLS/ACLS',       icon:'💊', color:'#EF4444' },
+  { id:'blsacls',    label:'Code Lab',       icon:'🔴', color:'#EF4444' },
   { id:'oncall',     label:'On-Call',         icon:'📞', color:'#7C3AED' },
   { id:'nightshift', label:'Night Shift',     icon:'🌙', color:'#7C3AED' },
   { id:'calc',       label:'Calculators',     icon:'🧮', color:'#0D9488' },
@@ -961,7 +962,11 @@ export default function ToolsPage({ onXP }:{ onXP?:(n:number)=>void }) {
       <div style={{padding:'0 16px'}}>
 
         {active==='codeblue'   && <CodeBlue/>}
-        {active==='blsacls'    && <BLSACLSModule/>}
+        {active==='blsacls'    && <CodeLabHub
+          isPro={!!isPro}
+          onUpgrade={() => setShowPaywall && setShowPaywall(true)}
+          onBack={() => setActive && setActive(null)}
+        />}
         {active==='oncall'     && <OnCallSystem/>}
         {active==='nightshift' && <NightShiftSurvival/>}
         {active==='calc'       && <MedCalculators/>}
