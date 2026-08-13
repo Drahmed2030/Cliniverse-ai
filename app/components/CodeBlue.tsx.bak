@@ -442,13 +442,6 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           </div>
         </div>
       )}
-            {megaCaseId && (
-        <MegacodeRunner
-          caseId={megaCaseId}
-          onClose={() => setMegaCaseId(null)}
-          onFinished={(r) => { if (onXP && r.xp) onXP(r.xp); setMegaCaseId(null); }}
-        />
-      )}
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   )
