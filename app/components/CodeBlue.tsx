@@ -247,9 +247,9 @@ const ScenarioIcon = ({ iconName, color, size=28 }: {iconName: string, color: st
 }
 
 const CASE_MAP: Record<string, "mega_vf_01" | "mega_pe_01" | "mega_sepsis_01"> = {
-  ventricular: "mega_vf_01",
-  massive: "mega_pe_01",
-  septic: "mega_sepsis_01",
+  vf: "mega_vf_01",
+  pe_massive: "mega_pe_01",
+  sepsis: "mega_sepsis_01",
 };
 
 export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
