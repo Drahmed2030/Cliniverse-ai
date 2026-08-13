@@ -43,9 +43,27 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: string) => void }) {
+  const [showMedFeed, setShowMedFeed] = React.useState(false);
+  const [showCodeLab, setShowCodeLab] = React.useState(false);
   const [selectedDept, setSelectedDept] = useState<string>('all')
 
   const assigned = MOCK_PATIENTS.filter(p => p.assignedToMe && p.status !== 'discharged')
+
+  if (showMedFeed) return (
+    <MedFeedScreen
+      isPro={isPro}
+      onUpgrade={onUpgrade}
+      onBack={() => setShowMedFeed(false)}
+    />
+  );
+
+  if (showCodeLab) return (
+    <CodeLabHub
+      isPro={isPro}
+      onUpgrade={onUpgrade}
+      onBack={() => setShowCodeLab(false)}
+    />
+  );
 
   return (
     <div style={{ background: T.bg, minHeight: '100vh', paddingBottom: 100 }}>
@@ -196,6 +214,36 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
         </div>
 
       </div>
+
+        {/* Signal + Code Lab entry */}
+        <div style={{ display: 'flex', gap: 10, marginTop: 8, marginBottom: 20 }}>
+          <button
+            onClick={() => setShowMedFeed(true)}
+            style={{
+              flex: 1, background: '#0F172A',
+              border: 'none', borderRadius: 14,
+              padding: '14px 12px', cursor: 'pointer',
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>📡</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#F8FAFC' }}>Signal</span>
+            <span style={{ fontSize: 11, color: '#94A3B8' }}>Latest evidence</span>
+          </button>
+          <button
+            onClick={() => setShowCodeLab(true)}
+            style={{
+              flex: 1, background: '#0B1220',
+              border: 'none', borderRadius: 14,
+              padding: '14px 12px', cursor: 'pointer',
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>🔴</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#F8FAFC' }}>Code Lab</span>
+            <span style={{ fontSize: 11, color: '#94A3B8' }}>BLS · ACLS drills</span>
+          </button>
+        </div>
       <style>{('@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}')}</style>
     </div>
   )
