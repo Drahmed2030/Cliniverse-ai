@@ -246,7 +246,14 @@ const ScenarioIcon = ({ iconName, color, size=28 }: {iconName: string, color: st
   return <div style={{transform:`scale(${scale})`,transformOrigin:'center',display:'flex',alignItems:'center',justifyContent:'center'}}>{fn(color)}</div>
 }
 
+const CASE_MAP: Record<string, "mega_vf_01" | "mega_pe_01" | "mega_sepsis_01"> = {
+  ventricular: "mega_vf_01",
+  massive: "mega_pe_01",
+  septic: "mega_sepsis_01",
+};
+
 export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
+  const [megaCaseId, setMegaCaseId] = React.useState<string | null>(null);
   const [scenarioIdx, setScenarioIdx] = useState(0)
   const [phase, setPhase] = useState<Phase>('intro')
   const [timeLeft, setTimeLeft] = useState(0)
@@ -355,9 +362,22 @@ export default function CodeBlue({ onXP }: { onXP: (n: number) => void }) {
           <div style={{ fontSize:12, color:'var(--text-secondary,rgba(10,22,40,0.55))', textAlign:'center', marginBottom:14 }}>
             ⏱ <b style={{color:'#ff3b30'}}>{scenario.timeLimit}s</b> · 2 wrong = FAILED · <b style={{color:'#00C4B4'}}>+{scenario.xpReward} XP</b>
           </div>
-          <button onClick={startScenario} style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:`linear-gradient(135deg,${scenario.color},${scenario.color}bb)`, color:'#0A1628', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:`0 6px 20px ${scenario.color}44` }}>
+          <button
+            onClick={() => {
+              if (megaCaseId) return;
+              const mapped = CASE_MAP[scenario.id];
+              if (mapped) {
+                setMegaCaseId(mapped);
+              } else {
+                startScenario();
+              }
+            }}
+            style={{ width:'100%', padding:'16px', borderRadius:16, border:'none', background:'linear-gradient(135deg,' + scenario.color + ',' + scenario.color + 'bb)', color:'#0A1628', fontSize:16, fontWeight:800, cursor:'pointer', boxShadow:'0 6px 20px ' + scenario.color + '44' }}>
             🚨 Respond Now
           </button>
+          <div style={{ fontSize:10, color:'rgba(10,22,40,0.45)', textAlign:'center', marginTop:6 }}>
+            Educational simulation only. Not real-time clinical guidance.
+          </div>
         </div>
       )}
 
