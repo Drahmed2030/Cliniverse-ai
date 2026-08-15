@@ -54,6 +54,7 @@ const WardIndex = dynamic(() => import('./components/ward'), { ssr:false })
 const AfiaSkeletonScreen = dynamic(() => import('./components/AfiaSkeletonScreen'), { ssr:false })
 const LiveCasesSystem     = dynamic(() => import('./components/LiveCasesSystem'),     { ssr:false })
 const HealthInsights      = dynamic(() => import('./components/HealthInsights'),      { ssr:false })
+const OracleScreen = dynamic(() => import('./components/oracle/OracleScreen'), { ssr: false })
 
 // ── DESIGN TOKENS — Liquid Ocean 2026 ──────────────────────────────────
 const D = {
@@ -1028,7 +1029,7 @@ export default function Home() {
 
       
 
-        {tab==='oracle' && <ErrorBoundary section="Oracle"><ClinicalOracle onXP={addXP}/></ErrorBoundary>}
+        {tab==='oracle' && <OracleScreen isPro={!!isPro} onUpgrade={() => setShowPaywall && setShowPaywall(true)} />}
 
       
 

@@ -8,6 +8,7 @@
 
 import React, { useState, useEffect } from "react";
 import { BLS_LESSONS, BLS_DISCLAIMER } from "../../lib/codelab/blsLessons";
+import { ACLS_LESSONS, ACLS_DISCLAIMER } from "../../lib/codelab/aclsLessons";
 import BLSLessonPlayer from "./BLSLessonPlayer";
 
 interface CodeLabHubProps {
@@ -44,8 +45,8 @@ const TRACKS = [
     label: "ACLS Track",
     icon: "⚡",
     desc: "Arrest algorithms, peri-arrest, team roles — think in the code",
-    lessonCount: 0,
-    available: false,
+    lessonCount: 6,
+    available: true,
   },
   {
     id: "megacode",
@@ -67,6 +68,7 @@ const TRACKS = [
 
 export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps) {
   const [progress, setProgress] = useState<TrackProgress>({ completedIds: [] });
+  const [activeTrack, setActiveTrack] = useState<"bls" | "acls">("bls");
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
   useEffect(() => {
@@ -151,7 +153,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
       {/* BLS Lessons */}
       <div style={styles.section}>
         <div style={styles.sectionLabel}>BLS TRACK — 6 LESSONS</div>
-        {BLS_LESSONS.map((lesson) => {
+        {(activeTrack === 'bls' ? BLS_LESSONS : ACLS_LESSONS).map((lesson) => {
           const done = progress.completedIds.includes(lesson.id);
           const locked = !canAccess(lesson.order);
           return (

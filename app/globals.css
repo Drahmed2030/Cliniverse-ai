@@ -245,3 +245,5 @@ input::placeholder, textarea::placeholder {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
+
+@keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
