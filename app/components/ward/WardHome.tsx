@@ -1,5 +1,8 @@
 'use client'
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
+const MedFeedScreen = dynamic(() => import('../MedFeed'), { ssr: false })
+const CodeLabHub = dynamic(() => import('./CodeLabHub'), { ssr: false })
 import {
   DEPARTMENTS, MOCK_PATIENTS, MOCK_LIVE_EVENTS, MOCK_CENSUS
 } from '../../lib/ward'
