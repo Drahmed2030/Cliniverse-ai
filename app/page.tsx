@@ -323,7 +323,7 @@ export default function Home() {
   useEffect(() => {
     var onboardingDone = localStorage.getItem('onboarding_completed') === '1'
     var authDone = localStorage.getItem('auth_completed') === '1'
-    if (onboardingDone) setShowSplash(false)
+    setShowSplash(false)
     setShowOnboarding(!onboardingDone)
     setShowAuth(onboardingDone && !authDone)
   }, [])
