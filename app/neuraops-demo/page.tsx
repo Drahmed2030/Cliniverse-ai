@@ -8,12 +8,6 @@ const SAMPLE_QUESTIONS_AR = [
   "وش المقاسات المتوفرة؟",
 ];
 
-const SAMPLE_QUESTIONS_EN = [
-  "How long does shipping take?",
-  "Can I return this if it doesn't fit?",
-  "What sizes are available?",
-];
-
 export default function NeuraOpsDemo() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -33,72 +27,127 @@ export default function NeuraOpsDemo() {
         body: JSON.stringify({ question: finalQuestion }),
       });
       const data = await res.json();
-      setAnswer(data.answer || data.error || "Something went wrong.");
+      setAnswer(data.answer || data.error || "حدث خطأ، حاول مرة أخرى.");
     } catch {
-      setAnswer("Connection error. Please try again.");
+      setAnswer("مشكلة بالاتصال — حاول مرة أخرى.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div style={{
+    <div dir="rtl" style={{
       minHeight: "100vh",
-      background: "#0B0F19",
-      color: "#F1F5F9",
-      padding: "40px 20px",
-      fontFamily: "system-ui, -apple-system, sans-serif",
+      background: "#0A0E14",
+      color: "#F5F3EE",
+      fontFamily: "'Tajawal', 'Segoe UI', sans-serif",
+      position: "relative",
+      overflow: "hidden",
     }}>
-      <div style={{ maxWidth: 640, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{ fontSize: 14, letterSpacing: 2, color: "#0D9488", fontWeight: 700, marginBottom: 8 }}>
-            NEURAOPS DEMO
-          </div>
-          <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>
-            رد آلي ذكي لمتجرك
-          </h1>
-          <p style={{ color: "#94A3B8", fontSize: 15 }}>
-            جرّب تسأل أي سؤال يسأله عميل — شوف كيف يرد النظام فوراً
-          </p>
+      {/* Ambient signature mark — a faint radial glow, not a logo graphic */}
+      <div style={{
+        position: "absolute",
+        top: "-20%",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: 900,
+        height: 900,
+        borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(212,175,120,0.06) 0%, rgba(13,148,136,0.04) 45%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px", position: "relative" }}>
+
+        {/* Eyebrow */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 32,
+        }}>
+          <div style={{ width: 24, height: 1, background: "#D4AF78" }} />
+          <span style={{
+            fontSize: 11,
+            letterSpacing: "0.15em",
+            color: "#D4AF78",
+            fontWeight: 700,
+          }}>
+            NEURAOPS · نظام الرد الذكي
+          </span>
         </div>
 
+        {/* Headline */}
+        <h1 style={{
+          fontSize: "clamp(30px, 6vw, 42px)",
+          fontWeight: 800,
+          lineHeight: 1.3,
+          marginBottom: 14,
+          color: "#FFFFFF",
+        }}>
+          متجرك يرد على عملاءك
+          <br />
+          <span style={{
+            background: "linear-gradient(90deg, #0D9488, #D4AF78)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
+            بذكاء، وبثوانٍ.
+          </span>
+        </h1>
+
+        <p style={{
+          fontSize: 15.5,
+          color: "#9CA3AF",
+          lineHeight: 1.8,
+          marginBottom: 40,
+          maxWidth: 460,
+        }}>
+          جرّب تسأل أي سؤال يسأله عميل حقيقي — وشوف كيف يرد النظام فوراً،
+          بدون أي إعداد أو انتظار.
+        </p>
+
+        {/* Card */}
         <div style={{
-          background: "#111827",
-          borderRadius: 16,
-          padding: 24,
-          border: "1px solid #1F2937",
+          background: "rgba(255,255,255,0.03)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 20,
+          padding: 28,
         }}>
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="اكتب سؤال زي ما يسأله عميل حقيقي..."
+            placeholder="اكتب سؤالك هنا..."
             style={{
               width: "100%",
-              minHeight: 80,
-              background: "#0B0F19",
-              border: "1px solid #1F2937",
-              borderRadius: 12,
-              padding: 14,
-              color: "#F1F5F9",
-              fontSize: 15,
+              minHeight: 84,
+              background: "rgba(0,0,0,0.25)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 14,
+              padding: 16,
+              color: "#F5F3EE",
+              fontSize: 15.5,
               resize: "vertical",
               boxSizing: "border-box",
               fontFamily: "inherit",
+              outline: "none",
             }}
           />
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
             {SAMPLE_QUESTIONS_AR.map((q) => (
               <button
                 key={q}
                 onClick={() => { setQuestion(q); ask(q); }}
                 style={{
                   fontSize: 13,
-                  padding: "6px 12px",
+                  padding: "7px 14px",
                   borderRadius: 100,
-                  border: "1px solid #1F2937",
-                  background: "transparent",
-                  color: "#94A3B8",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.03)",
+                  color: "#B8BCC4",
                   cursor: "pointer",
                 }}
               >
@@ -112,16 +161,17 @@ export default function NeuraOpsDemo() {
             disabled={loading}
             style={{
               width: "100%",
-              marginTop: 16,
-              padding: "14px",
-              borderRadius: 12,
+              marginTop: 18,
+              padding: "15px",
+              borderRadius: 14,
               border: "none",
-              background: "#0D9488",
+              background: "linear-gradient(90deg, #0D9488, #0B7A70)",
               color: "#fff",
               fontWeight: 700,
               fontSize: 15,
               cursor: loading ? "default" : "pointer",
               opacity: loading ? 0.6 : 1,
+              boxShadow: "0 8px 24px -8px rgba(13,148,136,0.5)",
             }}
           >
             {loading ? "جاري الرد..." : "أرسل السؤال"}
@@ -129,20 +179,32 @@ export default function NeuraOpsDemo() {
 
           {answer && (
             <div style={{
-              marginTop: 20,
-              padding: 16,
-              background: "#0D9488" + "15",
-              border: "1px solid #0D9488" + "40",
-              borderRadius: 12,
-              fontSize: 15,
-              lineHeight: 1.6,
+              marginTop: 22,
+              paddingTop: 22,
+              borderTop: "1px solid rgba(255,255,255,0.08)",
             }}>
-              {answer}
+              <div style={{
+                fontSize: 11,
+                letterSpacing: "0.1em",
+                color: "#D4AF78",
+                fontWeight: 700,
+                marginBottom: 10,
+              }}>
+                رد النظام
+              </div>
+              <div style={{ fontSize: 15.5, lineHeight: 1.8, color: "#F5F3EE" }}>
+                {answer}
+              </div>
             </div>
           )}
         </div>
 
-        <p style={{ textAlign: "center", color: "#475569", fontSize: 12, marginTop: 24 }}>
+        <p style={{
+          textAlign: "center",
+          color: "#5B6270",
+          fontSize: 12,
+          marginTop: 28,
+        }}>
           هذا عرض توضيحي — الرد مبني على بيانات متجر تجريبية
         </p>
       </div>
