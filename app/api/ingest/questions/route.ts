@@ -141,3 +141,31 @@ The proposed correct answer is ${mcq.correct_answer}. Is this correct? State cle
     return NextResponse.json({ error: 'Unhandled error', detail: String(err) }, { status: 500 });
   }
 }
+
+
+export async function GET() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!url || !key) {
+    return NextResponse.json({ error: 'Missing env vars', hasUrl: !!url, hasKey: !!key });
+  }
+
+  const supabase = createClient(url, key);
+  const { count, error } = await supabase
+    .from('evaluation_cases')
+    .select('*', { count: 'exact', head: true });
+
+  const { data: sample } = await supabase
+    .from('evaluation_cases')
+    .select('case_number, title')
+    .order('case_number')
+    .limit(3);
+
+  return NextResponse.json({
+    supabase_url_prefix: url.slice(0, 40),
+    evaluation_cases_count: count,
+    count_error: error,
+    sample_rows: sample,
+  });
+}
