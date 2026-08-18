@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) {
+    throw new Error('Missing Supabase credentials at runtime')
+  }
+  return createClient(url, key)
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +16,8 @@ export async function POST(req: NextRequest) {
     if (!deviceId || !mood || mood < 1 || mood > 5) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
     }
+
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('mood_logs')
       .insert({ device_id: deviceId, mood, note: note || null })
@@ -34,6 +40,7 @@ export async function GET(req: NextRequest) {
     const deviceId = req.nextUrl.searchParams.get('deviceId')
     if (!deviceId) return NextResponse.json({ error: 'Missing deviceId' }, { status: 400 })
 
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('mood_logs')
       .select('*')
