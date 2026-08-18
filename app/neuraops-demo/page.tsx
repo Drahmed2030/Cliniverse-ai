@@ -59,6 +59,20 @@ export default function NeuraOpsDemo() {
 
       <div style={{ maxWidth: 640, margin: "0 auto", padding: "56px 24px", position: "relative" }}>
 
+        <a href="/neuraops-demo-en" style={{
+          position: "absolute",
+          top: 24,
+          left: 24,
+          fontSize: 12,
+          color: "#8A8F98",
+          textDecoration: "none",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 100,
+          padding: "6px 12px",
+        }}>
+          English →
+        </a>
+
         {/* Eyebrow */}
         <div style={{
           display: "flex",

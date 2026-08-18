@@ -42,7 +42,21 @@ export default function NeuraOpsDemoEN() {
       color: "#1A1A1A",
       fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     }}>
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "64px 24px" }}>
+      <div style={{ maxWidth: 640, margin: "0 auto", padding: "64px 24px", position: "relative" }}>
+
+        <a href="/neuraops-demo" style={{
+          position: "absolute",
+          top: 24,
+          right: 24,
+          fontSize: 12,
+          color: "#8A8A82",
+          textDecoration: "none",
+          border: "1px solid #E5E4DD",
+          borderRadius: 100,
+          padding: "6px 12px",
+        }}>
+          ← العربية
+        </a>
 
         {/* Eyebrow */}
         <div style={{
