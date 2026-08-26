@@ -28,6 +28,19 @@ export async function getCurrentUser() {
   return supabase.auth.getUser()
 }
 
+export async function requireCurrentUser() {
+  const { data, error } = await supabase.auth.getUser()
+  if (error) return { user: null, error }
+  if (!data.user) return { user: null, error: new Error('No authenticated user') }
+  return { user: data.user, error: null }
+}
+
+export function subscribeToAuthState(
+  callback: Parameters<typeof supabase.auth.onAuthStateChange>[0],
+) {
+  return supabase.auth.onAuthStateChange(callback)
+}
+
 export async function signOut() {
   return supabase.auth.signOut()
 }
