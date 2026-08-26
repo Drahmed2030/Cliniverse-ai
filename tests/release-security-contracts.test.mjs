@@ -59,10 +59,25 @@ test('profile reads, bootstrap and updates derive ownership from the authenticat
   assert.equal(/updateOwnProfile\s*\([^)]*userId/.test(source), false)
 })
 
-test('profile bootstrap matches the verified profiles schema boundary', () => {
+test('profile bootstrap stays minimal and matches the verified profiles schema', () => {
   const source = read('app/lib/profile.ts')
   const defaults = source.slice(source.indexOf('function profileDefaults'), source.indexOf('export async function getOwnProfile'))
-  assert.equal(/email\s*:/.test(defaults), false)
+  assert.match(defaults, /id:\s*user\.id/)
+  assert.match(defaults, /name:\s*String\(fallbackName\)/)
+  for (const field of ['email', 'streak', 'mcq_correct', 'mcq_total', 'updated_at']) {
+    assert.equal(new RegExp(`${field}\\s*:`).test(defaults), false)
+  }
+})
+
+test('profile update uses only verified editable columns', () => {
+  const source = read('app/lib/profile.ts')
+  const updateSection = source.slice(source.indexOf('export async function updateOwnProfile'))
+  assert.match(updateSection, /name\.trim\(\)/)
+  assert.match(updateSection, /specialty\.trim\(\)/)
+  assert.match(updateSection, /country\.trim\(\)/)
+  for (const field of ['updated_at', 'is_pro', 'subscription_status', 'rank', 'xp', 'cases_completed']) {
+    assert.equal(new RegExp(`${field}\\s*:`).test(updateSection), false)
+  }
 })
 
 test('account email is sourced from Supabase Auth, not the profiles row', () => {
@@ -70,13 +85,6 @@ test('account email is sourced from Supabase Auth, not the profiles row', () => 
   assert.match(source, /getCurrentUser/)
   assert.match(source, /userResult\.data\.user\?\.email/)
   assert.equal(/profileResult\.data\.email/.test(source), false)
-})
-
-test('profile edits cannot write entitlement authority fields', () => {
-  const source = read('app/lib/profile.ts')
-  const updateSection = source.slice(source.indexOf('export async function updateOwnProfile'))
-  assert.equal(/is_pro\s*:/.test(updateSection), false)
-  assert.equal(/subscription_status\s*:/.test(updateSection), false)
 })
 
 test('entitlement reads derive identity from the authenticated user', () => {
