@@ -17,7 +17,6 @@ function profileDefaults(user: User) {
 
   return {
     id: user.id,
-    email: user.email || '',
     name: String(fallbackName),
     specialty: '',
     country: '',
