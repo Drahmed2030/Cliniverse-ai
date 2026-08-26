@@ -10,9 +10,11 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
+const releaseDescription = "Clinical learning, simulation and workflow tools for healthcare professionals."
+
 export const metadata: Metadata = {
-  title: "Cliniverse AI — Train Like a Consultant",
-  description: "AI-powered clinical training platform. 25+ cases, Dynamic MCQ, Surgical AI. Built by a doctor, for doctors.",
+  title: "Cliniverse AI — Clinical Learning & Workflow",
+  description: releaseDescription,
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -28,18 +30,15 @@ export const metadata: Metadata = {
     shortcut: "/icons/icon.svg",
   },
   openGraph: {
-    title: "Cliniverse AI — Train Like a Consultant",
-    description: "Join 1,000+ physicians. AI-powered clinical cases, Rapid Fire, Surgical protocols. Free to start.",
-    url: "https://cliniverseai.com",
+    title: "Cliniverse AI — Clinical Learning & Workflow",
+    description: releaseDescription,
     siteName: "Cliniverse AI",
-    images: [{ url: "https://cliniverseai.com/og.png", width: 1200, height: 630, alt: "Cliniverse AI" }],
     type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Cliniverse AI",
-    description: "AI-powered clinical training platform. Train like a consultant from day one.",
-    images: ["https://cliniverseai.com/og.png"],
+    description: releaseDescription,
   },
 }
 
