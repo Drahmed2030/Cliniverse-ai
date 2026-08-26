@@ -15,11 +15,20 @@ function profileDefaults(user: User) {
     user.email?.split('@')[0] ||
     'Cliniverse user'
 
-  // Keep bootstrap intentionally minimal and let verified database defaults
-  // own progression, rank and entitlement-related fields.
+  // Keep account identity minimal while explicitly neutralizing legacy
+  // database defaults that could imply professional attributes the user
+  // never supplied. Entitlement/progression authority remains elsewhere.
   return {
     id: user.id,
     name: String(fallbackName),
+    specialty: null,
+    country: null,
+    level: null,
+    institution: null,
+    target_board: null,
+    study_hours: null,
+    preferred_tools: [],
+    rank: 'Clinical Learner',
   }
 }
 
@@ -38,7 +47,18 @@ export async function ensureOwnProfile() {
   if (existing.error) return existing
   if (existing.data) return existing
 
-  return supabase.from('profiles').insert(profileDefaults(user)).select('*').single()
+  const created = await supabase.from('profiles').insert(profileDefaults(user)).select('*').single()
+  if (!created.error) return created
+
+  // Supabase auth-state restoration and SIGNED_IN events can overlap on the
+  // first authenticated launch. If another concurrent bootstrap won the race,
+  // recover by reading the now-existing own row instead of surfacing a false
+  // account failure.
+  if (created.error.code === '23505') {
+    return supabase.from('profiles').select('*').eq('id', user.id).maybeSingle()
+  }
+
+  return created
 }
 
 export async function updateOwnProfile(input: CliniverseProfileInput) {
@@ -47,8 +67,8 @@ export async function updateOwnProfile(input: CliniverseProfileInput) {
 
   const updates = {
     ...(typeof input.name === 'string' ? { name: input.name.trim() } : {}),
-    ...(typeof input.specialty === 'string' ? { specialty: input.specialty.trim() } : {}),
-    ...(typeof input.country === 'string' ? { country: input.country.trim() } : {}),
+    ...(typeof input.specialty === 'string' ? { specialty: input.specialty.trim() || null } : {}),
+    ...(typeof input.country === 'string' ? { country: input.country.trim() || null } : {}),
   }
 
   return supabase.from('profiles').update(updates).eq('id', user.id).select('*').single()
