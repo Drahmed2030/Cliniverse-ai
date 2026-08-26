@@ -39,6 +39,14 @@ workflows:
         script: |
           xcode-project use-profiles
           xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+      - name: RC package verification
+        script: |
+          if [ "${RELEASE_CANDIDATE:-false}" != "true" ]; then
+            echo "Integration build: final IPA compliance gate intentionally deferred until RELEASE_CANDIDATE=true."
+            exit 0
+          fi
+          IPA_PATH="$(find build/ios/ipa -maxdepth 1 -name '*.ipa' | head -n 1)"
+          bash scripts/verify-ios-ipa.sh "$IPA_PATH"
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
