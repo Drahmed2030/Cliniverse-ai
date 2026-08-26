@@ -28,8 +28,6 @@ interface Props {
     method: "apple" | "google" | "email" | "guest";
     email?: string;
   }) => void;
-  onOpenTerms?: () => void;
-  onOpenPrivacy?: () => void;
   allowGuest?: boolean;
   locale?: "en" | "ar";
   enabledOAuthProviders?: CliniverseAuthProvider[];
@@ -52,7 +50,7 @@ const COPY = {
     continueEmail: "Continue",
     back: "Back",
     guest: "Continue as guest",
-    trust: "Practice safely · No real patient data",
+    trust: "Practice safely · Do not enter real patient data",
     terms: "Terms",
     privacy: "Privacy",
     emailError: "Enter a valid email",
@@ -76,7 +74,7 @@ const COPY = {
     continueEmail: "متابعة",
     back: "رجوع",
     guest: "المتابعة كزائر",
-    trust: "تدرّب بأمان · لا بيانات مرضى حقيقية",
+    trust: "تدرّب بأمان · لا تُدخل بيانات مرضى حقيقية",
     terms: "الشروط",
     privacy: "الخصوصية",
     emailError: "أدخل بريدًا صالحًا",
@@ -88,8 +86,6 @@ const COPY = {
 
 export default function AuthScreen({
   onComplete,
-  onOpenTerms,
-  onOpenPrivacy,
   allowGuest = true,
   locale = "en",
   enabledOAuthProviders = [],
@@ -199,7 +195,7 @@ export default function AuthScreen({
       <div style={{ textAlign: "center", paddingTop: 18 }}>
         <div style={{ fontSize: 12, color: T.muted, marginBottom: 8 }}>{t.trust}</div>
         <div style={{ fontSize: 12, color: T.muted }}>
-          <button onClick={onOpenTerms} style={{ border: "none", background: "transparent", color: T.sub, fontWeight: 700, padding: "0 6px" }}>{t.terms}</button> · <button onClick={onOpenPrivacy} style={{ border: "none", background: "transparent", color: T.sub, fontWeight: 700, padding: "0 6px" }}>{t.privacy}</button>
+          <a href="/terms" style={{ color: T.sub, fontWeight: 700, padding: "0 6px", textDecoration: "none" }}>{t.terms}</a> · <a href="/privacy" style={{ color: T.sub, fontWeight: 700, padding: "0 6px", textDecoration: "none" }}>{t.privacy}</a>
         </div>
       </div>
     </div>
