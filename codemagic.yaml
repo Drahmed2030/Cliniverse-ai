@@ -23,6 +23,10 @@ workflows:
           rm -rf ios
           npx cap add ios
           npx cap copy ios
+      - name: Generate branded iOS assets
+        script: |
+          npx --yes @capacitor/assets@3.0.5 generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16'
+          test -f ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json
       - name: Add encryption compliance
         script: |
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
