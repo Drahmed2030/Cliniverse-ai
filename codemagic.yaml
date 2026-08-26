@@ -42,8 +42,10 @@ workflows:
         api_key: $APP_STORE_CONNECT_API_KEY
         key_id: $APP_STORE_CONNECT_KEY_ID
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        # Release integration builds must never auto-submit to Apple.
+        # Enable TestFlight/App Store publishing only from an explicitly approved RC workflow.
         submit_to_testflight: false
-        submit_to_app_store: true
+        submit_to_app_store: false
       email:
         recipients:
           - ahmyohmed121@gmail.com
