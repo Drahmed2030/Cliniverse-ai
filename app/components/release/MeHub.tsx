@@ -1,5 +1,7 @@
 'use client'
 
+import AchievementsHub from './AchievementsHub'
+
 const C = {
   panel: '#111827',
   elevated: '#172033',
@@ -11,7 +13,7 @@ const C = {
   gold: '#D4A72C',
 }
 
-type Status = 'ready' | 'foundation' | 'gated'
+type Status = 'ready' | 'foundation' | 'gated' | 'educational'
 
 const sections: Array<{
   title: string
@@ -32,6 +34,12 @@ const sections: Array<{
     detail: 'Manual entries are labelled as manual. Device data will appear only after a real Apple Health / Google integration is verified.',
   },
   {
+    title: 'Achievements',
+    description: 'Ranks, badges, streaks and certificates from Academy and simulation activity.',
+    status: 'educational',
+    detail: 'Achievements are in-platform learning records and are not presented as licensure, board status or accredited CME.',
+  },
+  {
     title: 'Plan',
     description: 'A single entitlement view for Free, Pro or Institution access.',
     status: 'foundation',
@@ -49,12 +57,14 @@ const statusLabel: Record<Status, string> = {
   ready: 'Release structure ready',
   foundation: 'Foundation in progress',
   gated: 'Gated until verified',
+  educational: 'Educational only',
 }
 
 const statusColor: Record<Status, string> = {
   ready: C.teal,
   foundation: C.blue,
   gated: C.gold,
+  educational: '#8B5CF6',
 }
 
 export default function MeHub() {
@@ -64,7 +74,7 @@ export default function MeHub() {
         <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>ONE ACCOUNT DESTINATION</div>
         <h1 id="me-title" style={{ fontSize: 26, margin: '7px 0 8px' }}>Me</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 720 }}>
-          Profile, Life, plan, privacy and settings live here so the user has one identity and one account state across Cliniverse.
+          Profile, Life, achievements, plan, privacy and settings live here so the user has one identity and one account state across Cliniverse.
         </p>
       </div>
 
@@ -95,10 +105,14 @@ export default function MeHub() {
         ))}
       </div>
 
+      <div style={{ marginTop: 10 }}>
+        <AchievementsHub />
+      </div>
+
       <div style={{ ...cardStyle, marginTop: 10, borderColor: 'rgba(20,184,166,0.22)' }}>
         <div style={{ fontSize: 12, fontWeight: 800, color: C.teal }}>Identity rule</div>
         <div style={{ marginTop: 5, color: C.sub, fontSize: 11, lineHeight: 1.6 }}>
-          Cliniverse will not maintain separate identities for Profile, Life and Settings. Authentication owns the user; the profile owns professional metadata; entitlement owns access level.
+          Cliniverse will not maintain separate identities for Profile, Life and Settings. Authentication owns the user; the profile owns professional metadata; entitlement owns access level; achievements own educational progress only.
         </div>
       </div>
     </section>
