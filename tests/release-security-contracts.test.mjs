@@ -40,3 +40,28 @@ test('release auth gate keeps guest access closed', () => {
   assert.match(source, /AuthGate/)
   assert.match(source, /allowGuest=\{false\}/)
 })
+
+test('auth gate bootstraps the authenticated profile before entering the release shell', () => {
+  const source = read('app/components/auth/AuthGate.tsx')
+  assert.match(source, /getCurrentSession/)
+  assert.match(source, /subscribeToAuthState/)
+  assert.match(source, /ensureOwnProfile/)
+  assert.match(source, /status:\s*'signed_in'/)
+})
+
+test('entitlement reads derive identity from the authenticated user', () => {
+  const source = read('app/lib/entitlements.ts')
+  assert.match(source, /requireCurrentUser/)
+  assert.match(source, /uid:\s*user\.id/)
+  assert.match(source, /\.eq\('user_id',\s*user\.id\)/)
+  assert.equal(/getOwnEntitlement\s*\([^)]*userId/.test(source), false)
+})
+
+test('release progress writes derive user_id from the authenticated session', () => {
+  const source = read('app/lib/progress.ts')
+  assert.match(source, /requireCurrentUser/)
+  assert.match(source, /user_id:\s*user\.id/)
+  assert.match(source, /\.eq\('user_id',\s*user\.id\)/)
+  assert.equal(/saveOwnCaseCompletion\s*\([^)]*userId/.test(source), false)
+  assert.equal(/saveOwnMcqAnswer\s*\([^)]*userId/.test(source), false)
+})
