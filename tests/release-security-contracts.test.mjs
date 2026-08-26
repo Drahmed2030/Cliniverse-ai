@@ -178,3 +178,18 @@ test('native iOS release gate is documented before RC1', () => {
   assert.match(gate, /cold launch/i)
   assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
 })
+
+test('magic-link sign-in cannot implicitly create accounts in the Apple release lane', () => {
+  const identity = read('app/lib/identity.ts')
+  const auth = read('app/components/AuthScreen.tsx')
+  assert.match(identity, /shouldCreateUser:\s*false/)
+  assert.match(auth, /Account creation is not enabled in this release/)
+})
+
+test('third-party AI is gated out of the release shell until consent and claims review pass', () => {
+  const release = read('app/components/ReleaseApp.tsx')
+  assert.equal(release.includes("import('./oracle/OracleScreen')"), false)
+  assert.match(release, /Clinical Intelligence is not enabled in this release build/)
+  assert.match(release, /third-party AI providers/)
+  assert.match(release, /Do not enter patient-identifiable information/)
+})
