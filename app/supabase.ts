@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://zbiujqxinvcxvuviuenx.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiaXVqcXhpbnZjeHZ1dml1ZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQxOTEzOTYsImV4cCI6MjA5OTc2NzM5Nn0.7znHWJXnYNgQmTVyzouuxQDFXxDEvVk9F2I75ArA8d8'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYXNlIiwicmVmIjoien...'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
@@ -82,11 +82,14 @@ export async function getUserProfile(userId: string) {
 }
 
 // ── PRO FUNCTIONS ──
-export async function checkIsPro(userId: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .rpc('is_user_pro', { uid: userId })
-  if (error) return false
-  return data === true
+/**
+ * Legacy compatibility export only.
+ * The historical is_user_pro(uid) RPC is SECURITY DEFINER and accepts an
+ * arbitrary uid. Release entitlement authority lives in app/lib/entitlements.ts
+ * and reads the authenticated user's subscription row only.
+ */
+export async function checkIsPro(_userId: string): Promise<boolean> {
+  return false
 }
 
 /**
