@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import CareOperationsPreview from './components/CareOperationsPreview'
 
 const sections = [
   {
@@ -117,8 +118,8 @@ export default function CliniverseShellPreview() {
             <h1>{current.title}</h1>
             <p>{current.copy}</p>
             <div className="cv-hero-actions">
-              <button className="no-primary-action cv-primary" type="button">Review care workflow</button>
-              <button className="cv-secondary-action no-focusable" type="button">Explore capabilities</button>
+              <button className="no-primary-action cv-primary" type="button" onClick={() => setActive('care')}>Review care workflow</button>
+              <button className="cv-secondary-action no-focusable" type="button" onClick={() => setActive('tools')}>Explore capabilities</button>
             </div>
           </section>
 
@@ -148,6 +149,8 @@ export default function CliniverseShellPreview() {
               <span className="cv-state cv-state-human">Human review</span>
             </article>
           </section>
+
+          {active === 'care' ? <CareOperationsPreview /> : null}
 
           <section className="cv-section-heading">
             <div>
