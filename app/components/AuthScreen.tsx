@@ -37,7 +37,7 @@ const COPY = {
   en: {
     kicker: "CLINIVERSE",
     title: "Sign in to save your progress",
-    subtitle: "Your account and learning progress stay with you across devices.",
+    subtitle: "Use an existing Cliniverse account. Account creation is not enabled in this release.",
     apple: "Continue with Apple",
     google: "Continue with Google",
     unavailable: "Not configured",
@@ -55,13 +55,13 @@ const COPY = {
     privacy: "Privacy",
     emailError: "Enter a valid email",
     passwordError: "Password must be at least 8 characters",
-    genericError: "Sign-in failed. Please try again.",
+    genericError: "Sign-in failed. Please check that this account already exists.",
     magicSent: "Check your email for the secure sign-in link.",
   },
   ar: {
     kicker: "CLINIVERSE",
     title: "سجّل دخولك لحفظ تقدمك",
-    subtitle: "يبقى حسابك وتقدمك التعليمي معك عبر أجهزتك.",
+    subtitle: "استخدم حساب Cliniverse موجودًا. إنشاء الحسابات غير مفعّل في هذا الإصدار.",
     apple: "المتابعة مع Apple",
     google: "المتابعة مع Google",
     unavailable: "غير مفعّل",
@@ -79,7 +79,7 @@ const COPY = {
     privacy: "الخصوصية",
     emailError: "أدخل بريدًا صالحًا",
     passwordError: "كلمة المرور 8 أحرف على الأقل",
-    genericError: "تعذر تسجيل الدخول. حاول مرة أخرى.",
+    genericError: "تعذر تسجيل الدخول. تحقق من أن الحساب موجود مسبقًا.",
     magicSent: "تحقق من بريدك للحصول على رابط الدخول الآمن.",
   },
 };
