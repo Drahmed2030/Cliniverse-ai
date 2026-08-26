@@ -98,11 +98,13 @@ test('account email is sourced from Supabase Auth, not the profiles row', () => 
   assert.equal(/profileResult\.data\.email/.test(source), false)
 })
 
-test('entitlement reads derive identity from the authenticated user', () => {
+test('release entitlement authority is the authenticated user subscription record only', () => {
   const source = read('app/lib/entitlements.ts')
   assert.match(source, /requireCurrentUser/)
-  assert.match(source, /uid:\s*user\.id/)
+  assert.match(source, /\.from\('subscriptions'\)/)
   assert.match(source, /\.eq\('user_id',\s*user\.id\)/)
+  assert.match(source, /source:\s*'subscription-record'/)
+  assert.equal(/rpc\(['"]is_user_pro['"]/.test(source), false)
   assert.equal(/getOwnEntitlement\s*\([^)]*userId/.test(source), false)
 })
 
