@@ -32,3 +32,24 @@ jobs:
 
       - name: Run release security contracts
         run: npm test
+
+      - name: Capture production dependency audit
+        shell: bash
+        run: |
+          npm audit --omit=dev --json > npm-audit-production.json || true
+          node - <<'NODE'
+          const fs = require('fs')
+          const audit = JSON.parse(fs.readFileSync('npm-audit-production.json', 'utf8'))
+          const counts = audit?.metadata?.vulnerabilities || {}
+          console.log('Production dependency audit:', JSON.stringify(counts))
+          if ((counts.critical || 0) > 0) {
+            console.log('RC HOLD: production dependency audit contains critical vulnerabilities; remediation/reachability review required.')
+          }
+          NODE
+
+      - name: Upload production dependency audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-production
+          path: npm-audit-production.json
+          if-no-files-found: error
