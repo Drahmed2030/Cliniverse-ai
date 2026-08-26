@@ -193,3 +193,12 @@ test('third-party AI is gated out of the release shell until consent and claims 
   assert.match(release, /third-party AI providers/)
   assert.match(release, /Do not enter patient-identifiable information/)
 })
+
+test('Oracle API fails closed by default in the Apple release lane', () => {
+  const route = read('app/api/oracle/route.ts')
+  assert.match(route, /RELEASE_ENABLE_ORACLE/)
+  assert.match(route, /RELEASE_ORACLE_ENABLED/)
+  assert.match(route, /status:\s*503/)
+  assert.match(route, /disabled in this release pending AI consent and clinical-safety review/)
+  assert.equal(route.includes('error: (r.reason as Error)?.message'), false)
+})
