@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { getOwnEntitlement, type CliniverseEntitlement } from '../../lib/entitlements'
+import { getCurrentUser } from '../../lib/identity'
 import { getOwnProfile, updateOwnProfile } from '../../lib/profile'
 import AccountSessionActions from '../auth/AccountSessionActions'
 
@@ -34,9 +35,10 @@ export default function MeAccountSummary() {
     let active = true
 
     async function load() {
-      const [profileResult, entitlementResult] = await Promise.all([
+      const [profileResult, entitlementResult, userResult] = await Promise.all([
         getOwnProfile(),
         getOwnEntitlement(),
+        getCurrentUser(),
       ])
 
       if (!active) return
@@ -46,7 +48,7 @@ export default function MeAccountSummary() {
           name: profileResult.data.name || '',
           specialty: profileResult.data.specialty || '',
           country: profileResult.data.country || '',
-          email: profileResult.data.email || '',
+          email: userResult.data.user?.email || '',
         })
       }
       setEntitlement(entitlementResult)
