@@ -126,3 +126,55 @@ test('release progress writes derive user_id from the authenticated session', ()
   assert.equal(/saveOwnCaseCompletion\s*\([^)]*userId/.test(source), false)
   assert.equal(/saveOwnMcqAnswer\s*\([^)]*userId/.test(source), false)
 })
+
+test('public release metadata avoids unverified seniority, volume and social-proof claims', () => {
+  const layout = read('app/layout.tsx')
+  const manifest = read('public/manifest.json')
+  for (const banned of ['Train Like a Consultant', 'Train like a consultant', '1,000+ physicians', '25+ cases', 'Surgical AI']) {
+    assert.equal(layout.includes(banned), false)
+    assert.equal(manifest.includes(banned), false)
+  }
+  assert.match(layout, /Clinical Learning & Workflow/)
+  assert.match(manifest, /Clinical learning, simulation and workflow tools/)
+})
+
+test('release manifest does not advertise legacy navigation shortcuts', () => {
+  const manifest = JSON.parse(read('public/manifest.json'))
+  assert.equal(Array.isArray(manifest.shortcuts), false)
+  assert.equal(manifest.start_url, '/')
+})
+
+test('sign-in surface has functional Terms and Privacy routes', () => {
+  const source = read('app/components/AuthScreen.tsx')
+  assert.equal(existsSync(new URL('../app/terms/page.tsx', import.meta.url)), true)
+  assert.equal(existsSync(new URL('../app/privacy/page.tsx', import.meta.url)), true)
+  assert.match(source, /href="\/terms"/)
+  assert.match(source, /href="\/privacy"/)
+  assert.equal(source.includes('onOpenTerms'), false)
+  assert.equal(source.includes('onOpenPrivacy'), false)
+})
+
+test('privacy notice does not make unverified encryption, retention or universal-case claims', () => {
+  const privacy = read('app/privacy/page.tsx')
+  for (const claim of ['TLS 1.3', 'AES-256', 'never stored', 'entirely fictional and AI-generated']) {
+    assert.equal(privacy.includes(claim), false)
+  }
+  assert.match(privacy, /do not submit real patient/i)
+  assert.match(privacy, /\/support/)
+})
+
+test('integration iOS workflow cannot automatically publish to Apple', () => {
+  const codemagic = read('codemagic.yaml')
+  assert.match(codemagic, /submit_to_testflight:\s*false/)
+  assert.match(codemagic, /submit_to_app_store:\s*false/)
+  assert.equal(/submit_to_app_store:\s*true/.test(codemagic), false)
+})
+
+test('native iOS release gate is documented before RC1', () => {
+  assert.equal(existsSync(new URL('../docs/NATIVE_IOS_BUILD_GATE_V1.md', import.meta.url)), true)
+  const gate = read('docs/NATIVE_IOS_BUILD_GATE_V1.md')
+  assert.match(gate, /rm -rf ios/)
+  assert.match(gate, /AppIcon/)
+  assert.match(gate, /cold launch/i)
+  assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
+})
