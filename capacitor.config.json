@@ -1,10 +1,10 @@
 {
   "appId": "com.cliniverse.ai",
-  "appName": "CLiniverse AI",
+  "appName": "Cliniverse AI",
   "webDir": "public",
   "server": {
-    "url": "https://cliniverseai.com",
-    "cleartext": true
+    "url": "https://cliniverse-ai-u7gi.vercel.app",
+    "cleartext": false
   },
   "ios": {
     "scheme": "App"
