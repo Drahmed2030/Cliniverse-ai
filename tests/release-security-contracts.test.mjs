@@ -59,6 +59,19 @@ test('profile reads, bootstrap and updates derive ownership from the authenticat
   assert.equal(/updateOwnProfile\s*\([^)]*userId/.test(source), false)
 })
 
+test('profile bootstrap matches the verified profiles schema boundary', () => {
+  const source = read('app/lib/profile.ts')
+  const defaults = source.slice(source.indexOf('function profileDefaults'), source.indexOf('export async function getOwnProfile'))
+  assert.equal(/email\s*:/.test(defaults), false)
+})
+
+test('account email is sourced from Supabase Auth, not the profiles row', () => {
+  const source = read('app/components/release/MeAccountSummary.tsx')
+  assert.match(source, /getCurrentUser/)
+  assert.match(source, /userResult\.data\.user\?\.email/)
+  assert.equal(/profileResult\.data\.email/.test(source), false)
+})
+
 test('profile edits cannot write entitlement authority fields', () => {
   const source = read('app/lib/profile.ts')
   const updateSection = source.slice(source.indexOf('export async function updateOwnProfile'))
