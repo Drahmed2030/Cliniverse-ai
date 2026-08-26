@@ -1,0 +1,71 @@
+:root {
+  /* NeuraOps shared brand foundation */
+  --no-navy-950: #080c16;
+  --no-navy-900: #0b0f19;
+  --no-navy-850: #101725;
+  --no-surface: #111827;
+  --no-surface-elevated: #172033;
+  --no-blue: #2563eb;
+  --no-blue-soft: #3b82f6;
+  --no-violet: #7c3aed;
+  --no-violet-soft: #8b5cf6;
+  --no-cliniverse: #14b8a6;
+  --no-priority: #d4a72c;
+  --no-success: #22c55e;
+  --no-critical: #ef4444;
+  --no-text: #f8fafc;
+  --no-text-secondary: #cbd5e1;
+  --no-text-muted: #94a3b8;
+  --no-border: rgba(148, 163, 184, 0.16);
+  --no-focus: 0 0 0 3px rgba(59, 130, 246, 0.35);
+  --no-radius-sm: 10px;
+  --no-radius-md: 14px;
+  --no-radius-lg: 20px;
+  --no-shadow-card: 0 12px 32px rgba(2, 6, 23, 0.28);
+}
+
+/* Phase 1 shell primitives. These are additive and intentionally do not
+   replace legacy component styling until each area is migrated. */
+.no-shell {
+  min-height: 100dvh;
+  background: var(--no-navy-950);
+  color: var(--no-text);
+}
+
+.no-card {
+  background: var(--no-surface);
+  border: 1px solid var(--no-border);
+  border-radius: var(--no-radius-lg);
+  box-shadow: var(--no-shadow-card);
+}
+
+.no-muted { color: var(--no-text-muted); }
+.no-secondary { color: var(--no-text-secondary); }
+.no-cliniverse-accent { color: var(--no-cliniverse); }
+.no-priority { color: var(--no-priority); }
+.no-critical { color: var(--no-critical); }
+.no-success { color: var(--no-success); }
+
+.no-primary-action {
+  background: var(--no-blue);
+  color: #fff;
+  border: 0;
+  border-radius: var(--no-radius-md);
+  font-weight: 700;
+}
+
+.no-primary-action:focus-visible,
+.no-focusable:focus-visible {
+  outline: none;
+  box-shadow: var(--no-focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .no-shell *,
+  .no-shell *::before,
+  .no-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
