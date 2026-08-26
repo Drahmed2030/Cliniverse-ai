@@ -59,14 +59,25 @@ test('profile reads, bootstrap and updates derive ownership from the authenticat
   assert.equal(/updateOwnProfile\s*\([^)]*userId/.test(source), false)
 })
 
-test('profile bootstrap stays minimal and matches the verified profiles schema', () => {
+test('profile bootstrap matches the verified schema and neutralizes misleading legacy defaults', () => {
   const source = read('app/lib/profile.ts')
   const defaults = source.slice(source.indexOf('function profileDefaults'), source.indexOf('export async function getOwnProfile'))
   assert.match(defaults, /id:\s*user\.id/)
   assert.match(defaults, /name:\s*String\(fallbackName\)/)
-  for (const field of ['email', 'streak', 'mcq_correct', 'mcq_total', 'updated_at']) {
+  assert.match(defaults, /specialty:\s*null/)
+  assert.match(defaults, /country:\s*null/)
+  assert.match(defaults, /level:\s*null/)
+  assert.match(defaults, /rank:\s*'Clinical Learner'/)
+  for (const field of ['email', 'streak', 'mcq_correct', 'mcq_total', 'updated_at', 'is_pro', 'subscription_status']) {
     assert.equal(new RegExp(`${field}\\s*:`).test(defaults), false)
   }
+})
+
+test('first-login profile bootstrap is idempotent under overlapping auth events', () => {
+  const source = read('app/lib/profile.ts')
+  const ensureSection = source.slice(source.indexOf('export async function ensureOwnProfile'), source.indexOf('export async function updateOwnProfile'))
+  assert.match(ensureSection, /created\.error\.code\s*===\s*'23505'/)
+  assert.match(ensureSection, /\.eq\('id',\s*user\.id\)\.maybeSingle\(\)/)
 })
 
 test('profile update uses only verified editable columns', () => {
