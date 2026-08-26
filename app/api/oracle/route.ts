@@ -6,8 +6,9 @@ const AN_KEY   = process.env.ANTHROPIC_API_KEY!;
 const XAI_KEY  = process.env.XAI_API_KEY!;
 const GM_KEY   = process.env.GOOGLE_AI_API_KEY!;
 
+const RELEASE_ORACLE_ENABLED = process.env.RELEASE_ENABLE_ORACLE === 'true';
+
 // ── Model Registry ─────────────────────────────────────────────────────
-// weight: قوة النموذج في المجال الطبي (1.0 = أقوى)
 const MODELS: Record<string, any> = {
   claude: {
     name: 'Claude 4', icon: '🔵', color: '#0D9488',
@@ -30,17 +31,15 @@ const MODELS: Record<string, any> = {
   },
 };
 
-// ── System Prompt ──────────────────────────────────────────────────────
-const SYS = `You are a senior clinical expert providing evidence-based answers.
+const SYS = `You are a senior clinical expert providing evidence-based educational support.
 Format your response EXACTLY like this:
-ANSWER: [direct clinical answer, 1-3 sentences]
-CONFIDENCE: [0-100, your certainty level]
+ANSWER: [direct educational answer, 1-3 sentences]
+CONFIDENCE: [0-100, your model certainty level]
 EVIDENCE: [specific guideline, study, or source]
-KEY_POINTS: [3 key clinical points, semicolon-separated]
+KEY_POINTS: [3 key educational points, semicolon-separated]
 CAUTION: [important warning or contraindication, or None]
 Respond in the same language as the question.`;
 
-// ── API Callers ────────────────────────────────────────────────────────
 async function callClaude(q: string): Promise<string> {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -120,7 +119,6 @@ async function callOR(model: string, q: string): Promise<string> {
   return d.choices?.[0]?.message?.content || '';
 }
 
-// ── Parser ─────────────────────────────────────────────────────────────
 function parse(text: string) {
   const g = (k: string) => {
     const m = text.match(new RegExp(`${k}:\\s*([^\\n]+)`, 'i'));
@@ -132,24 +130,20 @@ function parse(text: string) {
     ? keyPointsRaw.split(';').map(p => p.trim()).filter(Boolean)
     : [];
   return {
-    answer:     g('ANSWER') || text.slice(0, 200),
+    answer: g('ANSWER') || text.slice(0, 200),
     confidence: isNaN(c) ? 75 : Math.min(100, Math.max(0, c)),
-    evidence:   g('EVIDENCE') || 'Clinical judgment',
+    evidence: g('EVIDENCE') || 'Clinical judgment',
     keyPoints,
-    caution:    g('CAUTION') || '',
-    raw:        text,
+    caution: g('CAUTION') || '',
+    raw: text,
   };
 }
 
-// ── Semantic Consensus (Key Claims Analysis) ───────────────────────────
 function analyzeConsensus(responses: any[]) {
   const ok = responses.filter(r => r.status === 'ok');
   if (ok.length === 0) return { score: 0, agreedPoints: [], conflictingPoints: [], verdict: 'NO_DATA' };
 
-  // جمع كل الـ key points
   const allPoints: string[] = ok.flatMap(r => r.keyPoints || []);
-
-  // استخراج النقاط المتفق عليها (تظهر في أكثر من نموذج)
   const pointCount: Record<string, number> = {};
   allPoints.forEach(pt => {
     const key = pt.toLowerCase().slice(0, 30);
@@ -160,30 +154,25 @@ function analyzeConsensus(responses: any[]) {
     .filter(([, count]) => count >= Math.ceil(ok.length * 0.6))
     .map(([pt]) => allPoints.find(p => p.toLowerCase().startsWith(pt)) || pt);
 
-  // Weighted confidence score
   const totalWeight = ok.reduce((s, r) => s + (MODELS[r.id]?.weight || 0.7), 0);
   const weightedScore = Math.round(
     ok.reduce((s, r) => s + r.confidence * (MODELS[r.id]?.weight || 0.7), 0) / totalWeight
   );
 
-  // Spread analysis
   const confidences = ok.map(r => r.confidence);
   const spread = Math.max(...confidences) - Math.min(...confidences);
   const hasConsensus = spread < 25 && ok.length >= 2;
 
-  // Safety penalty — لو فيه تحذيرات خطيرة تخفض الـ score
   const seriousCautions = ok.filter(r =>
     r.caution && r.caution !== 'None' && r.caution.length > 5
   ).length;
   const safetyPenalty = seriousCautions >= 2 ? 10 : 0;
   const finalScore = Math.max(0, weightedScore - safetyPenalty);
 
-  // Conflicting points
   const conflictingPoints = ok
     .filter(r => Math.abs(r.confidence - weightedScore) > 20)
     .map(r => ({ model: r.name, position: r.answer.slice(0, 100) }));
 
-  // Verdict
   let verdict: string;
   if (!hasConsensus) verdict = 'CONFLICTING_VIEWS';
   else if (finalScore >= 85) verdict = 'HIGH_CONFIDENCE';
@@ -206,8 +195,14 @@ function analyzeConsensus(responses: any[]) {
   };
 }
 
-// ── Main Route ─────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  if (!RELEASE_ORACLE_ENABLED) {
+    return NextResponse.json(
+      { error: 'Clinical Intelligence is disabled in this release pending AI consent and clinical-safety review.' },
+      { status: 503 },
+    );
+  }
+
   const {
     question,
     models: sel = ['claude', 'grok', 'gemini', 'deepseek', 'llama'],
@@ -225,8 +220,8 @@ export async function POST(req: NextRequest) {
       let raw = '';
       switch (cfg.type) {
         case 'anthropic': raw = await callClaude(question); break;
-        case 'xai':       raw = await callGrok(question); break;
-        case 'gemini':    raw = await callGemini(question); break;
+        case 'xai': raw = await callGrok(question); break;
+        case 'gemini': raw = await callGemini(question); break;
         case 'openrouter': raw = await callOR(cfg.model, question); break;
         default: throw new Error(`Unknown type: ${cfg.type}`);
       }
@@ -245,13 +240,11 @@ export async function POST(req: NextRequest) {
       answer: 'Failed to respond', confidence: 0,
       evidence: '', keyPoints: [], caution: '',
       raw: '', latency: 0, status: 'error',
-      error: (r.reason as Error)?.message,
+      error: 'Provider unavailable',
     }
   );
 
   const consensus = analyzeConsensus(responses);
-
-  // Summary from highest-confidence model
   const best = responses
     .filter(r => r.status === 'ok')
     .sort((a, b) => (b.confidence * (MODELS[b.id]?.weight || 0.7)) - (a.confidence * (MODELS[a.id]?.weight || 0.7)))[0];
@@ -262,8 +255,8 @@ export async function POST(req: NextRequest) {
     consensus,
     summary: best?.answer || '',
     recommendation: consensus.hasConsensus
-      ? `${consensus.score}% weighted consensus across ${consensus.modelsUsed?.length} AI models`
-      : 'Conflicting views detected — refer to official guidelines (AHA/ESC/ADA 2025)',
+      ? 'Multiple model perspectives are available for educational review.'
+      : 'Model perspectives differ. Refer to official guidelines and local clinical protocols.',
     timestamp: new Date().toISOString(),
   });
 }
