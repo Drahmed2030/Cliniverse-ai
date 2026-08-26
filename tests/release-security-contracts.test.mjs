@@ -49,6 +49,23 @@ test('auth gate bootstraps the authenticated profile before entering the release
   assert.match(source, /status:\s*'signed_in'/)
 })
 
+test('profile reads, bootstrap and updates derive ownership from the authenticated user', () => {
+  const source = read('app/lib/profile.ts')
+  assert.match(source, /requireCurrentUser/)
+  assert.match(source, /\.eq\('id',\s*user\.id\)/)
+  assert.match(source, /id:\s*user\.id/)
+  assert.equal(/getOwnProfile\s*\([^)]*userId/.test(source), false)
+  assert.equal(/ensureOwnProfile\s*\([^)]*userId/.test(source), false)
+  assert.equal(/updateOwnProfile\s*\([^)]*userId/.test(source), false)
+})
+
+test('profile edits cannot write entitlement authority fields', () => {
+  const source = read('app/lib/profile.ts')
+  const updateSection = source.slice(source.indexOf('export async function updateOwnProfile'))
+  assert.equal(/is_pro\s*:/.test(updateSection), false)
+  assert.equal(/subscription_status\s*:/.test(updateSection), false)
+})
+
 test('entitlement reads derive identity from the authenticated user', () => {
   const source = read('app/lib/entitlements.ts')
   assert.match(source, /requireCurrentUser/)
