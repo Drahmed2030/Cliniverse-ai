@@ -27,7 +27,6 @@ test('onboarding has no remote image dependency or unapproved commercial and cli
     'MRCP · USMLE · FRCP',
     'GLOBAL LEARNING NETWORK',
     'virtual hospital OS',
-    'patient',
     'Afia',
   ]) {
     assert.equal(source.includes(banned), false)
@@ -36,4 +35,10 @@ test('onboarding has no remote image dependency or unapproved commercial and cli
   assert.match(source, /No real patient data/)
   assert.match(source, /Advanced AI stays gated/)
   assert.match(source, /Continue to sign in/)
+})
+
+test('release startup path does not yet insert optional splash or onboarding layers', () => {
+  const source = read('app/components/ReleaseApp.tsx')
+  assert.equal(source.includes('SplashScreen'), false)
+  assert.equal(source.includes('OnboardingFunnel'), false)
 })
