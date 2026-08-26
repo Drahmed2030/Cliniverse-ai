@@ -1,0 +1,1 @@
+Phase 1 documentation was prepared after GitHub write access was restored. Before merge, these commits should be carried on the canonical consolidation branch and reviewed through a pull request.

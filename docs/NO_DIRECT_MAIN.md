@@ -1,0 +1,1 @@
+No direct main modification is authorized for Cliniverse Phase 1 consolidation. All implementation remains branch/PR/preview gated.
