@@ -1,11 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/cron-pulse?secret=cliniverse2026secret",
+      "path": "/api/cron-pulse",
       "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/cron-nexus?secret=cliniverse2026secret",
+      "path": "/api/cron-nexus",
       "schedule": "0 1 * * *"
     }
   ]
