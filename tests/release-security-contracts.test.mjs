@@ -10,6 +10,14 @@ test('release branch does not contain public Supabase diagnostics endpoint', () 
   assert.equal(existsSync(new URL('../app/api/debug-supabase/route.ts', import.meta.url)), false)
 })
 
+test('Supabase public client configuration is not accidentally truncated', () => {
+  const source = read('app/supabase.ts')
+  const match = source.match(/const supabaseAnonKey = '([^']+)'/)
+  assert.ok(match)
+  assert.equal(match[1].includes('...'), false)
+  assert.equal(match[1].split('.').length, 3)
+})
+
 test('Vercel cron URLs do not contain committed secrets', () => {
   const vercel = read('vercel.json')
   assert.equal(vercel.includes('?secret='), false)
@@ -28,10 +36,12 @@ test('cron routes require Bearer authorization and fail closed', () => {
   }
 })
 
-test('client-side Pro activation stays fail-closed', () => {
+test('legacy client Pro helpers stay fail-closed', () => {
   const source = read('app/supabase.ts')
   assert.match(source, /activatePro/)
   assert.match(source, /Client-side PRO activation is disabled/i)
+  assert.match(source, /checkIsPro\(_userId: string\): Promise<boolean>[\s\S]{0,120}return false/)
+  assert.equal(/rpc\(['"]is_user_pro['"]/.test(source), false)
   assert.equal(/\.from\(['"]profiles['"]\)[\s\S]{0,300}is_pro:\s*true/.test(source), false)
 })
 
