@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import "./cliniverse-v1.css"
+import "./cliniverse-care.css"
 import ThemeProvider from "./components/ThemeProvider"
 
 export const viewport: Viewport = {
