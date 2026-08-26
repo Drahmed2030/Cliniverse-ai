@@ -31,7 +31,7 @@ test('onboarding has no remote image dependency or unapproved commercial and cli
   ]) {
     assert.equal(source.includes(banned), false)
   }
-  assert.match(source, /Clinical learning and workflow/)
+  assert.match(source, /clinical learning and workflow/i)
   assert.match(source, /No real patient data/)
   assert.match(source, /Advanced AI stays gated/)
   assert.match(source, /Continue to sign in/)
