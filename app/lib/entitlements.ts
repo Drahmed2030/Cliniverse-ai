@@ -8,7 +8,7 @@ export interface CliniverseEntitlement {
   isPro: boolean
   status: 'active' | 'inactive' | 'unknown'
   expiresAt: string | null
-  source: 'server-rpc' | 'subscription-record' | 'none'
+  source: 'subscription-record' | 'none'
 }
 
 const FREE_ENTITLEMENT: CliniverseEntitlement = {
@@ -25,16 +25,9 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
     return { ...FREE_ENTITLEMENT, status: 'unknown' }
   }
 
-  const { data: isPro, error: proError } = await supabase.rpc('is_user_pro', { uid: user.id })
-
-  if (proError) {
-    return { ...FREE_ENTITLEMENT, status: 'unknown' }
-  }
-
-  if (isPro !== true) {
-    return { ...FREE_ENTITLEMENT, source: 'server-rpc' }
-  }
-
+  // Subscription rows are the only accepted release authority. The legacy
+  // `is_user_pro(uid)` SECURITY DEFINER RPC reads a duplicate profile flag and
+  // accepts an arbitrary uid, so it is intentionally excluded from this path.
   const { data: subscription, error: subscriptionError } = await supabase
     .from('subscriptions')
     .select('plan,status,expires_at')
@@ -45,20 +38,18 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
     .maybeSingle()
 
   if (subscriptionError) {
-    return {
-      tier: 'pro',
-      isPro: true,
-      status: 'active',
-      expiresAt: null,
-      source: 'server-rpc',
-    }
+    return { ...FREE_ENTITLEMENT, status: 'unknown' }
+  }
+
+  if (!subscription) {
+    return FREE_ENTITLEMENT
   }
 
   return {
-    tier: subscription?.plan === 'institution' ? 'institution' : 'pro',
+    tier: subscription.plan === 'institution' ? 'institution' : 'pro',
     isPro: true,
     status: 'active',
-    expiresAt: subscription?.expires_at ?? null,
-    source: subscription ? 'subscription-record' : 'server-rpc',
+    expiresAt: subscription.expires_at ?? null,
+    source: 'subscription-record',
   }
 }
