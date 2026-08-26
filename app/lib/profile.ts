@@ -15,20 +15,11 @@ function profileDefaults(user: User) {
     user.email?.split('@')[0] ||
     'Cliniverse user'
 
+  // Keep bootstrap intentionally minimal and let verified database defaults
+  // own progression, rank and entitlement-related fields.
   return {
     id: user.id,
     name: String(fallbackName),
-    specialty: '',
-    country: '',
-    xp: 0,
-    streak: 0,
-    cases_completed: 0,
-    mcq_correct: 0,
-    mcq_total: 0,
-    rank: 'Clinical Learner',
-    is_pro: false,
-    subscription_status: 'inactive',
-    updated_at: new Date().toISOString(),
   }
 }
 
@@ -58,7 +49,6 @@ export async function updateOwnProfile(input: CliniverseProfileInput) {
     ...(typeof input.name === 'string' ? { name: input.name.trim() } : {}),
     ...(typeof input.specialty === 'string' ? { specialty: input.specialty.trim() } : {}),
     ...(typeof input.country === 'string' ? { country: input.country.trim() } : {}),
-    updated_at: new Date().toISOString(),
   }
 
   return supabase.from('profiles').update(updates).eq('id', user.id).select('*').single()
