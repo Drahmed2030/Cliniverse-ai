@@ -27,6 +27,20 @@ workflows:
         script: |
           npx --yes @capacitor/assets@3.0.5 generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16'
           test -f ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json
+      - name: Inject approved privacy manifest
+        script: |
+          PRIVACY_SOURCE="native/privacy/PrivacyInfo.xcprivacy"
+          PRIVACY_TARGET="ios/App/App/PrivacyInfo.xcprivacy"
+          if [ -f "$PRIVACY_SOURCE" ]; then
+            cp "$PRIVACY_SOURCE" "$PRIVACY_TARGET"
+            plutil -lint "$PRIVACY_TARGET"
+            echo "Approved privacy manifest injected into generated iOS app target."
+          elif [ "${RELEASE_CANDIDATE:-false}" = "true" ]; then
+            echo "RC BLOCKED: $PRIVACY_SOURCE is missing. Do not infer privacy declarations."
+            exit 1
+          else
+            echo "Integration build: approved privacy manifest not frozen yet; RC remains blocked."
+          fi
       - name: Add encryption compliance
         script: |
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
