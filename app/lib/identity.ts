@@ -9,7 +9,10 @@ export async function signInWithPassword(email: string, password: string) {
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   return supabase.auth.signInWithOtp({
     email,
-    options: redirectTo ? { emailRedirectTo: redirectTo } : undefined,
+    options: {
+      shouldCreateUser: false,
+      ...(redirectTo ? { emailRedirectTo: redirectTo } : {}),
+    },
   })
 }
 
