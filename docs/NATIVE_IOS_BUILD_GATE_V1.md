@@ -7,11 +7,12 @@ This gate exists because an iOS build can compile successfully while still faili
 ## Verified repository/build facts
 
 1. `capacitor.config.json` points the native container at the remote production web URL `https://cliniverse-ai-u7gi.vercel.app`.
-2. The current Codemagic workflow runs `rm -rf ios` and then `npx cap add ios` for every iOS build.
+2. The Codemagic workflow runs `rm -rf ios` and then `npx cap add ios` for every iOS build.
 3. Therefore the generated native Xcode project is recreated during CI and cannot be assumed to preserve files committed under `ios/` unless the workflow explicitly injects them after regeneration.
-4. The current workflow does not contain a deterministic step that installs the final approved AppIcon asset catalog after `npx cap add ios`.
-5. Apple has reported placeholder app icons and a blank launch on an iPad review device. These findings remain open until verified on the generated native artifact.
-6. Automatic App Store submission is disabled on the active integration lane. Release publishing must be explicitly enabled only from an approved release-candidate workflow.
+4. The integration lane now has a deterministic product-icon source at `assets/logo.svg` and runs pinned `@capacitor/assets@3.0.5` **after** `npx cap add ios` to generate the iOS asset catalog.
+5. Apple has reported placeholder app icons and a blank launch on an iPad review device. The placeholder-icon root cause is now addressed at pipeline-contract level, but the Apple finding remains open until the generated archive is inspected and the icon is visually verified on an installed build.
+6. Automatic TestFlight and App Store submission are disabled on the active integration lane. Release publishing must be explicitly enabled only from an approved release-candidate workflow.
+7. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. Privacy-manifest handling must be made accurate and deterministic before RC1.
 
 ## Executive release rule
 
@@ -21,19 +22,23 @@ No `release/cliniverse-rc1` promotion and no App Store submission until all nati
 
 ## Gate A — deterministic native assets
 
-- [ ] Final Cliniverse/NeuraOps-approved AppIcon source is frozen.
-- [ ] A complete iOS AppIcon asset catalog is generated from that source.
-- [ ] Codemagic explicitly copies the final AppIcon assets **after** `npx cap add ios` and before the archive is built.
-- [ ] The archived app is inspected to confirm the expected icon set is present.
-- [ ] No default Capacitor/placeholder icon remains in the distributable artifact.
+- [x] A versioned Cliniverse product-icon source exists outside the regenerated `ios/` directory (`assets/logo.svg`).
+- [x] Codemagic generates the iOS AppIcon catalog after `npx cap add ios` using pinned `@capacitor/assets@3.0.5`.
+- [x] CI contains a file-existence assertion for `AppIcon.appiconset/Contents.json`.
+- [ ] Final visual sign-off confirms this Cliniverse product icon is the intended App Store/device icon while the NeuraOps edge-N remains the corporate identity.
+- [ ] The generated/archive artifact is inspected to confirm the expected icon set is present.
+- [ ] A clean-installed iPhone/iPad build shows the expected icon and no default Capacitor/placeholder icon.
 
 ## Gate B — native privacy/configuration packaging
 
-- [ ] The privacy manifest required by the current native dependencies is injected or generated after native-project regeneration.
-- [ ] The generated `Info.plist` is inspected from the build artifact, not assumed from repository files.
+- [ ] Create an authoritative privacy-manifest source outside the regenerated `ios/` directory after validating its declarations against the actual enabled SDKs and data practices.
+- [ ] Inject that privacy manifest after native-project regeneration.
+- [ ] Inspect the generated `Info.plist` from the build artifact, not from deleted/recreated repository paths.
 - [ ] Any required usage-description keys are present only for capabilities that are actually enabled.
 - [ ] HealthKit / wearable permissions are absent until the real integration and permission UX are approved.
 - [ ] Encryption/export-compliance values are reviewed for the actual release configuration.
+
+The existing legacy privacy manifest declares no collected data and must not be promoted blindly while the product has authenticated account/profile/progress data. Its accuracy is a separate release check.
 
 ## Gate C — launch reliability
 
@@ -56,9 +61,10 @@ If the remote-container architecture cannot provide a reliable failure state whe
 
 - [ ] App Store icon matches the installed-device icon family.
 - [ ] Support URL points to the final `/support` page and its contact route is verified functional.
-- [ ] Privacy URL points to the canonical `/privacy` page.
-- [ ] Terms and Privacy links are functional from the sign-in surface.
-- [ ] App metadata uses factual release-scoped language only.
+- [x] Privacy route exists at `/privacy` with release-scoped, non-overclaiming language.
+- [x] Terms route exists at `/terms`.
+- [x] Terms and Privacy links are functional from the sign-in surface.
+- [x] Public web metadata/manifest use factual release-scoped language and remove stale social-proof/seniority claims.
 - [ ] Reviewer notes explain the product structure and the no-real-patient-data release boundary.
 - [ ] Reviewer account/instructions are prepared if login is required.
 
