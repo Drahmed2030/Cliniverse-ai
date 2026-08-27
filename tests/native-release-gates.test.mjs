@@ -81,6 +81,8 @@ test('native cold launch remains branded until remote content or local recovery 
   assert.match(nativeDelegate, /observe\(\\\.estimatedProgress/)
   assert.match(nativeDelegate, /errorPathURL/)
   assert.match(nativeDelegate, /DispatchQueue\.main\.asyncAfter\(deadline: \.now\(\) \+ 15/)
+  assert.match(nativeDelegate, /\[UIUserActivityRestoring\]/)
+  assert.doesNotMatch(nativeDelegate, /NSUserActivityRestoring/)
   assert.match(configurator, /customClass="CliniverseBridgeViewController"/)
   assert.match(configurator, /0\.03137254901960784/)
   assert.match(verify, /CliniverseLaunchGuardVersion/)
