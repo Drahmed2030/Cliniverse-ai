@@ -2,7 +2,7 @@
 
 This gate must pass before `integration/auth-release-shell-v1` can be promoted to a release-candidate branch.
 
-## Verified checkpoint — 2026-08-27
+## Pre-migration checkpoint — 2026-08-27
 
 - The current PR #13 integration head passes Release Contracts and its four Vercel preview deployments are Ready.
 - The protected preview visibly fails closed at the sign-in gate, keeps Apple/Google disabled, states that account creation is unavailable, and exposes working Terms, Privacy and Support pages.
@@ -13,17 +13,21 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - Current production `profiles` policies permit public insert/read/update, and current grants give `anon` and `authenticated` broad table privileges.
 - Current production `subscriptions` policy named `Service role can insert subscriptions` is actually assigned to `public` with an unconditional check. Combined with the current grants, it permits a client to insert a subscription row and violates the release entitlement authority.
 - `case_completions` and `mcq_answers` have RLS enabled but no policies, so the auth-scoped progress helpers cannot currently persist data.
-- Supabase branching registered the production schema baseline as migration `20260827071109_remote_schema`. No Apple RC1 RLS migration or production authority mutation was made during this checkpoint.
+- Supabase branching registered the production schema baseline as migration `20260827071109_remote_schema`. No Apple RC1 RLS migration or production authority mutation had been made at this pre-migration checkpoint.
 - The deferred knowledge-match API and legacy signup helper are now included in the fail-closed RC contract: client execution is revoked, and the HTTP route defaults to 503 unless separately enabled after AI consent/security review.
 - A Next.js 16 `proxy.ts` release boundary returns 404 before deferred AI, storage, ingestion, mood, cache and legacy API handlers execute. Their source remains available for later validation, but they are not runtime Apple v1 surfaces.
 
-## Prepared but not applied
+## Production migration evidence — 2026-08-27
 
-- Forward migration: `supabase/migrations/20260827044500_apple_rc1_runtime_trust.sql`.
-- Emergency rollback: `supabase/rollback/20260827044500_apple_rc1_safe_hold.sql`.
-- Read-only post-apply assertions: `supabase/tests/20260827044500_apple_rc1_catalog_assertions.sql`.
-- The rollback intentionally denies client data access rather than restoring insecure public policies.
-- Production apply remains **HOLD** until explicit migration-window GO, backup/staging evidence and authenticated two-user runtime testing.
+- Full executive authority was recorded as the migration-window GO after the isolated staging, rollback and recovery drills passed.
+- The production preflight at 08:00 UTC found no other non-idle database session, eight profile rows, and zero subscription, progress or deferred-table rows in the migration scope.
+- Forward migration `20260827080127_apple_rc1_runtime_trust` was applied through the Supabase migration mechanism and completed successfully.
+- Read-only post-apply catalog assertions passed. A separate verification confirmed: anon profile read denied; authenticated own-profile table access retained; subscription insert denied; `is_pro` update denied; allowed name update retained; and legacy signup/entitlement RPC execution denied.
+- The eight production profile rows remained present and the zero-row subscription count was unchanged.
+- The connector refused the transactional synthetic User A/User B test on production because it inserts temporary Auth rows and changes roles. That test was not bypassed or repeated; its identical SQL had already passed twice on the isolated branch, including after rollback recovery.
+- Emergency rollback remains `supabase/rollback/20260827044500_apple_rc1_safe_hold.sql`. It intentionally denies all client data access rather than restoring insecure public policies.
+- Production advisors now report only the expected no-policy informational notices for deny-closed/deferred tables, the deferred `vector` extension placement warning, and disabled Auth leaked-password protection.
+- Production web promotion, valid-account runtime testing, leaked-password protection, and the native gate remain **HOLD**.
 
 ## Isolated staging evidence — 2026-08-27
 
@@ -34,6 +38,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - The emergency safe-hold rollback passed deny-all assertions, preserved trusted service-role authority, and the forward migration recovered successfully. Catalog and two-user tests then passed again.
 - Supabase security advisors no longer report the exposed `SECURITY DEFINER` helper or mutable knowledge-match search path. The remaining warning-level item is the `vector` extension in `public`; no-policy informational notices correspond to deliberately deny-closed deferred tables. Moving the extension is a broader structural migration, not an Apple v1 client-authority path.
 - No production migration has been applied by this staging checkpoint.
+- After the production migration and read-only assertions passed, the disposable staging branch was deleted successfully. Its hourly charge is no longer running.
 
 ## Already passed
 - Authoritative Vercel build on the current integration head.
