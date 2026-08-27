@@ -28,7 +28,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - The connector refused the transactional synthetic User A/User B test on production because it inserts temporary Auth rows and changes roles. That test was not bypassed or repeated; its identical SQL had already passed twice on the isolated branch, including after rollback recovery.
 - Emergency rollback remains `supabase/rollback/20260827044500_apple_rc1_safe_hold.sql`. It intentionally denies all client data access rather than restoring insecure public policies.
 - Production advisors now report only the expected no-policy informational notices for deny-closed/deferred tables and the deferred `vector` extension placement warning. The initial leaked-password-protection warning was cleared at 09:07 UTC after the Pro control was enabled.
-- Production web promotion, valid-account runtime testing, reviewer credential provisioning, and the native gate remain **HOLD**.
+- Valid reviewer password authentication now passes on the authoritative PR preview. Production web promotion, the remaining non-Auth runtime checks, and the native gate remain **HOLD**.
 
 ## Isolated staging evidence — 2026-08-27
 
@@ -41,16 +41,18 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - No production migration has been applied by this staging checkpoint.
 - After the production migration and read-only assertions passed, the disposable staging branch was deleted successfully. Its hourly charge is no longer running.
 
-## Auth hardening checkpoint — 2026-08-27 08:46–09:07 UTC
+## Auth hardening checkpoint — 2026-08-27 08:46–09:59 UTC
 
-- Production Auth contains five non-anonymous users and zero anonymous users. Aggregate queries returned no email addresses, user identifiers, password material or other account secrets.
-- No production account matching the dedicated reviewer naming convention and no reviewer session exists as of 09:07 UTC. The stale credentials shown in the rejected App Store Connect record therefore cannot be reused for RC1; a new, non-expiring reviewer account must be provisioned through a protected admin channel now that password controls are enabled.
+- Before reviewer provisioning, production Auth contained five non-anonymous users and zero anonymous users. Aggregate queries returned no email addresses, user identifiers, password material or other account secrets.
+- One new reviewer account was provisioned through the protected Supabase admin surface after password controls passed. It is email-confirmed, password-enabled, not deleted or banned, and has no subscription row or Pro entitlement. The stale secret visible in the rejected App Store Connect record was not reused.
 - A synthetic nonexistent-account password attempt failed closed with `invalid_credentials` / HTTP 400 and created no session or user.
-- A synthetic nonexistent-account magic-link request used `shouldCreateUser: false`, failed closed with `otp_disabled` / HTTP 422 and created no session or user.
+- A synthetic nonexistent-account magic-link request used `shouldCreateUser: false`, failed closed with `otp_disabled` / HTTP 422 and created no session or user. Because this project has no approved production SMTP path, the RC sign-in surface now keeps magic-link selection disabled by default instead of advertising a non-working control.
 - The release auth shell remains sign-in only: guest access is disabled, implicit account creation is disabled, Apple/Google buttons remain disabled unless explicitly configured, and client-side Pro activation remains fail-closed.
+- On the authoritative `cliniverse-ai-u7gi` PR preview for commit `9c3bb3dfc5cc8158e85b50ed1ccc34bf83e14da8`, reviewer password sign-in reached the release Home surface on iPhone Safari. Reload restored the session, sign-out removed the reviewer session from `auth.sessions`, and a subsequent password sign-in created one fresh session.
+- Profile bootstrap remained idempotent at exactly one reviewer-owned profile across reload, sign-out and re-entry. No reviewer subscription, case-completion or MCQ-answer row was created.
 - Local verification passed: 39/39 release tests, strict Next.js production build, and production-dependency audit with zero reported vulnerabilities.
 - Supabase security advisors no longer report `auth_leaked_password_protection`; the Pro control was enabled in Auth settings and independently rechecked at 09:07 UTC. This password-control gate is **PASS**.
-- Valid-account password sign-in, restore, sign-out and device relaunch remain unverified because no dedicated reviewer account currently exists and no account secret was requested or extracted.
+- No reviewer password was requested, extracted, committed or copied into this evidence. Transfer to App Store Connect's protected sign-in field remains a later reviewer-package action.
 
 ## Already passed
 - Authoritative Vercel build on the current integration head.
@@ -60,14 +62,14 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 ## Runtime checks still required
 
 ### Authentication
-- Email/password sign-in succeeds against the real Supabase project.
-- Invalid credentials fail closed without entering the release shell.
-- Magic-link request succeeds and does not grant a session before callback completion.
-- Existing session restores after reload/relaunch.
-- Sign-out invalidates the app session and returns to the auth gate.
+- Reviewer email/password sign-in passed against the real Supabase project.
+- Invalid credentials failed closed without entering the release shell.
+- Magic-link selection is disabled by default for RC1 because no approved delivery path exists; it remains deferred and cannot create accounts implicitly.
+- Existing reviewer session restored after reload on iPhone Safari.
+- Sign-out invalidated the reviewer session and returned to the auth gate; subsequent password sign-in passed.
 - Apple/Google OAuth remains unavailable unless provider configuration is explicitly verified.
 - Supabase Auth leaked-password protection was enabled and the advisor warning cleared at 09:07 UTC.
-- Provision the dedicated reviewer account only after leaked-password protection is verified enabled; keep its non-expiring credentials exclusively in protected App Store Connect fields.
+- The dedicated reviewer account was provisioned after leaked-password protection passed. Its credentials must remain outside the repository and be copied only into protected App Store Connect fields.
 
 ### Profile ownership
 - First authenticated login creates at most one profile row with `id = auth.uid()`.
@@ -105,6 +107,6 @@ Current checkpoint:
 
 - BUILD: PASS
 - RUNTIME: HOLD
-- SECURITY: HOLD
+- SECURITY: PASS
 - NATIVE: HOLD
 - APPLE RC1: HOLD

@@ -31,6 +31,7 @@ interface Props {
   allowGuest?: boolean;
   locale?: "en" | "ar";
   enabledOAuthProviders?: CliniverseAuthProvider[];
+  enableMagicLink?: boolean;
 }
 
 const COPY = {
@@ -89,6 +90,7 @@ export default function AuthScreen({
   allowGuest = true,
   locale = "en",
   enabledOAuthProviders = [],
+  enableMagicLink = false,
 }: Props) {
   const [mode, setMode] = useState<Mode>("landing");
   const [email, setEmail] = useState("");
@@ -100,6 +102,7 @@ export default function AuthScreen({
 
   const t = COPY[locale] || COPY.en;
   const dir = locale === "ar" ? "rtl" : "ltr";
+  const magicLinkMode = enableMagicLink && useMagic;
 
   function validEmail(v: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -132,14 +135,14 @@ export default function AuthScreen({
       setError(t.emailError);
       return;
     }
-    if (!useMagic && password.trim().length < 8) {
+    if (!magicLinkMode && password.trim().length < 8) {
       setError(t.passwordError);
       return;
     }
 
     setLoading(true);
     try {
-      if (useMagic) {
+      if (magicLinkMode) {
         const redirectTo = typeof window !== "undefined" ? window.location.origin : undefined;
         const { error: authError } = await signInWithMagicLink(normalizedEmail, redirectTo);
         if (authError) {
@@ -183,8 +186,8 @@ export default function AuthScreen({
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Field label={t.emailLabel} value={email} onChange={setEmail} type="email" autoComplete="email" />
-            {!useMagic ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete="current-password" /> : null}
-            <button onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.teal, fontSize: 12, fontWeight: 700, textAlign: "left", padding: 0 }}>{useMagic ? t.password : t.magic}</button>
+            {!magicLinkMode ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete="current-password" /> : null}
+            {enableMagicLink ? <button onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.teal, fontSize: 12, fontWeight: 700, textAlign: "left", padding: 0 }}>{magicLinkMode ? t.password : t.magic}</button> : null}
             {error ? <div role="alert" style={{ fontSize: 12, color: T.danger, fontWeight: 600 }}>{error}</div> : null}
             {notice ? <div role="status" style={{ fontSize: 12, color: T.success, fontWeight: 600 }}>{notice}</div> : null}
             <AuthButton label={loading ? "..." : t.continueEmail} bg={T.tealD} color={T.white} onClick={handleEmail} disabled={loading} />

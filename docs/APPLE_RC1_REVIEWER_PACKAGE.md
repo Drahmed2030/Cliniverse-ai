@@ -57,12 +57,12 @@ There is no digital Upgrade call to action and no in-app purchase flow in this r
 - [x] Production RLS migration passed its approved window; isolated two-user, rollback and recovery tests passed before production apply.
 - [x] Confirmed at 2026-08-27 09:07 UTC that no dedicated production reviewer account currently exists and no reviewer session is active.
 - [x] Enabled Supabase leaked-password protection and verified at 2026-08-27 09:07 UTC that the advisor warning is cleared.
-- [ ] Provision one new non-expiring reviewer account through a protected admin channel. Do not reuse the stale credentials visible in the rejected App Store Connect record.
-- [ ] Give the account only the entitlement needed to inspect the submitted surface; do not create a client-writable subscription path.
+- [x] Provisioned one new non-expiring reviewer account through the protected Supabase admin surface without reusing the stale secret visible in the rejected App Store Connect record.
+- [x] Kept the reviewer account at the free/read-only entitlement state required by the current submitted surface; no subscription or client-writable entitlement path was created.
 - [ ] Store username and password only in App Store Connect's protected sign-in fields.
 - [ ] Test the account on a clean iPhone and iPad install immediately before submission.
-- [ ] Confirm magic-link delivery is not required for the reviewer path.
-- [ ] Confirm sign out and subsequent password sign in both work.
+- [x] Confirmed on the authoritative iPhone Safari preview that magic-link delivery is not required for the reviewer path; RC1 keeps the unavailable magic-link control hidden by default.
+- [x] Confirmed password sign-in, reload restore, sign out and subsequent password sign in against production Auth. This web-preview evidence does not replace the native clean-install gate.
 
 ## Screenshot contract
 

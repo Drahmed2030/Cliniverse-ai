@@ -285,10 +285,12 @@ test('native iOS release gate is documented before RC1', () => {
   assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
 })
 
-test('magic-link sign-in cannot implicitly create accounts in the Apple release lane', () => {
+test('magic-link sign-in stays disabled by default and cannot implicitly create accounts', () => {
   const identity = read('app/lib/identity.ts')
   const auth = read('app/components/AuthScreen.tsx')
   assert.match(identity, /shouldCreateUser:\s*false/)
+  assert.match(auth, /enableMagicLink\s*=\s*false/)
+  assert.match(auth, /\{enableMagicLink\s*\?\s*<button/)
   assert.match(auth, /Account creation is not enabled in this release/)
 })
 
