@@ -118,6 +118,55 @@ test('release entitlement authority is the authenticated user subscription recor
   assert.equal(/getOwnEntitlement\s*\([^)]*userId/.test(source), false)
 })
 
+test('release entitlement rejects unsupported or expired subscription records', () => {
+  const source = read('app/lib/entitlements.ts')
+  assert.match(source, /allowedPlans/)
+  assert.match(source, /pro_monthly/)
+  assert.match(source, /pro_yearly/)
+  assert.match(source, /institution/)
+  assert.match(source, /Date\.parse\(expiresAt\)/)
+  assert.match(source, /expiryTime\s*<=\s*Date\.now\(\)/)
+})
+
+test('prepared RC1 RLS migration closes client profile and subscription authority', () => {
+  const path = 'supabase/migrations/20260827044500_apple_rc1_runtime_trust.sql'
+  assert.equal(existsSync(new URL(`../${path}`, import.meta.url)), true)
+  const migration = read(path)
+
+  assert.match(migration, /PRODUCTION HOLD/)
+  assert.match(migration, /alter table public\.profiles enable row level security/i)
+  assert.match(migration, /alter table public\.subscriptions enable row level security/i)
+  assert.match(migration, /revoke all privileges on table public\.profiles from anon, authenticated/i)
+  assert.match(migration, /revoke all privileges on table public\.subscriptions from anon, authenticated/i)
+  assert.match(migration, /create policy "profiles_select_own"[\s\S]*to authenticated[\s\S]*auth\.uid\(\)/i)
+  assert.match(migration, /create policy "subscriptions_select_own"[\s\S]*to authenticated[\s\S]*auth\.uid\(\)/i)
+  assert.equal(/create policy[\s\S]{0,120}subscriptions[\s\S]{0,180}for insert/i.test(migration), false)
+  assert.match(migration, /revoke execute on function public\.is_user_pro\(uuid\) from PUBLIC, anon, authenticated/i)
+})
+
+test('RC1 RLS migration deny-lists deferred exposed tables and has a safe rollback', () => {
+  const migration = read('supabase/migrations/20260827044500_apple_rc1_runtime_trust.sql')
+  for (const table of ['cases', 'user_progress', 'leaderboard']) {
+    assert.match(migration, new RegExp(`alter table public\\.${table} enable row level security`, 'i'))
+    assert.match(migration, new RegExp(`revoke all privileges on table public\\.${table} from anon, authenticated`, 'i'))
+  }
+
+  const rollbackPath = 'supabase/rollback/20260827044500_apple_rc1_safe_hold.sql'
+  assert.equal(existsSync(new URL(`../${rollbackPath}`, import.meta.url)), true)
+  const rollback = read(rollbackPath)
+  assert.match(rollback, /deny-all safe state/i)
+  assert.match(rollback, /Table-level REVOKE does not remove column-level grants/i)
+  assert.equal(rollback.includes('Public read'), false)
+  assert.equal(rollback.includes('Public update'), false)
+  assert.equal(rollback.includes('Service role can insert subscriptions'), false)
+
+  const assertionsPath = 'supabase/tests/20260827044500_apple_rc1_catalog_assertions.sql'
+  assert.equal(existsSync(new URL(`../${assertionsPath}`, import.meta.url)), true)
+  const assertions = read(assertionsPath)
+  assert.match(assertions, /has_table_privilege\('authenticated', 'public\.subscriptions', 'INSERT'\)/)
+  assert.match(assertions, /has_function_privilege\('authenticated', 'public\.is_user_pro\(uuid\)', 'EXECUTE'\)/)
+})
+
 test('release progress writes derive user_id from the authenticated session', () => {
   const source = read('app/lib/progress.ts')
   assert.match(source, /requireCurrentUser/)

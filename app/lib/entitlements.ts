@@ -45,11 +45,19 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
     return FREE_ENTITLEMENT
   }
 
+  const allowedPlans = new Set(['pro_monthly', 'pro_yearly', 'institution'])
+  const expiresAt = subscription.expires_at ?? null
+  const expiryTime = expiresAt ? Date.parse(expiresAt) : null
+
+  if (!allowedPlans.has(subscription.plan) || (expiryTime !== null && (!Number.isFinite(expiryTime) || expiryTime <= Date.now()))) {
+    return FREE_ENTITLEMENT
+  }
+
   return {
     tier: subscription.plan === 'institution' ? 'institution' : 'pro',
     isPro: true,
     status: 'active',
-    expiresAt: subscription.expires_at ?? null,
+    expiresAt,
     source: 'subscription-record',
   }
 }
