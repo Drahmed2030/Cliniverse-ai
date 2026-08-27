@@ -3,7 +3,7 @@
  * Educational simulation only — not a real legal medical record
  */
 
-import type { DischargeSummary, SoapNote, MedicationItem } from "../clinicalTypes";
+import type { DischargeSummary, SoapNote, MedicationItem } from "./clinicalTypes";
 import { localDischargeStore } from "./soapStorage";
 
 export interface DischargeDraftInput {
