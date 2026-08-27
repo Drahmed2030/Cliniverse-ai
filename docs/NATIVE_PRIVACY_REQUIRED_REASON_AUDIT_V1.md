@@ -12,23 +12,24 @@ This document records the current evidence boundary for Cliniverse AI iOS privac
 - Codemagic deletes and regenerates the iOS project on each build (`rm -rf ios` followed by `npx cap add ios`).
 - Therefore checked-in files under `ios/` are not the release authority.
 - The release-authoritative privacy manifest location is `native/privacy/PrivacyInfo.xcprivacy`.
-- That authoritative file is currently **absent**.
-- Codemagic fails closed for `RELEASE_CANDIDATE=true` when the authoritative privacy manifest is absent.
+- The evidence-reviewed RC1 candidate is present at that authoritative path.
+- Codemagic now fails closed on every iOS package build when the authoritative privacy manifest is absent.
+- A dedicated Xcode-project injection script adds the manifest to the App target's Copy Bundle Resources phase; a filesystem copy alone is not accepted as proof of packaging.
 - Final IPA verification requires a bundled `PrivacyInfo.xcprivacy`, valid identity/version/encryption metadata and compiled assets.
 
-## Important finding
+## Evidence-reviewed RC1 candidate
 
-The checked-in generated `ios/App/App/PrivacyInfo.xcprivacy` currently contains empty accessed-API and collected-data declarations. It must **not** be treated as evidence for App Store submission because the iOS project is recreated during the real build and because final declarations must match the generated binary and App Store Connect privacy answers.
+The checked-in generated `ios/App/App/PrivacyInfo.xcprivacy` is still non-authoritative because CI recreates `ios/`. The authoritative candidate declares linked name, email, user ID, optional country/profile metadata and subscription history for app functionality. It also conservatively declares unlinked product-interaction and diagnostic data used to operate and troubleshoot the hosted service. Tracking is false and no tracking domains are declared.
+
+Repository and dependency-source inspection found no use of the required-reason API categories in the app, Capacitor iOS 6.2.1, or the bundled Cordova compatibility source. Their packaged SDK privacy manifests also declare no accessed API categories. The app-level candidate therefore keeps `NSPrivacyAccessedAPITypes` empty. This remains subject to a final archive/binary scan.
 
 ## RC1 evidence required before freezing the manifest
 
-1. Build the final iOS archive from the release-candidate dependency set.
-2. Inspect the generated app/IPA for Apple required-reason API usage from Capacitor and every bundled native SDK/framework.
-3. Inspect actual runtime data flows in the submitted release, including authentication/profile/subscription/progress and any analytics or diagnostics that are truly enabled.
-4. Confirm that release-gated AI, HealthKit/wearables, tracking and advertising are not accidentally bundled or enabled as active submitted behavior.
-5. Produce `native/privacy/PrivacyInfo.xcprivacy` from verified evidence only.
-6. Verify the final IPA contains the approved manifest after archive creation.
-7. Make App Store Connect privacy answers match the binary and the approved manifest.
+1. Build the final iOS archive from the frozen release-candidate dependency set.
+2. Scan the generated app/IPA for required-reason API use and compare all bundled SDK manifests with the app manifest.
+3. Confirm that gated AI, HealthKit/wearables, tracking and advertising are absent from the submitted binary and active behavior.
+4. Verify the final IPA contains the app-level manifest at the app-bundle root.
+5. Make App Store Connect privacy answers match the binary and the approved manifest exactly.
 
 ## Product boundary for Apple v1
 
@@ -42,4 +43,4 @@ The checked-in generated `ios/App/App/PrivacyInfo.xcprivacy` currently contains 
 
 **Current decision: HOLD.**
 
-Do not promote PR #13 to `release/cliniverse-rc1` on privacy-manifest evidence alone. Promotion still requires runtime trust/RLS evidence and native cold-launch/device testing in addition to this gate.
+Do not promote PR #13 to `release/cliniverse-rc1` on source-level privacy-manifest evidence alone. Promotion still requires the final signed IPA scan, runtime trust/RLS evidence and native cold-launch/device testing.

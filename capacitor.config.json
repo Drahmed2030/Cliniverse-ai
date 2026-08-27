@@ -4,9 +4,11 @@
   "webDir": "public",
   "server": {
     "url": "https://cliniverse-ai-u7gi.vercel.app",
+    "errorPath": "native-offline.html",
     "cleartext": false
   },
   "ios": {
-    "scheme": "App"
+    "scheme": "App",
+    "backgroundColor": "#080C16"
   }
 }

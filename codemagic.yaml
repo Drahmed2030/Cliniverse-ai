@@ -6,16 +6,14 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.cliniverse.ai
-      node: 20.17.0
+      node: 22.14.0
       xcode: latest
       cocoapods: default
       groups:
         - app_store
     scripts:
       - name: Install dependencies
-        script: npm install
-      - name: Install Capacitor 6
-        script: npm install @capacitor/core@6.2.0 @capacitor/ios@6.2.0 @capacitor/cli@6.2.0
+        script: npm ci
       - name: Build Next.js
         script: npm run build
       - name: Capacitor Add and Sync
@@ -23,30 +21,33 @@ workflows:
           rm -rf ios
           npx cap add ios
           npx cap copy ios
+          test -f ios/App/App/public/native-offline.html
       - name: Generate branded iOS assets
         script: |
-          npx --yes @capacitor/assets@3.0.5 generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16'
+          npx --no-install capacitor-assets generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16' --logoSplashScale 0.65
+          ICON_PATH="ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png"
+          SPLASH_PATH="ios/App/App/Assets.xcassets/Splash.imageset/Default@3x~universal~anyany.png"
           test -f ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json
+          test -f "$ICON_PATH"
+          test -f "$SPLASH_PATH"
+          test "$(sips -g pixelWidth "$ICON_PATH" | awk '/pixelWidth/{print $2}')" = "1024"
+          test "$(sips -g pixelHeight "$ICON_PATH" | awk '/pixelHeight/{print $2}')" = "1024"
+          test "$(sips -g hasAlpha "$ICON_PATH" | awk '/hasAlpha/{print $2}')" = "no"
       - name: Inject approved privacy manifest
         script: |
           PRIVACY_SOURCE="native/privacy/PrivacyInfo.xcprivacy"
           PRIVACY_TARGET="ios/App/App/PrivacyInfo.xcprivacy"
-          if [ -f "$PRIVACY_SOURCE" ]; then
-            cp "$PRIVACY_SOURCE" "$PRIVACY_TARGET"
-            plutil -lint "$PRIVACY_TARGET"
-            echo "Approved privacy manifest injected into generated iOS app target."
-          elif [ "${RELEASE_CANDIDATE:-false}" = "true" ]; then
-            echo "RC BLOCKED: $PRIVACY_SOURCE is missing. Do not infer privacy declarations."
-            exit 1
-          else
-            echo "Integration build: approved privacy manifest not frozen yet; RC remains blocked."
-          fi
-      - name: Add encryption compliance
+          test -f "$PRIVACY_SOURCE" || { echo "RC BLOCKED: $PRIVACY_SOURCE is missing."; exit 1; }
+          cp "$PRIVACY_SOURCE" "$PRIVACY_TARGET"
+          plutil -lint "$PRIVACY_TARGET"
+          ruby scripts/inject-ios-privacy-manifest.rb
+      - name: Configure release Info.plist
         script: |
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
-      - name: Set build number
-        script: |
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion 6" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 6" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Cliniverse AI" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string Cliniverse AI" ios/App/App/Info.plist
+          IOS_BUILD_NUMBER="${BUILD_NUMBER:?Codemagic BUILD_NUMBER is required}"
+          case "$IOS_BUILD_NUMBER" in (*[!0-9]*|'') echo "RC BLOCKED: BUILD_NUMBER must be numeric"; exit 1;; esac
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $IOS_BUILD_NUMBER" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string $IOS_BUILD_NUMBER" ios/App/App/Info.plist
       - name: CocoaPods
         script: cd ios/App && pod install --repo-update
       - name: Build IPA
@@ -55,10 +56,6 @@ workflows:
           xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
       - name: RC package verification
         script: |
-          if [ "${RELEASE_CANDIDATE:-false}" != "true" ]; then
-            echo "Integration build: final IPA compliance gate intentionally deferred until RELEASE_CANDIDATE=true."
-            exit 0
-          fi
           IPA_PATH="$(find build/ios/ipa -maxdepth 1 -name '*.ipa' | head -n 1)"
           bash scripts/verify-ios-ipa.sh "$IPA_PATH"
     artifacts:

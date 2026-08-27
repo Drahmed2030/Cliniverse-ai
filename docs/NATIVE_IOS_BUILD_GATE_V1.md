@@ -12,7 +12,9 @@ This gate exists because an iOS build can compile successfully while still faili
 4. The integration lane now has a deterministic product-icon source at `assets/logo.svg` and runs pinned `@capacitor/assets@3.0.5` **after** `npx cap add ios` to generate the iOS asset catalog.
 5. Apple has reported placeholder app icons and a blank launch on an iPad review device. The placeholder-icon root cause is now addressed at pipeline-contract level, but the Apple finding remains open until the generated archive is inspected and the icon is visually verified on an installed build.
 6. Automatic TestFlight and App Store submission are disabled on the active integration lane. Release publishing must be explicitly enabled only from an approved release-candidate workflow.
-7. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. Privacy-manifest handling must be made accurate and deterministic before RC1.
+7. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. The evidence-reviewed source now lives at `native/privacy/PrivacyInfo.xcprivacy` and is explicitly injected into the generated App target.
+8. The native shell now packages `native-offline.html` through Capacitor `server.errorPath` and uses a dark native background, providing a local, retryable state when the remote origin cannot load.
+9. The build lane pins patched `tar`, `uuid` and `sharp` transitive versions. A version-locked postinstall compatibility patch adapts Capacitor CLI 6.2.1 to the secure `tar` 7 export shape and fails closed if the expected source changes.
 
 ## Executive release rule
 
@@ -25,14 +27,14 @@ No `release/cliniverse-rc1` promotion and no App Store submission until all nati
 - [x] A versioned Cliniverse product-icon source exists outside the regenerated `ios/` directory (`assets/logo.svg`).
 - [x] Codemagic generates the iOS AppIcon catalog after `npx cap add ios` using pinned `@capacitor/assets@3.0.5`.
 - [x] CI contains a file-existence assertion for `AppIcon.appiconset/Contents.json`.
-- [ ] Final visual sign-off confirms this Cliniverse product icon is the intended App Store/device icon while the NeuraOps edge-N remains the corporate identity.
+- [x] Generated 1024×1024 AppIcon and dark launch artwork were visually inspected: the Cliniverse mark is present, opaque and not a Capacitor placeholder; NeuraOps remains the parent identity.
 - [ ] The generated/archive artifact is inspected to confirm the expected icon set is present.
 - [ ] A clean-installed iPhone/iPad build shows the expected icon and no default Capacitor/placeholder icon.
 
 ## Gate B — native privacy/configuration packaging
 
-- [ ] Create an authoritative privacy-manifest source outside the regenerated `ios/` directory after validating its declarations against the actual enabled SDKs and data practices.
-- [ ] Inject that privacy manifest after native-project regeneration.
+- [x] Create an authoritative privacy-manifest source outside the regenerated `ios/` directory from the active data-flow and dependency-source audit.
+- [x] Inject that manifest into the generated App target's Copy Bundle Resources phase after native-project regeneration.
 - [ ] Inspect the generated `Info.plist` from the build artifact, not from deleted/recreated repository paths.
 - [ ] Any required usage-description keys are present only for capabilities that are actually enabled.
 - [ ] HealthKit / wearable permissions are absent until the real integration and permission UX are approved.
@@ -55,7 +57,7 @@ Required tests:
 - [ ] Authentication restore after app termination.
 - [ ] No white/black blank state without a visible loading or recoverable error state.
 
-If the remote-container architecture cannot provide a reliable failure state when the remote origin is unavailable, a native/local fallback strategy must be implemented before RC1 rather than relying on web-level error UI alone.
+The repository now includes a local branded failure page wired through Capacitor `server.errorPath`, with manual and online-event retry. Its actual behavior must still pass the clean-install/offline/reconnect device matrix before this gate changes to PASS.
 
 ## Gate D — App Review package
 

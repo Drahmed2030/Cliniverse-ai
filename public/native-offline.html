@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Cliniverse AI — Connection unavailable</title>
+  <style>
+    :root { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; min-height: 100dvh; margin: 0; padding: calc(28px + env(safe-area-inset-top)) 22px calc(28px + env(safe-area-inset-bottom)); display: grid; place-items: center; background: #080c16; color: #f8fafc; }
+    main { width: min(100%, 430px); padding: 26px 22px; border: 1px solid rgba(148,163,184,.22); border-radius: 24px; background: #111827; box-shadow: 0 22px 70px rgba(0,0,0,.35); }
+    .mark { width: 58px; height: 58px; display: grid; place-items: center; border: 2px solid #d4a72c; border-radius: 18px; color: #5eead4; font-size: 28px; font-weight: 900; background: linear-gradient(145deg,#1e3d52,#123f43); }
+    .eyebrow { margin-top: 20px; color: #5eead4; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+    h1 { margin: 9px 0 10px; font-size: 25px; line-height: 1.15; }
+    p { margin: 0; color: #cbd5e1; font-size: 14px; line-height: 1.65; }
+    button { width: 100%; min-height: 48px; margin-top: 22px; border: 0; border-radius: 14px; background: #0f766e; color: white; font: inherit; font-weight: 800; }
+    button:disabled { opacity: .65; }
+    #status { min-height: 20px; margin-top: 12px; color: #94a3b8; font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">C</div>
+    <div class="eyebrow">CLINIVERSE AI · BY NEURAOPS</div>
+    <h1>Connection unavailable</h1>
+    <p>The app could not reach the secure Cliniverse service. Your account has not been signed out. Restore your connection, then retry.</p>
+    <button id="retry" type="button">Retry connection</button>
+    <div id="status" role="status" aria-live="polite">No patient information should be entered while reconnecting.</div>
+  </main>
+  <script>
+    (function () {
+      var origin = 'https://cliniverse-ai-u7gi.vercel.app';
+      var button = document.getElementById('retry');
+      var status = document.getElementById('status');
+
+      function retry() {
+        button.disabled = true;
+        status.textContent = navigator.onLine ? 'Reconnecting securely…' : 'Your device still appears to be offline.';
+        if (navigator.onLine) window.location.replace(origin);
+        else window.setTimeout(function () { button.disabled = false; }, 900);
+      }
+
+      button.addEventListener('click', retry);
+      window.addEventListener('online', retry);
+    }());
+  </script>
+</body>
+</html>
