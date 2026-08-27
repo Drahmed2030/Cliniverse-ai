@@ -26,9 +26,18 @@ workflows:
           npx cap add ios
           npx cap copy ios
           test -f ios/App/App/public/native-offline.html
+      - name: Install native cold-launch guard
+        script: |
+          node scripts/configure-ios-launch-guard.mjs
+          grep -q 'CliniverseBridgeViewController' ios/App/App/AppDelegate.swift
+          grep -q 'customClass="CliniverseBridgeViewController"' ios/App/App/Base.lproj/Main.storyboard
       - name: Generate branded iOS assets
         script: |
-          npx --no-install capacitor-assets generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16' --logoSplashScale 0.65
+          node scripts/sync-brand-icons.mjs
+          EXPECTED_ICON_SOURCE_SHA256="80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09"
+          ACTUAL_ICON_SOURCE_SHA256="$(shasum -a 256 assets/logo.svg | awk '{print $1}')"
+          test "$ACTUAL_ICON_SOURCE_SHA256" = "$EXPECTED_ICON_SOURCE_SHA256"
+          npx --no-install capacitor-assets generate --ios --assetPath assets --iconBackgroundColor '#080C16' --iconBackgroundColorDark '#080C16' --splashBackgroundColor '#080C16' --splashBackgroundColorDark '#080C16' --logoSplashTargetWidth 960
           ICON_PATH="ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png"
           SPLASH_PATH="ios/App/App/Assets.xcassets/Splash.imageset/Default@3x~universal~anyany.png"
           test -f ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json
@@ -49,6 +58,8 @@ workflows:
         script: |
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Cliniverse AI" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string Cliniverse AI" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :CliniverseLaunchGuardVersion string 1" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :CliniverseLaunchGuardVersion 1" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Add :CliniverseIconSourceSHA256 string 80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :CliniverseIconSourceSHA256 80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ios/App/App/Info.plist
           IOS_BUILD_NUMBER="${BUILD_NUMBER:?Codemagic BUILD_NUMBER is required}"
           case "$IOS_BUILD_NUMBER" in (*[!0-9]*|'') echo "RC BLOCKED: BUILD_NUMBER must be numeric"; exit 1;; esac
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $IOS_BUILD_NUMBER" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string $IOS_BUILD_NUMBER" ios/App/App/Info.plist

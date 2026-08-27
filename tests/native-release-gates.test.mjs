@@ -58,13 +58,44 @@ test('native dependency and asset generation are deterministic', () => {
   assert.match(workflow, /node:\s*22\.14\.0/)
   assert.match(workflow, /script: npm ci/)
   assert.match(workflow, /npx --no-install capacitor-assets generate/)
-  assert.match(workflow, /--logoSplashScale 0\.65/)
+  assert.match(workflow, /--logoSplashTargetWidth 960/)
+  assert.match(workflow, /EXPECTED_ICON_SOURCE_SHA256=/)
+  assert.match(workflow, /node scripts\/sync-brand-icons\.mjs/)
   assert.match(workflow, /sips -g hasAlpha/)
   assert.equal(workflow.includes('npm install @capacitor/core'), false)
   const compatibilityPatch = read('scripts/patch-capacitor-cli-tar.mjs')
   assert.match(compatibilityPatch, /cliPackage\.version !== '6\.2\.1'/)
   assert.match(compatibilityPatch, /tar_1\.extract/)
   assert.match(compatibilityPatch, /Refusing to patch unexpected/)
+})
+
+test('native cold launch remains branded until remote content or local recovery is visible', () => {
+  const workflow = read('codemagic.yaml')
+  const nativeDelegate = read('native/ios/AppDelegate.swift')
+  const configurator = read('scripts/configure-ios-launch-guard.mjs')
+  const verify = read('scripts/verify-ios-ipa.sh')
+
+  assert.match(workflow, /node scripts\/configure-ios-launch-guard\.mjs/)
+  assert.match(nativeDelegate, /CliniverseBridgeViewController/)
+  assert.match(nativeDelegate, /UIImage\(named: "Splash"\)/)
+  assert.match(nativeDelegate, /observe\(\\\.estimatedProgress/)
+  assert.match(nativeDelegate, /errorPathURL/)
+  assert.match(nativeDelegate, /DispatchQueue\.main\.asyncAfter\(deadline: \.now\(\) \+ 15/)
+  assert.match(configurator, /customClass="CliniverseBridgeViewController"/)
+  assert.match(configurator, /0\.03137254901960784/)
+  assert.match(verify, /CliniverseLaunchGuardVersion/)
+  assert.match(verify, /compiled native launch guard/)
+})
+
+test('native and web icon families share one frozen Cliniverse source', () => {
+  const source = read('assets/logo.svg').trimEnd()
+  const sync = read('scripts/sync-brand-icons.mjs')
+  const webIcon = read('public/icons/icon.svg').trimEnd()
+
+  assert.equal(webIcon, source)
+  assert.match(sync, /assets\/logo\.svg/)
+  assert.match(sync, /public\/icons\/icon-\$\{size\}\.svg/)
+  assert.match(sync, /brand icon drift detected/)
 })
 
 test('native shell uses HTTPS and blocks cleartext transport', () => {

@@ -16,6 +16,9 @@ This gate exists because an iOS build can compile successfully while still faili
 8. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. The evidence-reviewed source now lives at `native/privacy/PrivacyInfo.xcprivacy` and is explicitly injected into the generated App target.
 9. The native shell now packages `native-offline.html` through Capacitor `server.errorPath` and uses a dark native background, providing a local, retryable state when the remote origin cannot load.
 10. The build lane pins patched `tar`, `uuid` and `sharp` transitive versions. A version-locked postinstall compatibility patch adapts Capacitor CLI 6.2.1 to the secure `tar` 7 export shape and fails closed if the expected source changes.
+11. The generated Capacitor bridge now receives an authoritative native launch guard from `native/ios/AppDelegate.swift`. The generated storyboard is bound to that controller after every `npx cap add ios`; the branded native surface remains visible until the remote page or packaged recovery page finishes loading.
+12. The prior `--logoSplashScale 0.65` value scaled from the 512px source rather than the 2732px launch canvas, producing only a 332px mark. RC1 now uses a deterministic 960px launch-art target width suitable for iPhone and iPad review evidence.
+13. `assets/logo.svg` is the frozen icon authority. Codemagic verifies its SHA-256 contract, all public icon variants must derive from it, and the final IPA carries both the icon-source and native-launch contract markers for archive verification.
 
 ## Executive release rule
 
@@ -29,6 +32,7 @@ No `release/cliniverse-rc1` promotion and no App Store submission until all nati
 - [x] Codemagic generates the iOS AppIcon catalog after `npx cap add ios` using pinned `@capacitor/assets@3.0.5`.
 - [x] CI contains a file-existence assertion for `AppIcon.appiconset/Contents.json`.
 - [x] Generated 1024×1024 AppIcon and dark launch artwork were visually inspected: the Cliniverse mark is present, opaque and not a Capacitor placeholder; NeuraOps remains the parent identity.
+- [x] Web/PWA icon variants are deterministic derivatives of the same frozen `assets/logo.svg` source used by native asset generation.
 - [ ] The generated/archive artifact is inspected to confirm the expected icon set is present.
 - [ ] A clean-installed iPhone/iPad build shows the expected icon and no default Capacitor/placeholder icon.
 
@@ -58,7 +62,7 @@ Required tests:
 - [ ] Authentication restore after app termination.
 - [ ] No white/black blank state without a visible loading or recoverable error state.
 
-The repository now includes a local branded failure page wired through Capacitor `server.errorPath`, with manual and online-event retry. Its actual behavior must still pass the clean-install/offline/reconnect device matrix before this gate changes to PASS.
+The repository now includes a local branded failure page wired through Capacitor `server.errorPath`, with manual and online-event retry. A native launch guard preserves the same branded launch artwork while the initial remote navigation is pending and forces the local recovery page after a bounded 15-second wait. Its actual behavior must still pass the clean-install/offline/reconnect device matrix before this gate changes to PASS.
 
 ## Gate D — App Review package
 
