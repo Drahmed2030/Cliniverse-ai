@@ -7,7 +7,7 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.cliniverse.ai
       node: 22.14.0
-      xcode: latest
+      xcode: 26.6
       cocoapods: default
       groups:
         - app_store
