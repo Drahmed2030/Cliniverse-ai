@@ -34,6 +34,7 @@
     "node_modules",
     "_theme_backups",
     "app/components/AdminDashboard.tsx",
-    "app/components/AfiaHome.tsx"
+    "app/components/AfiaHome.tsx",
+    "app/components/BoardExam.tsx"
   ]
 }
