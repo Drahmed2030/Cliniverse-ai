@@ -33,6 +33,7 @@
   "exclude": [
     "node_modules",
     "_theme_backups",
-    "app/components/AdminDashboard.tsx"
+    "app/components/AdminDashboard.tsx",
+    "app/components/AfiaHome.tsx"
   ]
 }
