@@ -13,7 +13,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - Current production `profiles` policies permit public insert/read/update, and current grants give `anon` and `authenticated` broad table privileges.
 - Current production `subscriptions` policy named `Service role can insert subscriptions` is actually assigned to `public` with an unconditional check. Combined with the current grants, it permits a client to insert a subscription row and violates the release entitlement authority.
 - `case_completions` and `mcq_answers` have RLS enabled but no policies, so the auth-scoped progress helpers cannot currently persist data.
-- Supabase migration history is empty. No production RLS mutation was made during this checkpoint.
+- Supabase branching registered the production schema baseline as migration `20260827071109_remote_schema`. No Apple RC1 RLS migration or production authority mutation was made during this checkpoint.
 - The deferred knowledge-match API and legacy signup helper are now included in the fail-closed RC contract: client execution is revoked, and the HTTP route defaults to 503 unless separately enabled after AI consent/security review.
 - A Next.js 16 `proxy.ts` release boundary returns 404 before deferred AI, storage, ingestion, mood, cache and legacy API handlers execute. Their source remains available for later validation, but they are not runtime Apple v1 surfaces.
 
@@ -32,7 +32,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - The final forward migration passed its internal assertions and the separate catalog assertions.
 - Transactional User A/User B/anon/service-role tests passed for profile ownership, read-only subscription authority, progress ownership, deferred-table denial and legacy-RPC denial. Test identities and rows were rolled back.
 - The emergency safe-hold rollback passed deny-all assertions, preserved trusted service-role authority, and the forward migration recovered successfully. Catalog and two-user tests then passed again.
-- Supabase security advisors no longer report the exposed `SECURITY DEFINER` helper or mutable knowledge-match search path. The remaining `vector`-extension placement warning is a deferred structural migration, not an Apple v1 client-authority path.
+- Supabase security advisors no longer report the exposed `SECURITY DEFINER` helper or mutable knowledge-match search path. The remaining warning-level item is the `vector` extension in `public`; no-policy informational notices correspond to deliberately deny-closed deferred tables. Moving the extension is a broader structural migration, not an Apple v1 client-authority path.
 - No production migration has been applied by this staging checkpoint.
 
 ## Already passed
@@ -49,6 +49,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - Existing session restores after reload/relaunch.
 - Sign-out invalidates the app session and returns to the auth gate.
 - Apple/Google OAuth remains unavailable unless provider configuration is explicitly verified.
+- Enable and recheck Supabase Auth leaked-password protection; production currently reports this control as disabled.
 
 ### Profile ownership
 - First authenticated login creates at most one profile row with `id = auth.uid()`.
