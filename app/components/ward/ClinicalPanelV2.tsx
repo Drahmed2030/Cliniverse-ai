@@ -12,7 +12,7 @@ import type {
   MedicationItem,
   SoapNote,
   TrackingMetric,
-} from "../clinicalTypes";
+} from "./clinicalTypes";
 import {
   createSoapNote,
   isSoapMeaningful,
@@ -469,7 +469,7 @@ function SoapField(props: {
           padding: "8px 10px",
           fontSize: 13,
           color: T.text,
-          background: T.bg,
+          background: T.white,
           outline: "none",
           boxSizing: "border-box",
         }}
@@ -479,10 +479,11 @@ function SoapField(props: {
 }
 
 function SoapLine(props: { k: string; v: string }) {
+  if (!props.v) return null;
   return (
-    <div style={{ marginBottom: 6 }}>
-      <span style={{ fontSize: 11, fontWeight: 800, color: T.tealD }}>{props.k}: </span>
-      <span style={{ fontSize: 12, color: T.sub }}>{props.v}</span>
+    <div style={{ display: "grid", gridTemplateColumns: "22px 1fr", gap: 6, marginTop: 4 }}>
+      <div style={{ fontSize: 11, fontWeight: 900, color: T.tealD }}>{props.k}</div>
+      <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.45 }}>{props.v}</div>
     </div>
   );
 }
@@ -499,25 +500,21 @@ function MedsView(props: { meds: MedicationItem[] }) {
               background: T.white,
               border: "1px solid " + T.border,
               borderRadius: 14,
-              padding: "12px 12px",
+              padding: "11px 12px",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", gap: 8 }}>
               <div style={{ fontSize: 13, fontWeight: 800, color: T.text }}>{m.name}</div>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 800,
-                  color: m.status === "active" ? T.green : T.muted,
-                  textTransform: "uppercase",
-                }}
-              >
-                {m.status}
-              </span>
+              <div style={{ fontSize: 10, color: m.status === "active" ? T.green : T.muted, fontWeight: 800 }}>
+                {m.status.toUpperCase()}
+              </div>
             </div>
             <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>
-              {m.dose + " · " + m.route + " · " + m.frequency}
+              {m.dose} · {m.route} · {m.frequency}
             </div>
+            {m.indication ? (
+              <div style={{ fontSize: 11, color: T.muted, marginTop: 3 }}>{m.indication}</div>
+            ) : null}
           </div>
         );
       })}
@@ -531,111 +528,58 @@ function DischargeEditor(props: {
 }) {
   var d = props.value;
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <EditArea label="Diagnosis" value={d.diagnosis} onChange={function (v) { props.onChange("diagnosis", v); }} />
-      <EditArea label="Hospital course" value={d.hospitalCourse} onChange={function (v) { props.onChange("hospitalCourse", v); }} />
-      <EditArea label="Procedures" value={d.procedures} onChange={function (v) { props.onChange("procedures", v); }} />
-      <EditArea label="Follow-up" value={d.followUp} onChange={function (v) { props.onChange("followUp", v); }} />
-      <EditArea
-        label="Discharge meds (one per line)"
-        value={(d.dischargeMeds || []).join("\n")}
-        onChange={function (v) {
-          props.onChange(
-            "dischargeMeds",
-            v.split("\n").map(function (x) { return x.trim(); }).filter(Boolean)
-          );
-        }}
-      />
-      <EditArea
-        label="Home instructions (one per line)"
-        value={(d.homeInstructions || []).join("\n")}
-        onChange={function (v) {
-          props.onChange(
-            "homeInstructions",
-            v.split("\n").map(function (x) { return x.trim(); }).filter(Boolean)
-          );
-        }}
-      />
+    <div style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 16, padding: 12 }}>
+      <EditorField label="Diagnosis" value={d.diagnosis} onChange={(v) => props.onChange("diagnosis", v)} />
+      <EditorField label="Hospital course" value={d.hospitalCourse} onChange={(v) => props.onChange("hospitalCourse", v)} multiline />
+      <EditorField label="Procedures" value={d.procedures} onChange={(v) => props.onChange("procedures", v)} multiline />
+      <EditorField label="Follow-up" value={d.followUp} onChange={(v) => props.onChange("followUp", v)} multiline />
     </div>
   );
 }
 
-function EditArea(props: { label: string; value: string; onChange: (v: string) => void }) {
+function EditorField(props: { label: string; value: string; onChange: (v: string) => void; multiline?: boolean }) {
   return (
-    <div
-      style={{
-        background: T.white,
-        border: "1px solid " + T.border,
-        borderRadius: 14,
-        padding: 12,
-      }}
-    >
-      <div style={{ fontSize: 12, fontWeight: 800, color: T.text, marginBottom: 6 }}>
-        {props.label}
-      </div>
-      <textarea
-        value={props.value}
-        onChange={function (e) {
-          props.onChange(e.target.value);
-        }}
-        rows={3}
-        style={{
-          width: "100%",
-          border: "1px solid " + T.border,
-          borderRadius: 10,
-          padding: "8px 10px",
-          fontSize: 13,
-          color: T.text,
-          background: T.bg,
-          boxSizing: "border-box",
-          outline: "none",
-        }}
-      />
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 4 }}>{props.label}</div>
+      {props.multiline ? (
+        <textarea
+          value={props.value}
+          onChange={(e) => props.onChange(e.target.value)}
+          rows={3}
+          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text }}
+        />
+      ) : (
+        <input
+          value={props.value}
+          onChange={(e) => props.onChange(e.target.value)}
+          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text }}
+        />
+      )}
     </div>
   );
 }
 
 function BlockCard(props: { title: string; body: string }) {
   return (
-    <div
-      style={{
-        background: T.white,
-        border: "1px solid " + T.border,
-        borderRadius: 14,
-        padding: 12,
-      }}
-    >
-      <div style={{ fontSize: 12, fontWeight: 800, color: T.text, marginBottom: 6 }}>
-        {props.title}
-      </div>
-      <div style={{ fontSize: 12, color: T.sub, lineHeight: 1.45 }}>{props.body}</div>
+    <div style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 16, padding: 12 }}>
+      <div style={{ fontSize: 13, fontWeight: 800, color: T.text }}>{props.title}</div>
+      <div style={{ fontSize: 12, color: T.sub, marginTop: 7, lineHeight: 1.55, whiteSpace: "pre-wrap" }}>{props.body}</div>
     </div>
   );
 }
 
 function Empty(props: { text: string }) {
   return (
-    <div
-      style={{
-        background: T.white,
-        border: "1px dashed " + T.border,
-        borderRadius: 14,
-        padding: 14,
-        fontSize: 12,
-        color: T.muted,
-      }}
-    >
+    <div style={{ background: T.white, border: "1px dashed " + T.border, borderRadius: 14, padding: 12, fontSize: 12, color: T.muted }}>
       {props.text}
     </div>
   );
 }
 
-function formatTime(iso: string) {
+function formatTime(at: string) {
   try {
-    var d = new Date(iso);
-    if (isNaN(d.getTime())) return iso;
-    return d.toLocaleString();
-  } catch (e) {
-    return iso;
+    return new Date(at).toLocaleString();
+  } catch {
+    return at;
   }
 }
