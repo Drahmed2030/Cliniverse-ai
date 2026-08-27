@@ -54,7 +54,10 @@ There is no digital Upgrade call to action and no in-app purchase flow in this r
 
 ## Reviewer access gate
 
-- [ ] Provision one non-expiring reviewer account only after the production RLS migration passes its approved migration window and two-user isolation tests.
+- [x] Production RLS migration passed its approved window; isolated two-user, rollback and recovery tests passed before production apply.
+- [x] Confirmed at 2026-08-27 09:07 UTC that no dedicated production reviewer account currently exists and no reviewer session is active.
+- [x] Enabled Supabase leaked-password protection and verified at 2026-08-27 09:07 UTC that the advisor warning is cleared.
+- [ ] Provision one new non-expiring reviewer account through a protected admin channel. Do not reuse the stale credentials visible in the rejected App Store Connect record.
 - [ ] Give the account only the entitlement needed to inspect the submitted surface; do not create a client-writable subscription path.
 - [ ] Store username and password only in App Store Connect's protected sign-in fields.
 - [ ] Test the account on a clean iPhone and iPad install immediately before submission.

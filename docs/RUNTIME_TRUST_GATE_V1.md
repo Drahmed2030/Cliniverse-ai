@@ -27,8 +27,8 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - The eight production profile rows remained present and the zero-row subscription count was unchanged.
 - The connector refused the transactional synthetic User A/User B test on production because it inserts temporary Auth rows and changes roles. That test was not bypassed or repeated; its identical SQL had already passed twice on the isolated branch, including after rollback recovery.
 - Emergency rollback remains `supabase/rollback/20260827044500_apple_rc1_safe_hold.sql`. It intentionally denies all client data access rather than restoring insecure public policies.
-- Production advisors now report only the expected no-policy informational notices for deny-closed/deferred tables, the deferred `vector` extension placement warning, and disabled Auth leaked-password protection.
-- Production web promotion, valid-account runtime testing, leaked-password protection, and the native gate remain **HOLD**.
+- Production advisors now report only the expected no-policy informational notices for deny-closed/deferred tables and the deferred `vector` extension placement warning. The initial leaked-password-protection warning was cleared at 09:07 UTC after the Pro control was enabled.
+- Production web promotion, valid-account runtime testing, reviewer credential provisioning, and the native gate remain **HOLD**.
 
 ## Isolated staging evidence — 2026-08-27
 
@@ -40,6 +40,17 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - Supabase security advisors no longer report the exposed `SECURITY DEFINER` helper or mutable knowledge-match search path. The remaining warning-level item is the `vector` extension in `public`; no-policy informational notices correspond to deliberately deny-closed deferred tables. Moving the extension is a broader structural migration, not an Apple v1 client-authority path.
 - No production migration has been applied by this staging checkpoint.
 - After the production migration and read-only assertions passed, the disposable staging branch was deleted successfully. Its hourly charge is no longer running.
+
+## Auth hardening checkpoint — 2026-08-27 08:46–09:07 UTC
+
+- Production Auth contains five non-anonymous users and zero anonymous users. Aggregate queries returned no email addresses, user identifiers, password material or other account secrets.
+- No production account matching the dedicated reviewer naming convention and no reviewer session exists as of 09:07 UTC. The stale credentials shown in the rejected App Store Connect record therefore cannot be reused for RC1; a new, non-expiring reviewer account must be provisioned through a protected admin channel now that password controls are enabled.
+- A synthetic nonexistent-account password attempt failed closed with `invalid_credentials` / HTTP 400 and created no session or user.
+- A synthetic nonexistent-account magic-link request used `shouldCreateUser: false`, failed closed with `otp_disabled` / HTTP 422 and created no session or user.
+- The release auth shell remains sign-in only: guest access is disabled, implicit account creation is disabled, Apple/Google buttons remain disabled unless explicitly configured, and client-side Pro activation remains fail-closed.
+- Local verification passed: 39/39 release tests, strict Next.js production build, and production-dependency audit with zero reported vulnerabilities.
+- Supabase security advisors no longer report `auth_leaked_password_protection`; the Pro control was enabled in Auth settings and independently rechecked at 09:07 UTC. This password-control gate is **PASS**.
+- Valid-account password sign-in, restore, sign-out and device relaunch remain unverified because no dedicated reviewer account currently exists and no account secret was requested or extracted.
 
 ## Already passed
 - Authoritative Vercel build on the current integration head.
@@ -55,7 +66,8 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - Existing session restores after reload/relaunch.
 - Sign-out invalidates the app session and returns to the auth gate.
 - Apple/Google OAuth remains unavailable unless provider configuration is explicitly verified.
-- Enable and recheck Supabase Auth leaked-password protection; production currently reports this control as disabled.
+- Supabase Auth leaked-password protection was enabled and the advisor warning cleared at 09:07 UTC.
+- Provision the dedicated reviewer account only after leaked-password protection is verified enabled; keep its non-expiring credentials exclusively in protected App Store Connect fields.
 
 ### Profile ownership
 - First authenticated login creates at most one profile row with `id = auth.uid()`.
