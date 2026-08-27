@@ -53,3 +53,5 @@ Do not claim an accessibility feature in App Store Connect unless all common tas
 
 ## Submission rule
 No App Review notes may claim a feature, security control, compliance status, clinical accuracy, institutional integration or accessibility capability that has not been verified in the submitted binary or operational backend.
+
+The prepared field-level metadata, review notes, access gate and screenshot contract live in `docs/APPLE_RC1_REVIEWER_PACKAGE.md`. That package remains HOLD until its final external checks pass.

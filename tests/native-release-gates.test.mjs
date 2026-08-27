@@ -80,3 +80,16 @@ test('native shell uses HTTPS and blocks cleartext transport', () => {
   assert.match(offline, /window\.location\.replace\(origin\)/)
   assert.match(offline, /addEventListener\('online', retry\)/)
 })
+
+test('Apple reviewer package is release-scoped and contains no credentials', () => {
+  const reviewer = read('docs/APPLE_RC1_REVIEWER_PACKAGE.md')
+  assert.match(reviewer, /PREPARED \/ HOLD — do not submit/)
+  assert.match(reviewer, /sign-in-only release/)
+  assert.match(reviewer, /fictional simulation data/)
+  assert.match(reviewer, /no in-app purchase flow/i)
+  assert.match(reviewer, /Store username and password only in App Store Connect/)
+  assert.match(reviewer, /Support URL/)
+  assert.match(reviewer, /Privacy URL/)
+  assert.match(reviewer, /Screenshot contract/)
+  assert.equal(/password\s*[:=]\s*\S+/i.test(reviewer), false)
+})
