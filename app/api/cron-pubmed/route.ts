@@ -5,7 +5,8 @@ const SPECIALTIES = ['cardiology','emergency medicine','internal medicine','neur
 
 export async function GET(req: Request) {
   const auth = req.headers.get('authorization')
-  if (auth !== 'Bearer ' + process.env.CRON_SECRET) {
+  const expected = process.env.CRON_SECRET
+  if (!expected || auth !== `Bearer ${expected}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -39,7 +40,7 @@ export async function GET(req: Request) {
     }))
     await supabase.from('pubmed_articles').upsert(rows, { onConflict: 'id' })
     return NextResponse.json({ success: true, count: rows.length })
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 })
+  } catch {
+    return NextResponse.json({ error: 'Cron execution failed' }, { status: 500 })
   }
 }

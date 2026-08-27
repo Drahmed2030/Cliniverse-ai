@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req: Request) {
   const auth = req.headers.get('authorization')
-  if (auth !== 'Bearer ' + process.env.CRON_SECRET) {
+  const expected = process.env.CRON_SECRET
+  if (!expected || auth !== `Bearer ${expected}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -32,7 +33,7 @@ export async function GET(req: Request) {
     const caseData = JSON.parse(clean)
     await supabase.from('daily_cases').insert([{ ...caseData, source: 'ai' }])
     return NextResponse.json({ success: true })
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 })
+  } catch {
+    return NextResponse.json({ error: 'Cron execution failed' }, { status: 500 })
   }
 }

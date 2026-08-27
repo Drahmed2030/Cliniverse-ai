@@ -4,6 +4,8 @@ Status: **PREPARED / HOLD — do not submit**
 
 This package is the release-scoped source for App Store Connect metadata and reviewer instructions. Every item must be checked against the final signed IPA and production backend immediately before submission.
 
+The recovered Wave 1 review findings, response draft and physical-device recording script are tracked in `docs/APPLE_WAVE1_RESPONSE_AND_EVIDENCE.md`.
+
 ## Product metadata draft
 
 | Field | Release value | Gate |

@@ -25,7 +25,13 @@ test('Vercel cron URLs do not contain committed secrets', () => {
 })
 
 test('cron routes require Bearer authorization and fail closed', () => {
-  for (const path of ['app/api/cron-pulse/route.ts', 'app/api/cron-nexus/route.ts']) {
+  for (const path of [
+    'app/api/cron-case/route.ts',
+    'app/api/cron-nexus/route.ts',
+    'app/api/cron-pubmed/route.ts',
+    'app/api/cron-pulse/route.ts',
+    'app/api/knowledge-graph/seed/route.ts',
+  ]) {
     const source = read(path)
     assert.match(source, /process\.env\.CRON_SECRET/)
     assert.match(source, /authorization/)
@@ -33,6 +39,37 @@ test('cron routes require Bearer authorization and fail closed', () => {
     assert.match(source, /status:\s*401/)
     assert.equal(source.includes("searchParams.get('secret')"), false)
     assert.equal(source.includes('error: String(err)'), false)
+    assert.equal(source.includes('error: e.message'), false)
+  }
+})
+
+test('Apple v1 blocks deferred server APIs before route execution', () => {
+  const source = read('proxy.ts')
+  assert.match(source, /export function proxy/)
+  assert.match(source, /matcher:\s*'\/api\/:path\*'/)
+  assert.match(source, /status:\s*404/)
+  assert.match(source, /X-Cliniverse-Release-Gate/)
+  for (const path of [
+    '/api/analyze-doc',
+    '/api/cache',
+    '/api/generate-case',
+    '/api/ingest',
+    '/api/intelligence',
+    '/api/knowledge-graph',
+    '/api/medical-ai',
+    '/api/mood',
+    '/api/storage',
+    '/api/tts',
+  ]) {
+    assert.equal(source.includes(`'${path}'`), true)
+  }
+  for (const allowed of [
+    '/api/release-contract',
+    '/api/ward/case-evidence',
+    '/api/cron-pulse',
+    '/api/cron-nexus',
+  ]) {
+    assert.equal(source.includes(`'${allowed}'`), false)
   }
 })
 
@@ -142,6 +179,8 @@ test('prepared RC1 RLS migration closes client profile and subscription authorit
   assert.match(migration, /create policy "subscriptions_select_own"[\s\S]*to authenticated[\s\S]*auth\.uid\(\)/i)
   assert.equal(/create policy[\s\S]{0,120}subscriptions[\s\S]{0,180}for insert/i.test(migration), false)
   assert.match(migration, /revoke execute on function public\.is_user_pro\(uuid\) from PUBLIC, anon, authenticated/i)
+  assert.match(migration, /revoke execute on function public\.handle_new_user\(\) from PUBLIC, anon, authenticated/i)
+  assert.match(migration, /revoke execute on function public\.match_clinical_cases\(vector, real, integer\)[\s\S]*from PUBLIC, anon, authenticated/i)
 })
 
 test('RC1 RLS migration deny-lists deferred exposed tables and has a safe rollback', () => {
@@ -160,11 +199,29 @@ test('RC1 RLS migration deny-lists deferred exposed tables and has a safe rollba
   assert.equal(rollback.includes('Public update'), false)
   assert.equal(rollback.includes('Service role can insert subscriptions'), false)
 
+  const safeHoldAssertionsPath = 'supabase/tests/20260827044500_apple_rc1_safe_hold_assertions.sql'
+  assert.equal(existsSync(new URL(`../${safeHoldAssertionsPath}`, import.meta.url)), true)
+  const safeHoldAssertions = read(safeHoldAssertionsPath)
+  assert.match(safeHoldAssertions, /Safe-hold retained client authority/)
+  assert.match(safeHoldAssertions, /handle_new_user/)
+  assert.match(safeHoldAssertions, /match_clinical_cases/)
+
   const assertionsPath = 'supabase/tests/20260827044500_apple_rc1_catalog_assertions.sql'
   assert.equal(existsSync(new URL(`../${assertionsPath}`, import.meta.url)), true)
   const assertions = read(assertionsPath)
   assert.match(assertions, /has_table_privilege\('authenticated', 'public\.subscriptions', 'INSERT'\)/)
   assert.match(assertions, /has_function_privilege\('authenticated', 'public\.is_user_pro\(uuid\)', 'EXECUTE'\)/)
+
+  const twoUserPath = 'supabase/tests/20260827044500_apple_rc1_two_user_rls.sql'
+  assert.equal(existsSync(new URL(`../${twoUserPath}`, import.meta.url)), true)
+  const twoUser = read(twoUserPath)
+  assert.match(twoUser, /set local role authenticated/i)
+  assert.match(twoUser, /set local role anon/i)
+  assert.match(twoUser, /set local role service_role/i)
+  assert.match(twoUser, /request\.jwt\.claims/i)
+  assert.match(twoUser, /rollback;/i)
+  assert.match(twoUser, /User A inserted a subscription/)
+  assert.match(twoUser, /User B read User A case completion/)
 })
 
 test('release progress writes derive user_id from the authenticated session', () => {
@@ -250,4 +307,12 @@ test('Oracle API fails closed by default in the Apple release lane', () => {
   assert.match(route, /status:\s*503/)
   assert.match(route, /disabled in this release pending AI consent and clinical-safety review/)
   assert.equal(route.includes('error: (r.reason as Error)?.message'), false)
+})
+
+test('deferred knowledge matching API fails closed by default', () => {
+  const route = read('app/api/knowledge-graph/match/route.ts')
+  assert.match(route, /RELEASE_ENABLE_KNOWLEDGE_MATCH/)
+  assert.match(route, /RELEASE_KNOWLEDGE_MATCH_ENABLED/)
+  assert.match(route, /status:\s*503/)
+  assert.match(route, /disabled in this release pending AI consent and security review/)
 })

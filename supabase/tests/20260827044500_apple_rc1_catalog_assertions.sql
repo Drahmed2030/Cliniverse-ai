@@ -43,6 +43,16 @@ begin
      or has_function_privilege('authenticated', 'public.is_user_pro(uuid)', 'EXECUTE') then
     raise exception 'legacy arbitrary-user entitlement RPC remains executable';
   end if;
+
+  if has_function_privilege('anon', 'public.handle_new_user()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.handle_new_user()', 'EXECUTE') then
+    raise exception 'legacy signup trigger helper remains client-executable';
+  end if;
+
+  if has_function_privilege('anon', 'public.match_clinical_cases(vector,real,integer)', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.match_clinical_cases(vector,real,integer)', 'EXECUTE') then
+    raise exception 'deferred knowledge matching remains client-executable';
+  end if;
 end
 $catalog_assertions$;
 

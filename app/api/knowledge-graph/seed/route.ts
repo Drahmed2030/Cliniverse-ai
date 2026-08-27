@@ -15,8 +15,9 @@ function toVectorLiteral(embedding: number[]): string {
 }
 
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret');
-  if (secret !== process.env.CRON_SECRET) {
+  const expected = process.env.CRON_SECRET;
+  const authorization = req.headers.get('authorization');
+  if (!expected || authorization !== `Bearer ${expected}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
     .select('id, case_summary');
 
   if (fetchError) {
-    return NextResponse.json({ error: `Fetch failed: ${fetchError.message}` }, { status: 500 });
+    return NextResponse.json({ error: 'Knowledge seed fetch failed' }, { status: 500 });
   }
   if (!rows?.length) {
     return NextResponse.json({ message: 'No rows to seed', processed: 0 });
@@ -56,7 +57,7 @@ export async function GET(req: NextRequest) {
         .select('id');
 
       if (updateError) {
-        results.push({ id: numericId, status: 'error', error: updateError.message });
+        results.push({ id: numericId, status: 'error', error: 'Embedding update failed' });
         continue;
       }
 
@@ -64,14 +65,14 @@ export async function GET(req: NextRequest) {
         results.push({
           id: numericId,
           status: 'error',
-          error: `Update matched 0 rows (HTTP ${status}) — id type mismatch or row missing`,
+          error: `Embedding update matched 0 rows (HTTP ${status})`,
         });
         continue;
       }
 
       results.push({ id: numericId, status: 'seeded' });
-    } catch (e: any) {
-      results.push({ id: numericId, status: 'error', error: e.message });
+    } catch {
+      results.push({ id: numericId, status: 'error', error: 'Embedding generation failed' });
     }
   }
 

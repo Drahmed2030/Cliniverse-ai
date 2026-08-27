@@ -127,6 +127,20 @@ revoke insert, update, delete, truncate, references, trigger
 revoke execute on function public.is_user_pro(uuid) from PUBLIC, anon, authenticated;
 alter function public.is_user_pro(uuid) set search_path = '';
 
+-- Dormant legacy functions must not remain client-callable through the Data
+-- API. The trigger helper has no attached trigger in the verified production
+-- schema, and knowledge matching is disabled in Apple v1. Trusted server work
+-- may continue through service_role after a separate feature review.
+revoke execute on function public.handle_new_user() from PUBLIC, anon, authenticated;
+alter function public.handle_new_user() set search_path = 'public';
+
+revoke execute on function public.match_clinical_cases(vector, real, integer)
+  from PUBLIC, anon, authenticated;
+grant execute on function public.match_clinical_cases(vector, real, integer)
+  to service_role;
+alter function public.match_clinical_cases(vector, real, integer)
+  set search_path = 'public';
+
 -- Fail the migration if its essential authority boundaries are not present.
 do $migration_assertions$
 begin
@@ -167,6 +181,16 @@ begin
       and cmd = 'SELECT'
   ) then
     raise exception 'own-subscription SELECT policy is missing';
+  end if;
+
+  if has_function_privilege('anon', 'public.handle_new_user()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.handle_new_user()', 'EXECUTE') then
+    raise exception 'legacy signup trigger helper remains client-executable';
+  end if;
+
+  if has_function_privilege('anon', 'public.match_clinical_cases(vector,real,integer)', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.match_clinical_cases(vector,real,integer)', 'EXECUTE') then
+    raise exception 'deferred knowledge matching remains client-executable';
   end if;
 end
 $migration_assertions$;

@@ -44,5 +44,8 @@ revoke select (user_id, plan, status, expires_at, created_at)
   on table public.subscriptions from authenticated;
 
 revoke execute on function public.is_user_pro(uuid) from PUBLIC, anon, authenticated;
+revoke execute on function public.handle_new_user() from PUBLIC, anon, authenticated;
+revoke execute on function public.match_clinical_cases(vector, real, integer)
+  from PUBLIC, anon, authenticated;
 
 commit;

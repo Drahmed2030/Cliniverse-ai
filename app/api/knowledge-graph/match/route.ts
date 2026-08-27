@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateEmbedding } from '@/app/lib/embeddings';
 
+const RELEASE_KNOWLEDGE_MATCH_ENABLED = process.env.RELEASE_ENABLE_KNOWLEDGE_MATCH === 'true';
+
 const sb = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -14,6 +16,13 @@ const sb = () => createClient(
  * key differences the physician should note.
  */
 export async function POST(req: NextRequest) {
+  if (!RELEASE_KNOWLEDGE_MATCH_ENABLED) {
+    return NextResponse.json(
+      { error: 'Knowledge matching is disabled in this release pending AI consent and security review.' },
+      { status: 503 },
+    );
+  }
+
   const { queryText, matchThreshold = 0.75, matchCount = 3 } = await req.json();
 
   if (!queryText?.trim())
