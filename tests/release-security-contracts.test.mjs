@@ -302,6 +302,27 @@ test('third-party AI is gated out of the release shell until consent and claims 
   assert.match(release, /Do not enter patient-identifiable information/)
 })
 
+test('active Care surfaces preserve the dark release identity', () => {
+  for (const path of [
+    'app/components/ward/index.tsx',
+    'app/components/ward/WardHome.tsx',
+    'app/components/ward/PatientJourney.tsx',
+    'app/components/ward/RelatedEvidencePanel.tsx',
+    'app/components/ward/ClinicalPanelV2.tsx',
+  ]) {
+    const source = read(path)
+    assert.equal(/bg:\s*["']#F8FAFC["']/.test(source), false)
+    assert.equal(/background:\s*["']#F8FAFC["']/.test(source), false)
+    assert.equal(/white:\s*["']#FFFFFF["']/.test(source), false)
+    assert.equal(/border:\s*["']#E2E8F0["']/.test(source), false)
+  }
+
+  const home = read('app/components/ward/WardHome.tsx')
+  assert.match(home, /Care Workflow Simulation/)
+  assert.match(home, /No real patient data/)
+  assert.match(home, /#080C16/)
+})
+
 test('Oracle API fails closed by default in the Apple release lane', () => {
   const route = read('app/api/oracle/route.ts')
   assert.match(route, /RELEASE_ENABLE_ORACLE/)

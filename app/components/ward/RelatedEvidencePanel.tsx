@@ -18,14 +18,14 @@ interface RelatedEvidencePanelProps {
 }
 
 const T = {
-  white: "#FFFFFF",
-  text: "#0F172A",
-  sub: "#475569",
+  white: "#111827",
+  text: "#F8FAFC",
+  sub: "#CBD5E1",
   muted: "#94A3B8",
-  border: "#E2E8F0",
-  teal: "#0D9488",
-  blue: "#1E40AF",
-  red: "#EF4444",
+  border: "rgba(148,163,184,0.20)",
+  teal: "#2DD4BF",
+  blue: "#60A5FA",
+  red: "#F87171",
 };
 
 export default function RelatedEvidencePanel({

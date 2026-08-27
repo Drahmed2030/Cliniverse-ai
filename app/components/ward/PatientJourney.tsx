@@ -13,18 +13,18 @@ import type {
 } from "../../lib/ward/types";
 
 const T = {
-  teal: "#0D9488",
+  teal: "#2DD4BF",
   tealD: "#0F766E",
-  bg: "#F8FAFC",
-  white: "#FFFFFF",
-  text: "#0F172A",
-  sub: "#475569",
+  bg: "#080C16",
+  white: "#111827",
+  text: "#F8FAFC",
+  sub: "#CBD5E1",
   muted: "#94A3B8",
-  border: "#E2E8F0",
-  red: "#EF4444",
-  amber: "#F59E0B",
-  green: "#10B981",
-  blue: "#3B82F6",
+  border: "rgba(148,163,184,0.20)",
+  red: "#F87171",
+  amber: "#FBBF24",
+  green: "#34D399",
+  blue: "#60A5FA",
 };
 
 function priorityColor(p: Priority) {
@@ -78,6 +78,7 @@ export default function PatientJourney({
         inset: 0,
         zIndex: 80,
         background: T.bg,
+        colorScheme: "dark",
         overflowY: "auto",
       }}
     >
@@ -245,7 +246,7 @@ export default function PatientJourney({
 
             <button
               onClick={function () { if (onRequestConsult) onRequestConsult(patient.id); }}
-              style={{ width: "100%", border: "1px solid " + T.teal, background: "rgba(13,148,136,0.08)", color: T.tealD, borderRadius: 14, padding: "12px 14px", fontSize: 13, fontWeight: 800 }}
+              style={{ width: "100%", border: "1px solid " + T.teal, background: "rgba(45,212,191,0.08)", color: T.teal, borderRadius: 14, padding: "12px 14px", fontSize: 13, fontWeight: 800 }}
             >
               Request Consult
             </button>

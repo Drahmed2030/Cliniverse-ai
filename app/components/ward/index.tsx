@@ -51,7 +51,7 @@ export default function WardIndex(_: WardIndexProps) {
   }
 
   return (
-    <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,sans-serif', minHeight: '100vh', background: '#F8FAFC' }}>
+    <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,sans-serif', minHeight: 'calc(100dvh - 190px)', background: 'transparent' }}>
       <ErrorBoundary section="Care">
         <WardHome onSelectPatient={handleSelectPatient} />
       </ErrorBoundary>

@@ -27,17 +27,17 @@ import {
 } from "./dischargeWriter";
 
 var T = {
-  teal: "#0D9488",
+  teal: "#2DD4BF",
   tealD: "#0F766E",
-  bg: "#F8FAFC",
-  white: "#FFFFFF",
-  text: "#0F172A",
-  sub: "#475569",
+  bg: "#080C16",
+  white: "#111827",
+  text: "#F8FAFC",
+  sub: "#CBD5E1",
   muted: "#94A3B8",
-  border: "#E2E8F0",
-  red: "#EF4444",
-  amber: "#F59E0B",
-  green: "#10B981",
+  border: "rgba(148,163,184,0.20)",
+  red: "#F87171",
+  amber: "#FBBF24",
+  green: "#34D399",
 };
 
 type Tab = "track" | "soap" | "meds" | "report" | "discharge";
@@ -220,7 +220,7 @@ export default function ClinicalPanelV2({
       </div>
 
       {saveMsg ? (
-        <div style={{ fontSize: 12, color: T.tealD, fontWeight: 700 }}>{saveMsg}</div>
+        <div style={{ fontSize: 12, color: T.teal, fontWeight: 700 }}>{saveMsg}</div>
       ) : null}
 
       {tab === "track" ? <TrackingView metrics={bundle.metrics} /> : null}
@@ -546,13 +546,13 @@ function EditorField(props: { label: string; value: string; onChange: (v: string
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
           rows={3}
-          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text }}
+          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text, background: T.bg }}
         />
       ) : (
         <input
           value={props.value}
           onChange={(e) => props.onChange(e.target.value)}
-          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text }}
+          style={{ width: "100%", boxSizing: "border-box", border: "1px solid " + T.border, borderRadius: 10, padding: "8px 10px", fontSize: 12, color: T.text, background: T.bg }}
         />
       )}
     </div>
