@@ -16,11 +16,28 @@ The recovered Wave 1 review findings, response draft and physical-device recordi
 | Secondary category | Education | Confirm in App Store Connect |
 | Promotional text | Clinical learning, simulation and workflow tools for healthcare professionals, with explicit human review and no real-patient-data boundary. | Prepared — 140 characters |
 | Keywords | `clinical,simulation,workflow,medical,education,healthcare,ward,reference,clinician` | Prepared — 82 characters |
-| Support URL | `https://www.cliniverseai.com/support` | HOLD until RC production promotion and contact-route test |
-| Privacy URL | `https://www.cliniverseai.com/privacy` | HOLD until RC production promotion |
-| Marketing URL | `https://www.cliniverseai.com` | Optional; HOLD until RC production promotion |
+| Support URL | `https://www.cliniverseai.com/support` | Route is live; HOLD until the branded mailbox passes send/receive/reply testing |
+| Privacy URL | `https://www.cliniverseai.com/privacy` | Canonical route is live; legacy alternate URLs must redirect here in the final production release |
+| Marketing URL | `https://www.cliniverseai.com` | Optional; canonical production route is live |
 | Copyright | Must match the verified legal rights-holder name in App Store Connect | Founder/legal confirmation required |
 | Version / build | Copy from the final verified IPA only | Final IPA required |
+
+## Identity and contact contract
+
+Keep authentication, customer support and Apple account security as separate identities:
+
+| Purpose | Release identity | Rule / gate |
+| --- | --- | --- |
+| App Review sign-in | The pre-provisioned `reviewer@cliniverseai.com` Supabase Auth user | Authentication identifier only. It is not a public mailbox and must appear only in protected App Store Connect sign-in fields. |
+| Company operations mailbox | `operations@cliniverseai.com` | One real send/receive mailbox; HOLD until provisioned, 2FA-enabled and recovery details are founder-controlled. |
+| Product support | `support@cliniverseai.com` | Alias of the operations mailbox; publish only after external send/receive/reply test passes. |
+| Privacy requests | `privacy@cliniverseai.com` | Alias of the operations mailbox; use for privacy and account-data requests after the same mail test. |
+| Apple review contact | `apple@cliniverseai.com` | Alias of the operations mailbox; enter in protected App Review Contact Information and monitor during review. |
+| General enquiries | `hello@cliniverseai.com` | Alias of the operations mailbox; optional public company/product contact. |
+| Apple Account primary email | Existing founder-controlled, 2FA-protected Apple Account address | Do not convert the Apple Account login into a shared support mailbox during RC1. A primary-email change is a separate security migration. |
+| Seller / copyright | Exact verified legal rights holder in the enrolled Apple Developer team | `NeuraOps` may remain a product/operating brand, but must not replace the verified legal seller or copyright owner without legal-entity and rights confirmation. |
+
+Mailbox provider decision for RC1: Namecheap Private Email Launch is the lowest-complexity fit for the existing domain. One mailbox and its aliases are sufficient for the addresses above. Do not rely on Namecheap's current forwarding-only MX setup as the final support channel because forwarding cannot send replies from the branded address.
 
 ## Description draft
 

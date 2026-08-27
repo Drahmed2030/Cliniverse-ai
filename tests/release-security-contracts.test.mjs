@@ -269,6 +269,21 @@ test('privacy notice does not make unverified encryption, retention or universal
   assert.match(privacy, /\/support/)
 })
 
+test('legacy privacy URLs converge on the canonical release notice', () => {
+  const config = read('next.config.js')
+  assert.match(config, /source:\s*['"]\/privacy\.html['"][\s\S]*?destination:\s*['"]\/privacy['"]/)
+  assert.match(config, /source:\s*['"]\/privacy-policy\.html['"][\s\S]*?destination:\s*['"]\/privacy['"]/)
+
+  for (const path of ['public/privacy.html', 'public/privacy-policy.html']) {
+    const legacy = read(path)
+    assert.match(legacy, /https:\/\/www\.cliniverseai\.com\/privacy/)
+    assert.match(legacy, /url=\/privacy/)
+    for (const staleClaim of ['Ambient AI Scribe', 'Lemon Squeezy', 'Anthropic Claude', 'FHIR Integration']) {
+      assert.equal(legacy.includes(staleClaim), false)
+    }
+  }
+})
+
 test('integration iOS workflow cannot automatically publish to Apple', () => {
   const codemagic = read('codemagic.yaml')
   assert.match(codemagic, /submit_to_testflight:\s*false/)
