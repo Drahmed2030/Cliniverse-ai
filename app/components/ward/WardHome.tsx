@@ -45,33 +45,37 @@ const STATUS_LABEL: Record<string, string> = {
   discharged:           'Discharged',
 }
 
-export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: string) => void }) {
-  const [showMedFeed, setShowMedFeed] = React.useState(false);
-  const [showCodeLab, setShowCodeLab] = React.useState(false);
+interface WardHomeProps {
+  onSelectPatient?: (id: string) => void
+  isPro?: boolean
+}
+
+export default function WardHome({ onSelectPatient, isPro = false }: WardHomeProps) {
+  const [showMedFeed, setShowMedFeed] = React.useState(false)
+  const [showCodeLab, setShowCodeLab] = React.useState(false)
   const [selectedDept, setSelectedDept] = useState<string>('all')
+  const releaseNoUpgrade = () => {}
 
   const assigned = MOCK_PATIENTS.filter(p => p.assignedToMe && p.status !== 'discharged')
 
   if (showMedFeed) return (
     <MedFeedScreen
       isPro={isPro}
-      onUpgrade={onUpgrade}
+      onUpgrade={releaseNoUpgrade}
       onBack={() => setShowMedFeed(false)}
     />
-  );
+  )
 
   if (showCodeLab) return (
     <CodeLabHub
       isPro={isPro}
-      onUpgrade={onUpgrade}
+      onUpgrade={releaseNoUpgrade}
       onBack={() => setShowCodeLab(false)}
     />
-  );
+  )
 
   return (
     <div style={{ background: T.bg, minHeight: '100vh', paddingBottom: 100 }}>
-
-      {/* Header */}
       <div style={{
         background: 'linear-gradient(135deg, #0D9488, #0F766E)',
         padding: '48px 20px 24px',
@@ -95,11 +99,10 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
             display: 'flex', alignItems: 'center', gap: 6,
           }}>
             <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ADE80' }}/>
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', letterSpacing: 1 }}>LIVE</span>
+            <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', letterSpacing: 1 }}>SIMULATION</span>
           </div>
         </div>
 
-        {/* Census strip */}
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(4,1fr)',
           gap: 8, marginTop: 20,
@@ -121,11 +124,9 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
       </div>
 
       <div style={{ padding: '16px 16px 0' }}>
-
-        {/* Live Board */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
-            LIVE BOARD
+            SIMULATION BOARD
           </div>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
             {MOCK_LIVE_EVENTS.map(ev => {
@@ -150,7 +151,6 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
           </div>
         </div>
 
-        {/* Department Chips */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
             DEPARTMENTS
@@ -175,7 +175,6 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
           </div>
         </div>
 
-        {/* My Assigned Cases */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
             {'MY ASSIGNED CASES (' + assigned.length + ')'}
@@ -216,9 +215,6 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
           )}
         </div>
 
-      </div>
-
-        {/* Signal + Code Lab entry */}
         <div style={{ display: 'flex', gap: 10, marginTop: 8, marginBottom: 20 }}>
           <button
             onClick={() => setShowMedFeed(true)}
@@ -247,6 +243,7 @@ export default function WardHome({ onSelectPatient }: { onSelectPatient?: (id: s
             <span style={{ fontSize: 11, color: '#94A3B8' }}>BLS · ACLS drills</span>
           </button>
         </div>
+      </div>
       <style>{('@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}')}</style>
     </div>
   )
