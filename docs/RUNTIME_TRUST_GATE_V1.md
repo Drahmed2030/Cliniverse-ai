@@ -23,6 +23,7 @@ This gate must pass before `integration/auth-release-shell-v1` can be promoted t
 - The production preflight at 08:00 UTC found no other non-idle database session, eight profile rows, and zero subscription, progress or deferred-table rows in the migration scope.
 - Forward migration `20260827080127_apple_rc1_runtime_trust` was applied through the Supabase migration mechanism and completed successfully.
 - Read-only post-apply catalog assertions passed. A separate verification confirmed: anon profile read denied; authenticated own-profile table access retained; subscription insert denied; `is_pro` update denied; allowed name update retained; and legacy signup/entitlement RPC execution denied.
+- Production Data API requests using the public publishable key returned HTTP 401 for anonymous reads of `profiles`, `subscriptions` and deferred `cases`, proving that the catalog boundary is also enforced through PostgREST.
 - The eight production profile rows remained present and the zero-row subscription count was unchanged.
 - The connector refused the transactional synthetic User A/User B test on production because it inserts temporary Auth rows and changes roles. That test was not bypassed or repeated; its identical SQL had already passed twice on the isolated branch, including after rollback recovery.
 - Emergency rollback remains `supabase/rollback/20260827044500_apple_rc1_safe_hold.sql`. It intentionally denies all client data access rather than restoring insecure public policies.
