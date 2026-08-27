@@ -5,6 +5,7 @@ import WardHome from './WardHome'
 import PatientJourney from './PatientJourney'
 import ErrorBoundary from '../ErrorBoundary'
 import { MOCK_PATIENTS } from '../../lib/ward'
+import { getOwnEntitlement } from '../../lib/entitlements'
 
 const MedFeed     = dynamic(() => import('../MedFeed'),     { ssr: false })
 const ClinicalNet = dynamic(() => import('../ClinicalNet'), { ssr: false })
@@ -16,10 +17,21 @@ interface WardIndexProps {
 export default function WardIndex({ onXP = () => {} }: WardIndexProps) {
   const [activeTab, setActiveTab] = useState<'ward'|'feed'|'net'>('ward')
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
-  const [isPro] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return localStorage.getItem('cliniverse_pro') === 'true'
-  })
+  const [isPro, setIsPro] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    getOwnEntitlement()
+      .then(entitlement => {
+        if (active) setIsPro(entitlement.isPro && entitlement.status === 'active')
+      })
+      .catch(() => {
+        if (active) setIsPro(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   useEffect(() => {
     if (activeTab !== 'ward') setSelectedPatient(null)
@@ -36,14 +48,13 @@ export default function WardIndex({ onXP = () => {} }: WardIndexProps) {
 
   if (selectedPatient) {
     const patient = MOCK_PATIENTS.find(p => p.id === selectedPatient)
-    if (!patient) { setSelectedPatient(null); return null }
+    if (!patient) return null
     return (
       <ErrorBoundary section="Patient Journey">
         <PatientJourney
-          patientId={selectedPatient}
-          onBack={handleBack}
+          patient={patient}
+          onClose={handleBack}
           isPro={isPro}
-          onXP={onXP}
         />
       </ErrorBoundary>
     )
@@ -62,7 +73,7 @@ export default function WardIndex({ onXP = () => {} }: WardIndexProps) {
       <div>
         {activeTab === 'ward' && (
           <ErrorBoundary section="Ward">
-            <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={() => {}} />
+            <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} />
           </ErrorBoundary>
         )}
         {activeTab === 'feed' && (
