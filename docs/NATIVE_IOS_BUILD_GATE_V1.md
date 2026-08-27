@@ -6,15 +6,16 @@ This gate exists because an iOS build can compile successfully while still faili
 
 ## Verified repository/build facts
 
-1. `capacitor.config.json` points the native container at the remote production web URL `https://cliniverse-ai-u7gi.vercel.app`.
-2. The Codemagic workflow runs `rm -rf ios` and then `npx cap add ios` for every iOS build.
-3. Therefore the generated native Xcode project is recreated during CI and cannot be assumed to preserve files committed under `ios/` unless the workflow explicitly injects them after regeneration.
-4. The integration lane now has a deterministic product-icon source at `assets/logo.svg` and runs pinned `@capacitor/assets@3.0.5` **after** `npx cap add ios` to generate the iOS asset catalog.
-5. Apple has reported placeholder app icons and a blank launch on an iPad review device. The placeholder-icon root cause is now addressed at pipeline-contract level, but the Apple finding remains open until the generated archive is inspected and the icon is visually verified on an installed build.
-6. Automatic TestFlight and App Store submission are disabled on the active integration lane. Release publishing must be explicitly enabled only from an approved release-candidate workflow.
-7. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. The evidence-reviewed source now lives at `native/privacy/PrivacyInfo.xcprivacy` and is explicitly injected into the generated App target.
-8. The native shell now packages `native-offline.html` through Capacitor `server.errorPath` and uses a dark native background, providing a local, retryable state when the remote origin cannot load.
-9. The build lane pins patched `tar`, `uuid` and `sharp` transitive versions. A version-locked postinstall compatibility patch adapts Capacitor CLI 6.2.1 to the secure `tar` 7 export shape and fails closed if the expected source changes.
+1. `capacitor.config.json` points the native container at the canonical production web URL `https://www.cliniverseai.com`.
+2. Codemagic verifies `/api/release-contract` on that origin reports the exact `CM_COMMIT` and the production environment before generating the native project.
+3. The Codemagic workflow runs `rm -rf ios` and then `npx cap add ios` for every iOS build.
+4. Therefore the generated native Xcode project is recreated during CI and cannot be assumed to preserve files committed under `ios/` unless the workflow explicitly injects them after regeneration.
+5. The integration lane now has a deterministic product-icon source at `assets/logo.svg` and runs pinned `@capacitor/assets@3.0.5` **after** `npx cap add ios` to generate the iOS asset catalog.
+6. Apple has reported placeholder app icons and a blank launch on an iPad review device. The placeholder-icon root cause is now addressed at pipeline-contract level, but the Apple finding remains open until the generated archive is inspected and the icon is visually verified on an installed build.
+7. Automatic TestFlight and App Store submission are disabled on the active integration lane. Release publishing must be explicitly enabled only from an approved release-candidate workflow.
+8. The tracked legacy `ios/App/App/PrivacyInfo.xcprivacy` is not authoritative for CI because `ios/` is deleted before native generation. The evidence-reviewed source now lives at `native/privacy/PrivacyInfo.xcprivacy` and is explicitly injected into the generated App target.
+9. The native shell now packages `native-offline.html` through Capacitor `server.errorPath` and uses a dark native background, providing a local, retryable state when the remote origin cannot load.
+10. The build lane pins patched `tar`, `uuid` and `sharp` transitive versions. A version-locked postinstall compatibility patch adapts Capacitor CLI 6.2.1 to the secure `tar` 7 export shape and fails closed if the expected source changes.
 
 ## Executive release rule
 

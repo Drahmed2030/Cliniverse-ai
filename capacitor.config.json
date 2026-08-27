@@ -3,7 +3,7 @@
   "appName": "Cliniverse AI",
   "webDir": "public",
   "server": {
-    "url": "https://cliniverse-ai-u7gi.vercel.app",
+    "url": "https://www.cliniverseai.com",
     "errorPath": "native-offline.html",
     "cleartext": false
   },

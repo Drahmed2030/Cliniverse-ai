@@ -14,9 +14,9 @@ This package is the release-scoped source for App Store Connect metadata and rev
 | Secondary category | Education | Confirm in App Store Connect |
 | Promotional text | Clinical learning, simulation and workflow tools for healthcare professionals, with explicit human review and no real-patient-data boundary. | Prepared — 140 characters |
 | Keywords | `clinical,simulation,workflow,medical,education,healthcare,ward,reference,clinician` | Prepared — 82 characters |
-| Support URL | `https://cliniverse-ai-u7gi.vercel.app/support` | HOLD until RC production promotion and contact-route test |
-| Privacy URL | `https://cliniverse-ai-u7gi.vercel.app/privacy` | HOLD until RC production promotion |
-| Marketing URL | `https://cliniverse-ai-u7gi.vercel.app` | Optional; HOLD until RC production promotion |
+| Support URL | `https://www.cliniverseai.com/support` | HOLD until RC production promotion and contact-route test |
+| Privacy URL | `https://www.cliniverseai.com/privacy` | HOLD until RC production promotion |
+| Marketing URL | `https://www.cliniverseai.com` | Optional; HOLD until RC production promotion |
 | Copyright | Must match the verified legal rights-holder name in App Store Connect | Founder/legal confirmation required |
 | Version / build | Copy from the final verified IPA only | Final IPA required |
 

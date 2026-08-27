@@ -8,7 +8,7 @@ This document records the current evidence boundary for Cliniverse AI iOS privac
 
 - Capacitor app identifier: `com.cliniverse.ai`.
 - App name: `Cliniverse AI`.
-- The native shell loads the authoritative HTTPS web surface at `https://cliniverse-ai-u7gi.vercel.app` with cleartext disabled.
+- The native shell loads the authoritative HTTPS web surface at `https://www.cliniverseai.com` with cleartext disabled.
 - Codemagic deletes and regenerates the iOS project on each build (`rm -rf ios` followed by `npx cap add ios`).
 - Therefore checked-in files under `ios/` are not the release authority.
 - The release-authoritative privacy manifest location is `native/privacy/PrivacyInfo.xcprivacy`.

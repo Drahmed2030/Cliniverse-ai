@@ -71,7 +71,7 @@ test('native shell uses HTTPS and blocks cleartext transport', () => {
   const config = JSON.parse(read('capacitor.config.json'))
   assert.equal(config.appId, 'com.cliniverse.ai')
   assert.equal(config.appName, 'Cliniverse AI')
-  assert.equal(config.server.url, 'https://cliniverse-ai-u7gi.vercel.app')
+  assert.equal(config.server.url, 'https://www.cliniverseai.com')
   assert.equal(config.server.cleartext, false)
   assert.equal(config.server.errorPath, 'native-offline.html')
   assert.equal(config.ios.backgroundColor, '#080C16')
@@ -79,6 +79,17 @@ test('native shell uses HTTPS and blocks cleartext transport', () => {
   assert.match(offline, /Connection unavailable/)
   assert.match(offline, /window\.location\.replace\(origin\)/)
   assert.match(offline, /addEventListener\('online', retry\)/)
+})
+
+test('native packaging is blocked until the canonical production origin matches the RC commit', () => {
+  const workflow = read('codemagic.yaml')
+  const verifier = read('scripts/verify-native-release-origin.mjs')
+  assert.match(workflow, /CM_COMMIT:\?Codemagic CM_COMMIT is required/)
+  assert.match(workflow, /https:\/\/www\.cliniverseai\.com\/api\/release-contract/)
+  assert.match(workflow, /verify-native-release-origin\.mjs/)
+  assert.match(verifier, /payload\.commit !== expectedCommit/)
+  assert.match(verifier, /payload\.environment !== 'production'/)
+  assert.match(verifier, /RC BLOCKED:/)
 })
 
 test('Apple reviewer package is release-scoped and contains no credentials', () => {
