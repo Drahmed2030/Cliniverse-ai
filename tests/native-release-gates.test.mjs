@@ -80,7 +80,7 @@ test('native cold launch remains branded until remote content or local recovery 
   assert.match(nativeDelegate, /UIImage\(named: "Splash"\)/)
   assert.match(nativeDelegate, /observe\(\\\.estimatedProgress/)
   assert.match(nativeDelegate, /errorPathURL/)
-  assert.match(nativeDelegate, /\.now\(\) \+ 1\.0/)
+  assert.match(nativeDelegate, /DispatchQueue\.main\.asyncAfter\(deadline: \.now\(\) \+ 15/)
   assert.match(nativeDelegate, /document\.readyState/)
   assert.match(nativeDelegate, /showOfflineRecovery/)
   assert.match(nativeDelegate, /readyState == "interactive" \|\| readyState == "complete"/)
