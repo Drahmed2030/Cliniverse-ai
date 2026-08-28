@@ -60,6 +60,7 @@ interface Props {
   patient: WardPatient;
   onClose: () => void;
   onRequestConsult?: (patientId: string) => void;
+  consultRequested?: boolean;
   isPro?: boolean;
 }
 
@@ -67,6 +68,7 @@ export default function PatientJourney({
   patient,
   onClose,
   onRequestConsult,
+  consultRequested = false,
   isPro = false,
 }: Props) {
   const accent = priorityColor(patient.priority);
@@ -87,10 +89,10 @@ export default function PatientJourney({
           width: "100%",
           maxWidth: 600,
           margin: "0 auto",
-          paddingBottom: 100,
+          paddingBottom: "calc(100px + env(safe-area-inset-bottom))",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "center", paddingTop: 10 }}>
+        <div style={{ display: "flex", justifyContent: "center", paddingTop: "calc(10px + env(safe-area-inset-top))" }}>
           <div
             style={{
               width: 40,
@@ -148,6 +150,7 @@ export default function PatientJourney({
               </div>
             </div>
             <button
+              type="button"
               onClick={onClose}
               style={{
                 border: "1px solid " + T.border,
@@ -245,11 +248,18 @@ export default function PatientJourney({
             ) : null}
 
             <button
+              type="button"
               onClick={function () { if (onRequestConsult) onRequestConsult(patient.id); }}
-              style={{ width: "100%", border: "1px solid " + T.teal, background: "rgba(45,212,191,0.08)", color: T.teal, borderRadius: 14, padding: "12px 14px", fontSize: 13, fontWeight: 800 }}
+              disabled={consultRequested}
+              style={{ width: "100%", border: "1px solid " + T.teal, background: "rgba(45,212,191,0.08)", color: T.teal, borderRadius: 14, padding: "12px 14px", fontSize: 13, fontWeight: 800, cursor: consultRequested ? "default" : "pointer", opacity: consultRequested ? 0.7 : 1 }}
             >
-              Request Consult
+              {consultRequested ? "Consult Requested" : "Request Consult"}
             </button>
+            {consultRequested ? (
+              <p role="status" aria-live="polite" style={{ margin: "10px 0 0", color: T.sub, textAlign: "center", fontSize: 11 }}>
+                Simulated consult request recorded locally. No external message was sent.
+              </p>
+            ) : null}
           </Section>
 
           <div style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 16, padding: 14 }}>

@@ -14,6 +14,11 @@ interface WardIndexProps {
 export default function WardIndex(_: WardIndexProps) {
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
   const [isPro, setIsPro] = useState(false)
+  const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
+
+  const handleRequestConsult = (patientId: string) => {
+    setConsultedPatientIds(current => current.includes(patientId) ? current : [...current, patientId])
+  }
 
   useEffect(() => {
     let active = true
@@ -44,6 +49,8 @@ export default function WardIndex(_: WardIndexProps) {
         <PatientJourney
           patient={patient}
           onClose={() => setSelectedPatient(null)}
+          onRequestConsult={handleRequestConsult}
+          consultRequested={consultedPatientIds.includes(patient.id)}
           isPro={isPro}
         />
       </ErrorBoundary>

@@ -157,7 +157,11 @@ export default function ClinicalPanelV2({
   }
 
   function persistDischarge() {
-    if (!discharge) return;
+    if (!discharge) {
+      setSaveMsg("Generate a discharge draft before saving");
+      setTab("discharge");
+      return;
+    }
     saveDischargeDraft(patientId, discharge);
     setSaveMsg("Discharge summary saved");
     if (onDischargeSaved) onDischargeSaved(discharge);
@@ -220,7 +224,7 @@ export default function ClinicalPanelV2({
       </div>
 
       {saveMsg ? (
-        <div style={{ fontSize: 12, color: T.teal, fontWeight: 700 }}>{saveMsg}</div>
+        <div role="status" aria-live="polite" style={{ fontSize: 12, color: T.teal, fontWeight: 700 }}>{saveMsg}</div>
       ) : null}
 
       {tab === "track" ? <TrackingView metrics={bundle.metrics} /> : null}
@@ -256,6 +260,7 @@ export default function ClinicalPanelV2({
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button
+              type="button"
               onClick={generateDischargeDraft}
               style={{
                 border: "none",
@@ -270,7 +275,10 @@ export default function ClinicalPanelV2({
               Generate / Refresh Draft
             </button>
             <button
+              type="button"
               onClick={persistDischarge}
+              disabled={!discharge}
+              title={!discharge ? "Generate a discharge draft before saving" : undefined}
               style={{
                 border: "1px solid " + T.border,
                 background: T.white,
@@ -279,11 +287,15 @@ export default function ClinicalPanelV2({
                 padding: "10px 12px",
                 fontSize: 12,
                 fontWeight: 800,
+                cursor: discharge ? "pointer" : "not-allowed",
+                opacity: discharge ? 1 : 0.55,
               }}
             >
               Save Summary
             </button>
           </div>
+
+          {!discharge ? <Empty text="Generate a discharge draft before saving." /> : null}
 
           {!canDischarge ? (
             <Empty text="Patient is not marked ready_for_discharge yet — you can still draft the summary." />

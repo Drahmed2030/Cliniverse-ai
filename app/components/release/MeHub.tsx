@@ -20,6 +20,7 @@ const sections: Array<{
   description: string
   status: Status
   detail: string
+  links?: Array<{ label: string; href: string }>
 }> = [
   {
     title: 'Life',
@@ -32,6 +33,11 @@ const sections: Array<{
     description: 'Security, data controls, support and account preferences in one predictable place.',
     status: 'ready',
     detail: 'Release links will use the unified NeuraOps company support identity once the company mailbox is created.',
+    links: [
+      { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms', href: '/terms' },
+      { label: 'Support', href: '/support' },
+    ],
   },
 ]
 
@@ -83,6 +89,15 @@ export default function MeHub() {
             <div style={{ marginTop: 12, padding: 11, borderRadius: 12, background: C.elevated, color: '#CBD5E1', fontSize: 11, lineHeight: 1.55 }}>
               {section.detail}
             </div>
+            {section.links ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+                {section.links.map(link => (
+                  <a key={link.href} href={link.href} style={{ padding: '8px 11px', borderRadius: 999, border: '1px solid rgba(20,184,166,0.35)', color: '#5EEAD4', textDecoration: 'none', fontSize: 11, fontWeight: 800 }}>
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </article>
         ))}
       </div>

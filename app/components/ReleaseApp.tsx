@@ -77,7 +77,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.94)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
-      <div style={{ maxWidth: 1180, margin: '0 auto', minHeight: 68, padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', minHeight: 'calc(68px + env(safe-area-inset-top))', padding: 'calc(10px + env(safe-area-inset-top)) 16px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <div>
           <div style={{ fontSize: 16, fontWeight: 800 }}>{current.title}</div>
           <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{current.sub}</div>

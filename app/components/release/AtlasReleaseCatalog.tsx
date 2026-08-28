@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 const C = {
   panel: '#111827',
   elevated: '#172033',
@@ -53,6 +55,19 @@ const stateColor: Record<State, string> = {
 }
 
 export default function AtlasReleaseCatalog() {
+  const [selectedCapability, setSelectedCapability] = useState<{
+    item: string
+    state: State
+  } | null>(null)
+
+  const capabilityStatus = selectedCapability
+    ? selectedCapability.state === 'ship'
+      ? `${selectedCapability.item} is a release candidate pending individual verification; it is not enabled in this build.`
+      : selectedCapability.state === 'educational'
+        ? `${selectedCapability.item} is planned for educational simulation and is not enabled in this build.`
+        : `${selectedCapability.item} remains gated until safety, authentication, and validation requirements pass.`
+    : 'Select a capability to review its release status.'
+
   return (
     <section aria-labelledby="atlas-title">
       <div style={introStyle}>
@@ -77,13 +92,35 @@ export default function AtlasReleaseCatalog() {
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
               {group.examples.map(item => (
-                <span key={item} style={{ padding: '6px 8px', borderRadius: 999, background: C.elevated, color: '#CBD5E1', fontSize: 10, border: `1px solid ${C.border}` }}>
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setSelectedCapability({ item, state: group.state })}
+                  aria-pressed={selectedCapability?.item === item}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 999,
+                    background: selectedCapability?.item === item ? 'rgba(20,184,166,0.12)' : C.elevated,
+                    color: '#CBD5E1',
+                    fontSize: 10,
+                    fontFamily: 'inherit',
+                    border: `1px solid ${C.border}`,
+                    cursor: 'pointer',
+                  }}
+                >
                   {item}
-                </span>
+                </button>
               ))}
             </div>
           </article>
         ))}
+        <p
+          role="status"
+          aria-live="polite"
+          style={{ margin: 0, padding: '12px 14px', borderRadius: 14, border: '1px solid rgba(20,184,166,0.28)', background: 'rgba(20,184,166,0.07)', color: '#CBD5E1', fontSize: 11, lineHeight: 1.55 }}
+        >
+          {capabilityStatus}
+        </p>
       </div>
     </section>
   )
