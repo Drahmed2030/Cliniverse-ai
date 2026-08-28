@@ -149,17 +149,43 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         }
 
         let timeout = DispatchWorkItem { [weak self] in
-            guard let self = self, self.launchOverlay != nil else { return }
-            guard let fallbackURL = self.bridge?.config.errorPathURL else { return }
-            self.webView?.stopLoading()
-            self.webView?.load(URLRequest(
-                url: fallbackURL,
-                cachePolicy: .reloadIgnoringLocalCacheData,
-                timeoutInterval: 10
-            ))
+            guard let self = self, self.launchOverlay != nil, let webView = self.webView else { return }
+
+            webView.evaluateJavaScript("document.readyState") { [weak self] result, error in
+                DispatchQueue.main.async {
+                    guard let self = self, self.launchOverlay != nil else { return }
+
+                    if error == nil,
+                       let readyState = result as? String,
+                       readyState == "interactive" || readyState == "complete" {
+                        self.dismissLaunchOverlay()
+                        return
+                    }
+
+                    self.showOfflineRecovery()
+                }
+            }
         }
         launchTimeout = timeout
         DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: timeout)
+    }
+
+    private func showOfflineRecovery() {
+        guard let fallbackURL = bridge?.config.errorPathURL else {
+            dismissLaunchOverlay()
+            return
+        }
+
+        webView?.stopLoading()
+        webView?.load(URLRequest(
+            url: fallbackURL,
+            cachePolicy: .reloadIgnoringLocalCacheData,
+            timeoutInterval: 10
+        ))
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            self?.dismissLaunchOverlay()
+        }
     }
 
     private func dismissLaunchOverlay() {
