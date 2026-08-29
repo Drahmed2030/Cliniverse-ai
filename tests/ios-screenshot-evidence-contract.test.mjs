@@ -60,6 +60,12 @@ test('generated UI test target supports both device families without signing', (
   const installer = read('scripts/install-ios-screenshot-tests.rb')
 
   assert.match(installer, /:ui_test_bundle/)
+  assert.match(installer, /product_reference\.path = "#\{target_name\}\.xctest"/)
+  assert.match(installer, /PRODUCT_NAME'\] = target_name/)
+  assert.match(installer, /PRODUCT_MODULE_NAME'\] = target_name/)
+  assert.match(installer, /EXECUTABLE_NAME'\] = target_name/)
+  assert.match(installer, /USES_XCTRUNNER'\] = 'YES'/)
+  assert.match(installer, /TEST_TARGET_NAME'\] = app_target\.name/)
   assert.match(installer, /TARGETED_DEVICE_FAMILY'\] = '1,2'/)
   assert.match(installer, /CODE_SIGNING_ALLOWED'\] = 'NO'/)
   assert.match(installer, /scheme\.configure_with_targets/)
