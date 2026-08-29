@@ -24,6 +24,7 @@ test('screenshot evidence is an isolated non-publishing Codemagic workflow', () 
 
 test('XCUITest captures the six approved surfaces and protects reviewer identity', () => {
   const source = read('native/screenshot/CliniverseScreenshotTests.swift')
+  const wardHome = read('app/components/ward/WardHome.tsx')
   const captures = [...source.matchAll(/capture\("([^"]+)"\)/g)].map(match => match[1])
 
   assert.deepEqual(captures, [
@@ -48,6 +49,9 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /for swipe in 0\.\.\.maximumSwipes/)
   assert.match(source, /element\.exists && element\.isHittable/)
   assert.match(source, /if swipe < maximumSwipes/)
+  assert.match(source, /app\.buttons\["Open Hassan Al-Amri simulated case"\]/)
+  assert.doesNotMatch(source, /app\.staticTexts\["Hassan Al-Amri"\]/)
+  assert.match(wardHome, /aria-label=\{`Open \$\{patient\.name\} simulated case`\}/)
   assert.doesNotMatch(source, /capture\([^\n]+\)[\s\S]{0,300}typeText\(/)
 })
 

@@ -41,7 +41,7 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Care detail") {
-            let patient = app.staticTexts["Hassan Al-Amri"]
+            let patient = app.buttons["Open Hassan Al-Amri simulated case"]
             try reveal(patient, maximumSwipes: 6)
             patient.tap()
             try waitForText("PATIENT JOURNEY")

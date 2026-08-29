@@ -139,6 +139,7 @@ export default function WardHome({ onSelectPatient }: WardHomeProps) {
               <button
                 key={patient.id}
                 type="button"
+                aria-label={`Open ${patient.name} simulated case`}
                 onClick={() => onSelectPatient?.(patient.id)}
                 style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: '0 10px 24px rgba(0,0,0,0.18)' }}
               >
