@@ -47,6 +47,10 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
 
 test('evidence runner validates current Apple dimensions and twelve opaque PNGs', () => {
   const runner = read('scripts/run-ios-screenshot-evidence.sh')
+  const buildIndex = runner.indexOf('build-for-testing')
+  const iphoneCreateIndex = runner.indexOf('IPHONE_UDID="$(xcrun simctl create')
+  const iphoneTestIndex = runner.indexOf('run_device_test "iphone-6.9"')
+  const ipadCreateIndex = runner.indexOf('IPAD_UDID="$(xcrun simctl create')
 
   assert.match(runner, /1320x2868\|1290x2796\|1260x2736/)
   assert.match(runner, /2064x2752\|2048x2732/)
@@ -59,6 +63,10 @@ test('evidence runner validates current Apple dimensions and twelve opaque PNGs'
   assert.match(runner, /test-details\.json/)
   assert.match(runner, /status_bar.*override/s)
   assert.match(runner, /trap cleanup EXIT/)
+  assert.match(runner, /-destination "generic\/platform=iOS Simulator"/)
+  assert.doesNotMatch(runner, /xcodebuild -quiet/)
+  assert.ok(buildIndex >= 0 && buildIndex < iphoneCreateIndex)
+  assert.ok(iphoneCreateIndex < iphoneTestIndex && iphoneTestIndex < ipadCreateIndex)
   assert.match(runner, /xctestrun_root="\$\(dirname "\$BASE_XCTESTRUN"\)"/)
   assert.match(runner, /local xctestrun="\$xctestrun_root\/\$device_class\.xctestrun"/)
   assert.doesNotMatch(runner, /local xctestrun="\$WORK_DIR\/\$device_class\.xctestrun"/)
