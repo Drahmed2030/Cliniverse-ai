@@ -30,9 +30,9 @@ The checked-in/generated `ios/` directory is not authoritative because the curre
 ## Evidence used for the RC1 candidate
 
 - Active release code collects an authenticated email address and account user ID through Supabase Auth.
-- Active profile code stores linked name, optional specialty and optional country.
-- Active entitlement code reads linked subscription/purchase status.
-- Hosting may retain product-interaction and technical diagnostic records needed for service operation and troubleshooting; these are declared as not used for tracking.
+- The submitted RC1 profile surface stores only a linked profile name. Specialty and country editing are excluded from the RC1 UI.
+- The submitted RC1 has no StoreKit purchase path and does not collect purchase history.
+- The app-level manifest is limited to linked name, email address and account user ID plus unlinked technical diagnostic data for app functionality. Provider-side request/security processing must be kept consistent with the published privacy notice and provider configuration.
 - No advertising or tracking SDK is present in the submitted dependency set.
 - Native-source inspection found no app or bundled Capacitor/Cordova use of Apple's required-reason API categories. The app manifest therefore has an empty `NSPrivacyAccessedAPITypes` candidate, while dependency manifests remain independently packaged.
 - HealthKit, wearable, camera, microphone, location and photo-library capabilities are outside Apple v1. The IPA gate fails if corresponding usage-description keys appear.
