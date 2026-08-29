@@ -45,9 +45,24 @@ test('discharge save cannot silently run without a draft', () => {
 })
 
 test('release surfaces respect iOS safe areas', () => {
+  const layout = read('app/layout.tsx')
   const releaseApp = read('app/components/ReleaseApp.tsx')
+  const releaseNav = read('app/components/ReleaseNav.tsx')
+  const auth = read('app/components/AuthScreen.tsx')
   const journey = read('app/components/ward/PatientJourney.tsx')
-  assert.match(releaseApp, /env\(safe-area-inset-top\)/)
+  assert.match(layout, /viewportFit:\s*["']cover["']/)
+  assert.match(releaseApp, /env\(safe-area-inset-top,\s*0px\)/)
+  assert.match(releaseApp, /env\(safe-area-inset-left,\s*0px\)/)
+  assert.match(releaseNav, /env\(safe-area-inset-bottom,\s*0px\)/)
+  assert.match(auth, /env\(safe-area-inset-top,\s*0px\)/)
   assert.match(journey, /env\(safe-area-inset-top\)/)
   assert.match(journey, /env\(safe-area-inset-bottom\)/)
+})
+
+test('disabled OAuth providers are absent from the Apple v1 sign-in surface', () => {
+  const auth = read('app/components/AuthScreen.tsx')
+  assert.match(auth, /appleEnabled\s*\?\s*<AuthButton/)
+  assert.match(auth, /googleEnabled\s*\?\s*<AuthButton/)
+  assert.equal(auth.includes('Not configured'), false)
+  assert.equal(/unavailable\s*:/.test(auth), false)
 })
