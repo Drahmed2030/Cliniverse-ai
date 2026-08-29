@@ -78,9 +78,6 @@ IOS_RUNTIME="$(jq -r '
 [[ -n "$IPAD_TYPE" ]] || fail "No App Store-compatible 13-inch iPad Pro simulator type is available"
 [[ -n "$IOS_RUNTIME" ]] || fail "No available iOS Simulator runtime was found"
 
-IPHONE_UDID="$(xcrun simctl create "Cliniverse Evidence iPhone ${BUILD_NUMBER:-local}" "$IPHONE_TYPE" "$IOS_RUNTIME")"
-IPAD_UDID="$(xcrun simctl create "Cliniverse Evidence iPad ${BUILD_NUMBER:-local}" "$IPAD_TYPE" "$IOS_RUNTIME")"
-
 configure_simulator() {
   local udid="$1"
   xcrun simctl boot "$udid"
@@ -94,9 +91,6 @@ configure_simulator() {
     --cellularBars 4
 }
 
-configure_simulator "$IPHONE_UDID"
-configure_simulator "$IPAD_UDID"
-
 image_dimensions() {
   local image="$1"
   local width height
@@ -105,29 +99,15 @@ image_dimensions() {
   printf '%sx%s' "$width" "$height"
 }
 
-CALIBRATION_IPHONE="$WORK_DIR/iphone-calibration.png"
-CALIBRATION_IPAD="$WORK_DIR/ipad-calibration.png"
-xcrun simctl io "$IPHONE_UDID" screenshot "$CALIBRATION_IPHONE" >/dev/null
-xcrun simctl io "$IPAD_UDID" screenshot "$CALIBRATION_IPAD" >/dev/null
-IPHONE_DIMENSIONS="$(image_dimensions "$CALIBRATION_IPHONE")"
-IPAD_DIMENSIONS="$(image_dimensions "$CALIBRATION_IPAD")"
-
-case "$IPHONE_DIMENSIONS" in
-  1320x2868|1290x2796|1260x2736) ;;
-  *) fail "iPhone simulator produced unsupported App Store dimensions: $IPHONE_DIMENSIONS" ;;
-esac
-
-case "$IPAD_DIMENSIONS" in
-  2064x2752|2048x2732) ;;
-  *) fail "iPad simulator produced unsupported App Store dimensions: $IPAD_DIMENSIONS" ;;
-esac
-
-xcodebuild -quiet \
+# Build the reusable test bundle before booting either simulator. Keeping two
+# first-boot iOS runtimes alive during a cold Xcode compile can exhaust the
+# standard Codemagic M2 runner and leave xcodebuild silent for many minutes.
+xcodebuild \
   -workspace "$PROJECT_WORKSPACE" \
   -scheme "$SCHEME" \
   -configuration Release \
   -sdk iphonesimulator \
-  -destination "id=$IPHONE_UDID" \
+  -destination "generic/platform=iOS Simulator" \
   -derivedDataPath "$DERIVED_DATA" \
   -parallel-testing-enabled NO \
   CODE_SIGNING_ALLOWED=NO \
@@ -250,7 +230,34 @@ run_device_test() {
   export_attachments "$result_bundle" "$destination" "$dimensions"
 }
 
+IPHONE_UDID="$(xcrun simctl create "Cliniverse Evidence iPhone ${BUILD_NUMBER:-local}" "$IPHONE_TYPE" "$IOS_RUNTIME")"
+configure_simulator "$IPHONE_UDID"
+CALIBRATION_IPHONE="$WORK_DIR/iphone-calibration.png"
+xcrun simctl io "$IPHONE_UDID" screenshot "$CALIBRATION_IPHONE" >/dev/null
+IPHONE_DIMENSIONS="$(image_dimensions "$CALIBRATION_IPHONE")"
+
+case "$IPHONE_DIMENSIONS" in
+  1320x2868|1290x2796|1260x2736) ;;
+  *) fail "iPhone simulator produced unsupported App Store dimensions: $IPHONE_DIMENSIONS" ;;
+esac
+
 run_device_test "iphone-6.9" "$IPHONE_UDID" "$IPHONE_DIMENSIONS" "$OUTPUT_DIR/iphone-6.9"
+xcrun simctl status_bar "$IPHONE_UDID" clear >/dev/null 2>&1 || true
+xcrun simctl shutdown "$IPHONE_UDID" >/dev/null 2>&1 || true
+xcrun simctl delete "$IPHONE_UDID" >/dev/null 2>&1 || true
+IPHONE_UDID=""
+
+IPAD_UDID="$(xcrun simctl create "Cliniverse Evidence iPad ${BUILD_NUMBER:-local}" "$IPAD_TYPE" "$IOS_RUNTIME")"
+configure_simulator "$IPAD_UDID"
+CALIBRATION_IPAD="$WORK_DIR/ipad-calibration.png"
+xcrun simctl io "$IPAD_UDID" screenshot "$CALIBRATION_IPAD" >/dev/null
+IPAD_DIMENSIONS="$(image_dimensions "$CALIBRATION_IPAD")"
+
+case "$IPAD_DIMENSIONS" in
+  2064x2752|2048x2732) ;;
+  *) fail "iPad simulator produced unsupported App Store dimensions: $IPAD_DIMENSIONS" ;;
+esac
+
 run_device_test "ipad-13" "$IPAD_UDID" "$IPAD_DIMENSIONS" "$OUTPUT_DIR/ipad-13"
 
 jq -n \
