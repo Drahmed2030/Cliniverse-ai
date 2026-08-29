@@ -23,9 +23,9 @@ export default function ReleaseNav({ active, onChange }: Props) {
       aria-label="Primary"
       style={{
         position: 'fixed',
-        left: 12,
-        right: 12,
-        bottom: 'max(12px, env(safe-area-inset-bottom))',
+        left: 'max(12px, env(safe-area-inset-left, 0px))',
+        right: 'max(12px, env(safe-area-inset-right, 0px))',
+        bottom: 'max(12px, env(safe-area-inset-bottom, 0px))',
         zIndex: 100,
         display: 'grid',
         gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
