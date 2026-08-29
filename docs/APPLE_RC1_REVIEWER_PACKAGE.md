@@ -85,6 +85,8 @@ There is no digital Upgrade call to action and no in-app purchase flow in this r
 
 Capture screenshots only from the final signed RC build after the production origin matches that build. Use the exact device slots required by App Store Connect at upload time.
 
+Do not use `IMG_9446.png` through `IMG_9454.png`: those files show the internal executive-gate document rather than the app experience and contain obsolete Build 54-era wording.
+
 Approved screenshot sequence:
 
 1. Home — focused clinical learning/workflow purpose and real-patient-data boundary.
