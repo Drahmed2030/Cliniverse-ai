@@ -43,9 +43,18 @@ test('final IPA verification requires privacy manifest and deterministic package
   assert.match(verify, /ITSAppUsesNonExemptEncryption/)
   assert.match(verify, /Assets\.car/)
   assert.match(verify, /APP_PATH\/PrivacyInfo\.xcprivacy/)
+  assert.match(verify, /EXPECTED_PRIVACY_TYPES/)
+  assert.match(verify, /NSPrivacyCollectedDataTypeOtherDiagnosticData/)
+  assert.match(verify, /signed app privacy data types do not match the RC1 contract/)
   assert.match(verify, /public\/native-offline\.html/)
   assert.match(verify, /NSHealthShareUsageDescription/)
   assert.match(verify, /exit 2/)
+})
+
+test('public release artwork uses the canonical Cliniverse domain', () => {
+  const image = read('public/og-image.svg')
+  assert.match(image, /www\.cliniverseai\.com/)
+  assert.doesNotMatch(image, /vercel\.app/)
 })
 
 test('generated Xcode target explicitly bundles the app privacy manifest', () => {
