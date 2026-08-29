@@ -10,43 +10,80 @@ final class CliniverseScreenshotTests: XCTestCase {
         app.launch()
     }
 
-    func testAppleReleaseScreenshots() throws {
-        try signInIfNeeded()
+    override func tearDownWithError() throws {
+        if let run = testRun, run.failureCount > 0 {
+            let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+            screenshot.name = "failure-screen"
+            screenshot.lifetime = .keepAlways
+            add(screenshot)
 
-        try waitForText("One clear path through healthcare intelligence.")
-        capture("01-home")
-
-        try openTab("Care", waitingFor: "Care Workflow Simulation")
-        capture("02-care")
-
-        let patient = app.staticTexts["Hassan Al-Amri"]
-        try reveal(patient, maximumSwipes: 6)
-        patient.tap()
-        try waitForText("PATIENT JOURNEY")
-        capture("03-care-detail")
-
-        let close = app.buttons["Close"]
-        XCTAssertTrue(close.waitForExistence(timeout: waitTimeout), "Care detail did not expose its Close control")
-        close.tap()
-
-        try openTab("Intelligence", waitingFor: "Clinical Intelligence is not enabled in this release build.")
-        capture("04-intelligence")
-
-        try openTab("Atlas", waitingFor: "CURATED CAPABILITY LIBRARY")
-        capture("05-atlas")
-
-        try openTab("Me", waitingFor: "ONE ACCOUNT DESTINATION")
-        let privacyAndSupport = app.staticTexts["Privacy & Support"]
-        try reveal(privacyAndSupport, maximumSwipes: 10)
-
-        let emailField = app.textFields["Email"]
-        for _ in 0..<4 where emailField.isHittable {
-            app.swipeUp()
-            settle()
+            let hierarchy = XCTAttachment(string: app.debugDescription)
+            hierarchy.name = "failure-accessibility-hierarchy"
+            hierarchy.lifetime = .keepAlways
+            add(hierarchy)
         }
-        XCTAssertTrue(privacyAndSupport.isHittable, "Privacy & Support must remain visible in the Me screenshot")
-        XCTAssertFalse(emailField.isHittable, "Reviewer email must not be visible in the Me screenshot")
-        capture("06-me-privacy")
+        app.terminate()
+    }
+
+    func testAppleReleaseScreenshots() throws {
+        try runStep("Sign in with the protected reviewer account") {
+            try signInIfNeeded()
+        }
+
+        try runStep("Capture Home") {
+            try waitForText("One clear path through healthcare intelligence.")
+            capture("01-home")
+        }
+
+        try runStep("Capture Care") {
+            try openTab("Care", waitingFor: "Care Workflow Simulation")
+            capture("02-care")
+        }
+
+        try runStep("Capture Care detail") {
+            let patient = app.staticTexts["Hassan Al-Amri"]
+            try reveal(patient, maximumSwipes: 6)
+            patient.tap()
+            try waitForText("PATIENT JOURNEY")
+            capture("03-care-detail")
+        }
+
+        try runStep("Close Care detail") {
+            let close = app.buttons["Close"]
+            XCTAssertTrue(close.waitForExistence(timeout: waitTimeout), "Care detail did not expose its Close control")
+            close.tap()
+        }
+
+        try runStep("Capture Intelligence release boundary") {
+            try openTab("Intelligence", waitingFor: "Clinical Intelligence is not enabled in this release build.")
+            capture("04-intelligence")
+        }
+
+        try runStep("Capture Atlas") {
+            try openTab("Atlas", waitingFor: "CURATED CAPABILITY LIBRARY")
+            capture("05-atlas")
+        }
+
+        try runStep("Capture Me privacy surface") {
+            try openTab("Me", waitingFor: "ONE ACCOUNT DESTINATION")
+            let privacyAndSupport = app.staticTexts["Privacy & Support"]
+            try reveal(privacyAndSupport, maximumSwipes: 10)
+
+            let emailField = app.textFields["Email"]
+            for _ in 0..<4 where emailField.isHittable {
+                app.swipeUp()
+                settle()
+            }
+            XCTAssertTrue(privacyAndSupport.isHittable, "Privacy & Support must remain visible in the Me screenshot")
+            XCTAssertFalse(emailField.isHittable, "Reviewer email must not be visible in the Me screenshot")
+            capture("06-me-privacy")
+        }
+    }
+
+    private func runStep(_ name: String, body: () throws -> Void) rethrows {
+        try XCTContext.runActivity(named: name) { _ in
+            try body()
+        }
     }
 
     private func signInIfNeeded() throws {
