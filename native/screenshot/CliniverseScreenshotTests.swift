@@ -94,12 +94,36 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         let emailEntry = app.buttons["Continue with Email"]
         XCTAssertTrue(emailEntry.waitForExistence(timeout: waitTimeout), "Release sign-in screen did not load")
-        emailEntry.tap()
 
         let emailField = app.textFields["Email"]
         let passwordField = app.secureTextFields["Password"]
-        XCTAssertTrue(emailField.waitForExistence(timeout: waitTimeout), "Reviewer email field is missing")
-        XCTAssertTrue(passwordField.waitForExistence(timeout: waitTimeout), "Reviewer password field is missing")
+
+        // The native web view can expose server-rendered controls before React
+        // finishes hydrating them. A tap during that short window is visible to
+        // XCUITest but has no JavaScript handler yet. Retry the same semantic
+        // control on a bounded schedule and require the form transition before
+        // entering any reviewer value.
+        for attempt in 0..<3 {
+            if emailField.exists && passwordField.exists {
+                break
+            }
+
+            XCTAssertTrue(emailEntry.waitForExistence(timeout: waitTimeout), "Release sign-in screen disappeared before the email form opened")
+            if attempt == 0 {
+                Thread.sleep(forTimeInterval: 2)
+            } else {
+                settle()
+            }
+            XCTAssertTrue(emailEntry.isHittable, "Email sign-in action is not tappable")
+            emailEntry.tap()
+
+            if emailField.waitForExistence(timeout: 6) && passwordField.waitForExistence(timeout: 2) {
+                break
+            }
+        }
+
+        XCTAssertTrue(emailField.exists, "Reviewer email field is missing")
+        XCTAssertTrue(passwordField.exists, "Reviewer password field is missing")
 
         let environment = ProcessInfo.processInfo.environment
         guard
