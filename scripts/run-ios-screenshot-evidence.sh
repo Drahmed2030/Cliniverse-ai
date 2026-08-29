@@ -182,6 +182,25 @@ export_attachments() {
   done < "$records"
 }
 
+export_failure_diagnostics() {
+  local result_bundle="$1"
+  local device_class="$2"
+  local diagnostic_dir="$OUTPUT_DIR/diagnostics/$device_class"
+
+  mkdir -p "$diagnostic_dir"
+  xcrun xcresulttool get test-results summary \
+    --path "$result_bundle" \
+    --compact \
+    | tee "$diagnostic_dir/test-summary.json" || true
+  xcrun xcresulttool get test-results tests \
+    --path "$result_bundle" \
+    --compact \
+    | tee "$diagnostic_dir/test-details.json" || true
+  xcrun xcresulttool export attachments \
+    --path "$result_bundle" \
+    --output-path "$diagnostic_dir/attachments" >/dev/null || true
+}
+
 run_device_test() {
   local device_class="$1"
   local udid="$2"
@@ -202,13 +221,21 @@ run_device_test() {
     "$xctestrun_json" "$xctestrun_json.configured" "$device_class"
   plutil -convert binary1 -o "$xctestrun" "$xctestrun_json.configured"
 
-  xcodebuild -quiet \
+  set +e
+  xcodebuild \
     -xctestrun "$xctestrun" \
     -destination "id=$udid" \
     -parallel-testing-enabled NO \
     -resultBundlePath "$result_bundle" \
     -only-testing:CliniverseScreenshots/CliniverseScreenshotTests/testAppleReleaseScreenshots \
     test-without-building
+  local test_status=$?
+  set -e
+
+  if (( test_status != 0 )); then
+    export_failure_diagnostics "$result_bundle" "$device_class"
+    fail "$device_class screenshot test failed with xcodebuild status $test_status"
+  fi
 
   local summary
   summary="$(xcrun xcresulttool get test-results summary --path "$result_bundle" --compact)"
