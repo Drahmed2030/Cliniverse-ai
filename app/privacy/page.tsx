@@ -26,12 +26,12 @@ export default function PrivacyPolicy() {
 
         <section style={sectionStyle}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>Information associated with your account</h2>
-          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>When you use an account, Cliniverse AI may process your sign-in email through its authentication provider, optional profile information such as your name, specialty and country, and learning or product progress associated with your authenticated account. Technical information needed to operate, secure and troubleshoot the service may also be processed.</p>
+          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>When you use an account in this release, Cliniverse AI processes your sign-in email, account identifier and profile name through its authentication and database providers. Technical request information needed to operate, secure and troubleshoot the service may also be processed for the time required by those providers.</p>
         </section>
 
         <section style={sectionStyle}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>How information is used</h2>
-          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>We use account and product information to provide sign-in, preserve your profile and progress, operate requested features, maintain security, diagnose failures, and improve the reliability of the service. We do not treat educational ranks or achievements as professional licensure, board status, or external accreditation.</p>
+          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>We use account information to provide sign-in, preserve your profile, operate requested features, maintain security, diagnose failures, and improve the reliability of the service. We do not treat educational ranks or achievements as professional licensure, board status, or external accreditation.</p>
         </section>
 
         <section style={sectionStyle}>
