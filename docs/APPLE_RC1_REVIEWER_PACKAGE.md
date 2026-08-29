@@ -63,7 +63,7 @@ Reviewer walkthrough:
 2. Home explains the release boundary and human-in-the-loop rule.
 3. Open Care. All ward/patient content is fictional simulation data for workflow practice; no real patient data is permitted.
 4. Open Intelligence. This surface is intentionally disabled in the submitted binary pending a separate AI disclosure, consent and clinical-safety review. It is not a loading failure.
-5. Open Atlas to view release classifications for reference, educational and gated capabilities. Atlas is intentionally a release-status catalog in Apple v1, not an internal tool launcher. Tapping a capability updates the status message below the cards. Items labelled “Release candidate,” “Educational mode,” or “Not exposed in release” do not open a second screen in this build; this is the designed, fail-closed behavior and not a broken link or loading error.
+5. Open Atlas to view release classifications for reference, educational and gated capabilities. Atlas is intentionally a non-interactive release-status catalog in Apple v1, not an internal tool launcher. Capability names are rendered as labels rather than buttons, and items marked “Release candidate,” “Educational mode,” or “Not exposed in release” do not advertise or open unfinished functionality.
 6. Open Me to review the authenticated profile, read-only plan state, privacy boundary and sign-out control.
 7. Terms, Privacy and Support are available from the public release routes.
 
