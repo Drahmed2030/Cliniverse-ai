@@ -26,6 +26,13 @@ test_target = project.new_target(:ui_test_bundle, target_name, :ios, '15.0', nil
 test_target.add_dependency(app_target)
 test_target.add_system_framework('XCTest')
 
+# Xcode 26 no longer supplies a usable fallback product name for this
+# programmatically-created UI test bundle. Keep both the runner application and
+# its embedded .xctest bundle deterministic instead of allowing blank output
+# paths such as `-Runner.app/PlugIns/.xctest`.
+test_target.product_reference.name = "#{target_name}.xctest"
+test_target.product_reference.path = "#{target_name}.xctest"
+
 test_group = project.main_group.find_subpath(target_name, true)
 test_group.set_source_tree('<group>')
 test_group.set_path(target_name)
@@ -34,8 +41,13 @@ test_target.add_file_references([source_reference])
 
 test_target.build_configurations.each do |configuration|
   configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = 'com.cliniverse.ai.screenshots'
+  configuration.build_settings['PRODUCT_NAME'] = target_name
+  configuration.build_settings['PRODUCT_MODULE_NAME'] = target_name
+  configuration.build_settings['EXECUTABLE_NAME'] = target_name
+  configuration.build_settings['WRAPPER_EXTENSION'] = 'xctest'
+  configuration.build_settings['USES_XCTRUNNER'] = 'YES'
   configuration.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
-  configuration.build_settings['TEST_TARGET_NAME'] = 'App'
+  configuration.build_settings['TEST_TARGET_NAME'] = app_target.name
   configuration.build_settings['TARGETED_DEVICE_FAMILY'] = '1,2'
   configuration.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
   configuration.build_settings['SWIFT_VERSION'] = '5.0'
