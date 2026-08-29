@@ -12,7 +12,7 @@ This is the executive release record for Cliniverse AI Apple v1. It separates ev
 | --- | --- | --- |
 | Product | Cliniverse AI | Verified |
 | Public version | 1.0 | Verify again from final IPA |
-| Candidate build | 55 | Validated in App Store Connect; Codemagic branch/workflow provenance verified; final commit/tree and device QA still required |
+| Candidate build | 55 | Superseded for submission planning after signed-IPA privacy inspection; do not attach to the app version |
 | Release branch | `integration/auth-release-shell-v1` | Verified |
 | Production source | Remote commit `2ad7dba` | Verified deployment record |
 | Local evidence tree | `99de6242f61b2ff763040e564c99c6495aff594a` | Identical to remote release tree |
@@ -20,7 +20,11 @@ This is the executive release record for Cliniverse AI Apple v1. It separates ev
 
 Live App Store Connect verification on 2026-08-29 showed that the rejected version still references version 1.0, Build 6. Build 55 is the latest validated upload, has bundle ID `com.cliniverse.ai`, supports iPhone and iPad, declares no non-exempt encryption, and exposes only the application/team and TestFlight entitlements shown by Apple. Build 55 is not yet attached to the rejected app version.
 
-Codemagic's authenticated success notification proves that Build 55 was produced from branch `integration/auth-release-shell-v1` by workflow `ios-workflow` at 2026-08-28 19:26 UTC. The notification links to Codemagic build ID `6a91e02c5f6df79570c4de2c`. Build 54 immediately before it failed in the same workflow at the canonical-origin verification step; it was never an App Store candidate. The exact Build 55 Git commit/tree must still be matched from the Codemagic build record or the final artifact before the provenance gate is marked complete.
+Codemagic's authenticated success notification proves that Build 55 was produced from branch `integration/auth-release-shell-v1` by workflow `ios-workflow` at 2026-08-28 19:26 UTC. The notification links to Codemagic build ID `6a91e02c5f6df79570c4de2c`. Build 54 immediately before it failed in the same workflow at the canonical-origin verification step; it was never an App Store candidate.
+
+The signed Build 55 IPA was downloaded from that authenticated Codemagic artifact and inspected on 2026-08-29. SHA-256: `f3d4909d975c71ee812386acfb2a035b10c1645b5c88d7e11d2a037542578eda`. It proves version 1.0 (55), bundle ID `com.cliniverse.ai`, HTTPS origin `https://www.cliniverseai.com`, cleartext disabled, no sensitive-permission purpose strings and a bundled privacy manifest identical to the release source. The manifest, however, declares Purchase History, Coarse Location, Other Data, Product Interaction and Other Diagnostic Data while the current App Store privacy label declares only Name and Email Address. Because RC1 has no StoreKit path and does not use several of those declared categories, Build 55 is superseded rather than submitted with an inaccurate or internally inconsistent label.
+
+Draft PR #18 (`fix/apple-rc1-privacy-alignment`) narrows the release profile to Name/Email, aligns the privacy notice, declares linked Name, Email and User ID plus unlinked Other Diagnostic Data, removes unused categories and fixes the pre-existing Next.js route-export build failure. Its release tests pass 48/48, targeted lint passes and the production Next.js build completes. A new signed build is required after controlled merge and production deployment; provisional target: Build 56 or the next unused App Store build number.
 
 Production route check on 2026-08-29: `/`, `/support`, `/privacy` and `/terms` returned HTTP 200 from `https://www.cliniverseai.com`. The branded support mailbox send/receive/reply gate remains open.
 
@@ -54,7 +58,7 @@ The suite covers deterministic native packaging contracts, launch recovery, icon
 
 ## Manual evidence run
 
-Complete this matrix using the final signed Build 55 artifact after its source provenance is matched. If Build 55 is rebuilt or replaced, repeat the entire matrix against the new build number.
+Complete this matrix using the next signed candidate produced after PR #18 is approved, merged and deployed. Build 55 must not be used for submission. Repeat the entire matrix whenever the candidate build number changes.
 
 The nine uploaded images `IMG_9446.png` through `IMG_9454.png` were inspected on 2026-08-29. They are captures of an earlier executive-gate document, display Build 54-era text, and do not show the submitted app UI. They are internal working evidence only and must not be uploaded as App Store product screenshots or used as the requested physical-device core-flow recording.
 
@@ -72,8 +76,8 @@ The nine uploaded images `IMG_9446.png` through `IMG_9454.png` were inspected on
 
 ## Final IPA inspection
 
-- [x] App Store Connect reports version 1.0, Build 55 as Validated.
-- [ ] Build 55 source commit/tree is matched to the approved Apple RC source and production origin.
+- [x] App Store Connect reports version 1.0, Build 55 as Validated; it is retained only as superseded evidence.
+- [ ] The next signed candidate is matched to the approved Apple RC source and production origin.
 - [ ] Bundle identifier and signing team match the App Store Connect record.
 - [ ] Installed and App Store icons match the frozen Cliniverse mark.
 - [ ] `PrivacyInfo.xcprivacy` is bundled in the final application target.
@@ -90,7 +94,7 @@ The nine uploaded images `IMG_9446.png` through `IMG_9454.png` were inspected on
 - [ ] Upload six distinct screenshots from the final signed build for the required device classes.
 - [ ] Add the protected continuous recording link.
 - [ ] Verify Support, Privacy and Terms URLs.
-- [ ] Confirm App Privacy answers, age rating, category, content rights, seller/copyright and regulated-medical-device status.
+- [ ] Confirm App Privacy answers match the next signed IPA exactly: linked Name, Email Address and User ID; unlinked Other Diagnostic Data; App Functionality; no tracking. Also confirm age rating, category, content rights, seller/copyright and regulated-medical-device status.
 - [ ] For Medical/Health distribution in the EU/EEA, UK or U.S., complete Apple's 2026 regulated-medical-device declaration accurately; the current product position is not a medical-device authorization claim.
 - [ ] Keep the existing PRO Monthly product in Prepare for Submission and do not attach it to Apple v1.
 - [ ] State explicitly that Apple v1 contains no subscription purchase or paid-feature path; PRO Monthly is deferred to a future version after StoreKit, Restore Purchases, server-authoritative entitlements and Sandbox testing are complete.
