@@ -38,9 +38,18 @@ function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
 
   return (
-    <main style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom))' }}>
+    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
       <ReleaseHeader active={tab} />
-      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '18px 16px 28px' }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: '0 auto',
+          paddingTop: 18,
+          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingBottom: 28,
+          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+        }}
+      >
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
         {tab === 'care' && (
           <ErrorBoundary section="Care">
@@ -67,8 +76,22 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
   const current = titles[active]
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.94)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
-      <div style={{ maxWidth: 1180, margin: '0 auto', minHeight: 'calc(68px + env(safe-area-inset-top))', padding: 'calc(10px + env(safe-area-inset-top)) 16px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+    <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: '0 auto',
+          minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
+          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
+          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingBottom: 10,
+          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}
+      >
         <div>
           <div style={{ fontSize: 16, fontWeight: 800 }}>{current.title}</div>
           <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{current.sub}</div>
