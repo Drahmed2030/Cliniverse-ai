@@ -63,11 +63,11 @@ Reviewer walkthrough:
 2. Home explains the release boundary and human-in-the-loop rule.
 3. Open Care. All ward/patient content is fictional simulation data for workflow practice; no real patient data is permitted.
 4. Open Intelligence. This surface is intentionally disabled in the submitted binary pending a separate AI disclosure, consent and clinical-safety review. It is not a loading failure.
-5. Open Atlas to view release classifications for reference, educational and gated capabilities.
+5. Open Atlas to view release classifications for reference, educational and gated capabilities. Atlas is intentionally a release-status catalog in Apple v1, not an internal tool launcher. Tapping a capability updates the status message below the cards. Items labelled “Release candidate,” “Educational mode,” or “Not exposed in release” do not open a second screen in this build; this is the designed, fail-closed behavior and not a broken link or loading error.
 6. Open Me to review the authenticated profile, read-only plan state, privacy boundary and sign-out control.
 7. Terms, Privacy and Support are available from the public release routes.
 
-There is no digital Upgrade call to action and no in-app purchase flow in this release. The displayed plan is read-only and cannot activate itself. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
+There is no digital Upgrade call to action and no in-app purchase flow in this release. The displayed plan is read-only and cannot activate itself. The existing PRO Monthly product remains in Prepare for Submission and is not attached to this app version. It will be submitted only in a future version after StoreKit, Restore Purchases, server-authoritative entitlements and Sandbox testing are complete. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
 
 ## Reviewer access gate
 
