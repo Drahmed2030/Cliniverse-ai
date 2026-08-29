@@ -62,7 +62,7 @@ Record one continuous video on the final signed build, without exposing the revi
 5. Open Care and show fictional simulation labels, follow-up/documentation flow and escalation language.
 6. Open Intelligence and show the truthful disabled state.
 7. Open Atlas and show the release classifications.
-   Tap at least one item in each classification and show the status message beneath the cards. Atlas is a release-status catalog in Apple v1; classified items intentionally do not navigate to internal tool screens.
+   Show that capability names are static status labels rather than launch controls. Atlas is a non-interactive release-status catalog in Apple v1; unfinished internal modules are not presented as available actions.
 8. Open Me, the read-only plan state, privacy boundary and sign-out.
 9. Show Terms, Privacy and Support.
 10. Demonstrate offline/reconnect and background/foreground recovery if the final recording length permits; retain the full matrix as separate internal evidence.
@@ -79,7 +79,7 @@ Thank you for the detailed guidance. We prepared a narrowed Cliniverse AI releas
 - Review Notes list the exact iPhone/iPad models and OS versions tested, setup steps and a current non-expiring review account.
 - The app is a clinical learning, fictional simulation and workflow-support product for healthcare professionals. It does not autonomously diagnose or prescribe, does not replace professional judgment, and does not permit real patient-identifiable data in this release.
 - Apple v1 has no account-creation flow, no digital Upgrade action and no auto-renewing subscription purchase flow. The reviewer account is pre-provisioned.
-- Atlas is intentionally a release-status catalog in Apple v1. Its capability labels are interactive status controls, not promises of enabled internal tools: tapping an item updates the explanatory status message, while classified internal modules remain fail-closed.
+- Atlas is intentionally a non-interactive release-status catalog in Apple v1. Its capability names are labels, not buttons or promises of enabled internal tools, while classified internal modules remain fail-closed.
 - The existing PRO Monthly product remains in Prepare for Submission and is not attached to this version. It is deferred to a future version after StoreKit, Restore Purchases, server-authoritative entitlements and Sandbox testing are complete.
 - The screenshots were replaced with distinct images of actual Home, Care, Care detail, Intelligence, Atlas and Me screens captured from the submitted build.
 - The submitted native target does not request HealthKit, camera, microphone, location or photo-library permission. Its Info.plist and privacy manifest were rechecked against the final archive.
