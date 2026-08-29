@@ -20,7 +20,7 @@ The recovered Wave 1 review findings, response draft and physical-device recordi
 | Privacy URL | `https://www.cliniverseai.com/privacy` | Canonical route is live; legacy alternate URLs must redirect here in the final production release |
 | Marketing URL | `https://www.cliniverseai.com` | Optional; canonical production route is live |
 | Copyright | Must match the verified legal rights-holder name in App Store Connect | Founder/legal confirmation required |
-| Version / build | Copy from the final verified IPA only | Final IPA required |
+| Version / build | Version 1.0; use only the next signed candidate after privacy alignment | Build 55 is superseded; final IPA required |
 
 ## Identity and contact contract
 
@@ -109,7 +109,7 @@ Screenshot rules:
 
 - [ ] Support mailbox receives and replies to a test message without exposing patient data or credentials.
 - [ ] Support, Privacy and Terms return HTTP 200 on the production origin used by the native shell.
-- [ ] App Store privacy answers match `native/privacy/PrivacyInfo.xcprivacy` and the final IPA scan.
+- [ ] App Store privacy answers match the next candidate's `native/privacy/PrivacyInfo.xcprivacy` exactly: linked Name, Email Address and User ID; unlinked Other Diagnostic Data; App Functionality; no tracking.
 - [ ] Content-rights, age-rating, encryption/export-compliance and category answers are confirmed in App Store Connect.
 - [ ] Support contact name, email and international-format phone number are entered in protected App Review Information.
 - [ ] Metadata and screenshots are rechecked after the final build number is selected.
