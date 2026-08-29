@@ -163,12 +163,20 @@ final class CliniverseScreenshotTests: XCTestCase {
     }
 
     private func reveal(_ element: XCUIElement, maximumSwipes: Int) throws {
-        XCTAssertTrue(element.waitForExistence(timeout: waitTimeout), "Expected release element is missing")
-        for _ in 0..<maximumSwipes where !element.isHittable {
-            app.swipeUp()
-            settle()
+        // WKWebView may omit an off-screen DOM node from the accessibility
+        // hierarchy until the viewport approaches it. Search the bounded page
+        // range first instead of waiting for an element that cannot become
+        // discoverable without scrolling.
+        for swipe in 0...maximumSwipes {
+            if element.exists && element.isHittable {
+                return
+            }
+            if swipe < maximumSwipes {
+                app.swipeUp()
+                settle()
+            }
         }
-        XCTAssertTrue(element.isHittable, "Expected release element could not be brought on screen")
+        XCTFail("Expected release element could not be discovered and brought on screen")
     }
 
     private func capture(_ name: String) {
