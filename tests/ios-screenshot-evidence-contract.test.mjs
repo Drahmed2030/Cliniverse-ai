@@ -45,6 +45,9 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /for attempt in 0\.\.<3/)
   assert.match(source, /emailEntry\.isHittable/)
   assert.match(source, /emailField\.waitForExistence\(timeout: 6\)/)
+  assert.match(source, /for swipe in 0\.\.\.maximumSwipes/)
+  assert.match(source, /element\.exists && element\.isHittable/)
+  assert.match(source, /if swipe < maximumSwipes/)
   assert.doesNotMatch(source, /capture\([^\n]+\)[\s\S]{0,300}typeText\(/)
 })
 
