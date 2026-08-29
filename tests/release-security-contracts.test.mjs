@@ -73,6 +73,15 @@ test('Apple v1 blocks deferred server APIs before route execution', () => {
   }
 })
 
+test('Care evidence accepts only fixed fictional simulation templates', () => {
+  const route = read('app/api/ward/case-evidence/route.ts')
+  assert.match(route, /const term = EVIDENCE_MAP\[templateId\]/)
+  assert.match(route, /Never[\s\S]{0,120}arbitrary user-entered or patient-derived text/)
+  assert.doesNotMatch(route, /searchParams\.get\(["']diagnosis["']\)/)
+  assert.doesNotMatch(route, /\$\{diagnosis\} management guidelines/)
+  assert.match(route, /status:\s*404/)
+})
+
 test('legacy client Pro helpers stay fail-closed', () => {
   const source = read('app/supabase.ts')
   assert.match(source, /activatePro/)
