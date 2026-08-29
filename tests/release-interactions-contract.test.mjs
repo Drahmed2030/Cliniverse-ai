@@ -6,12 +6,12 @@ function read(path) {
   return fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
 }
 
-test('Atlas capabilities expose honest interactive release status', () => {
+test('Atlas is an explicit non-interactive release-status catalog', () => {
   const source = read('app/components/release/AtlasReleaseCatalog.tsx')
-  assert.match(source, /setSelectedCapability/)
-  assert.match(source, /aria-live="polite"/)
-  assert.match(source, /not enabled in this build/)
-  assert.match(source, /remains gated until safety, authentication, and validation requirements pass/)
+  assert.doesNotMatch(source, /<button/)
+  assert.doesNotMatch(source, /onClick=/)
+  assert.match(source, /capability names are release-status labels, not launch controls/)
+  assert.match(source, /Only completed and individually verified tools will become interactive/)
 })
 
 test('Me hub exposes privacy, terms, and support destinations', () => {
@@ -19,6 +19,13 @@ test('Me hub exposes privacy, terms, and support destinations', () => {
   assert.match(source, /href: '\/privacy'/)
   assert.match(source, /href: '\/terms'/)
   assert.match(source, /href: '\/support'/)
+})
+
+test('Me renders one account-session surface', () => {
+  const releaseApp = read('app/components/ReleaseApp.tsx')
+  const account = read('app/components/release/MeAccountSummary.tsx')
+  assert.doesNotMatch(releaseApp, /AccountSessionActions/)
+  assert.match(account, /AccountSessionActions/)
 })
 
 test('consult requests are explicit local simulation state', () => {
