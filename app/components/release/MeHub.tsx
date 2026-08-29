@@ -32,7 +32,7 @@ const sections: Array<{
     title: 'Privacy & Support',
     description: 'Security, data controls, support and account preferences in one predictable place.',
     status: 'ready',
-    detail: 'Release links will use the unified NeuraOps company support identity once the company mailbox is created.',
+    detail: 'Privacy, terms and support links are available from the release account surface.',
     links: [
       { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },

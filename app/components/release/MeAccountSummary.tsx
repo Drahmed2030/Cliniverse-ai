@@ -8,8 +8,6 @@ import AccountSessionActions from '../auth/AccountSessionActions'
 
 interface ProfileState {
   name: string
-  specialty: string
-  country: string
   email: string
 }
 
@@ -46,8 +44,6 @@ export default function MeAccountSummary() {
       if (profileResult.data) {
         setProfile({
           name: profileResult.data.name || '',
-          specialty: profileResult.data.specialty || '',
-          country: profileResult.data.country || '',
           email: userResult.data.user?.email || '',
         })
       }
@@ -68,8 +64,6 @@ export default function MeAccountSummary() {
 
     const result = await updateOwnProfile({
       name: profile.name,
-      specialty: profile.specialty,
-      country: profile.country,
     })
 
     setSaving(false)
@@ -96,8 +90,6 @@ export default function MeAccountSummary() {
           <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
             <ReadOnlyField label="Email" value={profile.email} />
             <EditableField label="Name" value={profile.name} onChange={(value) => setProfile({ ...profile, name: value })} />
-            <EditableField label="Specialty" value={profile.specialty} onChange={(value) => setProfile({ ...profile, specialty: value })} placeholder="Optional" />
-            <EditableField label="Country" value={profile.country} onChange={(value) => setProfile({ ...profile, country: value })} placeholder="Optional" />
             <button type="button" onClick={saveProfile} disabled={saving} style={primaryButtonStyle}>
               {saving ? 'Saving…' : 'Save profile'}
             </button>
@@ -130,11 +122,11 @@ export default function MeAccountSummary() {
   )
 }
 
-function EditableField({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (value: string) => void; placeholder?: string }) {
+function EditableField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
     <label>
       <div style={labelStyle}>{label}</div>
-      <input value={value} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} style={inputStyle} />
+      <input value={value} onChange={(event) => onChange(event.target.value)} style={inputStyle} />
     </label>
   )
 }

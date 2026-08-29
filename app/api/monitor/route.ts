@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN || ''
 const CHAT = '@cliniverse2030'
 
-export async function sendTelegram(msg: string) {
+async function sendTelegram(msg: string) {
   if (!TOKEN || !CHAT) { console.log('Missing TOKEN or CHAT'); return }
   try {
     const r = await fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
@@ -16,7 +16,7 @@ export async function sendTelegram(msg: string) {
   } catch(e) { console.error('TG error:', e) }
 }
 
-export const notify = {
+const notify = {
   aiSuccess: (t:string, s:string, ms:number) => sendTelegram('✅ <b>AI Done</b>\nType: '+t+'\nSpecialty: '+s+'\nTime: '+ms+'ms'),
   aiError:   (t:string, e:string)             => sendTelegram('❌ <b>AI Error</b>\nType: '+t+'\nError: '+e),
   aiSlow:    (t:string, ms:number)            => sendTelegram('🐌 <b>AI Slow</b>\nType: '+t+'\nTime: '+ms+'ms'),
@@ -52,7 +52,8 @@ export async function POST(req: Request) {
       default:           await sendTelegram('📢 '+JSON.stringify(data))
     }
     return NextResponse.json({ ok:true })
-  } catch(e:any) {
-    return NextResponse.json({ ok:false, error:e.message }, { status:500 })
+  } catch(e: unknown) {
+    const message = e instanceof Error ? e.message : 'Unexpected monitor error'
+    return NextResponse.json({ ok:false, error:message }, { status:500 })
   }
 }

@@ -28,12 +28,16 @@ function scoreRelevance(title: string, term: string): "High" | "Moderate" {
 
 export async function GET(req: NextRequest) {
   const templateId = req.nextUrl.searchParams.get("templateId") || "";
-  const diagnosis  = req.nextUrl.searchParams.get("diagnosis") || "";
+  const term = EVIDENCE_MAP[templateId];
 
-  // Resolve search term
-  const term =
-    EVIDENCE_MAP[templateId] ||
-    (diagnosis ? `${diagnosis} management guidelines` : "clinical guidelines 2025");
+  // Apple v1 is limited to the fixed fictional simulation catalog. Never
+  // forward arbitrary user-entered or patient-derived text to PubMed.
+  if (!term) {
+    return NextResponse.json(
+      { ok: false, error: "Evidence is unavailable for this simulation template", items: [] },
+      { status: 404 },
+    );
+  }
 
   try {
     // Step 1: Search
@@ -79,7 +83,7 @@ export async function GET(req: NextRequest) {
         };
       })
       // High relevance first
-      .sort((a, b) => (a.relevance === "High" ? -1 : 1));
+      .sort((a, b) => Number(b.relevance === "High") - Number(a.relevance === "High"));
 
     return NextResponse.json({ ok: true, items });
   } catch (err) {

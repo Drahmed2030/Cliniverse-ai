@@ -52,6 +52,27 @@ PRIVACY_MANIFEST="$APP_PATH/PrivacyInfo.xcprivacy"
 [ -f "$PRIVACY_MANIFEST" ] || { echo "HOLD: app-level PrivacyInfo.xcprivacy is missing"; exit 2; }
 plutil -lint "$PRIVACY_MANIFEST"
 
+# Fail closed if the signed artifact drifts from the App Store privacy answers
+# approved for RC1. Dependency manifests are inspected separately by Xcode;
+# this contract applies to the app target's own manifest.
+ACTUAL_PRIVACY_TYPES=""
+PRIVACY_INDEX=0
+while PRIVACY_TYPE=$(/usr/libexec/PlistBuddy -c "Print :NSPrivacyCollectedDataTypes:$PRIVACY_INDEX:NSPrivacyCollectedDataType" "$PRIVACY_MANIFEST" 2>/dev/null); do
+  ACTUAL_PRIVACY_TYPES="${ACTUAL_PRIVACY_TYPES}${PRIVACY_TYPE}\n"
+  PRIVACY_INDEX=$((PRIVACY_INDEX + 1))
+done
+ACTUAL_PRIVACY_TYPES="$(printf '%b' "$ACTUAL_PRIVACY_TYPES" | sed '/^$/d' | sort)"
+EXPECTED_PRIVACY_TYPES="$(printf '%s\n' \
+  NSPrivacyCollectedDataTypeEmailAddress \
+  NSPrivacyCollectedDataTypeName \
+  NSPrivacyCollectedDataTypeOtherDiagnosticData \
+  NSPrivacyCollectedDataTypeUserID | sort)"
+[ "$ACTUAL_PRIVACY_TYPES" = "$EXPECTED_PRIVACY_TYPES" ] || {
+  echo "HOLD: signed app privacy data types do not match the RC1 contract"
+  printf 'Expected:\n%s\nActual:\n%s\n' "$EXPECTED_PRIVACY_TYPES" "$ACTUAL_PRIVACY_TYPES"
+  exit 2
+}
+
 # The local fallback is the native recovery surface for remote-origin failure.
 [ -f "$APP_PATH/public/native-offline.html" ] || { echo "HOLD: native offline recovery page is missing"; exit 2; }
 

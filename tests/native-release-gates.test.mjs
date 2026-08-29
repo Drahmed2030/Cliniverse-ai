@@ -26,6 +26,15 @@ test('approved privacy manifest is authoritative outside regenerated ios directo
   assert.match(manifest, /NSPrivacyCollectedDataTypeName/)
   assert.match(manifest, /<key>NSPrivacyTracking<\/key>\s*<false\/>/)
   assert.equal(manifest.includes('NSPrivacyCollectedDataTypeHealth'), false)
+  assert.equal(manifest.includes('NSPrivacyCollectedDataTypePurchaseHistory'), false)
+  assert.equal(manifest.includes('NSPrivacyCollectedDataTypeCoarseLocation'), false)
+  assert.equal(manifest.includes('NSPrivacyCollectedDataTypeOtherDataTypes'), false)
+  assert.equal(manifest.includes('NSPrivacyCollectedDataTypeProductInteraction'), false)
+  assert.match(manifest, /NSPrivacyCollectedDataTypeOtherDiagnosticData/)
+
+  const releaseProfile = read('app/components/release/MeAccountSummary.tsx')
+  assert.equal(releaseProfile.includes('label="Specialty"'), false)
+  assert.equal(releaseProfile.includes('label="Country"'), false)
 })
 
 test('final IPA verification requires privacy manifest and deterministic package identity', () => {
@@ -34,9 +43,18 @@ test('final IPA verification requires privacy manifest and deterministic package
   assert.match(verify, /ITSAppUsesNonExemptEncryption/)
   assert.match(verify, /Assets\.car/)
   assert.match(verify, /APP_PATH\/PrivacyInfo\.xcprivacy/)
+  assert.match(verify, /EXPECTED_PRIVACY_TYPES/)
+  assert.match(verify, /NSPrivacyCollectedDataTypeOtherDiagnosticData/)
+  assert.match(verify, /signed app privacy data types do not match the RC1 contract/)
   assert.match(verify, /public\/native-offline\.html/)
   assert.match(verify, /NSHealthShareUsageDescription/)
   assert.match(verify, /exit 2/)
+})
+
+test('public release artwork uses the canonical Cliniverse domain', () => {
+  const image = read('public/og-image.svg')
+  assert.match(image, /www\.cliniverseai\.com/)
+  assert.doesNotMatch(image, /vercel\.app/)
 })
 
 test('generated Xcode target explicitly bundles the app privacy manifest', () => {
