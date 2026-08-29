@@ -126,7 +126,7 @@ function EditableField({ label, value, onChange }: { label: string; value: strin
   return (
     <label>
       <div style={labelStyle}>{label}</div>
-      <input value={value} onChange={(event) => onChange(event.target.value)} style={inputStyle} />
+      <input aria-label={label} value={value} onChange={(event) => onChange(event.target.value)} style={inputStyle} />
     </label>
   )
 }
@@ -135,7 +135,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
   return (
     <label>
       <div style={labelStyle}>{label}</div>
-      <input value={value} readOnly aria-readonly="true" style={{ ...inputStyle, opacity: 0.72 }} />
+      <input aria-label={label} value={value} readOnly aria-readonly="true" style={{ ...inputStyle, opacity: 0.72 }} />
     </label>
   )
 }
