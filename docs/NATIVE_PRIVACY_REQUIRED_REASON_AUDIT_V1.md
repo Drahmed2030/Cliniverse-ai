@@ -19,7 +19,7 @@ This document records the current evidence boundary for Cliniverse AI iOS privac
 
 ## Evidence-reviewed RC1 candidate
 
-The checked-in generated `ios/App/App/PrivacyInfo.xcprivacy` is still non-authoritative because CI recreates `ios/`. The authoritative candidate declares linked name, email, user ID, optional country/profile metadata and subscription history for app functionality. It also conservatively declares unlinked product-interaction and diagnostic data used to operate and troubleshoot the hosted service. Tracking is false and no tracking domains are declared.
+The checked-in generated `ios/App/App/PrivacyInfo.xcprivacy` is still non-authoritative because CI recreates `ios/`. The authoritative RC1 candidate declares linked name, email and user ID plus unlinked technical diagnostic data for app functionality. Specialty/country editing, StoreKit purchase history, app analytics and tracking are outside the submitted RC1 surface. Tracking is false and no tracking domains are declared.
 
 Repository and dependency-source inspection found no use of the required-reason API categories in the app, Capacitor iOS 6.2.1, or the bundled Cordova compatibility source. Their packaged SDK privacy manifests also declare no accessed API categories. The app-level candidate therefore keeps `NSPrivacyAccessedAPITypes` empty. This remains subject to a final archive/binary scan.
 
