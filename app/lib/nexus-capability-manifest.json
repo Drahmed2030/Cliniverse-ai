@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "productEpic": "Nexus",
+  "purpose": "Interprofessional learning and systems-safety review",
+  "releaseState": "planned_internal",
+  "releaseBoundary": {
+    "dataMode": "fictional_simulation_only",
+    "realPatientData": "prohibited",
+    "clinicalDecisionSupport": "prohibited",
+    "productionEnabled": false
+  },
+  "modules": [
+    {
+      "id": "case-huddle",
+      "label": "Case Huddle",
+      "replaces": "Daily Case",
+      "releaseState": "planned_internal",
+      "value": "Explore one curated fictional case through multiple professional perspectives.",
+      "allowed": [
+        "staged fictional case review",
+        "role-lens selection",
+        "private learning reflection",
+        "approved debrief after completion"
+      ],
+      "prohibited": [
+        "real patient intake",
+        "diagnosis or treatment recommendation",
+        "public clinician voting",
+        "fabricated global usage metrics"
+      ]
+    },
+    {
+      "id": "nursing-lens",
+      "label": "Nursing Lens",
+      "replaces": "Nursing",
+      "releaseState": "planned_internal",
+      "value": "Practise observation, escalation and structured handover reasoning.",
+      "allowed": [
+        "fictional observation review",
+        "structured handover exercise",
+        "safety checklist",
+        "reviewed rationale after completion"
+      ],
+      "prohibited": [
+        "bedside monitoring",
+        "unverified authoritative scoring",
+        "autonomous escalation",
+        "replacement of local policy"
+      ]
+    },
+    {
+      "id": "medication-safety",
+      "label": "Medication Safety",
+      "replaces": "Clinical Pharmacy",
+      "releaseState": "planned_internal",
+      "value": "Practise medication reconciliation, monitoring and pharmacist communication.",
+      "allowed": [
+        "fictional medication reconciliation",
+        "discrepancy-identification exercise",
+        "monitoring checklist",
+        "structured communication practice"
+      ],
+      "prohibited": [
+        "prescribing",
+        "dose selection",
+        "renal-dose automation",
+        "interaction clearance or formulary authority"
+      ]
+    },
+    {
+      "id": "safety-review",
+      "label": "Safety Review",
+      "replaces": "Error Autopsy",
+      "releaseState": "planned_internal",
+      "value": "Learn from fictional or approved composite events using a just-culture systems lens.",
+      "allowed": [
+        "fictional or approved composite timeline",
+        "contributory-factor reflection",
+        "barrier and action review",
+        "approved debrief"
+      ],
+      "prohibited": [
+        "real incident reporting",
+        "staff ranking or blame assignment",
+        "unsupported safety statistics",
+        "legal or regulatory determination"
+      ]
+    }
+  ],
+  "sharedGates": [
+    "product",
+    "clinical_content",
+    "safety",
+    "privacy",
+    "security",
+    "quality",
+    "claims",
+    "release"
+  ]
+}
