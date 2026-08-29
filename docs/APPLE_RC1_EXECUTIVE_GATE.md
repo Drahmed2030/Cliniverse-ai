@@ -56,6 +56,8 @@ The suite covers deterministic native packaging contracts, launch recovery, icon
 
 Complete this matrix using the final signed Build 55 artifact after its source provenance is matched. If Build 55 is rebuilt or replaced, repeat the entire matrix against the new build number.
 
+The nine uploaded images `IMG_9446.png` through `IMG_9454.png` were inspected on 2026-08-29. They are captures of an earlier executive-gate document, display Build 54-era text, and do not show the submitted app UI. They are internal working evidence only and must not be uploaded as App Store product screenshots or used as the requested physical-device core-flow recording.
+
 | Check | iPhone model / OS | iPad model / OS | Evidence | Result |
 | --- | --- | --- | --- | --- |
 | Clean install and installed icon | _Required_ | _Required_ | Screenshot/video | PENDING |
