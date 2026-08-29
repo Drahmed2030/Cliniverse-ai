@@ -187,8 +187,14 @@ run_device_test() {
   local udid="$2"
   local dimensions="$3"
   local destination="$4"
+  local xctestrun_root
+  xctestrun_root="$(dirname "$BASE_XCTESTRUN")"
   local xctestrun_json="$WORK_DIR/$device_class.xctestrun.json"
-  local xctestrun="$WORK_DIR/$device_class.xctestrun"
+  # Keep the configured xctestrun beside the file emitted by Xcode. Paths in
+  # the document use __TESTROOT__, which xcodebuild resolves relative to the
+  # xctestrun location. Moving it to WORK_DIR makes Xcode look for the runner
+  # outside DerivedData and report a missing embedded .xctest product.
+  local xctestrun="$xctestrun_root/$device_class.xctestrun"
   local result_bundle="$WORK_DIR/$device_class.xcresult"
 
   plutil -convert json -o "$xctestrun_json" "$BASE_XCTESTRUN"
