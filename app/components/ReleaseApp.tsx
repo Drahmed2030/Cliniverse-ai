@@ -7,7 +7,6 @@ import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
 import AuthGate from './auth/AuthGate'
-import AccountSessionActions from './auth/AccountSessionActions'
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
@@ -50,15 +49,7 @@ function ReleaseShell() {
         )}
         {tab === 'intelligence' && <ReleaseIntelligenceGate />}
         {tab === 'atlas' && <AtlasReleaseCatalog />}
-        {tab === 'me' && (
-          <>
-            <MeHub />
-            <div style={{ marginTop: 12, padding: 16, borderRadius: 18, border: `1px solid ${C.border}`, background: C.panel }}>
-              <div style={{ fontSize: 12, fontWeight: 800, marginBottom: 10 }}>Account session</div>
-              <AccountSessionActions />
-            </div>
-          </>
-        )}
+        {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
     </main>
