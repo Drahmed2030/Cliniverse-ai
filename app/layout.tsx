@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from "next"
+import Script from "next/script"
 import "./globals.css"
 import ThemeProvider from "./components/ThemeProvider"
 
 export const viewport: Viewport = {
-  themeColor: "#2a4a60",
+  themeColor: "#080C16",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  viewportFit: "cover",
+  colorScheme: "dark",
 }
 
 const releaseDescription = "Clinical learning, simulation and workflow tools for healthcare professionals."
@@ -51,7 +54,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes"/>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
         <meta name="mobile-web-app-capable" content="yes"/>
-        <script src="/register-sw.js" defer/>
       </head>
       <body style={{position:'relative',minHeight:'100vh'}}>
         {/* ── Logo Watermark ── */}
@@ -77,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <Script src="/register-sw.js" strategy="afterInteractive" />
       </body>
     </html>
   )
