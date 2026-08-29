@@ -54,6 +54,9 @@ test('evidence runner validates current Apple dimensions and twelve opaque PNGs'
   assert.match(runner, /Expected twelve final screenshots/)
   assert.match(runner, /status_bar.*override/s)
   assert.match(runner, /trap cleanup EXIT/)
+  assert.match(runner, /xctestrun_root="\$\(dirname "\$BASE_XCTESTRUN"\)"/)
+  assert.match(runner, /local xctestrun="\$xctestrun_root\/\$device_class\.xctestrun"/)
+  assert.doesNotMatch(runner, /local xctestrun="\$WORK_DIR\/\$device_class\.xctestrun"/)
 })
 
 test('generated UI test target supports both device families without signing', () => {
