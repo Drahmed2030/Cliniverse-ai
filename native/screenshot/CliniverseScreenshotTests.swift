@@ -66,16 +66,13 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         try runStep("Capture Me privacy surface") {
             try openTab("Me", waitingFor: "ONE ACCOUNT DESTINATION")
-            let privacyAndSupport = app.staticTexts["Privacy & Support"]
-            try reveal(privacyAndSupport, maximumSwipes: 10)
+            let privacyLink = app.links["Privacy"]
+            try reveal(privacyLink, maximumSwipes: 10)
+            privacyLink.tap()
+            try waitForText("Release safety boundary")
 
             let emailField = app.textFields["Email"]
-            for _ in 0..<4 where emailField.isHittable {
-                app.swipeUp()
-                settle()
-            }
-            XCTAssertTrue(privacyAndSupport.isHittable, "Privacy & Support must remain visible in the Me screenshot")
-            XCTAssertFalse(emailField.isHittable, "Reviewer email must not be visible in the Me screenshot")
+            XCTAssertFalse(emailField.exists, "Reviewer email must not be present in the privacy screenshot")
             capture("06-me-privacy")
         }
     }
