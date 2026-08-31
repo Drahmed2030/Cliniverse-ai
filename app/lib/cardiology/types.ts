@@ -1,4 +1,4 @@
-export type CardiologyModuleId = 'overview' | 'census' | 'surgery' | 'tasks' | 'handover'
+export type CardiologyModuleId = 'overview' | 'pathway' | 'census' | 'surgery' | 'tasks' | 'handover'
 
 export type CardiologyPathway = 'chest-pain' | 'stemi' | 'post-procedure'
 export type CardiologyPriority = 'time-sensitive' | 'watch' | 'routine'

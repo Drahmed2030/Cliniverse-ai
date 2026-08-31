@@ -1,2 +1,6 @@
 export * from './types'
 export * from './simulationData'
+export * from './pathwaySimulation'
+export * from './nexusCore'
+export * from './nexusReferences'
+export * from './nexusKpiEngine'

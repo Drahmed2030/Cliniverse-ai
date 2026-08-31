@@ -5,6 +5,7 @@ import type { CardiologyModuleId } from '../../../lib/cardiology'
 import ChestPainCensus from './ChestPainCensus'
 import NotesOrdersTracker from './NotesOrdersTracker'
 import OperationsOverview from './OperationsOverview'
+import QapasDirectSimulation from './QapasDirectSimulation'
 import StructuredHandover from './StructuredHandover'
 import SurgicalList from './SurgicalList'
 import { CARDIOLOGY_COLORS as C, compactButtonStyle, panelStyle } from './styles'
@@ -12,6 +13,7 @@ import { useCardiologyOperations } from './useCardiologyOperations'
 
 const modules: Array<{ id: CardiologyModuleId; label: string }> = [
   { id: 'overview', label: 'On-call' },
+  { id: 'pathway', label: 'QAPAS Direct' },
   { id: 'census', label: 'Census' },
   { id: 'surgery', label: 'Surgical' },
   { id: 'tasks', label: 'Notes & Orders' },
@@ -58,6 +60,7 @@ export default function CardiologyOperations() {
       </nav>
 
       {activeModule === 'overview' && <OperationsOverview cases={state.cases} tasks={state.tasks} onOpenModule={setActiveModule} />}
+      {activeModule === 'pathway' && <QapasDirectSimulation />}
       {activeModule === 'census' && <ChestPainCensus cases={state.cases} onCycleStatus={cycleCaseStatus} />}
       {activeModule === 'surgery' && <SurgicalList items={state.surgicalItems} onToggle={toggleSurgicalCheck} />}
       {activeModule === 'tasks' && <NotesOrdersTracker tasks={state.tasks} onCycleStatus={cycleTaskStatus} />}
