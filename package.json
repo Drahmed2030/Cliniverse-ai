@@ -16,6 +16,7 @@
     "@capacitor/android": "^6.2.1",
     "@capacitor/core": "^6.2.1",
     "@capacitor/ios": "^6.2.1",
+    "@opentelemetry/api": "1.9.1",
     "@supabase/supabase-js": "^2.109.0",
     "framer-motion": "^13.1.0",
     "jspdf": "^4.2.1",
