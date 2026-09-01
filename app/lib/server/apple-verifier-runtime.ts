@@ -10,6 +10,11 @@ const BUNDLE_ID = 'com.cliniverse.ai' as const
 
 export type AppleLibraryLoader = () => Promise<AppleLibraryModule>
 
+const loadOfficialAppleLibrary: AppleLibraryLoader = async () => {
+  const library = await import('@apple/app-store-server-library')
+  return library as unknown as AppleLibraryModule
+}
+
 function unavailable(reason: string): AppleSignedTransactionVerifier {
   return {
     async verifyAndDecodeTransaction() {
@@ -65,10 +70,10 @@ export function readAppleVerifierRuntimeConfig(
 }
 
 /**
- * The route depends on this stable runtime boundary. Until the official Apple
- * package is lockfile-installed, the default loader remains deliberately
- * unavailable. Once installed, only this loader changes; verification,
- * persistence and entitlement contracts remain untouched.
+ * Stable server-only runtime boundary for Apple's official verifier. Missing
+ * or invalid configuration fails closed before a transaction can persist.
+ * Tests may inject a deterministic loader; production uses the locked Apple
+ * App Store Server Library package.
  */
 export async function createConfiguredAppleVerifier(input?: {
   env?: NodeJS.ProcessEnv
@@ -77,8 +82,7 @@ export async function createConfiguredAppleVerifier(input?: {
   const config = readAppleVerifierRuntimeConfig(input?.env)
   if (!config) return unavailable('apple_verifier_runtime_not_configured')
 
-  const loadLibrary = input?.loadLibrary
-  if (!loadLibrary) return unavailable('apple_official_library_not_installed')
+  const loadLibrary = input?.loadLibrary ?? loadOfficialAppleLibrary
 
   try {
     const library = await loadLibrary()
