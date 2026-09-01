@@ -17,12 +17,13 @@ test('Apple verifier runtime is server-only and requires explicit environment pl
   assert.match(source, /bundleId:\s*BUNDLE_ID/)
 })
 
-test('Apple verifier runtime stays unavailable until official library loader exists', () => {
+test('Apple verifier runtime loads the locked official library and fails closed on configuration or load failure', () => {
   const source = read('app/lib/server/apple-verifier-runtime.ts')
+  assert.match(source, /import\('@apple\/app-store-server-library'\)/)
   assert.match(source, /apple_verifier_runtime_not_configured/)
-  assert.match(source, /apple_official_library_not_installed/)
   assert.match(source, /apple_official_library_load_failed/)
   assert.match(source, /createAppleOfficialVerifier/)
+  assert.match(source, /input\?\.loadLibrary \?\? loadOfficialAppleLibrary/)
   assert.equal(source.includes('activatePro'), false)
   assert.equal(source.includes('SUPABASE_SERVICE_ROLE_KEY'), false)
   assert.equal(source.includes("from('subscriptions')"), false)
