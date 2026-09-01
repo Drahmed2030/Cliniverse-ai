@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --test tests/*.test.mjs",
+    "test:visual": "playwright test",
     "postinstall": "node scripts/patch-capacitor-cli-tar.mjs"
   },
   "dependencies": {
@@ -28,9 +29,11 @@
     "unpdf": "^1.7.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@capacitor/assets": "3.0.5",
     "@capacitor/cli": "6.2.1",
     "@netlify/plugin-nextjs": "^5.15.12",
+    "@playwright/test": "1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
