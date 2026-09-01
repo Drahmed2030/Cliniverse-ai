@@ -15,7 +15,7 @@ import {
 } from '../../../../lib/server/observability/operational-telemetry'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zbiujqxinvcxvuviuenx.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3piaXVqcXhpbnZjeHZ1dml1ZW54LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJyZWYiOiJ6Yml1anF4aW52Y3h2dXZpdWVueCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg0MTkxMzk2LCJleHAiOjIwOTk3NjczOTZ9.7znHWJXnYNgQmTVyzouuxQDFXxDEvVk9F2I75ArA8d8'
 
 function isPlan(value: unknown): value is ApplePlan {
   return value === 'monthly' || value === 'yearly'
