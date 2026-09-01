@@ -20,7 +20,7 @@ The recovered Wave 1 review findings, response draft and physical-device recordi
 | Privacy URL | `https://www.cliniverseai.com/privacy` | Canonical route is live; legacy alternate URLs must redirect here in the final production release |
 | Marketing URL | `https://www.cliniverseai.com` | Optional; canonical production route is live |
 | Copyright | Must match the verified legal rights-holder name in App Store Connect | Founder/legal confirmation required |
-| Version / build | Copy from the final verified IPA only | Final IPA required |
+| Version / build | Version 1.0; use only the next signed candidate after privacy alignment | Build 55 is superseded; final IPA required |
 
 ## Identity and contact contract
 
@@ -63,11 +63,11 @@ Reviewer walkthrough:
 2. Home explains the release boundary and human-in-the-loop rule.
 3. Open Care. All ward/patient content is fictional simulation data for workflow practice; no real patient data is permitted.
 4. Open Intelligence. This surface is intentionally disabled in the submitted binary pending a separate AI disclosure, consent and clinical-safety review. It is not a loading failure.
-5. Open Atlas to view release classifications for reference, educational and gated capabilities.
+5. Open Atlas to view release classifications for reference, educational and gated capabilities. Atlas is intentionally a non-interactive release-status catalog in Apple v1, not an internal tool launcher. Capability names are rendered as labels rather than buttons, and items marked “Release candidate,” “Educational mode,” or “Not exposed in release” do not advertise or open unfinished functionality.
 6. Open Me to review the authenticated profile, read-only plan state, privacy boundary and sign-out control.
 7. Terms, Privacy and Support are available from the public release routes.
 
-There is no digital Upgrade call to action and no in-app purchase flow in this release. The displayed plan is read-only and cannot activate itself. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
+There is no digital Upgrade call to action and no in-app purchase flow in this release. The displayed plan is read-only and cannot activate itself. The existing PRO Monthly product remains in Prepare for Submission and is not attached to this app version. It will be submitted only in a future version after StoreKit, Restore Purchases, server-authoritative entitlements and Sandbox testing are complete. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
 
 ## Reviewer access gate
 
@@ -84,6 +84,8 @@ There is no digital Upgrade call to action and no in-app purchase flow in this r
 ## Screenshot contract
 
 Capture screenshots only from the final signed RC build after the production origin matches that build. Use the exact device slots required by App Store Connect at upload time.
+
+Do not use `IMG_9446.png` through `IMG_9454.png`: those files show the internal executive-gate document rather than the app experience and contain obsolete Build 54-era wording.
 
 Approved screenshot sequence:
 
@@ -107,7 +109,7 @@ Screenshot rules:
 
 - [ ] Support mailbox receives and replies to a test message without exposing patient data or credentials.
 - [ ] Support, Privacy and Terms return HTTP 200 on the production origin used by the native shell.
-- [ ] App Store privacy answers match `native/privacy/PrivacyInfo.xcprivacy` and the final IPA scan.
+- [ ] App Store privacy answers match the next candidate's `native/privacy/PrivacyInfo.xcprivacy` exactly: linked Name, Email Address and User ID; unlinked Other Diagnostic Data; App Functionality; no tracking.
 - [ ] Content-rights, age-rating, encryption/export-compliance and category answers are confirmed in App Store Connect.
 - [ ] Support contact name, email and international-format phone number are entered in protected App Review Information.
 - [ ] Metadata and screenshots are rechecked after the final build number is selected.

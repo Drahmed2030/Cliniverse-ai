@@ -1,6 +1,6 @@
 # Apple Wave 1 Response and Evidence Plan
 
-Status: **PREPARED / HOLD — verify against the live App Store Connect message before sending**
+Status: **LIVE MESSAGE VERIFIED / HOLD — do not send or resubmit yet**
 
 This document converts the Apple requirements recovered from the prior Wave 1 conversation into an RC1 evidence checklist. It does not claim that a device test, App Store Connect field, credential or upload is complete until the final signed build proves it.
 
@@ -8,18 +8,31 @@ This document converts the Apple requirements recovered from the prior Wave 1 co
 
 | Apple item | Required RC1 evidence | Current state |
 | --- | --- | --- |
-| Guideline 2.1 — App Completeness | A physical-device screen recording beginning at launch and showing the core flow. Include registration/login/deletion where applicable, paid content/subscriptions, UGC controls and sensitive-data permission prompts. | HOLD — final signed IPA and physical-device recording required |
+| Guideline 2.1 — Information Needed | A physical-device screen recording beginning at launch and showing the core flow. Include registration/login/deletion where applicable, paid content/subscriptions, UGC controls and sensitive-data permission prompts. | HOLD — final signed IPA and physical-device recording required |
 | Tested configuration | Exact device models and OS versions used for testing. | HOLD — complete after iPhone/iPad matrix |
 | Product explanation | Functions, target audience, problem and user value. | Prepared below |
 | Review access | Setup instructions, current demo credentials and any sample files required. | HOLD — credentials only in protected App Store Connect fields; no sample file required for Apple v1 |
 | External dependencies | External services, tools and platforms used by the reviewed flow. | Prepared below; recheck final network trace |
 | Regional behavior | Explain regional differences or confirm the same reviewed experience. | Prepared as no intentional regional feature difference; verify final build |
 | Regulated industry/materials | Supply authorization documentation if the app claims regulated authorization or protected-material rights. | No authorization claim; legal/content-rights confirmation still required |
-| Guideline 2.3.3 — Screenshots | Screenshots must show actual app use and its core concept. Apple reported three identical 6.7-inch iPhone screenshots; title art, login and splash screens are not sufficient. | HOLD — capture six distinct screens from final signed build |
-| Guideline 3.1.2 — Subscriptions | If auto-renewing subscriptions are offered, show title, duration and price and provide Terms of Use and Privacy links. | Not offered in Apple v1; remove stale subscription metadata and keep Upgrade/IAP absent |
-| Guideline 5.1.1 — Purpose strings | Every requested sensitive capability must have a complete purpose string explaining the data/capability and a concrete use example. | Candidate IPA declares no HealthKit, camera, microphone, location or photo permission; verify final Info.plist |
+| Guideline 2.3.3 — Screenshots | Apple included preventive guidance that screenshots must show actual app use and not merely title art, login or splash screens. This is not listed as an active rejection reason. | HOLD — replace the ten legacy Build 6 screenshots with distinct final-build screens |
+| Guideline 3.1.2 — Subscriptions | Apple included preventive guidance that auto-renewing subscriptions must show title, duration, price, Terms and Privacy. This is not listed as an active rejection reason. | Decision required — PRO Monthly exists in Prepare for Submission but is not attached to review |
+| Guideline 5.1.1 — Purpose strings | Apple included preventive guidance that requested sensitive capabilities need complete usage descriptions. This is not listed as an active rejection reason. | Build 55 metadata exposes no deferred capability entitlement; inspect final Info.plist and IPA |
 | Account deletion | If users can create accounts, deletion must be available and shown. | Account creation is disabled in Apple v1; reviewer uses a pre-provisioned account |
-| Launch/icon findings | Eliminate the default/placeholder icon and the observed white/black blank launch state. | Pipeline hardened; physical iPhone/iPad evidence remains required |
+| Guideline 2.3.8 — Accurate Metadata | Apple found placeholder app icons and requires finalized, recognizably consistent icons. | Pipeline hardened; inspect Build 55 IPA and installed icons |
+| Guideline 2.1(a) — App Completeness | Apple observed a blank page at launch on iPad Air 11-inch (M3), iPadOS 26.6, with an active connection. | Pipeline hardened; exact-class physical-device proof remains required |
+| Guideline 1.5 — Developer Information | The submitted Vercel Support URL did not provide usable support information. | App Store Connect now contains `https://www.cliniverseai.com/support`; live route and mailbox tests remain required |
+
+## Live submission facts
+
+- Submission ID: `035ce9aa-70a6-4f9f-87ce-fa8bcb7a010c`.
+- The rejected app version is 1.0, Build 6.
+- The active rejection reasons are 1.5.0, 2.1.0 and 2.3.8.
+- Build 55 is the newest validated upload but is not yet attached to the rejected version.
+- Codemagic confirms that Build 55 was produced by `ios-workflow` from `integration/auth-release-shell-v1`; exact commit/tree matching remains a final provenance gate.
+- The rejected version currently contains ten iPhone 6.5-inch screenshots and no App Review Notes.
+- The Support URL field has already been updated to the canonical `/support` route.
+- The existing auto-renewable product is `PRO Monthly`, one month, Prepare for Submission, priced at SAR 59.99 in Saudi Arabia and USD 14.99 in the United States. It is not attached to the submission.
 
 ## Product statement for App Review
 
@@ -49,6 +62,7 @@ Record one continuous video on the final signed build, without exposing the revi
 5. Open Care and show fictional simulation labels, follow-up/documentation flow and escalation language.
 6. Open Intelligence and show the truthful disabled state.
 7. Open Atlas and show the release classifications.
+   Show that capability names are static status labels rather than launch controls. Atlas is a non-interactive release-status catalog in Apple v1; unfinished internal modules are not presented as available actions.
 8. Open Me, the read-only plan state, privacy boundary and sign-out.
 9. Show Terms, Privacy and Support.
 10. Demonstrate offline/reconnect and background/foreground recovery if the final recording length permits; retain the full matrix as separate internal evidence.
@@ -65,6 +79,8 @@ Thank you for the detailed guidance. We prepared a narrowed Cliniverse AI releas
 - Review Notes list the exact iPhone/iPad models and OS versions tested, setup steps and a current non-expiring review account.
 - The app is a clinical learning, fictional simulation and workflow-support product for healthcare professionals. It does not autonomously diagnose or prescribe, does not replace professional judgment, and does not permit real patient-identifiable data in this release.
 - Apple v1 has no account-creation flow, no digital Upgrade action and no auto-renewing subscription purchase flow. The reviewer account is pre-provisioned.
+- Atlas is intentionally a non-interactive release-status catalog in Apple v1. Its capability names are labels, not buttons or promises of enabled internal tools, while classified internal modules remain fail-closed.
+- The existing PRO Monthly product remains in Prepare for Submission and is not attached to this version. It is deferred to a future version after StoreKit, Restore Purchases, server-authoritative entitlements and Sandbox testing are complete.
 - The screenshots were replaced with distinct images of actual Home, Care, Care detail, Intelligence, Atlas and Me screens captured from the submitted build.
 - The submitted native target does not request HealthKit, camera, microphone, location or photo-library permission. Its Info.plist and privacy manifest were rechecked against the final archive.
 - The default icon and blank launch findings were addressed and verified on clean-installed iPhone and iPad builds.
