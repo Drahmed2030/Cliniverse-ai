@@ -113,6 +113,12 @@ begin
     when 'cliniverse.core.yearly' then 'pro_yearly'
   end;
 
+  -- Serialize all work for one original transaction lineage. This closes the
+  -- concurrent first-write race before any ownership or idempotency decision.
+  perform pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtextextended(p_original_transaction_id, 0)
+  );
+
   -- Exact transaction replay is idempotent. A reused transaction ID with
   -- different ownership or semantics fails closed.
   select * into v_existing_event
@@ -144,8 +150,6 @@ begin
     );
   end if;
 
-  -- Lock the lineage if it already exists. The unique partial index protects
-  -- concurrent first-write races as an additional database-level guard.
   select * into v_subscription
   from public.subscriptions
   where apple_original_transaction_id = p_original_transaction_id
@@ -251,8 +255,8 @@ begin
   );
 exception
   when unique_violation then
-    -- Concurrent creation of the same original transaction or transaction event
-    -- must never silently transfer ownership.
+    -- The advisory lock should serialize same-lineage writes, while uniqueness
+    -- remains the final database guard against unexpected cross-lineage races.
     if exists (
       select 1 from public.subscriptions
       where apple_original_transaction_id = p_original_transaction_id
@@ -271,9 +275,11 @@ grant execute on function public.persist_verified_apple_subscription(
   uuid, text, text, text, text, timestamptz, timestamptz, timestamptz, text, text, timestamptz
 ) to service_role;
 
--- Current entitlement remains readable only through the existing own-row RLS
--- policy. New provider/Apple identity fields are intentionally not granted to
--- authenticated clients in Apple v1.
+-- Extend the existing own-row SELECT authority with derived provider/current
+-- state fields only. Apple transaction identifiers and the immutable ledger stay
+-- server-only and remain unavailable to authenticated clients.
+grant select (provider, apple_product_id, verified_at, revoked_at, updated_at)
+  on table public.subscriptions to authenticated;
 
 do $migration_assertions$
 begin
@@ -297,6 +303,16 @@ begin
   if has_table_privilege('anon', 'public.apple_subscription_transactions', 'SELECT')
      or has_table_privilege('authenticated', 'public.apple_subscription_transactions', 'SELECT') then
     raise exception 'Apple transaction evidence is client-readable';
+  end if;
+
+  if has_column_privilege('authenticated', 'public.subscriptions', 'apple_original_transaction_id', 'SELECT')
+     or has_column_privilege('authenticated', 'public.subscriptions', 'apple_latest_transaction_id', 'SELECT') then
+    raise exception 'Apple transaction identifiers are client-readable';
+  end if;
+
+  if not has_column_privilege('authenticated', 'public.subscriptions', 'provider', 'SELECT')
+     or not has_column_privilege('authenticated', 'public.subscriptions', 'apple_product_id', 'SELECT') then
+    raise exception 'Derived Apple entitlement fields are not client-readable';
   end if;
 
   if has_function_privilege(
