@@ -21,7 +21,10 @@ test('Apple subscription lineage migration enforces ownership, idempotency and s
   assert.match(migration, /grant execute on function public\.persist_verified_apple_subscription[\s\S]*to service_role/)
   assert.match(migration, /grant select \(provider, apple_product_id, verified_at, revoked_at, updated_at\)/)
   assert.match(migration, /Apple transaction identifiers are client-readable/)
-  assert.equal(migration.includes('grant execute on function public.persist_verified_apple_subscription') && migration.includes('to authenticated;'), false)
+  assert.doesNotMatch(
+    migration,
+    /grant execute on function public\.persist_verified_apple_subscription\([\s\S]*?\)\s+to authenticated;/,
+  )
 })
 
 test('trusted Apple persistence hashes signed JWS and never grants PRO directly', () => {
