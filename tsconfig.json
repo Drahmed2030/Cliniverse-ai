@@ -44,6 +44,8 @@
     "app/components/auth/**/*.tsx",
     "app/components/release/**/*.ts",
     "app/components/release/**/*.tsx",
+    "app/components/nexus/**/*.ts",
+    "app/components/nexus/**/*.tsx",
     "app/components/ward/**/*.ts",
     "app/components/ward/**/*.tsx",
     "app/lib/**/*.ts",

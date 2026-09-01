@@ -68,7 +68,7 @@ function ReleaseShell() {
 function ReleaseHeader({ active }: { active: ReleaseTab }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
-    care: { title: 'Care', sub: 'Follow-up, prioritization and human escalation' },
+    care: { title: 'Care', sub: 'Cardiology operations and safe workflow simulation' },
     intelligence: { title: 'Intelligence', sub: 'Release-gated AI workspace' },
     atlas: { title: 'Atlas', sub: 'Curated clinical tools and references' },
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
@@ -106,7 +106,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
 
 function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Review care workflow', text: 'Follow up, prioritize, escalate and keep the next human action accountable.', accent: C.teal },
+    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Open Cardiology Operations', text: 'Coordinate on-call work, pathway census, surgical readiness, task accountability and structured handover.', accent: C.teal },
     { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Review AI release boundary', text: 'AI assistance stays gated until disclosure, consent and clinical-claims review are complete.', accent: C.violet },
     { tab: 'atlas', eyebrow: 'ATLAS', title: 'Browse curated tools', text: 'See capabilities only after they are clearly classified for the current release.', accent: C.blue },
     { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage Me', text: 'Keep profile, Life, plan, privacy and settings under one identity.', accent: C.gold },
