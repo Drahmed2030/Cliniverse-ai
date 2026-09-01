@@ -7,7 +7,7 @@
  * Comments are intentional for Claude / future maintainers.
  */
 
-import type { SoapNote, DischargeSummary } from "../clinicalTypes";
+import type { SoapNote, DischargeSummary } from "./clinicalTypes";
 
 var STORAGE_PREFIX_SOAP = "cliniverse.ward.soap.";
 var STORAGE_PREFIX_DISCHARGE = "cliniverse.ward.discharge.";

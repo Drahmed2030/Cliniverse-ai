@@ -1,0 +1,58 @@
+name: Release contracts
+
+on:
+  pull_request:
+    branches:
+      - ux/confusion-reduction-v1
+      - release/apple-launch-stability
+      - main
+  push:
+    branches:
+      - integration/auth-release-shell-v1
+
+permissions:
+  contents: read
+
+jobs:
+  release-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run strict production build
+        run: npm run build
+
+      - name: Run release security contracts
+        run: npm test
+
+      - name: Capture production dependency audit
+        shell: bash
+        run: |
+          npm audit --omit=dev --json > npm-audit-production.json || true
+          node - <<'NODE'
+          const fs = require('fs')
+          const audit = JSON.parse(fs.readFileSync('npm-audit-production.json', 'utf8'))
+          const counts = audit?.metadata?.vulnerabilities || {}
+          console.log('Production dependency audit:', JSON.stringify(counts))
+          if ((counts.critical || 0) > 0) {
+            console.log('RC HOLD: production dependency audit contains critical vulnerabilities; remediation/reachability review required.')
+          }
+          NODE
+
+      - name: Upload production dependency audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-production
+          path: npm-audit-production.json
+          if-no-files-found: error

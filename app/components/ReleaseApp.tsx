@@ -6,15 +6,11 @@ import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
+import AuthGate from './auth/AuthGate'
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
   loading: () => <SectionLoading label="Loading Care" />,
-})
-
-const OracleScreen = dynamic(() => import('./oracle/OracleScreen'), {
-  ssr: false,
-  loading: () => <SectionLoading label="Loading Intelligence" />,
 })
 
 const C = {
@@ -31,23 +27,36 @@ const C = {
 }
 
 export default function ReleaseApp() {
+  return (
+    <AuthGate allowGuest={false}>
+      {() => <ReleaseShell />}
+    </AuthGate>
+  )
+}
+
+function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
 
   return (
-    <main style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom))' }}>
+    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
       <ReleaseHeader active={tab} />
-      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '18px 16px 28px' }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: '0 auto',
+          paddingTop: 18,
+          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingBottom: 28,
+          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+        }}
+      >
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
         {tab === 'care' && (
           <ErrorBoundary section="Care">
             <WardIndex />
           </ErrorBoundary>
         )}
-        {tab === 'intelligence' && (
-          <ErrorBoundary section="Clinical Intelligence">
-            <OracleScreen />
-          </ErrorBoundary>
-        )}
+        {tab === 'intelligence' && <ReleaseIntelligenceGate />}
         {tab === 'atlas' && <AtlasReleaseCatalog />}
         {tab === 'me' && <MeHub />}
       </div>
@@ -60,15 +69,29 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
     care: { title: 'Care', sub: 'Follow-up, prioritization and human escalation' },
-    intelligence: { title: 'Intelligence', sub: 'Evidence-aware clinical reasoning support' },
+    intelligence: { title: 'Intelligence', sub: 'Release-gated AI workspace' },
     atlas: { title: 'Atlas', sub: 'Curated clinical tools and references' },
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
   }
   const current = titles[active]
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.94)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
-      <div style={{ maxWidth: 1180, margin: '0 auto', minHeight: 68, padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+    <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
+      <div
+        style={{
+          maxWidth: 1180,
+          margin: '0 auto',
+          minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
+          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
+          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingBottom: 10,
+          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+        }}
+      >
         <div>
           <div style={{ fontSize: 16, fontWeight: 800 }}>{current.title}</div>
           <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{current.sub}</div>
@@ -84,7 +107,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
 function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
     { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Review care workflow', text: 'Follow up, prioritize, escalate and keep the next human action accountable.', accent: C.teal },
-    { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Open reasoning workspace', text: 'Use evidence-aware support for structured clinical questions and human review.', accent: C.violet },
+    { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Review AI release boundary', text: 'AI assistance stays gated until disclosure, consent and clinical-claims review are complete.', accent: C.violet },
     { tab: 'atlas', eyebrow: 'ATLAS', title: 'Browse curated tools', text: 'See capabilities only after they are clearly classified for the current release.', accent: C.blue },
     { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage Me', text: 'Keep profile, Life, plan, privacy and settings under one identity.', accent: C.gold },
   ]
@@ -95,7 +118,7 @@ function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) 
         <div style={{ color: C.blue, fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>CLINIVERSE AI · BY NEURAOPS</div>
         <h1 id="home-title" style={{ fontSize: 28, lineHeight: 1.12, margin: '9px 0 10px' }}>One clear path through healthcare intelligence.</h1>
         <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: 14 }}>
-          Care operations, clinical intelligence, curated tools and account controls are separated into predictable workspaces so each screen has one purpose.
+          Care operations, curated tools and account controls remain available only within the current release boundary. AI features are enabled only after their privacy, consent and clinical-safety gates pass.
         </p>
       </div>
 
@@ -111,8 +134,21 @@ function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) 
       </div>
 
       <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 16, border: '1px solid rgba(212,167,44,0.22)', background: 'rgba(212,167,44,0.06)', color: '#D8C690', fontSize: 12, lineHeight: 1.55 }}>
-        Release safety: this build is not cleared for real patient data. Human review remains required for clinical workflows.
+        Release safety: this build is not cleared for real patient data. Human review remains required for healthcare workflows.
       </div>
+    </section>
+  )
+}
+
+function ReleaseIntelligenceGate() {
+  return (
+    <section aria-labelledby="intelligence-gate-title" style={{ padding: 22, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
+      <div style={{ color: C.violet, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>RELEASE GATE</div>
+      <h2 id="intelligence-gate-title" style={{ margin: '9px 0 8px', fontSize: 22 }}>Clinical Intelligence is not enabled in this release build.</h2>
+      <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
+        User-entered content will not be sent to third-party AI providers until explicit disclosure and consent, provider/data-use review, and clinical-claims validation are complete. Do not enter patient-identifiable information into Cliniverse AI.
+      </p>
+      <div style={{ marginTop: 14, fontSize: 12, color: C.teal, fontWeight: 800 }}>Human review remains the release default.</div>
     </section>
   )
 }

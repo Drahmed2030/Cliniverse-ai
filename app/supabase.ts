@@ -45,7 +45,9 @@ export interface Subscription {
   expires_at?: string
 }
 
-// ── XP FUNCTIONS ──
+// ── LEGACY PROFILE / XP HELPERS ──
+// Release surfaces should prefer app/lib/profile.ts and app/lib/progress.ts,
+// which derive ownership from the authenticated Supabase user.
 export async function updateXP(userId: string, xpToAdd: number) {
   const { data, error } = await supabase.rpc('increment_xp', {
     user_id: userId,
@@ -80,25 +82,27 @@ export async function getUserProfile(userId: string) {
 }
 
 // ── PRO FUNCTIONS ──
-export async function checkIsPro(userId: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .rpc('is_user_pro', { uid: userId })
-  if (error) return false
-  return data === true
+/**
+ * Legacy compatibility export only.
+ * The historical is_user_pro(uid) RPC is SECURITY DEFINER and accepts an
+ * arbitrary uid. Release entitlement authority lives in app/lib/entitlements.ts
+ * and reads the authenticated user's subscription row only.
+ */
+export async function checkIsPro(_userId: string): Promise<boolean> {
+  return false
 }
 
-export async function activatePro(userId: string, subscriptionId: string, plan: string, expiresAt?: string) {
-  const { data, error } = await supabase
-    .from('profiles')
-    .update({
-      is_pro: true,
-      subscription_id: subscriptionId,
-      subscription_status: 'active',
-      pro_expires_at: expiresAt || null,
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', userId)
-  return { data, error }
+/**
+ * Legacy compatibility export only.
+ * Client-side entitlement activation is intentionally disabled.
+ * Paid access must be granted by a verified server/payment path and then read
+ * through app/lib/entitlements.ts.
+ */
+export async function activatePro(_userId: string, _subscriptionId: string, _plan: string, _expiresAt?: string) {
+  return {
+    data: null,
+    error: new Error('Client-side PRO activation is disabled. Use the verified server entitlement path.'),
+  }
 }
 
 export async function getUserSubscription(userId: string) {
@@ -113,7 +117,9 @@ export async function getUserSubscription(userId: string) {
   return { data, error }
 }
 
-// ── CASE / MCQ FUNCTIONS ──
+// ── LEGACY CASE / MCQ HELPERS ──
+// Retained temporarily for compatibility. New release code must use
+// saveOwnCaseCompletion/saveOwnMcqAnswer from app/lib/progress.ts.
 export async function saveCaseCompletion(userId: string, caseId: string, xpEarned: number, errors: number) {
   const { data, error } = await supabase
     .from('case_completions')

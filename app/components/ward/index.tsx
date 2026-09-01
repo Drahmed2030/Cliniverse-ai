@@ -1,81 +1,67 @@
 'use client'
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
+
+import { useEffect, useState } from 'react'
 import WardHome from './WardHome'
 import PatientJourney from './PatientJourney'
 import ErrorBoundary from '../ErrorBoundary'
 import { MOCK_PATIENTS } from '../../lib/ward'
-
-const MedFeed     = dynamic(() => import('../MedFeed'),     { ssr: false })
-const ClinicalNet = dynamic(() => import('../ClinicalNet'), { ssr: false })
+import { getOwnEntitlement } from '../../lib/entitlements'
 
 interface WardIndexProps {
   onXP?: (n: number) => void
 }
 
-export default function WardIndex({ onXP = () => {} }: WardIndexProps) {
-  const [activeTab, setActiveTab] = useState<'ward'|'feed'|'net'>('ward')
+export default function WardIndex(_: WardIndexProps) {
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
-  const [isPro] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return localStorage.getItem('cliniverse_pro') === 'true'
-  })
+  const [isPro, setIsPro] = useState(false)
+  const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
+
+  const handleRequestConsult = (patientId: string) => {
+    setConsultedPatientIds(current => current.includes(patientId) ? current : [...current, patientId])
+  }
 
   useEffect(() => {
-    if (activeTab !== 'ward') setSelectedPatient(null)
-  }, [activeTab])
+    let active = true
+    getOwnEntitlement()
+      .then(entitlement => {
+        if (active) setIsPro(entitlement.isPro && entitlement.status === 'active')
+      })
+      .catch(() => {
+        if (active) setIsPro(false)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [])
 
   const handleSelectPatient = (id: string) => {
-    const found = MOCK_PATIENTS.find(p => p.id === id || p.name === id)
+    const found = MOCK_PATIENTS.find(patient => patient.id === id || patient.name === id)
     if (found) setSelectedPatient(found.id)
   }
 
-  const handleBack = () => {
-    setSelectedPatient(null)
-  }
-
   if (selectedPatient) {
-    const patient = MOCK_PATIENTS.find(p => p.id === selectedPatient)
-    if (!patient) { setSelectedPatient(null); return null }
+    const patient = MOCK_PATIENTS.find(item => item.id === selectedPatient)
+    if (!patient) return null
+
     return (
       <ErrorBoundary section="Patient Journey">
         <PatientJourney
-          patientId={selectedPatient}
-          onBack={handleBack}
+          patient={patient}
+          onClose={() => setSelectedPatient(null)}
+          onRequestConsult={handleRequestConsult}
+          consultRequested={consultedPatientIds.includes(patient.id)}
           isPro={isPro}
-          onXP={onXP}
         />
       </ErrorBoundary>
     )
   }
 
   return (
-    <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,sans-serif', minHeight: '100vh', background: '#F8FAFC' }}>
-      <div style={{ display: 'flex', gap: 6, padding: '12px 16px 0', background: 'white', borderBottom: '1px solid rgba(0,0,0,0.06)', position: 'sticky', top: 0, zIndex: 10 }}>
-        {([['ward','🏥 Ward'],['feed','📡 MedFeed'],['net','🌐 Network']] as const).map(([id,label]) => (
-          <button key={id} onClick={() => setActiveTab(id)}
-            style={{ padding: '8px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 700, transition: 'all 0.15s', background: activeTab === id ? 'rgba(13,148,136,0.1)' : 'transparent', color: activeTab === id ? '#0D9488' : '#475569' }}>
-            {label}
-          </button>
-        ))}
-      </div>
-      <div>
-        {activeTab === 'ward' && (
-          <ErrorBoundary section="Ward">
-            <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={() => {}} />
-          </ErrorBoundary>
-        )}
-        {activeTab === 'feed' && (
-          <ErrorBoundary section="MedFeed">
-            <MedFeed onXP={onXP} />
-          </ErrorBoundary>
-        )}
-        {activeTab === 'net' && (
-          <ErrorBoundary section="ClinicalNet">
-            <ClinicalNet onXP={onXP} />
-          </ErrorBoundary>
-        )}
-      </div>
+    <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,sans-serif', minHeight: 'calc(100dvh - 190px)', background: 'transparent' }}>
+      <ErrorBoundary section="Care">
+        <WardHome onSelectPatient={handleSelectPatient} />
+      </ErrorBoundary>
     </div>
   )
 }

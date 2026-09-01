@@ -1,7 +1,19 @@
 /** @type {import("next").NextConfig} */
 const nextConfig = {
-  typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
-  eslint: { ignoreDuringBuilds: true }
+  async redirects() {
+    return [
+      {
+        source: '/privacy.html',
+        destination: '/privacy',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy.html',
+        destination: '/privacy',
+        permanent: true,
+      },
+    ]
+  },
 }
 module.exports = nextConfig

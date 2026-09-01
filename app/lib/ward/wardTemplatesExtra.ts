@@ -9,9 +9,22 @@
  * Add to CLINICAL_TEMPLATES array in wardEngine.ts
  */
 
-import type { ClinicalTemplate } from './wardEngine'
+interface DeferredClinicalTemplate {
+  id: string
+  title: string
+  department: 'internal' | 'emergency' | 'surgery'
+  acuity: 'urgent' | 'standard'
+  stemTemplate: string
+  vitals: { bp: string; hr: string; temp: string; o2: string; rr: string }
+  diagnosis: string
+  labSummary: string
+  journeyMilestones: Array<{ time: string; event: string; done: boolean }>
+  teachingPoints: Array<{ title: string; body: string; source: string }>
+  dischargeNotes: string
+  bedPrefix: string
+}
 
-export const EXTRA_TEMPLATES: ClinicalTemplate[] = [
+export const EXTRA_TEMPLATES: DeferredClinicalTemplate[] = [
 
   // ── 13. Acute Kidney Injury ────────────────────────────────────────────────
   {

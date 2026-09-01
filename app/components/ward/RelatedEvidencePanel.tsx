@@ -1,9 +1,4 @@
 "use client";
-/**
- * RelatedEvidencePanel.tsx
- * Save to: app/components/ward/RelatedEvidencePanel.tsx
- * Shows related PubMed evidence inside PatientJourney — after Workup section
- */
 
 import React, { useState, useEffect } from "react";
 
@@ -13,33 +8,30 @@ interface EvidenceItem {
   authors: string;
   journal: string;
   year: string;
-  relevance: string; // e.g. "High" | "Moderate"
+  relevance: string;
 }
 
 interface RelatedEvidencePanelProps {
   templateId?: string;
   diagnosis: string;
   isPro: boolean;
-  onUpgrade: () => void;
 }
 
 const T = {
-  bg: "#F8FAFC",
-  white: "#FFFFFF",
-  text: "#0F172A",
-  sub: "#475569",
+  white: "#111827",
+  text: "#F8FAFC",
+  sub: "#CBD5E1",
   muted: "#94A3B8",
-  border: "#E2E8F0",
-  teal: "#0D9488",
-  blue: "#1E40AF",
-  red: "#EF4444",
+  border: "rgba(148,163,184,0.20)",
+  teal: "#2DD4BF",
+  blue: "#60A5FA",
+  red: "#F87171",
 };
 
 export default function RelatedEvidencePanel({
   templateId,
   diagnosis,
   isPro,
-  onUpgrade,
 }: RelatedEvidencePanelProps) {
   const [items, setItems] = useState<EvidenceItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,9 +39,9 @@ export default function RelatedEvidencePanel({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!expanded) return;
-    fetchEvidence();
-  }, [expanded]);
+    if (!expanded || !isPro) return;
+    void fetchEvidence();
+  }, [expanded, isPro]);
 
   async function fetchEvidence() {
     setLoading(true);
@@ -70,11 +62,16 @@ export default function RelatedEvidencePanel({
     }
   }
 
-  // Collapsed state — just a button
   if (!expanded) {
     return (
-      <div
+      <button
+        type="button"
+        disabled={!isPro}
+        onClick={() => {
+          if (isPro) setExpanded(true);
+        }}
         style={{
+          width: "100%",
           background: T.white,
           border: "1px solid " + T.border,
           borderRadius: 14,
@@ -82,12 +79,10 @@ export default function RelatedEvidencePanel({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          cursor: "pointer",
+          cursor: isPro ? "pointer" : "default",
           marginBottom: 4,
-        }}
-        onClick={() => {
-          if (!isPro) { onUpgrade(); return; }
-          setExpanded(true);
+          textAlign: "left",
+          opacity: isPro ? 1 : 0.78,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -97,27 +92,29 @@ export default function RelatedEvidencePanel({
               Related Evidence
             </div>
             <div style={{ fontSize: 11, color: T.muted }}>
-              PubMed · Guidelines · PRO
+              {isPro ? "PubMed · Guidelines" : "Release-gated for this account"}
             </div>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {!isPro && (
             <span style={{
-              fontSize: 9, fontWeight: 800,
-              background: T.blue, color: "#fff",
-              borderRadius: 4, padding: "2px 6px",
+              fontSize: 9,
+              fontWeight: 800,
+              background: T.blue,
+              color: "#fff",
+              borderRadius: 4,
+              padding: "2px 6px",
             }}>
-              PRO
+              GATED
             </span>
           )}
-          <span style={{ color: T.muted, fontSize: 16 }}>→</span>
+          {isPro && <span style={{ color: T.muted, fontSize: 16 }}>→</span>}
         </div>
-      </div>
+      </button>
     );
   }
 
-  // Expanded state
   return (
     <div style={{
       background: T.white,
@@ -125,7 +122,6 @@ export default function RelatedEvidencePanel({
       borderRadius: 14,
       overflow: "hidden",
     }}>
-      {/* Header */}
       <div
         style={{
           padding: "14px 16px",
@@ -139,50 +135,26 @@ export default function RelatedEvidencePanel({
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 16 }}>📚</span>
-          <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>
-            Related Evidence
-          </div>
-          <span style={{
-            fontSize: 10, fontWeight: 700,
-            color: T.teal, border: "1px solid " + T.teal,
-            borderRadius: 6, padding: "1px 6px",
-          }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>Related Evidence</div>
+          <span style={{ fontSize: 10, fontWeight: 700, color: T.teal, border: "1px solid " + T.teal, borderRadius: 6, padding: "1px 6px" }}>
             PubMed
           </span>
         </div>
         <span style={{ color: T.muted, fontSize: 13 }}>↑ Close</span>
       </div>
 
-      {/* Content */}
       <div style={{ padding: "12px 14px" }}>
         {loading && (
           <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{
-              width: 24, height: 24,
-              border: "3px solid " + T.border,
-              borderTop: "3px solid " + T.teal,
-              borderRadius: "50%",
-              margin: "0 auto 10px",
-              animation: "spin 0.8s linear infinite",
-            }} />
-            <div style={{ fontSize: 12, color: T.muted }}>
-              Loading evidence...
-            </div>
+            <div style={{ width: 24, height: 24, border: "3px solid " + T.border, borderTop: "3px solid " + T.teal, borderRadius: "50%", margin: "0 auto 10px" }} />
+            <div style={{ fontSize: 12, color: T.muted }}>Loading evidence...</div>
           </div>
         )}
 
         {error && (
           <div style={{ fontSize: 12, color: T.red, padding: "12px 0" }}>
             {error}
-            <button
-              onClick={fetchEvidence}
-              style={{
-                marginLeft: 10, background: "none",
-                border: "1px solid " + T.red,
-                borderRadius: 6, color: T.red,
-                fontSize: 11, padding: "2px 8px", cursor: "pointer",
-              }}
-            >
+            <button type="button" onClick={() => void fetchEvidence()} style={{ marginLeft: 10, background: "none", border: "1px solid " + T.red, borderRadius: 6, color: T.red, fontSize: 11, padding: "2px 8px", cursor: "pointer" }}>
               Retry
             </button>
           </div>
@@ -195,47 +167,16 @@ export default function RelatedEvidencePanel({
         )}
 
         {!loading && items.map((item) => (
-          <div key={item.pmid} style={{
-            borderBottom: "1px solid " + T.border,
-            paddingBottom: 12,
-            marginBottom: 12,
-          }}>
-            {/* Relevance tag */}
+          <div key={item.pmid} style={{ borderBottom: "1px solid " + T.border, paddingBottom: 12, marginBottom: 12 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-              <span style={{
-                fontSize: 9, fontWeight: 800,
-                color: item.relevance === "High" ? T.teal : T.sub,
-                border: "1px solid " + (item.relevance === "High" ? T.teal : T.border),
-                borderRadius: 4, padding: "1px 6px",
-              }}>
+              <span style={{ fontSize: 9, fontWeight: 800, color: item.relevance === "High" ? T.teal : T.sub, border: "1px solid " + (item.relevance === "High" ? T.teal : T.border), borderRadius: 4, padding: "1px 6px" }}>
                 {item.relevance} relevance
               </span>
               <span style={{ fontSize: 10, color: T.muted }}>{item.year}</span>
             </div>
-
-            {/* Title */}
-            <div style={{
-              fontSize: 13, fontWeight: 600,
-              color: T.text, lineHeight: 1.4, marginBottom: 4,
-            }}>
-              {item.title}
-            </div>
-
-            {/* Meta */}
-            <div style={{ fontSize: 11, color: T.muted, marginBottom: 8 }}>
-              {item.authors} · {item.journal}
-            </div>
-
-            {/* PubMed link */}
-            <a
-              href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: 12, fontWeight: 600,
-                color: T.teal, textDecoration: "none",
-              }}
-            >
+            <div style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.4, marginBottom: 4 }}>{item.title}</div>
+            <div style={{ fontSize: 11, color: T.muted, marginBottom: 8 }}>{item.authors} · {item.journal}</div>
+            <a href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600, color: T.teal, textDecoration: "none" }}>
               View on PubMed →
             </a>
           </div>

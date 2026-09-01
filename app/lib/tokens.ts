@@ -1,3 +1,29 @@
+export const BRAND = {
+  company: 'NeuraOps',
+  product: 'Cliniverse AI',
+  relationship: 'A NeuraOps product',
+  marks: {
+    company: 'Edge N',
+    product: 'Geometric C Intelligence',
+  },
+  corporate: {
+    deepNavy: '#0B0F19',
+    navy: '#111827',
+    neuraBlue: '#2563EB',
+    electricBlue: '#3B82F6',
+    violet: '#7C3AED',
+    lightGray: '#E5E7EB',
+    white: '#FFFFFF',
+  },
+  cliniverse: {
+    clinicalTeal: '#06B6D4',
+    operationalTeal: '#0D9488',
+  },
+  font: '-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,sans-serif',
+} as const
+
+// Compatibility tokens used by existing clinical surfaces.
+// Keep these names stable while components are migrated incrementally to BRAND.
 export const L = {
   canvas:   '#F8FAFC',
   surface:  '#FFFFFF',
@@ -21,5 +47,5 @@ export const L = {
   shadowMd: '0 4px 16px rgba(15,23,42,0.08)',
   shadowLg: '0 12px 40px rgba(15,23,42,0.10)',
   rSm:10, rMd:16, rLg:22, rXl:28,
-  font:'-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif',
+  font: BRAND.font,
 }

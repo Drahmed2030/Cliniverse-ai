@@ -24,11 +24,36 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "app/page.tsx",
+    "app/layout.tsx",
+    "app/error.tsx",
+    "app/global-error.tsx",
+    "app/loading.tsx",
+    "app/support/**/*.ts",
+    "app/support/**/*.tsx",
+    "app/privacy/**/*.ts",
+    "app/privacy/**/*.tsx",
+    "app/terms/**/*.ts",
+    "app/terms/**/*.tsx",
+    "app/api/**/*.ts",
+    "app/api/**/*.tsx",
+    "app/components/ReleaseApp.tsx",
+    "app/components/ReleaseNav.tsx",
+    "app/components/ErrorBoundary.tsx",
+    "app/components/auth/**/*.ts",
+    "app/components/auth/**/*.tsx",
+    "app/components/release/**/*.ts",
+    "app/components/release/**/*.tsx",
+    "app/components/ward/**/*.ts",
+    "app/components/ward/**/*.tsx",
+    "app/lib/**/*.ts",
+    "app/lib/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "_theme_backups"
+  ]
 }

@@ -3,6 +3,12 @@ import { NextResponse } from 'next/server'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
+function isAuthorizedCron(req: Request) {
+  const expected = process.env.CRON_SECRET
+  if (!expected) return false
+  return req.headers.get('authorization') === `Bearer ${expected}`
+}
+
 async function supabaseFetch(path: string, options: any = {}) {
   const res = await fetch(`${supabaseUrl}/rest/v1/${path}`, {
     ...options,
@@ -43,9 +49,9 @@ const FALLBACK_CASES = [
 ]
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  if(searchParams.get('secret') !== process.env.CRON_SECRET)
+  if (!isAuthorizedCron(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   try {
     await supabaseFetch('nexus_cases?active=eq.true', {
@@ -81,7 +87,7 @@ export async function GET(req: Request) {
     })
 
     return NextResponse.json({ success: true, source: 'fallback' })
-  } catch(err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+  } catch {
+    return NextResponse.json({ error: 'Cron execution failed' }, { status: 500 })
   }
 }

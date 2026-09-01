@@ -1,5 +1,3 @@
-'use client'
-
 const C = {
   panel: '#111827',
   elevated: '#172033',
@@ -59,7 +57,7 @@ export default function AtlasReleaseCatalog() {
         <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>CURATED CAPABILITY LIBRARY</div>
         <h1 id="atlas-title" style={{ fontSize: 26, margin: '7px 0 8px' }}>Atlas</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
-          Atlas preserves Cliniverse's breadth without presenting every module as equally ready. Each capability is classified before it becomes visible to users.
+          Atlas preserves Cliniverse&apos;s breadth without presenting every module as equally ready. Each capability is classified before it becomes visible to users.
         </p>
       </div>
 
@@ -75,15 +73,31 @@ export default function AtlasReleaseCatalog() {
                 {stateText[group.state]}
               </span>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
+            <div aria-label={`${group.title} capability examples`} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
               {group.examples.map(item => (
-                <span key={item} style={{ padding: '6px 8px', borderRadius: 999, background: C.elevated, color: '#CBD5E1', fontSize: 10, border: `1px solid ${C.border}` }}>
+                <span
+                  key={item}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 999,
+                    background: C.elevated,
+                    color: '#CBD5E1',
+                    fontSize: 10,
+                    fontFamily: 'inherit',
+                    border: `1px solid ${C.border}`,
+                  }}
+                >
                   {item}
                 </span>
               ))}
             </div>
           </article>
         ))}
+        <p
+          style={{ margin: 0, padding: '12px 14px', borderRadius: 14, border: '1px solid rgba(20,184,166,0.28)', background: 'rgba(20,184,166,0.07)', color: '#CBD5E1', fontSize: 11, lineHeight: 1.55 }}
+        >
+          Catalog note: capability names are release-status labels, not launch controls. Only completed and individually verified tools will become interactive.
+        </p>
       </div>
     </section>
   )
