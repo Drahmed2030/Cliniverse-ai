@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import {
-  createUnavailableAppleVerifier,
   verifyCliniverseAppleTransaction,
   type ApplePlan,
 } from '../../../../lib/server/apple-subscription-verification'
+import { createConfiguredAppleVerifier } from '../../../../lib/server/apple-verifier-runtime'
 import { persistVerifiedAppleTransaction } from '../../../../lib/server/apple-subscription-persistence'
 import { createSupabaseAppleSubscriptionRepository } from '../../../../lib/server/supabase-apple-subscription-repository'
 
@@ -43,9 +43,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 
-  // Remains fail-closed until the official Apple library + root certificates
-  // are installed/configured atomically with the package lock and runtime env.
-  const verifier = createUnavailableAppleVerifier()
+  // The runtime factory is configuration-aware and deliberately fail-closed.
+  // Until Apple's official package is installed with a reproducible lockfile
+  // and the server has trusted root certificates, verification returns 503.
+  const verifier = await createConfiguredAppleVerifier()
   const result = await verifyCliniverseAppleTransaction({
     plan: payload.plan,
     signedTransaction: payload.signedTransaction,
