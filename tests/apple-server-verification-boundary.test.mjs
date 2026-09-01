@@ -20,17 +20,18 @@ test('Apple verification boundary is server-only, cryptographic-verifier depende
   assert.equal(source.includes(".from('subscriptions')"), false)
 })
 
-test('Apple route authenticates current account, verifies Apple, persists through trusted authority and never writes subscription directly', () => {
+test('Apple route authenticates current account, uses configured verifier runtime, persists through trusted authority and never writes subscription directly', () => {
   const source = read('app/api/subscriptions/apple/verify/route.ts')
   assert.match(source, /authorization/)
   assert.match(source, /Bearer /)
   assert.match(source, /auth\.getUser\(token\)/)
+  assert.match(source, /createConfiguredAppleVerifier/)
   assert.match(source, /verifyCliniverseAppleTransaction/)
-  assert.match(source, /createUnavailableAppleVerifier/)
   assert.match(source, /persistVerifiedAppleTransaction/)
   assert.match(source, /createSupabaseAppleSubscriptionRepository/)
   assert.match(source, /persisted:\s*false/)
   assert.match(source, /entitlementRefreshRequired:\s*true/)
+  assert.equal(source.includes('createUnavailableAppleVerifier'), false)
   assert.equal(source.includes('activatePro'), false)
   assert.equal(source.includes(".from('subscriptions')"), false)
   assert.equal(source.includes('SUPABASE_SERVICE_ROLE_KEY'), false)
