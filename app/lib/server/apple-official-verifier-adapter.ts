@@ -1,6 +1,6 @@
 import type {
-  AppleSignedTransaction,
-  AppleTransactionVerifier,
+  AppleVerifiedTransaction,
+  AppleSignedTransactionVerifier,
 } from './apple-subscription-verification'
 
 export type AppleVerifierRuntimeConfig = {
@@ -42,7 +42,7 @@ function isoFromAppleMillis(value: unknown, field: string): string {
 export function createAppleOfficialVerifier(
   library: AppleLibraryModule,
   config: AppleVerifierRuntimeConfig,
-): AppleTransactionVerifier {
+): AppleSignedTransactionVerifier {
   if (config.environment === 'Production' && !config.appAppleId) {
     throw new Error('apple_app_id_required_for_production')
   }
@@ -61,7 +61,7 @@ export function createAppleOfficialVerifier(
   )
 
   return {
-    async verifyAndDecodeTransaction(signedTransaction: string): Promise<AppleSignedTransaction> {
+    async verifyAndDecodeTransaction(signedTransaction: string): Promise<AppleVerifiedTransaction> {
       const decoded = await verifier.verifyAndDecodeTransaction(signedTransaction)
       return {
         transactionId: requireString(decoded.transactionId, 'transaction_id'),
@@ -72,6 +72,7 @@ export function createAppleOfficialVerifier(
         purchaseDate: isoFromAppleMillis(decoded.purchaseDate, 'purchase_date'),
         expiresDate: decoded.expiresDate == null ? null : isoFromAppleMillis(decoded.expiresDate, 'expires_date'),
         revocationDate: decoded.revocationDate == null ? null : isoFromAppleMillis(decoded.revocationDate, 'revocation_date'),
+        signedTransaction,
       }
     },
   }
