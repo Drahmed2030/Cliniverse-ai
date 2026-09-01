@@ -1,8 +1,11 @@
 import { getCurrentSession } from './identity'
+import { getOwnEntitlement, type CliniverseEntitlement } from './entitlements'
 import type { CliniversePlan, StorePurchaseResult } from './storekit-purchase-contract'
 
 export type VerifiedApplePurchase = {
-  userId: string
+  persisted: true
+  duplicate: boolean
+  stale: boolean
   transaction: {
     transactionId: string
     originalTransactionId: string
@@ -15,6 +18,10 @@ export type VerifiedApplePurchase = {
 
 export type ApplePurchaseVerificationResult =
   | { ok: true; verified: VerifiedApplePurchase }
+  | { ok: false; reason: string }
+
+export type CompletedApplePurchaseResult =
+  | { ok: true; entitlement: CliniverseEntitlement; verified: VerifiedApplePurchase }
   | { ok: false; reason: string }
 
 export async function verifyStoreKitPurchaseResult(
@@ -62,16 +69,55 @@ export async function verifyStoreKitPurchaseResult(
     return { ok: false, reason }
   }
 
-  const verified = body as { verified?: unknown; userId?: unknown; transaction?: unknown }
-  if (verified.verified !== true || typeof verified.userId !== 'string' || !verified.transaction) {
+  const result = body as {
+    verified?: unknown
+    persisted?: unknown
+    duplicate?: unknown
+    stale?: unknown
+    entitlementRefreshRequired?: unknown
+    transaction?: unknown
+  }
+
+  if (
+    result.verified !== true
+    || result.persisted !== true
+    || result.entitlementRefreshRequired !== true
+    || !result.transaction
+  ) {
     return { ok: false, reason: 'apple_verification_untrusted_response' }
   }
 
   return {
     ok: true,
     verified: {
-      userId: verified.userId,
-      transaction: verified.transaction as VerifiedApplePurchase['transaction'],
+      persisted: true,
+      duplicate: result.duplicate === true,
+      stale: result.stale === true,
+      transaction: result.transaction as VerifiedApplePurchase['transaction'],
     },
+  }
+}
+
+/**
+ * End-to-end client completion boundary. Even a verified and persisted Apple
+ * transaction does not unlock PRO optimistically; the authoritative own-user
+ * entitlement is read again from Supabase after persistence.
+ */
+export async function completeStoreKitPurchase(
+  plan: CliniversePlan,
+  purchase: StorePurchaseResult,
+): Promise<CompletedApplePurchaseResult> {
+  const verification = await verifyStoreKitPurchaseResult(plan, purchase)
+  if (!verification.ok) return verification
+
+  const entitlement = await getOwnEntitlement()
+  if (!entitlement.isPro || entitlement.product !== 'cliniverse.core') {
+    return { ok: false, reason: 'apple_entitlement_refresh_not_active' }
+  }
+
+  return {
+    ok: true,
+    entitlement,
+    verified: verification.verified,
   }
 }
