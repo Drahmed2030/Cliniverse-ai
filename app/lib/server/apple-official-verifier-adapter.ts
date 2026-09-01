@@ -11,7 +11,7 @@ export type AppleVerifierRuntimeConfig = {
   rootCertificates: Buffer[]
 }
 
-type AppleLibraryModule = {
+export type AppleLibraryModule = {
   Environment: { SANDBOX: unknown; PRODUCTION: unknown }
   SignedDataVerifier: new (
     roots: Buffer[],
