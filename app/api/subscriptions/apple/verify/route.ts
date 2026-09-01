@@ -5,6 +5,8 @@ import {
   verifyCliniverseAppleTransaction,
   type ApplePlan,
 } from '../../../../lib/server/apple-subscription-verification'
+import { persistVerifiedAppleTransaction } from '../../../../lib/server/apple-subscription-persistence'
+import { createSupabaseAppleSubscriptionRepository } from '../../../../lib/server/supabase-apple-subscription-repository'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zbiujqxinvcxvuviuenx.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3piaXVqcXhpbnZjeHZ1dml1ZW54LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJyZWYiOiJ6Yml1anF4aW52Y3h2dXZpdWVueCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg0MTkxMzk2LCJleHAiOjIwOTk3NjczOTZ9.7znHWJXnYNgQmTVyzouuxQDFXxDEvVk9F2I75ArA8d8'
@@ -41,6 +43,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
 
+  // Remains fail-closed until the official Apple library + root certificates
+  // are installed/configured atomically with the package lock and runtime env.
   const verifier = createUnavailableAppleVerifier()
   const result = await verifyCliniverseAppleTransaction({
     plan: payload.plan,
@@ -50,12 +54,32 @@ export async function POST(request: NextRequest) {
 
   if (!result.ok) {
     const status = result.reason === 'apple_signature_verification_failed' ? 503 : 422
-    return NextResponse.json({ verified: false, reason: result.reason }, { status })
+    return NextResponse.json({ verified: false, persisted: false, reason: result.reason }, { status })
+  }
+
+  let persisted
+  try {
+    const repository = createSupabaseAppleSubscriptionRepository()
+    persisted = await persistVerifiedAppleTransaction({
+      userId: data.user.id,
+      transaction: result.transaction,
+      repository,
+    })
+  } catch {
+    // Never turn cryptographic verification into optimistic access if the
+    // authoritative subscription write is unavailable or rejected.
+    return NextResponse.json(
+      { verified: true, persisted: false, reason: 'apple_subscription_persistence_failed' },
+      { status: 503 },
+    )
   }
 
   return NextResponse.json({
     verified: true,
-    userId: data.user.id,
+    persisted: true,
+    duplicate: persisted.duplicate,
+    stale: persisted.stale,
+    entitlementRefreshRequired: true,
     transaction: {
       transactionId: result.transaction.transactionId,
       originalTransactionId: result.transaction.originalTransactionId,
