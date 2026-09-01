@@ -23,31 +23,41 @@ export function createSupabaseAppleSubscriptionRepository(): TrustedAppleSubscri
     async persist(input: PersistVerifiedAppleInput): Promise<PersistVerifiedAppleResult> {
       const { data, error } = await supabase.rpc('persist_verified_apple_subscription', {
         p_user_id: input.userId,
+        p_provider_event_id: input.providerEventId,
         p_transaction_id: input.transactionId,
         p_original_transaction_id: input.originalTransactionId,
         p_product_id: input.productId,
         p_environment: input.environment,
+        p_lifecycle_status: input.lifecycleState,
+        p_event_at: input.eventAt,
         p_purchase_at: input.purchaseAt,
         p_expires_at: input.expiresAt,
         p_revoked_at: input.revokedAt,
-        p_lifecycle_state: input.lifecycleState,
-        p_signed_payload_hash: input.signedPayloadHash,
         p_verified_at: input.verifiedAt,
+        p_signed_payload_hash: input.signedPayloadHash,
       })
 
-      if (error) throw new Error(`apple_persistence_failed:${error.code || 'unknown'}`)
-      if (!data || data.ok !== true || typeof data.subscriptionId !== 'string') {
+      if (error) {
+        const code = error.code || 'unknown'
+        throw new Error(`apple_persistence_failed:${code}:${error.message || 'rpc_error'}`)
+      }
+      if (!data || typeof data !== 'object') {
         throw new Error('apple_persistence_invalid_result')
+      }
+
+      const result = data as Record<string, unknown>
+      if (result.ok !== true || typeof result.subscriptionId !== 'string') {
+        throw new Error('apple_persistence_rejected')
       }
 
       return {
         ok: true,
-        duplicate: data.duplicate === true,
-        stale: data.stale === true,
-        subscriptionId: data.subscriptionId,
-        status: String(data.status || 'unknown'),
-        expiresAt: typeof data.expiresAt === 'string' ? data.expiresAt : null,
-        originalTransactionId: String(data.originalTransactionId || ''),
+        duplicate: result.duplicate === true,
+        stale: result.stale === true,
+        subscriptionId: result.subscriptionId,
+        status: typeof result.status === 'string' ? result.status : 'unknown',
+        expiresAt: typeof result.expiresAt === 'string' ? result.expiresAt : null,
+        originalTransactionId: input.originalTransactionId,
       }
     },
   }
