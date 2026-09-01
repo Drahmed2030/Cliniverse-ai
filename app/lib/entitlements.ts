@@ -27,6 +27,11 @@ const APPLE_CORE_PRODUCTS = new Set([
   'cliniverse.core.yearly',
 ])
 
+// Apple grants access in active state and while a bounded Billing Grace Period
+// remains valid. Billing retry without grace, expiry, refund and revocation do
+// not unlock Cliniverse.
+const APPLE_ACCESS_STATUSES = new Set(['active', 'grace'])
+
 // Kept as the additive legacy plan allowlist while Apple moves to product-ID
 // authority. No unsupported plan can become PRO through this fallback path.
 const allowedPlans = new Set(['pro_monthly', 'pro_yearly', 'institution'])
@@ -71,21 +76,16 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
       || !APPLE_CORE_PRODUCTS.has(productId)
       || !verifiedAt
       || subscription.revoked_at
+      || !APPLE_ACCESS_STATUSES.has(status)
+      || expiryIsInvalid
     ) {
-      return FREE_ENTITLEMENT
-    }
-
-    // Purchase verification may establish active state. Grace/billing-retry are
-    // lifecycle states that will be accepted only once Server Notifications V2
-    // writes a separately bounded entitlement window; until then they fail closed.
-    if (status !== 'active' || expiryIsInvalid) {
       return FREE_ENTITLEMENT
     }
 
     return {
       tier: 'pro',
       isPro: true,
-      status: 'active',
+      status: status as 'active' | 'grace',
       expiresAt,
       source: 'apple-subscription-record',
       product: 'cliniverse.core',
