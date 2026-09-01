@@ -27,7 +27,9 @@ const APPLE_CORE_PRODUCTS = new Set([
   'cliniverse.core.yearly',
 ])
 
-const LEGACY_PRO_PLANS = new Set(['pro_monthly', 'pro_yearly'])
+// Kept as the additive legacy plan allowlist while Apple moves to product-ID
+// authority. No unsupported plan can become PRO through this fallback path.
+const allowedPlans = new Set(['pro_monthly', 'pro_yearly', 'institution'])
 
 export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
   const { user, error: authError } = await requireCurrentUser()
@@ -57,7 +59,7 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
 
   const expiresAt = subscription.expires_at ?? null
   const expiryTime = expiresAt ? Date.parse(expiresAt) : null
-  const expiryIsValid = expiryTime === null || (Number.isFinite(expiryTime) && expiryTime > Date.now())
+  const expiryIsInvalid = expiryTime !== null && (!Number.isFinite(expiryTime) || expiryTime <= Date.now())
 
   if (subscription.provider === 'apple') {
     const productId = subscription.apple_product_id
@@ -76,7 +78,7 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
     // Purchase verification may establish active state. Grace/billing-retry are
     // lifecycle states that will be accepted only once Server Notifications V2
     // writes a separately bounded entitlement window; until then they fail closed.
-    if (status !== 'active' || !expiryIsValid) {
+    if (status !== 'active' || expiryIsInvalid) {
       return FREE_ENTITLEMENT
     }
 
@@ -93,7 +95,7 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
   // Preserve the existing non-Apple release behavior while the migration is
   // additive. Legacy rows still require an allowed plan, active status and a
   // non-expired entitlement window.
-  if (subscription.status !== 'active' || !expiryIsValid) {
+  if (!allowedPlans.has(subscription.plan) || subscription.status !== 'active' || expiryIsInvalid) {
     return FREE_ENTITLEMENT
   }
 
@@ -106,10 +108,6 @@ export async function getOwnEntitlement(): Promise<CliniverseEntitlement> {
       source: 'subscription-record',
       product: 'institution',
     }
-  }
-
-  if (!LEGACY_PRO_PLANS.has(subscription.plan)) {
-    return FREE_ENTITLEMENT
   }
 
   return {
