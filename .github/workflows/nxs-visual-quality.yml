@@ -1,0 +1,42 @@
+name: NXS visual quality
+
+on:
+  pull_request:
+    branches:
+      - ux/confusion-reduction-v1
+    paths:
+      - 'app/components/**'
+      - 'app/lib/passkey-readiness.ts'
+      - 'tests/visual/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'docs/nxs-visual-quality-gate.md'
+      - '.github/workflows/nxs-visual-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  visual-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:visual
+      - name: Upload NXS quality artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nxs-visual-quality
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
