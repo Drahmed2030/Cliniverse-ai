@@ -1,0 +1,37 @@
+name: NXS quality lock sync
+
+on:
+  push:
+    branches:
+      - integration/auth-release-shell-v1
+    paths:
+      - package.json
+      - .github/workflows/nxs-quality-lock-sync.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: integration/auth-release-shell-v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --package-lock-only --ignore-scripts
+      - run: npm ci --ignore-scripts
+      - name: Commit lockfile if changed
+        run: |
+          if git diff --quiet package-lock.json; then
+            echo "package-lock.json already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "chore(nxs): lock visual quality dependencies"
+          git push origin HEAD:integration/auth-release-shell-v1
