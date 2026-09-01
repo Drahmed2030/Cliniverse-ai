@@ -6,8 +6,8 @@ import {
   type ApplePlan,
 } from '../../../../lib/server/apple-subscription-verification'
 
-const supabaseUrl = 'https://zbiujqxinvcxvuviuenx.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6InpiaXVqcXhpbnZjeHZ1dml1ZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQxOTEzOTYsImV4cCI6MjA5OTc2NzM5Nn0.7znHWJXnYNgQmTVyzouuxQDFXxDEvVk9F2I75ArA8d8'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://zbiujqxinvcxvuviuenx.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3piaXVqcXhpbnZjeHZ1dml1ZW54LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJyZWYiOiJ6Yml1anF4aW52Y3h2dXZpdWVueCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg0MTkxMzk2LCJleHAiOjIwOTk3NjczOTZ9.7znHWJXnYNgQmTVyzouuxQDFXxDEvVk9F2I75ArA8d8'
 
 function isPlan(value: unknown): value is ApplePlan {
   return value === 'monthly' || value === 'yearly'
