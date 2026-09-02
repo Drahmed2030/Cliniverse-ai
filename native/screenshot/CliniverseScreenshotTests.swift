@@ -89,7 +89,9 @@ final class CliniverseScreenshotTests: XCTestCase {
             return
         }
 
-        let emailEntry = app.buttons["Continue with Email"]
+        let emailEntry = app.buttons
+            .matching(NSPredicate(format: "label ==[c] %@", "Continue with email"))
+            .firstMatch
         XCTAssertTrue(emailEntry.waitForExistence(timeout: waitTimeout), "Release sign-in screen did not load")
 
         let emailField = app.textFields["Email"]

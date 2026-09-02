@@ -46,6 +46,8 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /XCTContext\.runActivity/)
   assert.match(source, /attachment\.lifetime = \.keepAlways/)
   assert.match(source, /for attempt in 0\.\.<3/)
+  assert.match(source, /label ==\[c\] %@/)
+  assert.match(source, /Continue with email/)
   assert.match(source, /emailEntry\.isHittable/)
   assert.match(source, /emailField\.waitForExistence\(timeout: 6\)/)
   assert.match(source, /for swipe in 0\.\.\.maximumSwipes/)
