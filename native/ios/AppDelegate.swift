@@ -44,6 +44,8 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var launchOverlay: UIView?
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
+    private var releaseConstraintRetry: DispatchWorkItem?
+    private var releaseConstraintAttempts = 0
     private var releaseWebViewConstraints: [NSLayoutConstraint] = []
 
     override func capacitorDidLoad() {
@@ -51,21 +53,43 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
+        scheduleReleaseWebViewConstraints()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        installReleaseWebViewConstraints()
-        view.layoutIfNeeded()
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        _ = installReleaseWebViewConstraintsIfReady()
     }
 
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
+        releaseConstraintRetry?.cancel()
     }
 
-    private func installReleaseWebViewConstraints() {
-        guard releaseWebViewConstraints.isEmpty, let webView = webView else { return }
+    private func scheduleReleaseWebViewConstraints() {
+        guard releaseWebViewConstraints.isEmpty, releaseConstraintAttempts < 4 else { return }
+
+        releaseConstraintRetry?.cancel()
+        releaseConstraintAttempts += 1
+
+        let retry = DispatchWorkItem { [weak self] in
+            guard let self = self, self.releaseWebViewConstraints.isEmpty else { return }
+            if !self.installReleaseWebViewConstraintsIfReady() {
+                self.scheduleReleaseWebViewConstraints()
+            }
+        }
+        releaseConstraintRetry = retry
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: retry)
+    }
+
+    @discardableResult
+    private func installReleaseWebViewConstraintsIfReady() -> Bool {
+        guard releaseWebViewConstraints.isEmpty,
+              let webView = webView,
+              webView.superview === view,
+              view.window != nil,
+              view.safeAreaInsets.top > 0 else { return false }
 
         let inheritedConstraints = view.constraints.filter { constraint in
             (constraint.firstItem as AnyObject?) === webView ||
@@ -81,6 +105,10 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ]
         NSLayoutConstraint.activate(releaseWebViewConstraints)
+        releaseConstraintRetry?.cancel()
+        releaseConstraintRetry = nil
+        view.layoutIfNeeded()
+        return true
     }
 
     private func installLaunchOverlay() {
