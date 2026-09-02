@@ -32,11 +32,13 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         try runStep("Capture Home") {
             try waitForText("One clear path through healthcare intelligence.")
+            assertSystemChromeClear("Cliniverse AI")
             capture("01-home")
         }
 
         try runStep("Capture Care") {
             try openTab("Care", waitingFor: "Care Workflow Simulation")
+            assertSystemChromeClear("Care")
             capture("02-care")
         }
 
@@ -45,6 +47,7 @@ final class CliniverseScreenshotTests: XCTestCase {
             try reveal(patient, maximumSwipes: 6)
             patient.tap()
             try waitForText("PATIENT JOURNEY")
+            assertSystemChromeClear("PATIENT JOURNEY")
             capture("03-care-detail")
         }
 
@@ -56,11 +59,13 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         try runStep("Capture Intelligence release boundary") {
             try openTab("Intelligence", waitingFor: "Clinical Intelligence is not enabled in this release build.")
+            assertSystemChromeClear("Intelligence")
             capture("04-intelligence")
         }
 
         try runStep("Capture Atlas") {
             try openTab("Atlas", waitingFor: "CURRENT RELEASE TOUR")
+            assertSystemChromeClear("Atlas")
             capture("05-atlas")
         }
 
@@ -73,6 +78,7 @@ final class CliniverseScreenshotTests: XCTestCase {
 
             let emailField = app.textFields["Email"]
             XCTAssertFalse(emailField.exists, "Reviewer email must not be present in the privacy screenshot")
+            assertSystemChromeClear("Privacy")
             capture("06-me-privacy")
         }
     }
@@ -208,6 +214,44 @@ final class CliniverseScreenshotTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func assertSystemChromeClear(
+        _ text: String,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let element = app.staticTexts[text].firstMatch
+        XCTAssertTrue(
+            element.waitForExistence(timeout: waitTimeout),
+            "Safe-area anchor is missing: \(text)",
+            file: file,
+            line: line
+        )
+
+        let statusBar = app.statusBars.firstMatch
+        XCTAssertTrue(
+            statusBar.waitForExistence(timeout: 4),
+            "The system status bar is unavailable for geometry validation",
+            file: file,
+            line: line
+        )
+
+        let elementFrame = element.frame
+        let statusBarFrame = statusBar.frame
+        XCTAssertFalse(
+            elementFrame.isEmpty,
+            "Safe-area anchor has an empty frame: \(text)",
+            file: file,
+            line: line
+        )
+        XCTAssertGreaterThanOrEqual(
+            elementFrame.minY,
+            statusBarFrame.maxY + 4,
+            "\(text) overlaps the iOS status bar",
+            file: file,
+            line: line
+        )
     }
 
     private func settle() {

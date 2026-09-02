@@ -48,10 +48,15 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
-        installReleaseWebViewConstraints()
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        installReleaseWebViewConstraints()
+        view.layoutIfNeeded()
     }
 
     deinit {
