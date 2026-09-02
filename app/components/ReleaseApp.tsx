@@ -34,8 +34,11 @@ function subscribeToNativeViewport(onChange: () => void) {
 }
 
 function getNativeHeaderTopPadding() {
-  if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'ios') return null
-  return window.innerWidth >= 768 ? 24 : 34
+  const isIOSWebView = Capacitor.getPlatform() === 'ios'
+    || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+
+  if (!isIOSWebView) return null
+  return window.innerWidth >= 768 ? 24 : 44
 }
 
 function getServerHeaderTopPadding() {
