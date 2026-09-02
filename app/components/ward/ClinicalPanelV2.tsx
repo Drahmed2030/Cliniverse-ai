@@ -5,7 +5,7 @@
  * Inline styles · no CSS template literal traps for shell tooling
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type {
   ClinicalBundle,
   DischargeSummary,
@@ -26,7 +26,7 @@ import {
   saveDischargeDraft,
 } from "./dischargeWriter";
 
-var T = {
+const T = {
   teal: "#2DD4BF",
   tealD: "#0F766E",
   bg: "#080C16",
@@ -41,6 +41,7 @@ var T = {
 };
 
 type Tab = "track" | "soap" | "meds" | "report" | "discharge";
+type EditableDischargeField = "diagnosis" | "hospitalCourse" | "procedures" | "followUp";
 
 interface Props {
   patientId: string;
@@ -62,33 +63,20 @@ export default function ClinicalPanelV2({
   onSoapSaved,
   onDischargeSaved,
 }: Props) {
-  var [tab, setTab] = useState<Tab>("track");
-  var [notes, setNotes] = useState<SoapNote[]>([]);
-  var [s, setS] = useState("");
-  var [o, setO] = useState("");
-  var [a, setA] = useState("");
-  var [p, setP] = useState("");
-  var [discharge, setDischarge] = useState<DischargeSummary | null>(null);
-  var [saveMsg, setSaveMsg] = useState("");
-
-  // Load persisted SOAP + discharge when patient opens
-  useEffect(
-    function () {
-      var saved = localSoapStore.list(patientId);
-      var merged = mergeSoapNotes(bundle.soapNotes || [], saved);
-      setNotes(merged);
-      var d = loadDischarge(patientId);
-      setDischarge(d || bundle.discharge || null);
-      setS("");
-      setO("");
-      setA("");
-      setP("");
-      setSaveMsg("");
-    },
-    [patientId]
+  const [tab, setTab] = useState<Tab>("track");
+  const [notes, setNotes] = useState<SoapNote[]>(() =>
+    mergeSoapNotes(bundle.soapNotes || [], localSoapStore.list(patientId))
   );
+  const [s, setS] = useState("");
+  const [o, setO] = useState("");
+  const [a, setA] = useState("");
+  const [p, setP] = useState("");
+  const [discharge, setDischarge] = useState<DischargeSummary | null>(() =>
+    loadDischarge(patientId) || bundle.discharge || null
+  );
+  const [saveMsg, setSaveMsg] = useState("");
 
-  var tabs = useMemo(
+  const tabs = useMemo(
     function () {
       return [
         { id: "track" as Tab, label: "Tracking" },
@@ -106,15 +94,15 @@ export default function ClinicalPanelV2({
       setSaveMsg("Write at least one SOAP field");
       return;
     }
-    var note = createSoapNote({
+    const note = createSoapNote({
       subjective: s,
       objective: o,
       assessment: a,
       plan: p,
       authorName: "You",
     });
-    var next = localSoapStore.append(patientId, note);
-    var merged = mergeSoapNotes(bundle.soapNotes || [], next);
+    const next = localSoapStore.append(patientId, note);
+    const merged = mergeSoapNotes(bundle.soapNotes || [], next);
     setNotes(merged);
     setS("");
     setO("");
@@ -125,7 +113,7 @@ export default function ClinicalPanelV2({
   }
 
   function generateDischargeDraft() {
-    var draft = buildDischargeDraft({
+    const draft = buildDischargeDraft({
       patientName: patientName,
       diagnosis: diagnosis,
       activeMeds: bundle.medications,
@@ -142,8 +130,8 @@ export default function ClinicalPanelV2({
     setTab("discharge");
   }
 
-  function updateDischargeField(field: keyof DischargeSummary, value: any) {
-    var base =
+  function updateDischargeField(field: EditableDischargeField, value: string) {
+    const base =
       discharge ||
       buildDischargeDraft({
         patientName: patientName,
@@ -151,8 +139,7 @@ export default function ClinicalPanelV2({
         activeMeds: bundle.medications,
         recentSoap: notes,
       });
-    var next = Object.assign({}, base) as DischargeSummary;
-    (next as any)[field] = value;
+    const next: DischargeSummary = { ...base, [field]: value };
     setDischarge(next);
   }
 
@@ -167,14 +154,14 @@ export default function ClinicalPanelV2({
     if (onDischargeSaved) onDischargeSaved(discharge);
   }
 
-  var readiness = dischargeReadiness(discharge);
+  const readiness = dischargeReadiness(discharge);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {bundle.alerts && bundle.alerts.length > 0 ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {bundle.alerts.map(function (al) {
-            var color =
+            const color =
               al.level === "critical" ? T.red : al.level === "watch" ? T.amber : T.teal;
             return (
               <div
@@ -199,7 +186,7 @@ export default function ClinicalPanelV2({
 
       <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
         {tabs.map(function (t) {
-          var active = tab === t.id;
+          const active = tab === t.id;
           return (
             <button
               key={t.id}
@@ -536,9 +523,9 @@ function MedsView(props: { meds: MedicationItem[] }) {
 
 function DischargeEditor(props: {
   value: DischargeSummary;
-  onChange: (field: keyof DischargeSummary, value: any) => void;
+  onChange: (field: EditableDischargeField, value: string) => void;
 }) {
-  var d = props.value;
+  const d = props.value;
   return (
     <div style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 16, padding: 12 }}>
       <EditorField label="Diagnosis" value={d.diagnosis} onChange={(v) => props.onChange("diagnosis", v)} />
