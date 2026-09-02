@@ -14,12 +14,28 @@ test('screenshot evidence is an isolated non-publishing Codemagic workflow', () 
   assert.match(evidence, /SCREENSHOT_REVIEW_EMAIL/)
   assert.match(evidence, /SCREENSHOT_REVIEW_PASSWORD/)
   assert.match(evidence, /verify-native-release-origin\.mjs/)
+  assert.match(evidence, /--allow-screenshot-native-delta/)
   assert.match(evidence, /install-ios-screenshot-tests\.rb/)
   assert.match(evidence, /run-ios-screenshot-evidence\.sh/)
   assert.match(evidence, /build\/apple-screenshot-evidence\/\*\*\/\*\.png/)
   assert.doesNotMatch(evidence, /Build IPA/)
   assert.doesNotMatch(evidence, /publishing:/)
   assert.doesNotMatch(evidence, /submit_to_(testflight|app_store)/)
+})
+
+test('screenshot origin compatibility allows only audited non-web deltas', () => {
+  const verifier = read('scripts/verify-native-release-origin.mjs')
+
+  assert.match(verifier, /merge-base', '--is-ancestor'/)
+  assert.match(verifier, /--diff-filter=ACDMRTUXB/)
+  assert.match(verifier, /path === 'codemagic\.yaml'/)
+  assert.match(verifier, /path === 'scripts\/verify-native-release-origin\.mjs'/)
+  assert.match(verifier, /path\.startsWith\('native\/'\)/)
+  assert.match(verifier, /path\.startsWith\('tests\/'\)/)
+  assert.match(verifier, /path\.startsWith\('docs\/'\)/)
+  assert.match(verifier, /screenshot commit changes web runtime files/)
+  assert.doesNotMatch(verifier, /path\.startsWith\('app\/'\)/)
+  assert.doesNotMatch(verifier, /path\.startsWith\('public\/'\)/)
 })
 
 test('XCUITest captures the six approved surfaces and protects reviewer identity', () => {

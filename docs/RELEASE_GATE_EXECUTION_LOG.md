@@ -41,3 +41,10 @@ Next: deploy the recovery commit to the canonical production origin, then requir
 - The next candidate resolves each safe-area edge independently, preserving measured values while retaining the bootstrap minimum for any zero edge.
 
 Next: verify this narrow per-edge correction locally, then require a new non-publishing screenshot-evidence run before any IPA or Apple submission.
+
+# Screenshot evidence origin decoupling
+
+- The production IPA workflow still requires an exact release-contract commit match.
+- The non-publishing screenshot workflow may use a newer descendant commit only when Git proves every delta is confined to audited native, test, documentation, or CI-verifier paths.
+- Any application, public asset, dependency, or web-runtime change still blocks screenshot capture until the matching commit is promoted to production.
+- This removes manual Vercel promotion from native-only screenshot iterations without weakening the production packaging gate.
