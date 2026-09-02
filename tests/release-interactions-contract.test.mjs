@@ -69,10 +69,10 @@ test('release surfaces respect iOS safe areas', () => {
   assert.match(journey, /env\(safe-area-inset-top\)/)
   assert.match(journey, /env\(safe-area-inset-bottom\)/)
   assert.match(journey, /data-patient-journey-top/)
-  assert.match(globalCss, /@supports \(-webkit-touch-callout: none\)/)
   assert.match(globalCss, /\[data-release-header-inner\]/)
   assert.match(globalCss, /\[data-patient-journey-top\]/)
   assert.match(globalCss, /padding-top: max\(44px, calc\(10px \+ env\(safe-area-inset-top, 0px\)\)\) !important/)
+  assert.doesNotMatch(globalCss, /@supports \(-webkit-touch-callout: none\)/)
 })
 
 test('disabled OAuth providers are absent from the Apple v1 sign-in surface', () => {

@@ -70,7 +70,6 @@ function ReleaseShell() {
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
       <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
-        data-release-header-inner
         style={{
           maxWidth: 1180,
           margin: '0 auto',
@@ -114,6 +113,7 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
       <div
+        data-release-header-inner
         style={{
           maxWidth: 1180,
           margin: '0 auto',

@@ -248,14 +248,12 @@ input::placeholder, textarea::placeholder {
 
 @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
 
-/* iOS WKWebView may report a zero safe-area inset after loading the remote
-   release origin. Keep compact-device release headers below the native status
-   bar even when that platform value is unavailable. */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 767px) {
-    [data-release-header-inner],
-    [data-patient-journey-top] {
-      padding-top: max(44px, calc(10px + env(safe-area-inset-top, 0px))) !important;
-    }
+/* The native release shell renders below a transparent iOS status bar. Some
+   WKWebView launches report a zero safe-area inset, so compact release
+   surfaces reserve the status-bar height deterministically. */
+@media (max-width: 767px) {
+  [data-release-header-inner],
+  [data-patient-journey-top] {
+    padding-top: max(44px, calc(10px + env(safe-area-inset-top, 0px))) !important;
   }
 }
