@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { Capacitor } from '@capacitor/core'
-import { useState, useSyncExternalStore } from 'react'
+import { useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
@@ -28,21 +28,12 @@ const C = {
   gold: '#D4A72C',
 }
 
-function subscribeToNativeViewport(onChange: () => void) {
-  window.addEventListener('resize', onChange)
-  return () => window.removeEventListener('resize', onChange)
-}
-
 function getNativeHeaderTopPadding() {
   const isIOSWebView = Capacitor.getPlatform() === 'ios'
     || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
 
   if (!isIOSWebView) return null
   return window.innerWidth >= 768 ? 24 : 44
-}
-
-function getServerHeaderTopPadding() {
-  return null
 }
 
 export default function ReleaseApp() {
@@ -59,12 +50,21 @@ export default function ReleaseApp() {
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
-  const nativeHeaderTopPadding = useSyncExternalStore(
-    subscribeToNativeViewport,
-    getNativeHeaderTopPadding,
-    getServerHeaderTopPadding,
-  )
+  const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
+
+  useEffect(() => {
+    const syncNativeHeaderTopPadding = () => {
+      setNativeHeaderTopPadding(getNativeHeaderTopPadding())
+    }
+
+    // Resolve after hydration even when WKWebView never emits a resize event.
+    // The prior external-store subscription could leave the first release
+    // surfaces on the server fallback until a later viewport change.
+    syncNativeHeaderTopPadding()
+    window.addEventListener('resize', syncNativeHeaderTopPadding)
+    return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
+  }, [])
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
