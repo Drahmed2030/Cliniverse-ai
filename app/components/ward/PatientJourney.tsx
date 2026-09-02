@@ -77,6 +77,7 @@ export default function PatientJourney({
 
   return (
     <div
+      data-patient-journey
       style={{
         position: "fixed",
         inset: 0,
@@ -94,7 +95,7 @@ export default function PatientJourney({
           paddingBottom: "calc(100px + env(safe-area-inset-bottom))",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "center", paddingTop: "calc(10px + env(safe-area-inset-top))" }}>
+        <div data-patient-journey-top style={{ display: "flex", justifyContent: "center", paddingTop: "calc(10px + env(safe-area-inset-top))" }}>
           <div
             style={{
               width: 40,
