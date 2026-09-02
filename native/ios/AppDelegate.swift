@@ -44,26 +44,11 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var launchOverlay: UIView?
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        guard let webView = webView else { return }
-        let topInset = view.safeAreaInsets.top
-        let releaseFrame = CGRect(
-            x: view.bounds.minX,
-            y: view.bounds.minY + topInset,
-            width: view.bounds.width,
-            height: max(0, view.bounds.height - topInset)
-        )
-
-        if webView.frame != releaseFrame {
-            webView.frame = releaseFrame
-        }
-    }
+    private var releaseWebViewConstraints: [NSLayoutConstraint] = []
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        installReleaseWebViewConstraints()
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
@@ -72,6 +57,25 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
+    }
+
+    private func installReleaseWebViewConstraints() {
+        guard releaseWebViewConstraints.isEmpty, let webView = webView else { return }
+
+        let inheritedConstraints = view.constraints.filter { constraint in
+            (constraint.firstItem as AnyObject?) === webView ||
+            (constraint.secondItem as AnyObject?) === webView
+        }
+        NSLayoutConstraint.deactivate(inheritedConstraints)
+
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        releaseWebViewConstraints = [
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ]
+        NSLayoutConstraint.activate(releaseWebViewConstraints)
     }
 
     private func installLaunchOverlay() {
