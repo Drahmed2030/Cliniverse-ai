@@ -7,6 +7,7 @@ final class CliniverseScreenshotTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
+        app.launchEnvironment["CLINIVERSE_LAYOUT_DIAGNOSTICS"] = "1"
         app.launch()
     }
 
@@ -17,7 +18,7 @@ final class CliniverseScreenshotTests: XCTestCase {
             screenshot.lifetime = .keepAlways
             add(screenshot)
 
-            let hierarchy = XCTAttachment(string: app.debugDescription)
+            let hierarchy = XCTAttachment(string: redactedAccessibilityHierarchy())
             hierarchy.name = "failure-accessibility-hierarchy"
             hierarchy.lifetime = .keepAlways
             add(hierarchy)
@@ -32,11 +33,13 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         try runStep("Capture Home") {
             try waitForText("One clear path through healthcare intelligence.")
+            assertSystemChromeClear("Cliniverse AI")
             capture("01-home")
         }
 
         try runStep("Capture Care") {
             try openTab("Care", waitingFor: "Care Workflow Simulation")
+            assertSystemChromeClear("Care")
             capture("02-care")
         }
 
@@ -45,6 +48,7 @@ final class CliniverseScreenshotTests: XCTestCase {
             try reveal(patient, maximumSwipes: 6)
             patient.tap()
             try waitForText("PATIENT JOURNEY")
+            assertSystemChromeClear("PATIENT JOURNEY")
             capture("03-care-detail")
         }
 
@@ -56,11 +60,13 @@ final class CliniverseScreenshotTests: XCTestCase {
 
         try runStep("Capture Intelligence release boundary") {
             try openTab("Intelligence", waitingFor: "Clinical Intelligence is not enabled in this release build.")
+            assertSystemChromeClear("Intelligence")
             capture("04-intelligence")
         }
 
         try runStep("Capture Atlas") {
-            try openTab("Atlas", waitingFor: "CURATED CAPABILITY LIBRARY")
+            try openTab("Atlas", waitingFor: "CURRENT RELEASE TOUR")
+            assertSystemChromeClear("Atlas")
             capture("05-atlas")
         }
 
@@ -73,6 +79,7 @@ final class CliniverseScreenshotTests: XCTestCase {
 
             let emailField = app.textFields["Email"]
             XCTAssertFalse(emailField.exists, "Reviewer email must not be present in the privacy screenshot")
+            assertSystemChromeClear("Privacy")
             capture("06-me-privacy")
         }
     }
@@ -89,7 +96,9 @@ final class CliniverseScreenshotTests: XCTestCase {
             return
         }
 
-        let emailEntry = app.buttons["Continue with Email"]
+        let emailEntry = app.buttons
+            .matching(NSPredicate(format: "label ==[c] %@", "Continue with email"))
+            .firstMatch
         XCTAssertTrue(emailEntry.waitForExistence(timeout: waitTimeout), "Release sign-in screen did not load")
 
         let emailField = app.textFields["Email"]
@@ -133,16 +142,38 @@ final class CliniverseScreenshotTests: XCTestCase {
             return
         }
 
-        emailField.tap()
-        emailField.typeText(email)
-        passwordField.tap()
-        passwordField.typeText(password)
+        try enter(email, into: emailField)
+        try enter(password, into: passwordField)
 
-        let continueButton = app.buttons["Continue"]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: waitTimeout), "Email sign-in action is missing")
-        continueButton.tap()
+        let signInButton = app.buttons
+            .matching(NSPredicate(format: "label ==[c] %@", "Sign in"))
+            .firstMatch
+        XCTAssertTrue(signInButton.waitForExistence(timeout: waitTimeout), "Email sign-in action is missing")
+        signInButton.tap()
 
         XCTAssertTrue(homeTitle.waitForExistence(timeout: waitTimeout), "Reviewer account could not reach the release Home surface")
+    }
+
+    private func enter(_ value: String, into field: XCUIElement) throws {
+        XCTAssertTrue(field.waitForExistence(timeout: waitTimeout), "Secure sign-in field is missing")
+
+        let focus = NSPredicate(format: "hasKeyboardFocus == true")
+        for attempt in 0..<3 {
+            if attempt == 0 {
+                field.tap()
+            } else {
+                field.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            }
+
+            let focused = XCTNSPredicateExpectation(predicate: focus, object: field)
+            if XCTWaiter.wait(for: [focused], timeout: 2) == .completed {
+                field.typeText(value)
+                return
+            }
+            settle()
+        }
+
+        XCTFail("Secure sign-in field could not receive keyboard focus")
     }
 
     private func openTab(_ label: String, waitingFor expectedText: String) throws {
@@ -184,6 +215,114 @@ final class CliniverseScreenshotTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func assertSystemChromeClear(
+        _ text: String,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let element = app.staticTexts[text].firstMatch
+        XCTAssertTrue(
+            element.waitForExistence(timeout: waitTimeout),
+            "Safe-area anchor is missing: \(text)",
+            file: file,
+            line: line
+        )
+
+        let statusBar = app.statusBars.firstMatch
+        let elementFrame = element.frame
+        XCTAssertFalse(
+            elementFrame.isEmpty,
+            "Safe-area anchor has an empty frame: \(text)",
+            file: file,
+            line: line
+        )
+
+        let minimumClearY: CGFloat
+        let statusBarFrame: CGRect
+        if statusBar.waitForExistence(timeout: 2) {
+            let observedStatusBarFrame = statusBar.frame
+            statusBarFrame = observedStatusBarFrame
+            if observedStatusBarFrame.isEmpty {
+                let windowWidth = app.windows.firstMatch.frame.width
+                minimumClearY = windowWidth >= 700 ? 28 : 60
+            } else {
+                minimumClearY = observedStatusBarFrame.maxY + 4
+            }
+        } else {
+            // Recent iOS simulator runtimes do not always expose StatusBar in
+            // the application accessibility tree. Keep the visual gate strict
+            // with deterministic portrait clearance for the tested form factor.
+            statusBarFrame = .zero
+            let windowWidth = app.windows.firstMatch.frame.width
+            minimumClearY = windowWidth >= 700 ? 28 : 60
+        }
+        attachLayoutDiagnostics(
+            anchor: text,
+            anchorFrame: elementFrame,
+            statusBarFrame: statusBarFrame,
+            minimumClearY: minimumClearY
+        )
+        XCTAssertGreaterThanOrEqual(
+            elementFrame.minY,
+            minimumClearY,
+            "\(text) overlaps the iOS status bar",
+            file: file,
+            line: line
+        )
+    }
+
+    private func attachLayoutDiagnostics(
+        anchor: String,
+        anchorFrame: CGRect,
+        statusBarFrame: CGRect,
+        minimumClearY: CGFloat
+    ) {
+        let diagnostics = app.otherElements["cliniverse.layout.diagnostics"].firstMatch
+        var nativeValue = "diagnostics-element-missing"
+
+        if diagnostics.waitForExistence(timeout: 5) {
+            for _ in 0..<10 {
+                nativeValue = diagnostics.value as? String ?? "diagnostics-value-missing"
+                if nativeValue.contains("\"header\":{\"computed\":{") {
+                    break
+                }
+                Thread.sleep(forTimeInterval: 0.25)
+            }
+        }
+
+        let report = """
+        schemaVersion=1
+        anchor=\(anchor)
+        anchorFrame=\(NSCoder.string(for: anchorFrame))
+        statusBarFrame=\(NSCoder.string(for: statusBarFrame))
+        minimumClearY=\(minimumClearY)
+        appWindowFrame=\(NSCoder.string(for: app.windows.firstMatch.frame))
+        nativeAndWeb=\(nativeValue)
+        """
+        let attachment = XCTAttachment(string: report)
+        attachment.name = "layout-diagnostics-\(diagnosticSlug(anchor))"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        print("[CliniverseXCTestLayoutDiagnostics] \(report)")
+    }
+
+    private func redactedAccessibilityHierarchy() -> String {
+        var hierarchy = app.debugDescription
+        let environment = ProcessInfo.processInfo.environment
+        for key in ["SCREENSHOT_REVIEW_EMAIL", "SCREENSHOT_REVIEW_PASSWORD"] {
+            guard let secret = environment[key], !secret.isEmpty else { continue }
+            hierarchy = hierarchy.replacingOccurrences(of: secret, with: "[REDACTED]")
+        }
+        return hierarchy
+    }
+
+    private func diagnosticSlug(_ value: String) -> String {
+        value
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: "/", with: "-")
     }
 
     private func settle() {

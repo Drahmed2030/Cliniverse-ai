@@ -44,9 +44,11 @@ const STATUS_LABEL: Record<string, string> = {
 
 interface WardHomeProps {
   onSelectPatient?: (id: string) => void
+  isPro?: boolean
+  onUpgrade?: () => void
 }
 
-export default function WardHome({ onSelectPatient }: WardHomeProps) {
+export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: WardHomeProps) {
   const [selectedDept, setSelectedDept] = useState<string>('all')
 
   const visiblePatients = MOCK_PATIENTS.filter(
@@ -135,17 +137,26 @@ export default function WardHome({ onSelectPatient }: WardHomeProps) {
           </div>
           {assigned.map(patient => {
             const priority = PRIORITY_COLOR[patient.priority]
+            const caseUnlocked = isPro || patient.id === 'w1'
             return (
               <button
                 key={patient.id}
                 type="button"
-                aria-label={`Open ${patient.name} simulated case`}
-                onClick={() => onSelectPatient?.(patient.id)}
+                aria-label={caseUnlocked
+                  ? `Open ${patient.name} simulated case`
+                  : `Upgrade to Cliniverse PRO to open ${patient.name} simulated case`}
+                onClick={() => {
+                  if (caseUnlocked) onSelectPatient?.(patient.id)
+                  else onUpgrade?.()
+                }}
                 style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: '0 10px 24px rgba(0,0,0,0.18)' }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{patient.name}</div>
-                  <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 99, background: priority.bg, color: priority.color }}>{priority.label}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {!caseUnlocked ? <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 7px', borderRadius: 99, background: 'rgba(96,165,250,0.14)', color: '#60A5FA' }}>PRO</span> : null}
+                    <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 99, background: priority.bg, color: priority.color }}>{priority.label}</span>
+                  </div>
                 </div>
                 <div style={{ fontSize: 12, color: T.sub, marginBottom: 6 }}>{patient.diagnosis}</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>

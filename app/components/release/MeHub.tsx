@@ -1,6 +1,8 @@
 'use client'
 
 import MeAccountSummary from './MeAccountSummary'
+import AchievementsHub from './AchievementsHub'
+import LifeDeviceBoundary from './LifeDeviceBoundary'
 
 const C = {
   panel: '#111827',
@@ -60,11 +62,19 @@ export default function MeHub() {
         <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>ONE ACCOUNT DESTINATION</div>
         <h1 id="me-title" style={{ fontSize: 26, margin: '7px 0 8px' }}>Me</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 720 }}>
-          Profile, plan, Life, privacy and settings live here so the user has one identity and one account state across Cliniverse.
+          Profile, plan, learning achievements, Life, privacy and settings share one identity and one account state across Cliniverse.
         </p>
       </div>
 
       <MeAccountSummary />
+
+      <div style={{ marginTop: 12 }}>
+        <AchievementsHub />
+      </div>
+
+      <div style={{ marginTop: 12 }}>
+        <LifeDeviceBoundary />
+      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 10, marginTop: 12 }}>
         {sections.map(section => (

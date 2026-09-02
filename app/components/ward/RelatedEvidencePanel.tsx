@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 
 interface EvidenceItem {
   pmid: string;
@@ -15,6 +15,7 @@ interface RelatedEvidencePanelProps {
   templateId?: string;
   diagnosis: string;
   isPro: boolean;
+  onUpgrade?: () => void;
 }
 
 const T = {
@@ -32,18 +33,14 @@ export default function RelatedEvidencePanel({
   templateId,
   diagnosis,
   isPro,
+  onUpgrade,
 }: RelatedEvidencePanelProps) {
   const [items, setItems] = useState<EvidenceItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!expanded || !isPro) return;
-    void fetchEvidence();
-  }, [expanded, isPro]);
-
-  async function fetchEvidence() {
+  const fetchEvidence = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -60,15 +57,18 @@ export default function RelatedEvidencePanel({
     } finally {
       setLoading(false);
     }
-  }
+  }, [diagnosis, templateId]);
 
   if (!expanded) {
     return (
       <button
         type="button"
-        disabled={!isPro}
         onClick={() => {
-          if (isPro) setExpanded(true);
+          if (isPro) {
+            setExpanded(true);
+            void fetchEvidence();
+          }
+          else onUpgrade?.();
         }}
         style={{
           width: "100%",
@@ -79,7 +79,7 @@ export default function RelatedEvidencePanel({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          cursor: isPro ? "pointer" : "default",
+          cursor: "pointer",
           marginBottom: 4,
           textAlign: "left",
           opacity: isPro ? 1 : 0.78,
@@ -92,7 +92,7 @@ export default function RelatedEvidencePanel({
               Related Evidence
             </div>
             <div style={{ fontSize: 11, color: T.muted }}>
-              {isPro ? "PubMed · Guidelines" : "Release-gated for this account"}
+              {isPro ? "PubMed · Guidelines" : "Available with Cliniverse PRO"}
             </div>
           </div>
         </div>
@@ -106,10 +106,10 @@ export default function RelatedEvidencePanel({
               borderRadius: 4,
               padding: "2px 6px",
             }}>
-              GATED
+              PRO
             </span>
           )}
-          {isPro && <span style={{ color: T.muted, fontSize: 16 }}>→</span>}
+          <span style={{ color: T.muted, fontSize: 16 }}>→</span>
         </div>
       </button>
     );

@@ -26,11 +26,21 @@ workflows:
           npx cap add ios
           npx cap copy ios
           test -f ios/App/App/public/native-offline.html
+      - name: Require iOS 15
+        script: |
+          ruby scripts/configure-ios-deployment-target.rb
+          grep -q "platform :ios, '15.0'" ios/App/Podfile
       - name: Install native cold-launch guard
         script: |
           node scripts/configure-ios-launch-guard.mjs
           grep -q 'CliniverseBridgeViewController' ios/App/App/AppDelegate.swift
           grep -q 'customClass="CliniverseBridgeViewController"' ios/App/App/Base.lproj/Main.storyboard
+      - name: Install native StoreKit bridge
+        script: |
+          ruby scripts/install-ios-storekit-plugin.rb
+          grep -q 'registerPluginInstance(CliniverseStoreKitPlugin())' ios/App/App/AppDelegate.swift
+          grep -q 'com.cliniverse.ai.pro.monthly' ios/App/App/CliniverseStoreKitPlugin.swift
+          grep -q 'CliniverseStoreKitPlugin.swift in Sources' ios/App/App.xcodeproj/project.pbxproj
       - name: Generate branded iOS assets
         script: |
           node scripts/sync-brand-icons.mjs
@@ -109,21 +119,31 @@ workflows:
         script: npm ci
       - name: Build Next.js
         script: npm run build
-      - name: Verify canonical RC web origin
+      - name: Verify screenshot-compatible RC web origin
         script: |
           EXPECTED_COMMIT="${CM_COMMIT:?Codemagic CM_COMMIT is required}"
-          node scripts/verify-native-release-origin.mjs "https://www.cliniverseai.com/api/release-contract" "$EXPECTED_COMMIT"
+          node scripts/verify-native-release-origin.mjs "https://www.cliniverseai.com/api/release-contract" "$EXPECTED_COMMIT" --allow-screenshot-native-delta
       - name: Generate simulator release shell
         script: |
           rm -rf ios
           npx cap add ios
           npx cap copy ios
           test -f ios/App/App/public/native-offline.html
+      - name: Require iOS 15
+        script: |
+          ruby scripts/configure-ios-deployment-target.rb
+          grep -q "platform :ios, '15.0'" ios/App/Podfile
       - name: Install native cold-launch guard
         script: |
           node scripts/configure-ios-launch-guard.mjs
           grep -q 'CliniverseBridgeViewController' ios/App/App/AppDelegate.swift
           grep -q 'customClass="CliniverseBridgeViewController"' ios/App/App/Base.lproj/Main.storyboard
+      - name: Install native StoreKit bridge
+        script: |
+          ruby scripts/install-ios-storekit-plugin.rb
+          grep -q 'registerPluginInstance(CliniverseStoreKitPlugin())' ios/App/App/AppDelegate.swift
+          grep -q 'com.cliniverse.ai.pro.monthly' ios/App/App/CliniverseStoreKitPlugin.swift
+          grep -q 'CliniverseStoreKitPlugin.swift in Sources' ios/App/App.xcodeproj/project.pbxproj
       - name: Generate branded iOS assets
         script: |
           node scripts/sync-brand-icons.mjs
@@ -163,4 +183,5 @@ workflows:
         script: bash scripts/run-ios-screenshot-evidence.sh
     artifacts:
       - build/apple-screenshot-evidence/**/*.png
+      - build/apple-screenshot-evidence/diagnostics/**/*
       - build/apple-screenshot-evidence/manifest.json

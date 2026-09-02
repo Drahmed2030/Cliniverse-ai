@@ -1,6 +1,11 @@
 'use client'
 
 import { Activity, BookOpenCheck, BrainCircuit, Home, UserRound } from 'lucide-react'
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_LEFT,
+  NATIVE_SAFE_AREA_RIGHT,
+} from '../lib/nativeSafeArea'
 
 export type ReleaseTab = 'home' | 'care' | 'intelligence' | 'atlas' | 'me'
 
@@ -23,9 +28,9 @@ export default function ReleaseNav({ active, onChange }: Props) {
       aria-label="Primary"
       style={{
         position: 'fixed',
-        left: 'max(12px, env(safe-area-inset-left, 0px))',
-        right: 'max(12px, env(safe-area-inset-right, 0px))',
-        bottom: 'max(12px, env(safe-area-inset-bottom, 0px))',
+        left: `max(12px, ${NATIVE_SAFE_AREA_LEFT})`,
+        right: `max(12px, ${NATIVE_SAFE_AREA_RIGHT})`,
+        bottom: `max(12px, ${NATIVE_SAFE_AREA_BOTTOM})`,
         zIndex: 100,
         display: 'grid',
         gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',

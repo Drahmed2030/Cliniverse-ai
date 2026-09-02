@@ -7,6 +7,12 @@ import {
   signInWithPassword,
   type CliniverseAuthProvider,
 } from "../lib/identity";
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_LEFT,
+  NATIVE_SAFE_AREA_RIGHT,
+  NATIVE_SAFE_AREA_TOP,
+} from "../lib/nativeSafeArea";
 
 const T = {
   bg: "#050814",
@@ -179,10 +185,10 @@ export default function AuthScreen({
         color: T.text,
         display: "flex",
         flexDirection: "column",
-        paddingTop: "calc(28px + env(safe-area-inset-top, 0px))",
-        paddingRight: "max(20px, env(safe-area-inset-right, 0px))",
-        paddingBottom: "calc(24px + env(safe-area-inset-bottom, 0px))",
-        paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
+        paddingTop: `calc(28px + ${NATIVE_SAFE_AREA_TOP})`,
+        paddingRight: `max(20px, ${NATIVE_SAFE_AREA_RIGHT})`,
+        paddingBottom: `calc(24px + ${NATIVE_SAFE_AREA_BOTTOM})`,
+        paddingLeft: `max(20px, ${NATIVE_SAFE_AREA_LEFT})`,
         boxSizing: "border-box",
       }}
     >
@@ -235,5 +241,5 @@ function AuthButton(props: { label: string; bg: string; color: string; border?: 
 }
 
 function Field(props: { label: string; value: string; onChange: (v: string) => void; type?: string; autoComplete?: string; }) {
-  return <label style={{ display: "block" }}><div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 6, letterSpacing: 0.35 }}>{props.label}</div><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} style={{ width: "100%", boxSizing: "border-box", borderRadius: 14, border: `1px solid ${T.border}`, background: "rgba(255,255,255,.035)", color: T.text, padding: "13px 14px", minHeight: 48, fontSize: 15, outline: "none" }} /></label>;
+  return <label style={{ display: "block" }}><div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 6, letterSpacing: 0.35 }}>{props.label}</div><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} style={{ width: "100%", boxSizing: "border-box", borderRadius: 14, border: `1px solid ${T.border}`, background: "rgba(255,255,255,.035)", color: T.text, padding: "13px 14px", minHeight: 48, fontSize: 16, outline: "none" }} /></label>;
 }

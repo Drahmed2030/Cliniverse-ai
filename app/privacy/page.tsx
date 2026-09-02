@@ -1,3 +1,5 @@
+import LegalPageBack from '../components/release/LegalPageBack'
+
 export const metadata = {
   title: 'Cliniverse AI Privacy',
   description: 'Privacy information for Cliniverse AI users.',
@@ -15,9 +17,10 @@ export default function PrivacyPolicy() {
   return (
     <main style={{minHeight:'100vh',background:'#080c16',color:'#f8fafc',fontFamily:'Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'}}>
       <div style={{maxWidth:760,margin:'0 auto',padding:'56px 22px 72px'}}>
+        <LegalPageBack />
         <div style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:'#14b8a6'}}>Cliniverse AI · by NeuraOps</div>
         <h1 style={{fontSize:'clamp(34px,6vw,50px)',lineHeight:1.05,letterSpacing:'-.04em',margin:'14px 0 8px'}}>Privacy</h1>
-        <p style={{fontSize:12,color:'#64748b',margin:'0 0 30px'}}>Last updated: August 26, 2026</p>
+        <p style={{fontSize:12,color:'#64748b',margin:'0 0 30px'}}>Last updated: September 2, 2026</p>
 
         <section style={{...sectionStyle,borderColor:'rgba(20,184,166,.28)',background:'rgba(20,184,166,.07)'}}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>Release safety boundary</h2>
@@ -32,6 +35,16 @@ export default function PrivacyPolicy() {
         <section style={sectionStyle}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>How information is used</h2>
           <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>We use account information to provide sign-in, preserve your profile, operate requested features, maintain security, diagnose failures, and improve the reliability of the service. We do not treat educational ranks or achievements as professional licensure, board status, or external accreditation.</p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2 style={{fontSize:18,margin:'0 0 8px'}}>Fictional learning records on this device</h2>
+          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>Cardiology Operations and Nexus Learning save fictional simulation progress, checklist state and learning reflections in local storage on your device. Those records are not sent to a hospital or clinician by these modules. Use their reset controls to clear the local exercise state. Do not enter real patient, staff, incident or institutional information.</p>
+        </section>
+
+        <section style={sectionStyle}>
+          <h2 style={{fontSize:18,margin:'0 0 8px'}}>App Store subscriptions</h2>
+          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>Apple processes payment for Cliniverse PRO. To verify a purchase, prevent replay and restore access to the correct signed-in account, Cliniverse processes signed StoreKit transaction evidence and stores derived subscription identifiers, product, status and entitlement dates. Cliniverse does not receive your full payment-card details.</p>
         </section>
 
         <section style={sectionStyle}>
