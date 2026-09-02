@@ -27,6 +27,11 @@ const C = {
   gold: '#D4A72C',
 }
 
+const SAFE_TOP = 'max(env(safe-area-inset-top, 0px), var(--cliniverse-native-safe-area-top, 0px))'
+const SAFE_RIGHT = 'max(env(safe-area-inset-right, 0px), var(--cliniverse-native-safe-area-right, 0px))'
+const SAFE_BOTTOM = 'max(env(safe-area-inset-bottom, 0px), var(--cliniverse-native-safe-area-bottom, 0px))'
+const SAFE_LEFT = 'max(env(safe-area-inset-left, 0px), var(--cliniverse-native-safe-area-left, 0px))'
+
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
@@ -44,16 +49,16 @@ function ReleaseShell() {
   const { openPaywall } = useCliniverseSubscription()
 
   return (
-    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
+    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${SAFE_BOTTOM})`, isolation: 'isolate' }}>
       <ReleaseHeader active={tab} />
       <div
         style={{
           maxWidth: 1180,
           margin: '0 auto',
           paddingTop: 18,
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingRight: `max(16px, ${SAFE_RIGHT})`,
           paddingBottom: 28,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${SAFE_LEFT})`,
         }}
       >
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
@@ -87,11 +92,11 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
         style={{
           maxWidth: 1180,
           margin: '0 auto',
-          minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
-          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          minHeight: `calc(68px + ${SAFE_TOP})`,
+          paddingTop: `calc(10px + ${SAFE_TOP})`,
+          paddingRight: `max(16px, ${SAFE_RIGHT})`,
           paddingBottom: 10,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${SAFE_LEFT})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

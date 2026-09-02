@@ -44,71 +44,54 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var launchOverlay: UIView?
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
-    private var releaseConstraintRetry: DispatchWorkItem?
-    private var releaseConstraintAttempts = 0
-    private var releaseWebViewConstraints: [NSLayoutConstraint] = []
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
-        scheduleReleaseWebViewConstraints()
+        synchronizeReleaseSafeArea()
     }
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        _ = installReleaseWebViewConstraintsIfReady()
+        synchronizeReleaseSafeArea()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        synchronizeReleaseSafeArea()
     }
 
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
-        releaseConstraintRetry?.cancel()
     }
 
-    private func scheduleReleaseWebViewConstraints() {
-        guard releaseWebViewConstraints.isEmpty, releaseConstraintAttempts < 4 else { return }
+    private func synchronizeReleaseSafeArea() {
+        guard let webView = webView else { return }
 
-        releaseConstraintRetry?.cancel()
-        releaseConstraintAttempts += 1
+        let windowInsets = view.window?.safeAreaInsets ?? .zero
+        let insets = UIEdgeInsets(
+            top: max(view.safeAreaInsets.top, windowInsets.top),
+            left: max(view.safeAreaInsets.left, windowInsets.left),
+            bottom: max(view.safeAreaInsets.bottom, windowInsets.bottom),
+            right: max(view.safeAreaInsets.right, windowInsets.right)
+        )
+        guard insets.top > 0 else { return }
 
-        let retry = DispatchWorkItem { [weak self] in
-            guard let self = self, self.releaseWebViewConstraints.isEmpty else { return }
-            if !self.installReleaseWebViewConstraintsIfReady() {
-                self.scheduleReleaseWebViewConstraints()
-            }
-        }
-        releaseConstraintRetry = retry
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: retry)
-    }
-
-    @discardableResult
-    private func installReleaseWebViewConstraintsIfReady() -> Bool {
-        guard releaseWebViewConstraints.isEmpty,
-              let webView = webView,
-              webView.superview === view,
-              view.window != nil,
-              view.safeAreaInsets.top > 0 else { return false }
-
-        let inheritedConstraints = view.constraints.filter { constraint in
-            (constraint.firstItem as AnyObject?) === webView ||
-            (constraint.secondItem as AnyObject?) === webView
-        }
-        NSLayoutConstraint.deactivate(inheritedConstraints)
-
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        releaseWebViewConstraints = [
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ]
-        NSLayoutConstraint.activate(releaseWebViewConstraints)
-        releaseConstraintRetry?.cancel()
-        releaseConstraintRetry = nil
-        view.layoutIfNeeded()
-        return true
+        let script = """
+        (() => {
+          const root = document.documentElement;
+          if (!root) return false;
+          root.style.setProperty('--cliniverse-native-safe-area-top', '\(insets.top)px');
+          root.style.setProperty('--cliniverse-native-safe-area-right', '\(insets.right)px');
+          root.style.setProperty('--cliniverse-native-safe-area-bottom', '\(insets.bottom)px');
+          root.style.setProperty('--cliniverse-native-safe-area-left', '\(insets.left)px');
+          return true;
+        })();
+        """
+        webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     private func installLaunchOverlay() {
@@ -199,6 +182,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
+                self?.synchronizeReleaseSafeArea()
                 self?.dismissLaunchOverlay()
             }
         }
@@ -213,6 +197,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
                     if error == nil,
                        let readyState = result as? String,
                        readyState == "interactive" || readyState == "complete" {
+                        self.synchronizeReleaseSafeArea()
                         self.dismissLaunchOverlay()
                         return
                     }

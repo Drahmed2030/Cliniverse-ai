@@ -230,24 +230,27 @@ final class CliniverseScreenshotTests: XCTestCase {
         )
 
         let statusBar = app.statusBars.firstMatch
-        XCTAssertTrue(
-            statusBar.waitForExistence(timeout: 4),
-            "The system status bar is unavailable for geometry validation",
-            file: file,
-            line: line
-        )
-
         let elementFrame = element.frame
-        let statusBarFrame = statusBar.frame
         XCTAssertFalse(
             elementFrame.isEmpty,
             "Safe-area anchor has an empty frame: \(text)",
             file: file,
             line: line
         )
+
+        let minimumClearY: CGFloat
+        if statusBar.waitForExistence(timeout: 2), !statusBar.frame.isEmpty {
+            minimumClearY = statusBar.frame.maxY + 4
+        } else {
+            // Recent iOS simulator runtimes do not always expose StatusBar in
+            // the application accessibility tree. Keep the visual gate strict
+            // with deterministic portrait clearance for the tested form factor.
+            let windowWidth = app.windows.firstMatch.frame.width
+            minimumClearY = windowWidth >= 700 ? 28 : 60
+        }
         XCTAssertGreaterThanOrEqual(
             elementFrame.minY,
-            statusBarFrame.maxY + 4,
+            minimumClearY,
             "\(text) overlaps the iOS status bar",
             file: file,
             line: line
