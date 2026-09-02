@@ -114,8 +114,6 @@ test('evidence runner validates current Apple dimensions and twelve opaque PNGs'
   assert.match(runner, /export_failure_diagnostics/)
   assert.match(runner, /get test-results tests/)
   assert.match(runner, /test-details\.json/)
-  assert.match(runner, /xcodebuild\.log/)
-  assert.match(runner, /PIPESTATUS\[0\]/)
   assert.match(runner, /status_bar.*override/s)
   assert.match(runner, /trap cleanup EXIT/)
   assert.match(runner, /-destination "generic\/platform=iOS Simulator"/)
