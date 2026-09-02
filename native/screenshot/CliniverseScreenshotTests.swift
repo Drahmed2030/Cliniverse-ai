@@ -286,10 +286,10 @@ final class CliniverseScreenshotTests: XCTestCase {
         let report = """
         schemaVersion=1
         anchor=\(anchor)
-        anchorFrame=\(NSStringFromCGRect(anchorFrame))
-        statusBarFrame=\(NSStringFromCGRect(statusBarFrame))
+        anchorFrame=\(NSCoder.string(for: anchorFrame))
+        statusBarFrame=\(NSCoder.string(for: statusBarFrame))
         minimumClearY=\(minimumClearY)
-        appWindowFrame=\(NSStringFromCGRect(app.windows.firstMatch.frame))
+        appWindowFrame=\(NSCoder.string(for: app.windows.firstMatch.frame))
         nativeAndWeb=\(nativeValue)
         """
         let attachment = XCTAttachment(string: report)
