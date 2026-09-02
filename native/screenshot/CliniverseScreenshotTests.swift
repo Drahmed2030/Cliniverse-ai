@@ -7,6 +7,7 @@ final class CliniverseScreenshotTests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
+        app.launchEnvironment["CLINIVERSE_LAYOUT_DIAGNOSTICS"] = "1"
         app.launch()
     }
 
@@ -17,7 +18,7 @@ final class CliniverseScreenshotTests: XCTestCase {
             screenshot.lifetime = .keepAlways
             add(screenshot)
 
-            let hierarchy = XCTAttachment(string: app.debugDescription)
+            let hierarchy = XCTAttachment(string: redactedAccessibilityHierarchy())
             hierarchy.name = "failure-accessibility-hierarchy"
             hierarchy.lifetime = .keepAlways
             add(hierarchy)
@@ -248,6 +249,12 @@ final class CliniverseScreenshotTests: XCTestCase {
             let windowWidth = app.windows.firstMatch.frame.width
             minimumClearY = windowWidth >= 700 ? 28 : 60
         }
+        attachLayoutDiagnostics(
+            anchor: text,
+            anchorFrame: elementFrame,
+            statusBarFrame: statusBar.frame,
+            minimumClearY: minimumClearY
+        )
         XCTAssertGreaterThanOrEqual(
             elementFrame.minY,
             minimumClearY,
@@ -255,6 +262,58 @@ final class CliniverseScreenshotTests: XCTestCase {
             file: file,
             line: line
         )
+    }
+
+    private func attachLayoutDiagnostics(
+        anchor: String,
+        anchorFrame: CGRect,
+        statusBarFrame: CGRect,
+        minimumClearY: CGFloat
+    ) {
+        let diagnostics = app.otherElements["cliniverse.layout.diagnostics"].firstMatch
+        var nativeValue = "diagnostics-element-missing"
+
+        if diagnostics.waitForExistence(timeout: 5) {
+            for _ in 0..<10 {
+                nativeValue = diagnostics.value as? String ?? "diagnostics-value-missing"
+                if nativeValue.contains("\"header\":{\"computed\":{") {
+                    break
+                }
+                Thread.sleep(forTimeInterval: 0.25)
+            }
+        }
+
+        let report = """
+        schemaVersion=1
+        anchor=\(anchor)
+        anchorFrame=\(NSStringFromCGRect(anchorFrame))
+        statusBarFrame=\(NSStringFromCGRect(statusBarFrame))
+        minimumClearY=\(minimumClearY)
+        appWindowFrame=\(NSStringFromCGRect(app.windows.firstMatch.frame))
+        nativeAndWeb=\(nativeValue)
+        """
+        let attachment = XCTAttachment(string: report)
+        attachment.name = "layout-diagnostics-\(diagnosticSlug(anchor))"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        print("[CliniverseXCTestLayoutDiagnostics] \(report)")
+    }
+
+    private func redactedAccessibilityHierarchy() -> String {
+        var hierarchy = app.debugDescription
+        let environment = ProcessInfo.processInfo.environment
+        for key in ["SCREENSHOT_REVIEW_EMAIL", "SCREENSHOT_REVIEW_PASSWORD"] {
+            guard let secret = environment[key], !secret.isEmpty else { continue }
+            hierarchy = hierarchy.replacingOccurrences(of: secret, with: "[REDACTED]")
+        }
+        return hierarchy
+    }
+
+    private func diagnosticSlug(_ value: String) -> String {
+        value
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: "/", with: "-")
     }
 
     private func settle() {

@@ -183,4 +183,5 @@ workflows:
         script: bash scripts/run-ios-screenshot-evidence.sh
     artifacts:
       - build/apple-screenshot-evidence/**/*.png
+      - build/apple-screenshot-evidence/diagnostics/**/*
       - build/apple-screenshot-evidence/manifest.json

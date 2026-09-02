@@ -44,6 +44,15 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var launchOverlay: UIView?
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
+    private var layoutDiagnosticsTimer: Timer?
+    private weak var layoutDiagnosticsElement: UIView?
+
+    private static let layoutDiagnosticsEnvironmentKey = "CLINIVERSE_LAYOUT_DIAGNOSTICS"
+    private static let layoutDiagnosticsAccessibilityIdentifier = "cliniverse.layout.diagnostics"
+
+    private var layoutDiagnosticsEnabled: Bool {
+        ProcessInfo.processInfo.environment[Self.layoutDiagnosticsEnvironmentKey] == "1"
+    }
 
     private static var bootstrapSafeAreaInsets: UIEdgeInsets {
         let bounds = UIScreen.main.bounds
@@ -158,6 +167,126 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         """
     }
 
+    private static let releaseLayoutDiagnosticsScript = """
+    (() => {
+      const root = document.documentElement;
+      const body = document.body;
+      const header = document.querySelector('[data-release-header-inner]');
+      const title = header
+        ? Array.from(header.querySelectorAll('*')).find((element) =>
+            element.children.length === 0 && element.textContent?.trim() === 'Cliniverse AI'
+          ) || null
+        : null;
+      const viewport = document.querySelector('meta[name="viewport"]');
+      const contract = window.__cliniverseNativeSafeAreaContract;
+      const computedRoot = root ? getComputedStyle(root) : null;
+      const computedHeader = header instanceof HTMLElement ? getComputedStyle(header) : null;
+      const visualViewport = window.visualViewport;
+      const capacitor = window.Capacitor;
+      const rect = (element) => {
+        if (!(element instanceof Element)) return null;
+        const value = element.getBoundingClientRect();
+        return {
+          x: value.x,
+          y: value.y,
+          width: value.width,
+          height: value.height,
+          top: value.top,
+          right: value.right,
+          bottom: value.bottom,
+          left: value.left,
+        };
+      };
+      const safeAreaValue = (name) => ({
+        computed: computedRoot?.getPropertyValue(name).trim() || '',
+        inline: root?.style.getPropertyValue(name).trim() || '',
+        priority: root?.style.getPropertyPriority(name) || '',
+      });
+
+      return {
+        schemaVersion: 1,
+        location: {
+          origin: window.location.origin,
+          pathname: window.location.pathname,
+        },
+        document: {
+          readyState: document.readyState,
+          visibilityState: document.visibilityState,
+          compatMode: document.compatMode,
+          rootClientWidth: root?.clientWidth || null,
+          rootClientHeight: root?.clientHeight || null,
+          bodyClientWidth: body?.clientWidth || null,
+          bodyClientHeight: body?.clientHeight || null,
+          stylesheetCount: document.styleSheets.length,
+        },
+        window: {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          outerWidth: window.outerWidth,
+          outerHeight: window.outerHeight,
+          devicePixelRatio: window.devicePixelRatio,
+          screenWidth: window.screen.width,
+          screenHeight: window.screen.height,
+        },
+        visualViewport: visualViewport ? {
+          width: visualViewport.width,
+          height: visualViewport.height,
+          offsetLeft: visualViewport.offsetLeft,
+          offsetTop: visualViewport.offsetTop,
+          pageLeft: visualViewport.pageLeft,
+          pageTop: visualViewport.pageTop,
+          scale: visualViewport.scale,
+        } : null,
+        viewportMeta: viewport?.getAttribute('content') || null,
+        userAgent: navigator.userAgent,
+        maxTouchPoints: navigator.maxTouchPoints,
+        mediaQueries: {
+          compact: matchMedia('(max-width: 767px)').matches,
+          touchTablet: matchMedia('(min-width: 768px) and (max-width: 1366px) and (pointer: coarse)').matches,
+          coarsePointer: matchMedia('(pointer: coarse)').matches,
+          noHover: matchMedia('(hover: none)').matches,
+        },
+        capacitor: {
+          present: Boolean(capacitor),
+          platform: typeof capacitor?.getPlatform === 'function' ? capacitor.getPlatform() : capacitor?.platform || null,
+          native: typeof capacitor?.isNativePlatform === 'function' ? capacitor.isNativePlatform() : null,
+        },
+        safeArea: {
+          top: safeAreaValue('--cliniverse-native-safe-area-top'),
+          right: safeAreaValue('--cliniverse-native-safe-area-right'),
+          bottom: safeAreaValue('--cliniverse-native-safe-area-bottom'),
+          left: safeAreaValue('--cliniverse-native-safe-area-left'),
+          contractInstalled: Boolean(contract),
+          observerInstalled: Boolean(contract?.observer),
+          contractValues: contract?.values || null,
+        },
+        header: {
+          present: header instanceof HTMLElement,
+          rect: rect(header),
+          inlineStyle: header instanceof HTMLElement ? header.getAttribute('style') : null,
+          computed: computedHeader ? {
+            paddingTop: computedHeader.paddingTop,
+            paddingRight: computedHeader.paddingRight,
+            paddingBottom: computedHeader.paddingBottom,
+            paddingLeft: computedHeader.paddingLeft,
+            minHeight: computedHeader.minHeight,
+            height: computedHeader.height,
+            position: computedHeader.position,
+            top: computedHeader.top,
+            boxSizing: computedHeader.boxSizing,
+            display: computedHeader.display,
+          } : null,
+        },
+        title: {
+          present: title instanceof HTMLElement,
+          text: title?.textContent?.trim() || null,
+          rect: rect(title),
+        },
+        bodyRect: rect(body),
+      };
+    })();
+    """
+
     override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
         let bootstrap = WKUserScript(
             source: Self.releaseSafeAreaScript(Self.bootstrapSafeAreaInsets),
@@ -165,7 +294,13 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             forMainFrameOnly: true
         )
         configuration.userContentController.addUserScript(bootstrap)
-        return super.webView(with: frame, configuration: configuration)
+        let releaseWebView = super.webView(with: frame, configuration: configuration)
+        if layoutDiagnosticsEnabled {
+            if #available(iOS 16.4, *) {
+                releaseWebView.isInspectable = true
+            }
+        }
+        return releaseWebView
     }
 
     override func capacitorDidLoad() {
@@ -174,6 +309,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
+        installLayoutDiagnostics()
     }
 
     override func viewSafeAreaInsetsDidChange() {
@@ -189,6 +325,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
+        layoutDiagnosticsTimer?.invalidate()
     }
 
     private func synchronizeReleaseSafeArea() {
@@ -218,10 +355,12 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         webView.evaluateJavaScript(Self.releaseSafeAreaScript(resolvedInsets)) { result, error in
             if let error = error {
                 print("[CliniverseSafeArea] injectionError=\(error.localizedDescription)")
+                self.updateLayoutDiagnostics(webContract: nil, error: error)
                 return
             }
             guard let contract = result as? [String: Any] else {
                 print("[CliniverseSafeArea] nativeTop=\(Double(resolvedInsets.top)) result=pending")
+                self.refreshLayoutDiagnostics()
                 return
             }
             let cssTop = contract["top"] as? String ?? "missing"
@@ -233,7 +372,125 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
                 "cssTop=\(cssTop) headerPaddingTop=\(headerPaddingTop) " +
                 "headerMinY=\(headerMinY) ready=\(readyState)"
             )
+            self.updateLayoutDiagnostics(webContract: contract, error: nil)
         }
+    }
+
+    private func installLayoutDiagnostics() {
+        guard layoutDiagnosticsEnabled, layoutDiagnosticsElement == nil else { return }
+
+        let diagnosticsElement = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        diagnosticsElement.backgroundColor = .clear
+        diagnosticsElement.isUserInteractionEnabled = false
+        diagnosticsElement.isAccessibilityElement = true
+        diagnosticsElement.accessibilityIdentifier = Self.layoutDiagnosticsAccessibilityIdentifier
+        diagnosticsElement.accessibilityLabel = "Cliniverse layout diagnostics"
+        diagnosticsElement.accessibilityValue = "pending"
+        view.addSubview(diagnosticsElement)
+        layoutDiagnosticsElement = diagnosticsElement
+
+        refreshLayoutDiagnostics()
+        layoutDiagnosticsTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            self?.refreshLayoutDiagnostics()
+        }
+    }
+
+    private func refreshLayoutDiagnostics() {
+        guard layoutDiagnosticsEnabled, let webView = webView else { return }
+
+        webView.evaluateJavaScript(Self.releaseLayoutDiagnosticsScript) { [weak self] result, error in
+            self?.updateLayoutDiagnostics(webContract: result as? [String: Any], error: error)
+        }
+    }
+
+    private func updateLayoutDiagnostics(webContract: [String: Any]?, error: Error?) {
+        guard layoutDiagnosticsEnabled, let diagnosticsElement = layoutDiagnosticsElement else { return }
+
+        let statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? .zero
+        var payload: [String: Any] = [
+            "schemaVersion": 1,
+            "device": [
+                "idiom": UIDevice.current.userInterfaceIdiom == .pad ? "pad" : "phone",
+                "orientation": view.window?.windowScene?.interfaceOrientation.rawValue ?? 0,
+                "screenScale": Double(UIScreen.main.scale),
+                "screenNativeScale": Double(UIScreen.main.nativeScale),
+            ],
+            "view": [
+                "frame": Self.rectPayload(view.frame),
+                "bounds": Self.rectPayload(view.bounds),
+                "safeAreaInsets": Self.insetsPayload(view.safeAreaInsets),
+                "additionalSafeAreaInsets": Self.insetsPayload(additionalSafeAreaInsets),
+            ],
+            "window": [
+                "frame": Self.rectPayload(view.window?.frame ?? .zero),
+                "safeAreaInsets": Self.insetsPayload(view.window?.safeAreaInsets ?? .zero),
+                "statusBarFrame": Self.rectPayload(statusBarFrame),
+            ],
+        ]
+
+        if let webView = webView {
+            payload["webView"] = [
+                "frame": Self.rectPayload(webView.frame),
+                "bounds": Self.rectPayload(webView.bounds),
+                "safeAreaInsets": Self.insetsPayload(webView.safeAreaInsets),
+                "scrollFrame": Self.rectPayload(webView.scrollView.frame),
+                "scrollBounds": Self.rectPayload(webView.scrollView.bounds),
+                "contentInset": Self.insetsPayload(webView.scrollView.contentInset),
+                "adjustedContentInset": Self.insetsPayload(webView.scrollView.adjustedContentInset),
+                "contentOffset": [
+                    "x": Double(webView.scrollView.contentOffset.x),
+                    "y": Double(webView.scrollView.contentOffset.y),
+                ],
+                "contentSize": [
+                    "width": Double(webView.scrollView.contentSize.width),
+                    "height": Double(webView.scrollView.contentSize.height),
+                ],
+                "insetAdjustmentBehavior": webView.scrollView.contentInsetAdjustmentBehavior.rawValue,
+            ]
+        }
+
+        if let webContract = webContract {
+            payload["web"] = webContract
+        } else {
+            payload["web"] = NSNull()
+        }
+        if let error = error {
+            payload["evaluationError"] = error.localizedDescription
+        }
+
+        guard
+            JSONSerialization.isValidJSONObject(payload),
+            let data = try? JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys]),
+            let value = String(data: data, encoding: .utf8)
+        else {
+            diagnosticsElement.accessibilityValue = "serialization-error"
+            return
+        }
+
+        diagnosticsElement.accessibilityValue = value
+        print("[CliniverseLayoutDiagnostics] \(value)")
+    }
+
+    private static func rectPayload(_ rect: CGRect) -> [String: Double] {
+        [
+            "x": Double(rect.origin.x),
+            "y": Double(rect.origin.y),
+            "width": Double(rect.size.width),
+            "height": Double(rect.size.height),
+            "minX": Double(rect.minX),
+            "minY": Double(rect.minY),
+            "maxX": Double(rect.maxX),
+            "maxY": Double(rect.maxY),
+        ]
+    }
+
+    private static func insetsPayload(_ insets: UIEdgeInsets) -> [String: Double] {
+        [
+            "top": Double(insets.top),
+            "right": Double(insets.right),
+            "bottom": Double(insets.bottom),
+            "left": Double(insets.left),
+        ]
     }
 
     private func installLaunchOverlay() {

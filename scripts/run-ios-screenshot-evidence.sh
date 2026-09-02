@@ -195,12 +195,14 @@ run_device_test() {
   # outside DerivedData and report a missing embedded .xctest product.
   local xctestrun="$xctestrun_root/$device_class.xctestrun"
   local result_bundle="$WORK_DIR/$device_class.xcresult"
+  local xcodebuild_log="$OUTPUT_DIR/diagnostics/$device_class/xcodebuild.log"
 
   plutil -convert json -o "$xctestrun_json" "$BASE_XCTESTRUN"
   node "$ROOT_DIR/scripts/configure-ios-screenshot-xctestrun.mjs" \
     "$xctestrun_json" "$xctestrun_json.configured" "$device_class"
   plutil -convert binary1 -o "$xctestrun" "$xctestrun_json.configured"
 
+  mkdir -p "$(dirname "$xcodebuild_log")"
   set +e
   xcodebuild \
     -xctestrun "$xctestrun" \
@@ -208,8 +210,9 @@ run_device_test() {
     -parallel-testing-enabled NO \
     -resultBundlePath "$result_bundle" \
     -only-testing:CliniverseScreenshots/CliniverseScreenshotTests/testAppleReleaseScreenshots \
-    test-without-building
-  local test_status=$?
+    test-without-building \
+    2>&1 | tee "$xcodebuild_log"
+  local test_status=${PIPESTATUS[0]}
   set -e
 
   if (( test_status != 0 )); then
