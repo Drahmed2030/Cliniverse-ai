@@ -65,16 +65,95 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private static func releaseSafeAreaScript(_ insets: UIEdgeInsets) -> String {
         return """
         (() => {
+          const stateKey = '__cliniverseNativeSafeAreaContract';
+          const nextValues = {
+            '--cliniverse-native-safe-area-top': '\(Double(insets.top))px',
+            '--cliniverse-native-safe-area-right': '\(Double(insets.right))px',
+            '--cliniverse-native-safe-area-bottom': '\(Double(insets.bottom))px',
+            '--cliniverse-native-safe-area-left': '\(Double(insets.left))px',
+          };
+          const state = window[stateKey] || {
+            values: nextValues,
+            observer: null,
+            scheduled: false,
+            apply: null,
+          };
+          state.values = nextValues;
+
+          const enforcePixels = (style, name, value) => {
+            const current = Number.parseFloat(style.getPropertyValue(name));
+            const expected = Number.parseFloat(value);
+            const priority = style.getPropertyPriority(name);
+            if (!Number.isFinite(current) || Math.abs(current - expected) > 0.01 || priority !== 'important') {
+              style.setProperty(name, value, 'important');
+            }
+          };
+
           const applyCliniverseSafeArea = () => {
             const root = document.documentElement;
-            if (!root) return;
-            root.style.setProperty('--cliniverse-native-safe-area-top', '\(Double(insets.top))px');
-            root.style.setProperty('--cliniverse-native-safe-area-right', '\(Double(insets.right))px');
-            root.style.setProperty('--cliniverse-native-safe-area-bottom', '\(Double(insets.bottom))px');
-            root.style.setProperty('--cliniverse-native-safe-area-left', '\(Double(insets.left))px');
+            if (!root) return null;
+
+            Object.entries(state.values).forEach(([name, value]) => {
+              enforcePixels(root.style, name, value);
+            });
+
+            // Keep the native release header below system chrome even if a
+            // framework render rewrites its inline safe-area expression.
+            const top = Number.parseFloat(state.values['--cliniverse-native-safe-area-top']);
+            const header = document.querySelector('[data-release-header-inner]');
+            if (header instanceof HTMLElement && Number.isFinite(top)) {
+              enforcePixels(header.style, 'padding-top', `${10 + top}px`);
+              enforcePixels(header.style, 'min-height', `${68 + top}px`);
+            }
+
+            const computedRoot = getComputedStyle(root);
+            const computedHeader = header instanceof HTMLElement ? getComputedStyle(header) : null;
+            return {
+              top: computedRoot.getPropertyValue('--cliniverse-native-safe-area-top').trim(),
+              right: computedRoot.getPropertyValue('--cliniverse-native-safe-area-right').trim(),
+              bottom: computedRoot.getPropertyValue('--cliniverse-native-safe-area-bottom').trim(),
+              left: computedRoot.getPropertyValue('--cliniverse-native-safe-area-left').trim(),
+              headerPaddingTop: computedHeader?.paddingTop || 'missing',
+              headerMinY: header instanceof HTMLElement ? header.getBoundingClientRect().top : null,
+              readyState: document.readyState,
+            };
           };
-          applyCliniverseSafeArea();
-          document.addEventListener('DOMContentLoaded', applyCliniverseSafeArea, { once: true });
+          state.apply = applyCliniverseSafeArea;
+          window[stateKey] = state;
+
+          const installCliniverseSafeArea = () => {
+            const root = document.documentElement;
+            if (!root) return null;
+            const result = state.apply();
+            if (!state.observer) {
+              state.observer = new MutationObserver((mutations) => {
+                const relevant = mutations.some((mutation) =>
+                  mutation.type === 'childList' ||
+                  mutation.target === root ||
+                  (mutation.target instanceof HTMLElement && mutation.target.matches('[data-release-header-inner]'))
+                );
+                if (!relevant || state.scheduled) return;
+                state.scheduled = true;
+                requestAnimationFrame(() => {
+                  state.scheduled = false;
+                  state.apply();
+                });
+              });
+              state.observer.observe(root, {
+                attributes: true,
+                attributeFilter: ['style'],
+                childList: true,
+                subtree: true,
+              });
+            }
+            return result;
+          };
+
+          if (!document.documentElement) {
+            document.addEventListener('DOMContentLoaded', installCliniverseSafeArea, { once: true });
+            return null;
+          }
+          return installCliniverseSafeArea();
         })();
         """
     }
@@ -136,7 +215,25 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             right: max(measuredInsets.right, bootstrapInsets.right)
         )
 
-        webView.evaluateJavaScript(Self.releaseSafeAreaScript(resolvedInsets), completionHandler: nil)
+        webView.evaluateJavaScript(Self.releaseSafeAreaScript(resolvedInsets)) { result, error in
+            if let error = error {
+                print("[CliniverseSafeArea] injectionError=\(error.localizedDescription)")
+                return
+            }
+            guard let contract = result as? [String: Any] else {
+                print("[CliniverseSafeArea] nativeTop=\(Double(resolvedInsets.top)) result=pending")
+                return
+            }
+            let cssTop = contract["top"] as? String ?? "missing"
+            let headerPaddingTop = contract["headerPaddingTop"] as? String ?? "missing"
+            let headerMinY = contract["headerMinY"].map { String(describing: $0) } ?? "missing"
+            let readyState = contract["readyState"] as? String ?? "unknown"
+            print(
+                "[CliniverseSafeArea] nativeTop=\(Double(resolvedInsets.top)) " +
+                "cssTop=\(cssTop) headerPaddingTop=\(headerPaddingTop) " +
+                "headerMinY=\(headerMinY) ready=\(readyState)"
+            )
+        }
     }
 
     private func installLaunchOverlay() {

@@ -48,3 +48,12 @@ Next: verify this narrow per-edge correction locally, then require a new non-pub
 - The non-publishing screenshot workflow may use a newer descendant commit only when Git proves every delta is confined to audited native, test, documentation, or CI-verifier paths.
 - Any application, public asset, dependency, or web-runtime change still blocks screenshot capture until the matching commit is promoted to production.
 - This removes manual Vercel promotion from native-only screenshot iterations without weakening the production packaging gate.
+
+### Screenshot evidence build 28
+
+- Codemagic build 28 passed dependency installation, the production web build, the native-only production compatibility gate, StoreKit, privacy, CocoaPods and native test-target setup.
+- The capture stage still measured the iPhone release title at `minY = 19`, below the required `60` point clearance.
+- The unchanged geometry proves that resolving each native inset was not enough. The remaining fault is the Swift-to-CSS application contract during WKWebView document hydration.
+- The next candidate persists the native values with one guarded observer, enforces the release-header top clearance directly, and emits non-sensitive computed safe-area diagnostics to the build log.
+
+Next: run one non-publishing screenshot-evidence build and use the `[CliniverseSafeArea]` diagnostic together with the XCTest geometry result. Do not create an IPA, promote production, merge, or submit to Apple from this gate.
