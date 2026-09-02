@@ -67,3 +67,14 @@ Next: run one non-publishing screenshot-evidence build and use the `[CliniverseS
 - A matching CSS fallback protects the release header and patient-journey header before and during React hydration.
 
 Next: verify the web change locally, deploy the exact candidate commit to the canonical production origin, then run one non-publishing iPhone and iPad screenshot-evidence build. Keep the pull request unmerged and do not create an IPA or submit to Apple.
+
+### Screenshot evidence build 30
+
+- Vercel production and the release contract matched commit `82196d5` before the run.
+- Every preparation gate passed, but the iPhone title remained at `minY = 19`.
+- The exported 1320 by 2868 failure image confirmed that iOS system status items visibly overlaid both release-header controls.
+- Production CSS contained the new clearance values, proving that deployment caching was not the cause.
+- The remaining activation fault was the WebKit feature query and platform identity: iOS 26 WKWebView can miss the legacy `-webkit-touch-callout` feature query and present a desktop-style user agent.
+- The next candidate makes compact-width clearance unconditional and recognizes touch tablets plus modern iPad desktop user agents, while keeping desktop layouts unchanged.
+
+Next: verify and promote the narrow activation correction, then run one final non-publishing evidence build. Do not create an IPA, merge, or submit to Apple.

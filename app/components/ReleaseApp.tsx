@@ -35,10 +35,13 @@ const C = {
 }
 
 function getNativeHeaderTopPadding() {
+  const isCompactViewport = window.innerWidth < 768
+  const isTouchTablet = window.innerWidth <= 1366 && window.navigator.maxTouchPoints > 0
   const isIOSWebView = Capacitor.getPlatform() === 'ios'
     || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+    || (/Macintosh/.test(window.navigator.userAgent) && window.navigator.maxTouchPoints > 1)
 
-  if (!isIOSWebView) return null
+  if (!isIOSWebView && !isCompactViewport && !isTouchTablet) return null
 
   // XCUITest requires the first accessible heading to begin below native
   // system chrome. Keep deterministic fallbacks for WKWebView launches that

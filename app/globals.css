@@ -251,30 +251,28 @@ input::placeholder, textarea::placeholder {
 /* WKWebView can expose zero safe-area values while a remote document hydrates.
    Keep the first accessible release heading below iOS system chrome even when
    the native bridge has not delivered its measured insets yet. */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 767px) {
-    [data-release-header-inner],
-    [data-patient-journey-top] {
-      padding-top: max(
-        69px,
-        calc(10px + max(
-          env(safe-area-inset-top, 0px),
-          var(--cliniverse-native-safe-area-top, 0px)
-        ))
-      ) !important;
-    }
+@media (max-width: 767px) {
+  [data-release-header-inner],
+  [data-patient-journey-top] {
+    padding-top: max(
+      69px,
+      calc(10px + max(
+        env(safe-area-inset-top, 0px),
+        var(--cliniverse-native-safe-area-top, 0px)
+      ))
+    ) !important;
   }
+}
 
-  @media (min-width: 768px) {
-    [data-release-header-inner],
-    [data-patient-journey-top] {
-      padding-top: max(
-        34px,
-        calc(10px + max(
-          env(safe-area-inset-top, 0px),
-          var(--cliniverse-native-safe-area-top, 0px)
-        ))
-      ) !important;
-    }
+@media (min-width: 768px) and (max-width: 1366px) and (pointer: coarse) {
+  [data-release-header-inner],
+  [data-patient-journey-top] {
+    padding-top: max(
+      34px,
+      calc(10px + max(
+        env(safe-area-inset-top, 0px),
+        var(--cliniverse-native-safe-area-top, 0px)
+      ))
+    ) !important;
   }
 }
