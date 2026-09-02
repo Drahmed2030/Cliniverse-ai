@@ -241,5 +241,5 @@ function AuthButton(props: { label: string; bg: string; color: string; border?: 
 }
 
 function Field(props: { label: string; value: string; onChange: (v: string) => void; type?: string; autoComplete?: string; }) {
-  return <label style={{ display: "block" }}><div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 6, letterSpacing: 0.35 }}>{props.label}</div><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} style={{ width: "100%", boxSizing: "border-box", borderRadius: 14, border: `1px solid ${T.border}`, background: "rgba(255,255,255,.035)", color: T.text, padding: "13px 14px", minHeight: 48, fontSize: 15, outline: "none" }} /></label>;
+  return <label style={{ display: "block" }}><div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 6, letterSpacing: 0.35 }}>{props.label}</div><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} style={{ width: "100%", boxSizing: "border-box", borderRadius: 14, border: `1px solid ${T.border}`, background: "rgba(255,255,255,.035)", color: T.text, padding: "13px 14px", minHeight: 48, fontSize: 16, outline: "none" }} /></label>;
 }

@@ -85,6 +85,13 @@ test('release surfaces respect iOS safe areas', () => {
   assert.match(globalCss, /34px/)
 })
 
+test('auth inputs prevent iOS focus auto-zoom', () => {
+  const auth = read('app/components/AuthScreen.tsx')
+  const field = auth.slice(auth.indexOf('function Field'))
+  assert.match(field, /<input[\s\S]*fontSize:\s*16/)
+  assert.doesNotMatch(field, /<input[\s\S]*fontSize:\s*15/)
+})
+
 test('disabled OAuth providers are absent from the Apple v1 sign-in surface', () => {
   const auth = read('app/components/AuthScreen.tsx')
   assert.match(auth, /appleEnabled\s*\?\s*<AuthButton/)
