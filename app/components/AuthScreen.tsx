@@ -7,6 +7,12 @@ import {
   signInWithPassword,
   type CliniverseAuthProvider,
 } from "../lib/identity";
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_LEFT,
+  NATIVE_SAFE_AREA_RIGHT,
+  NATIVE_SAFE_AREA_TOP,
+} from "../lib/nativeSafeArea";
 
 const T = {
   bg: "#050814",
@@ -179,10 +185,10 @@ export default function AuthScreen({
         color: T.text,
         display: "flex",
         flexDirection: "column",
-        paddingTop: "calc(28px + env(safe-area-inset-top, 0px))",
-        paddingRight: "max(20px, env(safe-area-inset-right, 0px))",
-        paddingBottom: "calc(24px + env(safe-area-inset-bottom, 0px))",
-        paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
+        paddingTop: `calc(28px + ${NATIVE_SAFE_AREA_TOP})`,
+        paddingRight: `max(20px, ${NATIVE_SAFE_AREA_RIGHT})`,
+        paddingBottom: `calc(24px + ${NATIVE_SAFE_AREA_BOTTOM})`,
+        paddingLeft: `max(20px, ${NATIVE_SAFE_AREA_LEFT})`,
         boxSizing: "border-box",
       }}
     >

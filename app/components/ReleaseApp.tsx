@@ -8,6 +8,12 @@ import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
 import AuthGate from './auth/AuthGate'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_LEFT,
+  NATIVE_SAFE_AREA_RIGHT,
+  NATIVE_SAFE_AREA_TOP,
+} from '../lib/nativeSafeArea'
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
@@ -44,16 +50,16 @@ function ReleaseShell() {
   const { openPaywall } = useCliniverseSubscription()
 
   return (
-    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
+    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
       <ReleaseHeader active={tab} />
       <div
         style={{
           maxWidth: 1180,
           margin: '0 auto',
           paddingTop: 18,
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingRight: `max(16px, ${NATIVE_SAFE_AREA_RIGHT})`,
           paddingBottom: 28,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
@@ -87,11 +93,11 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
         style={{
           maxWidth: 1180,
           margin: '0 auto',
-          minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
-          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          minHeight: `calc(68px + ${NATIVE_SAFE_AREA_TOP})`,
+          paddingTop: `calc(10px + ${NATIVE_SAFE_AREA_TOP})`,
+          paddingRight: `max(16px, ${NATIVE_SAFE_AREA_RIGHT})`,
           paddingBottom: 10,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

@@ -45,16 +45,90 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
 
+    private static var bootstrapSafeAreaInsets: UIEdgeInsets {
+        let bounds = UIScreen.main.bounds
+        let longEdge = max(bounds.width, bounds.height)
+        let portrait = bounds.height >= bounds.width
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return UIEdgeInsets(top: 24, left: 0, bottom: 20, right: 0)
+        }
+        if !portrait {
+            return UIEdgeInsets(top: 0, left: 59, bottom: 21, right: 59)
+        }
+        if longEdge <= 736 {
+            return UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        }
+        return UIEdgeInsets(top: 59, left: 0, bottom: 34, right: 0)
+    }
+
+    private static func releaseSafeAreaScript(_ insets: UIEdgeInsets) -> String {
+        return """
+        (() => {
+          const applyCliniverseSafeArea = () => {
+            const root = document.documentElement;
+            if (!root) return;
+            root.style.setProperty('--cliniverse-native-safe-area-top', '\(Double(insets.top))px');
+            root.style.setProperty('--cliniverse-native-safe-area-right', '\(Double(insets.right))px');
+            root.style.setProperty('--cliniverse-native-safe-area-bottom', '\(Double(insets.bottom))px');
+            root.style.setProperty('--cliniverse-native-safe-area-left', '\(Double(insets.left))px');
+          };
+          applyCliniverseSafeArea();
+          document.addEventListener('DOMContentLoaded', applyCliniverseSafeArea, { once: true });
+        })();
+        """
+    }
+
+    override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+        let bootstrap = WKUserScript(
+            source: Self.releaseSafeAreaScript(Self.bootstrapSafeAreaInsets),
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        )
+        configuration.userContentController.addUserScript(bootstrap)
+        return super.webView(with: frame, configuration: configuration)
+    }
+
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        webView?.scrollView.contentInsetAdjustmentBehavior = .never
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        synchronizeReleaseSafeArea()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        synchronizeReleaseSafeArea()
+    }
+
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
+    }
+
+    private func synchronizeReleaseSafeArea() {
+        guard let webView = webView else { return }
+
+        let viewInsets = view.safeAreaInsets
+        let windowInsets = view.window?.safeAreaInsets ?? .zero
+        let statusBarBottom = view.window?.windowScene?.statusBarManager?.statusBarFrame.maxY ?? 0
+        let measuredInsets = UIEdgeInsets(
+            top: max(max(viewInsets.top, windowInsets.top), statusBarBottom),
+            left: max(viewInsets.left, windowInsets.left),
+            bottom: max(viewInsets.bottom, windowInsets.bottom),
+            right: max(viewInsets.right, windowInsets.right)
+        )
+        let hasMeasuredInsets = measuredInsets.top > 0 || measuredInsets.left > 0 ||
+            measuredInsets.bottom > 0 || measuredInsets.right > 0
+        let resolvedInsets = hasMeasuredInsets ? measuredInsets : Self.bootstrapSafeAreaInsets
+
+        webView.evaluateJavaScript(Self.releaseSafeAreaScript(resolvedInsets), completionHandler: nil)
     }
 
     private func installLaunchOverlay() {
@@ -145,6 +219,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
+                self?.synchronizeReleaseSafeArea()
                 self?.dismissLaunchOverlay()
             }
         }
@@ -159,6 +234,7 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
                     if error == nil,
                        let readyState = result as? String,
                        readyState == "interactive" || readyState == "complete" {
+                        self.synchronizeReleaseSafeArea()
                         self.dismissLaunchOverlay()
                         return
                     }

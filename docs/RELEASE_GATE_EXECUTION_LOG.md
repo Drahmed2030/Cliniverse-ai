@@ -20,3 +20,14 @@ Next: build real identity + entitlement foundation on an isolated branch, then w
 - Passed 115 repository tests, TypeScript, release-file ESLint and a 41-route production build.
 
 Next: verify Vercel runtime secret names, create a signed iOS candidate, complete Sandbox purchase/restore tests on clean iPhone and iPad installs, then update App Store Connect. No production promotion or Apple submission is authorized by this log.
+
+### iOS screenshot evidence recovery
+
+- Codemagic build 26 on commit `37406b4` failed only at the screenshot geometry gate.
+- The iPhone 17 Pro Max evidence measured the release title at `minY = -15`, below the required `60` point clearance.
+- The artifact confirmed that `ios.contentInset = always` moved the sticky release header behind the system status bar.
+- The recovery candidate removes scroll-view automatic inset adjustment and installs a document-start native safe-area contract for every WKWebView navigation.
+- The same contract now protects authentication, release headers, bottom navigation, onboarding, paywall, patient detail, splash and offline recovery surfaces.
+- Repository tests pass `116/116`; the production Next.js build and targeted release-file ESLint pass.
+
+Next: deploy the recovery commit to the canonical production origin, then require a fresh non-publishing iPhone and iPad screenshot-evidence build. Do not create an IPA or submit to Apple until all twelve images pass automated and visual review.

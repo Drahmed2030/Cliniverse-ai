@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { StoreProduct } from '../lib/storekit-purchase-contract'
+import { NATIVE_SAFE_AREA_BOTTOM } from '../lib/nativeSafeArea'
 
 const T = {
   teal: "#0D9488",
@@ -100,7 +101,7 @@ export default function PaywallSheet({
 
   return (
     <div dir={dir} onClick={onClose} style={{ position:"fixed", inset:0, zIndex:100, background:"rgba(2,6,23,0.72)", display:"flex", alignItems:"flex-end", justifyContent:"center" }}>
-      <div role="dialog" aria-modal="true" aria-labelledby="cliniverse-pro-title" onClick={(e) => e.stopPropagation()} style={{ width:"100%", maxWidth:480, maxHeight:'calc(100dvh - 16px)', overflowY:'auto', background:`linear-gradient(180deg, ${T.card} 0%, ${T.bg} 100%)`, borderRadius:"28px 28px 0 0", borderTop:`1px solid ${T.border}`, padding:'18px 20px calc(28px + env(safe-area-inset-bottom, 0px))', color:T.text, position:'relative' }}>
+      <div role="dialog" aria-modal="true" aria-labelledby="cliniverse-pro-title" onClick={(e) => e.stopPropagation()} style={{ width:"100%", maxWidth:480, maxHeight:'calc(100dvh - 16px)', overflowY:'auto', background:`linear-gradient(180deg, ${T.card} 0%, ${T.bg} 100%)`, borderRadius:"28px 28px 0 0", borderTop:`1px solid ${T.border}`, padding:`18px 20px calc(28px + ${NATIVE_SAFE_AREA_BOTTOM})`, color:T.text, position:'relative' }}>
         <button type="button" aria-label="Close Cliniverse PRO plans" onClick={onClose} style={{ position:'absolute', top:16, right:18, width:34, height:34, borderRadius:99, border:`1px solid ${T.border}`, background:'rgba(255,255,255,0.04)', color:T.sub, fontSize:20, cursor:'pointer' }}>×</button>
         <div style={{ display:"flex", justifyContent:"center", marginBottom:10 }}><div style={{ width:42, height:4, borderRadius:99, background:"rgba(148,163,184,0.35)" }}/></div>
 

@@ -2,6 +2,10 @@
 import RelatedEvidencePanel from "./RelatedEvidencePanel";
 import ClinicalPanelV2 from "./ClinicalPanelV2";
 import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_TOP,
+} from "../../lib/nativeSafeArea";
 
 import type {
   WardPatient,
@@ -92,10 +96,10 @@ export default function PatientJourney({
           width: "100%",
           maxWidth: 600,
           margin: "0 auto",
-          paddingBottom: "calc(100px + env(safe-area-inset-bottom))",
+          paddingBottom: `calc(100px + ${NATIVE_SAFE_AREA_BOTTOM})`,
         }}
       >
-        <div data-patient-journey-top style={{ display: "flex", justifyContent: "center", paddingTop: "calc(10px + env(safe-area-inset-top))" }}>
+        <div data-patient-journey-top style={{ display: "flex", justifyContent: "center", paddingTop: `calc(10px + ${NATIVE_SAFE_AREA_TOP})` }}>
           <div
             style={{
               width: 40,
