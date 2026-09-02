@@ -50,48 +50,11 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())
         installLaunchOverlay()
         observeInitialNavigation()
-        synchronizeReleaseSafeArea()
-    }
-
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        synchronizeReleaseSafeArea()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        synchronizeReleaseSafeArea()
     }
 
     deinit {
         progressObservation?.invalidate()
         launchTimeout?.cancel()
-    }
-
-    private func synchronizeReleaseSafeArea() {
-        guard let webView = webView else { return }
-
-        let windowInsets = view.window?.safeAreaInsets ?? .zero
-        let insets = UIEdgeInsets(
-            top: max(view.safeAreaInsets.top, windowInsets.top),
-            left: max(view.safeAreaInsets.left, windowInsets.left),
-            bottom: max(view.safeAreaInsets.bottom, windowInsets.bottom),
-            right: max(view.safeAreaInsets.right, windowInsets.right)
-        )
-        guard insets.top > 0 else { return }
-
-        let script = """
-        (() => {
-          const root = document.documentElement;
-          if (!root) return false;
-          root.style.setProperty('--cliniverse-native-safe-area-top', '\(insets.top)px');
-          root.style.setProperty('--cliniverse-native-safe-area-right', '\(insets.right)px');
-          root.style.setProperty('--cliniverse-native-safe-area-bottom', '\(insets.bottom)px');
-          root.style.setProperty('--cliniverse-native-safe-area-left', '\(insets.left)px');
-          return true;
-        })();
-        """
-        webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     private func installLaunchOverlay() {
@@ -182,7 +145,6 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 guard observedWebView.estimatedProgress >= 1.0, !observedWebView.isLoading else { return }
-                self?.synchronizeReleaseSafeArea()
                 self?.dismissLaunchOverlay()
             }
         }
@@ -197,7 +159,6 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
                     if error == nil,
                        let readyState = result as? String,
                        readyState == "interactive" || readyState == "complete" {
-                        self.synchronizeReleaseSafeArea()
                         self.dismissLaunchOverlay()
                         return
                     }

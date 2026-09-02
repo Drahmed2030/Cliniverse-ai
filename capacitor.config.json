@@ -9,6 +9,7 @@
   },
   "ios": {
     "scheme": "App",
-    "backgroundColor": "#080C16"
+    "backgroundColor": "#080C16",
+    "contentInset": "always"
   }
 }
