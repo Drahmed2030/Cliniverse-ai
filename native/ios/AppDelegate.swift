@@ -124,9 +124,17 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
             bottom: max(viewInsets.bottom, windowInsets.bottom),
             right: max(viewInsets.right, windowInsets.right)
         )
-        let hasMeasuredInsets = measuredInsets.top > 0 || measuredInsets.left > 0 ||
-            measuredInsets.bottom > 0 || measuredInsets.right > 0
-        let resolvedInsets = hasMeasuredInsets ? measuredInsets : Self.bootstrapSafeAreaInsets
+        // A WKWebView that extends under the status bar can report a zero top
+        // inset while still reporting the home-indicator bottom inset. Resolve
+        // every edge independently so one valid measured edge cannot erase the
+        // deterministic bootstrap clearance required by another edge.
+        let bootstrapInsets = Self.bootstrapSafeAreaInsets
+        let resolvedInsets = UIEdgeInsets(
+            top: max(measuredInsets.top, bootstrapInsets.top),
+            left: max(measuredInsets.left, bootstrapInsets.left),
+            bottom: max(measuredInsets.bottom, bootstrapInsets.bottom),
+            right: max(measuredInsets.right, bootstrapInsets.right)
+        )
 
         webView.evaluateJavaScript(Self.releaseSafeAreaScript(resolvedInsets), completionHandler: nil)
     }

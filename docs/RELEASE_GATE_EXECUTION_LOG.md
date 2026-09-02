@@ -31,3 +31,13 @@ Next: verify Vercel runtime secret names, create a signed iOS candidate, complet
 - Repository tests pass `116/116`; the production Next.js build and targeted release-file ESLint pass.
 
 Next: deploy the recovery commit to the canonical production origin, then require a fresh non-publishing iPhone and iPad screenshot-evidence build. Do not create an IPA or submit to Apple until all twelve images pass automated and visual review.
+
+### Build 27 evidence result
+
+- Vercel production and the canonical release contract both matched commit `fe84a7f` before the run.
+- Codemagic build 27 passed every preparation gate and failed only at the iPhone screenshot geometry assertion.
+- The title improved from `minY = -15` in build 26 to `minY = 19`, but remained below the required `60` point clearance.
+- The remaining defect is deterministic: iOS reported a valid bottom safe-area inset and a zero top inset. Whole-vector fallback accepted that partial measurement and replaced the 59-point bootstrap top inset with zero.
+- The next candidate resolves each safe-area edge independently, preserving measured values while retaining the bootstrap minimum for any zero edge.
+
+Next: verify this narrow per-edge correction locally, then require a new non-publishing screenshot-evidence run before any IPA or Apple submission.
