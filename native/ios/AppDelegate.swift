@@ -45,6 +45,23 @@ final class CliniverseBridgeViewController: CAPBridgeViewController {
     private var progressObservation: NSKeyValueObservation?
     private var launchTimeout: DispatchWorkItem?
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard let webView = webView else { return }
+        let topInset = view.safeAreaInsets.top
+        let releaseFrame = CGRect(
+            x: view.bounds.minX,
+            y: view.bounds.minY + topInset,
+            width: view.bounds.width,
+            height: max(0, view.bounds.height - topInset)
+        )
+
+        if webView.frame != releaseFrame {
+            webView.frame = releaseFrame
+        }
+    }
+
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
         bridge?.registerPluginInstance(CliniverseStoreKitPlugin())

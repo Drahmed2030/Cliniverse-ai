@@ -1,8 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Capacitor } from '@capacitor/core'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
@@ -28,14 +27,6 @@ const C = {
   gold: '#D4A72C',
 }
 
-function getNativeHeaderTopPadding() {
-  const isIOSWebView = Capacitor.getPlatform() === 'ios'
-    || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
-
-  if (!isIOSWebView) return null
-  return window.innerWidth >= 768 ? 24 : 44
-}
-
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
@@ -50,25 +41,11 @@ export default function ReleaseApp() {
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
-  const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
-
-  useEffect(() => {
-    const syncNativeHeaderTopPadding = () => {
-      setNativeHeaderTopPadding(getNativeHeaderTopPadding())
-    }
-
-    // Resolve after hydration even when WKWebView never emits a resize event.
-    // The prior external-store subscription could leave the first release
-    // surfaces on the server fallback until a later viewport change.
-    syncNativeHeaderTopPadding()
-    window.addEventListener('resize', syncNativeHeaderTopPadding)
-    return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
-  }, [])
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
-      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
+      <ReleaseHeader active={tab} />
       <div
         style={{
           maxWidth: 1180,
@@ -94,7 +71,7 @@ function ReleaseShell() {
   )
 }
 
-function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
+function ReleaseHeader({ active }: { active: ReleaseTab }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
     care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
@@ -103,13 +80,6 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
   }
   const current = titles[active]
-  // WKWebView can report a zero CSS safe-area inset during remote navigation
-  // on some iOS versions. Keep the release header below the system status bar
-  // while still allowing a larger device-provided inset to win in CSS.
-  const topPadding = nativeTopPadding === null
-    ? 'calc(10px + env(safe-area-inset-top, 0px))'
-    : `max(${nativeTopPadding}px, calc(10px + env(safe-area-inset-top, 0px)))`
-
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
       <div
@@ -118,7 +88,7 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
           maxWidth: 1180,
           margin: '0 auto',
           minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
-          paddingTop: topPadding,
+          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
           paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
           paddingBottom: 10,
           paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',

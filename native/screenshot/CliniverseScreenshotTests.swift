@@ -135,10 +135,8 @@ final class CliniverseScreenshotTests: XCTestCase {
             return
         }
 
-        emailField.tap()
-        emailField.typeText(email)
-        passwordField.tap()
-        passwordField.typeText(password)
+        try enter(email, into: emailField)
+        try enter(password, into: passwordField)
 
         let signInButton = app.buttons
             .matching(NSPredicate(format: "label ==[c] %@", "Sign in"))
@@ -147,6 +145,28 @@ final class CliniverseScreenshotTests: XCTestCase {
         signInButton.tap()
 
         XCTAssertTrue(homeTitle.waitForExistence(timeout: waitTimeout), "Reviewer account could not reach the release Home surface")
+    }
+
+    private func enter(_ value: String, into field: XCUIElement) throws {
+        XCTAssertTrue(field.waitForExistence(timeout: waitTimeout), "Secure sign-in field is missing")
+
+        let focus = NSPredicate(format: "hasKeyboardFocus == true")
+        for attempt in 0..<3 {
+            if attempt == 0 {
+                field.tap()
+            } else {
+                field.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            }
+
+            let focused = XCTNSPredicateExpectation(predicate: focus, object: field)
+            if XCTWaiter.wait(for: [focused], timeout: 2) == .completed {
+                field.typeText(value)
+                return
+            }
+            settle()
+        }
+
+        XCTFail("Secure sign-in field could not receive keyboard focus")
     }
 
     private func openTab(_ label: String, waitingFor expectedText: String) throws {
