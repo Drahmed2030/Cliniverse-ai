@@ -240,19 +240,28 @@ final class CliniverseScreenshotTests: XCTestCase {
         )
 
         let minimumClearY: CGFloat
-        if statusBar.waitForExistence(timeout: 2), !statusBar.frame.isEmpty {
-            minimumClearY = statusBar.frame.maxY + 4
+        let statusBarFrame: CGRect
+        if statusBar.waitForExistence(timeout: 2) {
+            let observedStatusBarFrame = statusBar.frame
+            statusBarFrame = observedStatusBarFrame
+            if observedStatusBarFrame.isEmpty {
+                let windowWidth = app.windows.firstMatch.frame.width
+                minimumClearY = windowWidth >= 700 ? 28 : 60
+            } else {
+                minimumClearY = observedStatusBarFrame.maxY + 4
+            }
         } else {
             // Recent iOS simulator runtimes do not always expose StatusBar in
             // the application accessibility tree. Keep the visual gate strict
             // with deterministic portrait clearance for the tested form factor.
+            statusBarFrame = .zero
             let windowWidth = app.windows.firstMatch.frame.width
             minimumClearY = windowWidth >= 700 ? 28 : 60
         }
         attachLayoutDiagnostics(
             anchor: text,
             anchorFrame: elementFrame,
-            statusBarFrame: statusBar.frame,
+            statusBarFrame: statusBarFrame,
             minimumClearY: minimumClearY
         )
         XCTAssertGreaterThanOrEqual(
