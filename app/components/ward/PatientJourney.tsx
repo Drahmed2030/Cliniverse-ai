@@ -62,6 +62,7 @@ interface Props {
   onRequestConsult?: (patientId: string) => void;
   consultRequested?: boolean;
   isPro?: boolean;
+  onUpgrade?: () => void;
 }
 
 export default function PatientJourney({
@@ -70,6 +71,7 @@ export default function PatientJourney({
   onRequestConsult,
   consultRequested = false,
   isPro = false,
+  onUpgrade,
 }: Props) {
   const accent = priorityColor(patient.priority);
 
@@ -210,7 +212,7 @@ export default function PatientJourney({
           </Section>
 
           <Section title="Related Evidence">
-            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} />
+            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} onUpgrade={onUpgrade} />
           </Section>
 
           <Section title="Orders">

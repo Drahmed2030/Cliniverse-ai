@@ -7,6 +7,7 @@ import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
 import AuthGate from './auth/AuthGate'
+import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
@@ -29,13 +30,18 @@ const C = {
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
-      {() => <ReleaseShell />}
+      {() => (
+        <SubscriptionPurchaseProvider>
+          <ReleaseShell />
+        </SubscriptionPurchaseProvider>
+      )}
     </AuthGate>
   )
 }
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
+  const { openPaywall } = useCliniverseSubscription()
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
@@ -57,7 +63,7 @@ function ReleaseShell() {
           </ErrorBoundary>
         )}
         {tab === 'intelligence' && <ReleaseIntelligenceGate />}
-        {tab === 'atlas' && <AtlasReleaseCatalog />}
+        {tab === 'atlas' && <AtlasReleaseCatalog onNavigate={setTab} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
@@ -68,7 +74,7 @@ function ReleaseShell() {
 function ReleaseHeader({ active }: { active: ReleaseTab }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
-    care: { title: 'Care', sub: 'Follow-up, prioritization and human escalation' },
+    care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
     intelligence: { title: 'Intelligence', sub: 'Release-gated AI workspace' },
     atlas: { title: 'Atlas', sub: 'Curated clinical tools and references' },
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
@@ -106,7 +112,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
 
 function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Review care workflow', text: 'Follow up, prioritize, escalate and keep the next human action accountable.', accent: C.teal },
+    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Open cardiology learning', text: 'Run fictional Ward, Cardiology Operations and Nexus learning workflows with human review.', accent: C.teal },
     { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Review AI release boundary', text: 'AI assistance stays gated until disclosure, consent and clinical-claims review are complete.', accent: C.violet },
     { tab: 'atlas', eyebrow: 'ATLAS', title: 'Browse curated tools', text: 'See capabilities only after they are clearly classified for the current release.', accent: C.blue },
     { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage Me', text: 'Keep profile, Life, plan, privacy and settings under one identity.', accent: C.gold },

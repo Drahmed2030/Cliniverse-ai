@@ -53,7 +53,8 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /if swipe < maximumSwipes/)
   assert.match(source, /app\.buttons\["Open Hassan Al-Amri simulated case"\]/)
   assert.doesNotMatch(source, /app\.staticTexts\["Hassan Al-Amri"\]/)
-  assert.match(wardHome, /aria-label=\{`Open \$\{patient\.name\} simulated case`\}/)
+  assert.match(wardHome, /`Open \$\{patient\.name\} simulated case`/)
+  assert.match(wardHome, /patient\.id === 'w1'/)
   assert.doesNotMatch(source, /capture\([^\n]+\)[\s\S]{0,300}typeText\(/)
 })
 

@@ -43,6 +43,16 @@ if ! grep -R -a -q 'CliniverseBridgeViewController' "$APP_PATH"; then
   exit 2
 fi
 
+if ! grep -R -a -q 'CliniverseStoreKit' "$APP_PATH"; then
+  echo "HOLD: compiled StoreKit bridge is not referenced by the app bundle"
+  exit 2
+fi
+
+if ! grep -R -a -q 'com.cliniverse.ai.pro.monthly' "$APP_PATH"; then
+  echo "HOLD: live App Store product ID is missing from the signed artifact"
+  exit 2
+fi
+
 # A generated AppIcon should result in compiled asset catalog resources in the final bundle.
 [ -f "$APP_PATH/Assets.car" ] || { echo "ERROR: compiled Assets.car missing; AppIcon pipeline may be broken"; exit 1; }
 
@@ -66,6 +76,7 @@ EXPECTED_PRIVACY_TYPES="$(printf '%s\n' \
   NSPrivacyCollectedDataTypeEmailAddress \
   NSPrivacyCollectedDataTypeName \
   NSPrivacyCollectedDataTypeOtherDiagnosticData \
+  NSPrivacyCollectedDataTypePurchaseHistory \
   NSPrivacyCollectedDataTypeUserID | sort)"
 [ "$ACTUAL_PRIVACY_TYPES" = "$EXPECTED_PRIVACY_TYPES" ] || {
   echo "HOLD: signed app privacy data types do not match the RC1 contract"
@@ -76,7 +87,7 @@ EXPECTED_PRIVACY_TYPES="$(printf '%s\n' \
 # The local fallback is the native recovery surface for remote-origin failure.
 [ -f "$APP_PATH/public/native-offline.html" ] || { echo "HOLD: native offline recovery page is missing"; exit 2; }
 
-# Apple v1 does not include these native capabilities. Their presence would
+# Apple v1 does not include these native sensitive-data capabilities. Their presence would
 # indicate binary/configuration drift and requires a separate privacy review.
 for key in \
   NSHealthShareUsageDescription \

@@ -6,12 +6,14 @@ function read(path) {
   return fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
 }
 
-test('Atlas is an explicit non-interactive release-status catalog', () => {
+test('Atlas is an interactive tour limited to verified release surfaces', () => {
   const source = read('app/components/release/AtlasReleaseCatalog.tsx')
-  assert.doesNotMatch(source, /<button/)
-  assert.doesNotMatch(source, /onClick=/)
-  assert.match(source, /capability names are release-status labels, not launch controls/)
-  assert.match(source, /Only completed and individually verified tools will become interactive/)
+  assert.match(source, /<button/)
+  assert.match(source, /onNavigate\(path\.destination\)/)
+  assert.match(source, /onOpenPlan/)
+  assert.match(source, /CURRENT RELEASE TOUR/)
+  assert.match(source, /Release boundary:/)
+  assert.doesNotMatch(source, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
 })
 
 test('Me hub exposes privacy, terms, and support destinations', () => {

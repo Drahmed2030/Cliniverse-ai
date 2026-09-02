@@ -23,8 +23,8 @@ const FREE_ENTITLEMENT: CliniverseEntitlement = {
 }
 
 const APPLE_CORE_PRODUCTS = new Set([
-  'cliniverse.core.monthly',
-  'cliniverse.core.yearly',
+  'com.cliniverse.ai.pro.monthly',
+  'com.cliniverse.ai.pro.yearly',
 ])
 
 // Apple grants access in active state and while a bounded Billing Grace Period

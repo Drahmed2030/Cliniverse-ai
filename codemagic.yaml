@@ -31,6 +31,12 @@ workflows:
           node scripts/configure-ios-launch-guard.mjs
           grep -q 'CliniverseBridgeViewController' ios/App/App/AppDelegate.swift
           grep -q 'customClass="CliniverseBridgeViewController"' ios/App/App/Base.lproj/Main.storyboard
+      - name: Install native StoreKit bridge
+        script: |
+          ruby scripts/install-ios-storekit-plugin.rb
+          grep -q 'registerPluginInstance(CliniverseStoreKitPlugin())' ios/App/App/AppDelegate.swift
+          grep -q 'com.cliniverse.ai.pro.monthly' ios/App/App/CliniverseStoreKitPlugin.swift
+          grep -q 'CliniverseStoreKitPlugin.swift in Sources' ios/App/App.xcodeproj/project.pbxproj
       - name: Generate branded iOS assets
         script: |
           node scripts/sync-brand-icons.mjs
@@ -124,6 +130,12 @@ workflows:
           node scripts/configure-ios-launch-guard.mjs
           grep -q 'CliniverseBridgeViewController' ios/App/App/AppDelegate.swift
           grep -q 'customClass="CliniverseBridgeViewController"' ios/App/App/Base.lproj/Main.storyboard
+      - name: Install native StoreKit bridge
+        script: |
+          ruby scripts/install-ios-storekit-plugin.rb
+          grep -q 'registerPluginInstance(CliniverseStoreKitPlugin())' ios/App/App/AppDelegate.swift
+          grep -q 'com.cliniverse.ai.pro.monthly' ios/App/App/CliniverseStoreKitPlugin.swift
+          grep -q 'CliniverseStoreKitPlugin.swift in Sources' ios/App/App.xcodeproj/project.pbxproj
       - name: Generate branded iOS assets
         script: |
           node scripts/sync-brand-icons.mjs

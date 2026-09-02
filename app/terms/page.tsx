@@ -17,7 +17,7 @@ export default function TermsPage() {
       <div style={{maxWidth:760,margin:'0 auto',padding:'56px 22px 72px'}}>
         <div style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:'#14b8a6'}}>Cliniverse AI · by NeuraOps</div>
         <h1 style={{fontSize:'clamp(34px,6vw,50px)',lineHeight:1.05,letterSpacing:'-.04em',margin:'14px 0 8px'}}>Terms of Use</h1>
-        <p style={{fontSize:12,color:'#64748b',margin:'0 0 30px'}}>Last updated: August 26, 2026</p>
+        <p style={{fontSize:12,color:'#64748b',margin:'0 0 30px'}}>Last updated: September 2, 2026</p>
 
         <section style={{...sectionStyle,borderColor:'rgba(20,184,166,.28)',background:'rgba(20,184,166,.07)'}}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>Purpose of the current release</h2>
@@ -46,7 +46,7 @@ export default function TermsPage() {
 
         <section style={sectionStyle}>
           <h2 style={{fontSize:18,margin:'0 0 8px'}}>Paid features</h2>
-          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>Paid digital features are available only when an approved purchase and entitlement path is enabled for the relevant platform. Opening a checkout page or seeing a plan label does not by itself grant an entitlement. Applicable price, renewal, cancellation and refund terms will be presented with the verified purchase flow.</p>
+          <p style={{color:'#cbd5e1',lineHeight:1.7,margin:0}}>Cliniverse PRO provides expanded fictional Ward cases, Cardiology Operations, QAPAS workflow simulation, Nexus Learning and Related Evidence for supported simulation templates. It is offered through Apple in-app purchase on iOS. The App Store purchase sheet presents the localized price and renewal terms before confirmation. Subscriptions renew automatically unless cancelled through your Apple account before renewal. Apple handles billing, cancellation and refund requests under its terms. A plan label alone does not grant access. Cliniverse activates PRO only after verifying the StoreKit transaction.</p>
         </section>
 
         <section style={sectionStyle}>

@@ -24,8 +24,8 @@ export interface AppleSignedTransactionVerifier {
 
 const EXPECTED_BUNDLE_ID = 'com.cliniverse.ai'
 const PRODUCT_IDS: Record<ApplePlan, string> = {
-  monthly: 'cliniverse.core.monthly',
-  yearly: 'cliniverse.core.yearly',
+  monthly: 'com.cliniverse.ai.pro.monthly',
+  yearly: 'com.cliniverse.ai.pro.yearly',
 }
 
 export function expectedAppleProductId(plan: ApplePlan) {
