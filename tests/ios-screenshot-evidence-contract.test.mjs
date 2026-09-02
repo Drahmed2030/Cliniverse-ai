@@ -24,6 +24,8 @@ test('screenshot evidence is an isolated non-publishing Codemagic workflow', () 
 
 test('XCUITest captures the six approved surfaces and protects reviewer identity', () => {
   const source = read('native/screenshot/CliniverseScreenshotTests.swift')
+  const authScreen = read('app/components/AuthScreen.tsx')
+  const atlasCatalog = read('app/components/release/AtlasReleaseCatalog.tsx')
   const wardHome = read('app/components/ward/WardHome.tsx')
   const captures = [...source.matchAll(/capture\("([^"]+)"\)/g)].map(match => match[1])
 
@@ -48,6 +50,9 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /for attempt in 0\.\.<3/)
   assert.match(source, /label ==\[c\] %@/)
   assert.match(source, /Continue with email/)
+  assert.match(source, /Sign in/)
+  assert.doesNotMatch(source, /app\.buttons\["Continue"\]/)
+  assert.match(authScreen, /continueEmail: "Sign in"/)
   assert.match(source, /emailEntry\.isHittable/)
   assert.match(source, /emailField\.waitForExistence\(timeout: 6\)/)
   assert.match(source, /for swipe in 0\.\.\.maximumSwipes/)
@@ -55,6 +60,9 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.match(source, /if swipe < maximumSwipes/)
   assert.match(source, /app\.buttons\["Open Hassan Al-Amri simulated case"\]/)
   assert.doesNotMatch(source, /app\.staticTexts\["Hassan Al-Amri"\]/)
+  assert.match(source, /CURRENT RELEASE TOUR/)
+  assert.doesNotMatch(source, /CURATED CAPABILITY LIBRARY/)
+  assert.match(atlasCatalog, /CURRENT RELEASE TOUR/)
   assert.match(wardHome, /`Open \$\{patient\.name\} simulated case`/)
   assert.match(wardHome, /patient\.id === 'w1'/)
   assert.doesNotMatch(source, /capture\([^\n]+\)[\s\S]{0,300}typeText\(/)

@@ -60,7 +60,7 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Atlas") {
-            try openTab("Atlas", waitingFor: "CURATED CAPABILITY LIBRARY")
+            try openTab("Atlas", waitingFor: "CURRENT RELEASE TOUR")
             capture("05-atlas")
         }
 
@@ -140,9 +140,11 @@ final class CliniverseScreenshotTests: XCTestCase {
         passwordField.tap()
         passwordField.typeText(password)
 
-        let continueButton = app.buttons["Continue"]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: waitTimeout), "Email sign-in action is missing")
-        continueButton.tap()
+        let signInButton = app.buttons
+            .matching(NSPredicate(format: "label ==[c] %@", "Sign in"))
+            .firstMatch
+        XCTAssertTrue(signInButton.waitForExistence(timeout: waitTimeout), "Email sign-in action is missing")
+        signInButton.tap()
 
         XCTAssertTrue(homeTitle.waitForExistence(timeout: waitTimeout), "Reviewer account could not reach the release Home surface")
     }
