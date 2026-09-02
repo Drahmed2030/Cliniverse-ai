@@ -1,7 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { useState, useSyncExternalStore } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
@@ -27,6 +28,20 @@ const C = {
   gold: '#D4A72C',
 }
 
+function subscribeToNativeViewport(onChange: () => void) {
+  window.addEventListener('resize', onChange)
+  return () => window.removeEventListener('resize', onChange)
+}
+
+function getNativeHeaderTopPadding() {
+  if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'ios') return null
+  return window.innerWidth >= 768 ? 24 : 34
+}
+
+function getServerHeaderTopPadding() {
+  return null
+}
+
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
@@ -41,11 +56,16 @@ export default function ReleaseApp() {
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
+  const nativeHeaderTopPadding = useSyncExternalStore(
+    subscribeToNativeViewport,
+    getNativeHeaderTopPadding,
+    getServerHeaderTopPadding,
+  )
   const { openPaywall } = useCliniverseSubscription()
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
-      <ReleaseHeader active={tab} />
+      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
         style={{
           maxWidth: 1180,
@@ -71,7 +91,7 @@ function ReleaseShell() {
   )
 }
 
-function ReleaseHeader({ active }: { active: ReleaseTab }) {
+function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
     care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
@@ -80,6 +100,12 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
   }
   const current = titles[active]
+  // WKWebView can report a zero CSS safe-area inset during remote navigation
+  // on some iOS versions. Keep the release header below the system status bar
+  // while still allowing a larger device-provided inset to win in CSS.
+  const topPadding = nativeTopPadding === null
+    ? 'calc(10px + env(safe-area-inset-top, 0px))'
+    : `max(${nativeTopPadding}px, calc(10px + env(safe-area-inset-top, 0px)))`
 
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
@@ -88,7 +114,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
           maxWidth: 1180,
           margin: '0 auto',
           minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
-          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
+          paddingTop: topPadding,
           paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
           paddingBottom: 10,
           paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
