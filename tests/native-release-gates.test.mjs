@@ -50,6 +50,20 @@ test('final IPA verification requires privacy manifest and deterministic package
   assert.match(verify, /public\/native-offline\.html/)
   assert.match(verify, /NSHealthShareUsageDescription/)
   assert.match(verify, /exit 2/)
+  assert.match(verify, /MinimumOSVersion/)
+  assert.match(verify, /require iOS 15\.0/)
+})
+
+test('generated app and dependencies require iOS 15 before packaging', () => {
+  const workflow = read('codemagic.yaml')
+  const configurator = read('scripts/configure-ios-deployment-target.rb')
+
+  assert.equal((workflow.match(/ruby scripts\/configure-ios-deployment-target\.rb/g) || []).length, 2)
+  assert.match(configurator, /minimum_ios = '15\.0'/)
+  assert.match(configurator, /target\.name == 'App'/)
+  assert.match(configurator, /IPHONEOS_DEPLOYMENT_TARGET/)
+  assert.match(configurator, /platform :ios/)
+  assert.match(configurator, /generated Podfile does not declare an iOS platform/)
 })
 
 test('native StoreKit bridge is compiled, registered and verified against the live Apple product', () => {

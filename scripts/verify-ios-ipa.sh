@@ -29,6 +29,7 @@ ENCRYPTION=$(/usr/libexec/PlistBuddy -c 'Print :ITSAppUsesNonExemptEncryption' "
 DISPLAY_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$PLIST" 2>/dev/null || true)
 LAUNCH_GUARD=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseLaunchGuardVersion' "$PLIST" 2>/dev/null || true)
 ICON_SOURCE_SHA256=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseIconSourceSHA256' "$PLIST" 2>/dev/null || true)
+MINIMUM_IOS=$(/usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$PLIST" 2>/dev/null || true)
 
 [ "$BUNDLE_ID" = "com.cliniverse.ai" ] || { echo "ERROR: unexpected bundle id: $BUNDLE_ID"; exit 1; }
 [ -n "$VERSION" ] || { echo "ERROR: empty marketing version"; exit 1; }
@@ -37,6 +38,7 @@ ICON_SOURCE_SHA256=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseIconSourceSHA2
 [ "$DISPLAY_NAME" = "Cliniverse AI" ] || { echo "ERROR: unexpected display name: $DISPLAY_NAME"; exit 1; }
 [ "$LAUNCH_GUARD" = "1" ] || { echo "HOLD: native launch guard marker is missing"; exit 2; }
 [ "$ICON_SOURCE_SHA256" = "80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ] || { echo "HOLD: unexpected icon source contract: $ICON_SOURCE_SHA256"; exit 2; }
+[ "$MINIMUM_IOS" = "15.0" ] || { echo "HOLD: signed app must require iOS 15.0, found: ${MINIMUM_IOS:-missing}"; exit 2; }
 
 if ! grep -R -a -q 'CliniverseBridgeViewController' "$APP_PATH"; then
   echo "HOLD: compiled native launch guard is not referenced by the app bundle"
@@ -108,3 +110,4 @@ echo "PASS: app privacy manifest and offline recovery are packaged"
 echo "PASS: native cold-launch and icon-source contracts are packaged"
 echo "Bundle: $BUNDLE_ID"
 echo "Version: $VERSION ($BUILD)"
+echo "Minimum iOS: $MINIMUM_IOS"

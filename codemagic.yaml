@@ -26,6 +26,10 @@ workflows:
           npx cap add ios
           npx cap copy ios
           test -f ios/App/App/public/native-offline.html
+      - name: Require iOS 15
+        script: |
+          ruby scripts/configure-ios-deployment-target.rb
+          grep -q "platform :ios, '15.0'" ios/App/Podfile
       - name: Install native cold-launch guard
         script: |
           node scripts/configure-ios-launch-guard.mjs
@@ -125,6 +129,10 @@ workflows:
           npx cap add ios
           npx cap copy ios
           test -f ios/App/App/public/native-offline.html
+      - name: Require iOS 15
+        script: |
+          ruby scripts/configure-ios-deployment-target.rb
+          grep -q "platform :ios, '15.0'" ios/App/Podfile
       - name: Install native cold-launch guard
         script: |
           node scripts/configure-ios-launch-guard.mjs
