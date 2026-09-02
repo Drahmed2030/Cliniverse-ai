@@ -9,7 +9,11 @@ import CardiologyOperations from './cardiology'
 import PatientJourney from './PatientJourney'
 import WardHome from './WardHome'
 
-type CareWorkspace = 'ward' | 'cardiology' | 'nexus'
+export type CareWorkspace = 'ward' | 'cardiology' | 'nexus'
+
+interface Props {
+  initialWorkspace?: CareWorkspace
+}
 
 const workspaces: Array<{
   id: CareWorkspace
@@ -46,9 +50,11 @@ const C = {
   blue: '#60A5FA',
 }
 
-export default function WardIndex() {
+export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
   const [workspace, setWorkspace] = useState<CareWorkspace>('ward')
-  const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(null)
+  const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
+    initialWorkspace === 'ward' ? null : initialWorkspace,
+  )
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
   const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
   const { entitlement, entitlementLoading, openPaywall } = useCliniverseSubscription()

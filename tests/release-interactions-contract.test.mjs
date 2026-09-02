@@ -8,12 +8,34 @@ function read(path) {
 
 test('Atlas is an interactive tour limited to verified release surfaces', () => {
   const source = read('app/components/release/AtlasReleaseCatalog.tsx')
+  const releaseApp = read('app/components/ReleaseApp.tsx')
+  const ward = read('app/components/ward/index.tsx')
   assert.match(source, /<button/)
   assert.match(source, /onNavigate\(path\.destination\)/)
+  assert.match(source, /workspace: 'ward'/)
+  assert.match(source, /workspace: 'cardiology'/)
+  assert.match(source, /workspace: 'nexus'/)
+  assert.match(source, /Open Nexus/)
+  assert.match(releaseApp, /setCareWorkspace\(destination\.workspace\)/)
+  assert.match(releaseApp, /<WardIndex initialWorkspace=\{careWorkspace\}/)
+  assert.match(ward, /initialWorkspace === 'ward' \? null : initialWorkspace/)
   assert.match(source, /onOpenPlan/)
   assert.match(source, /CURRENT RELEASE TOUR/)
   assert.match(source, /Release boundary:/)
   assert.doesNotMatch(source, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
+})
+
+test('legal and support pages provide predictable in-app back navigation', () => {
+  const back = read('app/components/release/LegalPageBack.tsx')
+  assert.match(back, /aria-label="Back to Cliniverse AI"/)
+  assert.match(back, /minWidth: 44/)
+  assert.match(back, /minHeight: 44/)
+  assert.match(back, /router\.back\(\)/)
+  assert.match(back, /router\.push\('\/'\)/)
+
+  for (const path of ['app/privacy/page.tsx', 'app/support/page.tsx', 'app/terms/page.tsx']) {
+    assert.match(read(path), /<LegalPageBack \/>/)
+  }
 })
 
 test('Me hub exposes privacy, terms, and support destinations', () => {

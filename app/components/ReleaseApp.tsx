@@ -7,6 +7,8 @@ import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
+import type { AtlasDestination } from './release/AtlasReleaseCatalog'
+import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
 import {
@@ -63,6 +65,7 @@ export default function ReleaseApp() {
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
+  const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
 
@@ -75,6 +78,11 @@ function ReleaseShell() {
     window.addEventListener('resize', syncNativeHeaderTopPadding)
     return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
   }, [])
+
+  const handleAtlasNavigate = (destination: AtlasDestination) => {
+    if (destination.workspace) setCareWorkspace(destination.workspace)
+    setTab(destination.tab)
+  }
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
@@ -92,11 +100,11 @@ function ReleaseShell() {
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
         {tab === 'care' && (
           <ErrorBoundary section="Care">
-            <WardIndex />
+            <WardIndex initialWorkspace={careWorkspace} />
           </ErrorBoundary>
         )}
         {tab === 'intelligence' && <ReleaseIntelligenceGate />}
-        {tab === 'atlas' && <AtlasReleaseCatalog onNavigate={setTab} onOpenPlan={openPaywall} />}
+        {tab === 'atlas' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />

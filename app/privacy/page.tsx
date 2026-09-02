@@ -1,3 +1,5 @@
+import LegalPageBack from '../components/release/LegalPageBack'
+
 export const metadata = {
   title: 'Cliniverse AI Privacy',
   description: 'Privacy information for Cliniverse AI users.',
@@ -15,6 +17,7 @@ export default function PrivacyPolicy() {
   return (
     <main style={{minHeight:'100vh',background:'#080c16',color:'#f8fafc',fontFamily:'Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'}}>
       <div style={{maxWidth:760,margin:'0 auto',padding:'56px 22px 72px'}}>
+        <LegalPageBack />
         <div style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:'#14b8a6'}}>Cliniverse AI · by NeuraOps</div>
         <h1 style={{fontSize:'clamp(34px,6vw,50px)',lineHeight:1.05,letterSpacing:'-.04em',margin:'14px 0 8px'}}>Privacy</h1>
         <p style={{fontSize:12,color:'#64748b',margin:'0 0 30px'}}>Last updated: September 2, 2026</p>

@@ -13,8 +13,13 @@ const C = {
 type ReleaseDestination = 'care' | 'me'
 type ReleaseAccess = 'FREE' | 'PRO' | 'ACCOUNT'
 
+export interface AtlasDestination {
+  tab: ReleaseDestination
+  workspace?: 'ward' | 'cardiology' | 'nexus'
+}
+
 interface Props {
-  onNavigate: (destination: ReleaseDestination) => void
+  onNavigate: (destination: AtlasDestination) => void
   onOpenPlan: () => void
 }
 
@@ -22,7 +27,7 @@ const releasePaths: Array<{
   title: string
   description: string
   access: ReleaseAccess
-  destination: ReleaseDestination
+  destination: AtlasDestination
   action: string
   details: string[]
 }> = [
@@ -30,31 +35,31 @@ const releasePaths: Array<{
     title: 'Ward Simulation',
     description: 'Open the first fictional case and review the complete simulated care journey without purchasing PRO.',
     access: 'FREE',
-    destination: 'care',
-    action: 'Open Care',
+    destination: { tab: 'care', workspace: 'ward' },
+    action: 'Open Ward',
     details: ['Fictional records', 'Human review', 'Related evidence entry'],
   },
   {
     title: 'Cardiology Operations',
     description: 'A PRO learning workspace for QAPAS Direct, census, surgical readiness, tasks and structured handover.',
     access: 'PRO',
-    destination: 'care',
-    action: 'Open Care',
+    destination: { tab: 'care', workspace: 'cardiology' },
+    action: 'Open Cardiology',
     details: ['Six interactive modules', 'Local simulation state', 'No clinical order transmission'],
   },
   {
     title: 'Nexus Learning',
     description: 'A PRO cardiovascular reliability exercise that coordinates four professional perspectives and a gated debrief.',
     access: 'PRO',
-    destination: 'care',
-    action: 'Open Care',
+    destination: { tab: 'care', workspace: 'nexus' },
+    action: 'Open Nexus',
     details: ['Four learning roles', 'Fictional reflections', 'Human-confirmed debrief'],
   },
   {
     title: 'Account and subscription',
     description: 'Review the profile, localized App Store plan, purchase restoration, privacy, terms and session controls.',
     access: 'ACCOUNT',
-    destination: 'me',
+    destination: { tab: 'me' },
     action: 'Open Me',
     details: ['StoreKit price', 'Restore purchases', 'Privacy and support'],
   },

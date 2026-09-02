@@ -85,5 +85,5 @@ test('Atlas links reviewers only to active release paths and the shared StoreKit
   assert.match(atlas, /onOpenPlan/)
   assert.match(atlas, /localized price from StoreKit/)
   assert.doesNotMatch(atlas, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
-  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{setTab\} onOpenPlan=\{openPaywall\}/)
+  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} onOpenPlan=\{openPaywall\}/)
 })
