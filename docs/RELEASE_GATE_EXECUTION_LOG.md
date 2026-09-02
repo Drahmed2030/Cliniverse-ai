@@ -57,3 +57,13 @@ Next: verify this narrow per-edge correction locally, then require a new non-pub
 - The next candidate persists the native values with one guarded observer, enforces the release-header top clearance directly, and emits non-sensitive computed safe-area diagnostics to the build log.
 
 Next: run one non-publishing screenshot-evidence build and use the `[CliniverseSafeArea]` diagnostic together with the XCTest geometry result. Do not create an IPA, promote production, merge, or submit to Apple from this gate.
+
+### Screenshot evidence build 29
+
+- Build 29 passed dependency installation, the production web build, canonical-origin compatibility, StoreKit, privacy, CocoaPods and native test-target setup.
+- The iPhone title remained at `minY = 19`; the persistent native observer therefore did not affect the remote document geometry seen by XCUITest.
+- The release UI had lost its independent iOS hydration fallback and relied entirely on native custom-property injection.
+- The recovery restores an app-side iOS contract with deterministic `69` point iPhone and `34` point iPad content clearance, matching the native fallback inset plus the release header's 10-point content spacing while allowing larger measured values to win.
+- A matching CSS fallback protects the release header and patient-journey header before and during React hydration.
+
+Next: verify the web change locally, deploy the exact candidate commit to the canonical production origin, then run one non-publishing iPhone and iPad screenshot-evidence build. Keep the pull request unmerged and do not create an IPA or submit to Apple.

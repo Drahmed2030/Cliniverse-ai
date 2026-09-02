@@ -1,7 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
@@ -33,6 +34,18 @@ const C = {
   gold: '#D4A72C',
 }
 
+function getNativeHeaderTopPadding() {
+  const isIOSWebView = Capacitor.getPlatform() === 'ios'
+    || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+
+  if (!isIOSWebView) return null
+
+  // XCUITest requires the first accessible heading to begin below native
+  // system chrome. Keep deterministic fallbacks for WKWebView launches that
+  // temporarily expose zero CSS safe-area values.
+  return window.innerWidth >= 768 ? 34 : 69
+}
+
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
@@ -47,11 +60,22 @@ export default function ReleaseApp() {
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
+  const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
+
+  useEffect(() => {
+    const syncNativeHeaderTopPadding = () => {
+      setNativeHeaderTopPadding(getNativeHeaderTopPadding())
+    }
+
+    syncNativeHeaderTopPadding()
+    window.addEventListener('resize', syncNativeHeaderTopPadding)
+    return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
+  }, [])
 
   return (
     <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
-      <ReleaseHeader active={tab} />
+      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
         style={{
           maxWidth: 1180,
@@ -77,7 +101,7 @@ function ReleaseShell() {
   )
 }
 
-function ReleaseHeader({ active }: { active: ReleaseTab }) {
+function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
     care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
@@ -86,6 +110,10 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
   }
   const current = titles[active]
+  const topPadding = nativeTopPadding === null
+    ? `calc(10px + ${NATIVE_SAFE_AREA_TOP})`
+    : `max(${nativeTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
+
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
       <div
@@ -94,7 +122,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
           maxWidth: 1180,
           margin: '0 auto',
           minHeight: `calc(68px + ${NATIVE_SAFE_AREA_TOP})`,
-          paddingTop: `calc(10px + ${NATIVE_SAFE_AREA_TOP})`,
+          paddingTop: topPadding,
           paddingRight: `max(16px, ${NATIVE_SAFE_AREA_RIGHT})`,
           paddingBottom: 10,
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
