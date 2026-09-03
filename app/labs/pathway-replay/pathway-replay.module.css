@@ -134,6 +134,35 @@
 .reassessmentStatus { background: rgba(16, 185, 129, .13); color: var(--replay-green); }
 .openGate { margin-bottom: 18px; background: rgba(252, 211, 77, .12); color: var(--replay-yellow); }
 
+.mediaLauncher {
+  width: min(940px, 100%);
+  min-height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 auto 18px;
+  padding: 20px 24px;
+  border: 1px solid var(--replay-border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, .13), rgba(6, 182, 212, .08)), var(--replay-surface);
+}
+.mediaLauncher h2 { margin: 6px 0; font-size: 18px; }
+.mediaLauncher p:last-child { margin: 0; color: var(--replay-secondary); font-size: 13px; line-height: 1.5; }
+.mediaLauncher .secondaryAction { flex: 0 0 auto; gap: 8px; }
+.mediaLoadingPanel {
+  width: min(940px, 100%);
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 22px;
+  border: 1px solid var(--replay-border);
+  border-radius: 22px;
+  background: var(--replay-surface);
+  color: var(--replay-muted);
+  font-size: 13px;
+}
+
 @media (max-width: 760px) {
   .page { padding-inline: 20px; }
   .header { align-items: flex-start; margin-bottom: 28px; }
@@ -152,6 +181,8 @@
   .drillPanel, .reassessmentPanel { padding: 18px; }
   .resultSuccess, .resultWarning { grid-template-columns: 24px minmax(0, 1fr); }
   .resultSuccess .primaryAction, .resultWarning .secondaryAction { grid-column: 1 / -1; width: 100%; }
+  .mediaLauncher { align-items: stretch; flex-direction: column; padding: 18px; }
+  .mediaLauncher .secondaryAction { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

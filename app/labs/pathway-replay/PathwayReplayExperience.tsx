@@ -1,6 +1,7 @@
 'use client'
 
-import { Activity, ArrowLeft, CheckCircle2, Clock3, ShieldAlert } from 'lucide-react'
+import { Activity, ArrowLeft, CheckCircle2, Clock3, Film, ShieldAlert } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import {
@@ -11,6 +12,14 @@ import {
 } from '../../lib/cardiology/ecgWaveform'
 import type { PathwayReplayReport, ReplayAgentState, ReplayIntegrityState } from '../../lib/cardiology/pathwayReplayAgents'
 import styles from './pathway-replay.module.css'
+
+const ClinicalMediaPreview = dynamic(
+  () => import('../../components/clinical-media/ClinicalMediaPreview'),
+  {
+    loading: () => <div className={styles.mediaLoadingPanel} role="status">Loading governed media preview…</div>,
+    ssr: false,
+  },
+)
 
 interface Props {
   report: PathwayReplayReport
@@ -32,6 +41,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
   const [selectedLeads, setSelectedLeads] = useState<SyntheticLeadId[]>([])
   const [submitted, setSubmitted] = useState(false)
   const [drillComplete, setDrillComplete] = useState(false)
+  const [showMediaPreview, setShowMediaPreview] = useState(false)
   const measuredEvents = report.events.filter(event => event.occurredAt !== null).length
   const passed = matchesConfiguredMarker(selectedLeads)
 
@@ -51,6 +61,23 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           <h1>Door-to-ECG acquisition drill</h1>
           <p>Inspect a deterministic synthetic waveform, identify the configured marker, and verify the evidence needed for a traceable acquisition event.</p>
         </header>
+
+        <section className={styles.mediaLauncher} aria-labelledby="media-launcher-title">
+          <div>
+            <p className={styles.eyebrow}>CLINICAL MEDIA COMPILER · V0</p>
+            <h2 id="media-launcher-title">Preview the same lesson as governed motion</h2>
+            <p>One deterministic source produces the in-app lesson, bilingual captions and three export ratios.</p>
+          </div>
+          <button
+            aria-expanded={showMediaPreview}
+            className={styles.secondaryAction}
+            onClick={() => setShowMediaPreview(current => !current)}
+            type="button"
+          >
+            <Film aria-hidden="true" size={18} /> {showMediaPreview ? 'Close preview' : 'Open 24-second preview'}
+          </button>
+        </section>
+        {showMediaPreview ? <ClinicalMediaPreview /> : null}
 
         <section className={styles.drillPanel} aria-labelledby="waveform-title">
           <div className={styles.sectionHeading}>

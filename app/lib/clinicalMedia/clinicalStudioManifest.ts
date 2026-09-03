@@ -9,7 +9,7 @@ export interface ClinicalStudioAsset {
   dataMode: 'synthetic-non-clinical'
   reviewStatus: 'draft-human-review-required'
   linkedActivityId: string
-  renderTarget: 'web-svg' | 'remotion-video'
+  renderTargets: ('web-svg' | 'remotion-video')[]
   scenes: { id: string; durationFrames: number; narrationKey: string }[]
   waveform: { engine: 'deterministic-svg-v1'; leads: SyntheticLeadId[] }
   evidence: { sourceId: string; sourceType: 'internal-demonstration-rule' }[]
@@ -36,6 +36,6 @@ const shared = {
 }
 
 export const CLINICAL_STUDIO_ASSETS: ClinicalStudioAsset[] = [
-  { ...shared, locale: 'en', renderTarget: 'web-svg' },
-  { ...shared, assetId: `${shared.assetId}-ar`, locale: 'ar', renderTarget: 'remotion-video' },
+  { ...shared, locale: 'en', renderTargets: ['web-svg', 'remotion-video'] },
+  { ...shared, assetId: `${shared.assetId}-ar`, locale: 'ar', renderTargets: ['web-svg', 'remotion-video'] },
 ]

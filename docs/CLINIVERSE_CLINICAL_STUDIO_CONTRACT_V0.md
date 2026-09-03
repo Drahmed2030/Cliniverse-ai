@@ -27,11 +27,15 @@ The executable contract is in `app/lib/clinicalMedia/clinicalStudioManifest.ts`.
 
 ## Rendering strategy
 
-The web experience renders the ECG from deterministic SVG paths. A later Remotion composition may consume the same manifest and waveform engine to render video, subtitles, and localized narration. Remotion is intentionally not installed in this slice: the contract is prepared first, keeping the interactive prototype small and deployment-neutral.
+The web experience and a 24-second Remotion composition now consume the same manifest and deterministic SVG waveform engine. The composition contains four contiguous scenes: pathway gap context, waveform inspection, evidence verification, and illustrative reassessment. It supports English and Arabic plus explicit 16:9, 9:16, and 1:1 profiles.
+
+The in-app Player is click-to-play, loaded on demand, and honours the operating-system reduced-motion preference. Export rendering is intentionally not connected to a cloud renderer in v0, keeping the prototype deployment-neutral and free from a new service dependency.
 
 ## Evidence policy
 
 The first slice uses synthetic waveforms only. Any later PhysioNet material must be reviewed dataset by dataset for access controls, license, attribution, permitted derivative use, and governance approval before ingestion. No dataset is approved by this document.
+
+Generated or uploaded patient-identifiable media is outside this contract. Generative video may be used only for non-diagnostic atmosphere or brand material after rights and privacy review; waveform truth remains deterministic code.
 
 ## Non-goals
 
