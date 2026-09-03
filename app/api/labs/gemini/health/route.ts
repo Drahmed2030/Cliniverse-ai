@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
   if (!readiness.enabled) {
     return NextResponse.json({ ...readiness, code: 'disabled' }, { status: 503 })
   }
+  if (readiness.keyConfiguration === 'conflict') {
+    return NextResponse.json({ ...readiness, code: 'key-conflict' }, { status: 503 })
+  }
   if (!readiness.configured) {
     return NextResponse.json({ ...readiness, code: 'not-configured' }, { status: 503 })
   }

@@ -19,6 +19,7 @@ type Readiness = {
   provider: string
   model: string
   configured: boolean
+  keyConfiguration: 'missing' | 'single' | 'conflict'
   enabled: boolean
   environmentAllowed: boolean
   dataMode: string
@@ -69,6 +70,7 @@ function isReadiness(value: unknown): value is Readiness {
   const candidate = value as Partial<Readiness>
   return typeof candidate.model === 'string'
     && typeof candidate.configured === 'boolean'
+    && (candidate.keyConfiguration === 'missing' || candidate.keyConfiguration === 'single' || candidate.keyConfiguration === 'conflict')
     && typeof candidate.enabled === 'boolean'
     && typeof candidate.environmentAllowed === 'boolean'
 }
@@ -204,6 +206,13 @@ export default function DiagnosticConsole() {
           <StatusItem label="Server configuration" value={readiness?.configured} checking={phase === 'checking'} />
           <StatusItem label="Gateway enabled" value={readiness?.enabled} checking={phase === 'checking'} />
         </div>
+
+        {readiness?.keyConfiguration === 'conflict' && (
+          <div className={styles.alert} role="alert">
+            <CircleAlert aria-hidden="true" size={18} />
+            <span>Multiple Gemini key variables contain different values. Keep one approved Preview key value before probing.</span>
+          </div>
+        )}
 
         <div className={styles.contractCard}>
           <div><Activity aria-hidden="true" size={18} /><strong>Fixed probe contract</strong></div>

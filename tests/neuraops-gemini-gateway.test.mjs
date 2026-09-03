@@ -5,6 +5,7 @@ import {
   NEURAOPS_GEMINI_ENDPOINT,
   NEURAOPS_GEMINI_MODEL,
   authorizeNeuraOpsDiagnostic,
+  getGeminiKeyConfiguration,
   getNeuraOpsGatewayReadiness,
   resolveGeminiApiKey,
   runGeminiSyntheticProbe,
@@ -30,7 +31,7 @@ test('gateway readiness fails closed and exposes no secret values', () => {
   assert.equal(missing.enabled, false)
 })
 
-test('gateway accepts the existing Google key alias without exposing which secret is configured', () => {
+test('gateway accepts official and existing Google key aliases without exposing which secret is configured', () => {
   const env = {
     NODE_ENV: 'development',
     GOOGLE_AI_API_KEY: 'existing-google-key',
@@ -41,6 +42,26 @@ test('gateway accepts the existing Google key alias without exposing which secre
   assert.equal(resolveGeminiApiKey(env), 'existing-google-key')
   assert.equal(getNeuraOpsGatewayReadiness(env).configured, true)
   assert.equal(JSON.stringify(getNeuraOpsGatewayReadiness(env)).includes('existing-google-key'), false)
+
+  const officialAlias = { ...env, GOOGLE_AI_API_KEY: undefined, GOOGLE_API_KEY: 'existing-google-key' }
+  assert.equal(resolveGeminiApiKey(officialAlias), 'existing-google-key')
+  assert.equal(getGeminiKeyConfiguration(officialAlias), 'single')
+})
+
+test('gateway fails closed when Gemini key aliases disagree', () => {
+  const env = {
+    VERCEL_ENV: 'preview',
+    GEMINI_API_KEY: 'new-key',
+    GOOGLE_AI_API_KEY: 'old-key',
+    NEURAOPS_DIAGNOSTIC_TOKEN: 'diagnostic-token',
+    NEURAOPS_GEMINI_LAB_ENABLED: 'true',
+  }
+
+  assert.equal(getGeminiKeyConfiguration(env), 'conflict')
+  assert.equal(resolveGeminiApiKey(env), null)
+  assert.equal(getNeuraOpsGatewayReadiness(env).configured, false)
+  assert.equal(JSON.stringify(getNeuraOpsGatewayReadiness(env)).includes('new-key'), false)
+  assert.equal(JSON.stringify(getNeuraOpsGatewayReadiness(env)).includes('old-key'), false)
 })
 
 test('gateway blocks production and validates the diagnostic token', () => {
@@ -126,6 +147,7 @@ test('route and environment contract keep diagnostics private and non-production
   assert.equal(route.includes('request.json()'), false)
   assert.equal(envExample.includes('NEXT_PUBLIC_GEMINI'), false)
   assert.match(envExample, /GEMINI_API_KEY=\n/)
+  assert.match(envExample, /GOOGLE_API_KEY=\n/)
   assert.match(envExample, /GOOGLE_AI_API_KEY=\n/)
   assert.match(envExample, /NEURAOPS_DIAGNOSTIC_TOKEN=\n/)
 })

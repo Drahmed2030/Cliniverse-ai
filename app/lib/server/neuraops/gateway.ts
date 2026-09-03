@@ -18,6 +18,7 @@ export type NeuraOpsProbeCode =
   | 'ready'
   | 'disabled'
   | 'not-configured'
+  | 'key-conflict'
   | 'production-blocked'
   | 'unauthorized'
   | 'authentication-failed'
@@ -35,6 +36,7 @@ export type NeuraOpsGatewayReadiness = {
   provider: 'google-gemini'
   model: typeof NEURAOPS_GEMINI_MODEL
   configured: boolean
+  keyConfiguration: 'missing' | 'single' | 'conflict'
   enabled: boolean
   environmentAllowed: boolean
   dataMode: 'fictional-simulation'
@@ -55,9 +57,21 @@ export type NeuraOpsProbeResult = {
   diagnosticReason?: NeuraOpsProviderDiagnostic
 }
 
+function configuredGeminiApiKeys(env: Environment): string[] {
+  return [env.GEMINI_API_KEY, env.GOOGLE_API_KEY, env.GOOGLE_AI_API_KEY]
+    .map(value => value?.trim())
+    .filter((value): value is string => Boolean(value))
+}
+
+export function getGeminiKeyConfiguration(env: Environment = process.env): 'missing' | 'single' | 'conflict' {
+  const uniqueValues = new Set(configuredGeminiApiKeys(env))
+  if (uniqueValues.size === 0) return 'missing'
+  return uniqueValues.size === 1 ? 'single' : 'conflict'
+}
+
 export function resolveGeminiApiKey(env: Environment = process.env): string | null {
-  const value = env.GEMINI_API_KEY?.trim() || env.GOOGLE_AI_API_KEY?.trim()
-  return value || null
+  if (getGeminiKeyConfiguration(env) !== 'single') return null
+  return configuredGeminiApiKeys(env)[0] ?? null
 }
 
 function isNonProductionEnvironment(env: Environment): boolean {
@@ -66,10 +80,12 @@ function isNonProductionEnvironment(env: Environment): boolean {
 }
 
 export function getNeuraOpsGatewayReadiness(env: Environment = process.env): NeuraOpsGatewayReadiness {
+  const keyConfiguration = getGeminiKeyConfiguration(env)
   return {
     provider: 'google-gemini',
     model: NEURAOPS_GEMINI_MODEL,
-    configured: Boolean(resolveGeminiApiKey(env) && env.NEURAOPS_DIAGNOSTIC_TOKEN?.trim()),
+    configured: Boolean(keyConfiguration === 'single' && env.NEURAOPS_DIAGNOSTIC_TOKEN?.trim()),
+    keyConfiguration,
     enabled: env.NEURAOPS_GEMINI_LAB_ENABLED === 'true',
     environmentAllowed: isNonProductionEnvironment(env),
     dataMode: 'fictional-simulation',
