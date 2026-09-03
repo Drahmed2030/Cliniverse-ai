@@ -19,7 +19,9 @@ The prototype exposes:
 - a four-stage session contract (`Replay → ECG drill → Reassess → Review brief`);
 - safe same-tab resume with malformed state rejected;
 - an illustrative post-training reassessment; and
-- a compiled review brief whose governance closure remains blocked while evidence or review is open.
+- a compiled review brief whose governance closure remains blocked while evidence or review is open;
+- an immutable Medical Operations Registry snapshot attached to the rule, drill, and Closure Brief; and
+- explicit source lifecycle, review, rights, attribution, jurisdiction, intended-use, and clinical-authority gates.
 
 ## Six governed agents
 
@@ -41,6 +43,7 @@ These are bounded functional agents, not six independent clinical authorities. V
 - Responsive implementation: `app/labs/pathway-replay/`
 - Deterministic engine: `app/lib/cardiology/pathwayReplayAgents.ts`
 - Session state machine: `app/lib/cardiology/pathwaySession.ts`
+- Medical Operations Registry: `app/lib/cardiology/nexusReferences.ts`
 - Browser journey gate: `tests/visual/pathway-replay.spec.ts`
 
 ## Safety boundaries
@@ -52,15 +55,17 @@ These are bounded functional agents, not six independent clinical authorities. V
 - No claim of clinical validation or improved patient outcome.
 - No database migration or production connection.
 - No inclusion in the Apple release shell.
+- No registry record is approved as an executable clinical rule.
 
 ## Verification record
 
-- Full repository tests: 149 passed, 0 failed.
+- Full repository tests: 154 passed, 0 failed.
 - ESLint for new TypeScript/TSX: passed.
 - TypeScript `--noEmit`: passed.
 - Next.js 16 production build with Turbopack: passed.
 - Route output: statically generated.
 - Session contract tests: gating, retry, success, safe restoration and human-owned closure passed.
+- Registry tests: complete passports, immutable revision snapshots, fail-closed resolution, and blocked clinical authority passed.
 - Isolation test: engine, session, page and experience contain no provider, database or release-shell dependency.
 - Figma mobile and tablet compositions: visually reviewed after token, typography, component-state, clipping, and CTA corrections.
 

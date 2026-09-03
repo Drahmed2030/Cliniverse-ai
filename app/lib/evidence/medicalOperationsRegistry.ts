@@ -1,3 +1,5 @@
+import { getNexusReference } from '../cardiology/nexusReferences.ts'
+
 export type EvidenceRegion = 'global' | 'gulf' | 'europe'
 export type EvidenceUse = 'interoperability' | 'digital-guideline' | 'clinical-guideline' | 'governance'
 export type EvidenceStatus = 'verified-source' | 'human-review-required'
@@ -16,60 +18,64 @@ export interface MedicalOperationsSource {
   reviewBoundary: string
 }
 
-export const MEDICAL_OPERATIONS_REGISTRY: readonly MedicalOperationsSource[] = [
+interface EvidenceProjection {
+  canonicalId: string
+  region: EvidenceRegion
+  use: EvidenceUse
+}
+
+/**
+ * NeuraOps portfolio presentation. Source facts remain owned by the canonical
+ * Cardio/Nexus Medical Operations Registry and are resolved by immutable ID.
+ */
+const NEURAOPS_EVIDENCE_PROJECTION: readonly EvidenceProjection[] = [
   {
-    id: 'who-smart-dak',
-    title: 'SMART Guidelines and Digital Adaptation Kits',
-    publisher: 'World Health Organization',
-    versionLabel: 'Living programme · reviewed 2026-09-03',
+    canonicalId: 'WHO-SMART-DAK-REVIEW-2026-09-03',
     region: 'global',
     use: 'digital-guideline',
-    status: 'verified-source',
-    sourceUrl: 'https://www.who.int/teams/sexual-and-reproductive-health-and-research-%28srh%29/areas-of-work/digital-innovations/smart-guidelines-and-digital-adaptation-kits',
-    linkedPathways: ['future-pathway-template'],
-    operationalRole: 'Defines a software-neutral pattern for translating narrative guidance into structured digital workflows.',
-    reviewBoundary: 'No WHO recommendation is executable until a pathway-specific clinical review approves its localized rule set.',
   },
   {
-    id: 'hl7-fhir-r5',
-    title: 'FHIR R5 Specification',
-    publisher: 'HL7 International',
-    versionLabel: 'v5.0.0 · current published version',
+    canonicalId: 'HL7-FHIR-R5-SPECIFICATION',
     region: 'global',
     use: 'interoperability',
-    status: 'verified-source',
-    sourceUrl: 'https://hl7.org/fhir/',
-    linkedPathways: ['future-interoperability-mapping'],
-    operationalRole: 'Provides the future exchange vocabulary for traceable events, observations, tasks, and provenance.',
-    reviewBoundary: 'The prototype contains no EHR connection and does not claim conformance to a FHIR implementation guide.',
   },
   {
-    id: 'sha-ccs-2026',
-    title: '2026 Focused Update on Chronic Coronary Syndromes',
-    publisher: 'Saudi Heart Association',
-    versionLabel: 'Accepted 2026-07-08 · available 2026-08-18',
+    canonicalId: 'SHA-CCS-FOCUSED-UPDATE-2026',
     region: 'gulf',
     use: 'clinical-guideline',
-    status: 'human-review-required',
-    sourceUrl: 'https://doi.org/10.37616/2212-5043.1516',
-    linkedPathways: ['future-ccs-pathway'],
-    operationalRole: 'Supplies regionally contextual evidence for a future governed CCS pathway module.',
-    reviewBoundary: 'The focused update complements the 2022 guideline; recommendations require cardiology-panel review before digitization.',
   },
   {
-    id: 'eu-ehds-2025',
-    title: 'European Health Data Space Regulation',
-    publisher: 'European Union',
-    versionLabel: 'Regulation (EU) 2025/327 · in force 2025-03-26',
+    canonicalId: 'EU-EHDS-REGULATION-2025-327',
     region: 'europe',
     use: 'governance',
-    status: 'verified-source',
-    sourceUrl: 'https://eur-lex.europa.eu/eli/reg/2025/327/oj/eng',
-    linkedPathways: ['future-eu-data-readiness'],
-    operationalRole: 'Frames future European interoperability, patient access, and health-data governance readiness.',
-    reviewBoundary: 'Regulatory readiness is a design target, not a legal compliance certification.',
   },
 ] as const
+
+export const MEDICAL_OPERATIONS_REGISTRY: readonly MedicalOperationsSource[] = NEURAOPS_EVIDENCE_PROJECTION.map(
+  projection => {
+    const source = getNexusReference(projection.canonicalId)
+
+    if (!source || source.sourceAccess !== 'public-primary-url' || source.sourceUrl === null) {
+      throw new Error(`NeuraOps evidence projection cannot resolve public source ${projection.canonicalId}.`)
+    }
+
+    return {
+      id: source.id,
+      title: source.title,
+      publisher: source.publisher,
+      versionLabel: source.version,
+      region: projection.region,
+      use: projection.use,
+      status: source.reviewStatus === 'requires-local-review'
+        ? 'human-review-required'
+        : 'verified-source',
+      sourceUrl: source.sourceUrl,
+      linkedPathways: source.linkedPathwayIds,
+      operationalRole: source.intendedUse,
+      reviewBoundary: source.scope,
+    }
+  },
+)
 
 export function summarizeEvidenceRegistry(sources = MEDICAL_OPERATIONS_REGISTRY) {
   return {
@@ -80,4 +86,3 @@ export function summarizeEvidenceRegistry(sources = MEDICAL_OPERATIONS_REGISTRY)
     humanReviewItems: sources.filter(source => source.status === 'human-review-required').length,
   }
 }
-

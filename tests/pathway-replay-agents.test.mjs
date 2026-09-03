@@ -40,6 +40,8 @@ test('the synthetic demo calculates traceable KPIs without hiding missing eviden
   assert.equal(report.gap.requiresHumanReview, true)
   assert.equal(report.training.activityId, 'door-to-ecg-drill-v1')
   assert.match(report.training.label, /ECG Drill/i)
+  assert.deepEqual(report.training.referenceIds, ['DEMO-PATHWAY-RULESET-V1'])
+  assert.equal(report.registry.clinicalExecution.state, 'blocked')
   assert.equal(report.closure.state, 'blocked')
 })
 
@@ -60,10 +62,11 @@ test('the prototype remains isolated from providers, databases and the Apple rel
   const session = readFileSync(new URL('../app/lib/cardiology/pathwaySession.ts', import.meta.url), 'utf8')
   const page = readFileSync(new URL('../app/labs/pathway-replay/page.tsx', import.meta.url), 'utf8')
   const experience = readFileSync(new URL('../app/labs/pathway-replay/PathwayReplayExperience.tsx', import.meta.url), 'utf8')
+  const registry = readFileSync(new URL('../app/lib/cardiology/nexusReferences.ts', import.meta.url), 'utf8')
   const release = readFileSync(new URL('../app/components/ReleaseApp.tsx', import.meta.url), 'utf8')
 
   for (const prohibited of ['fetch(', 'supabase', '/api/oracle', 'ANTHROPIC_API_KEY']) {
-    for (const source of [engine, session, page, experience]) {
+    for (const source of [engine, session, page, experience, registry]) {
       assert.equal(source.includes(prohibited), false)
     }
   }
@@ -72,5 +75,7 @@ test('the prototype remains isolated from providers, databases and the Apple rel
   assert.match(page, /Human review required/i)
   assert.match(page, /Back to Cliniverse/i)
   assert.match(experience, /Brief compiled; closure not granted/i)
+  assert.match(experience, /Clinical rule blocked/i)
+  assert.match(experience, /Reference is not clinical authority/i)
   assert.match(experience, /Session-only · No upload/i)
 })

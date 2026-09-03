@@ -4,6 +4,7 @@ import {
   type SyntheticLeadId,
 } from './ecgWaveform.ts'
 import type { PathwayReplayReport } from './pathwayReplayAgents.ts'
+import type { MedicalOperationsRegistrySnapshot } from './nexusReferences.ts'
 
 export const PATHWAY_SESSION_SCHEMA_VERSION = 1 as const
 export const PATHWAY_SESSION_STORAGE_KEY = 'cliniverse_pathway_replay_session_v1'
@@ -53,6 +54,7 @@ export interface PathwayClosureBrief {
     configuredTargetMinutes: number
     state: 'passed-in-simulation'
   }
+  registry: MedicalOperationsRegistrySnapshot
   closure: {
     state: 'human-review-required'
     reasons: string[]
@@ -185,6 +187,21 @@ export function createPathwayClosureBrief(
       illustrativeMinutes: session.reassessment.illustrativeMinutes,
       configuredTargetMinutes: report.metrics.targetMinutes,
       state: 'passed-in-simulation',
+    },
+    registry: {
+      ...report.registry,
+      sourceIds: [...report.registry.sourceIds],
+      sources: report.registry.sources.map(source => ({
+        ...source,
+        linkedPathwayIds: [...source.linkedPathwayIds],
+        lifecycle: { ...source.lifecycle },
+        rights: { ...source.rights },
+        ruleAuthority: { ...source.ruleAuthority },
+      })),
+      clinicalExecution: {
+        ...report.registry.clinicalExecution,
+        reasons: [...report.registry.clinicalExecution.reasons],
+      },
     },
     closure: {
       state: 'human-review-required',

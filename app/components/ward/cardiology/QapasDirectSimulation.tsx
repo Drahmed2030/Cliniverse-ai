@@ -248,7 +248,7 @@ export default function QapasDirectSimulation() {
         <div style={{ color: C.blue, fontSize: 10, fontWeight: 900, letterSpacing: 0.8 }}>VERSIONED EVIDENCE</div>
         <h4 id="reference-registry-title" style={{ margin: '6px 0 0', fontSize: 16 }}>Reference registry</h4>
         <div style={{ display: 'grid', gap: 8, marginTop: 12 }}>
-          {NEXUS_REFERENCE_REGISTRY.filter(reference => reference.status === 'verified-public').map(reference => (
+          {NEXUS_REFERENCE_REGISTRY.filter(reference => reference.reviewStatus === 'verified-public-reference').map(reference => (
             <a key={reference.id} href={reference.sourceUrl ?? undefined} target="_blank" rel="noreferrer" style={{ borderRadius: 14, border: `1px solid ${C.border}`, background: C.elevated, padding: 12, color: C.text, textDecoration: 'none' }}>
               <div style={{ color: C.blue, fontSize: 9, fontWeight: 900 }}>{reference.publisher} · {reference.version}</div>
               <div style={{ marginTop: 4, fontSize: 11, lineHeight: 1.45 }}>{reference.title}</div>

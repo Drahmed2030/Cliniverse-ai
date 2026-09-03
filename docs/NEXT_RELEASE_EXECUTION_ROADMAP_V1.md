@@ -79,7 +79,7 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 - licensing and attribution status are explicit; and
 - no source becomes an executable clinical rule without human approval.
 
-**State:** next engineering stage.
+**State:** implemented for the first synthetic replay slice. The immutable source snapshot, lifecycle, rights, attribution, review, and clinical-authority gates are covered by deterministic tests and are visible in the replay and Closure Brief. External source approval remains intentionally pending.
 
 ## Stage 6 — Governed Gemini preparation
 

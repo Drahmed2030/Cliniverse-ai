@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import test from 'node:test'
+import { getNexusReference } from '../app/lib/cardiology/nexusReferences.ts'
 import { MEDICAL_OPERATIONS_REGISTRY, summarizeEvidenceRegistry } from '../app/lib/evidence/medicalOperationsRegistry.ts'
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
@@ -41,6 +42,16 @@ test('medical operations registry is source-versioned, regional and human-gated'
   assert.equal(summary.humanReviewItems, 1)
 
   for (const source of MEDICAL_OPERATIONS_REGISTRY) {
+    const canonical = getNexusReference(source.id)
+
+    assert.ok(canonical, `${source.id} must resolve from the canonical Nexus registry`)
+    assert.equal(source.title, canonical.title)
+    assert.equal(source.publisher, canonical.publisher)
+    assert.equal(source.versionLabel, canonical.version)
+    assert.equal(source.sourceUrl, canonical.sourceUrl)
+    assert.deepEqual(source.linkedPathways, canonical.linkedPathwayIds)
+    assert.equal(source.operationalRole, canonical.intendedUse)
+    assert.equal(source.reviewBoundary, canonical.scope)
     assert.match(source.sourceUrl, /^https:\/\//)
     assert.ok(source.versionLabel.length > 8)
     assert.ok(source.linkedPathways.length > 0)

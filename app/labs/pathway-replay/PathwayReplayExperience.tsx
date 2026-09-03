@@ -1,6 +1,18 @@
 'use client'
 
-import { Activity, ArrowLeft, CheckCircle2, ClipboardCheck, Clock3, Film, LockKeyhole, ShieldAlert } from 'lucide-react'
+import {
+  Activity,
+  ArrowLeft,
+  BookOpenCheck,
+  CheckCircle2,
+  ClipboardCheck,
+  Clock3,
+  ExternalLink,
+  FileLock2,
+  Film,
+  LockKeyhole,
+  ShieldAlert,
+} from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState, useSyncExternalStore } from 'react'
@@ -25,6 +37,7 @@ import {
   type PathwayReplaySession,
   type PathwaySessionStage,
 } from '../../lib/cardiology/pathwaySession'
+import type { MedicalOperationsRegistrySnapshot } from '../../lib/cardiology/nexusReferences'
 import styles from './pathway-replay.module.css'
 
 const ClinicalMediaPreview = dynamic(
@@ -170,6 +183,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
               <li><CheckCircle2 aria-hidden="true" size={17} /> Source timestamp captured: 08:12</li>
               <li><CheckCircle2 aria-hidden="true" size={17} /> Synthetic record provenance: SIM-ECG</li>
               <li><CheckCircle2 aria-hidden="true" size={17} /> Waveform is readable at review scale</li>
+              <li><FileLock2 aria-hidden="true" size={17} /> Rule revision frozen: {report.training.referenceIds.join(', ')}</li>
             </ul>
           </div>
 
@@ -281,6 +295,8 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             </div>
           </section>
 
+          <RegistryPassport compact idPrefix="closure" registry={brief.registry} />
+
           <section className={styles.limitations} aria-labelledby="limitations-title">
             <div className={styles.sectionHeading}>
               <h3 id="limitations-title">Open limitations</h3>
@@ -358,6 +374,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             <h2 id="gap-title">Door to ECG exceeded target by {report.metrics.deltaMinutes} minutes</h2>
             <dl className={styles.definitionList}>
               <Definition label="Rule" value={`${report.gap.rule.label} · ${report.gap.rule.version}`} />
+              <Definition label="Source revision" value={report.registry.sourceIds.join(', ')} />
               <Definition label="Evidence" value={report.gap.evidenceIds.join(' → ')} />
               <Definition label="Owner" value={`${roleLabel(report.gap.owner)} · Human review required`} tone="warning" />
             </dl>
@@ -379,6 +396,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           </section>
         </div>
       </div>
+      <RegistryPassport idPrefix="overview" registry={report.registry} />
     </Shell>
   )
 }
@@ -463,10 +481,94 @@ function KpiCard({ label, value, target, status, tone, fill }: { label: string; 
   return <article className={styles.kpiCard}><div><span>{label}</span><strong>{value}</strong></div><div className={styles.kpiTrack} aria-hidden="true"><span className={styles[tone]} style={{ width: `${Math.min(Math.max(fill, 0), 100)}%` }} /></div><div><small>{target}</small><em className={styles[tone]}>{status}</em></div></article>
 }
 
+function RegistryPassport({
+  compact = false,
+  idPrefix,
+  registry,
+}: {
+  compact?: boolean
+  idPrefix: string
+  registry: MedicalOperationsRegistrySnapshot
+}) {
+  const titleId = `${idPrefix}-registry-title`
+  const Heading = compact ? 'h3' : 'h2'
+  const SourceHeading = compact ? 'h4' : 'h3'
+
+  return (
+    <section className={`${styles.registryPassport} ${compact ? styles.registryCompact : ''}`} aria-labelledby={titleId}>
+      <header className={styles.registryHeader}>
+        <div>
+          <p className={styles.eyebrow}>NEURAOPS TRUST SPARK · SOURCE PASSPORT</p>
+          <Heading id={titleId}>Medical Operations Registry</Heading>
+          <p>Exact source revisions travel with this replay; later updates cannot silently rewrite it.</p>
+        </div>
+        <span className={styles.registryBlocked}><LockKeyhole aria-hidden="true" size={16} />Clinical rule blocked</span>
+      </header>
+
+      <div className={styles.registrySnapshot}>
+        <FileLock2 aria-hidden="true" size={18} />
+        <span>Immutable snapshot</span>
+        <code>{registry.snapshotId}</code>
+      </div>
+
+      <div className={styles.registrySources}>
+        {registry.sources.map(source => (
+          <article className={styles.registrySource} key={source.id}>
+            <header>
+              <span className={styles.registryIcon}><BookOpenCheck aria-hidden="true" size={19} /></span>
+              <div>
+                <SourceHeading>{source.title}</SourceHeading>
+                <p>{source.publisher} · {source.version}</p>
+              </div>
+            </header>
+            <dl className={styles.registryDetails}>
+              <Definition label="Review" value={registryReviewLabel(source.reviewStatus)} />
+              <Definition label="Jurisdiction" value={source.jurisdiction} />
+              <Definition label="Intended use" value={source.intendedUse} />
+              <Definition label="Rights" value={registryRightsLabel(source.rights.status)} tone="warning" />
+            </dl>
+            {source.sourceUrl ? (
+              <a className={styles.registryLink} href={source.sourceUrl} rel="noreferrer" target="_blank">
+                Open primary source <ExternalLink aria-hidden="true" size={15} />
+              </a>
+            ) : (
+              <p className={styles.registryInternal}>Controlled internal source · no public URL</p>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <div className={styles.registryBoundary} role="note">
+        <ShieldAlert aria-hidden="true" size={19} />
+        <div>
+          <strong>Reference is not clinical authority</strong>
+          <span>{registry.clinicalExecution.reasons.join(' ')}</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Definition({ label, value, tone }: { label: string; value: string; tone?: 'warning' }) {
   return <div className={styles.definition}><dt>{label}</dt><dd className={tone ? styles[tone] : undefined}>{value}</dd></div>
 }
 
 function roleLabel(role: string) {
   return ({ referring: 'ED team', coordination: 'Pathway coordination', cardiology: 'Cardiology', 'cath-lab': 'Cath Lab', quality: 'Quality lead' } as Record<string, string>)[role] ?? role
+}
+
+function registryReviewLabel(status: MedicalOperationsRegistrySnapshot['sources'][number]['reviewStatus']) {
+  return ({
+    'reviewed-synthetic-only': 'Reviewed for synthetic demonstration only',
+    'verified-public-reference': 'Public source verified; clinical review pending',
+    'requires-local-review': 'Local review required',
+  } as const)[status]
+}
+
+function registryRightsLabel(status: MedicalOperationsRegistrySnapshot['sources'][number]['rights']['status']) {
+  return ({
+    'owned-internal': 'Internal rights recorded',
+    'internal-use-review-required': 'Internal-use rights review required',
+    'link-only-review-required': 'Link only; reuse rights review required',
+  } as const)[status]
 }

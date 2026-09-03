@@ -1,4 +1,8 @@
 import type { NexusEventSource, NexusRoleId } from './nexusCore'
+import {
+  createMedicalOperationsRegistrySnapshot,
+  type MedicalOperationsRegistrySnapshot,
+} from './nexusReferences.ts'
 
 export type ReplayDataMode = 'fictional-simulation' | 'real-patient'
 export type ReplayAgentState = 'complete' | 'ready' | 'human-review'
@@ -82,7 +86,10 @@ export interface PathwayReplayReport {
     label: string
     durationMinutes: number
     state: 'ready'
+    referenceIds: string[]
+    registrySnapshotId: string
   }
+  registry: MedicalOperationsRegistrySnapshot
   closure: {
     state: 'blocked' | 'review-required'
     reasons: string[]
@@ -129,6 +136,8 @@ export function runPathwayReplay(input: PathwayReplayInput): PathwayReplayReport
   if (input.dataMode !== 'fictional-simulation') {
     throw new Error('Clinical Pathway Replay v1 accepts fictional simulation data only.')
   }
+
+  const registry = createMedicalOperationsRegistrySnapshot(input.primaryRule.referenceIds)
 
   const normalized = [...input.events]
     .map(item => ({ ...item, label: item.label.trim() }))
@@ -229,7 +238,10 @@ export function runPathwayReplay(input: PathwayReplayInput): PathwayReplayReport
       label: 'ECG Drill: acquisition evidence',
       durationMinutes: 5,
       state: 'ready',
+      referenceIds: [...registry.sourceIds],
+      registrySnapshotId: registry.snapshotId,
     },
+    registry,
     closure: {
       state: closureReasons.length ? 'blocked' : 'review-required',
       reasons: closureReasons,

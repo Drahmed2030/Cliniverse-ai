@@ -130,12 +130,12 @@ export default function NeuraOpsPage() {
       <section className={styles.evidence} id="evidence" aria-labelledby="evidence-title">
         <div className={styles.evidenceHeading}>
           <div className={styles.sectionLead}>
-            <p className={styles.eyebrow}>MEDICAL OPERATIONS REGISTRY · V0</p>
+            <p className={styles.eyebrow}>MEDICAL OPERATIONS REGISTRY · V1</p>
             <h2 id="evidence-title">A governed library, not an untraceable answer engine.</h2>
             <p>Each entry says what it can inform, which future pathway it may support, and where human review remains mandatory.</p>
           </div>
           <div className={styles.registrySummary} aria-label="Registry summary">
-            <div><strong>{evidenceSummary.sources}</strong><span>verified records</span></div>
+            <div><strong>{evidenceSummary.sources}</strong><span>source records</span></div>
             <div><strong>{evidenceSummary.regions}</strong><span>regional layers</span></div>
             <div><strong>{evidenceSummary.linkedPathways}</strong><span>future mappings</span></div>
           </div>

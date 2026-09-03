@@ -5,6 +5,9 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
   await page.goto('/labs/pathway-replay', { waitUntil: 'networkidle' })
 
   await expect(page.getByRole('heading', { level: 1, name: 'STEMI Pathway Replay' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Medical Operations Registry' })).toBeVisible()
+  await expect(page.getByText('Clinical rule blocked')).toBeVisible()
+  await expect(page.getByText('DEMO-PATHWAY-RULESET-V1', { exact: false }).first()).toBeVisible()
   await expect(page.getByRole('button', { name: /Review brief/ })).toBeDisabled()
   await page.getByRole('button', { name: 'Open ECG drill' }).click()
 
@@ -21,6 +24,7 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
 
   await expect(page.getByRole('heading', { level: 1, name: 'One reviewable pathway record' })).toBeVisible()
   await expect(page.getByText('Brief compiled; closure not granted')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 3, name: 'Medical Operations Registry' })).toBeVisible()
   await expect(page.getByText('A licensed human reviewer still owns classification, evidence acceptance and final closure.')).toBeVisible()
 
   const accessibility = await new AxeBuilder({ page })

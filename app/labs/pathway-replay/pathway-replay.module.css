@@ -210,6 +210,39 @@
 .closureDecision div { display: grid; gap: 4px; }
 .closureDecision span { color: var(--replay-secondary); font-size: 12px; line-height: 1.45; }
 
+.registryPassport {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--replay-cyan);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(6, 182, 212, .09), transparent 44%), var(--replay-surface);
+}
+.registryCompact { margin-top: 14px; padding: 18px; border-color: var(--replay-border); background-color: var(--replay-raised); }
+.registryHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.registryHeader h2, .registryHeader h3 { margin: 8px 0 6px; }
+.registryHeader > div > p:last-child { max-width: 660px; margin: 0; color: var(--replay-secondary); font-size: 13px; line-height: 1.55; }
+.registryBlocked { min-height: 44px; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 0 13px; border: 1px solid rgba(252, 211, 77, .34); border-radius: 999px; background: rgba(252, 211, 77, .11); color: var(--replay-yellow); font-size: 11px; font-weight: 800; }
+.registrySnapshot { display: grid; grid-template-columns: 22px auto minmax(0, 1fr); align-items: center; gap: 10px; margin-top: 18px; padding: 13px 15px; border: 1px solid rgba(148, 163, 184, .24); border-radius: 14px; color: var(--replay-cyan); }
+.registrySnapshot > span { color: var(--replay-secondary); font-size: 11px; font-weight: 750; }
+.registrySnapshot code { min-width: 0; overflow-wrap: anywhere; color: var(--replay-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; text-align: right; }
+.registrySources { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px; margin-top: 14px; }
+.registrySource { min-width: 0; padding: 17px; border: 1px solid var(--replay-border); border-radius: 17px; background: rgba(11, 15, 25, .58); }
+.registrySource > header { display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: start; gap: 11px; }
+.registryIcon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: rgba(6, 182, 212, .13); color: var(--replay-cyan); }
+.registrySource h3, .registrySource h4 { margin: 1px 0 5px; color: var(--replay-text); font-size: 14px; line-height: 1.35; }
+.registrySource > header p { margin: 0; color: var(--replay-muted); font-size: 11px; line-height: 1.45; }
+.registryDetails { margin: 13px 0 0; }
+.registryDetails .definition { align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(148, 163, 184, .14); }
+.registryDetails .definition:last-child { border-bottom: 0; }
+.registryDetails .definition dd { max-width: 68%; line-height: 1.45; }
+.registryLink { min-height: 44px; display: inline-flex; align-items: center; gap: 7px; margin-top: 9px; color: var(--replay-cyan); font-size: 12px; font-weight: 750; text-decoration: none; }
+.registryLink:focus-visible { outline: 3px solid var(--replay-cyan); outline-offset: 3px; border-radius: 8px; }
+.registryLink:active { opacity: .78; }
+.registryInternal { margin: 12px 0 0; color: var(--replay-muted); font-size: 11px; }
+.registryBoundary { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 11px; margin-top: 14px; padding: 15px; border-radius: 15px; background: rgba(252, 211, 77, .09); color: var(--replay-yellow); }
+.registryBoundary div { display: grid; gap: 4px; }
+.registryBoundary span { color: var(--replay-secondary); font-size: 11px; line-height: 1.55; }
+
 .mediaLauncher {
   width: min(940px, 100%);
   min-height: 112px;
@@ -265,6 +298,12 @@
   .briefGrid { grid-template-columns: 1fr; }
   .metricShift { justify-content: space-between; width: 100%; }
   .closureBrief > .primaryAction { width: 100%; }
+  .registryPassport { padding: 18px; }
+  .registryHeader { align-items: stretch; flex-direction: column; gap: 14px; }
+  .registryBlocked { align-self: flex-start; }
+  .registrySnapshot { grid-template-columns: 22px minmax(0, 1fr); }
+  .registrySnapshot code { grid-column: 1 / -1; text-align: left; }
+  .registryDetails .definition dd { max-width: 62%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -272,5 +311,5 @@
 }
 
 @media (prefers-contrast: more) {
-  .kpiCard, .eventRow, .agentRow, .timelinePanel, .gapCard, .actionCard { border-width: 2px; }
+  .kpiCard, .eventRow, .agentRow, .timelinePanel, .gapCard, .actionCard, .registryPassport, .registrySource { border-width: 2px; }
 }
