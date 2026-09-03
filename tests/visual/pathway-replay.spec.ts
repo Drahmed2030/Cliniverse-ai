@@ -9,15 +9,17 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
   await expect(page.getByText('Clinical rule blocked')).toBeVisible()
   await expect(page.getByText('DEMO-PATHWAY-RULESET-V1', { exact: false }).first()).toBeVisible()
   await expect(page.getByRole('button', { name: /Review brief/ })).toBeDisabled()
-  await page.getByRole('button', { name: 'Open ECG drill' }).click()
+  await page.getByRole('button', { name: 'Open Code Lab ECG drill' }).click()
 
   await expect(page.getByRole('heading', { level: 1, name: 'Door-to-ECG acquisition drill' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'One activity, one governed return path' })).toBeVisible()
   await page.getByRole('button', { name: /Synthetic V2 strip/ }).click()
   await page.getByRole('button', { name: /Synthetic V3 strip/ }).click()
   await page.getByRole('button', { name: /Synthetic V4 strip/ }).click()
   await page.getByRole('button', { name: 'Check selection' }).click()
 
   await expect(page.getByText('Configured marker found')).toBeVisible()
+  await expect(page.getByLabel('Code Lab completion receipt')).toBeVisible()
   await page.getByRole('button', { name: 'Open reassessment' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Re-run the same operational competency' })).toBeVisible()
   await page.getByRole('button', { name: 'Create review brief' }).click()

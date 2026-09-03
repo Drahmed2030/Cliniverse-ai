@@ -36,6 +36,7 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 - later stages remain locked until prerequisite work passes;
 - incorrect ECG attempts can retry without granting progress;
 - only the configured synthetic answer key unlocks reassessment;
+- successful practice creates a versioned completion receipt bound to the exact activity, content, answer key and Registry snapshot;
 - malformed or mismatched stored state fails closed; and
 - no model, network, or database call is required.
 
@@ -107,7 +108,7 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 - progress ownership and deletion behavior are documented; and
 - no schema migration occurs without a separate backup, rollback and authorization gate.
 
-**State:** pending Stages 2–6.
+**State:** partially implemented in the isolated pathway slice. The Door-to-ECG gap now opens one versioned Code Lab activity, a valid deterministic result creates a session-only completion receipt, and that receipt returns to Reassessment and travels into the Closure Brief. Global app navigation, BLS/ACLS migration, PRO/StoreKit entitlement behavior, cross-device progress ownership and deletion, and any database persistence remain pending. Stage 6 is not bypassed and remains separately blocked.
 
 ## Stage 8 — Product quality gate
 

@@ -29,35 +29,40 @@ test('the pathway session gates later stages until training and reassessment pas
 test('the deterministic drill records failed and successful attempts without provider calls', () => {
   let session = openPathwayStage(createPathwayReplaySession(report), 'drill')
   session = togglePathwayLead(session, 'II')
-  session = submitPathwayDrill(session)
+  session = submitPathwayDrill(session, report)
 
   assert.equal(session.attempts, 1)
   assert.equal(session.drillResult, 'needs-review')
-  assert.equal(session.trainingCompleted, false)
+  assert.equal(session.trainingReceipt, null)
 
   session = retryPathwayDrill(session)
   for (const lead of ['V2', 'V3', 'V4']) session = togglePathwayLead(session, lead)
-  session = submitPathwayDrill(session)
+  session = submitPathwayDrill(session, report)
 
   assert.equal(session.attempts, 2)
   assert.equal(session.drillResult, 'passed')
-  assert.equal(session.trainingCompleted, true)
+  assert.equal(session.trainingReceipt?.activityId, 'door-to-ecg-drill-v1')
+  assert.equal(session.trainingReceipt?.assessment.attempts, 2)
+  assert.equal(session.trainingReceipt?.source.registrySnapshotId, report.registry.snapshotId)
   assert.equal(isPathwayStageAvailable(session, 'reassessment'), true)
 })
 
 test('a completed reassessment compiles one reviewable closure brief while keeping closure human-owned', () => {
   let session = openPathwayStage(createPathwayReplaySession(report), 'drill')
   for (const lead of ['V2', 'V3', 'V4']) session = togglePathwayLead(session, lead)
-  session = submitPathwayDrill(session)
+  session = submitPathwayDrill(session, report)
   session = openPathwayStage(session, 'reassessment')
   session = completePathwayReassessment(session)
   const brief = createPathwayClosureBrief(report, session)
 
   assert.equal(session.stage, 'closure')
+  assert.equal(brief.schemaVersion, '1.1')
   assert.equal(brief.caseId, 'SIM-REPLAY-001')
   assert.equal(brief.pathway.dataMode, 'fictional-simulation')
   assert.equal(brief.training.result, 'configured-marker-matched')
   assert.deepEqual(brief.training.matchedLeads, ['V2', 'V3', 'V4'])
+  assert.equal(brief.training.receipt.receiptId, session.trainingReceipt.receiptId)
+  assert.equal(brief.training.receipt.contentVersion, '1.0.0-draft')
   assert.equal(brief.reassessment.baselineMinutes, 12)
   assert.equal(brief.reassessment.illustrativeMinutes, 8)
   assert.equal(brief.registry.snapshotId, report.registry.snapshotId)
@@ -70,7 +75,7 @@ test('a completed reassessment compiles one reviewable closure brief while keepi
 test('session restore accepts only the matching, internally consistent synthetic contract', () => {
   let session = openPathwayStage(createPathwayReplaySession(report), 'drill')
   for (const lead of ['V2', 'V3', 'V4']) session = togglePathwayLead(session, lead)
-  session = submitPathwayDrill(session)
+  session = submitPathwayDrill(session, report)
   session = openPathwayStage(session, 'reassessment')
 
   assert.deepEqual(parsePathwayReplaySession(serializePathwayReplaySession(session), report), session)
@@ -95,6 +100,18 @@ test('session restore accepts only the matching, internally consistent synthetic
     parsePathwayReplaySession(JSON.stringify(unknownLead), report),
     createPathwayReplaySession(report),
   )
+
+  const tamperedReceipt = {
+    ...session,
+    trainingReceipt: {
+      ...session.trainingReceipt,
+      contentVersion: 'unreviewed-drift',
+    },
+  }
+  assert.deepEqual(
+    parsePathwayReplaySession(JSON.stringify(tamperedReceipt), report),
+    createPathwayReplaySession(report),
+  )
 })
 
 test('closure brief creation fails closed before the required learning loop completes', () => {
@@ -105,7 +122,7 @@ test('closure brief creation fails closed before the required learning loop comp
 
   let completed = openPathwayStage(createPathwayReplaySession(report), 'drill')
   for (const lead of ['V2', 'V3', 'V4']) completed = togglePathwayLead(completed, lead)
-  completed = submitPathwayDrill(completed)
+  completed = submitPathwayDrill(completed, report)
   completed = completePathwayReassessment(completed)
 
   assert.throws(

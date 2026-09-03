@@ -272,6 +272,52 @@
   font-size: 13px;
 }
 
+.codeLabBridge {
+  width: min(940px, 100%);
+  margin: 0 auto 18px;
+  padding: 20px;
+  border: 1px solid var(--replay-cyan);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(6, 182, 212, .12), transparent 52%), var(--replay-surface);
+}
+.codeLabBridge > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.codeLabBridge h2 { margin: 7px 0 0; font-size: 19px; }
+.bridgeStatus {
+  min-height: 44px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 13px;
+  border: 1px solid rgba(6, 182, 212, .35);
+  border-radius: 999px;
+  background: rgba(6, 182, 212, .1);
+  color: var(--replay-cyan);
+  font-size: 11px;
+  font-weight: 800;
+}
+.bridgeFlow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+.bridgeFlow article { min-width: 0; padding: 14px; border: 1px solid var(--replay-border); border-radius: 15px; background: rgba(11, 15, 25, .58); }
+.bridgeFlow small, .bridgeFlow strong, .bridgeFlow span { display: block; overflow-wrap: anywhere; }
+.bridgeFlow small { color: var(--replay-muted); font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .06em; }
+.bridgeFlow strong { margin-top: 7px; color: var(--replay-text); font-size: 13px; line-height: 1.4; }
+.bridgeFlow span { margin-top: 5px; color: var(--replay-secondary); font-size: 11px; line-height: 1.4; }
+.bridgeSource { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; margin-top: 10px; padding: 12px 14px; border-radius: 13px; background: var(--replay-raised); }
+.bridgeSource span { color: var(--replay-secondary); font-size: 11px; font-weight: 750; }
+.bridgeSource code { min-width: 0; overflow-wrap: anywhere; color: var(--replay-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; text-align: right; }
+
+.trainingReceipt { margin-top: 16px; padding: 17px; border: 1px solid rgba(16, 185, 129, .42); border-radius: 17px; background: rgba(16, 185, 129, .08); }
+.trainingReceiptCompact { margin: 14px 0 0; padding: 15px; }
+.trainingReceipt > header { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 11px; }
+.trainingReceipt > header > div { min-width: 0; }
+.trainingReceipt > header strong { display: block; margin-top: 4px; color: var(--replay-text); font-size: 13px; line-height: 1.4; }
+.receiptIcon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: rgba(16, 185, 129, .16); color: var(--replay-green); }
+.receiptState { padding: 6px 10px; border-radius: 999px; background: rgba(16, 185, 129, .16); color: var(--replay-green); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+.receiptDetails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; margin: 13px 0 0; }
+.receiptDetails .definition { align-items: flex-start; padding: 7px 0; border-bottom: 1px solid rgba(148, 163, 184, .14); }
+.receiptDetails .definition dd { max-width: 65%; }
+.trainingReceipt > p { margin: 12px 0 0; color: var(--replay-muted); font-size: 10px; line-height: 1.5; }
+
 @media (max-width: 760px) {
   .page { padding-inline: 20px; }
   .journeyProgress { padding: 11px; }
@@ -293,6 +339,15 @@
   .resultSuccess .primaryAction, .resultWarning .secondaryAction { grid-column: 1 / -1; width: 100%; }
   .mediaLauncher { align-items: stretch; flex-direction: column; padding: 18px; }
   .mediaLauncher .secondaryAction { width: 100%; }
+  .codeLabBridge { padding: 18px; }
+  .codeLabBridge > header { align-items: stretch; flex-direction: column; }
+  .bridgeStatus { align-self: flex-start; }
+  .bridgeFlow, .receiptDetails { grid-template-columns: 1fr; }
+  .bridgeSource { grid-template-columns: 1fr; }
+  .bridgeSource code { text-align: left; }
+  .trainingReceipt > header { grid-template-columns: 40px minmax(0, 1fr); }
+  .receiptState { grid-column: 1 / -1; justify-self: start; }
+  .receiptDetails .definition dd { max-width: 62%; }
   .closureBrief { padding: 18px; }
   .closureHeader, .briefComparison { align-items: stretch; flex-direction: column; }
   .briefGrid { grid-template-columns: 1fr; }
@@ -311,5 +366,5 @@
 }
 
 @media (prefers-contrast: more) {
-  .kpiCard, .eventRow, .agentRow, .timelinePanel, .gapCard, .actionCard, .registryPassport, .registrySource { border-width: 2px; }
+  .kpiCard, .eventRow, .agentRow, .timelinePanel, .gapCard, .actionCard, .registryPassport, .registrySource, .codeLabBridge, .trainingReceipt { border-width: 2px; }
 }

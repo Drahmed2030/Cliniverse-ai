@@ -21,6 +21,10 @@ import {
   DOOR_TO_ECG_SYNTHETIC_LEADS,
   type SyntheticLeadId,
 } from '../../lib/cardiology/ecgWaveform'
+import {
+  DOOR_TO_ECG_CODE_LAB_ACTIVITY,
+  type CodeLabTrainingCompletionReceipt,
+} from '../../lib/codelab/trainingActivity'
 import type { PathwayReplayReport, ReplayAgentState, ReplayIntegrityState } from '../../lib/cardiology/pathwayReplayAgents'
 import {
   completePathwayReassessment,
@@ -110,7 +114,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
   const selectedLeads = session.selectedLeads
   const submitted = session.drillResult !== 'not-submitted'
   const passed = session.drillResult === 'passed'
-  const drillComplete = session.trainingCompleted
+  const drillComplete = session.trainingReceipt !== null
 
   function toggleLead(id: SyntheticLeadId) {
     writePathwaySessionSnapshot(togglePathwayLead(session, id))
@@ -127,10 +131,12 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           <ArrowLeft aria-hidden="true" size={18} /> Back to pathway
         </button>
         <header className={styles.drillHeader}>
-          <p className={styles.eyebrow}>CONTROLLED TRAINING · {report.training.durationMinutes} MIN</p>
-          <h1>Door-to-ECG acquisition drill</h1>
-          <p>Inspect a deterministic synthetic waveform, identify the configured marker, and verify the evidence needed for a traceable acquisition event.</p>
+          <p className={styles.eyebrow}>CODE LAB · TARGETED PATHWAY ACTIVITY · {report.training.durationMinutes} MIN</p>
+          <h1>{DOOR_TO_ECG_CODE_LAB_ACTIVITY.title}</h1>
+          <p>One governed activity links the detected pathway gap to deterministic practice, a completion receipt, and the same-session reassessment.</p>
         </header>
+
+        <CodeLabActivityBridge report={report} />
 
         <section className={styles.mediaLauncher} aria-labelledby="media-launcher-title">
           <div>
@@ -188,11 +194,11 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           </div>
 
           {!submitted ? (
-            <button className={styles.primaryAction} disabled={selectedLeads.length === 0} onClick={() => writePathwaySessionSnapshot(submitPathwayDrill(session))} type="button">Check selection</button>
+            <button className={styles.primaryAction} disabled={selectedLeads.length === 0} onClick={() => writePathwaySessionSnapshot(submitPathwayDrill(session, report))} type="button">Check selection</button>
           ) : passed ? (
             <div className={styles.resultSuccess} role="status">
               <CheckCircle2 aria-hidden="true" size={22} />
-              <div><strong>Configured marker found</strong><span>{DOOR_TO_ECG_MARKER_LEADS.join(', ')} matched the deterministic answer key.</span></div>
+              <div><strong>Configured marker found</strong><span>{DOOR_TO_ECG_MARKER_LEADS.join(', ')} matched the deterministic answer key and generated a session-only Code Lab receipt.</span></div>
               <button className={styles.primaryAction} onClick={() => openStage('reassessment')} type="button">Open reassessment</button>
             </div>
           ) : (
@@ -202,6 +208,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
               <button className={styles.secondaryAction} onClick={() => writePathwaySessionSnapshot(retryPathwayDrill(session))} type="button">Try again</button>
             </div>
           )}
+          {session.trainingReceipt ? <TrainingReceiptCard receipt={session.trainingReceipt} /> : null}
         </section>
       </Shell>
     )
@@ -224,9 +231,10 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             <article><span>Baseline replay</span><strong>{report.metrics.elapsedMinutes} min</strong><small>Recorded synthetic interval</small></article>
             <article><span>Post-training simulation</span><strong>{PATHWAY_ILLUSTRATIVE_REASSESSMENT_MINUTES} min</strong><small>Illustrative target run</small></article>
           </div>
+          {session.trainingReceipt ? <TrainingReceiptCard compact receipt={session.trainingReceipt} /> : null}
           <div className={styles.reassessmentStatus}>
             <Clock3 aria-hidden="true" size={20} />
-            <div><strong>Configured competency passed</strong><span>ECG acquisition evidence was recognized before the 10-minute demonstration threshold.</span></div>
+            <div><strong>Configured exercise passed</strong><span>ECG acquisition evidence was recognized before the 10-minute demonstration threshold.</span></div>
           </div>
           <div className={styles.openGate}>
             <ShieldAlert aria-hidden="true" size={20} />
@@ -276,8 +284,10 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
               <h3 id="brief-training-title">Training evidence</h3>
               <dl className={styles.definitionList}>
                 <Definition label="Activity" value={brief.training.activityId} />
+                <Definition label="Activity version" value={brief.training.receipt.activityVersion} />
+                <Definition label="Receipt" value={brief.training.receipt.receiptId} />
                 <Definition label="Attempts" value={String(brief.training.attempts)} />
-                <Definition label="Answer key" value={brief.training.matchedLeads.join(', ')} />
+                <Definition label="Source snapshot" value={brief.training.receipt.source.registrySnapshotId} />
                 <Definition label="Result" value="Configured marker matched" />
               </dl>
             </section>
@@ -365,7 +375,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             <p className={styles.eyebrow}>NEXT CONTROLLED ACTION</p>
             <h2 id="action-title">{report.training.label}</h2>
             <p>{drillComplete ? 'The drill is complete. Reassessment evidence is available for reviewer inspection.' : 'Inspect the synthetic waveform, verify acquisition evidence, then reassess the same configured competency.'}</p>
-            <p className={styles.trainingMeta}>{report.training.durationMinutes}-minute fictional exercise · No diagnosis or treatment authority</p>
+            <p className={styles.trainingMeta}>Code Lab {DOOR_TO_ECG_CODE_LAB_ACTIVITY.activityVersion} · {report.training.durationMinutes}-minute fictional exercise · No diagnosis or treatment authority</p>
           </section>
         </div>
         <div>
@@ -379,7 +389,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
               <Definition label="Owner" value={`${roleLabel(report.gap.owner)} · Human review required`} tone="warning" />
             </dl>
             <button className={styles.actionLink} onClick={() => openStage(drillComplete ? 'reassessment' : 'drill')} type="button">
-              {drillComplete ? 'Review reassessment' : 'Open ECG drill'}
+              {drillComplete ? 'Review reassessment' : 'Open Code Lab ECG drill'}
             </button>
           </section>
           <section className={styles.agentsPanel} aria-labelledby="agents-title">
@@ -425,7 +435,7 @@ function Shell({
 
 const JOURNEY_STAGES: { id: PathwaySessionStage; label: string; detail: string }[] = [
   { id: 'replay', label: 'Replay', detail: 'See the gap' },
-  { id: 'drill', label: 'ECG drill', detail: 'Practise' },
+  { id: 'drill', label: 'Code Lab', detail: 'ECG drill' },
   { id: 'reassessment', label: 'Reassess', detail: 'Compare' },
   { id: 'closure', label: 'Review brief', detail: 'Human closure' },
 ]
@@ -448,9 +458,9 @@ function JourneyProgress({
           const current = session.stage === stage.id
           const available = isPathwayStageAvailable(session, stage.id)
           const completed = stage.id === 'replay'
-            ? session.trainingCompleted
+            ? session.trainingReceipt !== null
             : stage.id === 'drill'
-              ? session.trainingCompleted
+              ? session.trainingReceipt !== null
               : stage.id === 'reassessment'
                 ? session.reassessment.state === 'passed'
                 : false
@@ -474,6 +484,73 @@ function JourneyProgress({
         })}
       </ol>
     </nav>
+  )
+}
+
+function CodeLabActivityBridge({ report }: { report: PathwayReplayReport }) {
+  return (
+    <section className={styles.codeLabBridge} aria-labelledby="codelab-bridge-title">
+      <header>
+        <div>
+          <p className={styles.eyebrow}>CODE LAB BRIDGE · V1</p>
+          <h2 id="codelab-bridge-title">One activity, one governed return path</h2>
+        </div>
+        <span className={styles.bridgeStatus}><FileLock2 aria-hidden="true" size={16} />Session-only</span>
+      </header>
+      <div className={styles.bridgeFlow}>
+        <article>
+          <small>Opened from</small>
+          <strong>Door-to-ECG gap</strong>
+          <span>{report.gap.rule.id}</span>
+        </article>
+        <article>
+          <small>Code Lab activity</small>
+          <strong>{report.training.activityId}</strong>
+          <span>Version {DOOR_TO_ECG_CODE_LAB_ACTIVITY.activityVersion}</span>
+        </article>
+        <article>
+          <small>Returns to</small>
+          <strong>Reassessment</strong>
+          <span>Only after a valid receipt</span>
+        </article>
+      </div>
+      <div className={styles.bridgeSource}>
+        <span>Frozen source snapshot</span>
+        <code>{report.training.registrySnapshotId}</code>
+      </div>
+    </section>
+  )
+}
+
+function TrainingReceiptCard({
+  compact = false,
+  receipt,
+}: {
+  compact?: boolean
+  receipt: CodeLabTrainingCompletionReceipt
+}) {
+  return (
+    <section
+      aria-label="Code Lab completion receipt"
+      className={`${styles.trainingReceipt} ${compact ? styles.trainingReceiptCompact : ''}`}
+      role="status"
+    >
+      <header>
+        <span className={styles.receiptIcon}><CheckCircle2 aria-hidden="true" size={19} /></span>
+        <div>
+          <p className={styles.eyebrow}>CODE LAB COMPLETION RECEIPT</p>
+          <strong>Accepted by the same-session contract</strong>
+        </div>
+        <span className={styles.receiptState}>Recorded</span>
+      </header>
+      <dl className={styles.receiptDetails}>
+        <Definition label="Receipt ID" value={receipt.receiptId} />
+        <Definition label="Content" value={`${receipt.contentAssetId} · ${receipt.contentVersion}`} />
+        <Definition label="Source" value={receipt.source.registrySnapshotId} />
+        <Definition label="Attempts" value={String(receipt.assessment.attempts)} />
+      </dl>
+      <p>Deterministic structural evidence only; not certification, clinical validation, or a digital signature.</p>
+    </section>
   )
 }
 

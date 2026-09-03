@@ -1,13 +1,17 @@
 import {
-  DOOR_TO_ECG_MARKER_LEADS,
   matchesConfiguredMarker,
   type SyntheticLeadId,
 } from './ecgWaveform.ts'
 import type { PathwayReplayReport } from './pathwayReplayAgents.ts'
 import type { MedicalOperationsRegistrySnapshot } from './nexusReferences.ts'
+import {
+  createCodeLabTrainingReceipt,
+  parseCodeLabTrainingReceipt,
+  type CodeLabTrainingCompletionReceipt,
+} from '../codelab/trainingActivity.ts'
 
-export const PATHWAY_SESSION_SCHEMA_VERSION = 1 as const
-export const PATHWAY_SESSION_STORAGE_KEY = 'cliniverse_pathway_replay_session_v1'
+export const PATHWAY_SESSION_SCHEMA_VERSION = 2 as const
+export const PATHWAY_SESSION_STORAGE_KEY = 'cliniverse_pathway_replay_session_v2'
 
 export type PathwaySessionStage = 'replay' | 'drill' | 'reassessment' | 'closure'
 export type PathwayDrillResult = 'not-submitted' | 'needs-review' | 'passed'
@@ -20,7 +24,7 @@ export interface PathwayReplaySession {
   selectedLeads: SyntheticLeadId[]
   attempts: number
   drillResult: PathwayDrillResult
-  trainingCompleted: boolean
+  trainingReceipt: CodeLabTrainingCompletionReceipt | null
   reassessment: {
     state: 'not-run' | 'passed'
     illustrativeMinutes: number | null
@@ -28,7 +32,7 @@ export interface PathwayReplaySession {
 }
 
 export interface PathwayClosureBrief {
-  schemaVersion: '1.0'
+  schemaVersion: '1.1'
   briefId: string
   caseId: string
   pathway: {
@@ -47,6 +51,7 @@ export interface PathwayClosureBrief {
     attempts: number
     result: 'configured-marker-matched'
     matchedLeads: SyntheticLeadId[]
+    receipt: CodeLabTrainingCompletionReceipt
   }
   reassessment: {
     baselineMinutes: number | null
@@ -74,7 +79,7 @@ export function createPathwayReplaySession(report: PathwayReplayReport): Pathway
     selectedLeads: [],
     attempts: 0,
     drillResult: 'not-submitted',
-    trainingCompleted: false,
+    trainingReceipt: null,
     reassessment: {
       state: 'not-run',
       illustrativeMinutes: null,
@@ -87,7 +92,7 @@ export function isPathwayStageAvailable(
   stage: PathwaySessionStage,
 ): boolean {
   if (stage === 'replay' || stage === 'drill') return true
-  if (stage === 'reassessment') return session.trainingCompleted
+  if (stage === 'reassessment') return session.trainingReceipt !== null
   return session.reassessment.state === 'passed'
 }
 
@@ -111,15 +116,29 @@ export function togglePathwayLead(
   return { ...session, selectedLeads }
 }
 
-export function submitPathwayDrill(session: PathwayReplaySession): PathwayReplaySession {
+export function submitPathwayDrill(
+  session: PathwayReplaySession,
+  report: PathwayReplayReport,
+): PathwayReplaySession {
   if (session.drillResult !== 'not-submitted' || session.selectedLeads.length === 0) return session
+  if (session.caseId !== report.caseId || session.activityId !== report.training.activityId) return session
 
   const passed = matchesConfiguredMarker(session.selectedLeads)
+  const attempts = session.attempts + 1
   return {
     ...session,
-    attempts: session.attempts + 1,
+    attempts,
     drillResult: passed ? 'passed' : 'needs-review',
-    trainingCompleted: passed,
+    trainingReceipt: passed
+      ? createCodeLabTrainingReceipt({
+          activityId: report.training.activityId,
+          attempts,
+          caseId: report.caseId,
+          matchedLeadIds: session.selectedLeads,
+          registrySnapshotId: report.training.registrySnapshotId,
+          sourceRevisionIds: report.training.referenceIds,
+        })
+      : null,
   }
 }
 
@@ -133,7 +152,7 @@ export function retryPathwayDrill(session: PathwayReplaySession): PathwayReplayS
 }
 
 export function completePathwayReassessment(session: PathwayReplaySession): PathwayReplaySession {
-  if (!session.trainingCompleted) return session
+  if (!session.trainingReceipt) return session
   return {
     ...session,
     stage: 'closure',
@@ -148,12 +167,19 @@ export function createPathwayClosureBrief(
   report: PathwayReplayReport,
   session: PathwayReplaySession,
 ): PathwayClosureBrief {
+  const receipt = parseCodeLabTrainingReceipt(session.trainingReceipt, {
+    activityId: report.training.activityId,
+    caseId: report.caseId,
+    registrySnapshotId: report.training.registrySnapshotId,
+    sourceRevisionIds: report.training.referenceIds,
+  })
+
   if (
     session.caseId !== report.caseId
     || session.activityId !== report.training.activityId
-    || !session.trainingCompleted
+    || receipt === null
     || session.drillResult !== 'passed'
-    || session.attempts < 1
+    || session.attempts !== receipt.assessment.attempts
     || !matchesConfiguredMarker(session.selectedLeads)
     || session.reassessment.state !== 'passed'
     || session.reassessment.illustrativeMinutes === null
@@ -162,7 +188,7 @@ export function createPathwayClosureBrief(
   }
 
   return {
-    schemaVersion: '1.0',
+    schemaVersion: '1.1',
     briefId: `${report.caseId}:${report.training.activityId}:brief-v1`,
     caseId: report.caseId,
     pathway: {
@@ -178,9 +204,10 @@ export function createPathwayClosureBrief(
     },
     training: {
       activityId: session.activityId,
-      attempts: session.attempts,
+      attempts: receipt.assessment.attempts,
       result: 'configured-marker-matched',
-      matchedLeads: [...DOOR_TO_ECG_MARKER_LEADS],
+      matchedLeads: [...receipt.assessment.matchedLeadIds],
+      receipt,
     },
     reassessment: {
       baselineMinutes: report.metrics.elapsedMinutes,
@@ -241,7 +268,13 @@ export function parsePathwayReplaySession(
     const attempts = Number.isInteger(candidate.attempts) && Number(candidate.attempts) >= 0
       ? Number(candidate.attempts)
       : 0
-    const trainingCompleted = candidate.trainingCompleted === true
+    const trainingReceipt = parseCodeLabTrainingReceipt(candidate.trainingReceipt, {
+      activityId: report.training.activityId,
+      caseId: report.caseId,
+      registrySnapshotId: report.training.registrySnapshotId,
+      sourceRevisionIds: report.training.referenceIds,
+    })
+    const trainingCompleted = trainingReceipt !== null
     const reassessmentPassed = candidate.reassessment?.state === 'passed'
       && candidate.reassessment.illustrativeMinutes === PATHWAY_ILLUSTRATIVE_REASSESSMENT_MINUTES
     const reassessmentNotRun = candidate.reassessment?.state === 'not-run'
@@ -250,13 +283,15 @@ export function parsePathwayReplaySession(
     const structurallyValid = candidate.schemaVersion === PATHWAY_SESSION_SCHEMA_VERSION
       && candidate.caseId === report.caseId
       && candidate.activityId === report.training.activityId
+      && (candidate.trainingReceipt === null || trainingReceipt !== null)
       && selectedLeadsValid
       && stageValid
       && drillResultValid
       && (reassessmentPassed || reassessmentNotRun)
-      && (drillResult !== 'passed' || (trainingCompleted && matchesConfiguredMarker(selectedLeads)))
+      && ((drillResult === 'passed') === trainingCompleted)
+      && (drillResult !== 'passed' || matchesConfiguredMarker(selectedLeads))
+      && (!trainingReceipt || trainingReceipt.assessment.attempts === attempts)
       && (drillResult !== 'needs-review' || (attempts > 0 && !matchesConfiguredMarker(selectedLeads)))
-      && (!trainingCompleted || drillResult === 'passed')
       && (!trainingCompleted || attempts > 0)
       && (!reassessmentPassed || trainingCompleted)
       && (stage !== 'reassessment' || trainingCompleted)
@@ -272,7 +307,7 @@ export function parsePathwayReplaySession(
       selectedLeads,
       attempts,
       drillResult,
-      trainingCompleted,
+      trainingReceipt,
       reassessment: reassessmentPassed
         ? { state: 'passed', illustrativeMinutes: PATHWAY_ILLUSTRATIVE_REASSESSMENT_MINUTES }
         : { state: 'not-run', illustrativeMinutes: null },

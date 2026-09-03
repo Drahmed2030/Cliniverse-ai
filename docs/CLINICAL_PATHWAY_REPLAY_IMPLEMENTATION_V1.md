@@ -15,8 +15,9 @@ The prototype exposes:
 - Door-to-ECG interval, completeness, and open-gate metrics;
 - explicit missing-evidence and delayed-event states;
 - a draft gap attribution that always requires human review;
-- a targeted deterministic ECG training action;
-- a four-stage session contract (`Replay → ECG drill → Reassess → Review brief`);
+- a versioned Code Lab training activity linked directly to the detected Door-to-ECG gap;
+- a four-stage session contract (`Replay → Code Lab → Reassess → Review brief`);
+- a deterministic completion receipt containing the activity, content, player, answer-key, source-snapshot, and attempt versions;
 - safe same-tab resume with malformed state rejected;
 - an illustrative post-training reassessment; and
 - a compiled review brief whose governance closure remains blocked while evidence or review is open;
@@ -43,6 +44,7 @@ These are bounded functional agents, not six independent clinical authorities. V
 - Responsive implementation: `app/labs/pathway-replay/`
 - Deterministic engine: `app/lib/cardiology/pathwayReplayAgents.ts`
 - Session state machine: `app/lib/cardiology/pathwaySession.ts`
+- Code Lab activity and completion contract: `app/lib/codelab/trainingActivity.ts`
 - Medical Operations Registry: `app/lib/cardiology/nexusReferences.ts`
 - Browser journey gate: `tests/visual/pathway-replay.spec.ts`
 
@@ -56,20 +58,23 @@ These are bounded functional agents, not six independent clinical authorities. V
 - No database migration or production connection.
 - No inclusion in the Apple release shell.
 - No registry record is approved as an executable clinical rule.
+- A completion receipt is structural session evidence, not certification, a digital signature, or clinical validation.
 
 ## Verification record
 
-- Full repository tests: 154 passed, 0 failed.
+- Full repository tests: 158 passed, 0 failed.
 - ESLint for new TypeScript/TSX: passed.
+- Repository-wide ESLint remains a separate legacy-debt gate: the current baseline reports 473 errors and 311 warnings outside this bounded change.
 - TypeScript `--noEmit`: passed.
 - Next.js 16 production build with Turbopack: passed.
 - Route output: statically generated.
 - Session contract tests: gating, retry, success, safe restoration and human-owned closure passed.
+- Code Lab bridge tests: shared activity identity, canonical receipt creation, exact source binding, tamper rejection, and session-only isolation passed.
 - Registry tests: complete passports, immutable revision snapshots, fail-closed resolution, and blocked clinical authority passed.
 - Isolation test: engine, session, page and experience contain no provider, database or release-shell dependency.
 - Figma mobile and tablet compositions: visually reviewed after token, typography, component-state, clipping, and CTA corrections.
 
-The local browser binary could not be installed because the execution network rejected the external Chrome download. The responsive Playwright journey is committed as a repeatable gate; live browser and accessibility verification remains required on the strategy Preview before this implementation record is closed.
+The local browser binary could not be installed because the execution network rejected the external Chrome download. The responsive Playwright journey includes the Code Lab bridge and receipt as a repeatable gate; live browser and accessibility verification remains required on the strategy Preview before this implementation record is closed.
 
 ## Next gate
 
