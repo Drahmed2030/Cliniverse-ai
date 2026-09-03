@@ -57,15 +57,20 @@ test('Pathway Replay rejects real-patient mode and is deterministic', () => {
 
 test('the prototype remains isolated from providers, databases and the Apple release shell', () => {
   const engine = readFileSync(new URL('../app/lib/cardiology/pathwayReplayAgents.ts', import.meta.url), 'utf8')
+  const session = readFileSync(new URL('../app/lib/cardiology/pathwaySession.ts', import.meta.url), 'utf8')
   const page = readFileSync(new URL('../app/labs/pathway-replay/page.tsx', import.meta.url), 'utf8')
+  const experience = readFileSync(new URL('../app/labs/pathway-replay/PathwayReplayExperience.tsx', import.meta.url), 'utf8')
   const release = readFileSync(new URL('../app/components/ReleaseApp.tsx', import.meta.url), 'utf8')
 
   for (const prohibited of ['fetch(', 'supabase', '/api/oracle', 'ANTHROPIC_API_KEY']) {
-    assert.equal(engine.includes(prohibited), false)
-    assert.equal(page.includes(prohibited), false)
+    for (const source of [engine, session, page, experience]) {
+      assert.equal(source.includes(prohibited), false)
+    }
   }
   assert.equal(release.includes('pathway-replay'), false)
   assert.match(page, /Synthetic data only/i)
   assert.match(page, /Human review required/i)
   assert.match(page, /Back to Cliniverse/i)
+  assert.match(experience, /Brief compiled; closure not granted/i)
+  assert.match(experience, /Session-only · No upload/i)
 })

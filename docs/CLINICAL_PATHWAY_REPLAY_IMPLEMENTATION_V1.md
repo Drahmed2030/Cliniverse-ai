@@ -15,8 +15,11 @@ The prototype exposes:
 - Door-to-ECG interval, completeness, and open-gate metrics;
 - explicit missing-evidence and delayed-event states;
 - a draft gap attribution that always requires human review;
-- a targeted training action; and
-- a governance closure gate that remains blocked while evidence or review is open.
+- a targeted deterministic ECG training action;
+- a four-stage session contract (`Replay → ECG drill → Reassess → Review brief`);
+- safe same-tab resume with malformed state rejected;
+- an illustrative post-training reassessment; and
+- a compiled review brief whose governance closure remains blocked while evidence or review is open.
 
 ## Six governed agents
 
@@ -37,6 +40,8 @@ These are bounded functional agents, not six independent clinical authorities. V
 - Primary tablet frame: `14:3`
 - Responsive implementation: `app/labs/pathway-replay/`
 - Deterministic engine: `app/lib/cardiology/pathwayReplayAgents.ts`
+- Session state machine: `app/lib/cardiology/pathwaySession.ts`
+- Browser journey gate: `tests/visual/pathway-replay.spec.ts`
 
 ## Safety boundaries
 
@@ -50,15 +55,16 @@ These are bounded functional agents, not six independent clinical authorities. V
 
 ## Verification record
 
-- Full repository tests: 123 passed, 0 failed.
+- Full repository tests: 149 passed, 0 failed.
 - ESLint for new TypeScript/TSX: passed.
 - TypeScript `--noEmit`: passed.
-- Next.js production build with webpack: passed.
+- Next.js 16 production build with Turbopack: passed.
 - Route output: statically generated.
-- Server-rendered contract check: key headings, boundaries, return link, and training anchor present.
+- Session contract tests: gating, retry, success, safe restoration and human-owned closure passed.
+- Isolation test: engine, session, page and experience contain no provider, database or release-shell dependency.
 - Figma mobile and tablet compositions: visually reviewed after token, typography, component-state, clipping, and CTA corrections.
 
-The remote browser could not reach the isolated localhost address because that environment blocks loopback navigation. This did not trigger a deployment workaround; the limitation is retained as a pre-deployment browser-test gate.
+The local browser binary could not be installed because the execution network rejected the external Chrome download. The responsive Playwright journey is committed as a repeatable gate; live browser and accessibility verification remains required on the strategy Preview before this implementation record is closed.
 
 ## Next gate
 

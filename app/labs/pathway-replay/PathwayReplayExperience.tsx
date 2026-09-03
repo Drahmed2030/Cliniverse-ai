@@ -1,16 +1,30 @@
 'use client'
 
-import { Activity, ArrowLeft, CheckCircle2, Clock3, Film, ShieldAlert } from 'lucide-react'
+import { Activity, ArrowLeft, CheckCircle2, ClipboardCheck, Clock3, Film, LockKeyhole, ShieldAlert } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import {
   DOOR_TO_ECG_MARKER_LEADS,
   DOOR_TO_ECG_SYNTHETIC_LEADS,
-  matchesConfiguredMarker,
   type SyntheticLeadId,
 } from '../../lib/cardiology/ecgWaveform'
 import type { PathwayReplayReport, ReplayAgentState, ReplayIntegrityState } from '../../lib/cardiology/pathwayReplayAgents'
+import {
+  completePathwayReassessment,
+  createPathwayClosureBrief,
+  isPathwayStageAvailable,
+  openPathwayStage,
+  parsePathwayReplaySession,
+  PATHWAY_ILLUSTRATIVE_REASSESSMENT_MINUTES,
+  PATHWAY_SESSION_STORAGE_KEY,
+  retryPathwayDrill,
+  serializePathwayReplaySession,
+  submitPathwayDrill,
+  togglePathwayLead,
+  type PathwayReplaySession,
+  type PathwaySessionStage,
+} from '../../lib/cardiology/pathwaySession'
 import styles from './pathway-replay.module.css'
 
 const ClinicalMediaPreview = dynamic(
@@ -30,30 +44,73 @@ interface Props {
   }
 }
 
-type View = 'replay' | 'drill' | 'reassessment'
-
 const agentLabels: Record<ReplayAgentState, string> = {
   complete: 'Complete', ready: 'Ready', 'human-review': 'Human review',
 }
 
+const PATHWAY_SESSION_EVENT = 'cliniverse:pathway-session-change'
+let pathwaySessionMemory: string | null = null
+
+function subscribePathwaySession(onStoreChange: () => void) {
+  window.addEventListener('storage', onStoreChange)
+  window.addEventListener(PATHWAY_SESSION_EVENT, onStoreChange)
+  return () => {
+    window.removeEventListener('storage', onStoreChange)
+    window.removeEventListener(PATHWAY_SESSION_EVENT, onStoreChange)
+  }
+}
+
+function readPathwaySessionSnapshot() {
+  if (typeof window === 'undefined') return null
+  try {
+    return sessionStorage.getItem(PATHWAY_SESSION_STORAGE_KEY) ?? pathwaySessionMemory
+  } catch {
+    return pathwaySessionMemory
+  }
+}
+
+function readServerPathwaySessionSnapshot() {
+  return null
+}
+
+function writePathwaySessionSnapshot(session: PathwayReplaySession) {
+  const serialized = serializePathwayReplaySession(session)
+  pathwaySessionMemory = serialized
+  try {
+    sessionStorage.setItem(PATHWAY_SESSION_STORAGE_KEY, serialized)
+  } catch {
+    // The deterministic prototype remains usable in memory when browser storage is unavailable.
+  }
+  window.dispatchEvent(new Event(PATHWAY_SESSION_EVENT))
+}
+
 export default function PathwayReplayExperience({ report, labels }: Props) {
-  const [view, setView] = useState<View>('replay')
-  const [selectedLeads, setSelectedLeads] = useState<SyntheticLeadId[]>([])
-  const [submitted, setSubmitted] = useState(false)
-  const [drillComplete, setDrillComplete] = useState(false)
   const [showMediaPreview, setShowMediaPreview] = useState(false)
+  const sessionSnapshot = useSyncExternalStore(
+    subscribePathwaySession,
+    readPathwaySessionSnapshot,
+    readServerPathwaySessionSnapshot,
+  )
+  const session = parsePathwayReplaySession(sessionSnapshot, report)
   const measuredEvents = report.events.filter(event => event.occurredAt !== null).length
-  const passed = matchesConfiguredMarker(selectedLeads)
+  const view = session.stage
+  const selectedLeads = session.selectedLeads
+  const submitted = session.drillResult !== 'not-submitted'
+  const passed = session.drillResult === 'passed'
+  const drillComplete = session.trainingCompleted
 
   function toggleLead(id: SyntheticLeadId) {
-    if (submitted) return
-    setSelectedLeads(current => current.includes(id) ? current.filter(item => item !== id) : [...current, id])
+    writePathwaySessionSnapshot(togglePathwayLead(session, id))
+  }
+
+  function openStage(stage: PathwaySessionStage) {
+    writePathwaySessionSnapshot(openPathwayStage(session, stage))
   }
 
   if (view === 'drill') {
     return (
-      <Shell disclaimer={labels.disclaimer}>
-        <button className={styles.inlineBack} onClick={() => setView('replay')} type="button">
+      <Shell disclaimer={labels.disclaimer} onOpenStage={openStage} session={session}>
+        <button className={styles.inlineBack} onClick={() => openStage('replay')} type="button">
           <ArrowLeft aria-hidden="true" size={18} /> Back to pathway
         </button>
         <header className={styles.drillHeader}>
@@ -99,7 +156,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
                   type="button"
                 >
                   <span>{lead.label}</span>
-                  <svg aria-hidden="true" preserveAspectRatio="none" role="img" viewBox="0 0 640 108">
+                  <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 640 108">
                     <path className={styles.ecgTrace} d={lead.path} />
                   </svg>
                 </button>
@@ -117,18 +174,18 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           </div>
 
           {!submitted ? (
-            <button className={styles.primaryAction} disabled={selectedLeads.length === 0} onClick={() => setSubmitted(true)} type="button">Check selection</button>
+            <button className={styles.primaryAction} disabled={selectedLeads.length === 0} onClick={() => writePathwaySessionSnapshot(submitPathwayDrill(session))} type="button">Check selection</button>
           ) : passed ? (
             <div className={styles.resultSuccess} role="status">
               <CheckCircle2 aria-hidden="true" size={22} />
               <div><strong>Configured marker found</strong><span>{DOOR_TO_ECG_MARKER_LEADS.join(', ')} matched the deterministic answer key.</span></div>
-              <button className={styles.primaryAction} onClick={() => { setDrillComplete(true); setView('reassessment') }} type="button">Open reassessment</button>
+              <button className={styles.primaryAction} onClick={() => openStage('reassessment')} type="button">Open reassessment</button>
             </div>
           ) : (
             <div className={styles.resultWarning} role="alert">
               <ShieldAlert aria-hidden="true" size={22} />
               <div><strong>Selection needs review</strong><span>Compare the segment immediately after the QRS complex across all four synthetic leads.</span></div>
-              <button className={styles.secondaryAction} onClick={() => { setSelectedLeads([]); setSubmitted(false) }} type="button">Try again</button>
+              <button className={styles.secondaryAction} onClick={() => writePathwaySessionSnapshot(retryPathwayDrill(session))} type="button">Try again</button>
             </div>
           )}
         </section>
@@ -138,8 +195,8 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
 
   if (view === 'reassessment') {
     return (
-      <Shell disclaimer={labels.disclaimer}>
-        <button className={styles.inlineBack} onClick={() => setView('drill')} type="button">
+      <Shell disclaimer={labels.disclaimer} onOpenStage={openStage} session={session}>
+        <button className={styles.inlineBack} onClick={() => openStage('drill')} type="button">
           <ArrowLeft aria-hidden="true" size={18} /> Back to drill
         </button>
         <header className={styles.drillHeader}>
@@ -151,7 +208,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           <h2 id="reassessment-title">Door-to-ECG comparison</h2>
           <div className={styles.comparisonGrid}>
             <article><span>Baseline replay</span><strong>{report.metrics.elapsedMinutes} min</strong><small>Recorded synthetic interval</small></article>
-            <article><span>Post-training simulation</span><strong>8 min</strong><small>Illustrative target run</small></article>
+            <article><span>Post-training simulation</span><strong>{PATHWAY_ILLUSTRATIVE_REASSESSMENT_MINUTES} min</strong><small>Illustrative target run</small></article>
           </div>
           <div className={styles.reassessmentStatus}>
             <Clock3 aria-hidden="true" size={20} />
@@ -161,8 +218,88 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             <ShieldAlert aria-hidden="true" size={20} />
             <div><strong>Closure remains blocked</strong><span>The Cath Lab arrival timestamp is still missing and requires human review.</span></div>
           </div>
-          <button className={styles.primaryAction} onClick={() => setView('replay')} type="button">Return to pathway replay</button>
+          <button className={styles.primaryAction} onClick={() => writePathwaySessionSnapshot(completePathwayReassessment(session))} type="button">
+            Create review brief
+          </button>
         </section>
+      </Shell>
+    )
+  }
+
+  if (view === 'closure') {
+    const brief = createPathwayClosureBrief(report, session)
+    return (
+      <Shell disclaimer={labels.disclaimer} onOpenStage={openStage} session={session}>
+        <button className={styles.inlineBack} onClick={() => openStage('reassessment')} type="button">
+          <ArrowLeft aria-hidden="true" size={18} /> Back to reassessment
+        </button>
+        <header className={styles.drillHeader}>
+          <p className={styles.eyebrow}>CLOSURE BRIEF · HUMAN DECISION REQUIRED</p>
+          <h1>One reviewable pathway record</h1>
+          <p>The brief joins the configured gap, completed training, illustrative reassessment and unresolved evidence without changing the source replay.</p>
+        </header>
+        <article className={styles.closureBrief} aria-labelledby="closure-title">
+          <header className={styles.closureHeader}>
+            <div>
+              <p className={styles.eyebrow}>NEURAOPS TRUST ARTIFACT · V1</p>
+              <h2 id="closure-title">{brief.pathway.label}</h2>
+              <p>{brief.caseId} · {brief.pathway.version} · Synthetic simulation</p>
+            </div>
+            <span className={`${styles.statusChip} ${styles.review}`}><span aria-hidden="true" />Human review</span>
+          </header>
+
+          <div className={styles.briefGrid}>
+            <section aria-labelledby="brief-gap-title">
+              <h3 id="brief-gap-title">Gap and ownership</h3>
+              <dl className={styles.definitionList}>
+                <Definition label="Finding" value={brief.gap.title} />
+                <Definition label="Configured rule" value={brief.gap.configuredRule} />
+                <Definition label="Evidence" value={brief.gap.evidenceIds.join(' → ')} />
+                <Definition label="Accountable role" value={roleLabel(brief.gap.accountableRole)} tone="warning" />
+              </dl>
+            </section>
+            <section aria-labelledby="brief-training-title">
+              <h3 id="brief-training-title">Training evidence</h3>
+              <dl className={styles.definitionList}>
+                <Definition label="Activity" value={brief.training.activityId} />
+                <Definition label="Attempts" value={String(brief.training.attempts)} />
+                <Definition label="Answer key" value={brief.training.matchedLeads.join(', ')} />
+                <Definition label="Result" value="Configured marker matched" />
+              </dl>
+            </section>
+          </div>
+
+          <section className={styles.briefComparison} aria-labelledby="brief-reassessment-title">
+            <div>
+              <h3 id="brief-reassessment-title">Illustrative reassessment</h3>
+              <p>No patient outcome or causal improvement claim.</p>
+            </div>
+            <div className={styles.metricShift} aria-label={`Baseline ${brief.reassessment.baselineMinutes ?? 'not measured'} minutes. Illustrative reassessment ${brief.reassessment.illustrativeMinutes} minutes. Configured target ${brief.reassessment.configuredTargetMinutes} minutes.`}>
+              <span><small>Baseline</small><strong>{brief.reassessment.baselineMinutes ?? '—'} min</strong></span>
+              <span aria-hidden="true">→</span>
+              <span><small>Illustrative rerun</small><strong>{brief.reassessment.illustrativeMinutes} min</strong></span>
+            </div>
+          </section>
+
+          <section className={styles.limitations} aria-labelledby="limitations-title">
+            <div className={styles.sectionHeading}>
+              <h3 id="limitations-title">Open limitations</h3>
+              <span>{brief.closure.reasons.length} requiring review</span>
+            </div>
+            <ul>
+              {brief.closure.reasons.map(reason => <li key={reason}><ShieldAlert aria-hidden="true" size={17} />{reason}</li>)}
+            </ul>
+          </section>
+
+          <div className={styles.closureDecision} role="status">
+            <ClipboardCheck aria-hidden="true" size={22} />
+            <div>
+              <strong>Brief compiled; closure not granted</strong>
+              <span>A licensed human reviewer still owns classification, evidence acceptance and final closure.</span>
+            </div>
+          </div>
+          <button className={styles.primaryAction} onClick={() => openStage('replay')} type="button">Return to pathway overview</button>
+        </article>
       </Shell>
     )
   }
@@ -172,7 +309,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
   }
 
   return (
-    <Shell disclaimer={labels.disclaimer}>
+    <Shell disclaimer={labels.disclaimer} onOpenStage={openStage} session={session}>
       <header className={styles.header}>
         <div>
           <p className={styles.eyebrow}>CLINIVERSE AI · BY NEURAOPS</p>
@@ -224,7 +361,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
               <Definition label="Evidence" value={report.gap.evidenceIds.join(' → ')} />
               <Definition label="Owner" value={`${roleLabel(report.gap.owner)} · Human review required`} tone="warning" />
             </dl>
-            <button className={styles.actionLink} onClick={() => setView(drillComplete ? 'reassessment' : 'drill')} type="button">
+            <button className={styles.actionLink} onClick={() => openStage(drillComplete ? 'reassessment' : 'drill')} type="button">
               {drillComplete ? 'Review reassessment' : 'Open ECG drill'}
             </button>
           </section>
@@ -246,8 +383,80 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
   )
 }
 
-function Shell({ children, disclaimer }: { children: React.ReactNode; disclaimer: string }) {
-  return <main className={styles.shell}><div className={styles.page}>{children}<footer className={styles.disclaimer}>{disclaimer}</footer></div></main>
+function Shell({
+  children,
+  disclaimer,
+  onOpenStage,
+  session,
+}: {
+  children: React.ReactNode
+  disclaimer: string
+  onOpenStage: (stage: PathwaySessionStage) => void
+  session: PathwayReplaySession
+}) {
+  return (
+    <main className={styles.shell}>
+      <div className={styles.page}>
+        <JourneyProgress onOpenStage={onOpenStage} session={session} />
+        {children}
+        <footer className={styles.disclaimer}>{disclaimer}</footer>
+      </div>
+    </main>
+  )
+}
+
+const JOURNEY_STAGES: { id: PathwaySessionStage; label: string; detail: string }[] = [
+  { id: 'replay', label: 'Replay', detail: 'See the gap' },
+  { id: 'drill', label: 'ECG drill', detail: 'Practise' },
+  { id: 'reassessment', label: 'Reassess', detail: 'Compare' },
+  { id: 'closure', label: 'Review brief', detail: 'Human closure' },
+]
+
+function JourneyProgress({
+  onOpenStage,
+  session,
+}: {
+  onOpenStage: (stage: PathwaySessionStage) => void
+  session: PathwayReplaySession
+}) {
+  return (
+    <nav className={styles.journeyProgress} aria-label="Pathway replay progress">
+      <div className={styles.journeyMeta}>
+        <span>CONTROLLED PATHWAY SESSION</span>
+        <small>Session-only · No upload</small>
+      </div>
+      <ol>
+        {JOURNEY_STAGES.map((stage, index) => {
+          const current = session.stage === stage.id
+          const available = isPathwayStageAvailable(session, stage.id)
+          const completed = stage.id === 'replay'
+            ? session.trainingCompleted
+            : stage.id === 'drill'
+              ? session.trainingCompleted
+              : stage.id === 'reassessment'
+                ? session.reassessment.state === 'passed'
+                : false
+          const status = current ? 'Current' : completed ? 'Completed' : available ? 'Available' : 'Locked'
+
+          return (
+            <li className={current ? styles.currentJourneyStep : undefined} key={stage.id}>
+              <button
+                aria-current={current ? 'step' : undefined}
+                disabled={!available || current}
+                onClick={() => onOpenStage(stage.id)}
+                type="button"
+              >
+                <span className={styles.journeyIndex} aria-hidden="true">
+                  {!available ? <LockKeyhole size={15} /> : completed && !current ? <CheckCircle2 size={17} /> : String(index + 1).padStart(2, '0')}
+                </span>
+                <span><strong>{stage.label}</strong><small>{stage.detail} · {status}</small></span>
+              </button>
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
 }
 
 function KpiCard({ label, value, target, status, tone, fill }: { label: string; value: string; target: string; status: string; tone: 'success' | 'warning' | 'critical'; fill: number }) {
