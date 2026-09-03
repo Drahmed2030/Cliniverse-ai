@@ -28,6 +28,8 @@ NEURAOPS_GEMINI_LAB_ENABLED=true
 NEURAOPS_DIAGNOSTIC_TOKEN=<new long random diagnostic token>
 ```
 
+If the Vercel project already uses the server-only `GOOGLE_AI_API_KEY` name, the gateway accepts it as a compatibility alias. `GEMINI_API_KEY` remains the preferred name for new environments. Never duplicate or rotate a working key solely to rename the variable.
+
 Keep `NEURAOPS_GEMINI_LAB_ENABLED=false` in Production. Do not use any `NEXT_PUBLIC_` prefix.
 
 ## Verification

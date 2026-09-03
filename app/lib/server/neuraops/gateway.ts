@@ -42,6 +42,11 @@ export type NeuraOpsProbeResult = {
   providerStatus?: number
 }
 
+export function resolveGeminiApiKey(env: Environment = process.env): string | null {
+  const value = env.GEMINI_API_KEY?.trim() || env.GOOGLE_AI_API_KEY?.trim()
+  return value || null
+}
+
 function isNonProductionEnvironment(env: Environment): boolean {
   if (env.VERCEL_ENV) return env.VERCEL_ENV === 'preview' || env.VERCEL_ENV === 'development'
   return env.NODE_ENV !== 'production'
@@ -51,7 +56,7 @@ export function getNeuraOpsGatewayReadiness(env: Environment = process.env): Neu
   return {
     provider: 'google-gemini',
     model: NEURAOPS_GEMINI_MODEL,
-    configured: Boolean(env.GEMINI_API_KEY?.trim() && env.NEURAOPS_DIAGNOSTIC_TOKEN?.trim()),
+    configured: Boolean(resolveGeminiApiKey(env) && env.NEURAOPS_DIAGNOSTIC_TOKEN?.trim()),
     enabled: env.NEURAOPS_GEMINI_LAB_ENABLED === 'true',
     environmentAllowed: isNonProductionEnvironment(env),
     dataMode: 'fictional-simulation',

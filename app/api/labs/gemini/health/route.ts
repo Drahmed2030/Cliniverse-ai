@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import {
   authorizeNeuraOpsDiagnostic,
   getNeuraOpsGatewayReadiness,
+  resolveGeminiApiKey,
   runGeminiSyntheticProbe,
 } from '@/app/lib/server/neuraops/gateway'
 import {
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
       environment: process.env.VERCEL_ENV ?? 'local',
     },
     run: async context => {
-      const result = await runGeminiSyntheticProbe({ apiKey: process.env.GEMINI_API_KEY! })
+      const result = await runGeminiSyntheticProbe({ apiKey: resolveGeminiApiKey()! })
       const receipt = createNeuraOpsTrustReceipt({ context, result })
       await recordNeuraOpsTrustReceipt({ recorder, context, receipt })
       return { result, receipt }

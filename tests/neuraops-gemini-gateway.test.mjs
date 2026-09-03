@@ -6,6 +6,7 @@ import {
   NEURAOPS_GEMINI_MODEL,
   authorizeNeuraOpsDiagnostic,
   getNeuraOpsGatewayReadiness,
+  resolveGeminiApiKey,
   runGeminiSyntheticProbe,
 } from '../app/lib/server/neuraops/gateway.ts'
 
@@ -27,6 +28,19 @@ test('gateway readiness fails closed and exposes no secret values', () => {
   const missing = getNeuraOpsGatewayReadiness({ NODE_ENV: 'development' })
   assert.equal(missing.configured, false)
   assert.equal(missing.enabled, false)
+})
+
+test('gateway accepts the existing Google key alias without exposing which secret is configured', () => {
+  const env = {
+    NODE_ENV: 'development',
+    GOOGLE_AI_API_KEY: 'existing-google-key',
+    NEURAOPS_DIAGNOSTIC_TOKEN: 'diagnostic-token',
+    NEURAOPS_GEMINI_LAB_ENABLED: 'true',
+  }
+
+  assert.equal(resolveGeminiApiKey(env), 'existing-google-key')
+  assert.equal(getNeuraOpsGatewayReadiness(env).configured, true)
+  assert.equal(JSON.stringify(getNeuraOpsGatewayReadiness(env)).includes('existing-google-key'), false)
 })
 
 test('gateway blocks production and validates the diagnostic token', () => {
@@ -98,6 +112,7 @@ test('route and environment contract keep diagnostics private and non-production
   assert.equal(route.includes('request.json()'), false)
   assert.equal(envExample.includes('NEXT_PUBLIC_GEMINI'), false)
   assert.match(envExample, /GEMINI_API_KEY=\n/)
+  assert.match(envExample, /GOOGLE_AI_API_KEY=\n/)
   assert.match(envExample, /NEURAOPS_DIAGNOSTIC_TOKEN=\n/)
 })
 
