@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto'
 export const NEURAOPS_GEMINI_MODEL = 'gemini-3.8-flash' as const
 export const NEURAOPS_GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions' as const
 export const NEURAOPS_PROBE_MARKER = 'NEURAOPS_GEMINI_OK' as const
+export const NEURAOPS_GEMINI_THINKING_LEVEL = 'low' as const
 
 export type NeuraOpsDataMode = 'fictional-simulation' | 'real-patient'
 export type NeuraOpsProbeCode =
@@ -12,6 +13,7 @@ export type NeuraOpsProbeCode =
   | 'production-blocked'
   | 'unauthorized'
   | 'authentication-failed'
+  | 'invalid-request'
   | 'model-not-found'
   | 'rate-limited'
   | 'provider-error'
@@ -80,6 +82,7 @@ function collectText(value: unknown, output: string[] = []): string[] {
 }
 
 function codeForProviderStatus(status: number): NeuraOpsProbeCode {
+  if (status === 400) return 'invalid-request'
   if (status === 401 || status === 403) return 'authentication-failed'
   if (status === 404) return 'model-not-found'
   if (status === 429) return 'rate-limited'
@@ -113,7 +116,7 @@ export async function runGeminiSyntheticProbe(options: {
       body: JSON.stringify({
         model: NEURAOPS_GEMINI_MODEL,
         input: `This is a non-clinical infrastructure check using no patient data. Return exactly: ${NEURAOPS_PROBE_MARKER}`,
-        generation_config: { thinking_level: 'low', temperature: 0 },
+        generation_config: { thinking_level: NEURAOPS_GEMINI_THINKING_LEVEL },
       }),
       cache: 'no-store',
       signal: controller.signal,

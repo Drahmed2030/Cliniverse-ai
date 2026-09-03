@@ -155,16 +155,22 @@ export default function DiagnosticConsole() {
       setToken('')
       const payload: unknown = await response.json()
 
-      if (!response.ok || !isProbeResponse(payload)) {
+      if (isProbeResponse(payload)) {
+        setProbe(payload)
+        setPhase(payload.result.ok ? 'success' : 'error')
+        if (!payload.result.ok) {
+          setError(`Provider diagnostic: ${readableCode(payload.result.code)}${payload.result.providerStatus ? ` (Google HTTP ${payload.result.providerStatus})` : ''}.`)
+        }
+        return
+      }
+
+      if (!response.ok) {
         const code = payload && typeof payload === 'object' && 'code' in payload
           ? String((payload as { code: unknown }).code)
           : `http-${response.status}`
         throw new Error(`Probe stopped safely: ${readableCode(code)}.`)
       }
-
-      setProbe(payload)
-      setPhase(payload.result.ok ? 'success' : 'error')
-      if (!payload.result.ok) setError(`Provider diagnostic: ${readableCode(payload.result.code)}.`)
+      throw new Error('The probe response did not match the governed receipt contract.')
     } catch (reason) {
       setToken('')
       setPhase('error')

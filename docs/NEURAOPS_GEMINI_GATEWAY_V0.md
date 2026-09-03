@@ -49,6 +49,8 @@ curl -X POST https://<preview-host>/api/labs/gemini/health \
 
 A successful response reports `code: "ready"`, model `gemini-3.8-flash`, latency, `markerMatched: true`, and a Trust Receipt containing the policy and template versions, correlation identifiers, contract hashes, data classification, and human-review boundary. A `404` from Google is translated to `model-not-found`, making the previously observed failure diagnosable without exposing the provider body.
 
+The request contract follows the Gemini 3.8 Flash migration guidance and omits deprecated sampling parameters such as `temperature`, `top_p`, and `top_k`. A provider `400` is classified as `invalid-request`; structured provider failures still render their Trust Receipt in the operator console instead of collapsing into a generic gateway status.
+
 ## Preview operator console
 
 `/labs/gemini-diagnostic` provides a no-index, Preview-only control surface for the same fixed probe. It accepts only the diagnostic token, keeps that token in component memory, clears it immediately after the request, and never writes it to browser storage. The page is unavailable when `VERCEL_ENV=production` and exposes no free-text AI or patient-data input.

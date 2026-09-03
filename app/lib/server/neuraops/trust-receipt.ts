@@ -6,11 +6,12 @@ import {
   NEURAOPS_GEMINI_MODEL,
   NEURAOPS_GEMINI_ENDPOINT,
   NEURAOPS_PROBE_MARKER,
+  NEURAOPS_GEMINI_THINKING_LEVEL,
   type NeuraOpsProbeResult,
 } from './gateway'
 
 export const NEURAOPS_AI_POLICY_VERSION = 'neuraops-ai-policy-2026-09-v1' as const
-export const NEURAOPS_PROBE_TEMPLATE_VERSION = 'gemini-connectivity-probe-v1' as const
+export const NEURAOPS_PROBE_TEMPLATE_VERSION = 'gemini-connectivity-probe-v2' as const
 
 export type NeuraOpsTrustReceipt = {
   schemaVersion: 1
@@ -43,7 +44,7 @@ export function createNeuraOpsTrustReceipt(input: {
 }): NeuraOpsTrustReceipt {
   const completedAt = input.completedAt ?? new Date().toISOString()
   const inputContractHash = sha256(
-    `${NEURAOPS_PROBE_TEMPLATE_VERSION}|${NEURAOPS_GEMINI_MODEL}|${NEURAOPS_PROBE_MARKER}|fictional-simulation`,
+    `${NEURAOPS_PROBE_TEMPLATE_VERSION}|${NEURAOPS_GEMINI_MODEL}|${NEURAOPS_GEMINI_THINKING_LEVEL}|${NEURAOPS_PROBE_MARKER}|fictional-simulation`,
   )
   const endpointContractHash = sha256(NEURAOPS_GEMINI_ENDPOINT)
   const receiptId = sha256(

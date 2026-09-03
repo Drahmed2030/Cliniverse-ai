@@ -66,8 +66,11 @@ test('synthetic probe uses the official Gemini interaction contract without putt
   assert.equal(captured.url, NEURAOPS_GEMINI_ENDPOINT)
   assert.equal(captured.url.includes('private-key'), false)
   assert.equal(captured.init.headers['x-goog-api-key'], 'private-key')
-  assert.equal(JSON.parse(captured.init.body).model, NEURAOPS_GEMINI_MODEL)
-  assert.match(JSON.parse(captured.init.body).input, /no patient data/i)
+  const requestBody = JSON.parse(captured.init.body)
+  assert.equal(requestBody.model, NEURAOPS_GEMINI_MODEL)
+  assert.match(requestBody.input, /no patient data/i)
+  assert.deepEqual(requestBody.generation_config, { thinking_level: 'low' })
+  assert.equal('temperature' in requestBody.generation_config, false)
 })
 
 test('synthetic probe rejects patient mode and classifies model-not-found diagnostics', async () => {
@@ -83,6 +86,13 @@ test('synthetic probe rejects patient mode and classifies model-not-found diagno
   assert.equal(result.ok, false)
   assert.equal(result.code, 'model-not-found')
   assert.equal(result.providerStatus, 404)
+
+  const invalid = await runGeminiSyntheticProbe({
+    apiKey: 'private-key',
+    fetchImpl: async () => new Response('{}', { status: 400 }),
+  })
+  assert.equal(invalid.code, 'invalid-request')
+  assert.equal(invalid.providerStatus, 400)
 })
 
 test('missing API key fails before any network request', async () => {
@@ -129,6 +139,8 @@ test('diagnostic console is preview-only and keeps the token ephemeral', () => {
   assert.doesNotMatch(console, /<textarea|name=["'](?:patient|mrn)|medicalRecord/i)
   assert.match(console, /fixed-synthetic-probe/)
   assert.match(console, /humanReviewRequired/)
+  assert.match(console, /if \(isProbeResponse\(payload\)\)/)
+  assert.match(console, /Google HTTP/)
 })
 
 test('Trust Receipt is versioned, hashed and never records raw AI or sensitive values', () => {
@@ -139,6 +151,8 @@ test('Trust Receipt is versioned, hashed and never records raw AI or sensitive v
   assert.match(receipt, /schemaVersion:\s*1/)
   assert.match(receipt, /NEURAOPS_AI_POLICY_VERSION/)
   assert.match(receipt, /NEURAOPS_PROBE_TEMPLATE_VERSION/)
+  assert.match(receipt, /gemini-connectivity-probe-v2/)
+  assert.match(receipt, /NEURAOPS_GEMINI_THINKING_LEVEL/)
   assert.match(receipt, /inputContractHash/)
   assert.match(receipt, /endpointContractHash/)
   assert.match(receipt, /humanReviewRequired:\s*true/)
