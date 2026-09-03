@@ -1,9 +1,10 @@
 'use client'
 
-import { ArrowLeft, Check, ChevronRight, LockKeyhole } from 'lucide-react'
+import { ArrowLeft, Check, ChevronRight, LockKeyhole, ShieldCheck } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import {
   EMPTY_CODELAB_PROGRESS,
+  CODE_LAB_CATALOG,
   parseCodeLabProgress,
   TRAINING_TRACKS,
   type CodeLabProgress,
@@ -66,21 +67,37 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
   }
 
   return (
-    <main className={styles.shell}>
+    <section aria-labelledby="codelab-title" className={styles.shell}>
       <div className={styles.content}>
         <header className={styles.header}>
           <button className={styles.backButton} onClick={onBack} type="button">
-            <ArrowLeft aria-hidden="true" size={18} /> Ward
+            <ArrowLeft aria-hidden="true" size={18} /> Care
           </button>
-          <span className={styles.badge}>{isPro ? 'PRO' : 'FREE'}</span>
+          <div className={styles.badgeGroup}>
+            <span className={styles.reviewBadge}>DRAFT · REVIEW REQUIRED</span>
+            <span className={styles.badge}>{isPro ? 'PRO ACTIVE' : 'FREE PREVIEW'}</span>
+          </div>
         </header>
 
         <p className={styles.eyebrow}>CLINIVERSE TRAINING STUDIO</p>
-        <h1 className={styles.title}>Code Lab</h1>
+        <h1 className={styles.title} id="codelab-title">Code Lab</h1>
         <p className={styles.subtitle}>
           One governed training player for BLS and ACLS. Educational practice only;
           certification and real-patient decisions remain outside this experience.
         </p>
+
+        <section aria-label="Code Lab release contract" className={styles.contractCard}>
+          <div>
+            <ShieldCheck aria-hidden="true" size={20} />
+            <span><strong>Controlled learning boundary</strong><small>No diagnosis, treatment authority or provider card</small></span>
+          </div>
+          <dl>
+            <div><dt>Catalog</dt><dd>{CODE_LAB_CATALOG.catalogVersion}</dd></div>
+            <div><dt>Player</dt><dd>{CODE_LAB_CATALOG.playerId}</dd></div>
+            <div><dt>Progress</dt><dd>Device-local</dd></div>
+            <div><dt>Sources</dt><dd>Lesson mapping required</dd></div>
+          </dl>
+        </section>
 
         <div className={styles.trackTabs} aria-label="Training track">
           {(Object.keys(TRAINING_TRACKS) as TrainingTrack[]).map(trackId => {
@@ -117,6 +134,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
             const locked = !isPro && lesson.order > 2
             return (
               <button
+                aria-label={`${lesson.title}, about ${lesson.durationMin} minutes${done ? ', completed' : ''}${locked ? ', Cliniverse PRO required' : ''}`}
                 className={`${styles.lessonButton} ${done ? styles.lessonDone : ''} ${locked ? styles.lessonLocked : ''}`}
                 key={lesson.id}
                 onClick={() => locked ? onUpgrade() : setActiveLessonId(lesson.id)}
@@ -148,6 +166,6 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
 
         <footer className={styles.disclaimer}>{track.lessons[0]?.disclaimer}</footer>
       </div>
-    </main>
+    </section>
   )
 }

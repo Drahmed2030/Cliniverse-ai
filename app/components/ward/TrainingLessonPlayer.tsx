@@ -70,7 +70,7 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
   }
 
   return (
-    <main className={styles.shell}>
+    <section aria-labelledby="codelab-lesson-title" className={styles.shell}>
       <div className={styles.content}>
         <header className={styles.header}>
           <button className={styles.backButton} onClick={onBack} type="button">
@@ -81,7 +81,7 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
 
         <div className={styles.lessonHeader}>
           <p className={styles.eyebrow}>UNIFIED TRAINING PLAYER · ~{lesson.durationMin} MIN</p>
-          <h1>{lesson.title}</h1>
+          <h1 id="codelab-lesson-title">{lesson.title}</h1>
           <p>{lesson.objective}</p>
         </div>
 
@@ -214,6 +214,6 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
 
         <footer className={styles.disclaimer}>{lesson.disclaimer}</footer>
       </div>
-    </main>
+    </section>
   )
 }

@@ -9,15 +9,15 @@
   --lab-cyan: #56d6e6;
   --lab-green: #36d399;
   --lab-red: #ff8c8c;
-  min-height: 100dvh;
-  overflow-y: auto;
-  background: var(--lab-bg);
+  min-height: 0;
+  overflow: visible;
+  background: transparent;
   color: var(--lab-text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif;
-  padding: max(18px, env(safe-area-inset-top)) 20px max(72px, env(safe-area-inset-bottom));
+  padding: 0;
 }
 
-.content { width: min(760px, 100%); margin: 0 auto; }
+.content { width: min(760px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 24px); border: 1px solid var(--lab-border); border-radius: 22px; background: var(--lab-bg); }
 .header, .row, .lessonRow, .progressHeader, .stepper { display: flex; align-items: center; }
 .header { justify-content: space-between; gap: 16px; }
 .backButton, .trackButton, .lessonButton, .primaryButton, .secondaryButton, .choiceButton, .checkButton {
@@ -28,9 +28,19 @@
 }
 .backButton { display: inline-flex; align-items: center; gap: 8px; color: var(--lab-muted); background: transparent; padding: 8px 0; }
 .badge { border-radius: 999px; background: #21396b; padding: 6px 11px; font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.badgeGroup { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.reviewBadge { border: 1px solid #826f2b; border-radius: 999px; background: #2a2514; color: #f5d76e; padding: 6px 10px; font-size: 10px; font-weight: 800; letter-spacing: .05em; }
 .eyebrow { margin: 30px 0 8px; color: var(--lab-cyan); font-size: 11px; font-weight: 800; letter-spacing: .12em; }
 .title { margin: 0; font-size: clamp(30px, 8vw, 44px); line-height: 1.05; }
 .subtitle { color: var(--lab-muted); line-height: 1.55; }
+.contractCard { margin-top: 20px; padding: 16px; border: 1px solid var(--lab-border); border-radius: 17px; background: var(--lab-surface); }
+.contractCard > div { display: flex; align-items: flex-start; gap: 10px; color: var(--lab-cyan); }
+.contractCard > div span, .contractCard > div strong, .contractCard > div small { display: block; }
+.contractCard > div small { margin-top: 4px; color: var(--lab-muted); font-size: 12px; line-height: 1.45; }
+.contractCard dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 16px 0 0; }
+.contractCard dl div { min-width: 0; padding: 10px; border-radius: 12px; background: var(--lab-raised); }
+.contractCard dt { color: var(--lab-muted); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.contractCard dd { margin: 5px 0 0; overflow-wrap: anywhere; color: var(--lab-text); font-size: 12px; line-height: 1.4; }
 .trackTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 24px 0; }
 .trackButton { min-height: 92px; border: 1px solid var(--lab-border); border-radius: 16px; background: var(--lab-surface); color: var(--lab-text); padding: 14px; text-align: left; }
 .trackButton strong, .trackButton span { display: block; }
@@ -93,7 +103,9 @@
 .focusable:focus-visible, .backButton:focus-visible, .trackButton:focus-visible, .lessonButton:focus-visible, .primaryButton:focus-visible, .secondaryButton:focus-visible, .choiceButton:focus-visible, .checkButton:focus-visible { outline: 3px solid var(--lab-cyan); outline-offset: 3px; }
 
 @media (max-width: 520px) {
-  .trackTabs, .keyGrid, .actions { grid-template-columns: 1fr; }
+  .header { align-items: flex-start; }
+  .badgeGroup { max-width: 190px; }
+  .trackTabs, .keyGrid, .actions, .contractCard dl { grid-template-columns: 1fr; }
   .trackButton { min-height: 76px; }
 }
 

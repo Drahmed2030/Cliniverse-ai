@@ -6,10 +6,11 @@ import NexusCardiovascularSlice from '../nexus/NexusCardiovascularSlice'
 import { useCliniverseSubscription } from '../release/SubscriptionPurchaseProvider'
 import { MOCK_PATIENTS } from '../../lib/ward'
 import CardiologyOperations from './cardiology'
+import CodeLabHub from './CodeLabHub'
 import PatientJourney from './PatientJourney'
 import WardHome from './WardHome'
 
-export type CareWorkspace = 'ward' | 'cardiology' | 'nexus'
+export type CareWorkspace = 'ward' | 'learning' | 'cardiology' | 'nexus'
 
 interface Props {
   initialWorkspace?: CareWorkspace
@@ -25,6 +26,12 @@ const workspaces: Array<{
     id: 'ward',
     label: 'Ward Simulation',
     description: 'Fictional care-flow cases',
+    premium: false,
+  },
+  {
+    id: 'learning',
+    label: 'Code Lab',
+    description: 'Governed BLS and ACLS learning',
     premium: false,
   },
   {
@@ -51,9 +58,11 @@ const C = {
 }
 
 export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
-  const [workspace, setWorkspace] = useState<CareWorkspace>('ward')
+  const [workspace, setWorkspace] = useState<CareWorkspace>(
+    initialWorkspace === 'learning' ? 'learning' : 'ward',
+  )
   const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
-    initialWorkspace === 'ward' ? null : initialWorkspace,
+    initialWorkspace === 'cardiology' || initialWorkspace === 'nexus' ? initialWorkspace : null,
   )
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
   const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
@@ -138,6 +147,16 @@ export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
       {activeWorkspace === 'ward' ? (
         <ErrorBoundary section="Ward Simulation">
           <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={openPaywall} />
+        </ErrorBoundary>
+      ) : null}
+
+      {activeWorkspace === 'learning' ? (
+        <ErrorBoundary section="Code Lab">
+          <CodeLabHub
+            isPro={isPro}
+            onBack={() => setWorkspace('ward')}
+            onUpgrade={openPaywall}
+          />
         </ErrorBoundary>
       ) : null}
 

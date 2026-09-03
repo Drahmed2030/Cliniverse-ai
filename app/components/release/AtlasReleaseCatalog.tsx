@@ -1,3 +1,5 @@
+import type { CareWorkspace } from '../ward'
+
 const C = {
   panel: '#111827',
   elevated: '#172033',
@@ -15,7 +17,7 @@ type ReleaseAccess = 'FREE' | 'PRO' | 'ACCOUNT'
 
 export interface AtlasDestination {
   tab: ReleaseDestination
-  workspace?: 'ward' | 'cardiology' | 'nexus'
+  workspace?: CareWorkspace
 }
 
 interface Props {
@@ -38,6 +40,14 @@ const releasePaths: Array<{
     destination: { tab: 'care', workspace: 'ward' },
     action: 'Open Ward',
     details: ['Fictional records', 'Human review', 'Related evidence entry'],
+  },
+  {
+    title: 'Code Lab',
+    description: 'Enter the governed learning studio for BLS and ACLS. Lessons 1–2 are open; the remaining draft library follows verified PRO entitlement.',
+    access: 'FREE',
+    destination: { tab: 'care', workspace: 'learning' },
+    action: 'Open Code Lab',
+    details: ['Unified lesson player', 'Local progress only', 'Clinical review required'],
   },
   {
     title: 'Cardiology Operations',

@@ -1,5 +1,5 @@
-import { ACLS_DISCLAIMER, ACLS_LESSONS, type ACLSLesson } from './aclsLessons'
-import { BLS_DISCLAIMER, BLS_LESSONS, type BlsLesson } from './blsLessons'
+import { ACLS_DISCLAIMER, ACLS_LESSONS, type ACLSLesson } from './aclsLessons.ts'
+import { BLS_DISCLAIMER, BLS_LESSONS, type BlsLesson } from './blsLessons.ts'
 
 export type TrainingTrack = 'bls' | 'acls'
 export type TrainingPracticeType =
@@ -41,6 +41,17 @@ export interface CodeLabProgress {
   schemaVersion: 1
   completedByTrack: Record<TrainingTrack, string[]>
 }
+
+export const CODE_LAB_CATALOG = {
+  schemaVersion: 1,
+  catalogVersion: '1.0.0-draft',
+  playerId: 'codelab-unified-player-v1',
+  intendedUse: 'education-only',
+  dataMode: 'fictional-and-skills-training-only',
+  reviewStatus: 'draft-human-review-required',
+  sourceStatus: 'lesson-level-source-mapping-required',
+  progressStorage: 'device-local',
+} as const
 
 export const EMPTY_CODELAB_PROGRESS: CodeLabProgress = {
   schemaVersion: 1,
