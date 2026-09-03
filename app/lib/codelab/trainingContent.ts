@@ -1,5 +1,6 @@
 import { ACLS_DISCLAIMER, ACLS_LESSONS, type ACLSLesson } from './aclsLessons.ts'
 import { BLS_DISCLAIMER, BLS_LESSONS, type BlsLesson } from './blsLessons.ts'
+import { parseCodeLabLessonReceipt, type CodeLabLessonCompletionReceipt } from './lessonReceipt.ts'
 
 export type TrainingTrack = 'bls' | 'acls'
 export type TrainingPracticeType =
@@ -38,8 +39,9 @@ export interface TrainingLesson {
 }
 
 export interface CodeLabProgress {
-  schemaVersion: 1
+  schemaVersion: 2
   completedByTrack: Record<TrainingTrack, string[]>
+  receiptsByLesson: Record<string, CodeLabLessonCompletionReceipt>
 }
 
 export const CODE_LAB_CATALOG = {
@@ -49,13 +51,14 @@ export const CODE_LAB_CATALOG = {
   intendedUse: 'education-only',
   dataMode: 'fictional-and-skills-training-only',
   reviewStatus: 'draft-human-review-required',
-  sourceStatus: 'lesson-level-source-mapping-required',
+  sourceStatus: 'provisional-source-family-mapping-human-review-required',
   progressStorage: 'device-local',
 } as const
 
 export const EMPTY_CODELAB_PROGRESS: CodeLabProgress = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   completedByTrack: { bls: [], acls: [] },
+  receiptsByLesson: {},
 }
 
 export const TRAINING_TRACKS: Record<TrainingTrack, {
@@ -96,17 +99,28 @@ export function normalizeAclsLesson(lesson: ACLSLesson): TrainingLesson {
   }
 }
 
-export function parseCodeLabProgress(raw: string | null, legacyRaw?: string | null): CodeLabProgress {
+export function parseCodeLabProgress(
+  raw: string | null,
+  previousRaw?: string | null,
+  legacyRaw?: string | null,
+): CodeLabProgress {
   if (raw) {
     try {
       const parsed = JSON.parse(raw) as Partial<CodeLabProgress>
-      if (parsed.schemaVersion === 1 && parsed.completedByTrack) {
+      if (parsed.schemaVersion === 2 && parsed.completedByTrack) {
+        const completedByTrack = {
+          bls: validLessonIds(parsed.completedByTrack.bls, 'bls'),
+          acls: validLessonIds(parsed.completedByTrack.acls, 'acls'),
+        }
+        const completedIds = new Set([...completedByTrack.bls, ...completedByTrack.acls])
+        const receiptsByLesson = Object.fromEntries(
+          Object.entries(parseReceipts(parsed.receiptsByLesson))
+            .filter(([lessonId]) => completedIds.has(lessonId)),
+        )
         return {
-          schemaVersion: 1,
-          completedByTrack: {
-            bls: uniqueStrings(parsed.completedByTrack.bls),
-            acls: uniqueStrings(parsed.completedByTrack.acls),
-          },
+          schemaVersion: 2,
+          completedByTrack,
+          receiptsByLesson,
         }
       }
     } catch {
@@ -114,15 +128,34 @@ export function parseCodeLabProgress(raw: string | null, legacyRaw?: string | nu
     }
   }
 
+  if (previousRaw) {
+    try {
+      const previous = JSON.parse(previousRaw) as { schemaVersion?: unknown; completedByTrack?: Record<string, unknown> }
+      if (previous.schemaVersion === 1 && previous.completedByTrack) {
+        return {
+          schemaVersion: 2,
+          completedByTrack: {
+            bls: validLessonIds(previous.completedByTrack.bls, 'bls'),
+            acls: validLessonIds(previous.completedByTrack.acls, 'acls'),
+          },
+          receiptsByLesson: {},
+        }
+      }
+    } catch {
+      // Fall through to the legacy BLS migration.
+    }
+  }
+
   if (legacyRaw) {
     try {
       const legacy = JSON.parse(legacyRaw) as { completedIds?: unknown }
       return {
-        schemaVersion: 1,
+        schemaVersion: 2,
         completedByTrack: {
-          bls: uniqueStrings(legacy.completedIds),
+          bls: validLessonIds(legacy.completedIds, 'bls'),
           acls: [],
         },
+        receiptsByLesson: {},
       }
     } catch {
       // Ignore invalid local-only progress.
@@ -135,4 +168,19 @@ export function parseCodeLabProgress(raw: string | null, legacyRaw?: string | nu
 function uniqueStrings(value: unknown): string[] {
   if (!Array.isArray(value)) return []
   return [...new Set(value.filter((item): item is string => typeof item === 'string'))]
+}
+
+function validLessonIds(value: unknown, track: TrainingTrack): string[] {
+  const allowed = new Set(TRAINING_TRACKS[track].lessons.map(lesson => lesson.id))
+  return uniqueStrings(value).filter(lessonId => allowed.has(lessonId))
+}
+
+function parseReceipts(value: unknown): Record<string, CodeLabLessonCompletionReceipt> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return {}
+  const receipts: Record<string, CodeLabLessonCompletionReceipt> = {}
+  for (const [lessonId, candidate] of Object.entries(value)) {
+    const receipt = parseCodeLabLessonReceipt(candidate)
+    if (receipt?.lessonId === lessonId) receipts[lessonId] = receipt
+  }
+  return receipts
 }

@@ -70,6 +70,17 @@
 .primaryButton { background: linear-gradient(135deg, var(--lab-blue), #735dff); color: white; }
 .secondaryButton { border: 1px solid var(--lab-border); background: var(--lab-raised); color: var(--lab-text); }
 .disclaimer { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--lab-border); color: var(--lab-muted); font-size: 11px; line-height: 1.6; }
+.sourceDisclosure { margin: 18px 0; padding: 14px; border: 1px solid var(--lab-border); border-radius: 14px; background: var(--lab-raised); color: var(--lab-muted); font-size: 12px; line-height: 1.55; }
+.sourceDisclosure summary { min-height: 44px; display: flex; align-items: center; color: var(--lab-text); font-weight: 800; cursor: pointer; }
+.sourceDisclosure p { max-width: 70ch; }
+.sourceDisclosure dl, .receiptCard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sourceDisclosure dl div, .receiptCard div { min-width: 0; padding: 10px; border-radius: 10px; background: var(--lab-surface); }
+.sourceDisclosure dt, .receiptCard dt { color: var(--lab-muted); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.sourceDisclosure dd, .receiptCard dd { margin: 4px 0 0; overflow-wrap: anywhere; color: var(--lab-text); }
+.sourceList { display: grid; gap: 10px; padding-left: 18px; }
+.sourceList a { display: inline-flex; min-height: 44px; align-items: center; gap: 5px; color: var(--lab-cyan); overflow-wrap: anywhere; }
+.sourceList span { display: block; }
+.receiptCard { margin: 18px 0; font-size: 12px; }
 .lessonHeader { margin: 20px 0; }
 .lessonHeader h1 { margin: 8px 0; font-size: clamp(26px, 7vw, 38px); }
 .lessonHeader p { color: var(--lab-muted); line-height: 1.55; }
@@ -105,7 +116,7 @@
 @media (max-width: 520px) {
   .header { align-items: flex-start; }
   .badgeGroup { max-width: 190px; }
-  .trackTabs, .keyGrid, .actions, .contractCard dl { grid-template-columns: 1fr; }
+  .trackTabs, .keyGrid, .actions, .contractCard dl, .sourceDisclosure dl, .receiptCard { grid-template-columns: 1fr; }
   .trackButton { min-height: 76px; }
 }
 

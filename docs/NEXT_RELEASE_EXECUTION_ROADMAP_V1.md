@@ -108,7 +108,7 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 - progress ownership and deletion behavior are documented; and
 - no schema migration occurs without a separate backup, rollback and authorization gate.
 
-**State:** partially implemented in the isolated pathway slice. The Door-to-ECG gap now opens one versioned Code Lab activity, a valid deterministic result creates a session-only completion receipt, and that receipt returns to Reassessment and travels into the Closure Brief. Global app navigation, BLS/ACLS migration, PRO/StoreKit entitlement behavior, cross-device progress ownership and deletion, and any database persistence remain pending. Stage 6 is not bypassed and remains separately blocked.
+**State:** partially implemented on the strategy branch. The Door-to-ECG gap opens one versioned Code Lab activity, a valid deterministic result creates a session-only completion receipt, and that receipt returns to Reassessment and travels into the Closure Brief. Code Lab is also reachable from Care and Atlas through the existing PRO/StoreKit boundary. The six BLS and six ACLS draft lessons now use the unified player, migrate prior device-local completion safely, carry provisional official-source-family mappings, and produce deterministic device-local receipts after a passing knowledge check. These mappings remain explicitly `not-reviewed`; no clinical approval or certification is claimed. Cross-device progress ownership and deletion, line-by-line clinical source review, bilingual content review, and any database persistence remain pending. Stage 6 is not bypassed and remains separately blocked.
 
 ## Stage 8 — Product quality gate
 

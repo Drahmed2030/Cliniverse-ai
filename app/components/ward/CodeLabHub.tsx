@@ -10,6 +10,7 @@ import {
   type CodeLabProgress,
   type TrainingTrack,
 } from '../../lib/codelab/trainingContent'
+import type { CodeLabLessonCompletionReceipt } from '../../lib/codelab/lessonReceipt'
 import TrainingLessonPlayer from './TrainingLessonPlayer'
 import styles from './code-lab.module.css'
 
@@ -19,7 +20,8 @@ interface CodeLabHubProps {
   onBack: () => void
 }
 
-const PROGRESS_KEY = 'cliniverse_codelab_progress_v1'
+const PROGRESS_KEY = 'cliniverse_codelab_progress_v2'
+const PREVIOUS_PROGRESS_KEY = 'cliniverse_codelab_progress_v1'
 const LEGACY_PROGRESS_KEY = 'codelab_bls_progress'
 
 export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps) {
@@ -29,7 +31,13 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setProgress(parseCodeLabProgress(localStorage.getItem(PROGRESS_KEY), localStorage.getItem(LEGACY_PROGRESS_KEY)))
+      const next = parseCodeLabProgress(
+        localStorage.getItem(PROGRESS_KEY),
+        localStorage.getItem(PREVIOUS_PROGRESS_KEY),
+        localStorage.getItem(LEGACY_PROGRESS_KEY),
+      )
+      setProgress(next)
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(next))
     }, 0)
     return () => window.clearTimeout(timer)
   }, [])
@@ -42,12 +50,18 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
   const completedIds = progress.completedByTrack[activeTrack]
   const progressPercent = Math.round((completedIds.length / Math.max(track.lessons.length, 1)) * 100)
 
-  function completeLesson(lessonId: string) {
+  function completeLesson(receipt: CodeLabLessonCompletionReceipt) {
+    if (receipt.track !== activeTrack) return
+    const lessonId = receipt.lessonId
     const next: CodeLabProgress = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       completedByTrack: {
         ...progress.completedByTrack,
         [activeTrack]: [...new Set([...completedIds, lessonId])],
+      },
+      receiptsByLesson: {
+        ...progress.receiptsByLesson,
+        [lessonId]: receipt,
       },
     }
     setProgress(next)
@@ -61,7 +75,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
         lesson={activeLesson}
         totalLessons={track.lessons.length}
         onBack={() => setActiveLessonId(null)}
-        onComplete={() => completeLesson(activeLesson.id)}
+        onComplete={completeLesson}
       />
     )
   }
@@ -95,7 +109,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
             <div><dt>Catalog</dt><dd>{CODE_LAB_CATALOG.catalogVersion}</dd></div>
             <div><dt>Player</dt><dd>{CODE_LAB_CATALOG.playerId}</dd></div>
             <div><dt>Progress</dt><dd>Device-local</dd></div>
-            <div><dt>Sources</dt><dd>Lesson mapping required</dd></div>
+            <div><dt>Sources</dt><dd>Provisional mapping · review required</dd></div>
           </dl>
         </section>
 
@@ -131,10 +145,11 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
         <div className={styles.lessonList}>
           {track.lessons.map(lesson => {
             const done = completedIds.includes(lesson.id)
+            const hasReceipt = Boolean(progress.receiptsByLesson[lesson.id])
             const locked = !isPro && lesson.order > 2
             return (
               <button
-                aria-label={`${lesson.title}, about ${lesson.durationMin} minutes${done ? ', completed' : ''}${locked ? ', Cliniverse PRO required' : ''}`}
+                aria-label={`${lesson.title}, about ${lesson.durationMin} minutes${done ? ', completed' : ''}${hasReceipt ? ', deterministic local receipt recorded' : ''}${locked ? ', Cliniverse PRO required' : ''}`}
                 className={`${styles.lessonButton} ${done ? styles.lessonDone : ''} ${locked ? styles.lessonLocked : ''}`}
                 key={lesson.id}
                 onClick={() => locked ? onUpgrade() : setActiveLessonId(lesson.id)}
@@ -147,7 +162,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
                     </span>
                     <span className={styles.lessonCopy}>
                       <strong>{lesson.title}</strong>
-                      <span>About {lesson.durationMin} min</span>
+                      <span>About {lesson.durationMin} min · {hasReceipt ? 'Receipt recorded' : 'Source review required'}</span>
                     </span>
                   </span>
                   <ChevronRight aria-hidden="true" size={18} />

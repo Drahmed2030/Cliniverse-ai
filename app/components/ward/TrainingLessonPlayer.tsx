@@ -1,14 +1,16 @@
 'use client'
 
-import { ArrowLeft, Check, Film, RotateCcw } from 'lucide-react'
+import { ArrowLeft, Check, ExternalLink, Film, RotateCcw } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { TrainingLesson } from '../../lib/codelab/trainingContent'
+import { getCodeLabLessonSourceBinding, getCodeLabLessonSources } from '../../lib/codelab/lessonGovernance'
+import { createCodeLabLessonReceipt, type CodeLabLessonCompletionReceipt } from '../../lib/codelab/lessonReceipt'
 import styles from './code-lab.module.css'
 
 interface Props {
   lesson: TrainingLesson
   totalLessons: number
-  onComplete: () => void
+  onComplete: (receipt: CodeLabLessonCompletionReceipt) => void
   onBack: () => void
 }
 
@@ -20,6 +22,7 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
   const [practiceChecks, setPracticeChecks] = useState<Set<number>>(new Set())
   const [answers, setAnswers] = useState<(number | null)[]>(lesson.mcqs.map(() => null))
   const [submitted, setSubmitted] = useState(false)
+  const [attempts, setAttempts] = useState(0)
   const [seconds, setSeconds] = useState(120)
   const [timerRunning, setTimerRunning] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -33,6 +36,18 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
     [answers, lesson.mcqs],
   )
   const passScore = Math.ceil(lesson.mcqs.length / 2)
+  const sourceBinding = getCodeLabLessonSourceBinding(lesson.id)
+  const sources = getCodeLabLessonSources(lesson.id)
+  const receipt = useMemo(() => {
+    if (!submitted || score < passScore || attempts < 1) return null
+    return createCodeLabLessonReceipt({
+      lessonId: lesson.id,
+      track: lesson.track,
+      attempts,
+      score,
+      total: lesson.mcqs.length,
+    })
+  }, [attempts, lesson.id, lesson.mcqs.length, lesson.track, passScore, score, submitted])
 
   function togglePractice(index: number) {
     setPracticeChecks(current => {
@@ -114,6 +129,28 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
               <Film aria-hidden="true" size={18} />
               <strong> Remotion-ready lesson brief:</strong> {lesson.videoBrief}
             </div>
+            <details className={styles.sourceDisclosure}>
+              <summary>Source ledger and review status</summary>
+              <p>
+                Official source identities are verified. Lesson-level claims have not yet completed
+                clinical review; this provisional mapping is not approval or certification.
+              </p>
+              <dl>
+                <div><dt>Content</dt><dd>{sourceBinding?.contentVersion ?? 'Unmapped'}</dd></div>
+                <div><dt>Mapping</dt><dd>{sourceBinding?.mappingStatus ?? 'Missing'}</dd></div>
+                <div><dt>Clinical review</dt><dd>{sourceBinding?.clinicalReviewStatus ?? 'Missing'}</dd></div>
+              </dl>
+              <ul className={styles.sourceList}>
+                {sources.map(source => (
+                  <li key={source.sourceId}>
+                    <a href={source.url} rel="noreferrer" target="_blank">
+                      {source.title} ({source.versionLabel}) <ExternalLink aria-hidden="true" size={14} />
+                    </a>
+                    <span>{source.publisher} · linked only</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
             <button className={styles.primaryButton} onClick={() => move('practice')} type="button">Start practice</button>
           </section>
         )}
@@ -191,7 +228,14 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
               ))}
             </div>
             {!submitted ? (
-              <button className={styles.primaryButton} disabled={!answers.every(answer => answer !== null)} onClick={() => setSubmitted(true)} type="button">Submit answers</button>
+              <button
+                className={styles.primaryButton}
+                disabled={!answers.every(answer => answer !== null)}
+                onClick={() => { setAttempts(value => value + 1); setSubmitted(true) }}
+                type="button"
+              >
+                Submit answers
+              </button>
             ) : score >= passScore ? (
               <div className={styles.actions}>
                 <div className={styles.score}><strong>{score}/{lesson.mcqs.length}</strong><span>Training threshold met</span></div>
@@ -208,7 +252,15 @@ export default function TrainingLessonPlayer({ lesson, totalLessons, onComplete,
             <h2 id="complete-title">Lesson complete</h2>
             <div className={styles.score}><strong><Check aria-hidden="true" size={30} /></strong><span>Local training progress ready to save</span></div>
             <p className={styles.subtitle}>This records educational completion only. It is not certification or clinical authorization.</p>
-            <button className={styles.primaryButton} onClick={onComplete} type="button">Save and return to Code Lab</button>
+            {receipt && (
+              <dl className={styles.receiptCard}>
+                <div><dt>Receipt</dt><dd>{receipt.receiptId}</dd></div>
+                <div><dt>Content version</dt><dd>{receipt.contentVersion}</dd></div>
+                <div><dt>Attempts</dt><dd>{receipt.assessment.attempts}</dd></div>
+                <div><dt>Review</dt><dd>Human review required</dd></div>
+              </dl>
+            )}
+            <button className={styles.primaryButton} disabled={!receipt} onClick={() => receipt && onComplete(receipt)} type="button">Save receipt and return to Code Lab</button>
           </section>
         )}
 
