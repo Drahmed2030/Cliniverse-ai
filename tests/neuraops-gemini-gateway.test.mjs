@@ -116,6 +116,21 @@ test('route and environment contract keep diagnostics private and non-production
   assert.match(envExample, /NEURAOPS_DIAGNOSTIC_TOKEN=\n/)
 })
 
+test('diagnostic console is preview-only and keeps the token ephemeral', () => {
+  const page = read('app/labs/gemini-diagnostic/page.tsx')
+  const console = read('app/labs/gemini-diagnostic/DiagnosticConsole.tsx')
+
+  assert.match(page, /process\.env\.VERCEL_ENV === 'production'/)
+  assert.match(page, /notFound\(\)/)
+  assert.match(page, /robots: \{ index: false, follow: false \}/)
+  assert.match(console, /type="password"/)
+  assert.match(console, /setToken\(''\)/)
+  assert.doesNotMatch(console, /localStorage|sessionStorage|document\.cookie/)
+  assert.doesNotMatch(console, /<textarea|name=["'](?:patient|mrn)|medicalRecord/i)
+  assert.match(console, /fixed-synthetic-probe/)
+  assert.match(console, /humanReviewRequired/)
+})
+
 test('Trust Receipt is versioned, hashed and never records raw AI or sensitive values', () => {
   const receipt = read('app/lib/server/neuraops/trust-receipt.ts')
   const recorder = read('app/lib/server/observability/flight-recorder.ts')

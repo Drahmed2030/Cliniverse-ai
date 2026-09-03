@@ -1,0 +1,126 @@
+.shell {
+  --canvas: #070c14;
+  --surface: #0d1623;
+  --raised: #132033;
+  --border: rgba(148, 163, 184, 0.2);
+  --text: #f8fafc;
+  --secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --cyan: #22d3ee;
+  --blue: #3b82f6;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --red: #fca5a5;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 85% 5%, rgba(34, 211, 238, 0.1), transparent 30rem),
+    radial-gradient(circle at 0 55%, rgba(59, 130, 246, 0.08), transparent 32rem),
+    var(--canvas);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif;
+}
+
+.page { width: min(1180px, 100%); margin: 0 auto; padding: max(24px, env(safe-area-inset-top)) 28px max(24px, env(safe-area-inset-bottom)); }
+.header, .brand, .backLink, .hero, .heroSeal, .panelHeading, .statusItem, .contractCard > div, .form label, .alert, .runButton, .resultSuccess, .resultFailure, .receiptState, .footer { display: flex; align-items: center; }
+.header { min-height: 52px; justify-content: space-between; gap: 20px; }
+.brand { gap: 11px; color: var(--text); text-decoration: none; }
+.brand > span:last-child { display: grid; gap: 2px; }
+.brand strong { font-size: 15px; letter-spacing: 0.01em; }
+.brand small { color: var(--muted); font-size: 9px; font-weight: 750; letter-spacing: 0.13em; }
+.mark { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(34, 211, 238, 0.35); border-radius: 12px; background: rgba(34, 211, 238, 0.1); color: var(--cyan); font-size: 16px; font-weight: 850; }
+.backLink { min-height: 44px; gap: 8px; color: var(--secondary); font-size: 13px; font-weight: 650; text-decoration: none; }
+.backLink:hover { color: var(--text); }
+.brand:focus-visible, .backLink:focus-visible, .iconButton:focus-visible, .runButton:focus-visible, .form input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+.hero { min-height: 300px; justify-content: space-between; gap: 48px; padding: 66px 0 54px; }
+.hero > div:first-child { max-width: 720px; }
+.eyebrow { margin: 0 0 10px; color: var(--cyan); font-size: 11px; font-weight: 800; letter-spacing: 0.13em; }
+.hero h1 { max-width: 650px; margin: 0; font-size: clamp(38px, 6vw, 70px); line-height: 0.98; letter-spacing: -0.055em; }
+.lede { max-width: 690px; margin: 25px 0 0; color: var(--secondary); font-size: clamp(16px, 2vw, 19px); line-height: 1.65; }
+.heroSeal { flex: 0 0 auto; gap: 13px; padding: 17px 18px; border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 18px; background: rgba(52, 211, 153, 0.08); color: var(--green); }
+.heroSeal span { display: grid; gap: 3px; }
+.heroSeal strong { font-size: 13px; }
+.heroSeal small { color: var(--secondary); font-size: 11px; }
+
+.consoleGrid { display: grid; grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr); gap: 20px; }
+.controlPanel, .receiptPanel { min-width: 0; padding: 25px; border: 1px solid var(--border); border-radius: 24px; background: rgba(13, 22, 35, 0.88); box-shadow: 0 22px 70px rgba(0, 0, 0, 0.24); backdrop-filter: blur(18px); }
+.panelHeading { min-height: 52px; justify-content: space-between; gap: 16px; }
+.panelHeading .eyebrow { margin-bottom: 5px; }
+.panelHeading h2 { margin: 0; font-size: 20px; letter-spacing: -0.025em; }
+.iconButton { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 13px; background: var(--raised); color: var(--secondary); cursor: pointer; transition: border-color 180ms ease, color 180ms ease, transform 180ms ease; }
+.iconButton:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); transform: translateY(-1px); }
+.iconButton:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.readinessGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-top: 22px; }
+.statusItem { min-height: 74px; gap: 10px; padding: 13px; border: 1px solid var(--border); border-radius: 15px; background: var(--raised); color: var(--cyan); }
+.statusItem[data-state="ready"] { color: var(--green); }
+.statusItem[data-state="blocked"] { color: var(--red); }
+.statusItem span { min-width: 0; display: grid; gap: 4px; }
+.statusItem strong { overflow: hidden; color: var(--secondary); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.statusItem small { color: currentColor; font-size: 11px; font-weight: 750; }
+
+.contractCard { margin-top: 15px; padding: 17px; border: 1px solid rgba(34, 211, 238, 0.22); border-radius: 17px; background: rgba(34, 211, 238, 0.05); }
+.contractCard > div { gap: 9px; color: var(--cyan); font-size: 13px; }
+.contractCard dl, .receiptFacts { display: grid; gap: 0; margin: 13px 0 0; }
+.contractCard dl > div, .receiptFacts > div { min-width: 0; display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 14px; padding: 9px 0; border-top: 1px solid var(--border); }
+.contractCard dt, .receiptFacts dt { color: var(--muted); font-size: 11px; font-weight: 650; }
+.contractCard dd, .receiptFacts dd { min-width: 0; margin: 0; color: var(--secondary); font-size: 11px; text-align: right; overflow-wrap: anywhere; }
+
+.form { margin-top: 20px; }
+.form label { gap: 8px; margin-bottom: 9px; color: var(--secondary); font-size: 13px; font-weight: 700; }
+.form input { width: 100%; min-height: 52px; padding: 0 15px; border: 1px solid var(--border); border-radius: 14px; background: #0a111c; color: var(--text); font: inherit; font-size: 16px; }
+.form input:hover:not(:disabled) { border-color: rgba(34, 211, 238, 0.45); }
+.form input:disabled { opacity: 0.65; }
+.helper { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.alert { gap: 9px; margin-top: 13px; padding: 12px 13px; border: 1px solid rgba(252, 165, 165, 0.25); border-radius: 12px; background: rgba(252, 165, 165, 0.08); color: var(--red); font-size: 12px; line-height: 1.45; }
+.alert:focus { outline: 2px solid var(--red); outline-offset: 2px; }
+.runButton { width: 100%; min-height: 52px; justify-content: center; gap: 9px; margin-top: 16px; border: 0; border-radius: 14px; background: linear-gradient(135deg, #0891b2, #2563eb); color: white; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25); transition: filter 180ms ease, transform 180ms ease; }
+.runButton:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+.runButton:disabled { cursor: not-allowed; filter: saturate(0.35); opacity: 0.58; box-shadow: none; }
+
+.receiptState { min-height: 32px; gap: 6px; padding: 0 10px; border-radius: 999px; background: rgba(148, 163, 184, 0.1); color: var(--secondary); font-size: 10px; font-weight: 750; }
+.emptyReceipt { min-height: 456px; display: grid; place-content: center; justify-items: center; padding: 40px; color: var(--muted); text-align: center; }
+.emptyReceipt h3 { margin: 18px 0 8px; color: var(--secondary); font-size: 16px; }
+.emptyReceipt p { max-width: 390px; margin: 0; font-size: 12px; line-height: 1.65; }
+.receipt { margin-top: 22px; }
+.resultSuccess, .resultFailure { gap: 11px; padding: 16px; border: 1px solid rgba(52, 211, 153, 0.28); border-radius: 16px; background: rgba(52, 211, 153, 0.08); color: var(--green); }
+.resultFailure { border-color: rgba(252, 165, 165, 0.28); background: rgba(252, 165, 165, 0.08); color: var(--red); }
+.resultSuccess span, .resultFailure span { display: grid; gap: 2px; }
+.resultSuccess small, .resultFailure small { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: 0.12em; }
+.resultSuccess strong, .resultFailure strong { font-size: 14px; }
+.resultSuccess em, .resultFailure em { margin-left: auto; color: var(--secondary); font-size: 12px; font-style: normal; font-weight: 750; }
+.receiptFacts { margin-top: 12px; }
+.receiptFacts > div { grid-template-columns: 115px minmax(0, 1fr); padding: 10px 2px; }
+.mono { font-family: "SFMono-Regular", Consolas, monospace; letter-spacing: -0.02em; }
+.receiptFootnote { margin: 15px 0 0; color: var(--muted); font-size: 10px; text-align: center; }
+.footer { justify-content: center; gap: 8px; min-height: 80px; color: var(--muted); font-size: 11px; text-align: center; }
+.spinner { animation: spin 850ms linear infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 820px) {
+  .page { padding-inline: 18px; }
+  .hero { min-height: auto; align-items: flex-start; flex-direction: column; gap: 25px; padding: 48px 0 38px; }
+  .heroSeal { width: 100%; }
+  .consoleGrid { grid-template-columns: 1fr; }
+  .emptyReceipt { min-height: 260px; padding-inline: 20px; }
+}
+
+@media (max-width: 520px) {
+  .header { align-items: flex-start; }
+  .backLink { width: 44px; justify-content: center; font-size: 0; }
+  .hero h1 { font-size: clamp(40px, 13vw, 54px); }
+  .controlPanel, .receiptPanel { padding: 19px; border-radius: 20px; }
+  .readinessGrid { grid-template-columns: 1fr; }
+  .statusItem { min-height: 60px; }
+  .contractCard dl > div, .receiptFacts > div { grid-template-columns: 1fr; gap: 4px; }
+  .contractCard dd, .receiptFacts dd { text-align: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell *, .shell *::before, .shell *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+
+@media (prefers-contrast: more) {
+  .controlPanel, .receiptPanel, .statusItem, .contractCard, .form input { border-width: 2px; }
+}
