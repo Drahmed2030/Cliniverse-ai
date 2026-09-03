@@ -1,441 +1,153 @@
-"use client";
-/**
- * CodeLabHub.tsx
- * Entry: Ward tab → Code Lab button
- * Design: dark mode (#0B1220) — intentionally separate from app Light 2026 system
- * Disclaimer: permanent footer, every screen
- */
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { BLS_LESSONS, BLS_DISCLAIMER } from "../../lib/codelab/blsLessons";
-import { ACLS_LESSONS, ACLS_DISCLAIMER } from "../../lib/codelab/aclsLessons";
-import BLSLessonPlayer from "./BLSLessonPlayer";
+import { ArrowLeft, Check, ChevronRight, LockKeyhole } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  EMPTY_CODELAB_PROGRESS,
+  parseCodeLabProgress,
+  TRAINING_TRACKS,
+  type CodeLabProgress,
+  type TrainingTrack,
+} from '../../lib/codelab/trainingContent'
+import TrainingLessonPlayer from './TrainingLessonPlayer'
+import styles from './code-lab.module.css'
 
 interface CodeLabHubProps {
-  isPro: boolean;
-  onUpgrade: () => void;
-  onBack: () => void;
+  isPro: boolean
+  onUpgrade: () => void
+  onBack: () => void
 }
 
-interface TrackProgress {
-  completedIds: string[];
-}
-
-function loadProgress(): TrackProgress {
-  if (typeof window === "undefined") return { completedIds: [] };
-  try {
-    const raw = localStorage.getItem("codelab_bls_progress");
-    return raw ? JSON.parse(raw) : { completedIds: [] };
-  } catch {
-    return { completedIds: [] };
-  }
-}
-
-const TRACKS = [
-  {
-    id: "bls",
-    label: "BLS Track",
-    icon: "❤️",
-    desc: "High-quality CPR, AED, airway — fundamentals that save the first minutes",
-    lessonCount: 6,
-    available: true,
-  },
-  {
-    id: "acls",
-    label: "ACLS Track",
-    icon: "⚡",
-    desc: "Arrest algorithms, peri-arrest, team roles — think in the code",
-    lessonCount: 6,
-    available: true,
-  },
-  {
-    id: "megacode",
-    label: "Megacode",
-    icon: "🔴",
-    desc: "Run a full simulated code with timer, roles, and debrief",
-    lessonCount: 0,
-    available: false,
-  },
-  {
-    id: "drills",
-    label: "Rhythm Drills",
-    icon: "📊",
-    desc: "2–4 minute daily skills under pressure",
-    lessonCount: 0,
-    available: false,
-  },
-];
+const PROGRESS_KEY = 'cliniverse_codelab_progress_v1'
+const LEGACY_PROGRESS_KEY = 'codelab_bls_progress'
 
 export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps) {
-  const [progress, setProgress] = useState<TrackProgress>({ completedIds: [] });
-  const [activeTrack, setActiveTrack] = useState<"bls" | "acls">("bls");
-  const [activeLesson, setActiveLesson] = useState<string | null>(null);
+  const [progress, setProgress] = useState<CodeLabProgress>(EMPTY_CODELAB_PROGRESS)
+  const [activeTrack, setActiveTrack] = useState<TrainingTrack>('bls')
+  const [activeLessonId, setActiveLessonId] = useState<string | null>(null)
 
   useEffect(() => {
-    setProgress(loadProgress());
-  }, []);
+    const timer = window.setTimeout(() => {
+      setProgress(parseCodeLabProgress(localStorage.getItem(PROGRESS_KEY), localStorage.getItem(LEGACY_PROGRESS_KEY)))
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [])
 
-  const completedCount = progress.completedIds.length;
-  const totalBLS = BLS_LESSONS.length;
-  const pct = Math.round((completedCount / totalBLS) * 100);
+  const track = TRAINING_TRACKS[activeTrack]
+  const activeLesson = useMemo(
+    () => track.lessons.find(lesson => lesson.id === activeLessonId) ?? null,
+    [activeLessonId, track.lessons],
+  )
+  const completedIds = progress.completedByTrack[activeTrack]
+  const progressPercent = Math.round((completedIds.length / Math.max(track.lessons.length, 1)) * 100)
 
-  // PRO gate: free = lessons 1–2 only
-  function canAccess(lessonOrder: number): boolean {
-    if (isPro) return true;
-    return lessonOrder <= 2;
-  }
-
-  function handleLessonComplete(lessonId: string) {
-    const next = { completedIds: [...new Set([...progress.completedIds, lessonId])] };
-    setProgress(next);
-    localStorage.setItem("codelab_bls_progress", JSON.stringify(next));
-    setActiveLesson(null);
+  function completeLesson(lessonId: string) {
+    const next: CodeLabProgress = {
+      schemaVersion: 1,
+      completedByTrack: {
+        ...progress.completedByTrack,
+        [activeTrack]: [...new Set([...completedIds, lessonId])],
+      },
+    }
+    setProgress(next)
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(next))
+    setActiveLessonId(null)
   }
 
   if (activeLesson) {
-    const lesson = BLS_LESSONS.find((l) => l.id === activeLesson);
-    if (!lesson) return null;
     return (
-      <BLSLessonPlayer
-        lesson={lesson}
-        isPro={isPro}
-        onComplete={() => handleLessonComplete(lesson.id)}
-        onBack={() => setActiveLesson(null)}
+      <TrainingLessonPlayer
+        lesson={activeLesson}
+        totalLessons={track.lessons.length}
+        onBack={() => setActiveLessonId(null)}
+        onComplete={() => completeLesson(activeLesson.id)}
       />
-    );
+    )
   }
 
   return (
-    <div style={styles.root}>
-      {/* Header */}
-      <div style={styles.header}>
-        <button onClick={onBack} style={styles.backBtn}>
-          ← Ward
-        </button>
-        <div style={styles.proBadge}>
-          {isPro ? "PRO" : "FREE"}
-        </div>
-      </div>
-
-      {/* Hero */}
-      <div style={styles.hero}>
-        <div style={styles.heroEyebrow}>EDUCATIONAL · AHA 2025 SCIENCE</div>
-        <div style={styles.heroTitle}>Code Lab</div>
-        <div style={styles.heroSub}>Stay code-ready between certifications</div>
-
-        {/* Progress ring summary */}
-        <div style={styles.progressRow}>
-          <div style={styles.progressRing}>
-            <svg width={56} height={56} viewBox="0 0 56 56">
-              <circle cx={28} cy={28} r={24} fill="none" stroke="#1E293B" strokeWidth={5} />
-              <circle
-                cx={28} cy={28} r={24}
-                fill="none"
-                stroke="#0D9488"
-                strokeWidth={5}
-                strokeDasharray={`${2 * Math.PI * 24}`}
-                strokeDashoffset={`${2 * Math.PI * 24 * (1 - pct / 100)}`}
-                strokeLinecap="round"
-                transform="rotate(-90 28 28)"
-              />
-              <text x={28} y={33} textAnchor="middle" fill="#F8FAFC" fontSize={13} fontWeight={700}>
-                {pct}%
-              </text>
-            </svg>
-          </div>
-          <div style={styles.progressText}>
-            <div style={styles.progressLabel}>BLS Track</div>
-            <div style={styles.progressSub}>{completedCount} / {totalBLS} lessons complete</div>
-          </div>
-        </div>
-      </div>
-
-      {/* BLS Lessons */}
-      <div style={styles.section}>
-        <div style={styles.sectionLabel}>BLS TRACK — 6 LESSONS</div>
-        {(activeTrack === 'bls' ? BLS_LESSONS : ACLS_LESSONS).map((lesson) => {
-          const done = progress.completedIds.includes(lesson.id);
-          const locked = !canAccess(lesson.order);
-          return (
-            <button
-              key={lesson.id}
-              style={{
-                ...styles.lessonCard,
-                ...(done ? styles.lessonDone : {}),
-                ...(locked ? styles.lessonLocked : {}),
-              }}
-              onClick={() => {
-                if (locked) { onUpgrade(); return; }
-                setActiveLesson(lesson.id);
-              }}
-            >
-              <div style={styles.lessonLeft}>
-                <div style={{
-                  ...styles.lessonNum,
-                  background: done ? "#0D9488" : locked ? "#1E293B" : "#1E40AF",
-                  color: locked ? "#475569" : "#F8FAFC",
-                }}>
-                  {done ? "✓" : locked ? "🔒" : lesson.order}
-                </div>
-                <div>
-                  <div style={styles.lessonTitle}>{lesson.title}</div>
-                  <div style={styles.lessonMeta}>~{lesson.durationMin} min</div>
-                </div>
-              </div>
-              <div style={styles.lessonArrow}>
-                {locked ? "" : "→"}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Other tracks — coming soon */}
-      <div style={styles.section}>
-        <div style={styles.sectionLabel}>COMING SOON</div>
-        {TRACKS.filter((t) => !t.available).map((track) => (
-          <div key={track.id} style={styles.trackCardDisabled}>
-            <span style={styles.trackIcon}>{track.icon}</span>
-            <div>
-              <div style={styles.trackTitle}>{track.label}</div>
-              <div style={styles.trackDesc}>{track.desc}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* PRO upgrade banner */}
-      {!isPro && (
-        <div style={styles.upgradeBanner}>
-          <div style={styles.upgradeText}>
-            Free: Lessons 1–2 only · PRO unlocks full BLS, ACLS, Megacode & debrief history
-          </div>
-          <button style={styles.upgradeBtn} onClick={onUpgrade}>
-            Upgrade to PRO
+    <main className={styles.shell}>
+      <div className={styles.content}>
+        <header className={styles.header}>
+          <button className={styles.backButton} onClick={onBack} type="button">
+            <ArrowLeft aria-hidden="true" size={18} /> Ward
           </button>
+          <span className={styles.badge}>{isPro ? 'PRO' : 'FREE'}</span>
+        </header>
+
+        <p className={styles.eyebrow}>CLINIVERSE TRAINING STUDIO</p>
+        <h1 className={styles.title}>Code Lab</h1>
+        <p className={styles.subtitle}>
+          One governed training player for BLS and ACLS. Educational practice only;
+          certification and real-patient decisions remain outside this experience.
+        </p>
+
+        <div className={styles.trackTabs} aria-label="Training track">
+          {(Object.keys(TRAINING_TRACKS) as TrainingTrack[]).map(trackId => {
+            const item = TRAINING_TRACKS[trackId]
+            return (
+              <button
+                aria-pressed={activeTrack === trackId}
+                className={`${styles.trackButton} ${activeTrack === trackId ? styles.trackActive : ''}`}
+                key={trackId}
+                onClick={() => { setActiveTrack(trackId); setActiveLessonId(null) }}
+                type="button"
+              >
+                <strong>{item.shortLabel} · {item.label}</strong>
+                <span>{item.description}</span>
+              </button>
+            )
+          })}
         </div>
-      )}
 
-      {/* AHA CTA */}
-      <div style={styles.ahaCta}>
-        <div style={styles.ahaText}>Official certification?</div>
-        <div style={styles.ahaLink}>Find an AHA skills session →</div>
+        <section className={styles.progressCard} aria-label={`${track.shortLabel} progress`}>
+          <div className={styles.progressHeader}>
+            <strong>{track.shortLabel} progress</strong>
+            <span>{completedIds.length} of {track.lessons.length} · {progressPercent}%</span>
+          </div>
+          <div aria-label={`${progressPercent}% complete`} aria-valuemax={100} aria-valuemin={0} aria-valuenow={progressPercent} className={styles.progressTrack} role="progressbar">
+            <span style={{ width: `${progressPercent}%` }} />
+          </div>
+        </section>
+
+        <p className={styles.sectionLabel}>{track.shortLabel} · {track.lessons.length} LESSONS</p>
+        <div className={styles.lessonList}>
+          {track.lessons.map(lesson => {
+            const done = completedIds.includes(lesson.id)
+            const locked = !isPro && lesson.order > 2
+            return (
+              <button
+                className={`${styles.lessonButton} ${done ? styles.lessonDone : ''} ${locked ? styles.lessonLocked : ''}`}
+                key={lesson.id}
+                onClick={() => locked ? onUpgrade() : setActiveLessonId(lesson.id)}
+                type="button"
+              >
+                <span className={styles.lessonRow}>
+                  <span className={styles.lessonIdentity}>
+                    <span className={styles.lessonIndex} aria-hidden="true">
+                      {done ? <Check size={18} /> : locked ? <LockKeyhole size={16} /> : lesson.order}
+                    </span>
+                    <span className={styles.lessonCopy}>
+                      <strong>{lesson.title}</strong>
+                      <span>About {lesson.durationMin} min</span>
+                    </span>
+                  </span>
+                  <ChevronRight aria-hidden="true" size={18} />
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        {!isPro && (
+          <aside className={styles.upgrade}>
+            <p>Lessons 1–2 are open. PRO unlocks the complete BLS and ACLS training library.</p>
+            <button className={styles.primaryButton} onClick={onUpgrade} type="button">View PRO access</button>
+          </aside>
+        )}
+
+        <footer className={styles.disclaimer}>{track.lessons[0]?.disclaimer}</footer>
       </div>
-
-      {/* Disclaimer */}
-      <div style={styles.disclaimer}>{BLS_DISCLAIMER}</div>
-    </div>
-  );
+    </main>
+  )
 }
-
-// ─── styles ───────────────────────────────────────────────────────────────────
-const styles: Record<string, React.CSSProperties> = {
-  root: {
-    minHeight: "100vh",
-    background: "#0B1220",
-    color: "#F8FAFC",
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-    paddingBottom: 100,
-    overflowY: "auto",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "16px 20px 0",
-  },
-  backBtn: {
-    background: "none",
-    border: "none",
-    color: "#94A3B8",
-    fontSize: 15,
-    cursor: "pointer",
-    padding: "8px 0",
-  },
-  proBadge: {
-    background: "#1E40AF",
-    color: "#F8FAFC",
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: 1,
-    padding: "3px 10px",
-    borderRadius: 20,
-  },
-  hero: {
-    padding: "24px 20px 20px",
-    borderBottom: "1px solid #1E293B",
-  },
-  heroEyebrow: {
-    fontSize: 10,
-    letterSpacing: 2,
-    color: "#0D9488",
-    fontWeight: 700,
-    marginBottom: 6,
-  },
-  heroTitle: {
-    fontSize: 32,
-    fontWeight: 800,
-    letterSpacing: -0.5,
-    lineHeight: 1.1,
-    marginBottom: 6,
-  },
-  heroSub: {
-    fontSize: 15,
-    color: "#94A3B8",
-    marginBottom: 20,
-  },
-  progressRow: {
-    display: "flex",
-    alignItems: "center",
-    gap: 14,
-  },
-  progressRing: {},
-  progressText: {},
-  progressLabel: {
-    fontSize: 14,
-    fontWeight: 700,
-    color: "#F8FAFC",
-  },
-  progressSub: {
-    fontSize: 12,
-    color: "#94A3B8",
-    marginTop: 2,
-  },
-  section: {
-    padding: "20px 20px 0",
-  },
-  sectionLabel: {
-    fontSize: 10,
-    letterSpacing: 2,
-    color: "#475569",
-    fontWeight: 700,
-    marginBottom: 12,
-  },
-  lessonCard: {
-    width: "100%",
-    background: "#111827",
-    border: "1px solid #1E293B",
-    borderRadius: 14,
-    padding: "14px 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-    cursor: "pointer",
-    textAlign: "left",
-    transition: "border-color 0.15s",
-  },
-  lessonDone: {
-    borderColor: "#0D9488",
-    opacity: 0.8,
-  },
-  lessonLocked: {
-    opacity: 0.5,
-    cursor: "pointer",
-  },
-  lessonLeft: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-  },
-  lessonNum: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 13,
-    fontWeight: 800,
-    flexShrink: 0,
-  },
-  lessonTitle: {
-    fontSize: 14,
-    fontWeight: 600,
-    color: "#F8FAFC",
-    marginBottom: 2,
-  },
-  lessonMeta: {
-    fontSize: 12,
-    color: "#64748B",
-  },
-  lessonArrow: {
-    color: "#475569",
-    fontSize: 16,
-  },
-  trackCardDisabled: {
-    display: "flex",
-    alignItems: "flex-start",
-    gap: 12,
-    background: "#0F172A",
-    border: "1px solid #1E293B",
-    borderRadius: 14,
-    padding: "14px 16px",
-    marginBottom: 10,
-    opacity: 0.4,
-  },
-  trackIcon: {
-    fontSize: 20,
-    flexShrink: 0,
-    marginTop: 2,
-  },
-  trackTitle: {
-    fontSize: 14,
-    fontWeight: 600,
-    color: "#F8FAFC",
-    marginBottom: 2,
-  },
-  trackDesc: {
-    fontSize: 12,
-    color: "#64748B",
-  },
-  upgradeBanner: {
-    margin: "20px",
-    background: "linear-gradient(135deg, #1E40AF 0%, #0D9488 100%)",
-    borderRadius: 16,
-    padding: "16px 18px",
-  },
-  upgradeText: {
-    fontSize: 13,
-    color: "rgba(248,250,252,0.85)",
-    marginBottom: 10,
-    lineHeight: 1.4,
-  },
-  upgradeBtn: {
-    background: "#F8FAFC",
-    color: "#1E40AF",
-    border: "none",
-    borderRadius: 10,
-    padding: "10px 20px",
-    fontWeight: 700,
-    fontSize: 14,
-    cursor: "pointer",
-    width: "100%",
-  },
-  ahaCta: {
-    margin: "20px 20px 0",
-    background: "#111827",
-    borderRadius: 14,
-    padding: "14px 16px",
-    border: "1px solid #1E293B",
-  },
-  ahaText: {
-    fontSize: 13,
-    color: "#94A3B8",
-    marginBottom: 4,
-  },
-  ahaLink: {
-    fontSize: 14,
-    color: "#0D9488",
-    fontWeight: 600,
-    cursor: "pointer",
-  },
-  disclaimer: {
-    margin: "16px 20px 0",
-    fontSize: 11,
-    color: "#475569",
-    lineHeight: 1.6,
-    borderTop: "1px solid #1E293B",
-    paddingTop: 14,
-  },
-};

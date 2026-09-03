@@ -78,7 +78,7 @@ export interface PathwayReplayReport {
     requiresHumanReview: true
   }
   training: {
-    activityId: 'targeted-shift-handover-v1'
+    activityId: 'door-to-ecg-drill-v1'
     label: string
     durationMinutes: number
     state: 'ready'
@@ -204,7 +204,7 @@ export function runPathwayReplay(input: PathwayReplayInput): PathwayReplayReport
     agent('timeline-integrity', 'complete', `${integrityGaps.length} missing or conflicting timestamp`, integrityGaps.map(item => item.id), false),
     agent('kpi-computation', 'complete', elapsedMinutes === null ? 'Interval not measured' : `Interval calculated: ${elapsedMinutes} min`, gapEvidenceIds, false),
     agent('gap-attribution', 'human-review', hasDelay ? 'Draft operational category prepared' : 'No draft category prepared', gapEvidenceIds, true),
-    agent('training-orchestration', 'ready', 'Targeted Shift ready', gapEvidenceIds, false),
+    agent('training-orchestration', 'ready', 'Door-to-ECG drill ready', gapEvidenceIds, false),
     agent('governance-closure', 'human-review', closureReasons.length ? 'Closure blocked by open evidence' : 'Reviewer closure required', [...gapEvidenceIds, ...integrityGaps.map(item => item.id)], true),
   ]
 
@@ -225,9 +225,9 @@ export function runPathwayReplay(input: PathwayReplayInput): PathwayReplayReport
     },
     gap,
     training: {
-      activityId: 'targeted-shift-handover-v1',
-      label: 'Targeted Shift: pathway handover',
-      durationMinutes: 4,
+      activityId: 'door-to-ecg-drill-v1',
+      label: 'ECG Drill: acquisition evidence',
+      durationMinutes: 5,
       state: 'ready',
     },
     closure: {

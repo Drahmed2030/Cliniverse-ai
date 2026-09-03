@@ -38,6 +38,8 @@ test('the synthetic demo calculates traceable KPIs without hiding missing eviden
   assert.equal(report.events.find(event => event.id === 'cath-lab-arrival')?.integrity, 'missing')
   assert.deepEqual(report.gap.evidenceIds, ['arrival', 'ecg'])
   assert.equal(report.gap.requiresHumanReview, true)
+  assert.equal(report.training.activityId, 'door-to-ecg-drill-v1')
+  assert.match(report.training.label, /ECG Drill/i)
   assert.equal(report.closure.state, 'blocked')
 })
 
