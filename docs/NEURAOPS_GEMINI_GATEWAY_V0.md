@@ -49,7 +49,7 @@ curl -X POST https://<preview-host>/api/labs/gemini/health \
 
 A successful response reports `code: "ready"`, model `gemini-3.8-flash`, latency, `markerMatched: true`, and a Trust Receipt containing the policy and template versions, correlation identifiers, contract hashes, data classification, and human-review boundary. A `404` from Google is translated to `model-not-found`, making the previously observed failure diagnosable without exposing the provider body.
 
-The request contract follows the Gemini 3.8 Flash migration guidance and omits deprecated sampling parameters such as `temperature`, `top_p`, and `top_k`. A provider `400` is classified as `invalid-request`; structured provider failures still render their Trust Receipt in the operator console instead of collapsing into a generic gateway status.
+The connectivity request uses Google's minimal documented REST contract: `model` and fixed `input` only. It omits deprecated sampling parameters and optional reasoning configuration until connectivity is proven. Structured provider failures still render their Trust Receipt instead of collapsing into a generic gateway status. The gateway maps only bounded diagnostic categories (for example `invalid-api-key`, `model-unavailable`, or `region-restricted`) and discards the provider's raw error message.
 
 ## Preview operator console
 

@@ -3,9 +3,16 @@ import { timingSafeEqual } from 'node:crypto'
 export const NEURAOPS_GEMINI_MODEL = 'gemini-3.8-flash' as const
 export const NEURAOPS_GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions' as const
 export const NEURAOPS_PROBE_MARKER = 'NEURAOPS_GEMINI_OK' as const
-export const NEURAOPS_GEMINI_THINKING_LEVEL = 'low' as const
 
 export type NeuraOpsDataMode = 'fictional-simulation' | 'real-patient'
+export type NeuraOpsProviderDiagnostic =
+  | 'invalid-api-key'
+  | 'billing-required'
+  | 'model-unavailable'
+  | 'quota-exceeded'
+  | 'region-restricted'
+  | 'invalid-payload'
+  | 'unclassified-provider-error'
 export type NeuraOpsProbeCode =
   | 'ready'
   | 'disabled'
@@ -42,6 +49,7 @@ export type NeuraOpsProbeResult = {
   latencyMs: number
   markerMatched: boolean
   providerStatus?: number
+  diagnosticReason?: NeuraOpsProviderDiagnostic
 }
 
 export function resolveGeminiApiKey(env: Environment = process.env): string | null {
@@ -89,6 +97,38 @@ function codeForProviderStatus(status: number): NeuraOpsProbeCode {
   return 'provider-error'
 }
 
+async function classifyProviderFailure(response: Response): Promise<{
+  code: NeuraOpsProbeCode
+  diagnosticReason: NeuraOpsProviderDiagnostic
+}> {
+  let text = ''
+  try {
+    text = collectText(await response.json()).join(' ').toLowerCase()
+  } catch {
+    // The raw provider payload is intentionally discarded.
+  }
+
+  if (/api[_ -]?key|credential/.test(text) && /invalid|expired|not valid|denied/.test(text)) {
+    return { code: 'authentication-failed', diagnosticReason: 'invalid-api-key' }
+  }
+  if (/billing|payment|paid tier/.test(text)) {
+    return { code: 'provider-error', diagnosticReason: 'billing-required' }
+  }
+  if (/quota|resource_exhausted/.test(text)) {
+    return { code: 'rate-limited', diagnosticReason: 'quota-exceeded' }
+  }
+  if (/country|region|location/.test(text) && /unsupported|restricted|not available/.test(text)) {
+    return { code: 'provider-error', diagnosticReason: 'region-restricted' }
+  }
+  if (/model/.test(text) && /not found|not supported|not available|unavailable/.test(text)) {
+    return { code: 'model-not-found', diagnosticReason: 'model-unavailable' }
+  }
+  if (response.status === 400) {
+    return { code: 'invalid-request', diagnosticReason: 'invalid-payload' }
+  }
+  return { code: codeForProviderStatus(response.status), diagnosticReason: 'unclassified-provider-error' }
+}
+
 export async function runGeminiSyntheticProbe(options: {
   apiKey: string
   dataMode?: NeuraOpsDataMode
@@ -116,7 +156,6 @@ export async function runGeminiSyntheticProbe(options: {
       body: JSON.stringify({
         model: NEURAOPS_GEMINI_MODEL,
         input: `This is a non-clinical infrastructure check using no patient data. Return exactly: ${NEURAOPS_PROBE_MARKER}`,
-        generation_config: { thinking_level: NEURAOPS_GEMINI_THINKING_LEVEL },
       }),
       cache: 'no-store',
       signal: controller.signal,
@@ -124,15 +163,17 @@ export async function runGeminiSyntheticProbe(options: {
 
     const latencyMs = Date.now() - startedAt
     if (!response.ok) {
+      const diagnostic = await classifyProviderFailure(response)
       return {
         ok: false,
-        code: codeForProviderStatus(response.status),
+        code: diagnostic.code,
         provider: 'google-gemini',
         model: NEURAOPS_GEMINI_MODEL,
         dataMode: 'fictional-simulation',
         latencyMs,
         markerMatched: false,
         providerStatus: response.status,
+        diagnosticReason: diagnostic.diagnosticReason,
       }
     }
 

@@ -34,6 +34,7 @@ type ProbeResult = {
   latencyMs: number
   markerMatched: boolean
   providerStatus?: number
+  diagnosticReason?: string
 }
 
 type TrustReceipt = {
@@ -54,6 +55,7 @@ type TrustReceipt = {
   latencyMs: number
   markerMatched: boolean
   providerStatus?: number
+  diagnosticReason?: string
 }
 
 type ProbeResponse = { result: ProbeResult; receipt: TrustReceipt }
@@ -271,6 +273,7 @@ export default function DiagnosticConsole() {
               <ReceiptRow label="Template" value={probe.receipt.templateVersion} />
               <ReceiptRow label="Classification" value={probe.receipt.dataClassification} />
               <ReceiptRow label="Human review" value={probe.receipt.humanReviewRequired ? 'Required' : 'Not recorded'} />
+              {probe.receipt.diagnosticReason && <ReceiptRow label="Safe diagnostic" value={readableCode(probe.receipt.diagnosticReason)} />}
               <ReceiptRow label="Input contract" value={shortHash(probe.receipt.inputContractHash)} mono />
               <ReceiptRow label="Endpoint contract" value={shortHash(probe.receipt.endpointContractHash)} mono />
               <ReceiptRow label="Correlation" value={probe.receipt.correlationId} mono />

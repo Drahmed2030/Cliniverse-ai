@@ -69,8 +69,7 @@ test('synthetic probe uses the official Gemini interaction contract without putt
   const requestBody = JSON.parse(captured.init.body)
   assert.equal(requestBody.model, NEURAOPS_GEMINI_MODEL)
   assert.match(requestBody.input, /no patient data/i)
-  assert.deepEqual(requestBody.generation_config, { thinking_level: 'low' })
-  assert.equal('temperature' in requestBody.generation_config, false)
+  assert.deepEqual(Object.keys(requestBody).sort(), ['input', 'model'])
 })
 
 test('synthetic probe rejects patient mode and classifies model-not-found diagnostics', async () => {
@@ -89,10 +88,14 @@ test('synthetic probe rejects patient mode and classifies model-not-found diagno
 
   const invalid = await runGeminiSyntheticProbe({
     apiKey: 'private-key',
-    fetchImpl: async () => new Response('{}', { status: 400 }),
+    fetchImpl: async () => new Response(JSON.stringify({
+      error: { code: 400, status: 'INVALID_ARGUMENT', message: 'API key not valid. Please pass a valid API key.' },
+    }), { status: 400 }),
   })
-  assert.equal(invalid.code, 'invalid-request')
+  assert.equal(invalid.code, 'authentication-failed')
   assert.equal(invalid.providerStatus, 400)
+  assert.equal(invalid.diagnosticReason, 'invalid-api-key')
+  assert.equal(JSON.stringify(invalid).includes('Please pass a valid API key'), false)
 })
 
 test('missing API key fails before any network request', async () => {
@@ -151,8 +154,8 @@ test('Trust Receipt is versioned, hashed and never records raw AI or sensitive v
   assert.match(receipt, /schemaVersion:\s*1/)
   assert.match(receipt, /NEURAOPS_AI_POLICY_VERSION/)
   assert.match(receipt, /NEURAOPS_PROBE_TEMPLATE_VERSION/)
-  assert.match(receipt, /gemini-connectivity-probe-v2/)
-  assert.match(receipt, /NEURAOPS_GEMINI_THINKING_LEVEL/)
+  assert.match(receipt, /gemini-connectivity-probe-v3/)
+  assert.match(receipt, /diagnosticReason/)
   assert.match(receipt, /inputContractHash/)
   assert.match(receipt, /endpointContractHash/)
   assert.match(receipt, /humanReviewRequired:\s*true/)
