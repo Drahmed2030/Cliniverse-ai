@@ -1,5 +1,7 @@
 # Apple StoreKit Resubmission Reviewer Package
 
+> Current addendum: the 2026-09-03 metadata-only Terms of Use issue for version `1.0 (62)` is handled in `docs/APPLE_BUILD62_EULA_RESOLUTION.md`. Its exact build and submission state supersede the older build-57 snapshot below.
+
 Status: **PREPARED / HOLD — do not submit**
 
 This package is the release-scoped source for App Store Connect metadata and reviewer instructions. Every item must be checked against the final signed IPA and production backend immediately before submission.

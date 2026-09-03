@@ -22,6 +22,7 @@ type Readiness = {
   enabled: boolean
   environmentAllowed: boolean
   dataMode: string
+  providerStorage: string
   probe: string
 }
 
@@ -31,6 +32,7 @@ type ProbeResult = {
   provider: string
   model: string
   dataMode: string
+  providerStorage: string
   latencyMs: number
   markerMatched: boolean
   providerStatus?: number
@@ -50,6 +52,7 @@ type TrustReceipt = {
   inputContractHash: string
   endpointContractHash: string
   dataClassification: string
+  providerStorage: string
   humanReviewRequired: boolean
   resultCode: string
   latencyMs: number
@@ -208,6 +211,7 @@ export default function DiagnosticConsole() {
             <div><dt>Provider</dt><dd>{readiness?.provider ?? 'Checking'}</dd></div>
             <div><dt>Model</dt><dd>{readiness?.model ?? 'Checking'}</dd></div>
             <div><dt>Data mode</dt><dd>Synthetic, non-clinical</dd></div>
+            <div><dt>Provider storage</dt><dd>{readiness?.providerStorage === 'disabled' ? 'Disabled (stateless)' : 'Checking'}</dd></div>
             <div><dt>Prompt input</dt><dd>Locked by policy</dd></div>
           </dl>
         </div>
@@ -272,6 +276,7 @@ export default function DiagnosticConsole() {
               <ReceiptRow label="Policy" value={probe.receipt.policyVersion} />
               <ReceiptRow label="Template" value={probe.receipt.templateVersion} />
               <ReceiptRow label="Classification" value={probe.receipt.dataClassification} />
+              <ReceiptRow label="Provider storage" value={probe.receipt.providerStorage === 'disabled' ? 'Disabled (store=false)' : probe.receipt.providerStorage} />
               <ReceiptRow label="Human review" value={probe.receipt.humanReviewRequired ? 'Required' : 'Not recorded'} />
               {probe.receipt.diagnosticReason && <ReceiptRow label="Safe diagnostic" value={readableCode(probe.receipt.diagnosticReason)} />}
               <ReceiptRow label="Input contract" value={shortHash(probe.receipt.inputContractHash)} mono />

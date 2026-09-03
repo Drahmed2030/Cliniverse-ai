@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto'
 export const NEURAOPS_GEMINI_MODEL = 'gemini-3.8-flash' as const
 export const NEURAOPS_GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/interactions' as const
 export const NEURAOPS_PROBE_MARKER = 'NEURAOPS_GEMINI_OK' as const
+export const NEURAOPS_PROVIDER_STORAGE = 'disabled' as const
 
 export type NeuraOpsDataMode = 'fictional-simulation' | 'real-patient'
 export type NeuraOpsProviderDiagnostic =
@@ -37,6 +38,7 @@ export type NeuraOpsGatewayReadiness = {
   enabled: boolean
   environmentAllowed: boolean
   dataMode: 'fictional-simulation'
+  providerStorage: typeof NEURAOPS_PROVIDER_STORAGE
   probe: 'not-run'
 }
 
@@ -46,6 +48,7 @@ export type NeuraOpsProbeResult = {
   provider: 'google-gemini'
   model: typeof NEURAOPS_GEMINI_MODEL
   dataMode: 'fictional-simulation'
+  providerStorage: typeof NEURAOPS_PROVIDER_STORAGE
   latencyMs: number
   markerMatched: boolean
   providerStatus?: number
@@ -70,6 +73,7 @@ export function getNeuraOpsGatewayReadiness(env: Environment = process.env): Neu
     enabled: env.NEURAOPS_GEMINI_LAB_ENABLED === 'true',
     environmentAllowed: isNonProductionEnvironment(env),
     dataMode: 'fictional-simulation',
+    providerStorage: NEURAOPS_PROVIDER_STORAGE,
     probe: 'not-run',
   }
 }
@@ -155,6 +159,7 @@ export async function runGeminiSyntheticProbe(options: {
       },
       body: JSON.stringify({
         model: NEURAOPS_GEMINI_MODEL,
+        store: false,
         input: `This is a non-clinical infrastructure check using no patient data. Return exactly: ${NEURAOPS_PROBE_MARKER}`,
       }),
       cache: 'no-store',
@@ -170,6 +175,7 @@ export async function runGeminiSyntheticProbe(options: {
         provider: 'google-gemini',
         model: NEURAOPS_GEMINI_MODEL,
         dataMode: 'fictional-simulation',
+        providerStorage: NEURAOPS_PROVIDER_STORAGE,
         latencyMs,
         markerMatched: false,
         providerStatus: response.status,
@@ -185,6 +191,7 @@ export async function runGeminiSyntheticProbe(options: {
       provider: 'google-gemini',
       model: NEURAOPS_GEMINI_MODEL,
       dataMode: 'fictional-simulation',
+      providerStorage: NEURAOPS_PROVIDER_STORAGE,
       latencyMs,
       markerMatched,
       providerStatus: response.status,
@@ -197,6 +204,7 @@ export async function runGeminiSyntheticProbe(options: {
       provider: 'google-gemini',
       model: NEURAOPS_GEMINI_MODEL,
       dataMode: 'fictional-simulation',
+      providerStorage: NEURAOPS_PROVIDER_STORAGE,
       latencyMs: Date.now() - startedAt,
       markerMatched: false,
     }

@@ -68,8 +68,9 @@ test('synthetic probe uses the official Gemini interaction contract without putt
   assert.equal(captured.init.headers['x-goog-api-key'], 'private-key')
   const requestBody = JSON.parse(captured.init.body)
   assert.equal(requestBody.model, NEURAOPS_GEMINI_MODEL)
+  assert.equal(requestBody.store, false)
   assert.match(requestBody.input, /no patient data/i)
-  assert.deepEqual(Object.keys(requestBody).sort(), ['input', 'model'])
+  assert.deepEqual(Object.keys(requestBody).sort(), ['input', 'model', 'store'])
 })
 
 test('synthetic probe rejects patient mode and classifies model-not-found diagnostics', async () => {
@@ -154,12 +155,14 @@ test('Trust Receipt is versioned, hashed and never records raw AI or sensitive v
   assert.match(receipt, /schemaVersion:\s*1/)
   assert.match(receipt, /NEURAOPS_AI_POLICY_VERSION/)
   assert.match(receipt, /NEURAOPS_PROBE_TEMPLATE_VERSION/)
-  assert.match(receipt, /gemini-connectivity-probe-v3/)
+  assert.match(receipt, /gemini-connectivity-probe-v4-stateless/)
   assert.match(receipt, /diagnosticReason/)
   assert.match(receipt, /inputContractHash/)
   assert.match(receipt, /endpointContractHash/)
   assert.match(receipt, /humanReviewRequired:\s*true/)
   assert.match(receipt, /dataClassification:\s*'synthetic-non-clinical'/)
+  assert.match(receipt, /providerStorage/)
+  assert.match(receipt, /store=false/)
   assert.match(receipt, /kind:\s*'ai\.receipt'/)
   assert.match(recorder, /'ai\.receipt'/)
 

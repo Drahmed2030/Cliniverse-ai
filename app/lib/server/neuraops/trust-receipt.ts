@@ -5,12 +5,13 @@ import type { OperationalContext } from '../observability/operational-telemetry'
 import {
   NEURAOPS_GEMINI_MODEL,
   NEURAOPS_GEMINI_ENDPOINT,
+  NEURAOPS_PROVIDER_STORAGE,
   NEURAOPS_PROBE_MARKER,
   type NeuraOpsProbeResult,
 } from './gateway'
 
 export const NEURAOPS_AI_POLICY_VERSION = 'neuraops-ai-policy-2026-09-v1' as const
-export const NEURAOPS_PROBE_TEMPLATE_VERSION = 'gemini-connectivity-probe-v3' as const
+export const NEURAOPS_PROBE_TEMPLATE_VERSION = 'gemini-connectivity-probe-v4-stateless' as const
 
 export type NeuraOpsTrustReceipt = {
   schemaVersion: 1
@@ -25,6 +26,7 @@ export type NeuraOpsTrustReceipt = {
   inputContractHash: string
   endpointContractHash: string
   dataClassification: 'synthetic-non-clinical'
+  providerStorage: typeof NEURAOPS_PROVIDER_STORAGE
   humanReviewRequired: true
   resultCode: NeuraOpsProbeResult['code']
   latencyMs: number
@@ -44,7 +46,7 @@ export function createNeuraOpsTrustReceipt(input: {
 }): NeuraOpsTrustReceipt {
   const completedAt = input.completedAt ?? new Date().toISOString()
   const inputContractHash = sha256(
-    `${NEURAOPS_PROBE_TEMPLATE_VERSION}|${NEURAOPS_GEMINI_MODEL}|${NEURAOPS_PROBE_MARKER}|fictional-simulation`,
+    `${NEURAOPS_PROBE_TEMPLATE_VERSION}|${NEURAOPS_GEMINI_MODEL}|${NEURAOPS_PROBE_MARKER}|fictional-simulation|store=false`,
   )
   const endpointContractHash = sha256(NEURAOPS_GEMINI_ENDPOINT)
   const receiptId = sha256(
@@ -64,6 +66,7 @@ export function createNeuraOpsTrustReceipt(input: {
     inputContractHash,
     endpointContractHash,
     dataClassification: 'synthetic-non-clinical',
+    providerStorage: NEURAOPS_PROVIDER_STORAGE,
     humanReviewRequired: true,
     resultCode: input.result.code,
     latencyMs: input.result.latencyMs,
@@ -95,6 +98,7 @@ export async function recordNeuraOpsTrustReceipt(input: {
       input_contract_hash: input.receipt.inputContractHash,
       endpoint_contract_hash: input.receipt.endpointContractHash,
       data_classification: input.receipt.dataClassification,
+      provider_storage: input.receipt.providerStorage,
       human_review_required: input.receipt.humanReviewRequired,
       result_code: input.receipt.resultCode,
       marker_matched: input.receipt.markerMatched,

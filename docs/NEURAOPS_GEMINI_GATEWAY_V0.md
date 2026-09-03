@@ -14,6 +14,7 @@ This gateway belongs to the isolated strategy branch. It does not alter the Clin
 - `POST /api/labs/gemini/health` requires a server-side diagnostic bearer token.
 - The POST probe is blocked in Vercel Production even when configured.
 - The API key is sent in the `x-goog-api-key` header and is never included in the URL or response.
+- Every Interactions API request sets `store=false`, explicitly opting out of provider-side Interaction object storage.
 - Provider response bodies are not returned or logged.
 - Every active probe creates a versioned **NeuraOps Trust Receipt** and a correlated Flight Recorder event.
 - The receipt stores hashes of the input and endpoint contracts, not the prompt, response, key, or authorization token.
@@ -49,13 +50,13 @@ curl -X POST https://<preview-host>/api/labs/gemini/health \
 
 A successful response reports `code: "ready"`, model `gemini-3.8-flash`, latency, `markerMatched: true`, and a Trust Receipt containing the policy and template versions, correlation identifiers, contract hashes, data classification, and human-review boundary. A `404` from Google is translated to `model-not-found`, making the previously observed failure diagnosable without exposing the provider body.
 
-The connectivity request uses Google's minimal documented REST contract: `model` and fixed `input` only. It omits deprecated sampling parameters and optional reasoning configuration until connectivity is proven. Structured provider failures still render their Trust Receipt instead of collapsing into a generic gateway status. The gateway maps only bounded diagnostic categories (for example `invalid-api-key`, `model-unavailable`, or `region-restricted`) and discards the provider's raw error message.
+The connectivity request uses Google's minimal documented REST contract: `model`, fixed `input`, and the privacy control `store=false`. It omits deprecated sampling parameters and optional reasoning configuration until connectivity is proven. Structured provider failures still render their Trust Receipt instead of collapsing into a generic gateway status. The gateway maps only bounded diagnostic categories (for example `invalid-api-key`, `model-unavailable`, or `region-restricted`) and discards the provider's raw error message.
 
 ## Preview operator console
 
 `/labs/gemini-diagnostic` provides a no-index, Preview-only control surface for the same fixed probe. It accepts only the diagnostic token, keeps that token in component memory, clears it immediately after the request, and never writes it to browser storage. The page is unavailable when `VERCEL_ENV=production` and exposes no free-text AI or patient-data input.
 
-The receipt is an operational provenance artifact. It is not a digital signature, clinical validation, regulatory certification, or proof that model output is medically correct.
+The receipt records that provider Interaction storage was disabled for the request. This is an operational provenance artifact, not a digital signature, clinical validation, regulatory certification, zero-data-retention agreement, or proof that model output is medically correct.
 
 ## Next gate
 
