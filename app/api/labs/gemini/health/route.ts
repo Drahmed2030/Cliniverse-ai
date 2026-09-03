@@ -4,6 +4,15 @@ import {
   getNeuraOpsGatewayReadiness,
   runGeminiSyntheticProbe,
 } from '@/app/lib/server/neuraops/gateway'
+import {
+  createNeuraOpsTrustReceipt,
+  recordNeuraOpsTrustReceipt,
+} from '@/app/lib/server/neuraops/trust-receipt'
+import { createServerFlightRecorder } from '@/app/lib/server/observability/flight-recorder'
+import {
+  createCorrelationId,
+  withOperationalSpan,
+} from '@/app/lib/server/observability/operational-telemetry'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -33,9 +42,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ code: 'unauthorized' }, { status: 401 })
   }
 
-  const result = await runGeminiSyntheticProbe({ apiKey: process.env.GEMINI_API_KEY! })
-  return NextResponse.json(result, {
-    status: result.ok ? 200 : 502,
+  const correlationId = createCorrelationId(request.headers.get('x-correlation-id'))
+  const recorder = createServerFlightRecorder()
+  const response = await withOperationalSpan({
+    operation: 'neuraops.gemini.synthetic_probe',
+    correlationId,
+    recorder,
+    attributes: {
+      provider: readiness.provider,
+      model: readiness.model,
+      data_mode: readiness.dataMode,
+      environment: process.env.VERCEL_ENV ?? 'local',
+    },
+    run: async context => {
+      const result = await runGeminiSyntheticProbe({ apiKey: process.env.GEMINI_API_KEY! })
+      const receipt = createNeuraOpsTrustReceipt({ context, result })
+      await recordNeuraOpsTrustReceipt({ recorder, context, receipt })
+      return { result, receipt }
+    },
+  })
+
+  return NextResponse.json(response, {
+    status: response.result.ok ? 200 : 502,
     headers: { 'cache-control': 'no-store' },
   })
 }

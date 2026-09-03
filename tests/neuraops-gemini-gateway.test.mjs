@@ -92,8 +92,31 @@ test('route and environment contract keep diagnostics private and non-production
 
   assert.match(route, /production-blocked/)
   assert.match(route, /Bearer /)
+  assert.match(route, /withOperationalSpan/)
+  assert.match(route, /createNeuraOpsTrustReceipt/)
+  assert.match(route, /recordNeuraOpsTrustReceipt/)
   assert.equal(route.includes('request.json()'), false)
   assert.equal(envExample.includes('NEXT_PUBLIC_GEMINI'), false)
   assert.match(envExample, /GEMINI_API_KEY=\n/)
   assert.match(envExample, /NEURAOPS_DIAGNOSTIC_TOKEN=\n/)
+})
+
+test('Trust Receipt is versioned, hashed and never records raw AI or sensitive values', () => {
+  const receipt = read('app/lib/server/neuraops/trust-receipt.ts')
+  const recorder = read('app/lib/server/observability/flight-recorder.ts')
+
+  assert.match(receipt, /import 'server-only'/)
+  assert.match(receipt, /schemaVersion:\s*1/)
+  assert.match(receipt, /NEURAOPS_AI_POLICY_VERSION/)
+  assert.match(receipt, /NEURAOPS_PROBE_TEMPLATE_VERSION/)
+  assert.match(receipt, /inputContractHash/)
+  assert.match(receipt, /endpointContractHash/)
+  assert.match(receipt, /humanReviewRequired:\s*true/)
+  assert.match(receipt, /dataClassification:\s*'synthetic-non-clinical'/)
+  assert.match(receipt, /kind:\s*'ai\.receipt'/)
+  assert.match(recorder, /'ai\.receipt'/)
+
+  for (const prohibited of ['apiKey', 'authorization:', 'rawResponse', 'responseText', 'patientId']) {
+    assert.equal(receipt.includes(prohibited), false)
+  }
 })

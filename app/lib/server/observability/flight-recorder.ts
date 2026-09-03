@@ -7,6 +7,7 @@ export type FlightEventKind =
   | 'operation.failed'
   | 'lineage.edge'
   | 'progressive.decision'
+  | 'ai.receipt'
 
 export type SafeAttributeValue = string | number | boolean | null
 

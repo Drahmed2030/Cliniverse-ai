@@ -15,6 +15,8 @@ This gateway belongs to the isolated strategy branch. It does not alter the Clin
 - The POST probe is blocked in Vercel Production even when configured.
 - The API key is sent in the `x-goog-api-key` header and is never included in the URL or response.
 - Provider response bodies are not returned or logged.
+- Every active probe creates a versioned **NeuraOps Trust Receipt** and a correlated Flight Recorder event.
+- The receipt stores hashes of the input and endpoint contracts, not the prompt, response, key, or authorization token.
 
 ## Preview configuration
 
@@ -43,7 +45,9 @@ curl -X POST https://<preview-host>/api/labs/gemini/health \
   -H "Authorization: Bearer <diagnostic-token>"
 ```
 
-A successful response reports `code: "ready"`, model `gemini-3.8-flash`, latency, and `markerMatched: true`. A `404` from Google is translated to `model-not-found`, making the previously observed failure diagnosable without exposing the provider body.
+A successful response reports `code: "ready"`, model `gemini-3.8-flash`, latency, `markerMatched: true`, and a Trust Receipt containing the policy and template versions, correlation identifiers, contract hashes, data classification, and human-review boundary. A `404` from Google is translated to `model-not-found`, making the previously observed failure diagnosable without exposing the provider body.
+
+The receipt is an operational provenance artifact. It is not a digital signature, clinical validation, regulatory certification, or proof that model output is medically correct.
 
 ## Next gate
 
