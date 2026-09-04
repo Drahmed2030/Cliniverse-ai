@@ -3,17 +3,22 @@ import {
   ECHO_CLINICAL_STUDIO_ASSETS,
   type ClinicalStudioAsset,
 } from './clinicalStudioManifest.ts'
+import {
+  A4C_NORMAL_CLINICAL_STUDIO_ASSET,
+} from './licensedEchoAsset.ts'
 
 export type ClinicalMediaLocale = ClinicalStudioAsset['locale']
 export type ClinicalMediaFormat = 'landscape' | 'portrait' | 'square'
-export type ClinicalMediaProgram = 'door-to-ecg' | 'echo-motion-orientation'
+export type ClinicalMediaProgram = 'door-to-ecg' | 'echo-a4c-normal' | 'echo-motion-orientation'
 
 export const CLINICAL_MEDIA_PROGRAM_ACCESS = {
   'door-to-ecg': 'learner',
+  'echo-a4c-normal': 'preview-only',
   'echo-motion-orientation': 'internal-engine-only',
 } as const satisfies Record<ClinicalMediaProgram, ClinicalStudioAsset['surfaceAccess']>
 
 export const LEARNER_CLINICAL_MEDIA_PROGRAMS = ['door-to-ecg'] as const satisfies readonly ClinicalMediaProgram[]
+export const PREVIEW_CLINICAL_MEDIA_PROGRAMS = ['echo-a4c-normal'] as const satisfies readonly ClinicalMediaProgram[]
 export const INTERNAL_ONLY_CLINICAL_MEDIA_PROGRAMS = ['echo-motion-orientation'] as const satisfies readonly ClinicalMediaProgram[]
 
 export interface ClinicalMediaSceneCopy {
@@ -31,7 +36,7 @@ export interface CompiledClinicalMediaScene extends ClinicalMediaSceneCopy {
 }
 
 export interface CompiledClinicalMedia {
-  schemaVersion: '0.1'
+  schemaVersion: ClinicalStudioAsset['schemaVersion']
   compilationId: string
   program: ClinicalMediaProgram
   modality: ClinicalStudioAsset['modality']
@@ -148,13 +153,40 @@ const ECHO_COPY: Record<ClinicalMediaLocale, Record<string, ClinicalMediaSceneCo
   },
 }
 
+const A4C_ECHO_COPY: Partial<Record<ClinicalMediaLocale, Record<string, ClinicalMediaSceneCopy>>> = {
+  en: {
+    'source-and-view': {
+      kicker: 'LICENSED REAL CINE',
+      title: 'A4C normal · source-labelled',
+      body: 'A real apical four-chamber loop from CardioNetworks ECHOpedia replaces the synthetic learner visual. The source page labels this clip normal.',
+    },
+    'view-landmarks': {
+      kicker: 'VIEW SIGNATURE',
+      title: 'Four chambers in one apical plane',
+      body: 'Identify both atria, both ventricles, the atrioventricular valves and the septa. Display-side conventions can vary, so use the complete view signature.',
+    },
+    'motion-boundary': {
+      kicker: 'SAFE READING',
+      title: 'Observe the cine before measuring',
+      body: 'Use this short loop for view recognition and cyclical motion. Do not derive ejection fraction, chamber measurements or pathology exclusion from this preview.',
+    },
+    'rights-and-review': {
+      kicker: 'PROVENANCE',
+      title: 'Rights and privacy remain visible',
+      body: 'CC BY-SA 3.0 source, VRT-confirmed permission, frozen checksums and a disclosed timestamp mask travel with this derivative.',
+    },
+  },
+}
+
 const ASSETS_BY_PROGRAM: Record<ClinicalMediaProgram, readonly ClinicalStudioAsset[]> = {
   'door-to-ecg': CLINICAL_STUDIO_ASSETS,
+  'echo-a4c-normal': [A4C_NORMAL_CLINICAL_STUDIO_ASSET],
   'echo-motion-orientation': ECHO_CLINICAL_STUDIO_ASSETS,
 }
 
-const COPY_BY_PROGRAM: Record<ClinicalMediaProgram, Record<ClinicalMediaLocale, Record<string, ClinicalMediaSceneCopy>>> = {
+const COPY_BY_PROGRAM: Record<ClinicalMediaProgram, Partial<Record<ClinicalMediaLocale, Record<string, ClinicalMediaSceneCopy>>>> = {
   'door-to-ecg': ECG_COPY,
+  'echo-a4c-normal': A4C_ECHO_COPY,
   'echo-motion-orientation': ECHO_COPY,
 }
 
@@ -165,13 +197,15 @@ export function compileClinicalMedia(
 ): CompiledClinicalMedia {
   const asset = ASSETS_BY_PROGRAM[program].find(candidate => candidate.locale === locale)
   if (!asset) throw new Error(`No ${program} Clinical Studio asset exists for locale: ${locale}`)
+  const localizedCopy = COPY_BY_PROGRAM[program][locale]
+  if (!localizedCopy) throw new Error(`No ${locale} copy exists for program: ${program}`)
 
   const profile = CLINICAL_MEDIA_FORMATS[format]
   let cursor = 0
   const scenes = asset.scenes.map(scene => {
     const startFrame = cursor
     cursor += scene.durationFrames
-    const sceneCopy = COPY_BY_PROGRAM[program][locale][scene.id]
+    const sceneCopy = localizedCopy[scene.id]
     if (!sceneCopy) throw new Error(`No ${locale} copy exists for scene: ${scene.id}`)
 
     return {
@@ -223,4 +257,16 @@ export function compileLearnerClinicalMedia(
     throw new Error(`The ${media.assetId} asset is not approved for the learner surface.`)
   }
   return media
+}
+
+export function compileClinicalMediaPreview(
+  locale: ClinicalMediaLocale = 'en',
+  format: ClinicalMediaFormat = 'landscape',
+  program: ClinicalMediaProgram = 'echo-a4c-normal',
+): CompiledClinicalMedia {
+  if (CLINICAL_MEDIA_PROGRAM_ACCESS[program] === 'internal-engine-only') {
+    throw new Error(`The ${program} Clinical Studio program is internal-only and cannot enter Preview.`)
+  }
+
+  return compileClinicalMedia(locale, format, program)
 }

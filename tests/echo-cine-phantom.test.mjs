@@ -104,7 +104,7 @@ test('the synthetic Echo phantom is internal-only and fails closed on learner su
 
   assert.doesNotMatch(previewSource, /EchoMotionLesson|EchoMotionMediaComposition|echo-motion-orientation/)
   assert.doesNotMatch(pathwaySource, /Explore ECG and ECHO/)
-  assert.match(pathwaySource, /ECHO remains an internal engine prototype/)
+  assert.match(pathwaySource, /synthetic ECHO phantom remains an internal engine prototype/)
 })
 
 test('the compiler produces bilingual contiguous Echo timelines for Remotion', () => {

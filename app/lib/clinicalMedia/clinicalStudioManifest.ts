@@ -4,6 +4,10 @@ import {
   ECHO_CINE_ENGINE_ID,
   ECHO_CINE_SOURCE_ID,
 } from './echoCinePhantom.ts'
+import {
+  A4C_NORMAL_CLINICAL_STUDIO_ASSET,
+  type LicensedEchoClinicalStudioAsset,
+} from './licensedEchoAsset.ts'
 
 interface ClinicalStudioAssetBase {
   schemaVersion: '0.1'
@@ -40,7 +44,7 @@ export interface EchoClinicalStudioAsset extends ClinicalStudioAssetBase {
   }
 }
 
-export type ClinicalStudioAsset = EcgClinicalStudioAsset | EchoClinicalStudioAsset
+export type ClinicalStudioAsset = EcgClinicalStudioAsset | EchoClinicalStudioAsset | LicensedEchoClinicalStudioAsset
 
 const sharedEcg = {
   schemaVersion: '0.1' as const,
@@ -102,4 +106,5 @@ export const ECHO_CLINICAL_STUDIO_ASSETS: EchoClinicalStudioAsset[] = [
 export const ALL_CLINICAL_STUDIO_ASSETS: readonly ClinicalStudioAsset[] = [
   ...CLINICAL_STUDIO_ASSETS,
   ...ECHO_CLINICAL_STUDIO_ASSETS,
+  A4C_NORMAL_CLINICAL_STUDIO_ASSET,
 ]

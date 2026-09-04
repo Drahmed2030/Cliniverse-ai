@@ -4,32 +4,42 @@ import { Player } from '@remotion/player'
 import { useMemo, useState, useSyncExternalStore } from 'react'
 import {
   CLINICAL_MEDIA_FORMATS,
-  compileLearnerClinicalMedia,
+  compileClinicalMediaPreview,
   type ClinicalMediaFormat,
-  type ClinicalMediaLocale,
+  type ClinicalMediaProgram,
 } from '../../lib/clinicalMedia/clinicalMediaCompiler'
 import DoorToEcgMediaComposition from './DoorToEcgMediaComposition'
+import EchoA4cLesson from './EchoA4cLesson'
+import EchoA4cMediaComposition from './EchoA4cMediaComposition'
 import styles from './clinical-media.module.css'
 
 const FORMAT_ORDER: ClinicalMediaFormat[] = ['landscape', 'portrait', 'square']
+const PROGRAM_ORDER = ['echo-a4c-normal', 'door-to-ecg'] as const satisfies readonly ClinicalMediaProgram[]
 
-const HEADER_COPY = {
-  en: {
+const PROGRAM_COPY = {
+  'echo-a4c-normal': {
+    label: 'ECHO · Real A4C',
+    title: 'Clinical Studio · licensed real ECHO cine',
+    body: 'A source-labelled normal A4C loop now drives the Preview lesson, Remotion composition, assessment and session-only receipt. The synthetic ECHO phantom remains internal.',
+    status: 'Licensed real cine · Preview-only clinical copy review.',
+  },
+  'door-to-ecg': {
+    label: 'ECG · Current prototype',
     title: 'Clinical Studio · ECG learning engine',
-    body: 'The learner surface compiles one governed synthetic ECG source into an export-ready composition. ECHO remains internal until real media clears rights and clinical review.',
-    language: 'Preview language',
-    ratio: 'Preview aspect ratio',
-    draft: 'Draft: synthetic, non-clinical and human-review gated.',
-    reduced: 'Reduced motion active',
+    body: 'The current ECG program still uses a governed synthetic signal. Real calibrated PhysioNet cases are now defined as the next independent ingestion tranche.',
+    status: 'Synthetic ECG · human-review draft.',
   },
-  ar: {
-    title: 'الاستوديو السريري · محرك تعلّم تخطيط القلب',
-    body: 'تعرض واجهة المتعلّم حاليًا مصدر تخطيط قلب اصطناعيًا محكومًا واحدًا. يبقى ECHO داخليًا حتى تجتاز الوسائط الحقيقية مراجعة الحقوق والمراجعة السريرية.',
-    language: 'لغة المعاينة',
-    ratio: 'نسبة أبعاد المعاينة',
-    draft: 'مسودة: بيانات اصطناعية غير سريرية وتتطلب مراجعة بشرية.',
-    reduced: 'وضع تقليل الحركة مفعّل',
-  },
+} as const satisfies Record<typeof PROGRAM_ORDER[number], {
+  label: string
+  title: string
+  body: string
+  status: string
+}>
+
+const CONTROL_COPY = {
+  program: 'Clinical program',
+  ratio: 'Preview aspect ratio',
+  reduced: 'Reduced Motion active',
 } as const
 
 function subscribeToReducedMotion(onStoreChange: () => void) {
@@ -47,15 +57,16 @@ function readServerReducedMotionPreference() {
 }
 
 export default function ClinicalMediaPreview() {
-  const [locale, setLocale] = useState<ClinicalMediaLocale>('en')
+  const [program, setProgram] = useState<typeof PROGRAM_ORDER[number]>('echo-a4c-normal')
   const [format, setFormat] = useState<ClinicalMediaFormat>('landscape')
   const reducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     readReducedMotionPreference,
     readServerReducedMotionPreference,
   )
-  const media = useMemo(() => compileLearnerClinicalMedia(locale, format), [format, locale])
-  const copy = HEADER_COPY[locale]
+  const media = useMemo(() => compileClinicalMediaPreview('en', format, program), [format, program])
+  const copy = PROGRAM_COPY[program]
+  const Composition = program === 'echo-a4c-normal' ? EchoA4cMediaComposition : DoorToEcgMediaComposition
 
   const playerClass = [
     styles.player,
@@ -64,27 +75,27 @@ export default function ClinicalMediaPreview() {
   ].filter(Boolean).join(' ')
 
   return (
-    <section className={styles.previewShell} aria-labelledby="clinical-media-preview-title" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <section className={styles.previewShell} aria-labelledby="clinical-media-preview-title" dir="ltr">
       <div className={styles.previewHeader}>
         <div>
           <h2 id="clinical-media-preview-title">{copy.title}</h2>
           <p>{copy.body}</p>
         </div>
         <div className={styles.previewControls}>
-          <div aria-label={copy.language} className={styles.controlGroup} role="group">
-            {(['en', 'ar'] as const).map(option => (
+          <div aria-label={CONTROL_COPY.program} className={`${styles.controlGroup} ${styles.programControl}`} role="group">
+            {PROGRAM_ORDER.map(option => (
               <button
-                aria-pressed={locale === option}
-                className={`${styles.controlButton} ${locale === option ? styles.activeControl : ''}`}
+                aria-pressed={program === option}
+                className={`${styles.controlButton} ${program === option ? styles.activeControl : ''}`}
                 key={option}
-                onClick={() => setLocale(option)}
+                onClick={() => setProgram(option)}
                 type="button"
               >
-                {option === 'en' ? 'EN' : 'عربي'}
+                {PROGRAM_COPY[option].label}
               </button>
             ))}
           </div>
-          <div aria-label={copy.ratio} className={styles.controlGroup} role="group">
+          <div aria-label={CONTROL_COPY.ratio} className={styles.controlGroup} role="group">
             {FORMAT_ORDER.map(option => (
               <button
                 aria-pressed={format === option}
@@ -105,13 +116,13 @@ export default function ClinicalMediaPreview() {
           autoPlay={false}
           className={playerClass}
           clickToPlay
-          component={DoorToEcgMediaComposition}
+          component={Composition}
           compositionHeight={media.height}
           compositionWidth={media.width}
           controls
           durationInFrames={media.durationInFrames}
           fps={media.fps}
-          inputProps={{ locale, format, reducedMotion }}
+          inputProps={{ locale: 'en' as const, format, reducedMotion }}
           key={media.compilationId}
           loop={false}
           showVolumeControls={false}
@@ -120,9 +131,11 @@ export default function ClinicalMediaPreview() {
       </div>
 
       <div className={styles.previewFooter}>
-        <span><strong>{copy.draft}</strong>{reducedMotion ? ` · ${copy.reduced}` : ''}</span>
+        <span><strong>{copy.status}</strong>{reducedMotion ? ` · ${CONTROL_COPY.reduced}` : ''}</span>
         <span>{media.durationInFrames / media.fps}s · {media.width}×{media.height} · {media.compilationId}</span>
       </div>
+
+      {program === 'echo-a4c-normal' ? <EchoA4cLesson reducedMotion={reducedMotion} /> : null}
     </section>
   )
 }

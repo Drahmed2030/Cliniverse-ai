@@ -1,6 +1,6 @@
 # Cardiac Imaging Engine Recovery v1
 
-Status: synthetic ECHO cine retained as an internal engine prototype and removed from the learner surface; real-media rights and clinical review remain required; no Apple, Production, database, paid-service, upload, or patient-data change
+Status: synthetic ECHO cine retained as an internal engine prototype; licensed A4C Normal added as a local Preview-only real-media lesson; clinical copy review remains required; no Apple, Production, database, paid-service, upload, or patient-data change
 
 ## Executive decision
 
@@ -11,7 +11,7 @@ Cliniverse will use one governed learning and media contract with three modality
 | Modality | Scientific object | Engine decision | Current state |
 |---|---|---|---|
 | ECG | time-series electrical signal | deterministic parametric waveform renderer | strategy prototype |
-| ECHO | ordered cine frames | dedicated deterministic cine-frame engine | internal engine prototype; learner access blocked |
+| ECHO | ordered cine frames | dedicated cine-frame engine with licensed-file adapter | synthetic engine internal; real A4C Preview candidate implemented |
 | CT | calibrated voxel volume and DICOM metadata | dedicated DICOM volume/MPR engine | contract only |
 
 The three engines may share identity, source, rights, localization, review, accessibility, lesson and receipt infrastructure. They do not share a scientific renderer.
@@ -44,7 +44,11 @@ Clinical Studio now compiles an 18-second ECHO timeline in English and Arabic fo
 
 This implementation is now classified `internal-engine-only`. The learner compiler fails closed if asked to compile the synthetic ECHO program, and the learner-facing Clinical Studio no longer imports or offers its Canvas lesson or Remotion composition. The prototype remains useful for deterministic frame, localization, accessibility and receipt tests, but is not learner content. It does not calculate or manufacture EF, chamber dimensions, Doppler values, pathology or diagnostic findings.
 
-The real-media candidate and acceptance policy is recorded in `ECHO_REAL_MEDIA_RIGHTS_GATE_V1.md`. No external video has been downloaded, copied into the repository or approved for learner use.
+The real-media candidate and acceptance policy is recorded in `ECHO_REAL_MEDIA_RIGHTS_GATE_V1.md`. The exact A4C Normal source is now represented by a privacy-hardened local H.264 derivative with frozen original and derivative checksums, file-level CC BY-SA 3.0 attribution, VRT permission identity and disclosed transformations. It drives a 20-second English-only Remotion composition, three-part lesson, deterministic assessment and session-only receipt in Clinical Studio Preview. The source selection is approved; the learning copy and answer key remain human-review gated and the media has not been pushed or deployed.
+
+Core ECG and ECHO clinical media are now English-only by product decision. Existing Arabic synthetic contracts may remain as internal regression fixtures, but the learner Clinical Studio no longer offers a language switch. Localization elsewhere in Cliniverse is unchanged.
+
+The real-ECG sourcing path is recorded in `ECG_REAL_SIGNAL_SOURCE_GATE_V1.md` and encoded in `realEcgSourceRegistry.ts`. PTB-XL, MIT-BIH Arrhythmia and LUDB provide the approved curation sources. No ECG signal file is ingested in this A4C change; the next slice will import five calibrated WFDB records and render original samples rather than screenshots or generated waveforms.
 
 CT remains contract-only. No CT learning asset is accepted until its source, license, de-identification status, teaching objective and reviewer are recorded. A production-quality CT renderer would later use a DICOM/DICOMweb viewer and a volume/MPR engine; dependency selection remains a separate architecture and security decision.
 
@@ -53,8 +57,8 @@ CT remains contract-only. No CT learning asset is accepted until its source, lic
 1. Synthetic ECHO learning objective and deterministic answer key: retained for internal engineering tests only.
 2. Deterministic synthetic cine phantom, bilingual frame descriptions and reduced-motion behavior: implemented; learner access blocked.
 3. Clinical Studio, Remotion, bilingual lesson and structural completion receipt: retained internally; no longer imported by the learner surface.
-4. Learner-surface fail-closed access contract: implemented; Preview and TestFlight unchanged.
-5. Real ECHO media: permissive-license candidates identified; file-by-file rights, privacy and clinical review required before any download or ingestion.
+4. Learner-surface fail-closed access contract: synthetic ECHO remains blocked; real A4C is explicitly `preview-only`; TestFlight and Production unchanged.
+5. Real ECHO media: A4C rights, checksums, all-frame technical privacy review, attribution and local derivative passed; clinical learning-copy review and device verification remain open.
 6. CT implementation: not started; remains blocked on dataset approval and a DICOM security threat model.
 
 Real-patient upload, automated interpretation, measurements, diagnostic claims, PACS connectivity and clinical action remain a separate regulated-risk program.

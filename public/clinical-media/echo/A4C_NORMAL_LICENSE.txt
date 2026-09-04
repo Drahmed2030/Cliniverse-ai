@@ -1,0 +1,32 @@
+A4C normal (CardioNetworks ECHOpedia)
+
+Source page:
+https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm
+
+Original creator and source attribution:
+CardioNetworks / Vdbilt. The source file displays courtesy credit to the
+Department of Echocardiography AMC and I.A.C. van der Bilt, MD.
+
+License:
+Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+https://creativecommons.org/licenses/by-sa/3.0/deed.en
+
+Wikimedia permission record:
+VRT ticket 2011102310008874
+
+Changes made by Cliniverse AI for this derivative:
+- Masked the burned-in acquisition date and time in the top-left corner for
+  privacy hardening.
+- Re-encoded the VP8 WebM source as H.264 MP4 for browser and iOS compatibility.
+- Removed container metadata and omitted audio tracks. The source has no audio
+  stream.
+- Added no diagnostic annotation and made no other pixel-level clinical edit.
+
+This media derivative is distributed under CC BY-SA 3.0. This notice applies to
+the derivative media file, not to unrelated application code or content.
+
+Integrity:
+Original SHA-1: 1ae4551bf89fc5f41d4f2632584999230c2dcbab
+Original size: 288005 bytes
+Derivative SHA-256: 89e311b8a841a2a6813d4c5ba470aede46ba85780d42b2124330fc01846c783c
+Derivative size: 168220 bytes
