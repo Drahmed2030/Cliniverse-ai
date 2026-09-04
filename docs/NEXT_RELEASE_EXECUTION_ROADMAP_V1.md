@@ -124,6 +124,20 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 
 **State:** pending.
 
+## Imaging expansion gate — after the ECG learning loop
+
+**Objective:** recover ECHO and CT teaching value without presenting legacy illustrations or generated text as medical imaging evidence.
+
+**Exit evidence:**
+
+- ECG, ECHO and CT remain separate scientific engines under one governance contract;
+- the first ECHO asset is synthetic, bilingual, sourced, rights-labelled and human-review gated;
+- no EF, chamber measurement, Doppler value, pathology or diagnosis is generated from text;
+- CT stays disabled until a licensed de-identified dataset and DICOM security threat model are approved; and
+- real-patient upload, PACS integration and automated interpretation remain outside the learning program.
+
+**State:** engine boundary implemented. ECHO synthetic cine rendering and clinical answer-key review are next; CT is contract-only.
+
 ## Stage 9 — TestFlight candidate
 
 **Objective:** generate a signed candidate only after the product and governance gates pass.

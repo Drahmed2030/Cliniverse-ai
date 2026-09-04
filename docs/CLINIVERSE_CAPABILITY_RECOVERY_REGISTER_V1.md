@@ -15,7 +15,8 @@ Code presence is not a release decision. A preserved component is adopted only w
 | `CodeLabHub`, `TrainingLessonPlayer`, BLS and ACLS lesson sets | Code Lab / Learning Journey | Adopt through Care and Atlas | Lesson-level sources, clinical review, versioned completion receipt |
 | `CodeBlue`, `MegacodeRunner` | Resuscitation Simulation Pack | Preserve; do not expose as authoritative guidance | Scenario audit, source versions, deterministic scoring, debrief review |
 | `EcgChallenge`, deterministic SVG waveform engine, Clinical Media compiler | ECG Learning Track | Reuse the deterministic engine; quarantine unsupported diagnostic claims | Reviewed synthetic cases, answer-key versions, accessibility and receipt contract |
-| Echo fragments in `LiveCaseViewer`, Grand Rounds and snapshots | Future Echo Learning Track | Preserve concepts, not the current fragmented UI | New deterministic media contract, licensed assets, cardiology review |
+| Echo fragments in `LiveCaseViewer`, Grand Rounds and snapshots | Future Echo Learning Track | Preserve concepts, not the current fragmented UI; modality-specific engine contract added | Narrow learning objective, synthetic cine phantom, licensed assets, cardiology review |
+| CT summaries and radiology quiz fragments | Future CT Learning Track | Preserve sourced teaching patterns only; CT engine remains contract-only | DICOM threat model, licensed de-identified dataset, radiology review |
 | Case Huddle, Nursing Lens, Medication Safety, Safety Review | Nexus Learning | Already consolidated | Scenario-by-scenario content approval and signed-device evidence |
 | Legacy Nursing, Pharmacy and Error Autopsy screens | Nexus source inventory | Do not restore as standalone clinical tools | Extract only reviewed learning patterns |
 | Clinical Library, Global Standards and calculators | Atlas | Preserve by capability | Canonical source ID, effective date, jurisdiction, formula tests |
