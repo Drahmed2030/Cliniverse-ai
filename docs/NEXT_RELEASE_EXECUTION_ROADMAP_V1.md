@@ -136,7 +136,7 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 - CT stays disabled until a licensed de-identified dataset and DICOM security threat model are approved; and
 - real-patient upload, PACS integration and automated interpretation remain outside the learning program.
 
-**State:** engine boundary implemented. ECHO synthetic cine rendering and clinical answer-key review are next; CT is contract-only.
+**State:** first ECHO strategy prototype implemented. A deterministic 90-frame synthetic cine core now drives both an accessible Canvas lesson and an 18-second Remotion composition in English and Arabic. The two-question boundary assessment produces a deterministic session-only receipt, and automated contracts cover engine separation, identity, frame determinism, localization and reduced motion. The learning labels and answer key remain `draft-human-review-required`; Preview phone/tablet evidence is pending. CT remains contract-only and unchanged.
 
 ## Stage 9 — TestFlight candidate
 

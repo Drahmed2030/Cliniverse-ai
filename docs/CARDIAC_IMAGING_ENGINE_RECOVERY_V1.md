@@ -1,6 +1,6 @@
 # Cardiac Imaging Engine Recovery v1
 
-Status: implemented architecture boundary on the isolated strategy branch; no Apple, Production, database, paid-service, upload, or patient-data change
+Status: first synthetic ECHO cine strategy prototype implemented on the isolated branch; human clinical review remains required; no Apple, Production, database, paid-service, upload, or patient-data change
 
 ## Executive decision
 
@@ -11,7 +11,7 @@ Cliniverse will use one governed learning and media contract with three modality
 | Modality | Scientific object | Engine decision | Current state |
 |---|---|---|---|
 | ECG | time-series electrical signal | deterministic parametric waveform renderer | strategy prototype |
-| ECHO | ordered ultrasound cine frames | dedicated cine-frame engine | contract only |
+| ECHO | ordered cine frames | dedicated deterministic cine-frame engine | strategy prototype; draft human review required |
 | CT | calibrated voxel volume and DICOM metadata | dedicated DICOM volume/MPR engine | contract only |
 
 The three engines may share identity, source, rights, localization, review, accessibility, lesson and receipt infrastructure. They do not share a scientific renderer.
@@ -38,17 +38,21 @@ The current Apple entry is `ReleaseApp`; it does not import these legacy imaging
 - stable provenance, rights, review and disclaimer fields; and
 - validation that rejects routing an ECHO asset through the ECG engine.
 
-This is deliberately a contract, not a simulated echocardiogram. The first visual ECHO implementation may show cardiac-motion orientation only after a cardiology reviewer approves its learning objective and labels. It must never manufacture EF, chamber dimensions, Doppler values, pathology or diagnostic findings from text.
+The first visual implementation is deliberately an abstract synthetic motion phantom, not a simulated echocardiogram. `echoCinePhantom.ts` emits one deterministic 90-frame cycle and bilingual frame descriptions. The web adapter renders it to Canvas; the Remotion adapter consumes the same frame model. Reduced-motion mode disables automatic Canvas playback and freezes the Remotion visual at one representative frame while preserving manual frame stepping.
+
+Clinical Studio now compiles an 18-second ECHO timeline in English and Arabic for 16:9, 9:16 and 1:1. The linked two-question lesson checks only the scientific object and the permitted non-diagnostic observation. A passing answer creates a deterministic, session-only structural receipt bound to the localized asset, engine, source and answer-key versions.
+
+The implemented learning objective is narrow: understand that ECHO uses ordered cine frames and observe cyclical motion in a synthetic phantom. Its labels and answer key remain `draft-human-review-required` until a cardiology reviewer approves them. The prototype does not calculate or manufacture EF, chamber dimensions, Doppler values, pathology or diagnostic findings.
 
 CT remains contract-only. No CT learning asset is accepted until its source, license, de-identification status, teaching objective and reviewer are recorded. A production-quality CT renderer would later use a DICOM/DICOMweb viewer and a volume/MPR engine; dependency selection remains a separate architecture and security decision.
 
-## Next gates
+## Gate state
 
-1. Define one narrow ECHO learning objective and a cardiology-reviewed answer key.
-2. Build a deterministic synthetic cine phantom with accessible frame descriptions and reduced-motion behavior.
-3. Bind it to the Clinical Studio bilingual lesson/media compiler and a structural completion receipt.
-4. Verify phone and tablet behavior in the future TestFlight candidate.
-5. Select a licensed, de-identified ECHO teaching dataset only after rights and privacy review.
-6. Start CT only after ECHO proves the shared governance contract and a DICOM security threat model is approved.
+1. Narrow ECHO learning objective and deterministic answer key: technically defined; cardiology review pending.
+2. Deterministic synthetic cine phantom, bilingual frame descriptions and reduced-motion behavior: implemented.
+3. Clinical Studio, Remotion, bilingual lesson and structural completion receipt: implemented.
+4. Automated phone/tablet accessibility and visual contract: added; Preview evidence and future TestFlight verification pending.
+5. Licensed, de-identified ECHO teaching dataset: not selected; rights and privacy review required first.
+6. CT implementation: not started; remains blocked on dataset approval and a DICOM security threat model.
 
 Real-patient upload, automated interpretation, measurements, diagnostic claims, PACS connectivity and clinical action remain a separate regulated-risk program.

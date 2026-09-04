@@ -41,3 +41,37 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
     animations: 'disabled',
   })
 })
+
+test('Clinical Studio completes the bilingual Echo cine lesson with reduced motion', async ({ page }, testInfo) => {
+  await page.goto('/labs/pathway-replay', { waitUntil: 'networkidle' })
+  await page.getByRole('button', { name: 'Open Code Lab ECG drill' }).click()
+  await page.getByRole('button', { name: 'Open Clinical Studio' }).click()
+  await page.getByRole('button', { name: 'ECHO' }).click()
+
+  await expect(page.getByRole('heading', { level: 2, name: 'Recognize the scientific object and its safe boundary' })).toBeVisible()
+  await expect(page.locator('canvas[role="img"]')).toHaveAttribute('aria-label', /Synthetic frame 23 of 90/)
+  await expect(page.getByRole('button', { name: 'Play synthetic cine loop' })).toBeDisabled()
+  await expect(page.getByText('Reduced motion is on.', { exact: false })).toBeVisible()
+
+  await page.getByRole('button', { name: 'An ordered sequence of cine frames' }).click()
+  await page.getByRole('button', { name: 'Describe the visible cyclical motion only' }).click()
+  await page.getByRole('button', { name: 'Check both answers' }).click()
+  await expect(page.getByText('Boundary check passed')).toBeVisible()
+  await expect(page.getByLabel('Unified completion receipt')).toBeVisible()
+
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze()
+
+  expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([])
+
+  await page.getByRole('button', { name: 'عربي' }).click()
+  await expect(page.getByRole('heading', { level: 2, name: 'تعرّف إلى الكائن العلمي وحدوده الآمنة' })).toBeVisible()
+  await expect(page.locator('canvas[role="img"]')).toHaveAttribute('aria-label', /الإطار الاصطناعي 23 من 90/)
+
+  await page.screenshot({
+    path: testInfo.outputPath(`echo-cine-lesson-${testInfo.project.name}.png`),
+    fullPage: true,
+    animations: 'disabled',
+  })
+})

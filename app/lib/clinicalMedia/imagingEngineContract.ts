@@ -56,7 +56,7 @@ export const IMAGING_ENGINE_BOUNDARIES: Readonly<Record<ImagingModality, Imaging
     scientificModel: 'cine-frame-sequence',
     approvedInputs: ['synthetic-cardiac-motion-phantom'],
     renderTargets: ['web-canvas', 'remotion-video'],
-    implementationState: 'contract-only',
+    implementationState: 'strategy-prototype',
     diagnosticUse: 'prohibited',
     patientDataUse: 'prohibited',
   },

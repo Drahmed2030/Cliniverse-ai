@@ -140,9 +140,9 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
 
         <section className={styles.mediaLauncher} aria-labelledby="media-launcher-title">
           <div>
-            <p className={styles.eyebrow}>CLINICAL MEDIA COMPILER · V0</p>
-            <h2 id="media-launcher-title">Preview the same lesson as governed motion</h2>
-            <p>One deterministic source produces the in-app lesson, bilingual captions and three export ratios.</p>
+            <p className={styles.eyebrow}>CLINICAL STUDIO · MODALITY ENGINES</p>
+            <h2 id="media-launcher-title">Explore ECG and ECHO through separate scientific renderers</h2>
+            <p>Governed sources compile into bilingual lessons, accessible motion and three Remotion export ratios.</p>
           </div>
           <button
             aria-expanded={showMediaPreview}
@@ -150,7 +150,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
             onClick={() => setShowMediaPreview(current => !current)}
             type="button"
           >
-            <Film aria-hidden="true" size={18} /> {showMediaPreview ? 'Close preview' : 'Open 24-second preview'}
+            <Film aria-hidden="true" size={18} /> {showMediaPreview ? 'Close Clinical Studio' : 'Open Clinical Studio'}
           </button>
         </section>
         {showMediaPreview ? <ClinicalMediaPreview /> : null}
