@@ -131,12 +131,13 @@ No step in this roadmap authorizes a merge, Production promotion, database chang
 **Exit evidence:**
 
 - ECG, ECHO and CT remain separate scientific engines under one governance contract;
-- the first ECHO asset is synthetic, bilingual, sourced, rights-labelled and human-review gated;
+- the synthetic ECHO phantom remains internal-only and cannot compile onto the learner surface;
+- the first learner ECHO asset uses real, de-identified media with file-level commercial reuse rights, attribution and clinical review;
 - no EF, chamber measurement, Doppler value, pathology or diagnosis is generated from text;
 - CT stays disabled until a licensed de-identified dataset and DICOM security threat model are approved; and
 - real-patient upload, PACS integration and automated interpretation remain outside the learning program.
 
-**State:** first ECHO strategy prototype implemented. A deterministic 90-frame synthetic cine core now drives both an accessible Canvas lesson and an 18-second Remotion composition in English and Arabic. The two-question boundary assessment produces a deterministic session-only receipt, and automated contracts cover engine separation, identity, frame determinism, localization and reduced motion. The learning labels and answer key remain `draft-human-review-required`; Preview phone/tablet evidence is pending. CT remains contract-only and unchanged.
+**State:** the deterministic 90-frame synthetic cine core, bilingual Canvas/Remotion adapters and receipt remain available for internal engineering tests. The learner compiler now rejects the ECHO program and the learner-facing Clinical Studio no longer imports or offers it. Permissive-license real-media candidates are documented, but no external media is downloaded or approved. CT remains contract-only and unchanged.
 
 ## Stage 9 — TestFlight candidate
 

@@ -8,6 +8,14 @@ export type ClinicalMediaLocale = ClinicalStudioAsset['locale']
 export type ClinicalMediaFormat = 'landscape' | 'portrait' | 'square'
 export type ClinicalMediaProgram = 'door-to-ecg' | 'echo-motion-orientation'
 
+export const CLINICAL_MEDIA_PROGRAM_ACCESS = {
+  'door-to-ecg': 'learner',
+  'echo-motion-orientation': 'internal-engine-only',
+} as const satisfies Record<ClinicalMediaProgram, ClinicalStudioAsset['surfaceAccess']>
+
+export const LEARNER_CLINICAL_MEDIA_PROGRAMS = ['door-to-ecg'] as const satisfies readonly ClinicalMediaProgram[]
+export const INTERNAL_ONLY_CLINICAL_MEDIA_PROGRAMS = ['echo-motion-orientation'] as const satisfies readonly ClinicalMediaProgram[]
+
 export interface ClinicalMediaSceneCopy {
   kicker: string
   title: string
@@ -37,7 +45,7 @@ export interface CompiledClinicalMedia {
   fps: 30
   durationInFrames: number
   scenes: CompiledClinicalMediaScene[]
-  governance: Pick<ClinicalStudioAsset, 'intendedUse' | 'dataMode' | 'reviewStatus' | 'disclaimer' | 'evidence' | 'renderTargets'>
+  governance: Pick<ClinicalStudioAsset, 'intendedUse' | 'dataMode' | 'reviewStatus' | 'surfaceAccess' | 'disclaimer' | 'evidence' | 'renderTargets'>
 }
 
 export const CLINICAL_MEDIA_FORMATS: Record<ClinicalMediaFormat, { label: string; width: number; height: number }> = {
@@ -193,9 +201,26 @@ export function compileClinicalMedia(
       intendedUse: asset.intendedUse,
       dataMode: asset.dataMode,
       reviewStatus: asset.reviewStatus,
+      surfaceAccess: asset.surfaceAccess,
       disclaimer: asset.disclaimer,
       evidence: asset.evidence,
       renderTargets: asset.renderTargets,
     },
   }
+}
+
+export function compileLearnerClinicalMedia(
+  locale: ClinicalMediaLocale = 'en',
+  format: ClinicalMediaFormat = 'landscape',
+  program: ClinicalMediaProgram = 'door-to-ecg',
+): CompiledClinicalMedia {
+  if (CLINICAL_MEDIA_PROGRAM_ACCESS[program] !== 'learner') {
+    throw new Error(`The ${program} Clinical Studio program is not available on the learner surface.`)
+  }
+
+  const media = compileClinicalMedia(locale, format, program)
+  if (media.governance.surfaceAccess !== 'learner') {
+    throw new Error(`The ${media.assetId} asset is not approved for the learner surface.`)
+  }
+  return media
 }

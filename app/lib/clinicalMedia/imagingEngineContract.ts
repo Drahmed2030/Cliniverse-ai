@@ -14,6 +14,7 @@ export interface ImagingEngineBoundary {
   approvedInputs: readonly string[]
   renderTargets: readonly string[]
   implementationState: 'strategy-prototype' | 'contract-only'
+  surfaceAccess: 'learner' | 'internal-engine-only' | 'not-implemented'
   diagnosticUse: 'prohibited'
   patientDataUse: 'prohibited'
 }
@@ -29,6 +30,7 @@ export interface ImagingLearningAsset {
   intendedUse: 'education-only'
   dataMode: 'synthetic-non-clinical'
   reviewStatus: 'draft-human-review-required'
+  surfaceAccess: 'internal-engine-only'
   provenance: {
     sourceKind: 'internally-authored-synthetic-phantom'
     sourceId: string
@@ -47,6 +49,7 @@ export const IMAGING_ENGINE_BOUNDARIES: Readonly<Record<ImagingModality, Imaging
     approvedInputs: ['synthetic-waveform-parameters'],
     renderTargets: ['web-svg', 'remotion-video'],
     implementationState: 'strategy-prototype',
+    surfaceAccess: 'learner',
     diagnosticUse: 'prohibited',
     patientDataUse: 'prohibited',
   },
@@ -57,6 +60,7 @@ export const IMAGING_ENGINE_BOUNDARIES: Readonly<Record<ImagingModality, Imaging
     approvedInputs: ['synthetic-cardiac-motion-phantom'],
     renderTargets: ['web-canvas', 'remotion-video'],
     implementationState: 'strategy-prototype',
+    surfaceAccess: 'internal-engine-only',
     diagnosticUse: 'prohibited',
     patientDataUse: 'prohibited',
   },
@@ -67,6 +71,7 @@ export const IMAGING_ENGINE_BOUNDARIES: Readonly<Record<ImagingModality, Imaging
     approvedInputs: [],
     renderTargets: ['future-dicom-viewer'],
     implementationState: 'contract-only',
+    surfaceAccess: 'not-implemented',
     diagnosticUse: 'prohibited',
     patientDataUse: 'prohibited',
   },
@@ -80,6 +85,7 @@ const sharedEchoAsset = {
   intendedUse: 'education-only' as const,
   dataMode: 'synthetic-non-clinical' as const,
   reviewStatus: 'draft-human-review-required' as const,
+  surfaceAccess: 'internal-engine-only' as const,
   provenance: {
     sourceKind: 'internally-authored-synthetic-phantom' as const,
     sourceId: 'SYNTHETIC-ECHO-MOTION-PHANTOM-V0',

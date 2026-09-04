@@ -141,8 +141,8 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
         <section className={styles.mediaLauncher} aria-labelledby="media-launcher-title">
           <div>
             <p className={styles.eyebrow}>CLINICAL STUDIO · MODALITY ENGINES</p>
-            <h2 id="media-launcher-title">Explore ECG and ECHO through separate scientific renderers</h2>
-            <p>Governed sources compile into bilingual lessons, accessible motion and three Remotion export ratios.</p>
+            <h2 id="media-launcher-title">Explore ECG through its governed scientific renderer</h2>
+            <p>The learner surface exposes only the approved ECG program. ECHO remains an internal engine prototype pending licensed real media and clinical review.</p>
           </div>
           <button
             aria-expanded={showMediaPreview}

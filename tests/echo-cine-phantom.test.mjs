@@ -10,7 +10,11 @@ import {
   ECHO_CLINICAL_STUDIO_ASSETS,
 } from '../app/lib/clinicalMedia/clinicalStudioManifest.ts'
 import {
+  CLINICAL_MEDIA_PROGRAM_ACCESS,
   compileClinicalMedia,
+  compileLearnerClinicalMedia,
+  INTERNAL_ONLY_CLINICAL_MEDIA_PROGRAMS,
+  LEARNER_CLINICAL_MEDIA_PROGRAMS,
 } from '../app/lib/clinicalMedia/clinicalMediaCompiler.ts'
 import {
   createEchoCineFrame,
@@ -60,6 +64,7 @@ test('every synthetic frame stays finite and carries bilingual accessible descri
 
 test('the imaging, Clinical Studio and activity contracts share one Echo identity', () => {
   assert.equal(IMAGING_ENGINE_BOUNDARIES.echo.implementationState, 'strategy-prototype')
+  assert.equal(IMAGING_ENGINE_BOUNDARIES.echo.surfaceAccess, 'internal-engine-only')
   assert.equal(IMAGING_ENGINE_BOUNDARIES.ct.implementationState, 'contract-only')
   assert.equal(ECHO_CINE_PHANTOM_SPEC.engineId, IMAGING_ENGINE_BOUNDARIES.echo.engineId)
   assert.equal(ECHO_CINE_PHANTOM_SPEC.sourceId, ECHO_CINE_SOURCE_ID)
@@ -71,11 +76,35 @@ test('the imaging, Clinical Studio and activity contracts share one Echo identit
 
   for (const asset of ECHO_CLINICAL_STUDIO_ASSETS) {
     assert.equal(asset.linkedActivityId, ECHO_MOTION_TRAINING_ACTIVITY.activityId)
+    assert.equal(asset.surfaceAccess, 'internal-engine-only')
     assert.equal(asset.version, ECHO_MOTION_TRAINING_ACTIVITY.contentVersion)
     assert.equal(asset.cine.engine, ECHO_MOTION_TRAINING_ACTIVITY.engineId)
     assert.equal(asset.cine.sourceId, ECHO_CINE_SOURCE_ID)
     assert.deepEqual(asset.renderTargets, ['web-canvas', 'remotion-video'])
   }
+})
+
+test('the synthetic Echo phantom is internal-only and fails closed on learner surfaces', () => {
+  assert.equal(CLINICAL_MEDIA_PROGRAM_ACCESS['echo-motion-orientation'], 'internal-engine-only')
+  assert.deepEqual(LEARNER_CLINICAL_MEDIA_PROGRAMS, ['door-to-ecg'])
+  assert.deepEqual(INTERNAL_ONLY_CLINICAL_MEDIA_PROGRAMS, ['echo-motion-orientation'])
+  assert.throws(
+    () => compileLearnerClinicalMedia('en', 'landscape', 'echo-motion-orientation'),
+    /not available on the learner surface/i,
+  )
+
+  const previewSource = readFileSync(
+    new URL('../app/components/clinical-media/ClinicalMediaPreview.tsx', import.meta.url),
+    'utf8',
+  )
+  const pathwaySource = readFileSync(
+    new URL('../app/labs/pathway-replay/PathwayReplayExperience.tsx', import.meta.url),
+    'utf8',
+  )
+
+  assert.doesNotMatch(previewSource, /EchoMotionLesson|EchoMotionMediaComposition|echo-motion-orientation/)
+  assert.doesNotMatch(pathwaySource, /Explore ECG and ECHO/)
+  assert.match(pathwaySource, /ECHO remains an internal engine prototype/)
 })
 
 test('the compiler produces bilingual contiguous Echo timelines for Remotion', () => {

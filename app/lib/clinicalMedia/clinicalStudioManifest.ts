@@ -14,6 +14,7 @@ interface ClinicalStudioAssetBase {
   intendedUse: 'education-only'
   dataMode: 'synthetic-non-clinical'
   reviewStatus: 'draft-human-review-required'
+  surfaceAccess: 'learner' | 'internal-engine-only'
   linkedActivityId: string
   scenes: { id: string; durationFrames: number; narrationKey: string }[]
   evidence: {
@@ -49,6 +50,7 @@ const sharedEcg = {
   intendedUse: 'education-only' as const,
   dataMode: 'synthetic-non-clinical' as const,
   reviewStatus: 'draft-human-review-required' as const,
+  surfaceAccess: 'learner' as const,
   linkedActivityId: 'door-to-ecg-drill-v1',
   scenes: [
     { id: 'gap-context', durationFrames: 150, narrationKey: 'doorToEcg.context' },
@@ -68,6 +70,7 @@ const sharedEcho = {
   intendedUse: 'education-only' as const,
   dataMode: 'synthetic-non-clinical' as const,
   reviewStatus: 'draft-human-review-required' as const,
+  surfaceAccess: 'internal-engine-only' as const,
   linkedActivityId: 'echo-motion-orientation-v0',
   renderTargets: ['web-canvas', 'remotion-video'] as ('web-canvas' | 'remotion-video')[],
   scenes: [

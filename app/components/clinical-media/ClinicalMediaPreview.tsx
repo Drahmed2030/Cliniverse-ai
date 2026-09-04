@@ -4,35 +4,29 @@ import { Player } from '@remotion/player'
 import { useMemo, useState, useSyncExternalStore } from 'react'
 import {
   CLINICAL_MEDIA_FORMATS,
-  compileClinicalMedia,
+  compileLearnerClinicalMedia,
   type ClinicalMediaFormat,
   type ClinicalMediaLocale,
-  type ClinicalMediaProgram,
 } from '../../lib/clinicalMedia/clinicalMediaCompiler'
 import DoorToEcgMediaComposition from './DoorToEcgMediaComposition'
-import EchoMotionLesson from './EchoMotionLesson'
-import EchoMotionMediaComposition from './EchoMotionMediaComposition'
 import styles from './clinical-media.module.css'
 
 const FORMAT_ORDER: ClinicalMediaFormat[] = ['landscape', 'portrait', 'square']
-const PROGRAM_ORDER: ClinicalMediaProgram[] = ['door-to-ecg', 'echo-motion-orientation']
 
 const HEADER_COPY = {
   en: {
-    title: 'Clinical Studio · modality-specific engines',
-    body: 'Each program compiles one governed source into an interactive lesson and an export-ready composition.',
+    title: 'Clinical Studio · ECG learning engine',
+    body: 'The learner surface compiles one governed synthetic ECG source into an export-ready composition. ECHO remains internal until real media clears rights and clinical review.',
     language: 'Preview language',
     ratio: 'Preview aspect ratio',
-    program: 'Clinical Studio program',
     draft: 'Draft: synthetic, non-clinical and human-review gated.',
     reduced: 'Reduced motion active',
   },
   ar: {
-    title: 'الاستوديو السريري · محركات مستقلة لكل وسيلة',
-    body: 'يحوّل كل برنامج مصدرًا محكومًا واحدًا إلى درس تفاعلي وتركيب جاهز للتصدير.',
+    title: 'الاستوديو السريري · محرك تعلّم تخطيط القلب',
+    body: 'تعرض واجهة المتعلّم حاليًا مصدر تخطيط قلب اصطناعيًا محكومًا واحدًا. يبقى ECHO داخليًا حتى تجتاز الوسائط الحقيقية مراجعة الحقوق والمراجعة السريرية.',
     language: 'لغة المعاينة',
     ratio: 'نسبة أبعاد المعاينة',
-    program: 'برنامج الاستوديو السريري',
     draft: 'مسودة: بيانات اصطناعية غير سريرية وتتطلب مراجعة بشرية.',
     reduced: 'وضع تقليل الحركة مفعّل',
   },
@@ -55,13 +49,12 @@ function readServerReducedMotionPreference() {
 export default function ClinicalMediaPreview() {
   const [locale, setLocale] = useState<ClinicalMediaLocale>('en')
   const [format, setFormat] = useState<ClinicalMediaFormat>('landscape')
-  const [program, setProgram] = useState<ClinicalMediaProgram>('door-to-ecg')
   const reducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     readReducedMotionPreference,
     readServerReducedMotionPreference,
   )
-  const media = useMemo(() => compileClinicalMedia(locale, format, program), [format, locale, program])
+  const media = useMemo(() => compileLearnerClinicalMedia(locale, format), [format, locale])
   const copy = HEADER_COPY[locale]
 
   const playerClass = [
@@ -78,19 +71,6 @@ export default function ClinicalMediaPreview() {
           <p>{copy.body}</p>
         </div>
         <div className={styles.previewControls}>
-          <div aria-label={copy.program} className={`${styles.controlGroup} ${styles.programControl}`} role="group">
-            {PROGRAM_ORDER.map(option => (
-              <button
-                aria-pressed={program === option}
-                className={`${styles.controlButton} ${program === option ? styles.activeControl : ''}`}
-                key={option}
-                onClick={() => setProgram(option)}
-                type="button"
-              >
-                {option === 'door-to-ecg' ? 'ECG' : 'ECHO'}
-              </button>
-            ))}
-          </div>
           <div aria-label={copy.language} className={styles.controlGroup} role="group">
             {(['en', 'ar'] as const).map(option => (
               <button
@@ -121,51 +101,28 @@ export default function ClinicalMediaPreview() {
       </div>
 
       <div className={styles.playerStage}>
-        {program === 'echo-motion-orientation' ? (
-          <Player
-            autoPlay={false}
-            className={playerClass}
-            clickToPlay
-            component={EchoMotionMediaComposition}
-            compositionHeight={media.height}
-            compositionWidth={media.width}
-            controls
-            durationInFrames={media.durationInFrames}
-            fps={media.fps}
-            inputProps={{ locale, format, reducedMotion }}
-            key={program}
-            loop={false}
-            showVolumeControls={false}
-            spaceKeyToPlayOrPause
-          />
-        ) : (
-          <Player
-            autoPlay={false}
-            className={playerClass}
-            clickToPlay
-            component={DoorToEcgMediaComposition}
-            compositionHeight={media.height}
-            compositionWidth={media.width}
-            controls
-            durationInFrames={media.durationInFrames}
-            fps={media.fps}
-            inputProps={{ locale, format, reducedMotion }}
-            key={program}
-            loop={false}
-            showVolumeControls={false}
-            spaceKeyToPlayOrPause
-          />
-        )}
+        <Player
+          autoPlay={false}
+          className={playerClass}
+          clickToPlay
+          component={DoorToEcgMediaComposition}
+          compositionHeight={media.height}
+          compositionWidth={media.width}
+          controls
+          durationInFrames={media.durationInFrames}
+          fps={media.fps}
+          inputProps={{ locale, format, reducedMotion }}
+          key={media.compilationId}
+          loop={false}
+          showVolumeControls={false}
+          spaceKeyToPlayOrPause
+        />
       </div>
 
       <div className={styles.previewFooter}>
         <span><strong>{copy.draft}</strong>{reducedMotion ? ` · ${copy.reduced}` : ''}</span>
         <span>{media.durationInFrames / media.fps}s · {media.width}×{media.height} · {media.compilationId}</span>
       </div>
-
-      {program === 'echo-motion-orientation' ? (
-        <EchoMotionLesson key={locale} locale={locale} reducedMotion={reducedMotion} />
-      ) : null}
     </section>
   )
 }
