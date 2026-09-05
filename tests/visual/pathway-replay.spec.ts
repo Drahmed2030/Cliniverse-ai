@@ -43,6 +43,7 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
 })
 
 test('Clinical Studio completes the licensed real A4C lesson with reduced motion', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/labs/pathway-replay', { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'Open Code Lab ECG drill' }).click()
   await page.getByRole('button', { name: 'Open Clinical Studio' }).click()

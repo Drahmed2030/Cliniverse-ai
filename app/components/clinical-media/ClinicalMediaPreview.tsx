@@ -132,6 +132,7 @@ export default function ClinicalMediaPreview() {
       <div className={styles.playerStage} data-testid="clinical-media-stage">
         <div className={playerViewportClass} data-export-format={format} data-testid="clinical-media-player-viewport">
           <Player
+            acknowledgeRemotionLicense
             autoPlay={false}
             className={styles.player}
             clickToPlay
