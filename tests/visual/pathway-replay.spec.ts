@@ -57,7 +57,7 @@ test('Clinical Studio completes the licensed real A4C lesson with reduced motion
   await page.getByRole('button', { name: 'Four chambers, AV valve planes and septa' }).click()
   await page.getByRole('button', { name: 'Exclude all structural pathology', exact: true }).click()
   await page.getByRole('button', { name: 'Check all three answers' }).click()
-  await expect(page.getByRole('alert')).toContainText('Review Note 03')
+  await expect(page.getByTestId('clinical-media-preview').getByRole('alert')).toContainText('Review Note 03')
   await expect(page.getByRole('region', { name: 'Learning attempt history' })).toContainText('Attempt 1: 2/3')
   await page.getByRole('button', { name: 'Use the source-labelled normal cine for view recognition only' }).click()
   await page.getByRole('button', { name: 'Check all three answers' }).click()
