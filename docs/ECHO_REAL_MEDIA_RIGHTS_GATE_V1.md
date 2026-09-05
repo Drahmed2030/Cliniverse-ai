@@ -1,6 +1,6 @@
 # ECHO Real Media Rights Gate v1
 
-Status: A4C Normal source and local privacy-hardened derivative verified; Preview implementation only; clinical lesson-copy review, Push, Preview deployment and Production approval remain pending
+Status: A4C Normal source and local privacy-hardened derivative verified; Preview deployment passed; clinical lesson-copy review, device-matrix completion, TestFlight and Production approval remain pending
 
 Date reviewed: 2026-09-04
 
@@ -65,7 +65,7 @@ This is the strongest low-complexity single-file rights candidate found in the f
 5. Record consent or publication provenance where available; unresolved privacy provenance remains a stop condition even when copyright is permissive. **A4C: Wikimedia VRT permission provenance recorded; no direct patient identifier visible after masking.**
 6. Obtain cardiology review of the view label, normal/pathology claim, privacy mask and English teaching copy. **A4C: source selection approved; copy and answer-key review remain open.**
 7. Define an in-product attribution surface and, for BY-SA material, a compliant derivative-media distribution policy. **A4C: implemented locally.**
-8. Compute checksums, transcode reproducibly if needed and test browser, Remotion, iPhone/iPad and reduced-motion behavior. **A4C: checksum/transcode implemented; automated browser and device review remain open.**
+8. Compute checksums, transcode reproducibly if needed and test browser, Remotion, iPhone/iPad and reduced-motion behavior. **A4C: checksum/transcode implemented; live desktop Preview passed; the automated browser/device matrix remains open because the local Playwright Chromium download was unavailable.**
 
 ## First proposed learner slice
 
