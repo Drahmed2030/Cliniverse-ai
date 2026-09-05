@@ -14,7 +14,7 @@ The remediation additions belong to the local change set containing this packet,
 
 | File | SHA-256 at packet preparation |
 |---|---|
-| app/components/clinical-media/EchoA4cLesson.tsx | 723aa22065b11f085f07284b623bee66d4d5af5b9f76b73e05b2b314e7673679 |
+| app/components/clinical-media/EchoA4cLesson.tsx | 95f18d2ec05cb71ebfe123a5944a7131d9b1ce7fffef53ef85db9b1f71f2d866 |
 | app/lib/codelab/echoA4cTrainingActivity.ts | 053e8a51456bb7083c97c6d415b99649cd28366c29c048b1354748f100b69fed |
 | app/lib/codelab/echoA4cRemediation.ts | 47a451c87400f50aa16809661b20212fcbbbd35d33ba8bb27f2656e433796e8f |
 
@@ -68,14 +68,16 @@ The feedback is skill-level, not a separate explanation of every distractor. Rev
 
 The local addition stores each submitted answer snapshot and score in component state, and shows missed-skill feedback. Restart clears the history. No patient data or AI provider calls are added.
 
-The v2 completion receipt embeds submitted answer snapshots and displays their scores. The parser continues to accept v1 receipts. History must match the attempt count and terminate at the first passing attempt. Receipt IDs are deterministic consistency checks, NOT signatures or proof against deliberate fabrication. Neither history nor receipts are durably persisted. Same-case improvement is not evidence of transfer or clinical competence.
+The v2 completion receipt embeds submitted answer snapshots and displays their scores. The parser continues to accept v1 receipts. History must match the attempt count and terminate at the first passing attempt. Receipt IDs are deterministic consistency checks, NOT signatures or proof against deliberate fabrication. Same-case improvement is not evidence of transfer or clinical competence.
+
+The review-plan addition suggests days 1/3/7 after completion when recorded mistakes exist, otherwise days 3/7/14. These are unvalidated product defaults, not evidence-based optimal intervals. Legacy receipts without history do not imply first-attempt success. UTC dates are frozen at completion; reminders, cross-session import and automatic adherence tracking are not implemented. Session state is cleared on restart or leaving. A user-initiated JSON download contains the receipt and plan; browser download behavior, including native iOS, remains to be verified.
 
 New-case assessment: BLOCKED. No distinct reviewed second case is available in this packet. Activation requires a distinct licensed asset, suitable difficulty, the same narrow objective, a versioned answer key and explicit human review. Reordering answers is not a new-case test.
 
 ## Technical evidence and remaining checks
 
-- Latest local result: 189/189 unit tests passed; TypeScript, targeted ESLint and diff checks passed.
-- Browser verification of the new remediation flow: PENDING. The visual test now covers wrong answer, correction, receipt scores and restart. Local Chromium installation timed out; the download was stopped, and no browser pass is claimed.
+- Baseline before review-plan addition: 189/189 local tests and 20/20 CI browser tests passed (remote 0b10f794f7f49e573c09bd542916e7953f09a8db).
+- Review-plan browser verification: PENDING. The extended test covers dates, focus, export contents, download event and restart clearing. Chromium is unavailable locally. The baseline browser success does not validate this new UI.
 - Test incorrect submission, targeted feedback, corrected submission, preserved first-attempt snapshot and restart clearing.
 - Test keyboard navigation, screen-reader feedback, phone/iPad layout and reduced motion.
 - Confirm the final receipt remains explicitly non-certifying and does not claim new-case transfer.

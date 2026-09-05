@@ -14,6 +14,7 @@ import {
 import { A4C_NORMAL_CLINICAL_STUDIO_ASSET } from '../../lib/clinicalMedia/licensedEchoAsset'
 import styles from './clinical-media.module.css'
 import { evaluateEchoA4cAttempt, ECHO_A4C_REVIEW_NOTES, type EchoA4cAttempt } from '../../lib/codelab/echoA4cRemediation'
+import { createEchoA4cReviewPlan } from '../../lib/codelab/echoA4cReviewPlan'
 
 interface EchoA4cLessonProps {
   reducedMotion: boolean
@@ -61,6 +62,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
   const [history, setHistory] = useState<EchoA4cAttempt[]>([])
   const [result, setResult] = useState<'idle' | 'needs-review' | 'passed'>('idle')
   const [receipt, setReceipt] = useState<EchoA4cCompletionReceipt | null>(null)
+  const [reviewPlan, setReviewPlan] = useState<ReturnType<typeof createEchoA4cReviewPlan> | null>(null)
   const isComplete = QUESTIONS.every(question => answers[question.id])
 
   function chooseAnswer(questionId: EchoA4cQuestionId, answerId: EchoA4cAnswerId) {
@@ -90,7 +92,9 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
       return
     }
 
-    setReceipt(createEchoA4cCompletionReceipt({ attempts: nextAttempts, answers: completeAnswers, history: [...history.map(item => item.answers), completeAnswers] }))
+    const completedReceipt = createEchoA4cCompletionReceipt({ attempts: nextAttempts, answers: completeAnswers, history: [...history.map(item => item.answers), completeAnswers] })
+    setReceipt(completedReceipt)
+    setReviewPlan(createEchoA4cReviewPlan(completedReceipt, new Date().toISOString()))
     setResult('passed')
   }
 
@@ -100,6 +104,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
     setHistory([])
     setResult('idle')
     setReceipt(null)
+    setReviewPlan(null)
   }
 
   return (
@@ -218,6 +223,24 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
           <button className={styles.echoSecondaryAction} onClick={restartLesson} type="button">
             <RotateCcw aria-hidden="true" size={18} /> Restart this lesson
           </button>
+        </section>
+      ) : null}
+
+      {receipt && reviewPlan ? (
+        <section className={styles.echoReceipt} aria-labelledby="echo-review-plan-title">
+          <h3 id="echo-review-plan-title">Your review plan</h3>
+          <p>Suggested practice dates · UTC</p>
+          <ol>{reviewPlan.reviews.map(review => (
+            <li key={review.afterDays}>Day {review.afterDays}: <time dateTime={review.dueAt}>{review.dueAt.slice(0, 10)} at {review.dueAt.slice(11, 16)} UTC</time></li>
+          ))}</ol>
+          <p>Focus: {reviewPlan.focus.map(id => ({ 'view-identity': 'View recognition', 'visible-landmarks': 'Visible landmarks', 'safe-conclusion': 'Learning scope' })[id]).join(', ')}.</p>
+          <p>These intervals are experimental product defaults, not a validated retention schedule. This is same-case practice, not a new-case assessment.</p>
+          <p>No reminders are scheduled. The plan is session-only: download it before restarting or leaving. Revisit this lesson on the suggested dates; earlier sessions are not imported or tracked automatically.</p>
+          <a className={styles.echoSecondaryAction}
+            download={`cliniverse-${receipt.receiptId}-review.json`}
+            href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify({ receipt, reviewPlan }, null, 2))}`}>
+            Download receipt and review plan
+          </a>
         </section>
       ) : null}
 
