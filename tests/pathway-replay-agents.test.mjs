@@ -71,7 +71,7 @@ test('the prototype remains isolated from providers, databases and the Apple rel
     }
   }
   assert.equal(release.includes('pathway-replay'), false)
-  assert.match(page, /Synthetic data only/i)
+  assert.match(page, /Licensed ECHO preview and synthetic pathway\/ECG/i)
   assert.match(page, /Human review required/i)
   assert.match(page, /Back to Cliniverse/i)
   assert.match(experience, /Brief compiled; closure not granted/i)

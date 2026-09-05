@@ -80,13 +80,40 @@ test('the real A4C composition is local, silent, attributed and user-controlled'
   assert.match(compositionSource, /staticFile\(mediaPath\)/)
   assert.match(compositionSource, /muted/)
   assert.match(compositionSource, /Loop durationInFrames/)
+  assert.match(compositionSource, /objectFit: 'contain'/)
+  assert.match(compositionSource, /objectPosition: 'center center'/)
   assert.doesNotMatch(compositionSource, /fetch\s*\(|https:\/\//)
   assert.match(lessonSource, /CC BY-SA 3\.0/)
   assert.match(lessonSource, /acquisition date\/time was masked/)
   assert.match(lessonSource, /sourcePageUrl/)
   assert.match(previewSource, /autoPlay=\{false\}/)
+  assert.match(previewSource, /style=\{RESPONSIVE_PLAYER_STYLE\}/)
+  assert.match(previewSource, /Export format/)
+  assert.match(previewSource, /Device-fit preview/)
   assert.match(previewSource, /'echo-a4c-normal'/)
   assert.doesNotMatch(previewSource, /setLocale|>عربي<|Preview language/)
+})
+
+test('Clinical Studio has an explicit device-fit display contract', () => {
+  const previewSource = readFileSync(
+    new URL('../app/components/clinical-media/ClinicalMediaPreview.tsx', import.meta.url),
+    'utf8',
+  )
+  const mediaStyles = readFileSync(
+    new URL('../app/components/clinical-media/clinical-media.module.css', import.meta.url),
+    'utf8',
+  )
+  const layoutSource = readFileSync(new URL('../app/layout.tsx', import.meta.url), 'utf8')
+  const globalStyles = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8')
+
+  assert.match(previewSource, /data-testid="clinical-media-player-viewport"/)
+  assert.match(previewSource, /data-export-format=\{format\}/)
+  assert.match(mediaStyles, /\.portraitPlayerViewport[\s\S]*40\.5dvh/)
+  assert.match(mediaStyles, /\.landscapePlayerViewport[\s\S]*128dvh/)
+  assert.match(mediaStyles, /\.squarePlayerViewport[\s\S]*72dvh/)
+  assert.match(mediaStyles, /\.realEchoVideoFrame video[\s\S]*object-fit: contain !important/)
+  assert.match(layoutSource, /aria-hidden="true" className="cliniverse-watermark"/)
+  assert.match(globalStyles, /@media \(max-width: 760px\)[\s\S]*\.cliniverse-watermark[\s\S]*opacity: \.028/)
 })
 
 test('a correct A4C assessment creates a deterministic session-only receipt', () => {

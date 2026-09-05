@@ -55,17 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body style={{position:'relative',minHeight:'100vh'}}>
         {/* ── Logo Watermark ── */}
-        <div style={{
-          position:'fixed',
-          inset:0,
-          display:'flex',
-          alignItems:'center',
-          justifyContent:'center',
-          pointerEvents:'none',
-          zIndex:0,
-          overflow:'hidden',
-          opacity:0.07,
-        }}>
+        <div aria-hidden="true" className="cliniverse-watermark">
           <svg width="520" height="520" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="5" y="5" width="90" height="90" rx="23" fill="rgba(255,213,79,0.15)" stroke="rgba(255,213,79,0.8)" strokeWidth="2"/>
             <path d="M69 32C63 25 55 21 46 21C30 21 17 34 17 50C17 66 30 79 46 79C55 79 63 75 69 68" stroke="rgba(255,213,79,1)" strokeWidth="9" strokeLinecap="round" fill="none"/>

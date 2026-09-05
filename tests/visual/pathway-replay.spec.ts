@@ -42,22 +42,26 @@ test('Pathway Replay completes the governed learning loop', async ({ page }, tes
   })
 })
 
-test('Clinical Studio completes the bilingual Echo cine lesson with reduced motion', async ({ page }, testInfo) => {
+test('Clinical Studio completes the licensed real A4C lesson with reduced motion', async ({ page }, testInfo) => {
   await page.goto('/labs/pathway-replay', { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'Open Code Lab ECG drill' }).click()
   await page.getByRole('button', { name: 'Open Clinical Studio' }).click()
-  await page.getByRole('button', { name: 'ECHO' }).click()
 
-  await expect(page.getByRole('heading', { level: 2, name: 'Recognize the scientific object and its safe boundary' })).toBeVisible()
-  await expect(page.locator('canvas[role="img"]')).toHaveAttribute('aria-label', /Synthetic frame 23 of 90/)
-  await expect(page.getByRole('button', { name: 'Play synthetic cine loop' })).toBeDisabled()
-  await expect(page.getByText('Reduced motion is on.', { exact: false })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Recognize the A4C view without over-interpreting a short loop' })).toBeVisible()
+  await expect(page.getByLabel('Licensed real apical four-chamber echocardiography cine')).toBeVisible()
+  await expect(page.getByText('Licensed cine · rights verified')).toBeVisible()
+  await expect(page.getByText('Reduced Motion active', { exact: false })).toBeVisible()
 
-  await page.getByRole('button', { name: 'An ordered sequence of cine frames' }).click()
-  await page.getByRole('button', { name: 'Describe the visible cyclical motion only' }).click()
-  await page.getByRole('button', { name: 'Check both answers' }).click()
-  await expect(page.getByText('Boundary check passed')).toBeVisible()
+  await page.getByRole('button', { name: 'Apical four-chamber (A4C)' }).click()
+  await page.getByRole('button', { name: 'Four chambers, AV valve planes and septa' }).click()
+  await page.getByRole('button', { name: 'Use the source-labelled normal cine for view recognition only' }).click()
+  await page.getByRole('button', { name: 'Check all three answers' }).click()
+  await expect(page.getByText('A4C check passed')).toBeVisible()
   await expect(page.getByLabel('Unified completion receipt')).toBeVisible()
+
+  const sourceRecord = page.locator('details').filter({ hasText: 'CardioNetworks / Vdbilt · CC BY-SA 3.0' })
+  await sourceRecord.locator('summary').click()
+  await expect(page.getByRole('link', { name: 'Source file page' })).toBeVisible()
 
   const accessibility = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -65,13 +69,54 @@ test('Clinical Studio completes the bilingual Echo cine lesson with reduced moti
 
   expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([])
 
-  await page.getByRole('button', { name: 'عربي' }).click()
-  await expect(page.getByRole('heading', { level: 2, name: 'تعرّف إلى الكائن العلمي وحدوده الآمنة' })).toBeVisible()
-  await expect(page.locator('canvas[role="img"]')).toHaveAttribute('aria-label', /الإطار الاصطناعي 23 من 90/)
-
   await page.screenshot({
-    path: testInfo.outputPath(`echo-cine-lesson-${testInfo.project.name}.png`),
+    path: testInfo.outputPath(`a4c-cine-lesson-${testInfo.project.name}.png`),
     fullPage: true,
     animations: 'disabled',
   })
+})
+
+test('Clinical Studio contains every export canvas inside the active device viewport', async ({ page }) => {
+  await page.goto('/labs/pathway-replay', { waitUntil: 'networkidle' })
+  await page.getByRole('button', { name: 'Open Code Lab ECG drill' }).click()
+  await page.getByRole('button', { name: 'Open Clinical Studio' }).click()
+
+  const preview = page.getByTestId('clinical-media-preview')
+  const stage = page.getByTestId('clinical-media-stage')
+  const playerViewport = page.getByTestId('clinical-media-player-viewport')
+
+  for (const target of [
+    { label: '16:9', format: 'landscape' },
+    { label: '9:16', format: 'portrait' },
+    { label: '1:1', format: 'square' },
+  ]) {
+    await page.getByRole('button', { name: target.label, exact: true }).click()
+    await expect(playerViewport).toHaveAttribute('data-export-format', target.format)
+
+    const stageBox = await stage.boundingBox()
+    const playerBox = await playerViewport.boundingBox()
+    expect(stageBox).not.toBeNull()
+    expect(playerBox).not.toBeNull()
+    expect(playerBox!.x).toBeGreaterThanOrEqual(stageBox!.x - 1)
+    expect(playerBox!.x + playerBox!.width).toBeLessThanOrEqual(stageBox!.x + stageBox!.width + 1)
+
+    const stageWidths = await stage.evaluate(element => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+    }))
+    expect(stageWidths.scrollWidth).toBeLessThanOrEqual(stageWidths.clientWidth + 1)
+  }
+
+  const previewWidths = await preview.evaluate(element => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  }))
+  expect(previewWidths.scrollWidth).toBeLessThanOrEqual(previewWidths.clientWidth + 1)
+  await expect(page.getByLabel('Licensed real apical four-chamber echocardiography cine')).toHaveCSS('object-fit', 'contain')
+
+  for (const button of await page.getByRole('group', { name: 'Export format' }).getByRole('button').all()) {
+    const box = await button.boundingBox()
+    expect(box).not.toBeNull()
+    expect(box!.height).toBeGreaterThanOrEqual(44)
+  }
 })

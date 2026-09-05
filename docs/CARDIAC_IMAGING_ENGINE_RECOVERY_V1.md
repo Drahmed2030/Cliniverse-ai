@@ -2,6 +2,8 @@
 
 Status: synthetic ECHO cine retained as an internal engine prototype; licensed A4C Normal added as a local Preview-only real-media lesson; clinical copy review remains required; no Apple, Production, database, paid-service, upload, or patient-data change
 
+Responsive display follow-up: `CLINICAL_STUDIO_RESPONSIVE_DISPLAY_V1.md` records the XS Max Remotion containment finding, the device-fit versus export-size contract, the reduced-warning hierarchy and the bounded Gemini curation role.
+
 ## Executive decision
 
 The preserved ECHO, CT and radiology fragments contain useful teaching ideas, but they are not medical imaging engines. They must not be restored under an analysis or diagnostic claim.

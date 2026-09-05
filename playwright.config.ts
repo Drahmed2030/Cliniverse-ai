@@ -24,12 +24,24 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'iphone',
-      use: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
+      name: 'iphone-xs-max',
+      use: { viewport: { width: 414, height: 896 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
+    },
+    {
+      name: 'iphone-pro',
+      use: { viewport: { width: 393, height: 852 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
+    },
+    {
+      name: 'iphone-landscape',
+      use: { viewport: { width: 852, height: 393 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
     },
     {
       name: 'ipad',
       use: { viewport: { width: 820, height: 1180 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
+    },
+    {
+      name: 'desktop-1440',
+      use: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, isMobile: false, hasTouch: false },
     },
   ],
 })

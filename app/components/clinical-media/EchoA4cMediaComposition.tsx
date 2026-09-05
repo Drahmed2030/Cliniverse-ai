@@ -46,7 +46,7 @@ export default function EchoA4cMediaComposition({
           <span aria-hidden="true" className={styles.brandMark}>C</span>
           <span>CLINIVERSE AI · REAL ECHO CINE</span>
         </div>
-        <span className={styles.realMediaBadge}>Licensed source · Preview review</span>
+        <span className={styles.realMediaBadge}>Licensed · Preview</span>
       </header>
 
       <section
@@ -70,7 +70,7 @@ export default function EchoA4cMediaComposition({
                 muted
                 pauseWhenBuffering
                 src={staticFile(mediaPath)}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain', objectPosition: 'center center' }}
               />
             </Loop>
           </div>

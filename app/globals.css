@@ -65,6 +65,34 @@ body {
   overflow-x: hidden;
 }
 
+.cliniverse-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: .055;
+  pointer-events: none;
+}
+
+.cliniverse-watermark svg {
+  width: clamp(280px, 38vw, 520px);
+  height: auto;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .cliniverse-watermark {
+    opacity: .028;
+  }
+
+  .cliniverse-watermark svg {
+    width: clamp(220px, 62vw, 300px);
+  }
+}
+
 /* ── Animations ── */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(16px); }

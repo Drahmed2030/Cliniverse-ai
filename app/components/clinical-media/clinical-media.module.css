@@ -399,6 +399,10 @@
   margin-bottom: 16px;
 }
 
+.previewHeader > div:first-child {
+  min-width: 0;
+}
+
 .previewHeader h2 {
   margin: 5px 0 4px;
   color: var(--replay-text, #fff);
@@ -417,6 +421,20 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.controlSet {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+
+.controlLabel {
+  color: var(--replay-muted, #94a3b8);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
 }
 
 .controlGroup {
@@ -460,7 +478,63 @@
   color: #fff;
 }
 
+.previewStatus {
+  margin-bottom: 12px;
+  border: 1px solid rgba(61, 214, 161, .28);
+  border-radius: 13px;
+  background: rgba(61, 214, 161, .07);
+  color: var(--replay-secondary, #e5e7eb);
+}
+
+.previewStatus summary {
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.previewStatus summary::-webkit-details-marker {
+  display: none;
+}
+
+.previewStatus summary > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--replay-green, #10b981);
+}
+
+.previewStatus summary strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+
+.previewStatus summary small {
+  color: var(--replay-muted, #94a3b8);
+  font-size: 10px;
+}
+
+.previewStatus summary:focus-visible {
+  outline: 3px solid var(--replay-cyan, #06b6d4);
+  outline-offset: 2px;
+}
+
+.previewStatus p {
+  margin: 0;
+  padding: 0 29px 12px;
+  color: var(--replay-muted, #94a3b8);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .playerStage {
+  width: 100%;
+  min-width: 0;
   display: grid;
   place-items: center;
   min-height: 320px;
@@ -470,20 +544,34 @@
   background: #050912;
 }
 
+.playerViewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.landscapePlayerViewport {
+  max-width: 128vh;
+  max-width: 128dvh;
+}
+
+.portraitPlayerViewport {
+  max-width: min(390px, 40.5vh);
+  max-width: min(390px, 40.5dvh);
+}
+
+.squarePlayerViewport {
+  max-width: min(560px, 72vh);
+  max-width: min(560px, 72dvh);
+}
+
 .player {
   width: 100%;
+  max-width: 100%;
   overflow: hidden;
   border: 1px solid var(--replay-border, #374151);
   border-radius: 14px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
-}
-
-.portraitPlayer {
-  width: min(390px, 100%);
-}
-
-.squarePlayer {
-  width: min(560px, 100%);
 }
 
 .previewFooter {
@@ -497,8 +585,13 @@
   line-height: 1.45;
 }
 
+.previewFooter span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .previewFooter strong {
-  color: var(--replay-yellow, #fcd34d);
+  color: var(--replay-green, #10b981);
 }
 
 .programControl {
@@ -558,6 +651,16 @@
   border: 1px solid rgba(61, 214, 161, .34);
   border-radius: 20px;
   background: #000;
+}
+
+.realEchoVideoFrame video,
+.realEchoVideoFrame img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  display: block;
+  object-fit: contain !important;
+  object-position: center center;
 }
 
 .realEchoMediaMeta {
@@ -1048,14 +1151,61 @@
 }
 
 .realEchoAttribution {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 20px;
   margin-top: 18px;
-  padding: 16px;
   border: 1px solid rgba(61, 214, 161, .34);
   border-radius: 16px;
   background: rgba(61, 214, 161, .07);
+}
+
+.realEchoAttribution > summary {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.realEchoAttribution > summary::-webkit-details-marker {
+  display: none;
+}
+
+.realEchoAttribution > summary > span:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.realEchoAttribution > summary strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--replay-text, #fff);
+  font-size: 12px;
+}
+
+.realEchoAttribution > summary > span:last-child {
+  flex: 0 0 auto;
+  color: #a7f3d0;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.realEchoAttribution > summary:focus-visible {
+  outline: 3px solid var(--replay-cyan, #06b6d4);
+  outline-offset: 3px;
+}
+
+.realEchoAttribution[open] > summary {
+  border-bottom: 1px solid rgba(61, 214, 161, .2);
+}
+
+.realEchoAttributionBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  padding: 16px;
 }
 
 .realEchoAttribution h3 {
@@ -1190,7 +1340,7 @@
   .echoReceipt dl,
   .realEchoGuideGrid,
   .realEchoQuestionGrid,
-  .realEchoAttribution {
+  .realEchoAttributionBody {
     grid-template-columns: 1fr;
   }
 
@@ -1208,6 +1358,60 @@
   .echoSecondaryAction {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .previewShell {
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .previewControls,
+  .controlSet {
+    width: 100%;
+  }
+
+  .programControl,
+  .formatControl {
+    display: grid;
+    width: 100%;
+  }
+
+  .programControl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formatControl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .controlButton {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+
+  .previewStatus summary {
+    grid-template-columns: 8px minmax(0, 1fr);
+  }
+
+  .previewStatus summary small {
+    grid-column: 2;
+  }
+
+  .playerStage {
+    min-height: 0;
+    padding: 8px;
+  }
+
+  .realEchoGuideGrid article,
+  .echoQuestion {
+    padding: 13px;
+  }
+
+  .realEchoAttribution > summary {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 

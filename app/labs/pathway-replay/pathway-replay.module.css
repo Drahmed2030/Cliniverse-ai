@@ -21,6 +21,8 @@
   width: min(1180px, 100%);
   margin: 0 auto;
   padding: max(32px, env(safe-area-inset-top)) 28px max(28px, env(safe-area-inset-bottom));
+  padding-left: max(28px, env(safe-area-inset-left));
+  padding-right: max(28px, env(safe-area-inset-right));
 }
 
 .journeyProgress {
@@ -319,7 +321,10 @@
 .trainingReceipt > p { margin: 12px 0 0; color: var(--replay-muted); font-size: 10px; line-height: 1.5; }
 
 @media (max-width: 760px) {
-  .page { padding-inline: 20px; }
+  .page {
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+  }
   .journeyProgress { padding: 11px; }
   .journeyProgress ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .journeyMeta { align-items: flex-start; flex-direction: column; }
@@ -359,6 +364,17 @@
   .registrySnapshot { grid-template-columns: 22px minmax(0, 1fr); }
   .registrySnapshot code { grid-column: 1 / -1; text-align: left; }
   .registryDetails .definition dd { max-width: 62%; }
+}
+
+@media (max-width: 430px) {
+  .page {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+
+  .mediaLauncher p:last-child {
+    font-size: 15px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

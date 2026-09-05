@@ -106,23 +106,23 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
           <h2 id="echo-a4c-lesson-title">Recognize the A4C view without over-interpreting a short loop</h2>
           <p>Use the governed cine above to identify the complete view signature, observe cyclical motion and preserve the boundary between view recognition and diagnostic measurement.</p>
         </div>
-        <span className={styles.realMediaBadge}>Rights reviewed · clinical copy review required</span>
+        <span className={styles.realMediaBadge}>English · A4C recognition</span>
       </header>
 
       <div className={styles.realEchoGuideGrid}>
         <article>
-          <span>1 · View signature</span>
+          <span>Note 01 · View signature</span>
           <strong>Apical four-chamber</strong>
           <p>Both atria and ventricles appear in one apical plane with the atrioventricular valve planes and septa.</p>
         </article>
         <article>
-          <span>2 · Motion task</span>
+          <span>Note 02 · Motion task</span>
           <strong>Observe before measuring</strong>
           <p>Track chamber and valve motion across the cine. Screen-side convention alone is not a reliable view identifier.</p>
         </article>
         <article>
-          <span>3 · Safety boundary</span>
-          <strong>No quantitative claim</strong>
+          <span>Note 03 · Learning scope</span>
+          <strong>View recognition only</strong>
           <p>This 0.98-second source loop is not sufficient for EF, chamber measurements or exclusion of pathology.</p>
         </article>
       </div>
@@ -201,25 +201,29 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
         </section>
       ) : null}
 
-      <section className={styles.realEchoAttribution} aria-labelledby="echo-a4c-attribution-title">
-        <div>
-          <p className={styles.echoEyebrow}>SOURCE, RIGHTS AND CHANGES</p>
-          <h3 id="echo-a4c-attribution-title">A4C normal · CardioNetworks ECHOpedia</h3>
-          <p>Creator: CardioNetworks / Vdbilt. The source file also displays courtesy credit to the Department of Echocardiography AMC and I.A.C. van der Bilt, MD.</p>
-          <p>Licensed under CC BY-SA 3.0. Changes: the burned-in acquisition date/time was masked for privacy hardening, the VP8 WebM was re-encoded to H.264 MP4, container metadata was removed, and no diagnostic annotation was added. This media derivative remains CC BY-SA 3.0.</p>
+      <details className={styles.realEchoAttribution}>
+        <summary>
+          <span><span className={styles.echoEyebrow}>SOURCE &amp; LICENSE</span><strong>CardioNetworks / Vdbilt · CC BY-SA 3.0</strong></span>
+          <span>View record</span>
+        </summary>
+        <div className={styles.realEchoAttributionBody}>
+          <div>
+            <h3 id="echo-a4c-attribution-title">A4C normal · CardioNetworks ECHOpedia</h3>
+            <p>Creator: CardioNetworks / Vdbilt. The source file also displays courtesy credit to the Department of Echocardiography AMC and I.A.C. van der Bilt, MD.</p>
+            <p>Licensed under CC BY-SA 3.0. Changes: the burned-in acquisition date/time was masked for privacy hardening, the VP8 WebM was re-encoded to H.264 MP4, container metadata was removed, and no diagnostic annotation was added. This media derivative remains CC BY-SA 3.0.</p>
+            <p className={styles.echoDisclaimer}>{A4C_NORMAL_CLINICAL_STUDIO_ASSET.disclaimer}</p>
+            <span className={styles.echoContractId}>{ECHO_A4C_TRAINING_ACTIVITY.contentVersion} · {ECHO_A4C_TRAINING_ACTIVITY.engineId} · {A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.derivativeSha256}</span>
+          </div>
+          <div className={styles.realEchoSourceLinks}>
+            <a href={A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.sourcePageUrl} rel="noreferrer" target="_blank">
+              Source file page <ExternalLink aria-hidden="true" size={14} />
+            </a>
+            <a href={A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.licenseUrl} rel="noreferrer" target="_blank">
+              CC BY-SA 3.0 <ExternalLink aria-hidden="true" size={14} />
+            </a>
+          </div>
         </div>
-        <div className={styles.realEchoSourceLinks}>
-          <a href={A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.sourcePageUrl} rel="noreferrer" target="_blank">
-            Source file page <ExternalLink aria-hidden="true" size={14} />
-          </a>
-          <a href={A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.licenseUrl} rel="noreferrer" target="_blank">
-            CC BY-SA 3.0 <ExternalLink aria-hidden="true" size={14} />
-          </a>
-        </div>
-      </section>
-
-      <p className={styles.echoDisclaimer}>{A4C_NORMAL_CLINICAL_STUDIO_ASSET.disclaimer}</p>
-      <span className={styles.echoContractId}>{ECHO_A4C_TRAINING_ACTIVITY.contentVersion} · {ECHO_A4C_TRAINING_ACTIVITY.engineId} · {A4C_NORMAL_CLINICAL_STUDIO_ASSET.rights.derivativeSha256}</span>
+      </details>
     </section>
   )
 }

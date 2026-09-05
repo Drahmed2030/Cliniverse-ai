@@ -16,7 +16,7 @@ export default function PathwayReplayPage() {
       labels={{
         back: 'Back to Cliniverse',
         humanReview: 'Human review required',
-        disclaimer: 'Illustrative and unvalidated · Synthetic data only · No patient outcome claim',
+        disclaimer: 'Training workspace · Licensed ECHO preview and synthetic pathway/ECG · No patient decisions',
       }}
     />
   )

@@ -142,7 +142,7 @@ export default function PathwayReplayExperience({ report, labels }: Props) {
           <div>
             <p className={styles.eyebrow}>CLINICAL STUDIO · MODALITY ENGINES</p>
             <h2 id="media-launcher-title">Explore governed ECG and a licensed real A4C cine</h2>
-            <p>The synthetic ECHO phantom remains an internal engine prototype. Clinical Studio Preview now exposes one source-labelled A4C Normal candidate with visible rights, privacy changes and clinical-review status.</p>
+            <p>Review ECHO cine and ECG signals as separate scientific engines. A4C uses licensed real media; the current ECG exercise remains synthetic while calibrated records stay in their own gated ingestion track.</p>
           </div>
           <button
             aria-expanded={showMediaPreview}
