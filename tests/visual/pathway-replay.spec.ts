@@ -55,10 +55,15 @@ test('Clinical Studio completes the licensed real A4C lesson with reduced motion
 
   await page.getByRole('button', { name: 'Apical four-chamber (A4C)' }).click()
   await page.getByRole('button', { name: 'Four chambers, AV valve planes and septa' }).click()
+  await page.getByRole('button', { name: 'Exclude all structural pathology', exact: true }).click()
+  await page.getByRole('button', { name: 'Check all three answers' }).click()
+  await expect(page.getByRole('alert')).toContainText('Review Note 03')
+  await expect(page.getByRole('region', { name: 'Learning attempt history' })).toContainText('Attempt 1: 2/3')
   await page.getByRole('button', { name: 'Use the source-labelled normal cine for view recognition only' }).click()
   await page.getByRole('button', { name: 'Check all three answers' }).click()
   await expect(page.getByText('A4C check passed')).toBeVisible()
   await expect(page.getByLabel('Unified completion receipt')).toBeVisible()
+  await expect(page.getByLabel('Unified completion receipt')).toContainText('2/3 → 3/3')
 
   const sourceRecord = page.locator('details').filter({ hasText: 'CardioNetworks / Vdbilt · CC BY-SA 3.0' })
   await sourceRecord.locator('summary').click()
@@ -75,6 +80,10 @@ test('Clinical Studio completes the licensed real A4C lesson with reduced motion
     fullPage: true,
     animations: 'disabled',
   })
+  await page.getByRole('button', { name: 'Restart this lesson' }).click()
+  await expect(page.getByLabel('Unified completion receipt')).toHaveCount(0)
+  await expect(page.getByRole('region', { name: 'Learning attempt history' })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Check all three answers' })).toBeDisabled()
 })
 
 test('Clinical Studio contains every export canvas inside the active device viewport', async ({ page }) => {

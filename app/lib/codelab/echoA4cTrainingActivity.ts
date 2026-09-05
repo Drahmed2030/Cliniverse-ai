@@ -23,7 +23,7 @@ export type EchoA4cAnswerId =
 export type EchoA4cAnswers = Record<EchoA4cQuestionId, EchoA4cAnswerId>
 
 export interface EchoA4cCompletionReceipt {
-  schemaVersion: typeof ECHO_A4C_RECEIPT_SCHEMA_VERSION
+  schemaVersion: 1 | 2
   receiptId: string
   activityId: typeof A4C_NORMAL_ACTIVITY_ID
   activityVersion: '1.0.0-preview'
@@ -45,6 +45,7 @@ export interface EchoA4cCompletionReceipt {
     attempts: number
     result: 'passed'
     answers: EchoA4cAnswers
+    history?: EchoA4cAnswers[]
   }
   intendedUse: 'education-only'
   dataMode: 'licensed-real-clinical-media'
@@ -89,6 +90,7 @@ export function matchesEchoA4cAnswerKey(answers: EchoA4cAnswers): boolean {
 export function createEchoA4cCompletionReceipt(input: {
   attempts: number
   answers: EchoA4cAnswers
+  history?: EchoA4cAnswers[]
 }): EchoA4cCompletionReceipt {
   if (!Number.isInteger(input.attempts) || input.attempts < ECHO_A4C_TRAINING_ACTIVITY.assessment.minimumAttempts) {
     throw new Error('At least one completed A4C training attempt is required.')
@@ -97,10 +99,17 @@ export function createEchoA4cCompletionReceipt(input: {
     throw new Error('The governed A4C answer key must be matched before completion.')
   }
 
+  const history = input.history?.map(item => ({ ...item }))
+  if (history && (history.length !== input.attempts
+    || !history.every(isEchoA4cAnswers)
+    || !matchesEchoA4cAnswerKey(history[history.length - 1])
+    || history.slice(0, -1).some(matchesEchoA4cAnswerKey))) {
+    throw new Error('History must contain every attempt and end at the first passing attempt.')
+  }
   const answers = { ...ECHO_A4C_TRAINING_ACTIVITY.assessment.correctAnswers }
-  const receiptId = createReceiptId(input.attempts, answers)
+  const receiptId = createReceiptId(input.attempts, answers, history)
   return {
-    schemaVersion: ECHO_A4C_RECEIPT_SCHEMA_VERSION,
+    schemaVersion: history ? 2 : ECHO_A4C_RECEIPT_SCHEMA_VERSION,
     receiptId,
     activityId: ECHO_A4C_TRAINING_ACTIVITY.activityId,
     activityVersion: ECHO_A4C_TRAINING_ACTIVITY.activityVersion,
@@ -122,6 +131,7 @@ export function createEchoA4cCompletionReceipt(input: {
       attempts: input.attempts,
       result: 'passed',
       answers,
+      ...(history ? { history } : {}),
     },
     intendedUse: ECHO_A4C_TRAINING_ACTIVITY.intendedUse,
     dataMode: ECHO_A4C_TRAINING_ACTIVITY.dataMode,
@@ -135,11 +145,14 @@ export function createEchoA4cCompletionReceipt(input: {
 export function parseEchoA4cCompletionReceipt(value: unknown): EchoA4cCompletionReceipt | null {
   if (!isRecord(value) || !isRecord(value.assessment)) return null
   if (!Number.isInteger(value.assessment.attempts) || !isEchoA4cAnswers(value.assessment.answers)) return null
+  if (value.schemaVersion !== 1 && value.schemaVersion !== 2) return null
+  if (value.schemaVersion === 2 && (!Array.isArray(value.assessment.history) || !value.assessment.history.every(isEchoA4cAnswers))) return null
 
   try {
     const canonical = createEchoA4cCompletionReceipt({
       attempts: Number(value.assessment.attempts),
       answers: value.assessment.answers,
+      ...(value.schemaVersion === 2 ? { history: value.assessment.history as EchoA4cAnswers[] } : {}),
     })
     return JSON.stringify(value) === JSON.stringify(canonical) ? canonical : null
   } catch {
@@ -147,7 +160,7 @@ export function parseEchoA4cCompletionReceipt(value: unknown): EchoA4cCompletion
   }
 }
 
-function createReceiptId(attempts: number, answers: EchoA4cAnswers): string {
+function createReceiptId(attempts: number, answers: EchoA4cAnswers, history?: EchoA4cAnswers[]): string {
   const canonical = JSON.stringify([
     A4C_NORMAL_ACTIVITY_ID,
     ECHO_A4C_TRAINING_ACTIVITY.activityVersion,
@@ -159,13 +172,14 @@ function createReceiptId(attempts: number, answers: EchoA4cAnswers): string {
     answers['visible-landmarks'],
     answers['safe-conclusion'],
     attempts,
+    ...(history ? [history] : []),
   ])
   let hash = 2_166_136_261
   for (let index = 0; index < canonical.length; index += 1) {
     hash ^= canonical.charCodeAt(index)
     hash = Math.imul(hash, 16_777_619)
   }
-  return `echo-a4c-receipt-v1-${(hash >>> 0).toString(16).padStart(8, '0')}`
+  return `echo-a4c-receipt-v${history ? 2 : 1}-${(hash >>> 0).toString(16).padStart(8, '0')}`
 }
 
 function isEchoA4cAnswers(value: unknown): value is EchoA4cAnswers {

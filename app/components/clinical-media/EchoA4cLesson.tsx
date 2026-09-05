@@ -13,6 +13,7 @@ import {
 } from '../../lib/codelab/echoA4cTrainingActivity'
 import { A4C_NORMAL_CLINICAL_STUDIO_ASSET } from '../../lib/clinicalMedia/licensedEchoAsset'
 import styles from './clinical-media.module.css'
+import { evaluateEchoA4cAttempt, ECHO_A4C_REVIEW_NOTES, type EchoA4cAttempt } from '../../lib/codelab/echoA4cRemediation'
 
 interface EchoA4cLessonProps {
   reducedMotion: boolean
@@ -57,6 +58,7 @@ const QUESTIONS: EchoA4cQuestion[] = [
 export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
   const [answers, setAnswers] = useState<Partial<EchoA4cAnswers>>({})
   const [attempts, setAttempts] = useState(0)
+  const [history, setHistory] = useState<EchoA4cAttempt[]>([])
   const [result, setResult] = useState<'idle' | 'needs-review' | 'passed'>('idle')
   const [receipt, setReceipt] = useState<EchoA4cCompletionReceipt | null>(null)
   const isComplete = QUESTIONS.every(question => answers[question.id])
@@ -80,6 +82,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
     }
     const nextAttempts = attempts + 1
     setAttempts(nextAttempts)
+    setHistory(current => [...current, evaluateEchoA4cAttempt(completeAnswers)])
 
     if (!matchesEchoA4cAnswerKey(completeAnswers)) {
       setReceipt(null)
@@ -87,13 +90,14 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
       return
     }
 
-    setReceipt(createEchoA4cCompletionReceipt({ attempts: nextAttempts, answers: completeAnswers }))
+    setReceipt(createEchoA4cCompletionReceipt({ attempts: nextAttempts, answers: completeAnswers, history: [...history.map(item => item.answers), completeAnswers] }))
     setResult('passed')
   }
 
   function restartLesson() {
     setAnswers({})
     setAttempts(0)
+    setHistory([])
     setResult('idle')
     setReceipt(null)
   }
@@ -168,7 +172,11 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
         {result === 'needs-review' ? (
           <div className={styles.echoResultWarning} role="alert">
             <ShieldAlert aria-hidden="true" size={21} />
-            <div><strong>Review the A4C view boundary</strong><span>Use the full four-chamber landmark set and do not convert this short preview into a quantitative or exclusion claim.</span></div>
+            <div>
+              <strong>Review the A4C view boundary</strong>
+              <span>Review the notes for the missed skills, then revise your answers. Playback remains under your control.</span>
+              <ul>{history.at(-1)?.missed.map(id => <li key={id}>{ECHO_A4C_REVIEW_NOTES[id]}</li>)}</ul>
+            </div>
           </div>
         ) : null}
 
@@ -179,6 +187,17 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
           </div>
         ) : null}
       </section>
+
+      {history.length > 0 ? (
+        <section className={styles.echoReceipt} aria-label="Learning attempt history">
+          <h3>Your learning attempts</h3>
+          <ol>{history.map((attempt, index) => (
+            <li key={index}>Attempt {index + 1}: {attempt.correct}/3 matched · {attempt.missed.length === 0 ? 'Answer key matched' : `${attempt.missed.length} skills to review`}</li>
+          ))}</ol>
+          <p>Same-case practice only. Improved scores here do not demonstrate transfer to a new case.</p>
+          <p>New-case assessment is not available yet: a distinct licensed example and human-reviewed answer key are required.</p>
+        </section>
+      ) : null}
 
       {receipt ? (
         <section aria-label="Unified completion receipt" className={styles.echoReceipt} role="status">
@@ -191,6 +210,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
             <div><dt>Content</dt><dd>{receipt.contentAssetId} · {receipt.contentVersion}</dd></div>
             <div><dt>Engine</dt><dd>{receipt.engineId}</dd></div>
             <div><dt>Attempts</dt><dd>{receipt.assessment.attempts}</dd></div>
+            <div><dt>Recorded scores</dt><dd>{receipt.assessment.history?.map(item => `${evaluateEchoA4cAttempt(item).correct}/3`).join(' → ')}</dd></div>
             <div><dt>Source</dt><dd>{receipt.source.sourceId}</dd></div>
             <div><dt>License</dt><dd>{receipt.source.licenseId}</dd></div>
           </dl>
