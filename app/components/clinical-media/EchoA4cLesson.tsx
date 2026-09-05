@@ -128,7 +128,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
       </div>
 
       {reducedMotion ? (
-        <p className={styles.reducedMotionNote}>Reduced Motion is active. Playback remains off until you explicitly use the player controls; non-essential transitions are disabled.</p>
+        <p className={styles.reducedMotionNote}>Reduced Motion active. Playback remains off until you explicitly use the player controls; non-essential transitions are disabled.</p>
       ) : null}
 
       <section className={styles.echoAssessment} aria-labelledby="echo-a4c-assessment-title">
