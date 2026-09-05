@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "1.0.0",
+  "observedAt": "2026-09-05",
+  "dataClassification": "operational-metadata-only-no-phi-no-secrets",
+  "sourceControl": {
+    "provider": "github",
+    "owner": "Drahmed2030",
+    "repositories": [
+      {
+        "product": "cliniverse-ai",
+        "repository": "Drahmed2030/Cliniverse-ai",
+        "defaultBranch": "main",
+        "observedDefaultBranchHead": "d355d798d20ca9d7d6d2a67f76434ca6c6247890",
+        "rulesetCount": 0,
+        "protected": false,
+        "authority": "canonical"
+      },
+      {
+        "product": "neuraops",
+        "repository": "Drahmed2030/neuraops-core",
+        "defaultBranch": "main",
+        "observedDefaultBranchHead": "45fe580cfbbdaa2f90909b18d06ce1b453829e5f",
+        "rulesetCount": 0,
+        "protected": false,
+        "authority": "canonical"
+      }
+    ]
+  },
+  "vercel": {
+    "team": {
+      "name": "Cliniverse-Ai",
+      "slug": "cliniverse-ai",
+      "plan": "pro"
+    },
+    "authentication": "connected-app-oauth",
+    "visibleProjectInventory": {
+      "minimumVisibleCount": 50,
+      "inventoryLimitReached": true,
+      "note": "Most visible legacy projects are not linked to a Git repository and require item-level classification before removal."
+    },
+    "projects": [
+      {
+        "product": "cliniverse-ai",
+        "projectId": "prj_Dq2B7ckeEqS6UvNzEaIZnYHBCFnX",
+        "projectName": "cliniverse-ai-u7gi",
+        "linkedRepository": "Drahmed2030/Cliniverse-ai",
+        "customDomains": [
+          "cliniverseai.com",
+          "www.cliniverseai.com"
+        ],
+        "latestDeployment": {
+          "deploymentId": "dpl_GQhX4PvgBiQX3GPGpWcZNhuEyibw",
+          "state": "READY",
+          "target": "preview"
+        },
+        "role": "authoritative-runtime",
+        "decision": "preserve"
+      },
+      {
+        "product": "neuraops",
+        "projectId": "prj_RjF2s10VCS3VnylALtzTVqZr6omx",
+        "projectName": "neuraops-core",
+        "linkedRepository": "Drahmed2030/neuraops-core",
+        "customDomains": [
+          "getneuraops.com",
+          "www.getneuraops.com"
+        ],
+        "latestDeployment": {
+          "deploymentId": "dpl_CC8NW8pvdWASocva6ZfuHTpd2Jeo",
+          "state": "READY",
+          "target": "production"
+        },
+        "role": "authoritative-runtime",
+        "decision": "preserve"
+      },
+      {
+        "product": "neuraops",
+        "projectId": "prj_JdlLSEpl41gRDqzg9G6vg0olap3J",
+        "projectName": "neuraops-core-snnv",
+        "linkedRepository": "Drahmed2030/neuraops-core",
+        "customDomains": [],
+        "latestDeployment": {
+          "deploymentId": "dpl_CZ1EfWCbzviGcL9XpGMgp9H1R2Ya",
+          "state": "ERROR",
+          "target": "production"
+        },
+        "role": "duplicate-failing-runtime",
+        "decision": "quarantine-pending-env-and-dependency-review"
+      }
+    ]
+  },
+  "cloudflare": {
+    "workerName": "cliniverse",
+    "evidenceSource": "github-check-run",
+    "latestObservedCommit": "b9ee4321fd23b7c6c7390c8d02997a86023d9132",
+    "latestObservedCheck": "failure",
+    "role": "unapproved-deployment-integration",
+    "decision": "disable-non-production-builds-then-review-git-integration",
+    "productionChangeAuthorized": false,
+    "dnsChangeAuthorized": false
+  },
+  "releasePolicy": {
+    "previewBranchPushRequiresApproval": true,
+    "mergeRequiresApproval": true,
+    "productionRequiresSeparateApproval": true,
+    "forcePushAllowed": false,
+    "bulkDeletionAllowed": false,
+    "defaultControlPlaneMode": "read-only"
+  },
+  "pendingExternalActions": [
+    {
+      "action": "activate-cliniverse-main-ruleset",
+      "state": "proposal-only"
+    },
+    {
+      "action": "activate-neuraops-main-ruleset",
+      "state": "proposal-only"
+    },
+    {
+      "action": "disable-cloudflare-non-production-builds",
+      "state": "blocked-on-cloudflare-connection-or-authenticated-browser"
+    },
+    {
+      "action": "remove-neuraops-core-snnv",
+      "state": "blocked-on-destructive-review-and-exact-approval"
+    },
+    {
+      "action": "classify-legacy-vercel-projects",
+      "state": "inventory-in-progress-no-deletion-authorized"
+    }
+  ]
+}
