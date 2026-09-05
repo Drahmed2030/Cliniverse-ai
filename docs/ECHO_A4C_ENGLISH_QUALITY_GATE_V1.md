@@ -1,6 +1,6 @@
 # ECHO A4C English Quality Gate v1
 
-Status: Preview verified; human clinical-copy approval and automated device-matrix completion remain open; TestFlight and Production are not approved
+Status: Preview verified; human clinical-copy approval recorded; automated device-matrix completion remains open; TestFlight and Production are not approved
 
 Review date: 2026-09-05
 
@@ -36,7 +36,9 @@ Frozen answer key:
 2. Visible landmarks: `Four chambers, AV valve planes and septa`.
 3. Safe conclusion: `Use the source-labelled normal cine for view recognition only`.
 
-The lesson does not teach or claim ejection fraction, chamber measurement, Doppler quantification, pathology exclusion, diagnosis or clinical action. A named human clinical reviewer must approve the objective, wording and answer key before TestFlight or Production.
+The lesson does not teach or claim ejection fraction, chamber measurement, Doppler quantification, pathology exclusion, diagnosis or clinical action.
+
+Human approval record: Dr. Ahmed Osman, project owner and physician, approved the objective, wording and answer key for English Preview use on 2026-09-05. This approval is limited to the bounded educational objective above and does not authorize diagnostic claims, TestFlight or Production.
 
 ## Verification receipt
 
@@ -50,13 +52,13 @@ The lesson does not teach or claim ejection fraction, chamber measurement, Doppl
 | Cine playback and containment | Passed |
 | Three-answer assessment | Passed |
 | Deterministic receipt | `echo-a4c-receipt-v1-a1334a63` |
-| Automated phone/iPad/reduced-motion matrix | Blocked locally by unavailable Playwright Chromium download; not an application failure |
+| Automated phone/iPad/reduced-motion matrix | CI workflow configured; local run blocked by unavailable Playwright Chromium download, not an application failure |
 
-The automated device matrix remains a release stop until it runs in an environment with the pinned Playwright browser available. Manual desktop success does not substitute for phone, iPad, landscape and reduced-motion evidence.
+The automated device matrix remains a release stop until it runs in an environment with the pinned Playwright browser available. The `Clinical visual quality` workflow now installs Chromium automatically, supports manual dispatch, and covers the engineering branches. Manual desktop success does not substitute for phone, iPad, landscape and reduced-motion evidence.
 
 ## Remotion license gate
 
-The repository currently uses Remotion `4.0.520`. Remotion's published terms state that individuals and organizations of up to three people qualify for the Free License, including unlimited commercial use, and that collaborations or companies of four or more people require a Company License. Before adding `acknowledgeRemotionLicense`, the project owner must record the actual team-size category. No purchase is authorized by this document.
+The repository currently uses Remotion `4.0.520`. The project owner confirmed a team size of three people or fewer, placing this project in Remotion's Free License category for the current scope. Remotion's published terms include unlimited commercial use for that category. No paid license, license key or subscription is authorized by this document. The existing v4 Player warning remains an informational engineering warning; it will not be suppressed by an unverified code assertion.
 
 Source: <https://www.remotion.dev/docs/license/pricing>
 
@@ -65,7 +67,7 @@ Source: <https://www.remotion.dev/docs/license/pricing>
 | Stage | Decision |
 |---|---|
 | Vercel Preview | Active for review |
-| Clinical-copy approval | Open human gate |
+| Clinical-copy approval | Approved for bounded English Preview scope |
 | Automated device matrix | Open technical gate |
 | TestFlight | Hold until both open gates pass |
 | Production | Not authorized |
@@ -73,9 +75,6 @@ Source: <https://www.remotion.dev/docs/license/pricing>
 
 ## Next executable order
 
-1. Record named human approval or requested corrections for the objective and answer key.
-2. Run the pinned Playwright device and reduced-motion matrix in CI or another approved browser environment.
-3. Resolve the Remotion license declaration from the actual team size; do not infer or purchase.
-4. Update the release receipt with reviewer identity, test run and immutable commit SHA.
-5. Include the slice in a future TestFlight candidate only under separate approval.
-
+1. Run the pinned Playwright device and reduced-motion matrix in CI or another approved browser environment.
+2. Update the release receipt with reviewer identity, test run and immutable commit SHA.
+3. Include the slice in a future TestFlight candidate only under separate approval.
