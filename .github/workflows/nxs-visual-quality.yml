@@ -1,9 +1,15 @@
-name: NXS visual quality
+name: Clinical visual quality
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
-      - ux/confusion-reduction-v1
+      - main
+      - strategy/clinical-pathway-replay-v1
+      - ops/platform-governance-v1
+  push:
+    branches:
+      - feat/echo-a4c-quality-gates-v1
     paths:
       - 'app/components/**'
       - 'app/lib/passkey-readiness.ts'
@@ -30,11 +36,11 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:visual
-      - name: Upload NXS quality artifacts
+      - name: Upload clinical visual quality artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: nxs-visual-quality
+          name: clinical-visual-quality
           path: |
             playwright-report
             test-results
