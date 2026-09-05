@@ -51,7 +51,7 @@ test('Clinical Studio completes the licensed real A4C lesson with reduced motion
   await expect(page.getByRole('heading', { level: 2, name: 'Recognize the A4C view without over-interpreting a short loop' })).toBeVisible()
   await expect(page.getByLabel('Licensed real apical four-chamber echocardiography cine')).toBeVisible()
   await expect(page.getByText('Licensed cine · rights verified')).toBeVisible()
-  await expect(page.getByText('Reduced Motion active', { exact: false })).toBeVisible()
+  await expect(page.getByText('Reduced Motion active.', { exact: false })).toBeVisible()
 
   await page.getByRole('button', { name: 'Apical four-chamber (A4C)' }).click()
   await page.getByRole('button', { name: 'Four chambers, AV valve planes and septa' }).click()
