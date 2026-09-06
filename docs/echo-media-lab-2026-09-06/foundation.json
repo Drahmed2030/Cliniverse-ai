@@ -1,0 +1,28 @@
+{
+  "assetId": "echo-a4c-normal-cardionetworks-v1-en",
+  "status": "preserved-byte-for-byte-preview-only",
+  "technical": {
+    "sourceSha1": "6d2f2edc3c8139d845fe0b2324f497af6f236b31",
+    "sourceSha256": "89e311b8a841a2a6813d4c5ba470aede46ba85780d42b2124330fc01846c783c",
+    "bytes": 168220,
+    "codec": "h264",
+    "width": 624,
+    "height": 480,
+    "frameRate": "51/1",
+    "averageFrameRate": "51/1",
+    "frameCount": 50,
+    "durationSeconds": 0.980392,
+    "audioStreams": [],
+    "timestampCount": 50,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.01960699999999993,
+    "maxFrameIntervalSeconds": 0.01960800000000007,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "sourceSha1Verified": true,
+  "review": "50/50 contact-sheet frames reviewed plus full-size frame 1. Existing date mask present; attribution and ECG/depth overlays retained. Source-labelled normal supports view-recognition only; clinical copy/discrimination approval remains outstanding."
+}

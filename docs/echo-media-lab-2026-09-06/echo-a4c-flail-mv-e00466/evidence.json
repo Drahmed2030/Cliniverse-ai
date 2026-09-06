@@ -1,0 +1,140 @@
+{
+  "candidateId": "echo-a4c-flail-mv-e00466",
+  "diagnosisLabel": "Flail mitral valve with severe mitral regurgitation",
+  "view": "A4C with Color Doppler",
+  "sourceDescription": "A4CH: Color Doppler, severe mitral regurgitation, excentric jet",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Flail_of_mitral_valve_E00466_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "mitral-valve-disease",
+    "regurgitation-pattern",
+    "color-doppler-context"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Mechanistically meaningful MR case with explicit eccentric-jet source description.",
+  "rights": {
+    "candidateId": "echo-a4c-flail-mv-e00466",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Flail_of_mitral_valve_E00466_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/Flail_of_mitral_valve_E00466_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "4c4039d07e82a472234692948ca293661281d333e43889c0678944697c4051c3",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Flail_of_mitral_valve_E00466_(CardioNetworks_ECHOpedia).webm?oldid=1254317906",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "6048e02c5a85fd137ac5b2fc13989b3e500857fa",
+    "sourceSha256": "05c3a62dc70a52a8f84ed12f626169bb1dd04141a9fa85b8d166b5c407f3389e",
+    "bytes": 178196,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "32/1",
+    "averageFrameRate": "32/1",
+    "frameCount": 19,
+    "durationSeconds": 0.594,
+    "audioStreams": [],
+    "timestampCount": 19,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.030999999999999972,
+    "maxFrameIntervalSeconds": 0.032,
+    "completeContactSheets": [
+      "contact-01.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C with Color Doppler",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Apical geometry with atrial color sector; full A4C landmark confirmation limited by darkness.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Only 19 frames in 0.594 s; shortest sequence; loop adequacy uncertain.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Dark anatomy; color jet dominates; poor clean-view reference.",
+    "discriminationTrainingAssessment": "Hold clinical view confirmation; source-labelled flail MR is not established by color alone.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "e0c91a003a380b6d61f93d4e2e1b5b3daf6f028b137dd2ed6e8ba6afcadf18e8"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-flail-mv-e00466",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Flail_of_mitral_valve_E00466_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 594,
+      "framesPerSecond": 32,
+      "view": "not-confirmed-isolated-A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": false,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": false,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-flail-mv-e00466",
+      "score": 40,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "not-suitable-for-view-recognition",
+        "not-a4c",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination",
+        "not-mobile-readable"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-32"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -29,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

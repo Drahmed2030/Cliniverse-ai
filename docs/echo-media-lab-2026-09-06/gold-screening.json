@@ -1,0 +1,28 @@
+[
+  {
+    "candidateId": "robotic-a4c-acquisition-2026",
+    "sourcePageUrl": "https://link.springer.com/article/10.1007/s11548-026-03766-1",
+    "licenseId": "CC-BY-4.0",
+    "sourcePageSha256": "50e68530e5904c5b1ecfd0b015ad6d7d19d8848be3d6bb64c202953093ee0690",
+    "commercialReuseVerifiedForArticle": true,
+    "originalFileUrl": null,
+    "mediaDownloaded": false,
+    "disposition": "hold",
+    "reason": "Retrieved full article and inspected links: no supplementary source cine link found. Article license and image-quality score do not establish source media accessibility or Gold suitability."
+  },
+  {
+    "candidateId": "frontiers-image-perception-a4c-60fps-2022",
+    "disposition": "reject",
+    "reviewScope": "Existing registry decision retained; no new media download. Research red-line overlay exclusion."
+  },
+  {
+    "candidateId": "echonet-dynamic-normal-a4c",
+    "disposition": "reject",
+    "reviewScope": "Existing registry rights exclusion retained; no media access or download."
+  },
+  {
+    "candidateId": "cardiacnet-pah-asd-a4c",
+    "disposition": "pathology-only",
+    "reviewScope": "Existing registry pathology exclusion retained; no new media access or license approval claimed."
+  }
+]

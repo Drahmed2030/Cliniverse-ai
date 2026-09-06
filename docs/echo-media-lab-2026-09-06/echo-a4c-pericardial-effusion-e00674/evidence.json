@@ -1,0 +1,137 @@
+{
+  "candidateId": "echo-a4c-pericardial-effusion-e00674",
+  "diagnosisLabel": "Pericardial effusion",
+  "view": "A4C",
+  "sourceDescription": "A4CH",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "pericardial-space",
+    "pattern-recognition",
+    "a4c-context"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Adds a non-myocardial pathology with a visually distinct educational target.",
+  "rights": {
+    "candidateId": "echo-a4c-pericardial-effusion-e00674",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Pericardial_effusion_E00674_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "7a8a8fc61e94a296ab3f6481ade171711e8af98809c6e27f89fb3aaa6abf032a",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm?oldid=1091980422",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "1f88abcd0262043c31d1aaddae6d467048f70194",
+    "sourceSha256": "edb1a37e186c8b56a243f826691fc98a96b3cabf08b1d6f7f39130054e0443f6",
+    "bytes": 221694,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "47/1",
+    "averageFrameRate": "47/1",
+    "frameCount": 32,
+    "durationSeconds": 0.681,
+    "audioStreams": [],
+    "timestampCount": 32,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.020999999999999908,
+    "maxFrameIntervalSeconds": 0.02200000000000002,
+    "completeContactSheets": [
+      "contact-01.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four chambers and surrounding echo-free space visible; source-labelled effusion.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "32-frame short sequence; no obvious cut; incomplete loop/cycle sufficiency review.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Pericardial-space contrast visible at 375 px.",
+    "discriminationTrainingAssessment": "Potential pericardial-space recognition; no tamponade inference.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "511642b8b479d09244479e6ce2f2c4c65b345d3b25f78cc19600fbe4be52e6ca"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-pericardial-effusion-e00674",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 681,
+      "framesPerSecond": 47,
+      "view": "A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": true,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-pericardial-effusion-e00674",
+      "score": 65,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-47"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -4,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

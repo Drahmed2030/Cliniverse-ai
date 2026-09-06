@@ -1,0 +1,144 @@
+{
+  "candidateId": "echo-a3c-severe-ar-e00234",
+  "diagnosisLabel": "Severe aortic regurgitation",
+  "view": "A3C with Color Doppler",
+  "sourceDescription": "A3CH: Color Doppler, severe aortic regurgitation",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "aortic-valve-disease",
+    "regurgitation-pattern",
+    "a3c-recognition"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Adds aortic valve disease and a non-A4C apical view to prevent view overfitting.",
+  "rights": {
+    "candidateId": "echo-a3c-severe-ar-e00234",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/Severe_aortic_regurgitation_E00234_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "51a9b89ae6bd4a004813326840e4b4ac988c3573fabe092f9fbaafd163321d7b",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm?oldid=494788381",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "a0c07aa41d7706f2389d16a1411df1a6886dcdb9",
+    "sourceSha256": "ff626bf0f8715daf8d4f6f450cc71f57c93036e338a8215db809439d35d54f47",
+    "bytes": 292056,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "51/1",
+    "averageFrameRate": "51/1",
+    "frameCount": 48,
+    "durationSeconds": 0.942,
+    "audioStreams": [],
+    "timestampCount": 48,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.01899999999999996,
+    "maxFrameIntervalSeconds": 0.020000000000000018,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A3C with Color Doppler",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "LV/LA/LVOT-long-axis geometry and color sector; not A4C.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "48 frames at 51 fps; short ordered phase progression.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad color-flow anatomy readable; fine mechanism requires review.",
+    "discriminationTrainingAssessment": "A3C/valvular contrast only; excludes Normal A4C Gold.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "92c0226727af59bb49087accca982e7c026977a1f98abfe739e2fb79f4864ad6"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "55233c92df9e86b2bebb7c6ae6c90b01b68d04b1a2fcb916182aa049f756eb27"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a3c-severe-ar-e00234",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 942,
+      "framesPerSecond": 51,
+      "view": "not-confirmed-isolated-A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": false,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a3c-severe-ar-e00234",
+      "score": 50,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "not-suitable-for-view-recognition",
+        "not-a4c",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-51"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -19,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

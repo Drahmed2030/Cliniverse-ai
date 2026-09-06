@@ -34,9 +34,9 @@ export const ECHO_A4C_GOLD_CANDIDATES: readonly EchoGoldCandidateRecord[] = [
     commercialReuse: true,
     normalReferenceEligible: true,
     view: 'A4C',
-    temporalQualityNote: 'Supplementary video contains apical four- and two-chamber imaging from a wearable ultrasound platform.',
-    disposition: 'hold',
-    reason: 'Rights are promising, but the supplementary sequence is not yet confirmed as a clean isolated standard A4C cine suitable for reference benchmarking.',
+    temporalQualityNote: 'Original Supplementary Video 2 measured: H.264, 512x640, 24 fps, 222 frames, 9.25 seconds; continuous timestamps do not establish native acquisition fidelity.',
+    disposition: 'reject',
+    reason: 'Media laboratory reviewed all 222 frames of Supplementary Video 2: split A4C/A2C panels, research axes, 512x640 container at 24 fps, and a silent AAC track. Reject this presentation as Normal Gold; clinical approval and isolated native cine remain outstanding.',
   },
   {
     candidateId: 'robotic-a4c-acquisition-2026',

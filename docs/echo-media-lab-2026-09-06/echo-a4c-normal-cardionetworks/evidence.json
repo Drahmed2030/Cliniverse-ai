@@ -1,0 +1,142 @@
+{
+  "candidateId": "echo-a4c-normal-cardionetworks",
+  "diagnosisLabel": "Normal heart",
+  "view": "A4C",
+  "sourceDescription": "Apical 4 Chamber view of a normal heart",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "normal-reference",
+    "view-recognition",
+    "a4c-landmarks"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "High-value normal reference anchor already governed in Cliniverse.",
+  "rights": {
+    "candidateId": "echo-a4c-normal-cardionetworks",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/A4C_normal_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "7ebf76e374c24e8e179fc363b3e76138c67ab4ff4392ab34a3410fb487d38fc9",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm?oldid=773339821",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "1ae4551bf89fc5f41d4f2632584999230c2dcbab",
+    "sourceSha256": "0c21971562048eff46a65403284e247e2feed41dad60ae65f3de9c2735b65276",
+    "bytes": 288005,
+    "codec": "vp8",
+    "width": 624,
+    "height": 480,
+    "frameRate": "51/1",
+    "averageFrameRate": "51/1",
+    "frameCount": 50,
+    "durationSeconds": 0.981,
+    "audioStreams": [],
+    "timestampCount": 50,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.018999999999999906,
+    "maxFrameIntervalSeconds": 0.020000000000000018,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four chambers and both AV valve planes visible; source-labelled normal, not pathology exclusion.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": true,
+    "privacyState": "hold-date-remediation-required",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Single short cycle; smooth phase progression, no visible cut in contact sheets.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad landmarks readable at 375 px; source captions small.",
+    "discriminationTrainingAssessment": "View recognition only; clinically approved discrimination role not established.",
+    "goldDecision": "preserve-existing-foundation-only",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "59a2eacf5fdf079a3b41cad7ece96de32d6f940de769783cdf7ee4867b00137a"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "7628eaf389f7e114ea2fbb1cb8dec974e362ac30ce56cca7d8074060e3ee6a4a"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-normal-cardionetworks",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:A4C_normal_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 624,
+      "height": 480,
+      "durationMs": 981,
+      "framesPerSecond": 51,
+      "view": "A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": true,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-normal-cardionetworks",
+      "score": 59,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-624x480",
+        "fps-51"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -10,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

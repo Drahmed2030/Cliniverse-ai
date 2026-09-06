@@ -1,0 +1,198 @@
+{
+  "candidateId": "nature-wearable-apical-4ch-2023",
+  "sourcePageUrl": "https://www.nature.com/articles/s41586-022-05498-z",
+  "doi": "10.1038/s41586-022-05498-z",
+  "originalFileUrl": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-022-05498-z/MediaObjects/41586_2022_5498_MOESM3_ESM.mp4",
+  "sourceItem": "Supplementary Video 2",
+  "creator": "Hu et al.",
+  "licenseId": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "commercialReuseVerified": true,
+  "licenseEvidenceSummary": "Article permits reproduction and adaptation with attribution and change notice; third-party exceptions apply where credited. Supplementary Video 2 has no separate restrictive credit in its linked entry or visible frames.",
+  "sourcePageSha256": "f08d99103fd3416c31600d595de66f6b1c22b8c009ff4ee1e15288d9ab93565f",
+  "reviewDate": "2026-09-06",
+  "technical": {
+    "sourceSha1": "6499ffc7d2df235c9c73597cebf740b6d9ed38d4",
+    "sourceSha256": "ff679b290e09c088120ef0c6fb40b95a667f4b39cffa6196a15b4a4eec763ed0",
+    "bytes": 2093499,
+    "codec": "h264",
+    "width": 512,
+    "height": 640,
+    "frameRate": "24/1",
+    "averageFrameRate": "24/1",
+    "frameCount": 222,
+    "durationSeconds": 9.25,
+    "audioStreams": [
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_long_name": "AAC (Advanced Audio Coding)",
+        "profile": "LC",
+        "codec_type": "audio",
+        "codec_tag_string": "mp4a",
+        "codec_tag": "0x6134706d",
+        "sample_fmt": "fltp",
+        "sample_rate": "48000",
+        "channels": 2,
+        "channel_layout": "stereo",
+        "bits_per_sample": 0,
+        "initial_padding": 0,
+        "id": "0x2",
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "time_base": "1/48000",
+        "start_pts": 0,
+        "start_time": "0.000000",
+        "duration_ts": 444000,
+        "duration": "9.250000",
+        "bit_rate": "317375",
+        "nb_frames": "436",
+        "nb_read_frames": "434",
+        "extradata_size": 2,
+        "disposition": {
+          "default": 1,
+          "dub": 0,
+          "original": 0,
+          "comment": 0,
+          "lyrics": 0,
+          "karaoke": 0,
+          "forced": 0,
+          "hearing_impaired": 0,
+          "visual_impaired": 0,
+          "clean_effects": 0,
+          "attached_pic": 0,
+          "timed_thumbnails": 0,
+          "non_diegetic": 0,
+          "captions": 0,
+          "descriptions": 0,
+          "metadata": 0,
+          "dependent": 0,
+          "still_image": 0
+        },
+        "tags": {
+          "creation_time": "2022-04-15T03:25:50.000000Z",
+          "language": "eng",
+          "handler_name": "#Mainconcept MP4 Sound Media Handler",
+          "vendor_id": "[0][0][0][0]"
+        }
+      }
+    ],
+    "timestampCount": 222,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.041665999999999315,
+    "maxFrameIntervalSeconds": 0.04166700000000034,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg",
+      "contact-03.jpg",
+      "contact-04.jpg",
+      "contact-05.jpg",
+      "contact-06.jpg",
+      "contact-07.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "allFramesContactSheetReviewed": true,
+    "frameCountReviewed": 222,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "visibleViewAssessment": "Side-by-side panels consistent with apical four- and two-chamber imaging; not an isolated standard A4C cine.",
+    "overlays": "Research presentation includes coordinate axes/borders and large black margins.",
+    "directPatientIdentifiersObserved": false,
+    "datesObserved": false,
+    "audioAssessment": {
+      "codec": "aac",
+      "decodedFloatSamples": 888832,
+      "nonzeroSamples": 0,
+      "maximumAbsoluteAmplitude": 0,
+      "conclusion": "Audio stream exists but all decoded samples are silent."
+    },
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "motionFidelityAssessment": "24 fps container; no visible cut across 222 frames; native acquisition rate and temporal processing not independently verified.",
+    "mobileReadabilityAssessment": "At 375 px full-container width each cine is under approximately 180 px wide; inferior to full-width Foundation anatomy.",
+    "discriminationTrainingAssessment": "Insufficient isolated A4C detail; not accepted for normal/pathology discrimination.",
+    "normalReferenceConfirmed": false,
+    "clinicalReviewComplete": false,
+    "goldDecision": "reject-as-is-research-presentation",
+    "labDisposition": "hold-clinical-review-and-native-isolated-cine",
+    "binaryCommitAllowed": false
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "nature-contact-1.jpg",
+      "sha256": "6518fee50e50417789fd4dc65c9c605cd592c3fe07300083ad15cafa10948d9b"
+    },
+    {
+      "file": "nature-contact-2.jpg",
+      "sha256": "a96bc8b994594364bb32173f26123134bbc5c9baf36168315798d5f9937d70a8"
+    },
+    {
+      "file": "nature-contact-3.jpg",
+      "sha256": "4e171ceeaea2b4c6d589859f00bb7add72fe2ac742a120d9bc77b248950fc944"
+    },
+    {
+      "file": "nature-contact-4.jpg",
+      "sha256": "2418f454188fd1136cc587ba542e977a99ca7f676d15eadebcb2b3e9c793a37c"
+    },
+    {
+      "file": "nature-contact-5.jpg",
+      "sha256": "88bbc950f533c9a2813cc3c5eaefa1ad245d081d470fe55c5cc1b9ff2c7e573a"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "nature-wearable-apical-4ch-2023",
+      "sourcePageUrl": "https://www.nature.com/articles/s41586-022-05498-z",
+      "sourceDate": "",
+      "width": 512,
+      "height": 640,
+      "durationMs": 9250,
+      "framesPerSecond": 24,
+      "view": "not-confirmed-isolated-A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-4.0",
+      "vrtConfirmed": false,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": false,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": false,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "nature-wearable-apical-4ch-2023",
+      "score": 30,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "vrt-unconfirmed",
+        "license-not-approved",
+        "privacy-not-reviewed",
+        "not-suitable-for-view-recognition",
+        "not-a4c",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination",
+        "not-mobile-readable"
+      ],
+      "reasons": [
+        "resolution-512x640",
+        "fps-24"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -39,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

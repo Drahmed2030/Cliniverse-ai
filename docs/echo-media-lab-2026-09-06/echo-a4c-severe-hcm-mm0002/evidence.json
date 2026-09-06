@@ -1,0 +1,152 @@
+{
+  "candidateId": "echo-a4c-severe-hcm-mm0002",
+  "diagnosisLabel": "Severe hypertrophic cardiomyopathy",
+  "view": "A4C",
+  "sourceDescription": "A4CH view",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "cardiomyopathy-pattern",
+    "wall-thickness-pattern",
+    "a4c-pattern-discrimination"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Strong cardiomyopathy contrast case with explicit A4C source labeling.",
+  "rights": {
+    "candidateId": "echo-a4c-severe-hcm-mm0002",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/0/06/Severe_Hypertrophic_Cardiomyopathy_%28HCM%29_MM0002_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "e1d5ef0fb43e76f482b0e0a5c7b11bd386474cbf05a26d2e41cad6b56ccca0cf",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm?oldid=972178519",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "28aff74e3fb665fa7611f96ad3f6ebbe51b99679",
+    "sourceSha256": "52f8ece25ccac48f561bdef70e5ee531c6bfb24f1d190063ec647505b3ea8de2",
+    "bytes": 743671,
+    "codec": "vp8",
+    "width": 427,
+    "height": 480,
+    "frameRate": "50/1",
+    "averageFrameRate": "50/1",
+    "frameCount": 123,
+    "durationSeconds": 2.46,
+    "audioStreams": [],
+    "timestampCount": 123,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.019999999999999574,
+    "maxFrameIntervalSeconds": 0.020000000000000018,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg",
+      "contact-03.jpg",
+      "contact-04.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry with conspicuous wall-thickness pattern; source-labelled severe HCM.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Multiple phases over 2.46 s; no obvious edit cuts; saturation limits endocardial detail.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Narrow 427 px source; broad morphology visible, fine boundaries limited.",
+    "discriminationTrainingAssessment": "Potential wall-thickness contrast; do not infer severity quantitatively.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "355ed9e19c5dd66eca8a6d7c3225d09d7aaa02edc9c14d8185a06187113a0e5a"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "537c7a7035c2cc8bdb80d3d8c94446da10636c63bcbc7c305be0ec5cf1275378"
+    },
+    {
+      "file": "contact-03.jpg",
+      "sha256": "dd043ca4e3791507168df38ec70c23bdc9addabccc776156f33d193591d3d213"
+    },
+    {
+      "file": "contact-04.jpg",
+      "sha256": "fdb745caf0123fadaa5729e7d67b7f42e82e93c922b7e23d1bb476e12573f635"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-severe-hcm-mm0002",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 427,
+      "height": 480,
+      "durationMs": 2460,
+      "framesPerSecond": 50,
+      "view": "A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": true,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-severe-hcm-mm0002",
+      "score": 63,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-427x480",
+        "fps-50"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -6,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

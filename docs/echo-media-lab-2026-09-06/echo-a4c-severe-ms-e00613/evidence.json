@@ -1,0 +1,139 @@
+{
+  "candidateId": "echo-a4c-severe-ms-e00613",
+  "diagnosisLabel": "Severe mitral stenosis",
+  "view": "A4C with Color Doppler",
+  "sourceDescription": "A4CH with Color Doppler: high velocity mitral inflow",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_mitral_valve_stenosis_E00613_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "mitral-valve-disease",
+    "color-doppler-context",
+    "stenosis-pattern"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Introduces valvular stenosis and Doppler interpretation context without requiring quantitative claims.",
+  "rights": {
+    "candidateId": "echo-a4c-severe-ms-e00613",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_mitral_valve_stenosis_E00613_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Severe_mitral_valve_stenosis_E00613_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "29f105a5a6c2a1831596bdd3a5cd73aeae8fd8e8d8907dd3a2ac1f93a3530f69",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_mitral_valve_stenosis_E00613_(CardioNetworks_ECHOpedia).webm?oldid=509541163",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "b06d3d27b1634bdfbb8079c5d5891b0be48bab21",
+    "sourceSha256": "02eb95356657acd22d9ffeb696fdcdfb0011a9d79b1ca5448581a6c61c72c4c4",
+    "bytes": 242418,
+    "codec": "vp8",
+    "width": 608,
+    "height": 480,
+    "frameRate": "24/1",
+    "averageFrameRate": "24/1",
+    "frameCount": 19,
+    "durationSeconds": 0.792,
+    "audioStreams": [],
+    "timestampCount": 19,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.040999999999999925,
+    "maxFrameIntervalSeconds": 0.04200000000000004,
+    "completeContactSheets": [
+      "contact-01.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C with Color Doppler",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry with mitral color sector; source-labelled severe MS.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Only 19 frames at 24 fps; lower temporal coverage than Foundation.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad color-flow pattern visible; valve morphology less clear.",
+    "discriminationTrainingAssessment": "Doppler context only; severity/velocity cannot be established from this clip alone.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "e779caa02dcd8561dc8bec563318bb89805fe38266e8ee6a96ed8ddd6d749a1f"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-severe-ms-e00613",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_mitral_valve_stenosis_E00613_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 608,
+      "height": 480,
+      "durationMs": 792,
+      "framesPerSecond": 24,
+      "view": "not-confirmed-isolated-A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": false,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-severe-ms-e00613",
+      "score": 34,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "not-suitable-for-view-recognition",
+        "not-a4c",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-608x480",
+        "fps-24"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -35,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

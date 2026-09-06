@@ -1,0 +1,142 @@
+{
+  "candidateId": "echo-a4c-apical-hcm-e00291",
+  "diagnosisLabel": "Apical hypertrophic cardiomyopathy",
+  "view": "A4C",
+  "sourceDescription": "A4CH: apical hypertrophic cardiomyopathy",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "cardiomyopathy-pattern",
+    "apical-pattern",
+    "misconception-discrimination"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Adds within-family discrimination rather than another generic HCM example.",
+  "rights": {
+    "candidateId": "echo-a4c-apical-hcm-e00291",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Apical_HCM_E00291_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "51a0b8e575d1a6ad52ed1090c51794f6644c667b53dbf6e88b1733fede38df62",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm?oldid=799837133",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "0c73d70ee7ad0663a7c62b0a3ed0e453b4f4f84e",
+    "sourceSha256": "e23aa565789effcae9728fc8e9a4b71e6a90062e8c0014e4fe85899bd419f97a",
+    "bytes": 302041,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "51/1",
+    "averageFrameRate": "51/1",
+    "frameCount": 50,
+    "durationSeconds": 0.981,
+    "audioStreams": [],
+    "timestampCount": 50,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.018999999999999906,
+    "maxFrameIntervalSeconds": 0.020000000000000018,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry; prominent apical wall/cavity pattern; source-labelled apical HCM.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Short single-cycle sequence with orderly progression; loop seam unvalidated.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Apical cavity pattern readable at 375 px; fine thickness not measurable.",
+    "discriminationTrainingAssessment": "Promising apical-pattern contrast for clinician review; not independent diagnostic proof.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "dd6e5e3f62f803775143c0c416fd2b966fca9886db2e76b251789c9f25dc82f8"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "93587a5d0defb45658065bc9c55a375d41d2e6a313a4086bc59a22c9744cc838"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-apical-hcm-e00291",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 981,
+      "framesPerSecond": 51,
+      "view": "A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": true,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-apical-hcm-e00291",
+      "score": 65,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-51"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -4,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

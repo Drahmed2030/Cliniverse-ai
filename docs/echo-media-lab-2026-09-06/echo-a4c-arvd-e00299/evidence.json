@@ -1,0 +1,137 @@
+{
+  "candidateId": "echo-a4c-arvd-e00299",
+  "diagnosisLabel": "Arrhythmogenic right ventricular dysplasia",
+  "view": "A4C",
+  "sourceDescription": "A4CH: dilated right ventricle, reduced systolic function",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "rv-size",
+    "rv-function",
+    "right-heart-pattern"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "Expands beyond LV-centric training and introduces a high-value right-heart pattern.",
+  "rights": {
+    "candidateId": "echo-a4c-arvd-e00299",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/0/06/ARVD_E00299_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "f842d02f434da3ece4946163cdf2fdd3ab30d0d75895c7ed43020bd52c619379",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm?oldid=775829151",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "65b42d237285192bf902b8af793a7b0228fe9804",
+    "sourceSha256": "b02a4886f9146097df188bae7855027085870297a345908327f1959dcc06a541",
+    "bytes": 336449,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "28/1",
+    "averageFrameRate": "28/1",
+    "frameCount": 31,
+    "durationSeconds": 1.107,
+    "audioStreams": [],
+    "timestampCount": 31,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.03499999999999992,
+    "maxFrameIntervalSeconds": 0.03600000000000003,
+    "completeContactSheets": [
+      "contact-01.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry with prominent right-sided cavity; source-labelled ARVD.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "31 frames at 28 fps; coarser temporal sampling than Foundation.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad RV geometry visible; fine motion less clear.",
+    "discriminationTrainingAssessment": "Potential RV size/function contrast; ARVD diagnosis needs wider evidence.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "44c036266f58ae46ec78ffc46bc987d9a312e57c41ea7d9504ab9eb997a032a0"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-a4c-arvd-e00299",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 1107,
+      "framesPerSecond": 28,
+      "view": "A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": true,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": true,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-a4c-arvd-e00299",
+      "score": 60,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-28"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -9,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

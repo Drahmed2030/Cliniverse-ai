@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "repository": "Drahmed2030/Cliniverse-ai",
+  "branch": "feature/echo-competency-engine-v1",
+  "baseHead": "c26466099bc1e8f833ac68b9e907eae31c5980be",
+  "reviewDate": "2026-09-06",
+  "batchCandidates": 12,
+  "downloadedOriginals": 13,
+  "decodedOriginalFrames": 853,
+  "foundationDerivativeFrames": 50,
+  "goldPromotion": false,
+  "learnerRelease": false,
+  "supabaseApplied": false,
+  "binaryCommits": false,
+  "candidateEvidence": [
+    "echo-a4c-normal-cardionetworks/evidence.json",
+    "echo-a4c-takotsubo-cardionetworks/evidence.json",
+    "echo-a4c-severe-hcm-mm0002/evidence.json",
+    "echo-a4c-apical-hcm-e00291/evidence.json",
+    "echo-a4c-dcm-e00476/evidence.json",
+    "echo-a4c-arvd-e00299/evidence.json",
+    "echo-a4c-pericardial-effusion-e00674/evidence.json",
+    "echo-a4c-severe-ms-e00613/evidence.json",
+    "echo-a4c-flail-mv-e00466/evidence.json",
+    "echo-a3c-severe-ar-e00234/evidence.json",
+    "echo-psax-severe-as-e00261/evidence.json",
+    "echo-plax-vsd-rtl-e00832/evidence.json",
+    "nature-wearable-apical-4ch-2023/evidence.json"
+  ],
+  "scope": "Machine measurements and visual screening complete; specialist clinical approval, physical-device playback and governed derivatives pending. Contact sheets/raw media remain quarantined outside git; checksums and source URLs permit reproduction."
+}

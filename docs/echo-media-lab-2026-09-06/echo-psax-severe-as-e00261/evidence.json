@@ -1,0 +1,150 @@
+{
+  "candidateId": "echo-psax-severe-as-e00261",
+  "diagnosisLabel": "Severe aortic stenosis",
+  "view": "PSAX",
+  "sourceDescription": "PSAX: stenotic aortic valve",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm",
+  "sourceProvider": "CardioNetworks ECHOpedia / Wikimedia Commons",
+  "licenseId": "CC-BY-SA-3.0",
+  "vrtTicket": "2011102310008874",
+  "learningFocus": [
+    "aortic-valve-disease",
+    "psax-recognition",
+    "valve-morphology"
+  ],
+  "evidenceState": "media-fingerprint-complete-review-held",
+  "selectionRationale": "High-yield morphology case with an explicit PSAX source description.",
+  "rights": {
+    "candidateId": "echo-psax-severe-as-e00261",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Severe_aortic_valve_stenosis_E00261_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "d913c74e9dc219707d257f1d0d2f1047c44a9df32ee0c8c0b7931ef213b82c2b",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm?oldid=508075923",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "technical": {
+    "sourceSha1": "624e6a4b5547a02dd018e29603a2e8fa03a29f6d",
+    "sourceSha256": "64ff4285b4de87f67be1740d3889a525a69a6fd9220de5079ef4436972075131",
+    "bytes": 493693,
+    "codec": "vp8",
+    "width": 647,
+    "height": 480,
+    "frameRate": "50/1",
+    "averageFrameRate": "50/1",
+    "frameCount": 82,
+    "durationSeconds": 1.64,
+    "audioStreams": [],
+    "timestampCount": 82,
+    "strictlyIncreasingTimestamps": true,
+    "minFrameIntervalSeconds": 0.019999999999999796,
+    "maxFrameIntervalSeconds": 0.020000000000000018,
+    "completeContactSheets": [
+      "contact-01.jpg",
+      "contact-02.jpg",
+      "contact-03.jpg"
+    ],
+    "reviewState": "technical-evidence-only-no-approval"
+  },
+  "review": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "PSAX",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Short-axis aortic-valve-plane geometry; not A4C.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "82 frames over 1.64 s; orderly valve opening/closing pattern.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Small central valve target, dark surrounding field; weak fine-detail mobile task.",
+    "discriminationTrainingAssessment": "PSAX recognition candidate; severity requires clinical evidence beyond appearance.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "contactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "30a856463187c630ccba7c7525b824d71a87fe87652a8b934bf39757fab001e9"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "cd69db700cb3530bb20ae96378fb4dc47be294e399f07b417b47e0c713ea4017"
+    },
+    {
+      "file": "contact-03.jpg",
+      "sha256": "33e0b22576e8564330180dbd073a712973e2681b2b104506bbc49bb5094cd5b2"
+    }
+  ],
+  "standard2026": {
+    "input": {
+      "candidateId": "echo-psax-severe-as-e00261",
+      "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm",
+      "sourceDate": "",
+      "width": 647,
+      "height": 480,
+      "durationMs": 1640,
+      "framesPerSecond": 50,
+      "view": "not-confirmed-isolated-A4C",
+      "intendedUse": "education-only",
+      "licenseId": "CC-BY-SA-3.0",
+      "vrtConfirmed": true,
+      "provenanceVerified": true,
+      "privacyReviewed": false,
+      "directIdentifiersVisible": false,
+      "unexpectedAudio": false,
+      "clinicallySuitableForViewRecognition": false,
+      "clinicallySuitableForDiscrimination": false,
+      "mobileReadable": false,
+      "ipadReadable": false,
+      "desktopReadable": false,
+      "distractingOverlays": true,
+      "normalReferenceConfirmed": false,
+      "motionContinuous": false,
+      "clinicalReviewComplete": false
+    },
+    "result": {
+      "candidateId": "echo-psax-severe-as-e00261",
+      "score": 49,
+      "releaseTier": "foundation",
+      "blockingIssues": [
+        "privacy-not-reviewed",
+        "not-suitable-for-view-recognition",
+        "not-a4c",
+        "normal-reference-not-confirmed",
+        "motion-continuity-not-confirmed",
+        "clinical-review-incomplete",
+        "distracting-overlays",
+        "not-suitable-for-discrimination",
+        "not-mobile-readable"
+      ],
+      "reasons": [
+        "resolution-647x480",
+        "fps-50"
+      ]
+    },
+    "foundationScore": 69,
+    "scoreDelta": -20,
+    "promote": false,
+    "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  }
+}

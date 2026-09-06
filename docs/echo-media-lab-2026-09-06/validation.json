@@ -1,0 +1,57 @@
+{
+  "runtime": "Node 24.19.0",
+  "baseline": {
+    "npmTest": {
+      "pass": 243,
+      "fail": 3,
+      "exitCode": 1
+    },
+    "typecheckErrors": 4,
+    "lint": {
+      "errors": 474,
+      "warnings": 311,
+      "exitCode": 1
+    }
+  },
+  "final": {
+    "npmTest": {
+      "pass": 259,
+      "fail": 0,
+      "exitCode": 0
+    },
+    "targetedEcho": {
+      "pass": 84,
+      "fail": 0,
+      "exitCode": 0
+    },
+    "typecheck": {
+      "command": "npx tsc --noEmit",
+      "exitCode": 0
+    },
+    "changedFileLint": {
+      "exitCode": 0
+    },
+    "repositoryLint": {
+      "command": "npm run lint",
+      "errors": 473,
+      "warnings": 311,
+      "exitCode": 1,
+      "remainingFindings": "Outside competency branch changed files compared with b681bb7^; not modified."
+    },
+    "gitDiffCheck": {
+      "exitCode": 0
+    }
+  },
+  "cloudCiRun": false,
+  "browserOrPhysicalDevicePlayback": false,
+  "buildRun": false,
+  "commandsStillRunning": false,
+  "remoteHeadRechecked": true,
+  "protectedPathsUnchanged": [
+    "public/clinical-media/echo",
+    "app/lib/clinicalMedia/licensedEchoAsset.ts",
+    "supabase"
+  ],
+  "validationContext": "Completed pre-commit validation of the code changes against the recorded base HEAD; commit preparation changes evidence packaging only.",
+  "baseHead": "c26466099bc1e8f833ac68b9e907eae31c5980be"
+}
