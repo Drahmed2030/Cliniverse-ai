@@ -14,7 +14,8 @@ The remediation additions belong to the local change set containing this packet,
 
 | File | SHA-256 at packet preparation |
 |---|---|
-| app/components/clinical-media/EchoA4cLesson.tsx | 95f18d2ec05cb71ebfe123a5944a7131d9b1ce7fffef53ef85db9b1f71f2d866 |
+| app/components/clinical-media/EchoA4cLesson.tsx | b959a3bd5cfa8730264ade8b83adb1f021a5a33851b58cb3e0dad8758721365d |
+| app/lib/codelab/echoA4cCasePack.ts | 7348c23abc7d42bba5d50248b03249ae57a930aa4fa894b176c2e0d9236d97e3 |
 | app/lib/codelab/echoA4cTrainingActivity.ts | 053e8a51456bb7083c97c6d415b99649cd28366c29c048b1354748f100b69fed |
 | app/lib/codelab/echoA4cRemediation.ts | 47a451c87400f50aa16809661b20212fcbbbd35d33ba8bb27f2656e433796e8f |
 
@@ -77,11 +78,18 @@ New-case assessment: BLOCKED. No distinct reviewed second case is available in t
 ## Technical evidence and remaining checks
 
 - Baseline before review-plan addition: 189/189 local tests and 20/20 CI browser tests passed (remote 0b10f794f7f49e573c09bd542916e7953f09a8db).
-- Review-plan browser verification: PENDING. The extended test covers dates, focus, export contents, download event and restart clearing. Chromium is unavailable locally. The baseline browser success does not validate this new UI.
+- Review-plan browser verification passed: 20/20 tests in CI run 33981827145, remote commit 2f3c31536756c7ea926e6a323fbf089a32dcb69c. Chromium viewport tests do not establish native iOS download behavior.
+- Case-pack extraction: 194/194 local tests, TypeScript and targeted ESLint passed. Browser verification of this extraction remains pending; previous CI evidence applies to its baseline only.
 - Test incorrect submission, targeted feedback, corrected submission, preserved first-attempt snapshot and restart clearing.
 - Test keyboard navigation, screen-reader feedback, phone/iPad layout and reduced motion.
 - Confirm the final receipt remains explicitly non-certifying and does not claim new-case transfer.
 - No Push, Production, TestFlight or Cloudflare action is authorized by review completion alone.
+
+## Case-data extraction record — 2026-09-06
+
+The lesson now reads its title, objective, three teaching notes, questions and corrective feedback from `echoA4cCasePack.ts`. The pack references the existing licensed asset and training activity, preserving the answer key and receipt formats. Structural validation rejects missing or duplicate questions, invalid options and key coverage mismatches; it does not validate clinical correctness.
+
+This is the first extraction, not a generic multi-case player. Assessment state, review scheduling, receipt generation and navigation remain A4C-specific. No second case is registered. Next: verify this refactor in Preview, then prepare a distinct licensed case with provenance and a human-reviewed key before enabling new-case assessment. Content remains English, education-only and Preview-only.
 
 ## Human review record — leave blank until actually reviewed
 

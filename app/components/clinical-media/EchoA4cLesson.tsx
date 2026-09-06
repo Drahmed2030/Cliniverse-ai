@@ -11,50 +11,16 @@ import {
   type EchoA4cCompletionReceipt,
   type EchoA4cQuestionId,
 } from '../../lib/codelab/echoA4cTrainingActivity'
-import { A4C_NORMAL_CLINICAL_STUDIO_ASSET } from '../../lib/clinicalMedia/licensedEchoAsset'
+import { ECHO_A4C_CASE_PACK } from '../../lib/codelab/echoA4cCasePack'
+
+const { questions: QUESTIONS, asset: A4C_NORMAL_CLINICAL_STUDIO_ASSET } = ECHO_A4C_CASE_PACK
 import styles from './clinical-media.module.css'
-import { evaluateEchoA4cAttempt, ECHO_A4C_REVIEW_NOTES, type EchoA4cAttempt } from '../../lib/codelab/echoA4cRemediation'
+import { evaluateEchoA4cAttempt, type EchoA4cAttempt } from '../../lib/codelab/echoA4cRemediation'
 import { createEchoA4cReviewPlan } from '../../lib/codelab/echoA4cReviewPlan'
 
 interface EchoA4cLessonProps {
   reducedMotion: boolean
 }
-
-interface EchoA4cQuestion {
-  id: EchoA4cQuestionId
-  prompt: string
-  options: { id: EchoA4cAnswerId; label: string }[]
-}
-
-const QUESTIONS: EchoA4cQuestion[] = [
-  {
-    id: 'view-identity',
-    prompt: 'Which view signature is demonstrated in the cine?',
-    options: [
-      { id: 'apical-four-chamber', label: 'Apical four-chamber (A4C)' },
-      { id: 'parasternal-long-axis', label: 'Parasternal long-axis (PLAX)' },
-      { id: 'subcostal-ivc', label: 'Subcostal IVC view' },
-    ],
-  },
-  {
-    id: 'visible-landmarks',
-    prompt: 'Which landmark set supports A4C recognition?',
-    options: [
-      { id: 'four-chambers-av-valves-septa', label: 'Four chambers, AV valve planes and septa' },
-      { id: 'aortic-arch-only', label: 'Aortic arch only' },
-      { id: 'coronary-arteries-only', label: 'Coronary arteries only' },
-    ],
-  },
-  {
-    id: 'safe-conclusion',
-    prompt: 'What is the safe conclusion from this short learning loop?',
-    options: [
-      { id: 'source-labeled-view-recognition-only', label: 'Use the source-labelled normal cine for view recognition only' },
-      { id: 'calculate-ejection-fraction', label: 'Calculate ejection fraction from this loop' },
-      { id: 'exclude-all-pathology', label: 'Exclude all structural pathology' },
-    ],
-  },
-]
 
 export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
   const [answers, setAnswers] = useState<Partial<EchoA4cAnswers>>({})
@@ -112,28 +78,20 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
       <header className={styles.echoLessonHeader}>
         <div>
           <p className={styles.echoEyebrow}>REAL ECHO · A4C NORMAL · PREVIEW</p>
-          <h2 id="echo-a4c-lesson-title">Recognize the A4C view without over-interpreting a short loop</h2>
-          <p>Use the governed cine above to identify the complete view signature, observe cyclical motion and preserve the boundary between view recognition and diagnostic measurement.</p>
+          <h2 id="echo-a4c-lesson-title">{ECHO_A4C_CASE_PACK.title}</h2>
+          <p>{ECHO_A4C_CASE_PACK.objective}</p>
         </div>
         <span className={styles.realMediaBadge}>English · A4C recognition</span>
       </header>
 
       <div className={styles.realEchoGuideGrid}>
-        <article>
-          <span>Note 01 · View signature</span>
-          <strong>Apical four-chamber</strong>
-          <p>Both atria and ventricles appear in one apical plane with the atrioventricular valve planes and septa.</p>
-        </article>
-        <article>
-          <span>Note 02 · Motion task</span>
-          <strong>Observe before measuring</strong>
-          <p>Track chamber and valve motion across the cine. Screen-side convention alone is not a reliable view identifier.</p>
-        </article>
-        <article>
-          <span>Note 03 · Learning scope</span>
-          <strong>View recognition only</strong>
-          <p>This 0.98-second source loop is not sufficient for EF, chamber measurements or exclusion of pathology.</p>
-        </article>
+        {ECHO_A4C_CASE_PACK.notes.map(note => (
+          <article key={note.id}>
+            <span>{note.label}</span>
+            <strong>{note.title}</strong>
+            <p>{note.body}</p>
+          </article>
+        ))}
       </div>
 
       {reducedMotion ? (
@@ -180,7 +138,7 @@ export default function EchoA4cLesson({ reducedMotion }: EchoA4cLessonProps) {
             <div>
               <strong>Review the A4C view boundary</strong>
               <span>Review the notes for the missed skills, then revise your answers. Playback remains under your control.</span>
-              <ul>{history.at(-1)?.missed.map(id => <li key={id}>{ECHO_A4C_REVIEW_NOTES[id]}</li>)}</ul>
+              <ul>{history.at(-1)?.missed.map(id => <li key={id}>{ECHO_A4C_CASE_PACK.reviewNotes[id]}</li>)}</ul>
             </div>
           </div>
         ) : null}
