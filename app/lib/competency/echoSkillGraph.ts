@@ -5,6 +5,7 @@ export type EchoSkillDomain =
   | 'regional-wall-motion'
   | 'cardiomyopathy-patterns'
   | 'valve-recognition'
+  | 'pericardial-patterns'
 
 export type EchoSkillLevel = 'foundation' | 'developing' | 'proficient'
 
@@ -57,6 +58,14 @@ export const ECHO_SKILL_GRAPH: readonly EchoSkillNode[] = [
     level: 'proficient',
     prerequisites: ['echo.function.lv-global-visual'],
     measurableOutcome: 'Selects the best supported cardiomyopathy pattern from approved educational options.',
+  },
+  {
+    id: 'echo.pericardium.effusion-pattern',
+    domain: 'pericardial-patterns',
+    label: 'Recognize a pericardial effusion pattern',
+    level: 'developing',
+    prerequisites: ['echo.view.a4c-recognition', 'echo.anatomy.a4c-landmarks'],
+    measurableOutcome: 'Recognizes a source-supported echo-free pericardial-space pattern without inferring tamponade, hemodynamic compromise or effusion size.',
   },
 ] as const
 
