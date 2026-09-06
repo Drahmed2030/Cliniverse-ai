@@ -59,3 +59,13 @@ test('mastery projections remain recomputable from evidence', () => {
   assert.equal(projection.band, 'proficient')
   assert.equal(projection.evidenceCount, 3)
 })
+
+test('real assessment scoring preserves selected option evidence through event conversion', async () => {
+  const { scoreEchoAssessment } = await import('../app/lib/competency/echoAssessmentContract.ts')
+  const { ECHO_A4C_COMPETENCY_TASKS } = await import('../app/lib/competency/echoA4cCompetencyTasks.ts')
+  const task = ECHO_A4C_COMPETENCY_TASKS[0]
+  const selectedOptionIds = [task.options[0].id]
+  const result = scoreEchoAssessment(task, { taskId: task.id, selectedOptionIds, confidence: 3, responseTimeMs: 1200, attemptedAt: '2026-09-06T10:00:00Z' })
+  const event = toEchoCompetencyEvent({ userId: 'preview-user', caseId: task.caseId, taskVersion: task.version, result, observedAt: '2026-09-06T10:00:00Z' })
+  assert.deepEqual(JSON.parse(event.selectedAnswer), selectedOptionIds)
+})

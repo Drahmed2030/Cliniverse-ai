@@ -1,7 +1,7 @@
 'use client'
 
 import { CheckCircle2, ExternalLink, RotateCcw, ShieldAlert } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   createEchoA4cCompletionReceipt,
   ECHO_A4C_TRAINING_ACTIVITY,
@@ -47,7 +47,8 @@ export default function EchoA4cLesson({ reducedMotion, onCompetencySignal }: Ech
   const [confidence,setConfidence]=useState<1|2|3|4|5>(3)
   const [mastery,setMastery]=useState<EchoSkillMastery|null>(null)
   const [competencyStatus,setCompetencyStatus]=useState<'idle'|'ready'|'degraded'>('idle')
-  const startedAtRef=useRef(Date.now())
+  const startedAtRef=useRef<number | null>(null)
+  useEffect(() => { startedAtRef.current = Date.now() }, [])
   const isComplete=QUESTIONS.every(question=>answers[question.id])
 
   function chooseAnswer(questionId:EchoA4cQuestionId,answerId:EchoA4cAnswerId){if(receipt)return;setAnswers(current=>({...current,[questionId]:answerId}));setResult('idle')}
@@ -56,7 +57,7 @@ export default function EchoA4cLesson({ reducedMotion, onCompetencySignal }: Ech
     const selected=answers['view-identity']; const taskId=COMPETENCY_TASK_BY_QUESTION['view-identity']; if(!selected||!taskId)return
     try{
       const observedAt=new Date().toISOString()
-      const output=await submitEchoPreviewCompetency({userId:'preview-session',taskId,selectedOptionId:selected,confidence,responseTimeMs:Math.max(0,Date.now()-startedAtRef.current),attemptedAt:observedAt})
+      const output=await submitEchoPreviewCompetency({userId:'preview-session',taskId,selectedOptionId:selected,confidence,responseTimeMs:Math.max(0,Date.now()-(startedAtRef.current ?? Date.now())),attemptedAt:observedAt})
       setMastery(output.mastery);setCompetencyStatus(output.persistenceState?'degraded':'ready')
       onCompetencySignal?.({ mastery:output.mastery, taskId, observedAt })
     }catch{setCompetencyStatus('degraded')}

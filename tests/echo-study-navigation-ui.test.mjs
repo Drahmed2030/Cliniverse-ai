@@ -14,7 +14,7 @@ test('study navigation exposes previous, next and clip position semantics', () =
 
 test('clinical studio renders study navigation only for governed Echo program', () => {
   assert.match(preview, /EchoStudyNavigation study=\{ECHO_A4C_PREVIEW_STUDY\}/)
-  assert.match(preview, /program === 'echo-a4c-normal'/)
+  assert.match(preview, /program\s*===\s*'echo-a4c-normal'\s*\?\s*<EchoStudyNavigation/)
 })
 
 test('preview study uses the governed licensed media asset rather than placeholder clips', () => {

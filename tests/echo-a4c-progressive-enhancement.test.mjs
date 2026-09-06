@@ -10,7 +10,7 @@ test('A4C lesson keeps competency integration behind preview adapter', () => {
 })
 
 test('A4C lesson degrades competency without throwing through the studio', () => {
-  assert.match(source, /Progressive enhancement: competency failure must never break the governed lesson/)
+  assert.match(source, /catch\s*\{\s*setCompetencyStatus\('degraded'\)/)
   assert.match(source, /setCompetencyStatus\('degraded'\)/)
 })
 

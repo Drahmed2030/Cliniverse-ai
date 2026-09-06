@@ -31,6 +31,7 @@ export interface EchoAssessmentResponse {
 }
 
 export interface EchoAssessmentResult {
+  selectedAnswer: string
   taskId: string
   skillId: string
   rawScore: number
@@ -76,6 +77,7 @@ export function scoreEchoAssessment(
   return {
     taskId: task.id,
     skillId: task.skillId,
+    selectedAnswer: JSON.stringify(response.selectedOptionIds),
     rawScore,
     normalizedScore,
     confidence: response.confidence,

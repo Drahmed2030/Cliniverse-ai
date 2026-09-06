@@ -22,6 +22,9 @@ export interface EchoMedia2026Candidate {
   ipadReadable: boolean
   desktopReadable: boolean
   distractingOverlays: boolean
+  normalReferenceConfirmed?: boolean
+  motionContinuous?: boolean
+  clinicalReviewComplete?: boolean
 }
 
 export interface EchoMedia2026Score {
@@ -45,6 +48,15 @@ export function evaluateEchoMedia2026(candidate: EchoMedia2026Candidate): EchoMe
   if (candidate.directIdentifiersVisible) blockingIssues.push('direct-identifiers-visible')
   if (candidate.unexpectedAudio) blockingIssues.push('unexpected-audio')
   if (!candidate.clinicallySuitableForViewRecognition) blockingIssues.push('not-suitable-for-view-recognition')
+
+  if (candidate.view !== 'A4C') blockingIssues.push('not-a4c')
+  if (candidate.normalReferenceConfirmed !== true) blockingIssues.push('normal-reference-not-confirmed')
+  if (candidate.motionContinuous !== true) blockingIssues.push('motion-continuity-not-confirmed')
+  if (candidate.clinicalReviewComplete !== true) blockingIssues.push('clinical-review-incomplete')
+  if (candidate.distractingOverlays) blockingIssues.push('distracting-overlays')
+  if (!candidate.clinicallySuitableForDiscrimination) blockingIssues.push('not-suitable-for-discrimination')
+  if (!candidate.mobileReadable) blockingIssues.push('not-mobile-readable')
+  if (![candidate.width, candidate.height, candidate.durationMs, candidate.framesPerSecond].every(value => typeof value === 'number' && Number.isFinite(value) && value > 0)) blockingIssues.push('invalid-media-metadata')
 
   let score = 0
   const pixelCount = candidate.width * candidate.height

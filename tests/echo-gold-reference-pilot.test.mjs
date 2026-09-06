@@ -4,7 +4,7 @@ import { A4C_FOUNDATION_STANDARD_2026, evaluateA4cGoldCandidate } from '../app/l
 
 test('foundation reference remains benchmarked rather than implicitly gold', () => {
   assert.ok(A4C_FOUNDATION_STANDARD_2026.score > 0)
-  assert.notEqual(A4C_FOUNDATION_STANDARD_2026.tier, 'gold')
+  assert.notEqual(A4C_FOUNDATION_STANDARD_2026.releaseTier, 'gold')
 })
 
 test('search metadata cannot promote an unreviewed candidate', () => {
@@ -29,11 +29,26 @@ test('reviewed high-quality candidate can clear the promotion gate', () => {
     candidateId: 'candidate-gold', sourcePageUrl: 'https://example.invalid/a4c', acquisitionEra: 'modern',
     rightsState: 'commercial-reuse-verified', mediaState: 'media-reviewed', clinicalState: 'view-confirmed',
     standardInput: {
-      width: 1920, height: 1080, framesPerSecond: 60, durationMs: 4000, viewConfirmed: true, motionContinuous: true,
-      clinicallyUsefulFieldOfView: true, distractingOverlay: false, mobileReadable: true, tabletDesktopReadable: true,
-      provenanceVerified: true, commercialReuseVerified: true, privacyPassed: true, discriminationTrainingSuitable: true,
+      candidateId: 'candidate-gold', sourcePageUrl: 'https://example.invalid/a4c', sourceDate: '2026-01-01',
+      width: 1920, height: 1080, framesPerSecond: 60, durationMs: 4000,
+      view: 'A4C', intendedUse: 'education-only', licenseId: 'CC-BY-SA-3.0', vrtConfirmed: true,
+      provenanceVerified: true, privacyReviewed: true, directIdentifiersVisible: false, unexpectedAudio: false,
+      clinicallySuitableForViewRecognition: true, clinicallySuitableForDiscrimination: true,
+      distractingOverlays: false, mobileReadable: true, ipadReadable: true, desktopReadable: true,
+      normalReferenceConfirmed: true, motionContinuous: true, clinicalReviewComplete: true,
     },
   })
   assert.equal(decision.decision, 'promote')
   assert.ok(decision.candidateScore > decision.foundationScore)
+})
+
+test('incomplete privacy or clinical review holds even with a media-reviewed claim', () => {
+  for (const flags of [{privacyReviewed:false, clinicalReviewComplete:true}, {privacyReviewed:true, clinicalReviewComplete:false}]) {
+    const decision = evaluateA4cGoldCandidate({
+      candidateId: 'pending', sourcePageUrl: 'https://example.invalid/pending', acquisitionEra: 'modern',
+      rightsState: 'commercial-reuse-verified', mediaState: 'media-reviewed', clinicalState: 'view-confirmed',
+      standardInput: { ...flags },
+    })
+    assert.equal(decision.decision, 'hold-for-media-review')
+  }
 })
