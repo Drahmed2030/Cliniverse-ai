@@ -91,10 +91,14 @@ export const ECHO_BATCH_01_CLINICAL_PROMOTION: readonly EchoClinicalPromotionRec
       'Recognize an abnormal echo-free pericardial-space pattern in A4C.',
       'Differentiate pericardial-space recognition from myocardial-pattern tasks.',
     ],
-    mappedSkillIds: ['echo.view.a4c-recognition', 'echo.anatomy.a4c-landmarks'],
-    requiredNewSkillIds: ['echo.pericardium.effusion-pattern'],
+    mappedSkillIds: [
+      'echo.view.a4c-recognition',
+      'echo.anatomy.a4c-landmarks',
+      'echo.pericardium.effusion-pattern',
+    ],
+    requiredNewSkillIds: [],
     prohibitedClaims: ['tamponade diagnosis', 'effusion size quantification', 'hemodynamic compromise', 'treatment recommendation'],
-    nextStep: 'Add a governed pericardial-pattern skill only after specialist review confirms the teaching construct; complete privacy and derivative review.',
+    nextStep: 'Specialist review of the pericardial-space teaching construct, privacy and governed derivative before learner release.',
   },
 ] as const
 
