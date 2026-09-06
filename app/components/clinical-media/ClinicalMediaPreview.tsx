@@ -8,9 +8,11 @@ import {
   type ClinicalMediaFormat,
   type ClinicalMediaProgram,
 } from '../../lib/clinicalMedia/clinicalMediaCompiler'
+import { ECHO_A4C_PREVIEW_STUDY } from '../../lib/clinicalMedia/echoPreviewStudy'
 import DoorToEcgMediaComposition from './DoorToEcgMediaComposition'
 import EchoA4cLesson from './EchoA4cLesson'
 import EchoA4cMediaComposition from './EchoA4cMediaComposition'
+import EchoStudyNavigation from './EchoStudyNavigation'
 import styles from './clinical-media.module.css'
 
 const FORMAT_ORDER: ClinicalMediaFormat[] = ['landscape', 'portrait', 'square']
@@ -26,7 +28,7 @@ const PROGRAM_COPY = {
   'echo-a4c-normal': {
     label: 'ECHO · Real A4C',
     title: 'Clinical Studio · licensed real ECHO cine',
-    body: 'A source-labelled normal A4C cine with concise study notes, three questions and a session-only receipt.',
+    body: 'A source-labelled normal A4C cine with governed study navigation, competency feedback and session-safe learning evidence.',
     status: {
       summary: 'Licensed cine · rights verified',
       detail: 'The English lesson copy and answer key remain Preview-only until clinical approval. No learner or Production release is enabled.',
@@ -128,6 +130,8 @@ export default function ClinicalMediaPreview() {
         <summary><span aria-hidden="true" /><strong>{copy.status.summary}</strong><small>Preview status</small></summary>
         <p>{copy.status.detail}</p>
       </details>
+
+      {program === 'echo-a4c-normal' ? <EchoStudyNavigation study={ECHO_A4C_PREVIEW_STUDY} /> : null}
 
       <div className={styles.playerStage} data-testid="clinical-media-stage">
         <div className={playerViewportClass} data-export-format={format} data-testid="clinical-media-player-viewport">
