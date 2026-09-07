@@ -1,0 +1,134 @@
+{
+  "candidateId": "echo-a4c-arvd-e00299",
+  "diagnosisLabel": "Arrhythmogenic right ventricular dysplasia",
+  "view": "A4C",
+  "sourceDescription": "A4CH: dilated right ventricle, reduced systolic function",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm",
+  "rights": {
+    "candidateId": "echo-a4c-arvd-e00299",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/0/06/ARVD_E00299_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "f842d02f434da3ece4946163cdf2fdd3ab30d0d75895c7ed43020bd52c619379",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:ARVD_E00299_(CardioNetworks_ECHOpedia).webm?oldid=775829151",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../../echo-media-lab-2026-09-06/echo-a4c-arvd-e00299/evidence.json",
+  "priorReview": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry with prominent right-sided cavity; source-labelled ARVD.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "31 frames at 28 fps; coarser temporal sampling than Foundation.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad RV geometry visible; fine motion less clear.",
+    "discriminationTrainingAssessment": "Potential RV size/function contrast; ARVD diagnosis needs wider evidence.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "sourceVerified": true,
+  "rightsVerified": true,
+  "sourceScreen": {
+    "candidateId": "echo-a4c-arvd-e00299",
+    "sourceSha256": "b02a4886f9146097df188bae7855027085870297a345908327f1959dcc06a541",
+    "sourcePageSha256": "f842d02f434da3ece4946163cdf2fdd3ab30d0d75895c7ed43020bd52c619379",
+    "commercialReuseVerified": true,
+    "licenseId": "CC-BY-SA-3.0",
+    "completeFrameReview": true,
+    "noDirectIdentifiers": true,
+    "noUnresolvedDateTime": true,
+    "noUnexpectedAudio": true,
+    "usableViewContext": true,
+    "anatomyPreservable": true,
+    "prohibitedClaims": [
+      "independent-arvc-diagnosis",
+      "genetic-inference",
+      "risk-inference",
+      "prognosis",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ]
+  },
+  "artifactScreen": {
+    "expectedSha256": "2e83143bd1e969b4b53349687cc2371cc9896c54e7c2c475659c7bb1b767c97b",
+    "actualSha256": "2e83143bd1e969b4b53349687cc2371cc9896c54e7c2c475659c7bb1b767c97b",
+    "decodePassed": true,
+    "completeContactSheetReview": true,
+    "clinicalReviewComplete": false,
+    "finalPrivacyReviewComplete": false
+  },
+  "teachingFocus": "Source-supported RV/cardiomyopathy pattern recognition",
+  "prohibitedClaims": [
+    "independent-arvc-diagnosis",
+    "genetic-inference",
+    "risk-inference",
+    "prognosis",
+    "treatment-recommendation",
+    "independent-diagnosis-from-one-clip",
+    "exclusion-of-alternative-pathology",
+    "learner-discrimination-before-specialist-approval",
+    "unsupported-measurements",
+    "numerical-ef"
+  ],
+  "recipe": "scripts/prepare-echo-pathology-batch.py",
+  "recipeHelpers": "scripts/prepare-echo-apical-hcm-derivative.py (read-only probe/summarize helpers)",
+  "technicalPrivacyScreen": "PASS-source-screen: no observed patient identifiers, accession/study IDs or acquisition date/time; institutional/provider credits retained; no audio",
+  "derivativePrivacyScreen": "PASS-technical-only",
+  "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+  "attribution": "CardioNetworks ECHOpedia / Wikimedia Commons; retain original named provider credit (A. Waterhouse, MD for severe HCM; AMC Echolab for other clips), canonical source link, CC BY-SA 3.0 link, change notice and ShareAlike.",
+  "transformationNotice": "VP8 to H.264 CRF16; minimal right-edge padding if odd width; container metadata removed; no crop/mask/interpolation/speed change; original overlays retained.",
+  "reviewMethod": "All original frames reviewed via checksum-verified complete contact sheets; complete derivative sheets reviewed only for the six intact artifacts.",
+  "sourceContactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "44c036266f58ae46ec78ffc46bc987d9a312e57c41ea7d9504ab9eb997a032a0"
+    }
+  ],
+  "derivativeContactSheetEvidence": [
+    {
+      "filename": "contact-01.jpg",
+      "sha256": "708836759070f85a0fb0a1c067c6bb4f01adc43920fab09767ae16cc242da9ff"
+    }
+  ],
+  "readability": {
+    "mobile": "HOLD-actual-device-observation-required",
+    "iPad": "HOLD-actual-device-observation-required",
+    "desktop": "HOLD-actual-device-observation-required"
+  },
+  "privacyQuestions": [
+    "Final human review of residual phase/timing annotations and named/institutional provider credits",
+    "Human acceptance of provenance and attribution plan"
+  ],
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

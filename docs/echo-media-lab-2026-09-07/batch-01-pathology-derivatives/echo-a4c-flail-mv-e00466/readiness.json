@@ -1,0 +1,20 @@
+{
+  "candidateId": "echo-a4c-flail-mv-e00466",
+  "disposition": "hold",
+  "blockers": [
+    "usableViewContext",
+    "Dark anatomy, uncertain A4C landmarks and flail mechanism obscured by color; specialist visibility review required before transformation."
+  ],
+  "governedPromotionAllowed": false,
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "promotionBlockers": [
+    "specialist-clinical-review-pending",
+    "final-privacy-review-pending",
+    "device-playback-pending",
+    "post-derivative-governance-required"
+  ],
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

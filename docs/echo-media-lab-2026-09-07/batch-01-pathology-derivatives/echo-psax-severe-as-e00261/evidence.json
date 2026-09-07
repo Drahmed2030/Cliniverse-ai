@@ -1,0 +1,148 @@
+{
+  "candidateId": "echo-psax-severe-as-e00261",
+  "diagnosisLabel": "Severe aortic stenosis",
+  "view": "PSAX",
+  "sourceDescription": "PSAX: stenotic aortic valve",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm",
+  "rights": {
+    "candidateId": "echo-psax-severe-as-e00261",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Severe_aortic_valve_stenosis_E00261_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "d913c74e9dc219707d257f1d0d2f1047c44a9df32ee0c8c0b7931ef213b82c2b",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_valve_stenosis_E00261_(CardioNetworks_ECHOpedia).webm?oldid=508075923",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../../echo-media-lab-2026-09-06/echo-psax-severe-as-e00261/evidence.json",
+  "priorReview": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "PSAX",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Short-axis aortic-valve-plane geometry; not A4C.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "82 frames over 1.64 s; orderly valve opening/closing pattern.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Small central valve target, dark surrounding field; weak fine-detail mobile task.",
+    "discriminationTrainingAssessment": "PSAX recognition candidate; severity requires clinical evidence beyond appearance.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "sourceVerified": true,
+  "rightsVerified": true,
+  "sourceScreen": {
+    "candidateId": "echo-psax-severe-as-e00261",
+    "sourceSha256": "64ff4285b4de87f67be1740d3889a525a69a6fd9220de5079ef4436972075131",
+    "sourcePageSha256": "d913c74e9dc219707d257f1d0d2f1047c44a9df32ee0c8c0b7931ef213b82c2b",
+    "commercialReuseVerified": true,
+    "licenseId": "CC-BY-SA-3.0",
+    "completeFrameReview": true,
+    "noDirectIdentifiers": true,
+    "noUnresolvedDateTime": true,
+    "noUnexpectedAudio": true,
+    "usableViewContext": true,
+    "anatomyPreservable": true,
+    "prohibitedClaims": [
+      "valve-area-calculation",
+      "gradient-calculation",
+      "velocity-calculation",
+      "intervention-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ]
+  },
+  "artifactScreen": {
+    "expectedSha256": "1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715",
+    "actualSha256": "1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715",
+    "decodePassed": true,
+    "completeContactSheetReview": true,
+    "clinicalReviewComplete": false,
+    "finalPrivacyReviewComplete": false
+  },
+  "teachingFocus": "Source-supported stenotic aortic valve pattern recognition",
+  "prohibitedClaims": [
+    "valve-area-calculation",
+    "gradient-calculation",
+    "velocity-calculation",
+    "intervention-recommendation",
+    "independent-diagnosis-from-one-clip",
+    "exclusion-of-alternative-pathology",
+    "learner-discrimination-before-specialist-approval",
+    "unsupported-measurements",
+    "numerical-ef"
+  ],
+  "recipe": "scripts/prepare-echo-pathology-batch.py",
+  "recipeHelpers": "scripts/prepare-echo-apical-hcm-derivative.py (read-only probe/summarize helpers)",
+  "technicalPrivacyScreen": "PASS-source-screen: no observed patient identifiers, accession/study IDs or acquisition date/time; institutional/provider credits retained; no audio",
+  "derivativePrivacyScreen": "PASS-technical-only",
+  "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+  "attribution": "CardioNetworks ECHOpedia / Wikimedia Commons; retain original named provider credit (A. Waterhouse, MD for severe HCM; AMC Echolab for other clips), canonical source link, CC BY-SA 3.0 link, change notice and ShareAlike.",
+  "transformationNotice": "VP8 to H.264 CRF16; minimal right-edge padding if odd width; container metadata removed; no crop/mask/interpolation/speed change; original overlays retained.",
+  "reviewMethod": "All original frames reviewed via checksum-verified complete contact sheets; complete derivative sheets reviewed only for the six intact artifacts.",
+  "sourceContactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "30a856463187c630ccba7c7525b824d71a87fe87652a8b934bf39757fab001e9"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "cd69db700cb3530bb20ae96378fb4dc47be294e399f07b417b47e0c713ea4017"
+    },
+    {
+      "file": "contact-03.jpg",
+      "sha256": "33e0b22576e8564330180dbd073a712973e2681b2b104506bbc49bb5094cd5b2"
+    }
+  ],
+  "derivativeContactSheetEvidence": [
+    {
+      "filename": "contact-01.jpg",
+      "sha256": "3a694a2233d4b2311651388c29e91a4bcef5b3bbdbfe1232dcc9f2cab6cabc3e"
+    },
+    {
+      "filename": "contact-02.jpg",
+      "sha256": "ebb28485e788929d513626dac4be5bead440b2272d406b6195b4f929d2c7f3e1"
+    },
+    {
+      "filename": "contact-03.jpg",
+      "sha256": "7efc3058aacb20ceed55e1ff028a41ba35d73586c939dcbedd2fc08cccb9d2db"
+    }
+  ],
+  "readability": {
+    "mobile": "HOLD-actual-device-observation-required",
+    "iPad": "HOLD-actual-device-observation-required",
+    "desktop": "HOLD-actual-device-observation-required"
+  },
+  "privacyQuestions": [
+    "Final human review of residual phase/timing annotations and named/institutional provider credits",
+    "Human acceptance of provenance and attribution plan"
+  ],
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

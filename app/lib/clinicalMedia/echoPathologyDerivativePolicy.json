@@ -1,0 +1,158 @@
+[
+  {
+    "candidateId": "echo-a4c-pericardial-effusion-e00674",
+    "sourceSha256": "edb1a37e186c8b56a243f826691fc98a96b3cabf08b1d6f7f39130054e0443f6",
+    "sourcePageSha256": "7a8a8fc61e94a296ab3f6481ade171711e8af98809c6e27f89fb3aaa6abf032a",
+    "teachingFocus": "Qualitative pericardial-space pattern recognition",
+    "prohibitedClaims": [
+      "tamponade-inference",
+      "size-quantification",
+      "hemodynamic-compromise",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-a4c-severe-hcm-mm0002",
+    "sourceSha256": "52f8ece25ccac48f561bdef70e5ee531c6bfb24f1d190063ec647505b3ea8de2",
+    "sourcePageSha256": "e1d5ef0fb43e76f482b0e0a5c7b11bd386474cbf05a26d2e41cad6b56ccca0cf",
+    "teachingFocus": "Source-supported hypertrophic pattern recognition",
+    "prohibitedClaims": [
+      "wall-thickness-measurement",
+      "lvot-obstruction-inference",
+      "genotype-inference",
+      "prognosis",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-a4c-severe-ms-e00613",
+    "sourceSha256": "02eb95356657acd22d9ffeb696fdcdfb0011a9d79b1ca5448581a6c61c72c4c4",
+    "sourcePageSha256": "29f105a5a6c2a1831596bdd3a5cd73aeae8fd8e8d8907dd3a2ac1f93a3530f69",
+    "teachingFocus": "Source-supported mitral stenosis pattern recognition",
+    "prohibitedClaims": [
+      "valve-area-calculation",
+      "pressure-gradient-quantification",
+      "hemodynamic-severity",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-a4c-flail-mv-e00466",
+    "sourceSha256": "05c3a62dc70a52a8f84ed12f626169bb1dd04141a9fa85b8d166b5c407f3389e",
+    "sourcePageSha256": "4c4039d07e82a472234692948ca293661281d333e43889c0678944697c4051c3",
+    "teachingFocus": "Source-supported flail/prolapse pattern recognition",
+    "prohibitedClaims": [
+      "mr-quantification",
+      "eroa",
+      "regurgitant-volume",
+      "surgical-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": true,
+    "transformationHoldReason": "Dark anatomy, uncertain A4C landmarks and flail mechanism obscured by color; specialist visibility review required before transformation."
+  },
+  {
+    "candidateId": "echo-a3c-severe-ar-e00234",
+    "sourceSha256": "ff626bf0f8715daf8d4f6f450cc71f57c93036e338a8215db809439d35d54f47",
+    "sourcePageSha256": "51a9b89ae6bd4a004813326840e4b4ac988c3573fabe092f9fbaafd163321d7b",
+    "teachingFocus": "Source-supported aortic regurgitation pattern recognition",
+    "prohibitedClaims": [
+      "vena-contracta",
+      "pressure-half-time",
+      "regurgitant-volume",
+      "hemodynamic-severity",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-psax-severe-as-e00261",
+    "sourceSha256": "64ff4285b4de87f67be1740d3889a525a69a6fd9220de5079ef4436972075131",
+    "sourcePageSha256": "d913c74e9dc219707d257f1d0d2f1047c44a9df32ee0c8c0b7931ef213b82c2b",
+    "teachingFocus": "Source-supported stenotic aortic valve pattern recognition",
+    "prohibitedClaims": [
+      "valve-area-calculation",
+      "gradient-calculation",
+      "velocity-calculation",
+      "intervention-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-plax-vsd-rtl-e00832",
+    "sourceSha256": "f251364be6911c350e4c3d2526f3c71e5f00ef435d45878f1df66534e0ce7ee8",
+    "sourcePageSha256": "5d1115fb5c7663f200b09c98fc09ae2d27668c734ec0932d4ef35796f35babf8",
+    "teachingFocus": "Source-supported defect/localization recognition subject to specialist confirmation; PLAX recognition only until then",
+    "prohibitedClaims": [
+      "shunt-quantification",
+      "qp-qs",
+      "shunt-direction-inference",
+      "hemodynamic-consequences",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  },
+  {
+    "candidateId": "echo-a4c-arvd-e00299",
+    "sourceSha256": "b02a4886f9146097df188bae7855027085870297a345908327f1959dcc06a541",
+    "sourcePageSha256": "f842d02f434da3ece4946163cdf2fdd3ab30d0d75895c7ed43020bd52c619379",
+    "teachingFocus": "Source-supported RV/cardiomyopathy pattern recognition",
+    "prohibitedClaims": [
+      "independent-arvc-diagnosis",
+      "genetic-inference",
+      "risk-inference",
+      "prognosis",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ],
+    "specialistRequiredBeforeTransformation": false,
+    "transformationHoldReason": null
+  }
+]

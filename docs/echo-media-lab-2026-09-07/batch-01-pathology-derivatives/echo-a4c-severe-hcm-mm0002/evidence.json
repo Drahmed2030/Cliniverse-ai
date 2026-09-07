@@ -1,0 +1,158 @@
+{
+  "candidateId": "echo-a4c-severe-hcm-mm0002",
+  "diagnosisLabel": "Severe hypertrophic cardiomyopathy",
+  "view": "A4C",
+  "sourceDescription": "A4CH view",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm",
+  "rights": {
+    "candidateId": "echo-a4c-severe-hcm-mm0002",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/0/06/Severe_Hypertrophic_Cardiomyopathy_%28HCM%29_MM0002_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "e1d5ef0fb43e76f482b0e0a5c7b11bd386474cbf05a26d2e41cad6b56ccca0cf",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_Hypertrophic_Cardiomyopathy_(HCM)_MM0002_(CardioNetworks_ECHOpedia).webm?oldid=972178519",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../../echo-media-lab-2026-09-06/echo-a4c-severe-hcm-mm0002/evidence.json",
+  "priorReview": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four-chamber geometry with conspicuous wall-thickness pattern; source-labelled severe HCM.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "Multiple phases over 2.46 s; no obvious edit cuts; saturation limits endocardial detail.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Narrow 427 px source; broad morphology visible, fine boundaries limited.",
+    "discriminationTrainingAssessment": "Potential wall-thickness contrast; do not infer severity quantitatively.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "sourceVerified": true,
+  "rightsVerified": true,
+  "sourceScreen": {
+    "candidateId": "echo-a4c-severe-hcm-mm0002",
+    "sourceSha256": "52f8ece25ccac48f561bdef70e5ee531c6bfb24f1d190063ec647505b3ea8de2",
+    "sourcePageSha256": "e1d5ef0fb43e76f482b0e0a5c7b11bd386474cbf05a26d2e41cad6b56ccca0cf",
+    "commercialReuseVerified": true,
+    "licenseId": "CC-BY-SA-3.0",
+    "completeFrameReview": true,
+    "noDirectIdentifiers": true,
+    "noUnresolvedDateTime": true,
+    "noUnexpectedAudio": true,
+    "usableViewContext": true,
+    "anatomyPreservable": true,
+    "prohibitedClaims": [
+      "wall-thickness-measurement",
+      "lvot-obstruction-inference",
+      "genotype-inference",
+      "prognosis",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ]
+  },
+  "artifactScreen": {
+    "expectedSha256": "39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913",
+    "actualSha256": "39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913",
+    "decodePassed": true,
+    "completeContactSheetReview": true,
+    "clinicalReviewComplete": false,
+    "finalPrivacyReviewComplete": false
+  },
+  "teachingFocus": "Source-supported hypertrophic pattern recognition",
+  "prohibitedClaims": [
+    "wall-thickness-measurement",
+    "lvot-obstruction-inference",
+    "genotype-inference",
+    "prognosis",
+    "treatment-recommendation",
+    "independent-diagnosis-from-one-clip",
+    "exclusion-of-alternative-pathology",
+    "learner-discrimination-before-specialist-approval",
+    "unsupported-measurements",
+    "numerical-ef"
+  ],
+  "recipe": "scripts/prepare-echo-pathology-batch.py",
+  "recipeHelpers": "scripts/prepare-echo-apical-hcm-derivative.py (read-only probe/summarize helpers)",
+  "technicalPrivacyScreen": "PASS-source-screen: no observed patient identifiers, accession/study IDs or acquisition date/time; institutional/provider credits retained; no audio",
+  "derivativePrivacyScreen": "PASS-technical-only",
+  "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+  "attribution": "CardioNetworks ECHOpedia / Wikimedia Commons; retain original named provider credit (A. Waterhouse, MD for severe HCM; AMC Echolab for other clips), canonical source link, CC BY-SA 3.0 link, change notice and ShareAlike.",
+  "transformationNotice": "VP8 to H.264 CRF16; minimal right-edge padding if odd width; container metadata removed; no crop/mask/interpolation/speed change; original overlays retained.",
+  "reviewMethod": "All original frames reviewed via checksum-verified complete contact sheets; complete derivative sheets reviewed only for the six intact artifacts.",
+  "sourceContactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "355ed9e19c5dd66eca8a6d7c3225d09d7aaa02edc9c14d8185a06187113a0e5a"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "537c7a7035c2cc8bdb80d3d8c94446da10636c63bcbc7c305be0ec5cf1275378"
+    },
+    {
+      "file": "contact-03.jpg",
+      "sha256": "dd043ca4e3791507168df38ec70c23bdc9addabccc776156f33d193591d3d213"
+    },
+    {
+      "file": "contact-04.jpg",
+      "sha256": "fdb745caf0123fadaa5729e7d67b7f42e82e93c922b7e23d1bb476e12573f635"
+    }
+  ],
+  "derivativeContactSheetEvidence": [
+    {
+      "filename": "contact-01.jpg",
+      "sha256": "7afc9213481d1db2c9ad0bbd0d9aa4d4174a4e2d2aba698ae48de0c08003b3c7"
+    },
+    {
+      "filename": "contact-02.jpg",
+      "sha256": "a70d6207feab79fe5f58ace9ba9693ef3ba485045a97f962e17810dffaff6b6b"
+    },
+    {
+      "filename": "contact-03.jpg",
+      "sha256": "2f3f5521fb29c412f22293f3bad6fba884094f47e74d316ff8c75dd21f644383"
+    },
+    {
+      "filename": "contact-04.jpg",
+      "sha256": "f23a9390da94e0b500c82c6b74b8c27c31fe29dbd3145680c2be84331f66c817"
+    }
+  ],
+  "readability": {
+    "mobile": "HOLD-actual-device-observation-required",
+    "iPad": "HOLD-actual-device-observation-required",
+    "desktop": "HOLD-actual-device-observation-required"
+  },
+  "privacyQuestions": [
+    "Final human review of residual phase/timing annotations and named/institutional provider credits",
+    "Human acceptance of provenance and attribution plan"
+  ],
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

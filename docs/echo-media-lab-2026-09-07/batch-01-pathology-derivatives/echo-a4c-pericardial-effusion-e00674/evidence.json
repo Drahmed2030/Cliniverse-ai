@@ -1,0 +1,132 @@
+{
+  "candidateId": "echo-a4c-pericardial-effusion-e00674",
+  "diagnosisLabel": "Pericardial effusion",
+  "view": "A4C",
+  "sourceDescription": "A4CH",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm",
+  "rights": {
+    "candidateId": "echo-a4c-pericardial-effusion-e00674",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Pericardial_effusion_E00674_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "7a8a8fc61e94a296ab3f6481ade171711e8af98809c6e27f89fb3aaa6abf032a",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Pericardial_effusion_E00674_(CardioNetworks_ECHOpedia).webm?oldid=1091980422",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../../echo-media-lab-2026-09-06/echo-a4c-pericardial-effusion-e00674/evidence.json",
+  "priorReview": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A4C",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "Four chambers and surrounding echo-free space visible; source-labelled effusion.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "32-frame short sequence; no obvious cut; incomplete loop/cycle sufficiency review.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Pericardial-space contrast visible at 375 px.",
+    "discriminationTrainingAssessment": "Potential pericardial-space recognition; no tamponade inference.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "sourceVerified": true,
+  "rightsVerified": true,
+  "sourceScreen": {
+    "candidateId": "echo-a4c-pericardial-effusion-e00674",
+    "sourceSha256": "edb1a37e186c8b56a243f826691fc98a96b3cabf08b1d6f7f39130054e0443f6",
+    "sourcePageSha256": "7a8a8fc61e94a296ab3f6481ade171711e8af98809c6e27f89fb3aaa6abf032a",
+    "commercialReuseVerified": true,
+    "licenseId": "CC-BY-SA-3.0",
+    "completeFrameReview": true,
+    "noDirectIdentifiers": true,
+    "noUnresolvedDateTime": true,
+    "noUnexpectedAudio": true,
+    "usableViewContext": true,
+    "anatomyPreservable": true,
+    "prohibitedClaims": [
+      "tamponade-inference",
+      "size-quantification",
+      "hemodynamic-compromise",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ]
+  },
+  "artifactScreen": {
+    "expectedSha256": "ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a",
+    "actualSha256": "ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a",
+    "decodePassed": true,
+    "completeContactSheetReview": true,
+    "clinicalReviewComplete": false,
+    "finalPrivacyReviewComplete": false
+  },
+  "teachingFocus": "Qualitative pericardial-space pattern recognition",
+  "prohibitedClaims": [
+    "tamponade-inference",
+    "size-quantification",
+    "hemodynamic-compromise",
+    "treatment-recommendation",
+    "independent-diagnosis-from-one-clip",
+    "exclusion-of-alternative-pathology",
+    "learner-discrimination-before-specialist-approval",
+    "unsupported-measurements",
+    "numerical-ef"
+  ],
+  "recipe": "scripts/prepare-echo-pathology-batch.py",
+  "recipeHelpers": "scripts/prepare-echo-apical-hcm-derivative.py (read-only probe/summarize helpers)",
+  "technicalPrivacyScreen": "PASS-source-screen: no observed patient identifiers, accession/study IDs or acquisition date/time; institutional/provider credits retained; no audio",
+  "derivativePrivacyScreen": "PASS-technical-only",
+  "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+  "attribution": "CardioNetworks ECHOpedia / Wikimedia Commons; retain original named provider credit (A. Waterhouse, MD for severe HCM; AMC Echolab for other clips), canonical source link, CC BY-SA 3.0 link, change notice and ShareAlike.",
+  "transformationNotice": "VP8 to H.264 CRF16; minimal right-edge padding if odd width; container metadata removed; no crop/mask/interpolation/speed change; original overlays retained.",
+  "reviewMethod": "All original frames reviewed via checksum-verified complete contact sheets; complete derivative sheets reviewed only for the six intact artifacts.",
+  "sourceContactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "511642b8b479d09244479e6ce2f2c4c65b345d3b25f78cc19600fbe4be52e6ca"
+    }
+  ],
+  "derivativeContactSheetEvidence": [
+    {
+      "filename": "contact-01.jpg",
+      "sha256": "80d50842fc67a9cf58d23319a397db24a08f98987e4e45275cfb9340a009d004"
+    }
+  ],
+  "readability": {
+    "mobile": "HOLD-actual-device-observation-required",
+    "iPad": "HOLD-actual-device-observation-required",
+    "desktop": "HOLD-actual-device-observation-required"
+  },
+  "privacyQuestions": [
+    "Final human review of residual phase/timing annotations and named/institutional provider credits",
+    "Human acceptance of provenance and attribution plan"
+  ],
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

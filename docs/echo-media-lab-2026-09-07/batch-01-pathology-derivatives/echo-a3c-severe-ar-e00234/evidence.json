@@ -1,0 +1,142 @@
+{
+  "candidateId": "echo-a3c-severe-ar-e00234",
+  "diagnosisLabel": "Severe aortic regurgitation",
+  "view": "A3C with Color Doppler",
+  "sourceDescription": "A3CH: Color Doppler, severe aortic regurgitation",
+  "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm",
+  "rights": {
+    "candidateId": "echo-a3c-severe-ar-e00234",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/Severe_aortic_regurgitation_E00234_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "51a9b89ae6bd4a004813326840e4b4ac988c3573fabe092f9fbaafd163321d7b",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Severe_aortic_regurgitation_E00234_(CardioNetworks_ECHOpedia).webm?oldid=494788381",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../../echo-media-lab-2026-09-06/echo-a3c-severe-ar-e00234/evidence.json",
+  "priorReview": {
+    "reviewer": "Codex technical and visual screening; not specialist clinical sign-off",
+    "reviewDate": "2026-09-06",
+    "allFramesContactSheetReviewed": true,
+    "fullResolutionSpotFrames": [
+      1
+    ],
+    "mobileAssessmentWidthPx": 375,
+    "visibleViewAssessment": "A3C with Color Doppler",
+    "a4cConfirmedForGold": false,
+    "clinicalObservation": "LV/LA/LVOT-long-axis geometry and color sector; not A4C.",
+    "clinicalReviewComplete": false,
+    "normalReferenceConfirmed": false,
+    "directPatientIdentifiersObserved": false,
+    "burnedInAcquisitionDateTimeObserved": false,
+    "privacyState": "technical-screen-no-identifiers-observed-final-review-pending",
+    "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+    "audioAssessment": "No audio stream in ffprobe.",
+    "motionFidelityAssessment": "48 frames at 51 fps; short ordered phase progression.",
+    "temporalContinuityAssessment": "Timestamps strictly increasing; see measured min/max intervals. Visual continuity is provisional, not native acquisition verification.",
+    "mobileReadabilityAssessment": "Broad color-flow anatomy readable; fine mechanism requires review.",
+    "discriminationTrainingAssessment": "A3C/valvular contrast only; excludes Normal A4C Gold.",
+    "goldDecision": "exclude-pathology-or-other-view",
+    "labDisposition": "hold",
+    "learnerReady": false,
+    "binaryCommitAllowed": false,
+    "nextStep": "Obtain specialist clip/view and teaching-boundary review; prepare and re-review governed derivative only after source gates clear."
+  },
+  "sourceVerified": true,
+  "rightsVerified": true,
+  "sourceScreen": {
+    "candidateId": "echo-a3c-severe-ar-e00234",
+    "sourceSha256": "ff626bf0f8715daf8d4f6f450cc71f57c93036e338a8215db809439d35d54f47",
+    "sourcePageSha256": "51a9b89ae6bd4a004813326840e4b4ac988c3573fabe092f9fbaafd163321d7b",
+    "commercialReuseVerified": true,
+    "licenseId": "CC-BY-SA-3.0",
+    "completeFrameReview": true,
+    "noDirectIdentifiers": true,
+    "noUnresolvedDateTime": true,
+    "noUnexpectedAudio": true,
+    "usableViewContext": true,
+    "anatomyPreservable": true,
+    "prohibitedClaims": [
+      "vena-contracta",
+      "pressure-half-time",
+      "regurgitant-volume",
+      "hemodynamic-severity",
+      "treatment-recommendation",
+      "independent-diagnosis-from-one-clip",
+      "exclusion-of-alternative-pathology",
+      "learner-discrimination-before-specialist-approval",
+      "unsupported-measurements",
+      "numerical-ef"
+    ]
+  },
+  "artifactScreen": {
+    "expectedSha256": "13f3d791637cdc7e8704fd36fc98269b458afc0d472f03ca1349540b09ca91cc",
+    "actualSha256": "13f3d791637cdc7e8704fd36fc98269b458afc0d472f03ca1349540b09ca91cc",
+    "decodePassed": true,
+    "completeContactSheetReview": true,
+    "clinicalReviewComplete": false,
+    "finalPrivacyReviewComplete": false
+  },
+  "teachingFocus": "Source-supported aortic regurgitation pattern recognition",
+  "prohibitedClaims": [
+    "vena-contracta",
+    "pressure-half-time",
+    "regurgitant-volume",
+    "hemodynamic-severity",
+    "treatment-recommendation",
+    "independent-diagnosis-from-one-clip",
+    "exclusion-of-alternative-pathology",
+    "learner-discrimination-before-specialist-approval",
+    "unsupported-measurements",
+    "numerical-ef"
+  ],
+  "recipe": "scripts/prepare-echo-pathology-batch.py",
+  "recipeHelpers": "scripts/prepare-echo-apical-hcm-derivative.py (read-only probe/summarize helpers)",
+  "technicalPrivacyScreen": "PASS-source-screen: no observed patient identifiers, accession/study IDs or acquisition date/time; institutional/provider credits retained; no audio",
+  "derivativePrivacyScreen": "PASS-technical-only",
+  "overlays": "ECHOpedia/provider credits, ECG trace, depth scale and acquisition parameters; color sector/scale where applicable.",
+  "attribution": "CardioNetworks ECHOpedia / Wikimedia Commons; retain original named provider credit (A. Waterhouse, MD for severe HCM; AMC Echolab for other clips), canonical source link, CC BY-SA 3.0 link, change notice and ShareAlike.",
+  "transformationNotice": "VP8 to H.264 CRF16; minimal right-edge padding if odd width; container metadata removed; no crop/mask/interpolation/speed change; original overlays retained.",
+  "reviewMethod": "All original frames reviewed via checksum-verified complete contact sheets; complete derivative sheets reviewed only for the six intact artifacts.",
+  "sourceContactSheetEvidence": [
+    {
+      "file": "contact-01.jpg",
+      "sha256": "92c0226727af59bb49087accca982e7c026977a1f98abfe739e2fb79f4864ad6"
+    },
+    {
+      "file": "contact-02.jpg",
+      "sha256": "55233c92df9e86b2bebb7c6ae6c90b01b68d04b1a2fcb916182aa049f756eb27"
+    }
+  ],
+  "derivativeContactSheetEvidence": [
+    {
+      "filename": "contact-01.jpg",
+      "sha256": "d54a78c96f230f4a92b2a0fa90a95a143f04510816f330ebb758865dc051fe11"
+    },
+    {
+      "filename": "contact-02.jpg",
+      "sha256": "37e0e43f60263f18674a6127e6e8469c1db4e085913a3bfc18535c0d6ec1f03b"
+    }
+  ],
+  "readability": {
+    "mobile": "HOLD-actual-device-observation-required",
+    "iPad": "HOLD-actual-device-observation-required",
+    "desktop": "HOLD-actual-device-observation-required"
+  },
+  "privacyQuestions": [
+    "Final human review of residual phase/timing annotations and named/institutional provider credits",
+    "Human acceptance of provenance and attribution plan"
+  ],
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

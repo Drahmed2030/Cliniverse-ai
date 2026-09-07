@@ -1,0 +1,28 @@
+{
+  "remoteBase": "bd13549968707308fa4db9539c997f567317faa3",
+  "batchTests": {
+    "command": "node --experimental-strip-types --test tests/echo-pathology-batch-derivatives.test.mjs",
+    "passed": 22,
+    "failed": 0
+  },
+  "echoTests": {
+    "command": "node --experimental-strip-types --test tests/echo-*.test.mjs",
+    "passed": 179,
+    "failed": 1,
+    "baselineFailure": "Pericardial skill-graph gap expectation; previously independently reproduced at 6a044672; related tracked files unchanged."
+  },
+  "typecheck": {
+    "command": "tsc --noEmit --incremental false",
+    "exitCode": 0
+  },
+  "targetedLint": {
+    "command": "eslint app/lib/clinicalMedia/echoPathologyDerivativeReadiness.ts tests/echo-pathology-batch-derivatives.test.mjs",
+    "exitCode": 0
+  },
+  "allPreExistingTrackedFilesUnchanged": true,
+  "protectedLocalMediaChecksumsUnchanged": true,
+  "sourceChecksumsReverified": 8,
+  "intactDerivativeChecksumsReverified": 6,
+  "heldCorruptDerivative": 1,
+  "binariesCommitted": false
+}

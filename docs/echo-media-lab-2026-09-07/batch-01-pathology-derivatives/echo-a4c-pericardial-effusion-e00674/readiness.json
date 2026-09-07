@@ -1,0 +1,18 @@
+{
+  "candidateId": "echo-a4c-pericardial-effusion-e00674",
+  "disposition": "process-derivative",
+  "blockers": [],
+  "governedPromotionAllowed": false,
+  "specialistReview": "pending-human-review",
+  "finalPrivacyReview": "pending-human-review",
+  "devicePlayback": "pending-observation",
+  "promotionBlockers": [
+    "specialist-clinical-review-pending",
+    "final-privacy-review-pending",
+    "device-playback-pending",
+    "post-derivative-governance-required"
+  ],
+  "learnerReady": false,
+  "binaryCommitEligible": false,
+  "artifactIntegrityVerified": true
+}
