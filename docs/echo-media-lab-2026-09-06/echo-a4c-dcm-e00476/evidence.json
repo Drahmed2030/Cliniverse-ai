@@ -138,5 +138,12 @@
     "scoreDelta": -4,
     "promote": false,
     "interpretation": "Conservative screening score with all incomplete clinical/device/privacy gates false. The evaluator legacy foundation fallback denotes blocked promotion, not appointment as a Foundation asset."
+  },
+  "governedDerivative": {
+    "evidence": "derivative-v1/readiness.json",
+    "report": "derivative-v1/README.md",
+    "status": "local-derivative-prepared-review-held",
+    "binaryCommitAllowed": false,
+    "learnerReady": false
   }
 }

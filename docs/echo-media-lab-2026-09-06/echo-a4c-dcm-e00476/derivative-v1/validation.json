@@ -1,0 +1,25 @@
+{
+  "date": "2026-09-06",
+  "baseHead": "a9f088e20b6ab3bc0a98917106b48ad9d0b4e402",
+  "targetedTests": {
+    "command": "node --test tests/echo-*.test.mjs",
+    "passed": 106,
+    "failed": 0,
+    "newDcmTests": 22
+  },
+  "typecheck": {
+    "command": "./node_modules/.bin/tsc --noEmit --incremental false",
+    "exitCode": 0
+  },
+  "targetedLint": {
+    "command": "./node_modules/.bin/eslint scripts/echo-dcm-derivative-readiness.mts tests/echo-dcm-derivative-readiness.test.mjs",
+    "exitCode": 0
+  },
+  "fullSuite": "Not rerun for this derivative-only change; prior recorded result 259/259 in ../../validation.json.",
+  "build": "Not run; no runtime/UI/deployment change.",
+  "physicalDevicePlayback": "Not performed; remains blocking review.",
+  "foundationSha256": "89e311b8a841a2a6813d4c5ba470aede46ba85780d42b2124330fc01846c783c",
+  "foundationUnchanged": true,
+  "rawMediaCommitted": false,
+  "logsCommitted": false
+}
