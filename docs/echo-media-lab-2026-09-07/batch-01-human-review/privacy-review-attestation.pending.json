@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "batchId": "echo-batch-01-pathology-human-review",
+  "recordType": "pending-human-privacy-provenance-attestation",
+  "status": "PENDING_HUMAN_PRIVACY_ATTESTATION",
+  "recordedAt": "2026-09-07",
+  "technicalEvidenceAlreadyAvailable": {
+    "directIdentifiersObservedInTechnicalReview": false,
+    "disallowedDateTimeObservedInTechnicalReview": false,
+    "audioPresent": false,
+    "exactShaVerifiedOnMac": true,
+    "devicePlayback": {
+      "catalinaQuickTime": "PASS_6_OF_6",
+      "catalinaSafari": "PASS_6_OF_6",
+      "physicalIPhoneSafari": "PASS_6_OF_6",
+      "iPad": "PENDING_NOT_AVAILABLE"
+    }
+  },
+  "requiredHumanAttestation": [
+    "noDirectIdentifiers",
+    "noDisallowedDateTime",
+    "residualAnnotationsAccepted",
+    "provenanceAccepted",
+    "attributionPlanAccepted"
+  ],
+  "attestationBoundary": {
+    "clinicalReviewAttested": true,
+    "privacyApprovalClaimed": false,
+    "learnerReady": false,
+    "binaryCommitEligible": false,
+    "note": "Technical screening and playback evidence do not replace final human privacy/provenance attestation. This file remains fail-closed until a named human reviewer explicitly attests the five required privacy/provenance checks for the six exact-SHA artifacts."
+  },
+  "candidates": [
+    {"candidateId":"echo-a4c-pericardial-effusion-e00674","artifactSha256":"ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a"},
+    {"candidateId":"echo-a4c-severe-hcm-mm0002","artifactSha256":"39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913"},
+    {"candidateId":"echo-a4c-severe-ms-e00613","artifactSha256":"c9db61d29ae454e9967023aa0b2ce3e218b333b4b199f6394b8665199616f274"},
+    {"candidateId":"echo-a3c-severe-ar-e00234","artifactSha256":"13f3d791637cdc7e8704fd36fc98269b458afc0d472f03ca1349540b09ca91cc"},
+    {"candidateId":"echo-psax-severe-as-e00261","artifactSha256":"1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715"},
+    {"candidateId":"echo-a4c-arvd-e00299","artifactSha256":"2e83143bd1e969b4b53349687cc2371cc9896c54e7c2c475659c7bb1b767c97b"}
+  ]
+}
