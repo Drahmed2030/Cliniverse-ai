@@ -574,6 +574,93 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
 }
 
+/* A separate control surface keeps contrast stable and the cine unobstructed. */
+.cineControlShelf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--replay-border, #374151);
+  border-radius: 22px;
+  background: var(--replay-raised, #1f2937);
+  color: var(--replay-text, #fff);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+@supports (backdrop-filter: blur(12px)) {
+  .cineControlShelf {
+    background: color-mix(in srgb, var(--replay-raised, #1f2937) 94%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.cineFrameTools, .cineActionTools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cineToolButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--replay-border, #64748b);
+  border-radius: 16px;
+  background: var(--replay-surface, #111827);
+  color: var(--replay-text, #fff);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.cineToolButton:hover:not(:disabled), .cineToolButton[aria-pressed="true"] {
+  border-color: var(--replay-cyan, #06b6d4);
+  background: var(--replay-blue, #2563eb);
+  color: #fff;
+}
+
+.cineToolButton:active:not(:disabled) { filter: brightness(.9); }
+.cineToolButton:focus-visible { outline: 3px solid var(--replay-cyan, #06b6d4); outline-offset: 3px; }
+.cineToolButton:disabled, .controlButton:disabled { opacity: .45; cursor: not-allowed; }
+.cineFrameReadout { display: grid; gap: 3px; min-width: 100px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+.cineFrameReadout strong { font-size: 16px; }
+.cineControlHint { width: 100%; margin: 0; color: var(--replay-secondary, #e5e7eb); font-size: 12px; line-height: 1.5; text-align: center; }
+
+.cineFocus { padding: 0 !important; background: #000; }
+.cineFocus::before { display: none; }
+.cineFocus .brandRow, .cineFocus .copy, .cineFocus .footerRow, .cineFocus .realEchoMediaMeta { display: none; }
+.cineFocus .scene { position: absolute; inset: 0; display: block; margin: 0; padding: 0; }
+.cineFocus .visual { width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: 0; }
+.cineFocus .realEchoVideoFrame { width: 100%; height: 100%; border: 0; border-radius: 0; }
+
+@media (max-width: 600px) {
+  .cineControlShelf { justify-content: center; padding: 12px 8px; }
+  .cineActionTools { width: 100%; }
+  .cineToolButton { flex-shrink: 0; }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .cineControlShelf { background: var(--replay-surface, #111827); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cineToolButton { transition: none; }
+}
+
 .previewFooter {
   display: flex;
   align-items: center;
