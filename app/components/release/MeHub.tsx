@@ -28,7 +28,7 @@ const sections: Array<{
     title: 'Life',
     description: 'Personal wellness context kept separate from clinical workflow data.',
     status: 'gated',
-    detail: 'Manual entries are labelled as manual. Device data appears only after a real Apple Health / Health Connect integration is verified.',
+    detail: 'Manual entries are labelled as manual. Device data appears only after a real Apple Health integration is verified.',
   },
   {
     title: 'Privacy & Support',

@@ -29,11 +29,6 @@ const items: Array<{
     detail: 'Hidden from connected-data claims until native HealthKit permissions, source attribution and physical-device testing are complete.',
   },
   {
-    title: 'Android Health Connect',
-    state: 'not_connected',
-    detail: 'Planned Android health-data bridge. No Google/Android connected claim until a maintained native integration is verified.',
-  },
-  {
     title: 'Demo / educational vitals',
     state: 'sample',
     detail: 'Allowed only in clearly marked demo or simulation surfaces and never in the user wellness record.',
