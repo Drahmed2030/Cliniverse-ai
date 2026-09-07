@@ -1,6 +1,6 @@
 # Echo Batch 01 — Apple Playback Matrix
 
-Status: LEGACY QUICKTIME BATCH PASS
+Status: LEGACY APPLE PLAYBACK BATCH PASS
 
 This matrix records playback evidence only. It does not provide clinical approval, privacy approval, learner readiness, binary inclusion authorization, diagnosis authorization, certification, deployment authorization, or Supabase authorization.
 
@@ -34,12 +34,12 @@ Any checksum mismatch, FAIL, uncertainty requiring escalation, or inability to v
 
 | Candidate | SHA256 | Catalina Safari | Catalina QuickTime | iPhone | iPad | Current status |
 |---|---|---:|---:|---:|---:|---|
-| Pericardial effusion | `ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
-| Severe HCM | `39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
-| Severe MS | `c9db61d29ae454e9967023aa0b2ce3e218b333b4b199f6394b8665199616f274` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
-| Severe AR | `13f3d791637cdc7e8704fd36fc98269b458afc0d472f03ca1349540b09ca91cc` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
-| Severe AS | `1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
-| ARVD source-supported RV pattern | `2e83143bd1e969b4b53349687cc2371cc9896c54e7c2c475659c7bb1b767c97b` | PENDING | **PASS** | PENDING | PENDING | legacy QuickTime pass; Safari/current Apple pending |
+| Pericardial effusion | `ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
+| Severe HCM | `39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
+| Severe MS | `c9db61d29ae454e9967023aa0b2ce3e218b333b4b199f6394b8665199616f274` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
+| Severe AR | `13f3d791637cdc7e8704fd36fc98269b458afc0d472f03ca1349540b09ca91cc` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
+| Severe AS | `1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
+| ARVD source-supported RV pattern | `2e83143bd1e969b4b53349687cc2371cc9896c54e7c2c475659c7bb1b767c97b` | **PASS** | **PASS** | PENDING | PENDING | legacy Apple playback pass; current Apple pending |
 
 ## Verified Catalina QuickTime batch evidence
 
@@ -61,15 +61,35 @@ Date: 2026-09-07
 - Overlay readability: PASS by device observer across all six
 - Visual quality: device observer reported all six as very clear/high quality and comparable in appearance to routine echo cine displayed on clinical-center echo workstations
 
-This is a device-playback observation only. It is not specialist clinical approval, privacy approval, diagnosis authorization, or learner-readiness authorization.
+## Verified Catalina Safari batch evidence
 
-## Next legacy playback step
+Date: 2026-09-07
 
-QuickTime batch review is complete. Next:
+- Hardware: MacBook Pro 2012
+- OS: macOS Catalina
+- Browser: Safari 15.6.1 / WebKit 605.1.15
+- Delivery: local `file:` page serving the exact downloaded MP4 derivatives without re-encoding
+- Exact-SHA verification had already passed for all six files on the same Mac before browser review
+- Six of six derivatives were visually reviewed in Safari and reported PASS by the device observer
+- Playback start: PASS across all six
+- Play/pause: PASS across all six
+- Seek/scrub: PASS across all six
+- No blank/black playback failure reported across all six
+- Aspect ratio and visible geometry: PASS by device observer across all six
+- Anatomy and retained overlays remained readable by device observer across all six
+- User-provided photos show all six clips loaded in the local Safari review page, with the first three and second three visible in separate views
 
-1. run the same six exact-SHA derivatives through Catalina Safari/direct media playback;
-2. if Clinical Studio can serve the exact files without transformation, review them there and record separately;
-3. later obtain current iPhone/iPad evidence;
+The Safari record is based on direct user/device observation. An earlier exported observation JSON recorded three provisional HOLD values while the batch review was incomplete; those were superseded by explicit manual re-review of all six clips, with the user confirming all six PASS.
+
+This is device-playback evidence only. It is not specialist clinical approval, privacy approval, diagnosis authorization, or learner-readiness authorization.
+
+## Next playback step
+
+Legacy Apple playback is complete for the six exact-SHA derivatives on Catalina in both QuickTime and Safari. Next:
+
+1. obtain current physical iPhone playback evidence for the six clips;
+2. obtain current physical iPad evidence if available, or record iPad as pending rather than inferring it;
+3. if Clinical Studio can serve the exact files without transformation, review the Studio integration path separately;
 4. keep human clinical/privacy review and post-review quality gate independent.
 
 ## Release boundary
