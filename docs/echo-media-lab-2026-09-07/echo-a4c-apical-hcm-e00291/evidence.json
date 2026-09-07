@@ -1,0 +1,116 @@
+{
+  "candidateId": "echo-a4c-apical-hcm-e00291",
+  "sourceLabel": "Apical hypertrophic cardiomyopathy",
+  "derivativeFilename": "echo-a4c-apical-hcm-e00291-preview-v1.mp4",
+  "sourceSha1": "0c73d70ee7ad0663a7c62b0a3ed0e453b4f4f84e",
+  "sourceSha256": "e23aa565789effcae9728fc8e9a4b71e6a90062e8c0014e4fe85899bd419f97a",
+  "derivativeSha256": "d7bd8c51449596da112362d7747f67d2fedec979f0a5327b748ebd5d8984260e",
+  "rights": {
+    "candidateId": "echo-a4c-apical-hcm-e00291",
+    "sourcePageUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm",
+    "originalFileUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Apical_HCM_E00291_%28CardioNetworks_ECHOpedia%29.webm",
+    "licenseId": "CC-BY-SA-3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "vrtTicket": "2011102310008874",
+    "commercialReuseVerified": true,
+    "rightsReviewer": "Codex source-page review; per-file license and VRT notice inspected before download",
+    "sourcePageSha256": "51a0b8e575d1a6ad52ed1090c51794f6644c667b53dbf6e88b1733fede38df62",
+    "downloadExit": 0,
+    "downloadError": "",
+    "reviewDate": "2026-09-06",
+    "canonicalRevisionUrl": "https://commons.wikimedia.org/wiki/File:Apical_HCM_E00291_(CardioNetworks_ECHOpedia).webm?oldid=799837133",
+    "licenseEvidenceSummary": "Per-file notice grants sharing and adaptation under CC BY-SA 3.0; commercial reuse permitted subject to attribution, license link, change notice and ShareAlike. The listed VRT ticket confirms the public permission notice; private ticket contents were not accessed."
+  },
+  "sourceEvidence": "../../echo-media-lab-2026-09-06/echo-a4c-apical-hcm-e00291/evidence.json",
+  "attribution": {
+    "credit": "CardioNetworks ECHOpedia; Courtesy of the AMC Echolab, AMC, The Netherlands; Wikimedia Commons",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "changeNotice": "VP8 to H.264 re-encode; one black pixel column added at right; container metadata removed; frames and presentation timestamps retained.",
+    "shareAlikeRequired": true,
+    "originalCreditsPreserved": true
+  },
+  "technicalEvidence": "technical.json",
+  "recipe": "../../../scripts/prepare-echo-apical-hcm-derivative.py",
+  "temporalFidelity": {
+    "frameCountPreserved": true,
+    "presentationTimestampsIdentical": true,
+    "durationDifferenceMilliseconds": -1,
+    "explanation": "Final packet/container duration rounding; 50 frame presentation times unchanged. Nominal 51 fps retained; average is 2500/49 due to 980 ms container duration.",
+    "framesInvented": false,
+    "interpolation": false,
+    "speedChange": false
+  },
+  "visualReview": {
+    "method": "All 50 source and all 50 derivative frames reviewed in complete ordered contact sheets; source first frame additionally inspected at native resolution.",
+    "a4cContext": "technically-screened; apex and four-chamber context preserved; specialist confirmation pending",
+    "anatomyCropped": false,
+    "overlayMasking": false,
+    "overlays": [
+      "depth scale",
+      "orientation markers",
+      "grayscale bar",
+      "ECG trace",
+      "heart rate and changing phase/timing numerals",
+      "AMC Echolab institutional credit",
+      "ECHOPEDIA.ORG credit"
+    ],
+    "technicalPrivacyScreen": "PASS: no observed direct patient identifiers, accession/study identifiers or acquisition date/time; no audio streams",
+    "institutionalCreditPresent": true,
+    "unresolvedPrivacyQuestions": [
+      "Human confirmation of all residual timing/clinical annotations",
+      "Human approval of institutional credits and provenance/redistribution attribution"
+    ],
+    "motionContinuity": "PASS for ordered frame/timestamp continuity and complete decode; live playback, loop seam and clinical motion sufficiency HOLD",
+    "contactSheetsCommitted": false
+  },
+  "readability": {
+    "mobile": {
+      "state": "HOLD",
+      "reason": "Device/browser observation not performed; contact sheets do not establish device readability."
+    },
+    "iPad": {
+      "state": "HOLD",
+      "reason": "Device/browser observation not performed; contact sheets do not establish device readability."
+    },
+    "desktop": {
+      "state": "HOLD",
+      "reason": "Device/browser observation not performed; contact sheets do not establish device readability."
+    }
+  },
+  "teachingFocus": [
+    "A4C view recognition",
+    "source-supported apical hypertrophic pattern",
+    "qualitative pattern recognition",
+    "future normal-versus-pathology discrimination only after specialist approval"
+  ],
+  "prohibitedClaims": [
+    "wall-thickness-measurement",
+    "chamber-measurement",
+    "lvot-obstruction-inference",
+    "doppler-severity",
+    "genotype-inference",
+    "prognosis",
+    "treatment-recommendation",
+    "independent-hcm-diagnosis",
+    "exclusion-of-alternative-pathology",
+    "numerical-ef",
+    "learner-discrimination-before-specialist-approval"
+  ],
+  "finalPrivacyReview": "human-required-pending",
+  "specialistClinicalReview": "human-required-pending",
+  "appleDeviceReview": "pending-not-waived",
+  "learnerReady": false,
+  "binaryCommitEligible": false,
+  "localArtifactOnly": true,
+  "contractProvenance": {
+    "path": "app/lib/clinicalMedia/echoApicalHcmReadiness.ts",
+    "importedFromRequiredRemoteBranchCommit": "6a044672a3c3318ce29ad2ea78cf5c04b077ae95",
+    "note": "Contract absent at local HEAD; only existing Apical contract and test retrieved. No DCM closure files imported."
+  },
+  "frozenAssets": {
+    "manifest": "frozen-assets.json",
+    "allPreexistingFrozenFilesUnchanged": true,
+    "localDcmDerivativeSha256": "7aa9c9b446c84f6de3af0eaf3cbcfd0821b5f70f8b12d031fa027b083079397f"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "apicalTests": {
+    "command": "node --experimental-strip-types --test tests/echo-apical-hcm-*.test.mjs",
+    "pass": 19,
+    "fail": 0
+  },
+  "affectedEchoTests": {
+    "command": "node --experimental-strip-types --test tests/echo-*.test.mjs",
+    "pass": 146,
+    "fail": 1,
+    "knownBaselineFailure": "echo-batch01-clinical-promotion.test.mjs: pericardial effusion skill-graph gap expects missing skill but registry already contains it; unrelated tracked files unchanged"
+  },
+  "typecheck": {
+    "command": "./node_modules/.bin/tsc --noEmit --incremental false",
+    "exitCode": 0
+  },
+  "targetedLint": {
+    "command": "./node_modules/.bin/eslint app/lib/clinicalMedia/echoApicalHcmReadiness.ts tests/echo-apical-hcm-readiness.test.mjs tests/echo-apical-hcm-derivative.test.mjs",
+    "exitCode": 0
+  },
+  "sourceAndDerivativeChecksumsReverified": true,
+  "allFrozenFilesReverified": true,
+  "learnerReady": false,
+  "binaryCommitEligible": false
+}

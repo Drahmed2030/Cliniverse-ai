@@ -16,6 +16,11 @@ export interface ApicalHcmClinicalReviewSubmission {
   lvotObstructionClaimExcluded: boolean
   genotypeInferenceExcluded: boolean
   prognosisExcluded: boolean
+  chamberMeasurementExcluded: boolean
+  dopplerSeverityExcluded: boolean
+  treatmentRecommendationExcluded: boolean
+  alternativePathologyExclusionExcluded: boolean
+  numericalEfExcluded: boolean
   independentDiagnosisExcluded: boolean
   notes: readonly string[]
 }
@@ -66,6 +71,11 @@ export function evaluateApicalHcmReadiness(
     if (!clinical.lvotObstructionClaimExcluded) blockingIssues.push('lvot-boundary-not-accepted')
     if (!clinical.genotypeInferenceExcluded) blockingIssues.push('genotype-boundary-not-accepted')
     if (!clinical.prognosisExcluded) blockingIssues.push('prognosis-boundary-not-accepted')
+    if (!clinical.chamberMeasurementExcluded) blockingIssues.push('chamber-measurement-boundary-not-accepted')
+    if (!clinical.dopplerSeverityExcluded) blockingIssues.push('doppler-severity-boundary-not-accepted')
+    if (!clinical.treatmentRecommendationExcluded) blockingIssues.push('treatment-boundary-not-accepted')
+    if (!clinical.alternativePathologyExclusionExcluded) blockingIssues.push('alternative-pathology-exclusion-boundary-not-accepted')
+    if (!clinical.numericalEfExcluded) blockingIssues.push('numerical-ef-boundary-not-accepted')
     if (!clinical.independentDiagnosisExcluded) blockingIssues.push('independent-diagnosis-boundary-not-accepted')
   }
 

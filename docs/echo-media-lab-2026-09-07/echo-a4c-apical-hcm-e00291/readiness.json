@@ -1,0 +1,12 @@
+{
+  "candidateId": "echo-a4c-apical-hcm-e00291",
+  "sourceSha256": "e23aa565789effcae9728fc8e9a4b71e6a90062e8c0014e4fe85899bd419f97a",
+  "state": "clinical-review-required",
+  "blockingIssues": [
+    "specialist-clinical-review-pending",
+    "final-privacy-review-pending"
+  ],
+  "governedDerivativeAllowed": false,
+  "binaryCommitEligible": false,
+  "learnerReady": false
+}

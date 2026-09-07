@@ -18,6 +18,11 @@ const clinicalPass = {
   lvotObstructionClaimExcluded: true,
   genotypeInferenceExcluded: true,
   prognosisExcluded: true,
+  chamberMeasurementExcluded: true,
+  dopplerSeverityExcluded: true,
+  treatmentRecommendationExcluded: true,
+  alternativePathologyExclusionExcluded: true,
+  numericalEfExcluded: true,
   independentDiagnosisExcluded: true,
   notes: [],
 }
@@ -62,4 +67,27 @@ test('privacy or core teaching failures can hard reject', () => {
   const result = evaluateApicalHcmReadiness(clinicalPass, { ...privacyPass, noDirectPatientIdentifiers: false })
   assert.equal(result.state, 'rejected')
   assert.equal(result.governedDerivativeAllowed, false)
+})
+
+for (const boundary of [
+  'wallThicknessMeasurementExcluded', 'lvotObstructionClaimExcluded',
+  'genotypeInferenceExcluded', 'prognosisExcluded', 'treatmentRecommendationExcluded',
+  'chamberMeasurementExcluded', 'dopplerSeverityExcluded',
+  'alternativePathologyExclusionExcluded', 'numericalEfExcluded',
+]) {
+  test(`${boundary} must be explicitly accepted`, () => {
+    for (const value of [false, undefined]) {
+      const result = evaluateApicalHcmReadiness({ ...clinicalPass, [boundary]: value }, privacyPass)
+      assert.equal(result.governedDerivativeAllowed, false)
+      assert.equal(result.learnerReady, false)
+    }
+  })
+}
+
+test('each unresolved human review independently blocks promotion', () => {
+  for (const result of [evaluateApicalHcmReadiness(null, privacyPass), evaluateApicalHcmReadiness(clinicalPass, null)]) {
+    assert.equal(result.governedDerivativeAllowed, false)
+    assert.equal(result.binaryCommitEligible, false)
+    assert.equal(result.learnerReady, false)
+  }
 })
