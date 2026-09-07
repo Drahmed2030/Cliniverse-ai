@@ -10,93 +10,120 @@ const C = {
   gold: '#D4A72C',
 }
 
-type State = 'ship' | 'educational' | 'gated'
+type ReleaseDestination = 'care' | 'me'
+type ReleaseAccess = 'FREE' | 'PRO' | 'ACCOUNT'
 
-const groups: Array<{
+export interface AtlasDestination {
+  tab: ReleaseDestination
+  workspace?: 'ward' | 'cardiology' | 'nexus'
+}
+
+interface Props {
+  onNavigate: (destination: AtlasDestination) => void
+  onOpenPlan: () => void
+}
+
+const releasePaths: Array<{
   title: string
   description: string
-  state: State
-  examples: string[]
+  access: ReleaseAccess
+  destination: AtlasDestination
+  action: string
+  details: string[]
 }> = [
   {
-    title: 'Reference',
-    description: 'Lower-risk reference and calculation utilities that can be released after individual verification.',
-    state: 'ship',
-    examples: ['Drug reference', 'Medical calculators', 'Evidence lookup'],
+    title: 'Ward Simulation',
+    description: 'Open the first fictional case and review the complete simulated care journey without purchasing PRO.',
+    access: 'FREE',
+    destination: { tab: 'care', workspace: 'ward' },
+    action: 'Open Ward',
+    details: ['Fictional records', 'Human review', 'Related evidence entry'],
   },
   {
-    title: 'Simulation & Training',
-    description: 'Educational experiences remain clearly separated from real-patient workflow and clinical decision support.',
-    state: 'educational',
-    examples: ['Virtual Ward simulation', 'Code Blue', 'BLS / ACLS', 'Board exam'],
+    title: 'Cardiology Operations',
+    description: 'A PRO learning workspace for QAPAS Direct, census, surgical readiness, tasks and structured handover.',
+    access: 'PRO',
+    destination: { tab: 'care', workspace: 'cardiology' },
+    action: 'Open Cardiology',
+    details: ['Six interactive modules', 'Local simulation state', 'No clinical order transmission'],
   },
   {
-    title: 'Advanced Clinical AI',
-    description: 'Higher-risk analysis stays preserved in the codebase but hidden from the release surface until safety, auth and validation gates pass.',
-    state: 'gated',
-    examples: ['Imaging analysis', 'Symptom interpretation', 'Prescription / dosing AI'],
+    title: 'Nexus Learning',
+    description: 'A PRO cardiovascular reliability exercise that coordinates four professional perspectives and a gated debrief.',
+    access: 'PRO',
+    destination: { tab: 'care', workspace: 'nexus' },
+    action: 'Open Nexus',
+    details: ['Four learning roles', 'Fictional reflections', 'Human-confirmed debrief'],
+  },
+  {
+    title: 'Account and subscription',
+    description: 'Review the profile, localized App Store plan, purchase restoration, privacy, terms and session controls.',
+    access: 'ACCOUNT',
+    destination: { tab: 'me' },
+    action: 'Open Me',
+    details: ['StoreKit price', 'Restore purchases', 'Privacy and support'],
   },
 ]
 
-const stateText: Record<State, string> = {
-  ship: 'Release candidate',
-  educational: 'Educational mode',
-  gated: 'Not exposed in release',
+const accessColor: Record<ReleaseAccess, string> = {
+  FREE: C.teal,
+  PRO: C.violet,
+  ACCOUNT: C.blue,
 }
 
-const stateColor: Record<State, string> = {
-  ship: C.teal,
-  educational: C.violet,
-  gated: C.gold,
-}
-
-export default function AtlasReleaseCatalog() {
+export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
   return (
     <section aria-labelledby="atlas-title">
       <div style={introStyle}>
-        <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>CURATED CAPABILITY LIBRARY</div>
+        <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>CURRENT RELEASE TOUR</div>
         <h1 id="atlas-title" style={{ fontSize: 26, margin: '7px 0 8px' }}>Atlas</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
-          Atlas preserves Cliniverse&apos;s breadth without presenting every module as equally ready. Each capability is classified before it becomes visible to users.
+          Use this map to reach every active release area. Labels distinguish the free preview, PRO learning content and account controls.
         </p>
       </div>
 
       <div style={{ display: 'grid', gap: 10 }}>
-        {groups.map(group => (
-          <article key={group.title} style={cardStyle}>
+        {releasePaths.map(path => (
+          <article key={path.title} style={cardStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
               <div>
-                <div style={{ fontSize: 16, fontWeight: 800 }}>{group.title}</div>
-                <p style={{ color: C.sub, fontSize: 12, lineHeight: 1.55, margin: '7px 0 0' }}>{group.description}</p>
+                <div style={{ fontSize: 16, fontWeight: 800 }}>{path.title}</div>
+                <p style={{ color: C.sub, fontSize: 12, lineHeight: 1.55, margin: '7px 0 0' }}>{path.description}</p>
               </div>
-              <span style={{ color: stateColor[group.state], border: `1px solid ${stateColor[group.state]}44`, borderRadius: 999, padding: '4px 7px', fontSize: 9, fontWeight: 800, whiteSpace: 'nowrap' }}>
-                {stateText[group.state]}
+              <span style={{ color: accessColor[path.access], border: `1px solid ${accessColor[path.access]}44`, borderRadius: 999, padding: '4px 7px', fontSize: 9, fontWeight: 800, whiteSpace: 'nowrap' }}>
+                {path.access}
               </span>
             </div>
-            <div aria-label={`${group.title} capability examples`} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
-              {group.examples.map(item => (
-                <span
-                  key={item}
-                  style={{
-                    padding: '6px 8px',
-                    borderRadius: 999,
-                    background: C.elevated,
-                    color: '#CBD5E1',
-                    fontSize: 10,
-                    fontFamily: 'inherit',
-                    border: `1px solid ${C.border}`,
-                  }}
-                >
-                  {item}
-                </span>
+
+            <div aria-label={`${path.title} included capabilities`} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
+              {path.details.map(item => (
+                <span key={item} style={detailStyle}>{item}</span>
               ))}
             </div>
+
+            <button
+              type="button"
+              onClick={() => onNavigate(path.destination)}
+              style={{ ...actionStyle, color: accessColor[path.access], borderColor: `${accessColor[path.access]}55` }}
+            >
+              {path.action} →
+            </button>
           </article>
         ))}
-        <p
-          style={{ margin: 0, padding: '12px 14px', borderRadius: 14, border: '1px solid rgba(20,184,166,0.28)', background: 'rgba(20,184,166,0.07)', color: '#CBD5E1', fontSize: 11, lineHeight: 1.55 }}
-        >
-          Catalog note: capability names are release-status labels, not launch controls. Only completed and individually verified tools will become interactive.
+
+        <section aria-labelledby="atlas-plan-title" style={{ ...cardStyle, borderColor: 'rgba(139,92,246,0.34)' }}>
+          <div style={{ color: C.violet, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>APP STORE PLAN</div>
+          <h2 id="atlas-plan-title" style={{ fontSize: 17, margin: '7px 0 6px' }}>Review Cliniverse PRO</h2>
+          <p style={{ margin: 0, color: C.sub, fontSize: 12, lineHeight: 1.55 }}>
+            The plan sheet loads the title, renewal period and localized price from StoreKit. PRO activates only after server verification.
+          </p>
+          <button type="button" onClick={onOpenPlan} style={{ ...actionStyle, color: C.violet, borderColor: 'rgba(139,92,246,0.44)' }}>
+            View plan →
+          </button>
+        </section>
+
+        <p style={boundaryStyle}>
+          Release boundary: third-party clinical AI, diagnosis, prescribing, real-patient workflows and device-health integrations are not part of this version.
         </p>
       </div>
     </section>
@@ -117,4 +144,37 @@ const cardStyle = {
   border: `1px solid ${C.border}`,
   background: C.panel,
   color: C.text,
+} as const
+
+const detailStyle = {
+  padding: '6px 8px',
+  borderRadius: 999,
+  background: C.elevated,
+  color: '#CBD5E1',
+  fontSize: 10,
+  fontFamily: 'inherit',
+  border: `1px solid ${C.border}`,
+} as const
+
+const actionStyle = {
+  width: '100%',
+  minHeight: 44,
+  marginTop: 14,
+  borderRadius: 13,
+  border: `1px solid ${C.border}`,
+  background: C.elevated,
+  fontSize: 12,
+  fontWeight: 800,
+  cursor: 'pointer',
+} as const
+
+const boundaryStyle = {
+  margin: 0,
+  padding: '12px 14px',
+  borderRadius: 14,
+  border: '1px solid rgba(212,167,44,0.28)',
+  background: 'rgba(212,167,44,0.07)',
+  color: '#D8C690',
+  fontSize: 11,
+  lineHeight: 1.55,
 } as const

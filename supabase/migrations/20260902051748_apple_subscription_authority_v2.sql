@@ -101,7 +101,7 @@ begin
   if coalesce(length(p_provider_event_id), 0) = 0 then raise exception 'apple_provider_event_id_required'; end if;
   if coalesce(length(p_transaction_id), 0) = 0 then raise exception 'apple_transaction_id_required'; end if;
   if coalesce(length(p_original_transaction_id), 0) = 0 then raise exception 'apple_original_transaction_id_required'; end if;
-  if p_product_id not in ('cliniverse.core.monthly', 'cliniverse.core.yearly') then raise exception 'apple_product_not_allowed'; end if;
+  if p_product_id not in ('com.cliniverse.ai.pro.monthly', 'com.cliniverse.ai.pro.yearly') then raise exception 'apple_product_not_allowed'; end if;
   if p_environment not in ('Sandbox', 'Production') then raise exception 'apple_environment_invalid'; end if;
   if p_lifecycle_status not in ('active', 'grace', 'billing_retry', 'expired', 'revoked', 'refunded') then raise exception 'apple_lifecycle_status_invalid'; end if;
   if p_event_at is null or p_verified_at is null or p_purchase_at is null then raise exception 'apple_timestamps_required'; end if;
@@ -142,8 +142,8 @@ begin
   for update;
 
   v_plan := case p_product_id
-    when 'cliniverse.core.monthly' then 'pro_monthly'
-    when 'cliniverse.core.yearly' then 'pro_yearly'
+    when 'com.cliniverse.ai.pro.monthly' then 'pro_monthly'
+    when 'com.cliniverse.ai.pro.yearly' then 'pro_yearly'
   end;
 
   if found then

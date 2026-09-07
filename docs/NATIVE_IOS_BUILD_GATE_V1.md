@@ -72,8 +72,8 @@ The repository now includes a local branded failure page wired through Capacitor
 - [x] Terms route exists at `/terms`.
 - [x] Terms and Privacy links are functional from the sign-in surface.
 - [x] Public web metadata/manifest use factual release-scoped language and remove stale social-proof/seniority claims.
-- [ ] Reviewer notes explain the product structure and the no-real-patient-data release boundary.
-- [ ] Reviewer account/instructions are prepared if login is required.
+- [x] Reviewer notes explain the product structure, active release tour and no-real-patient-data boundary.
+- [x] A dedicated reviewer account and protected sign-in instructions are prepared; credentials remain outside the repository.
 
 ## Publishing safety
 

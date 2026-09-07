@@ -31,9 +31,17 @@ Implementation:
 
 ## Decision 3 — Monetization
 
-No in-app digital upgrade CTA is authorized until the iOS purchase architecture is resolved.
+The iOS purchase architecture is resolved for the monthly Cliniverse PRO release product. Upgrade, View plan and Restore purchases are authorized only through the shared StoreKit 2 surface.
 
-Long-term commercial model may include clinician, clinic, hospital and enterprise tiers, but App Store release behavior must comply with Apple purchase rules and use a server-controlled entitlement authority.
+Implementation:
+- StoreKit supplies the product title, localized price and renewal period;
+- the submitted product is `com.cliniverse.ai.pro.monthly`;
+- the app sends Apple's signed transaction to an authenticated server route;
+- the server verifies the signature with Apple's official library and persists through the service-role-only subscription authority;
+- the client never writes entitlement state or grants PRO optimistically;
+- no external digital checkout is exposed in the iOS release.
+
+Yearly, clinic, hospital and enterprise offers remain outside this App Store submission until their products, terms and purchase paths are reviewed separately.
 
 ## Decision 4 — Healthcare scope
 

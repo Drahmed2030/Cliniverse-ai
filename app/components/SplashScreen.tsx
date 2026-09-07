@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { NATIVE_SAFE_AREA_BOTTOM } from "../lib/nativeSafeArea";
 
 const T = {
   bg: "#080C16",
@@ -81,7 +82,7 @@ export default function SplashScreen({ onDone, duration = 700 }: Props) {
       <div
         style={{
           position: "absolute",
-          bottom: "calc(30px + env(safe-area-inset-bottom))",
+          bottom: `calc(30px + ${NATIVE_SAFE_AREA_BOTTOM})`,
           color: T.sub,
           fontSize: 11,
           lineHeight: 1.5,

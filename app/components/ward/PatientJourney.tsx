@@ -2,6 +2,10 @@
 import RelatedEvidencePanel from "./RelatedEvidencePanel";
 import ClinicalPanelV2 from "./ClinicalPanelV2";
 import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_TOP,
+} from "../../lib/nativeSafeArea";
 
 import type {
   WardPatient,
@@ -62,6 +66,7 @@ interface Props {
   onRequestConsult?: (patientId: string) => void;
   consultRequested?: boolean;
   isPro?: boolean;
+  onUpgrade?: () => void;
 }
 
 export default function PatientJourney({
@@ -70,11 +75,13 @@ export default function PatientJourney({
   onRequestConsult,
   consultRequested = false,
   isPro = false,
+  onUpgrade,
 }: Props) {
   const accent = priorityColor(patient.priority);
 
   return (
     <div
+      data-patient-journey
       style={{
         position: "fixed",
         inset: 0,
@@ -89,10 +96,10 @@ export default function PatientJourney({
           width: "100%",
           maxWidth: 600,
           margin: "0 auto",
-          paddingBottom: "calc(100px + env(safe-area-inset-bottom))",
+          paddingBottom: `calc(100px + ${NATIVE_SAFE_AREA_BOTTOM})`,
         }}
       >
-        <div style={{ display: "flex", justifyContent: "center", paddingTop: "calc(10px + env(safe-area-inset-top))" }}>
+        <div data-patient-journey-top style={{ display: "flex", justifyContent: "center", paddingTop: `calc(10px + ${NATIVE_SAFE_AREA_TOP})` }}>
           <div
             style={{
               width: 40,
@@ -210,7 +217,7 @@ export default function PatientJourney({
           </Section>
 
           <Section title="Related Evidence">
-            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} />
+            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} onUpgrade={onUpgrade} />
           </Section>
 
           <Section title="Orders">

@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_TOP,
+} from "../lib/nativeSafeArea";
 
 const T = {
   bg: "#080C16",
@@ -67,7 +71,7 @@ export default function OnboardingFunnel({ onComplete }: Props) {
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
-        padding: "max(22px, env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom))",
+        padding: `max(22px, ${NATIVE_SAFE_AREA_TOP}) 20px calc(28px + ${NATIVE_SAFE_AREA_BOTTOM})`,
       }}
     >
       <div style={{ display: "flex", gap: 6, marginBottom: 26 }} aria-label={`Step ${index + 1} of ${SLIDES.length}`}>

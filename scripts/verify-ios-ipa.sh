@@ -29,6 +29,7 @@ ENCRYPTION=$(/usr/libexec/PlistBuddy -c 'Print :ITSAppUsesNonExemptEncryption' "
 DISPLAY_NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$PLIST" 2>/dev/null || true)
 LAUNCH_GUARD=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseLaunchGuardVersion' "$PLIST" 2>/dev/null || true)
 ICON_SOURCE_SHA256=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseIconSourceSHA256' "$PLIST" 2>/dev/null || true)
+MINIMUM_IOS=$(/usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$PLIST" 2>/dev/null || true)
 
 [ "$BUNDLE_ID" = "com.cliniverse.ai" ] || { echo "ERROR: unexpected bundle id: $BUNDLE_ID"; exit 1; }
 [ -n "$VERSION" ] || { echo "ERROR: empty marketing version"; exit 1; }
@@ -37,9 +38,20 @@ ICON_SOURCE_SHA256=$(/usr/libexec/PlistBuddy -c 'Print :CliniverseIconSourceSHA2
 [ "$DISPLAY_NAME" = "Cliniverse AI" ] || { echo "ERROR: unexpected display name: $DISPLAY_NAME"; exit 1; }
 [ "$LAUNCH_GUARD" = "1" ] || { echo "HOLD: native launch guard marker is missing"; exit 2; }
 [ "$ICON_SOURCE_SHA256" = "80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ] || { echo "HOLD: unexpected icon source contract: $ICON_SOURCE_SHA256"; exit 2; }
+[ "$MINIMUM_IOS" = "15.0" ] || { echo "HOLD: signed app must require iOS 15.0, found: ${MINIMUM_IOS:-missing}"; exit 2; }
 
 if ! grep -R -a -q 'CliniverseBridgeViewController' "$APP_PATH"; then
   echo "HOLD: compiled native launch guard is not referenced by the app bundle"
+  exit 2
+fi
+
+if ! grep -R -a -q 'CliniverseStoreKit' "$APP_PATH"; then
+  echo "HOLD: compiled StoreKit bridge is not referenced by the app bundle"
+  exit 2
+fi
+
+if ! grep -R -a -q 'com.cliniverse.ai.pro.monthly' "$APP_PATH"; then
+  echo "HOLD: live App Store product ID is missing from the signed artifact"
   exit 2
 fi
 
@@ -66,6 +78,7 @@ EXPECTED_PRIVACY_TYPES="$(printf '%s\n' \
   NSPrivacyCollectedDataTypeEmailAddress \
   NSPrivacyCollectedDataTypeName \
   NSPrivacyCollectedDataTypeOtherDiagnosticData \
+  NSPrivacyCollectedDataTypePurchaseHistory \
   NSPrivacyCollectedDataTypeUserID | sort)"
 [ "$ACTUAL_PRIVACY_TYPES" = "$EXPECTED_PRIVACY_TYPES" ] || {
   echo "HOLD: signed app privacy data types do not match the RC1 contract"
@@ -76,7 +89,7 @@ EXPECTED_PRIVACY_TYPES="$(printf '%s\n' \
 # The local fallback is the native recovery surface for remote-origin failure.
 [ -f "$APP_PATH/public/native-offline.html" ] || { echo "HOLD: native offline recovery page is missing"; exit 2; }
 
-# Apple v1 does not include these native capabilities. Their presence would
+# Apple v1 does not include these native sensitive-data capabilities. Their presence would
 # indicate binary/configuration drift and requires a separate privacy review.
 for key in \
   NSHealthShareUsageDescription \
@@ -97,3 +110,4 @@ echo "PASS: app privacy manifest and offline recovery are packaged"
 echo "PASS: native cold-launch and icon-source contracts are packaged"
 echo "Bundle: $BUNDLE_ID"
 echo "Version: $VERSION ($BUILD)"
+echo "Minimum iOS: $MINIMUM_IOS"

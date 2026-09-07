@@ -1,3 +1,5 @@
+import LegalPageBack from '../components/release/LegalPageBack'
+
 export const metadata = {
   title: 'Cliniverse AI Support',
   description: 'Support information for Cliniverse AI users.',
@@ -7,6 +9,7 @@ export default function SupportPage() {
   return (
     <main style={{minHeight:'100vh',background:'#080c16',color:'#f8fafc',fontFamily:'Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif'}}>
       <div style={{maxWidth:760,margin:'0 auto',padding:'56px 22px 72px'}}>
+        <LegalPageBack />
         <div style={{fontSize:12,fontWeight:800,letterSpacing:'.12em',textTransform:'uppercase',color:'#14b8a6'}}>Cliniverse AI · by NeuraOps</div>
         <h1 style={{fontSize:'clamp(34px,6vw,54px)',lineHeight:1.05,letterSpacing:'-.04em',margin:'14px 0 18px'}}>Support</h1>
         <p style={{fontSize:16,lineHeight:1.7,color:'#cbd5e1',margin:'0 0 34px'}}>Need help with Cliniverse AI? Use the support options below for app access, technical issues, account questions, or general product support.</p>

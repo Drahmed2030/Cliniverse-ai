@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getOwnEntitlement, type CliniverseEntitlement } from '../../lib/entitlements'
 import { getCurrentUser } from '../../lib/identity'
 import { getOwnProfile, updateOwnProfile } from '../../lib/profile'
 import AccountSessionActions from '../auth/AccountSessionActions'
+import { useCliniverseSubscription } from './SubscriptionPurchaseProvider'
 
 interface ProfileState {
   name: string
@@ -24,18 +24,24 @@ const C = {
 
 export default function MeAccountSummary() {
   const [profile, setProfile] = useState<ProfileState | null>(null)
-  const [entitlement, setEntitlement] = useState<CliniverseEntitlement | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [profileLoading, setProfileLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const {
+    entitlement,
+    entitlementLoading,
+    products,
+    openPaywall,
+    storeMessage,
+  } = useCliniverseSubscription()
+  const primaryProduct = products[0]
 
   useEffect(() => {
     let active = true
 
     async function load() {
-      const [profileResult, entitlementResult, userResult] = await Promise.all([
+      const [profileResult, userResult] = await Promise.all([
         getOwnProfile(),
-        getOwnEntitlement(),
         getCurrentUser(),
       ])
 
@@ -47,8 +53,7 @@ export default function MeAccountSummary() {
           email: userResult.data.user?.email || '',
         })
       }
-      setEntitlement(entitlementResult)
-      setLoading(false)
+      setProfileLoading(false)
     }
 
     load()
@@ -74,7 +79,7 @@ export default function MeAccountSummary() {
     setMessage('Profile updated.')
   }
 
-  if (loading) {
+  if (profileLoading || entitlementLoading) {
     return <div style={cardStyle}>Loading account…</div>
   }
 
@@ -103,7 +108,7 @@ export default function MeAccountSummary() {
       <section style={cardStyle} aria-labelledby="plan-account-title">
         <div id="plan-account-title" style={{ fontSize: 16, fontWeight: 800 }}>Plan</div>
         <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>
-          Read-only entitlement state. This screen cannot activate or upgrade itself.
+          App Store controls the localized price and renewal. Cliniverse activates PRO only after server verification.
         </div>
         <div style={{ marginTop: 12, padding: 12, borderRadius: 12, background: C.elevated }}>
           <div style={{ fontSize: 12, fontWeight: 800, textTransform: 'capitalize' }}>{entitlement?.tier ?? 'free'}</div>
@@ -111,13 +116,33 @@ export default function MeAccountSummary() {
             Status: {entitlement?.status ?? 'unknown'} · Source: {entitlement?.source ?? 'none'}
           </div>
           {entitlement?.expiresAt ? <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
+          {primaryProduct ? (
+            <div style={{ color: C.text, fontSize: 12, fontWeight: 800, marginTop: 10 }}>
+              {primaryProduct.displayName} · {primaryProduct.displayPrice} · {primaryProduct.subscriptionPeriod}
+            </div>
+          ) : null}
         </div>
+        <button type="button" onClick={openPaywall} style={{ ...primaryButtonStyle, width: '100%', marginTop: 10 }}>
+          {entitlement?.isPro ? 'View Cliniverse PRO plan' : 'Upgrade to Cliniverse PRO'}
+        </button>
+        {entitlement?.isPro ? (
+          <a
+            href="https://apps.apple.com/account/subscriptions"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'block', color: C.blue, textAlign: 'center', fontSize: 11, fontWeight: 800, marginTop: 10 }}
+          >
+            Manage Apple subscription
+          </a>
+        ) : null}
+        {storeMessage ? <div role="status" aria-live="polite" style={{ color: C.sub, fontSize: 11, lineHeight: 1.5, marginTop: 8 }}>{storeMessage}</div> : null}
       </section>
 
       <section style={cardStyle} aria-labelledby="session-account-title">
         <div id="session-account-title" style={{ fontSize: 16, fontWeight: 800, marginBottom: 10 }}>Account session</div>
         <AccountSessionActions />
       </section>
+
     </div>
   )
 }

@@ -1,18 +1,18 @@
 "use client";
 
 import PaywallSheet, { type PaywallPlan } from "./PaywallSheet";
+import type { StoreProduct } from '../lib/storekit-purchase-contract'
 
 interface PaywallScreenProps {
   onClose: () => void;
   onSubscribe: (plan: PaywallPlan) => void | Promise<void>;
   onRestore?: () => void | Promise<void>;
-  monthlyPrice?: string;
-  yearlyPrice?: string;
-  yearlyPerMonth?: string;
+  products?: StoreProduct[];
   purchaseEnabled?: boolean;
   trialLabel?: string | null;
   busy?: boolean;
   statusLabel?: string | null;
+  catalogLoading?: boolean;
 }
 
 /**
@@ -27,13 +27,12 @@ export default function PaywallScreen({
   onClose,
   onSubscribe,
   onRestore,
-  monthlyPrice,
-  yearlyPrice,
-  yearlyPerMonth,
+  products = [],
   purchaseEnabled = false,
   trialLabel = null,
   busy = false,
   statusLabel = null,
+  catalogLoading = false,
 }: PaywallScreenProps) {
   return (
     <PaywallSheet
@@ -41,13 +40,12 @@ export default function PaywallScreen({
       onClose={onClose}
       onSubscribe={onSubscribe}
       onRestore={onRestore}
-      monthlyPrice={monthlyPrice}
-      yearlyPrice={yearlyPrice}
-      yearlyPerMonth={yearlyPerMonth}
+      products={products}
       purchaseEnabled={purchaseEnabled}
       trialLabel={trialLabel}
       busy={busy}
       statusLabel={statusLabel}
+      catalogLoading={catalogLoading}
     />
   );
 }

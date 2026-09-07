@@ -1,12 +1,22 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
+import type { AtlasDestination } from './release/AtlasReleaseCatalog'
+import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
+import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
+import {
+  NATIVE_SAFE_AREA_BOTTOM,
+  NATIVE_SAFE_AREA_LEFT,
+  NATIVE_SAFE_AREA_RIGHT,
+  NATIVE_SAFE_AREA_TOP,
+} from '../lib/nativeSafeArea'
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
@@ -26,38 +36,75 @@ const C = {
   gold: '#D4A72C',
 }
 
+function getNativeHeaderTopPadding() {
+  const isCompactViewport = window.innerWidth < 768
+  const isTouchTablet = window.innerWidth <= 1366 && window.navigator.maxTouchPoints > 0
+  const isIOSWebView = Capacitor.getPlatform() === 'ios'
+    || /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+    || (/Macintosh/.test(window.navigator.userAgent) && window.navigator.maxTouchPoints > 1)
+
+  if (!isIOSWebView && !isCompactViewport && !isTouchTablet) return null
+
+  // XCUITest requires the first accessible heading to begin below native
+  // system chrome. Keep deterministic fallbacks for WKWebView launches that
+  // temporarily expose zero CSS safe-area values.
+  return window.innerWidth >= 768 ? 34 : 69
+}
+
 export default function ReleaseApp() {
   return (
     <AuthGate allowGuest={false}>
-      {() => <ReleaseShell />}
+      {() => (
+        <SubscriptionPurchaseProvider>
+          <ReleaseShell />
+        </SubscriptionPurchaseProvider>
+      )}
     </AuthGate>
   )
 }
 
 function ReleaseShell() {
   const [tab, setTab] = useState<ReleaseTab>('home')
+  const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
+  const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
+  const { openPaywall } = useCliniverseSubscription()
+
+  useEffect(() => {
+    const syncNativeHeaderTopPadding = () => {
+      setNativeHeaderTopPadding(getNativeHeaderTopPadding())
+    }
+
+    syncNativeHeaderTopPadding()
+    window.addEventListener('resize', syncNativeHeaderTopPadding)
+    return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
+  }, [])
+
+  const handleAtlasNavigate = (destination: AtlasDestination) => {
+    if (destination.workspace) setCareWorkspace(destination.workspace)
+    setTab(destination.tab)
+  }
 
   return (
-    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: 'calc(92px + env(safe-area-inset-bottom, 0px))', isolation: 'isolate' }}>
-      <ReleaseHeader active={tab} />
+    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
+      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
         style={{
           maxWidth: 1180,
           margin: '0 auto',
           paddingTop: 18,
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          paddingRight: `max(16px, ${NATIVE_SAFE_AREA_RIGHT})`,
           paddingBottom: 28,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
         {tab === 'home' && <HomeSurface onNavigate={setTab} />}
         {tab === 'care' && (
           <ErrorBoundary section="Care">
-            <WardIndex />
+            <WardIndex initialWorkspace={careWorkspace} />
           </ErrorBoundary>
         )}
         {tab === 'intelligence' && <ReleaseIntelligenceGate />}
-        {tab === 'atlas' && <AtlasReleaseCatalog />}
+        {tab === 'atlas' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
@@ -65,27 +112,31 @@ function ReleaseShell() {
   )
 }
 
-function ReleaseHeader({ active }: { active: ReleaseTab }) {
+function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
-    care: { title: 'Care', sub: 'Follow-up, prioritization and human escalation' },
+    care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
     intelligence: { title: 'Intelligence', sub: 'Release-gated AI workspace' },
     atlas: { title: 'Atlas', sub: 'Curated clinical tools and references' },
     me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
   }
   const current = titles[active]
+  const topPadding = nativeTopPadding === null
+    ? `calc(10px + ${NATIVE_SAFE_AREA_TOP})`
+    : `max(${nativeTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
 
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
       <div
+        data-release-header-inner
         style={{
           maxWidth: 1180,
           margin: '0 auto',
-          minHeight: 'calc(68px + env(safe-area-inset-top, 0px))',
-          paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))',
-          paddingRight: 'max(16px, env(safe-area-inset-right, 0px))',
+          minHeight: `calc(68px + ${NATIVE_SAFE_AREA_TOP})`,
+          paddingTop: topPadding,
+          paddingRight: `max(16px, ${NATIVE_SAFE_AREA_RIGHT})`,
           paddingBottom: 10,
-          paddingLeft: 'max(16px, env(safe-area-inset-left, 0px))',
+          paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -106,7 +157,7 @@ function ReleaseHeader({ active }: { active: ReleaseTab }) {
 
 function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Review care workflow', text: 'Follow up, prioritize, escalate and keep the next human action accountable.', accent: C.teal },
+    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Open cardiology learning', text: 'Run fictional Ward, Cardiology Operations and Nexus learning workflows with human review.', accent: C.teal },
     { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Review AI release boundary', text: 'AI assistance stays gated until disclosure, consent and clinical-claims review are complete.', accent: C.violet },
     { tab: 'atlas', eyebrow: 'ATLAS', title: 'Browse curated tools', text: 'See capabilities only after they are clearly classified for the current release.', accent: C.blue },
     { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage Me', text: 'Keep profile, Life, plan, privacy and settings under one identity.', accent: C.gold },

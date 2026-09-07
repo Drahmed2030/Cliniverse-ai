@@ -22,7 +22,7 @@ export interface DischargeDraftInput {
  * User can edit before finalize.
  */
 export function buildDischargeDraft(input: DischargeDraftInput): DischargeSummary {
-  var meds = (input.activeMeds || [])
+  const meds = (input.activeMeds || [])
     .filter(function (m) {
       return m.status === "active";
     })
@@ -30,12 +30,12 @@ export function buildDischargeDraft(input: DischargeDraftInput): DischargeSummar
       return m.name + " " + m.dose + " " + m.route + " " + m.frequency;
     });
 
-  var course = input.hospitalCourse;
+  let course = input.hospitalCourse;
   if (!course || !course.trim()) {
     course = defaultCourse(input);
   }
 
-  var instructions =
+  const instructions =
     input.homeInstructions && input.homeInstructions.length
       ? input.homeInstructions
       : defaultHomeInstructions(input.diagnosis);
@@ -53,10 +53,10 @@ export function buildDischargeDraft(input: DischargeDraftInput): DischargeSummar
 }
 
 function defaultCourse(input: DischargeDraftInput) {
-  var bits = [];
+  const bits: string[] = [];
   bits.push(input.patientName + " was managed on the simulated ward pathway for " + input.diagnosis + ".");
   if (input.recentSoap && input.recentSoap.length) {
-    var last = input.recentSoap[input.recentSoap.length - 1];
+    const last = input.recentSoap[input.recentSoap.length - 1];
     bits.push("Latest assessment: " + last.assessment + ".");
     bits.push("Latest plan: " + last.plan + ".");
   } else {
@@ -93,7 +93,7 @@ export function dischargeReadiness(summary: DischargeSummary | null) {
       missing: ["No discharge summary draft"],
     };
   }
-  var missing = [];
+  const missing: string[] = [];
   if (!summary.diagnosis.trim()) missing.push("Diagnosis");
   if (!summary.hospitalCourse.trim()) missing.push("Hospital course");
   if (!summary.followUp.trim()) missing.push("Follow-up");

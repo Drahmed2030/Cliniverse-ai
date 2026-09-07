@@ -1,4 +1,4 @@
-# Apple RC1 Reviewer Package
+# Apple StoreKit Resubmission Reviewer Package
 
 Status: **PREPARED / HOLD — do not submit**
 
@@ -46,9 +46,9 @@ Cliniverse AI is a clinical learning, simulation and workflow application for he
 The focused first release provides:
 
 - a Home surface explaining the current safety boundary;
-- a Care workspace using simulated virtual-ward information for follow-up, prioritization, documentation practice and human escalation;
+- a Care workspace with one free fictional Ward case plus PRO Cardiology Operations, QAPAS and Nexus systems-learning simulations;
 - a clearly gated Intelligence surface that does not transmit content to third-party AI providers in this release;
-- an Atlas catalog that classifies clinical reference, educational and future capabilities by release status;
+- an Atlas release tour that links directly to every active free, PRO and account surface;
 - authenticated profile, plan, privacy and session controls under Me.
 
 Cliniverse AI does not replace independent clinical judgment, local policy, supervision or emergency services. The submitted release is not cleared for real patient-identifiable information or protected health information. Users are instructed not to enter real patient data.
@@ -61,13 +61,32 @@ Reviewer walkthrough:
 
 1. Launch the app and sign in with the supplied email and password.
 2. Home explains the release boundary and human-in-the-loop rule.
-3. Open Care. All ward/patient content is fictional simulation data for workflow practice; no real patient data is permitted.
+3. Open Care. The first Ward case is available without PRO. All cases and operational records are fictional simulation data; no real patient data is permitted.
 4. Open Intelligence. This surface is intentionally disabled in the submitted binary pending a separate AI disclosure, consent and clinical-safety review. It is not a loading failure.
-5. Open Atlas to view release classifications for reference, educational and gated capabilities.
-6. Open Me to review the authenticated profile, read-only plan state, privacy boundary and sign-out control.
-7. Terms, Privacy and Support are available from the public release routes.
+5. Open Atlas. The release tour links to the free Ward preview, PRO Cardiology Operations, PRO Nexus Learning, account controls and the StoreKit plan sheet. It also states which higher-risk clinical capabilities are excluded from this version.
+6. In Atlas tap View plan, or open Me and tap Upgrade to Cliniverse PRO. The paywall loads the monthly title, one-month duration and localized price from the App Store. Terms, Privacy and Restore purchases are available on the same surface.
+7. Complete the Apple sandbox purchase. Cliniverse verifies the signed StoreKit transaction on its server before PRO becomes active. The app never grants PRO from the button alone.
+8. Return to Care and open Cardiology Operations, QAPAS Direct, Nexus Learning, an expanded Ward case and Related Evidence. These paid surfaces remain fictional, local learning workflows and do not provide diagnosis, prescribing, order transmission or external messaging.
+9. Terms, Privacy and Support are available from the public release routes. Restore purchases is available on the paywall and Apple subscription management is linked from Me for an active subscriber.
 
-There is no digital Upgrade call to action and no in-app purchase flow in this release. The displayed plan is read-only and cannot activate itself. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
+This release offers one auto-renewable product, Cliniverse PRO Monthly, product ID `com.cliniverse.ai.pro.monthly`. A yearly option is not advertised because no yearly product is currently configured in App Store Connect. Apple Health/HealthKit, wearable permissions, advertising, tracking and real-patient-data workflows are not enabled.
+
+## Live App Store Connect verification
+
+Verified read-only on 2026-09-02 UTC:
+
+| Item | Live state | Required action before resubmission |
+| --- | --- | --- |
+| Rejected app version | Version 1.0, build 57, Guideline 2.1(b) App Completeness | Upload and select a new signed binary after all native gates pass. |
+| Apple issue | The app referenced Plan, but its subscription was not submitted for review | Include the monthly subscription and new app binary in the same review submission. |
+| Monthly product | `com.cliniverse.ai.pro.monthly`, one month, status `Prepare for Submission` | Use Add for Review only after the new app version is ready. |
+| Saudi Arabia price | `SAR 59.99` per month | Keep the UI StoreKit-authoritative; do not hard-code this value. |
+| Product availability | All countries or regions selected | Reconfirm before submission. |
+| Product review media | One App Review screenshot is present | Replace it if it does not match the final signed paywall. |
+| Product localization | Current display name is `CLiniverse PRO Monthly` | Correct capitalization to `Cliniverse PRO Monthly`. |
+| App-version review notes | Build 57 notes state there is no subscription, IAP or upgrade CTA | Replace them with the current walkthrough in this package when selecting the new build. |
+
+Do not select Add for Review, Update Review or Resubmit until the signed-device purchase, restore, server verification, production-origin and metadata gates pass.
 
 ## Reviewer access gate
 
@@ -75,7 +94,10 @@ There is no digital Upgrade call to action and no in-app purchase flow in this r
 - [x] Confirmed at 2026-08-27 09:07 UTC that no dedicated production reviewer account currently exists and no reviewer session is active.
 - [x] Enabled Supabase leaked-password protection and verified at 2026-08-27 09:07 UTC that the advisor warning is cleared.
 - [x] Provisioned one new non-expiring reviewer account through the protected Supabase admin surface without reusing the stale secret visible in the rejected App Store Connect record.
-- [x] Kept the reviewer account at the free/read-only entitlement state required by the current submitted surface; no subscription or client-writable entitlement path was created.
+- [x] Kept the reviewer account free before review. Subscription authority remains server-controlled and cannot be written by the client.
+- [x] Applied and verified the Apple subscription-authority migration on 2026-09-02 UTC. Remote history records `apple_subscription_authority_v2` and `apple_subscription_events_fk_index`; RLS, grants, server-only RPC access and the covering foreign-key index passed post-migration checks.
+- [ ] Attach `com.cliniverse.ai.pro.monthly` to the app-version submission and confirm its metadata is review-ready.
+- [ ] Correct the product display-name capitalization and replace the obsolete build 57 review notes.
 - [ ] Store username and password only in App Store Connect's protected sign-in fields.
 - [ ] Test the account on a clean iPhone and iPad install immediately before submission.
 - [x] Confirmed on the authoritative iPhone Safari preview that magic-link delivery is not required for the reviewer path; RC1 keeps the unavailable magic-link control hidden by default.
@@ -88,11 +110,11 @@ Capture screenshots only from the final signed RC build after the production ori
 Approved screenshot sequence:
 
 1. Home — focused clinical learning/workflow purpose and real-patient-data boundary.
-2. Care — visibly labelled simulation with human review/escalation language.
+2. Care — visibly labelled Ward simulation with active PRO entry points and human-review language.
 3. Care detail — simulated workflow/documentation state without fabricated LIVE claims.
 4. Intelligence — truthful release-gated state.
-5. Atlas — capability classification matching the binary.
-6. Me — profile and read-only plan authority.
+5. Atlas — active release tour with working Care, Me and View plan actions.
+6. Me — profile and the active Upgrade to Cliniverse PRO entry point. Capture the StoreKit paywall separately when Apple requires subscription evidence.
 
 Screenshot rules:
 
@@ -108,6 +130,7 @@ Screenshot rules:
 - [ ] Support mailbox receives and replies to a test message without exposing patient data or credentials.
 - [ ] Support, Privacy and Terms return HTTP 200 on the production origin used by the native shell.
 - [ ] App Store privacy answers match `native/privacy/PrivacyInfo.xcprivacy` and the final IPA scan.
+- [ ] App Store privacy answers declare linked purchase history for app functionality before submission.
 - [ ] Content-rights, age-rating, encryption/export-compliance and category answers are confirmed in App Store Connect.
 - [ ] Support contact name, email and international-format phone number are entered in protected App Review Information.
 - [ ] Metadata and screenshots are rechecked after the final build number is selected.

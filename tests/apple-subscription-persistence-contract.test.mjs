@@ -11,7 +11,9 @@ function exists(path) {
 }
 
 test('Apple subscription authority migration separates event idempotency from transaction lineage', () => {
-  const migration = read('supabase/migrations/20260901074500_apple_subscription_authority_v2.sql')
+  const migration = read('supabase/migrations/20260902051748_apple_subscription_authority_v2.sql')
+  assert.match(migration, /com\.cliniverse\.ai\.pro\.monthly/)
+  assert.match(migration, /com\.cliniverse\.ai\.pro\.yearly/)
   assert.match(migration, /subscriptions_apple_original_transaction_uidx/)
   assert.match(migration, /apple_subscription_events/)
   assert.match(migration, /provider_event_id text not null unique/)
@@ -34,6 +36,14 @@ test('Apple subscription authority migration separates event idempotency from tr
 
 test('superseded transaction-primary-key Apple migration cannot return', () => {
   assert.equal(exists('supabase/migrations/20260901080000_apple_subscription_lineage.sql'), false)
+})
+
+test('Apple subscription event lineage has a covering foreign-key index', () => {
+  const migration = read(
+    'supabase/migrations/20260902051936_apple_subscription_events_fk_index.sql',
+  )
+  assert.match(migration, /apple_subscription_events_subscription_idx/)
+  assert.match(migration, /apple_subscription_events \(subscription_id\)/)
 })
 
 test('trusted Apple persistence hashes signed JWS, creates deterministic StoreKit event identity and never grants PRO directly', () => {
@@ -64,8 +74,8 @@ test('Supabase Apple persistence adapter is server-only and calls only the canon
 
 test('Apple PRO entitlement is read-only cliniverse.core authority and supports active/grace only', () => {
   const source = read('app/lib/entitlements.ts')
-  assert.match(source, /cliniverse\.core\.monthly/)
-  assert.match(source, /cliniverse\.core\.yearly/)
+  assert.match(source, /com\.cliniverse\.ai\.pro\.monthly/)
+  assert.match(source, /com\.cliniverse\.ai\.pro\.yearly/)
   assert.match(source, /provider === 'apple'/)
   assert.match(source, /apple_product_id/)
   assert.match(source, /verified_at/)

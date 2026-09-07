@@ -9,8 +9,8 @@
 
 import type { SoapNote, DischargeSummary } from "./clinicalTypes";
 
-var STORAGE_PREFIX_SOAP = "cliniverse.ward.soap.";
-var STORAGE_PREFIX_DISCHARGE = "cliniverse.ward.discharge.";
+const STORAGE_PREFIX_SOAP = "cliniverse.ward.soap.";
+const STORAGE_PREFIX_DISCHARGE = "cliniverse.ward.discharge.";
 
 export interface SoapStoreAdapter {
   list: (patientId: string) => SoapNote[];
@@ -27,27 +27,27 @@ export interface DischargeStoreAdapter {
 function canUseStorage() {
   try {
     return typeof window !== "undefined" && !!window.localStorage;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
 
-function readJson(key: string, fallback: any) {
+function readJson<T>(key: string, fallback: T): T {
   if (!canUseStorage()) return fallback;
   try {
-    var raw = window.localStorage.getItem(key);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return fallback;
-    return JSON.parse(raw);
-  } catch (e) {
+    return JSON.parse(raw) as T;
+  } catch {
     return fallback;
   }
 }
 
-function writeJson(key: string, value: any) {
+function writeJson(key: string, value: unknown) {
   if (!canUseStorage()) return;
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
+  } catch {
     // Quota or private mode — fail soft so UI still works in-memory
   }
 }
@@ -61,16 +61,16 @@ function dischargeKey(patientId: string) {
 }
 
 /** LocalStorage adapter — default for Web now */
-export var localSoapStore: SoapStoreAdapter = {
+export const localSoapStore: SoapStoreAdapter = {
   list: function (patientId) {
-    var list = readJson(soapKey(patientId), []);
+    const list = readJson<unknown[]>(soapKey(patientId), []);
     if (!Array.isArray(list)) return [];
     return list as SoapNote[];
   },
   append: function (patientId, note) {
-    var current = localSoapStore.list(patientId);
+    const current = localSoapStore.list(patientId);
     // Append-only clinical narrative (do not replace history)
-    var next = current.concat([note]);
+    const next = current.concat([note]);
     writeJson(soapKey(patientId), next);
     return next;
   },
@@ -78,14 +78,13 @@ export var localSoapStore: SoapStoreAdapter = {
     if (!canUseStorage()) return;
     try {
       window.localStorage.removeItem(soapKey(patientId));
-    } catch (e) {}
+    } catch {}
   },
 };
 
-export var localDischargeStore: DischargeStoreAdapter = {
+export const localDischargeStore: DischargeStoreAdapter = {
   get: function (patientId) {
-    var row = readJson(dischargeKey(patientId), null);
-    return row as DischargeSummary | null;
+    return readJson<DischargeSummary | null>(dischargeKey(patientId), null);
   },
   save: function (patientId, summary) {
     writeJson(dischargeKey(patientId), summary);
@@ -94,7 +93,7 @@ export var localDischargeStore: DischargeStoreAdapter = {
     if (!canUseStorage()) return;
     try {
       window.localStorage.removeItem(dischargeKey(patientId));
-    } catch (e) {}
+    } catch {}
   },
 };
 
@@ -103,7 +102,7 @@ export var localDischargeStore: DischargeStoreAdapter = {
  * Seed first chronologically, then user notes (or by created_at sort).
  */
 export function mergeSoapNotes(seed: SoapNote[], saved: SoapNote[]): SoapNote[] {
-  var map: Record<string, SoapNote> = {};
+  const map: Record<string, SoapNote> = {};
   seed.forEach(function (n) {
     map[n.id] = n;
   });
@@ -127,7 +126,7 @@ export function createSoapNote(input: {
   authorName?: string;
   shift?: SoapNote["shift"];
 }): SoapNote {
-  var now = new Date();
+  const now = new Date();
   return {
     id: "soap_" + String(now.getTime()),
     at: now.toISOString(),
@@ -141,12 +140,12 @@ export function createSoapNote(input: {
 }
 
 function normalizePart(v: string) {
-  var t = (v || "").trim();
+  const t = (v || "").trim();
   return t.length ? t : "—";
 }
 
 function guessShift(d: Date): SoapNote["shift"] {
-  var h = d.getHours();
+  const h = d.getHours();
   if (h >= 6 && h < 14) return "morning";
   if (h >= 14 && h < 22) return "evening";
   return "night";
