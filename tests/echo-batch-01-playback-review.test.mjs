@@ -1,43 +1,74 @@
-import assert from 'node:assert/strict'
 import test from 'node:test'
+import assert from 'node:assert/strict'
+import { ECHO_BATCH_01_REVIEW_ARTIFACTS } from '../app/lib/clinicalMedia/echoBatch01HumanReview.ts'
+import { evaluateEchoPlaybackReview } from '../app/lib/clinicalMedia/echoBatch01PlaybackReview.ts'
 
-const SOURCE_URL = new URL('../app/lib/clinicalMedia/echoBatch01PlaybackReview.ts', import.meta.url)
-const source = await (await fetch(SOURCE_URL)).text()
+const artifact = ECHO_BATCH_01_REVIEW_ARTIFACTS[0]
 
-function requireText(fragment) {
-  assert.ok(source.includes(fragment), `Expected playback contract to contain: ${fragment}`)
+function playback(overrides = {}) {
+  return {
+    candidateId: artifact.candidateId,
+    artifactSha256: artifact.derivativeSha256,
+    environment: 'macos-catalina-safari',
+    deviceModel: 'MacBook Pro 2012',
+    osVersion: 'macOS Catalina',
+    appOrBrowserVersion: 'Safari',
+    reviewedAt: '2026-09-07',
+    reviewerName: 'Device Reviewer',
+    playbackStarts: 'PASS',
+    playPauseWorks: 'PASS',
+    seekWorks: 'PASS',
+    frameSteppingWorks: 'PASS',
+    loopWorks: 'PASS',
+    aspectRatioPreserved: 'PASS',
+    noCropOrDistortion: 'PASS',
+    anatomyReadable: 'PASS',
+    overlaysReadable: 'PASS',
+    noBlankOrBlackFailure: 'PASS',
+    reducedMotionSafe: 'PASS',
+    notes: [],
+    ...overrides,
+  }
 }
 
-test('playback review is SHA-bound and fail-closed', () => {
-  requireText("throw new Error('Playback review artifact checksum mismatch')")
-  requireText("if (decisions.includes('FAIL')) return 'failed'")
-  requireText("if (decisions.includes('HOLD')) return 'hold'")
+test('checksum mismatch cannot produce playback evidence', () => {
+  assert.throws(
+    () => evaluateEchoPlaybackReview(playback({ artifactSha256: '0'.repeat(64) })),
+    /checksum mismatch/,
+  )
 })
 
-test('Catalina is explicitly legacy compatibility evidence only', () => {
-  requireText("submission.environment === 'macos-catalina-safari'")
-  requireText("submission.environment === 'macos-catalina-quicktime'")
-  requireText("blockers.push('current-apple-platform-playback-pending')")
+test('HOLD decision fails closed', () => {
+  const result = evaluateEchoPlaybackReview(playback({ anatomyReadable: 'HOLD' }))
+  assert.equal(result.state, 'hold')
+  assert.equal(result.devicePlaybackCleared, false)
+  assert.ok(result.blockers.includes('device-playback-hold'))
+  assert.equal(result.learnerReady, false)
 })
 
-test('playback evidence cannot authorize learner readiness or binary inclusion', () => {
-  requireText('learnerReady: false')
-  requireText('binaryCommitEligible: false')
-  requireText("blockers.push('post-review-quality-gate-pending')")
+test('FAIL decision fails closed', () => {
+  const result = evaluateEchoPlaybackReview(playback({ noBlankOrBlackFailure: 'FAIL' }))
+  assert.equal(result.state, 'failed')
+  assert.equal(result.devicePlaybackCleared, false)
+  assert.ok(result.blockers.includes('device-playback-failed'))
 })
 
-test('required playback checks include clinical geometry and failure-state visibility', () => {
-  for (const check of [
-    'playbackStarts',
-    'playPauseWorks',
-    'seekWorks',
-    'frameSteppingWorks',
-    'loopWorks',
-    'aspectRatioPreserved',
-    'noCropOrDistortion',
-    'anatomyReadable',
-    'overlaysReadable',
-    'noBlankOrBlackFailure',
-    'reducedMotionSafe',
-  ]) requireText(check)
+test('Catalina PASS is legacy compatibility evidence only', () => {
+  const result = evaluateEchoPlaybackReview(playback())
+  assert.equal(result.state, 'cleared')
+  assert.equal(result.devicePlaybackCleared, true)
+  assert.equal(result.legacyCompatibilityEvidence, true)
+  assert.equal(result.currentApplePlatformEvidence, false)
+  assert.ok(result.blockers.includes('current-apple-platform-playback-pending'))
+  assert.ok(result.blockers.includes('post-review-quality-gate-pending'))
+  assert.equal(result.learnerReady, false)
+  assert.equal(result.binaryCommitEligible, false)
+})
+
+test('current Apple PASS still requires post-review quality gate', () => {
+  const result = evaluateEchoPlaybackReview(playback({ environment: 'iphone-in-app', deviceModel: 'iPhone' }))
+  assert.equal(result.currentApplePlatformEvidence, true)
+  assert.equal(result.legacyCompatibilityEvidence, false)
+  assert.ok(result.blockers.includes('post-review-quality-gate-pending'))
+  assert.equal(result.learnerReady, false)
 })
