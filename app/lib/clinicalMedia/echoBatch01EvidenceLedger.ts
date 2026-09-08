@@ -1,4 +1,4 @@
-import type { EvidenceLedgerEvent } from '../governance/evidenceProvenanceLedger'
+import type { EvidenceLedgerEvent } from '../governance/evidenceProvenanceLedger.ts'
 
 export const ECHO_BATCH_01_LEDGER_ASSETS = [
   ['echo-a4c-pericardial-effusion-e00674', 'ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a'],
