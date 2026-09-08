@@ -14,6 +14,13 @@ function requireText(source, fragment) {
   assert.ok(source.includes(fragment), `Expected content to include: ${fragment}`)
 }
 
+function stripSqlComments(source) {
+  return source
+    .split('\n')
+    .map(line => line.replace(/--.*$/, ''))
+    .join('\n')
+}
+
 test('candidate remains review-only and preserves private governance storage', () => {
   requireText(migration, 'STAGING MIGRATION CANDIDATE ONLY — DO NOT APPLY WITHOUT EXPLICIT AUTHORIZATION')
   requireText(migration, 'create schema if not exists governance')
@@ -50,8 +57,10 @@ test('rollback refuses destructive removal when evidence rows exist', () => {
   requireText(rollback, "select count(*) from governance.evidence_ledger_events")
   requireText(rollback, 'if row_count > 0 then')
   requireText(rollback, 'drop table if exists governance.evidence_ledger_events')
-  assert.equal(rollback.includes('drop schema api'), false)
-  assert.equal(rollback.includes('drop schema governance'), false)
+
+  const executableRollback = stripSqlComments(rollback)
+  assert.equal(/\bdrop\s+schema\s+(if\s+exists\s+)?api\b/i.test(executableRollback), false)
+  assert.equal(/\bdrop\s+schema\s+(if\s+exists\s+)?governance\b/i.test(executableRollback), false)
 })
 
 test('review package keeps apply behind explicit staging authorization and PHI guard', () => {
