@@ -95,3 +95,29 @@ test('promotion authorization cannot be supplied by AI', () => {
   assert.equal(result.decision, 'HOLD')
   assert.ok(result.blockers.some(blocker => blocker.includes('ai-cannot-authorize-promotion')))
 })
+
+test('integrity v2 blocks cross-subject parent lineage even when pass events otherwise exist', () => {
+  const foreignParent = event('PROBED', {
+    eventId: 'evt-foreign-parent',
+    subjectId: 'other-subject',
+  })
+  const events = completeLedger().map(item =>
+    item.kind === 'PRIVACY_ATTESTED'
+      ? { ...item, parentEventIds: [foreignParent.eventId] }
+      : item,
+  )
+  const result = evaluate([foreignParent, ...events])
+  assert.equal(result.decision, 'HOLD')
+  assert.ok(result.blockers.some(blocker => blocker.includes('ledger-integrity-v2:parent-subject-mismatch:evt-privacy:evt-foreign-parent')))
+})
+
+test('integrity v2 blocks temporal inversion before promotion candidacy', () => {
+  const events = completeLedger().map(item =>
+    item.kind === 'PRIVACY_ATTESTED'
+      ? { ...item, occurredAt: '2026-09-08T07:59:59Z' }
+      : item,
+  )
+  const result = evaluate(events)
+  assert.equal(result.decision, 'HOLD')
+  assert.ok(result.blockers.some(blocker => blocker.includes('ledger-integrity-v2:child-occurs-before-parent:evt-privacy:evt-probed')))
+})
