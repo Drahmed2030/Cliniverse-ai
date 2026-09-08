@@ -1,9 +1,10 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "pilotId": "echo-batch-01-governed-pipeline-dry-run-v1",
   "mode": "DRY_RUN_ONLY",
   "executionBoundary": {
     "mediaBytesReprobedInThisRun": false,
+    "existingExactShaMachineEvidenceReused": true,
     "supabaseChanged": false,
     "storageChanged": false,
     "productionChanged": false,
@@ -11,13 +12,14 @@
   },
   "evidenceSummary": {
     "exactShaLocalVerification": "PASS_6_OF_6",
+    "existingMachineTechnicalEvidence": "PASS_6_OF_6",
     "clinicalHumanAttestation": "PASS_6_OF_6",
     "catalinaQuickTimePlayback": "PASS_6_OF_6",
     "catalinaSafariPlayback": "PASS_6_OF_6",
     "physicalIPhonePlayback": "PASS_6_OF_6",
     "iPadPlayback": "PENDING_NOT_AVAILABLE",
     "privacyHumanAttestation": "PENDING",
-    "canonicalAutomatedMediaGateReprobe": "PENDING"
+    "rendererBaseline": "BOUND_ACTIVE_WITH_LIMITATIONS"
   },
   "assets": [
     ["echo-a4c-pericardial-effusion-e00674","ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a"],
@@ -29,20 +31,19 @@
   ],
   "pipelineOutcome": {
     "sourceAndRights": "PASS_FROM_EXISTING_GOVERNANCE_EVIDENCE",
-    "automatedMediaGate": "PENDING_CANONICAL_REPROBE",
+    "automatedMediaGate": "PASS_6_OF_6_FROM_EXISTING_EXACT_SHA_MACHINE_EVIDENCE",
     "privacyHumanAttestation": "PENDING",
-    "clinicalHumanAttestation": "PASS",
-    "rendererBaseline": "EVIDENCE_PRESENT_BASELINE_RECORD_PENDING",
-    "registryBoundary": "CONTRACT_READY_RECORDS_NOT_PERSISTED",
-    "promotionDecision": "NOT_REACHED",
+    "clinicalHumanAttestation": "PASS_6_OF_6",
+    "rendererBaseline": "COVERED_6_OF_6_WITH_IPHONE_METADATA_LIMITATION_AND_IPAD_PENDING",
+    "registryBoundary": "DRY_RUN_READY_NOT_PERSISTED",
+    "promotionDecision": "BLOCKED_BY_PRIVACY_ATTESTATION",
     "learnerEligible": false,
     "binaryCommitEligible": false,
     "overall": "HOLD"
   },
   "nextActions": [
-    "Run the canonical automated media gate against the six exact derivative bytes and persist probe evidence.",
     "Complete named human privacy/provenance attestation for the same six SHA-bound artifacts.",
-    "Bind existing Apple playback evidence to a versioned Echo renderer baseline record.",
-    "Re-run the dry-run orchestrator; only then evaluate promotion eligibility."
+    "Re-run promotion lifecycle using the existing technical gate PASS, clinical PASS and renderer baseline coverage.",
+    "Do not persist to learner distribution until privacy attestation passes and an explicit promotion decision is recorded."
   ]
 }
