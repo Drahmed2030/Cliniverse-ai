@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "baselineId": "echo-apple-webkit-v1",
+  "status": "ACTIVE",
+  "fingerprint": {
+    "modality": "ECHO",
+    "rendererId": "clinical-studio-echo-cine",
+    "rendererVersion": "1.0.0",
+    "mediaPolicyVersion": "echo-media-policy-v1",
+    "encodingRecipeVersion": "h264-mp4-v1",
+    "platformFamily": "APPLE_WEBKIT"
+  },
+  "evidence": {
+    "sampleAssetCount": 6,
+    "catalinaQuickTime": "PASS_6_OF_6",
+    "catalinaSafari": "PASS_6_OF_6",
+    "physicalIPhoneSafari": "PASS_6_OF_6",
+    "iPad": "PENDING_NOT_AVAILABLE",
+    "currentDeviceEvidence": true,
+    "legacyDeviceEvidence": true,
+    "playbackStarts": true,
+    "controlsWork": true,
+    "geometryPreserved": true,
+    "noBlankFailure": true
+  },
+  "representativeFeatures": [
+    "grayscale-cine",
+    "color-doppler",
+    "overlay-heavy",
+    "dark-field",
+    "small-target"
+  ],
+  "limitations": [
+    "Exact physical iPhone model and iOS version were not recorded in the observation session.",
+    "iPad validation is pending/not available and is not counted as passed.",
+    "This renderer baseline does not constitute clinical, privacy, diagnostic, certification, or learner-readiness approval."
+  ]
+}
