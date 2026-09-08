@@ -1,4 +1,4 @@
-import type { UnifiedCompetencyTelemetryEvent } from './unifiedCompetencyTelemetryContract.ts'
+import type { CompetencyTelemetryEvent } from './unifiedCompetencyTelemetryContract.ts'
 
 export type EcgVerticalSliceStage = 'PREVIEW' | 'GOVERNED_CASE' | 'LEARNER_READY'
 export type EcgSourceKind = 'SYNTHETIC' | 'LICENSED_DATASET'
@@ -37,7 +37,7 @@ export interface EcgVerticalSliceInput {
   source: EcgSourceEvidence
   clinicalReview: EcgClinicalReview
   skillIds: readonly string[]
-  telemetry: readonly UnifiedCompetencyTelemetryEvent[]
+  telemetry: readonly CompetencyTelemetryEvent[]
 }
 
 export interface EcgVerticalSliceResult {
