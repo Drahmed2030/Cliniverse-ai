@@ -24,9 +24,14 @@ test('DCM maps to existing global-function and cardiomyopathy skills without EF 
   assert.ok(dcm.prohibitedClaims.includes('numerical EF estimation'))
 })
 
-test('pericardial effusion exposes a deliberate skill-graph gap instead of inventing competency support', () => {
+test('pericardial effusion uses the now-established pericardium skill without inventing new gaps', () => {
+  const pericardial = ECHO_BATCH_01_CLINICAL_PROMOTION.find(record => record.candidateId === 'echo-a4c-pericardial-effusion-e00674')
+  assert.ok(pericardial)
+  assert.ok(pericardial.mappedSkillIds.includes('echo.pericardium.effusion-pattern'))
+  assert.deepEqual(pericardial.requiredNewSkillIds, [])
+
   const summary = summarizeEchoBatch01ClinicalPromotion()
-  assert.deepEqual(summary.skillGraphGaps, ['echo.pericardium.effusion-pattern'])
+  assert.deepEqual(summary.skillGraphGaps, [])
   assert.equal(summary.learnerReady, 0)
   assert.equal(summary.clinicalReviewRequired, 3)
 })
