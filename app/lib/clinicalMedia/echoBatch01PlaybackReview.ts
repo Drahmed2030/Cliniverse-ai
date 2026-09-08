@@ -1,4 +1,4 @@
-import { ECHO_BATCH_01_REVIEW_ARTIFACTS } from './echoBatch01HumanReview'
+import { ECHO_BATCH_01_REVIEW_ARTIFACTS } from './echoBatch01HumanReview.ts'
 
 export type PlaybackDecision = 'PASS' | 'HOLD' | 'FAIL'
 export type ApplePlaybackEnvironment =
