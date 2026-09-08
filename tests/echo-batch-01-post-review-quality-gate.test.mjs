@@ -1,8 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
 
 const SOURCE_URL = new URL('../app/lib/clinicalMedia/echoBatch01PostReviewQualityGate.ts', import.meta.url)
-const source = await (await fetch(SOURCE_URL)).text()
+const source = await readFile(SOURCE_URL, 'utf8')
 
 function requireText(fragment) {
   assert.ok(source.includes(fragment), `Expected post-review quality gate to contain: ${fragment}`)
