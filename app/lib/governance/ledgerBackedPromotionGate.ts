@@ -1,5 +1,5 @@
-import type { EvidenceLedgerEvent, LedgerProduct } from './evidenceProvenanceLedger'
-import { validateEvidenceLedgerChain } from './evidenceProvenanceLedger'
+import type { EvidenceLedgerEvent, LedgerProduct } from './evidenceProvenanceLedger.ts'
+import { validateEvidenceLedgerChain } from './evidenceProvenanceLedger.ts'
 
 export type LedgerPromotionDecision = 'PROMOTION_CANDIDATE' | 'HOLD' | 'REJECT'
 
