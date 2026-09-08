@@ -1,5 +1,5 @@
 import type { EvidenceLedgerEvent, LedgerProduct } from './evidenceProvenanceLedger.ts'
-import { validateEvidenceLedgerChain } from './evidenceProvenanceLedger.ts'
+import { validateEvidenceLedgerIntegrityV2 } from './evidenceLedgerIntegrityV2.ts'
 
 export type LedgerPromotionDecision = 'PROMOTION_CANDIDATE' | 'HOLD' | 'REJECT'
 
@@ -47,8 +47,8 @@ export function evaluateLedgerBackedPromotion(
     throw new Error('expectedArtifactSha256 must be a SHA256 hex digest')
   }
 
-  const chain = validateEvidenceLedgerChain({ events: input.events })
-  if (!chain.valid) blockers.push(...chain.blockers.map(blocker => `ledger-invalid:${blocker}`))
+  const integrity = validateEvidenceLedgerIntegrityV2(input.events)
+  if (!integrity.valid) blockers.push(...integrity.blockers.map(blocker => `ledger-integrity-v2:${blocker}`))
 
   const subjectEvents = input.events.filter(event => event.product === input.product && event.subjectId === input.subjectId)
   if (!subjectEvents.length) blockers.push('subject-ledger-events-missing')
