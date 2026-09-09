@@ -62,6 +62,11 @@ function inUnitRange(value: number): boolean {
  * Selection consumes governed learner-eligible cases plus derived mastery/review
  * state. It never uses dataset diagnosis labels as selection authority, never
  * promotes cases, and never changes scoring or mastery state.
+ *
+ * A due review is a scheduling obligation, not merely another additive bonus.
+ * Therefore any due governed learner-eligible review outranks non-due weak,
+ * unseen, or spaced-practice candidates. Priority scoring is then used within
+ * the due/non-due cohort and deterministic case/skill tie-breaking remains.
  */
 export function selectNextEcgCaseV1(
   input: EcgAdaptiveCaseSelectionInputV1,
@@ -128,13 +133,16 @@ export function selectNextEcgCaseV1(
 
       return { caseId: candidate.caseId, targetSkillId: skillId, reason, priorityScore }
     }))
-    .sort((a, b) =>
-      b.priorityScore - a.priorityScore
-      || a.caseId.localeCompare(b.caseId)
-      || a.targetSkillId.localeCompare(b.targetSkillId),
-    )
 
-  const selected = ranked[0]
+  const dueRanked = ranked.filter(item => item.reason === 'DUE_REVIEW')
+  const selectionPool = dueRanked.length ? dueRanked : ranked
+  selectionPool.sort((a, b) =>
+    b.priorityScore - a.priorityScore
+    || a.caseId.localeCompare(b.caseId)
+    || a.targetSkillId.localeCompare(b.targetSkillId),
+  )
+
+  const selected = selectionPool[0]
   if (!selected) {
     return {
       decision: 'HOLD',
@@ -162,6 +170,7 @@ export function describeEcgAdaptiveCaseSelectionContractV1() {
     learnerEligibleCasesOnly: true,
     datasetLabelsNotSelectionAuthority: true,
     masteryAndReviewStateConsumed: true,
+    dueReviewsOutrankNonDueCandidates: true,
     criticalMissesIncreasePriorityWithoutChangingMastery: true,
     casePromotionProducedHere: false,
     scoringProducedHere: false,
