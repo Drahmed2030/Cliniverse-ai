@@ -1,14 +1,18 @@
 import type { Metadata, Viewport } from "next"
 import Script from "next/script"
 import "./globals.css"
+import "./commercial-visual-system.css"
 import ThemeProvider from "./components/ThemeProvider"
 
 export const viewport: Viewport = {
-  themeColor: "#080C16",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F8FB" },
+    { media: "(prefers-color-scheme: dark)", color: "#080C16" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  colorScheme: "dark",
+  colorScheme: "light dark",
 }
 
 const releaseDescription = "Clinical learning, simulation and workflow tools for healthcare professionals."
