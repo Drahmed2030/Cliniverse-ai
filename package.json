@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "node --test tests/*.test.mjs",
     "test:visual": "playwright test",
+    "test:visual:commercial": "playwright test --config=playwright.commercial.config.ts",
     "postinstall": "node scripts/patch-capacitor-cli-tar.mjs"
   },
   "dependencies": {
