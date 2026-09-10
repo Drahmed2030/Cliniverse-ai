@@ -42,12 +42,13 @@ const workspaces: Array<{
 ]
 
 const C = {
-  panel: '#111827',
-  border: 'rgba(148,163,184,0.20)',
-  text: '#F8FAFC',
-  sub: '#94A3B8',
-  teal: '#2DD4BF',
-  blue: '#60A5FA',
+  panel: 'var(--cv-surface)',
+  elevated: 'var(--cv-surface-elevated)',
+  border: 'var(--cv-border)',
+  text: 'var(--cv-text)',
+  sub: 'var(--cv-text-secondary)',
+  teal: 'var(--cv-teal)',
+  blue: 'var(--cv-blue)',
 }
 
 export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
@@ -100,7 +101,15 @@ export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
   }
 
   return (
-    <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,sans-serif', minHeight: 'calc(100dvh - 190px)', background: 'transparent' }}>
+    <div
+      data-commercial-learn-surface
+      style={{
+        fontFamily: 'var(--cv-font)',
+        minHeight: 'calc(100dvh - 190px)',
+        background: 'transparent',
+        color: C.text,
+      }}
+    >
       <nav aria-label="Care workspaces" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(165px,1fr))', gap: 8, marginBottom: 12 }}>
         {workspaces.map(item => {
           const selected = activeWorkspace === item.id
@@ -116,18 +125,18 @@ export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
                 minHeight: 74,
                 padding: 12,
                 borderRadius: 16,
-                border: `1px solid ${selected ? 'rgba(45,212,191,0.62)' : C.border}`,
-                background: selected ? 'rgba(13,148,136,0.20)' : C.panel,
-                color: C.text,
+                border: `1px solid ${selected ? C.teal : C.border}`,
+                background: selected ? C.elevated : C.panel,
+                color: selected ? C.teal : C.text,
                 textAlign: 'left',
                 cursor: 'pointer',
               }}
             >
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, fontSize: 12, fontWeight: 800 }}>
+              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, fontSize: '0.85rem', fontWeight: 800 }}>
                 {item.label}
-                {item.premium ? <span style={{ color: locked ? C.blue : C.teal, fontSize: 9 }}>PRO</span> : null}
+                {item.premium ? <span style={{ color: locked ? C.blue : C.teal, fontSize: '0.72rem' }}>PRO</span> : null}
               </span>
-              <span style={{ display: 'block', color: C.sub, fontSize: 10, lineHeight: 1.45, marginTop: 5 }}>
+              <span style={{ display: 'block', color: C.sub, fontSize: '0.78rem', lineHeight: 1.45, marginTop: 5 }}>
                 {entitlementLoading && item.premium ? 'Checking plan…' : item.description}
               </span>
             </button>
