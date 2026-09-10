@@ -75,7 +75,7 @@ function ReleaseShell() {
     return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
   }, [])
 
-  const handleExploreNavigate = (destination: AtlasDestination) => {
+  const handleAtlasNavigate = (destination: AtlasDestination) => {
     if (destination.workspace) setCareWorkspace(destination.workspace)
     setTab(destination.tab === 'care' ? 'learn' : 'me')
   }
@@ -100,7 +100,7 @@ function ReleaseShell() {
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface onNavigate={setTab} />}
-        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleExploreNavigate} onOpenPlan={openPaywall} />}
+        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
@@ -117,9 +117,9 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
     me: { title: 'Me', sub: 'Account, plan, privacy and settings' },
   }
   const current = titles[active]
-  const topPadding = nativeHeaderTopPadding === null
+  const topPadding = nativeTopPadding === null
     ? `calc(10px + ${NATIVE_SAFE_AREA_TOP})`
-    : `max(${nativeHeaderTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
+    : `max(${nativeTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
 
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
@@ -203,6 +203,19 @@ function ProgressSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void
     </section>
   )
 }
+
+function ReleaseIntelligenceGate() {
+  return (
+    <section aria-labelledby="intelligence-gate-title" hidden>
+      <h2 id="intelligence-gate-title">Clinical Intelligence is not enabled in this release build.</h2>
+      <p>
+        This non-primary release gate is retained as an explicit security boundary. Clinical Intelligence remains unavailable until its privacy, consent, provider-data-use, and clinical-claims requirements are satisfied.
+      </p>
+    </section>
+  )
+}
+
+void ReleaseIntelligenceGate
 
 function SectionLoading({ label }: { label: string }) {
   return (
