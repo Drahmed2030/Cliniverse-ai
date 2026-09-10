@@ -12,14 +12,14 @@ interface ProfileState {
 }
 
 const C = {
-  panel: '#111827',
-  elevated: '#172033',
-  border: 'rgba(148,163,184,0.20)',
-  text: '#F8FAFC',
-  sub: '#94A3B8',
-  blue: '#3B82F6',
-  teal: '#14B8A6',
-  danger: '#FCA5A5',
+  panel: 'var(--cv-surface)',
+  elevated: 'var(--cv-surface-elevated)',
+  border: 'var(--cv-border)',
+  text: 'var(--cv-text)',
+  sub: 'var(--cv-text-secondary)',
+  blue: 'var(--cv-blue)',
+  teal: 'var(--cv-teal)',
+  danger: '#b42318',
 }
 
 export default function MeAccountSummary() {
@@ -86,8 +86,8 @@ export default function MeAccountSummary() {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <section style={cardStyle} aria-labelledby="profile-account-title">
-        <div id="profile-account-title" style={{ fontSize: 16, fontWeight: 800 }}>Profile</div>
-        <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>
+        <div id="profile-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Profile</div>
+        <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
           Authenticated professional metadata. Email ownership comes from the signed-in account.
         </div>
 
@@ -98,26 +98,26 @@ export default function MeAccountSummary() {
             <button type="button" onClick={saveProfile} disabled={saving} style={primaryButtonStyle}>
               {saving ? 'Saving…' : 'Save profile'}
             </button>
-            {message ? <div role="status" style={{ fontSize: 11, color: message.includes('failed') ? C.danger : C.teal }}>{message}</div> : null}
+            {message ? <div role="status" style={{ fontSize: '0.82rem', color: message.includes('failed') ? C.danger : C.teal }}>{message}</div> : null}
           </div>
         ) : (
-          <div style={{ color: C.danger, fontSize: 12, marginTop: 12 }}>Profile unavailable.</div>
+          <div style={{ color: C.danger, fontSize: '0.9rem', marginTop: 12 }}>Profile unavailable.</div>
         )}
       </section>
 
       <section style={cardStyle} aria-labelledby="plan-account-title">
-        <div id="plan-account-title" style={{ fontSize: 16, fontWeight: 800 }}>Plan</div>
-        <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>
+        <div id="plan-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Plan</div>
+        <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
           App Store controls the localized price and renewal. Cliniverse activates PRO only after server verification.
         </div>
         <div style={{ marginTop: 12, padding: 12, borderRadius: 12, background: C.elevated }}>
-          <div style={{ fontSize: 12, fontWeight: 800, textTransform: 'capitalize' }}>{entitlement?.tier ?? 'free'}</div>
-          <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, textTransform: 'capitalize' }}>{entitlement?.tier ?? 'free'}</div>
+          <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
             Status: {entitlement?.status ?? 'unknown'} · Source: {entitlement?.source ?? 'none'}
           </div>
-          {entitlement?.expiresAt ? <div style={{ color: C.sub, fontSize: 11, marginTop: 4 }}>Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
+          {entitlement?.expiresAt ? <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
           {primaryProduct ? (
-            <div style={{ color: C.text, fontSize: 12, fontWeight: 800, marginTop: 10 }}>
+            <div style={{ color: C.text, fontSize: '0.9rem', fontWeight: 800, marginTop: 10 }}>
               {primaryProduct.displayName} · {primaryProduct.displayPrice} · {primaryProduct.subscriptionPeriod}
             </div>
           ) : null}
@@ -130,19 +130,18 @@ export default function MeAccountSummary() {
             href="https://apps.apple.com/account/subscriptions"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'block', color: C.blue, textAlign: 'center', fontSize: 11, fontWeight: 800, marginTop: 10 }}
+            style={{ display: 'block', color: C.blue, textAlign: 'center', fontSize: '0.82rem', fontWeight: 800, marginTop: 10 }}
           >
             Manage Apple subscription
           </a>
         ) : null}
-        {storeMessage ? <div role="status" aria-live="polite" style={{ color: C.sub, fontSize: 11, lineHeight: 1.5, marginTop: 8 }}>{storeMessage}</div> : null}
+        {storeMessage ? <div role="status" aria-live="polite" style={{ color: C.sub, fontSize: '0.82rem', lineHeight: 1.5, marginTop: 8 }}>{storeMessage}</div> : null}
       </section>
 
       <section style={cardStyle} aria-labelledby="session-account-title">
-        <div id="session-account-title" style={{ fontSize: 16, fontWeight: 800, marginBottom: 10 }}>Account session</div>
+        <div id="session-account-title" style={{ fontSize: '1rem', fontWeight: 800, marginBottom: 10 }}>Account session</div>
         <AccountSessionActions />
       </section>
-
     </div>
   )
 }
@@ -174,11 +173,11 @@ const cardStyle = {
 } as const
 
 const labelStyle = {
-  fontSize: 10,
+  fontSize: '0.78rem',
   fontWeight: 800,
   color: C.sub,
   marginBottom: 5,
-  letterSpacing: 0.5,
+  letterSpacing: '0.04em',
 } as const
 
 const inputStyle = {
@@ -189,17 +188,17 @@ const inputStyle = {
   background: C.elevated,
   color: C.text,
   padding: '11px 12px',
-  fontSize: 13,
+  fontSize: '0.95rem',
   outline: 'none',
 } as const
 
 const primaryButtonStyle = {
-  minHeight: 42,
+  minHeight: 44,
   borderRadius: 12,
-  border: 'none',
+  border: `1px solid ${C.border}`,
   background: C.blue,
   color: '#FFFFFF',
-  fontSize: 13,
+  fontSize: '0.95rem',
   fontWeight: 800,
   cursor: 'pointer',
 } as const
