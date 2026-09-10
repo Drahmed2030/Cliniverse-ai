@@ -1,13 +1,13 @@
 'use client'
 
-import { Activity, BookOpenCheck, BrainCircuit, Home, UserRound } from 'lucide-react'
+import { BarChart3, BookOpenCheck, CalendarDays, Compass, UserRound } from 'lucide-react'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
   NATIVE_SAFE_AREA_RIGHT,
 } from '../lib/nativeSafeArea'
 
-export type ReleaseTab = 'home' | 'care' | 'intelligence' | 'atlas' | 'me'
+export type ReleaseTab = 'today' | 'learn' | 'progress' | 'explore' | 'me'
 
 interface Props {
   active: ReleaseTab
@@ -15,10 +15,10 @@ interface Props {
 }
 
 const items = [
-  { id: 'home' as const, label: 'Home', Icon: Home },
-  { id: 'care' as const, label: 'Care', Icon: Activity },
-  { id: 'intelligence' as const, label: 'Intelligence', Icon: BrainCircuit },
-  { id: 'atlas' as const, label: 'Atlas', Icon: BookOpenCheck },
+  { id: 'today' as const, label: 'Today', Icon: CalendarDays },
+  { id: 'learn' as const, label: 'Learn', Icon: BookOpenCheck },
+  { id: 'progress' as const, label: 'Progress', Icon: BarChart3 },
+  { id: 'explore' as const, label: 'Explore', Icon: Compass },
   { id: 'me' as const, label: 'Me', Icon: UserRound },
 ]
 
@@ -26,6 +26,7 @@ export default function ReleaseNav({ active, onChange }: Props) {
   return (
     <nav
       aria-label="Primary"
+      data-commercial-navigation
       style={{
         position: 'fixed',
         left: `max(12px, ${NATIVE_SAFE_AREA_LEFT})`,
@@ -42,6 +43,8 @@ export default function ReleaseNav({ active, onChange }: Props) {
         border: '1px solid rgba(148,163,184,0.24)',
         background: 'rgba(8,12,22,0.94)',
         boxShadow: '0 14px 40px rgba(2,6,23,0.28)',
+        WebkitBackdropFilter: 'blur(18px)',
+        backdropFilter: 'blur(18px)',
       }}
     >
       {items.map(({ id, label, Icon }) => {
