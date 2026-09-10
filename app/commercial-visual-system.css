@@ -97,3 +97,41 @@
   color: var(--cv-text) !important;
   background: var(--cv-nav-selected) !important;
 }
+
+/* Geometry-driven expanded presentation. This is intentionally device-name agnostic:
+ * wide iPhone/foldable postures, iPad, desktop and future Apple form factors can all
+ * enter the same layout when usable viewport geometry allows it.
+ */
+@media (min-width: 900px) {
+  [data-commercial-shell] {
+    padding-left: 104px;
+  }
+
+  [data-commercial-navigation] {
+    top: max(88px, env(safe-area-inset-top, 0px)) !important;
+    bottom: auto !important;
+    left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    right: auto !important;
+    width: 76px;
+    max-width: 76px !important;
+    margin: 0 !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: repeat(5, minmax(56px, auto));
+    border-radius: 24px !important;
+  }
+
+  [data-commercial-navigation] button {
+    min-height: 58px !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-commercial-shell] {
+    padding-left: 128px;
+  }
+
+  [data-commercial-navigation] {
+    width: 96px;
+    max-width: 96px !important;
+  }
+}
