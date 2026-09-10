@@ -18,7 +18,7 @@ export const COMMERCIAL_VISUAL_QA_MATRIX_2026: readonly CommercialVisualQaScenar
     id: 'compact-light-default',
     viewport: 'COMPACT',
     minWidth: 320,
-    maxWidth: 899,
+    maxWidth: 699,
     appearance: 'LIGHT',
     contrast: 'STANDARD',
     navigation: 'BOTTOM_TABS',
@@ -28,7 +28,7 @@ export const COMMERCIAL_VISUAL_QA_MATRIX_2026: readonly CommercialVisualQaScenar
     id: 'compact-dark-accessibility',
     viewport: 'COMPACT',
     minWidth: 320,
-    maxWidth: 899,
+    maxWidth: 699,
     appearance: 'DARK',
     contrast: 'INCREASED',
     navigation: 'BOTTOM_TABS',
@@ -37,7 +37,7 @@ export const COMMERCIAL_VISUAL_QA_MATRIX_2026: readonly CommercialVisualQaScenar
   {
     id: 'expanded-light-default',
     viewport: 'EXPANDED',
-    minWidth: 900,
+    minWidth: 700,
     maxWidth: 1279,
     appearance: 'LIGHT',
     contrast: 'STANDARD',
@@ -47,7 +47,7 @@ export const COMMERCIAL_VISUAL_QA_MATRIX_2026: readonly CommercialVisualQaScenar
   {
     id: 'expanded-dark-accessibility',
     viewport: 'EXPANDED',
-    minWidth: 900,
+    minWidth: 700,
     maxWidth: 1279,
     appearance: 'DARK',
     contrast: 'INCREASED',
@@ -116,6 +116,9 @@ export function evaluateCommercialVisualQaMatrix2026(
 export function describeCommercialVisualQaMatrix2026() {
   return {
     geometryDriven: true,
+    compactBelowPx: 700,
+    expandedStartsAtPx: 700,
+    wideClinicalStartsAtPx: 1280,
     deviceNameForksProhibited: true,
     lightAndDarkRequired: true,
     increasedContrastRequired: true,
