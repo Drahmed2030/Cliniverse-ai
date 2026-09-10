@@ -209,7 +209,7 @@ function ReleaseIntelligenceGate() {
     <section aria-labelledby="intelligence-gate-title" hidden>
       <h2 id="intelligence-gate-title">Clinical Intelligence is not enabled in this release build.</h2>
       <p>
-        This non-primary release gate is retained as an explicit security boundary. Clinical Intelligence remains unavailable until its privacy, consent, provider-data-use, and clinical-claims requirements are satisfied.
+        This non-primary release gate is retained as an explicit security boundary. User-entered content is not sent to third-party AI providers until explicit disclosure and consent, provider/data-use review, and clinical-claims validation are complete. Do not enter patient-identifiable information into Cliniverse AI.
       </p>
     </section>
   )
