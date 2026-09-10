@@ -5,14 +5,14 @@ import AchievementsHub from './AchievementsHub'
 import LifeDeviceBoundary from './LifeDeviceBoundary'
 
 const C = {
-  panel: '#111827',
-  elevated: '#172033',
-  border: 'rgba(148,163,184,0.20)',
-  text: '#F8FAFC',
-  sub: '#94A3B8',
-  blue: '#3B82F6',
-  teal: '#14B8A6',
-  gold: '#D4A72C',
+  panel: 'var(--cv-surface)',
+  elevated: 'var(--cv-surface-elevated)',
+  border: 'var(--cv-border)',
+  text: 'var(--cv-text)',
+  sub: 'var(--cv-text-secondary)',
+  blue: 'var(--cv-blue)',
+  teal: 'var(--cv-teal)',
+  gold: 'var(--cv-gold)',
 }
 
 type Status = 'ready' | 'foundation' | 'gated'
@@ -57,11 +57,11 @@ const statusColor: Record<Status, string> = {
 
 export default function MeHub() {
   return (
-    <section aria-labelledby="me-title">
+    <section aria-labelledby="me-title" data-commercial-me-surface>
       <div style={introStyle}>
-        <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>ONE ACCOUNT DESTINATION</div>
-        <h1 id="me-title" style={{ fontSize: 26, margin: '7px 0 8px' }}>Me</h1>
-        <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 720 }}>
+        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>ONE ACCOUNT DESTINATION</div>
+        <h1 id="me-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Me</h1>
+        <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 720 }}>
           Profile, plan, learning achievements, Life, privacy and settings share one identity and one account state across Cliniverse.
         </p>
       </div>
@@ -80,14 +80,14 @@ export default function MeHub() {
         {sections.map(section => (
           <article key={section.title} style={cardStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 16, fontWeight: 800 }}>{section.title}</div>
+              <div style={{ fontSize: '1rem', fontWeight: 800 }}>{section.title}</div>
               <span
                 style={{
                   color: statusColor[section.status],
-                  border: `1px solid ${statusColor[section.status]}44`,
+                  border: `1px solid color-mix(in srgb, ${statusColor[section.status]} 35%, transparent)`,
                   borderRadius: 999,
                   padding: '4px 7px',
-                  fontSize: 9,
+                  fontSize: '0.72rem',
                   fontWeight: 800,
                   whiteSpace: 'nowrap',
                 }}
@@ -95,14 +95,14 @@ export default function MeHub() {
                 {statusLabel[section.status]}
               </span>
             </div>
-            <p style={{ color: C.sub, fontSize: 12, lineHeight: 1.55, margin: '10px 0 0' }}>{section.description}</p>
-            <div style={{ marginTop: 12, padding: 11, borderRadius: 12, background: C.elevated, color: '#CBD5E1', fontSize: 11, lineHeight: 1.55 }}>
+            <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '10px 0 0' }}>{section.description}</p>
+            <div style={{ marginTop: 12, padding: 11, borderRadius: 12, background: C.elevated, color: C.sub, fontSize: '0.85rem', lineHeight: 1.55 }}>
               {section.detail}
             </div>
             {section.links ? (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
                 {section.links.map(link => (
-                  <a key={link.href} href={link.href} style={{ padding: '8px 11px', borderRadius: 999, border: '1px solid rgba(20,184,166,0.35)', color: '#5EEAD4', textDecoration: 'none', fontSize: 11, fontWeight: 800 }}>
+                  <a key={link.href} href={link.href} style={{ padding: '8px 11px', borderRadius: 999, border: `1px solid ${C.border}`, color: C.teal, textDecoration: 'none', fontSize: '0.85rem', fontWeight: 800 }}>
                     {link.label}
                   </a>
                 ))}
@@ -112,9 +112,9 @@ export default function MeHub() {
         ))}
       </div>
 
-      <div style={{ ...cardStyle, marginTop: 10, borderColor: 'rgba(20,184,166,0.22)' }}>
-        <div style={{ fontSize: 12, fontWeight: 800, color: C.teal }}>Identity rule</div>
-        <div style={{ marginTop: 5, color: C.sub, fontSize: 11, lineHeight: 1.6 }}>
+      <div style={{ ...cardStyle, marginTop: 10, borderColor: C.border }}>
+        <div style={{ fontSize: '0.85rem', fontWeight: 800, color: C.teal }}>Identity rule</div>
+        <div style={{ marginTop: 5, color: C.sub, fontSize: '0.82rem', lineHeight: 1.6 }}>
           Authentication owns the user; Profile owns professional metadata; Entitlement owns access; Life owns wellness context. No surface may create a second identity or activate PRO locally.
         </div>
       </div>
@@ -127,6 +127,7 @@ const introStyle = {
   borderRadius: 18,
   border: `1px solid ${C.border}`,
   background: C.panel,
+  color: C.text,
   marginBottom: 12,
 } as const
 
