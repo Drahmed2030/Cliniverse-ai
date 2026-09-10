@@ -26,7 +26,7 @@ test('navigation styling uses semantic visual tokens instead of fixed release co
 
 test('expanded navigation is selected by viewport geometry without device-name forks', () => {
   const css = read('app/commercial-visual-system.css')
-  assert.match(css, /@media \(min-width: 900px\)/)
+  assert.match(css, /@media \(min-width: 700px\)/)
   assert.match(css, /grid-template-columns: 1fr !important/)
   assert.match(css, /grid-template-rows: repeat\(5,/)
   for (const forbidden of ['iPhone18', 'iPhone 18', 'iPhone Duo', 'Fold', 'iPad Pro']) {
