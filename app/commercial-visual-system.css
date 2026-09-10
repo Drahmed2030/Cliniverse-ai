@@ -99,10 +99,10 @@
 }
 
 /* Geometry-driven expanded presentation. This is intentionally device-name agnostic:
- * wide iPhone/foldable postures, iPad, desktop and future Apple form factors can all
- * enter the same layout when usable viewport geometry allows it.
+ * any future Apple form factor can enter the same layout when usable viewport geometry allows it.
+ * Keep the breakpoint aligned with the shared adaptive clinical layout contract: compact <700px.
  */
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   [data-commercial-shell] {
     padding-left: 104px;
   }
