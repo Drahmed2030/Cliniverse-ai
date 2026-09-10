@@ -4,15 +4,15 @@ import { useState } from 'react'
 import { DEPARTMENTS, MOCK_PATIENTS, MOCK_LIVE_EVENTS, MOCK_CENSUS } from '../../lib/ward'
 
 const T = {
-  teal: '#2DD4BF',
+  teal: 'var(--cv-teal, #2DD4BF)',
   tealD: '#0F766E',
-  bg: '#080C16',
-  white: '#111827',
-  elevated: '#172033',
-  text: '#F8FAFC',
-  sub: '#CBD5E1',
-  muted: '#94A3B8',
-  border: 'rgba(148,163,184,0.20)',
+  bg: 'var(--cv-bg, #080C16)',
+  white: 'var(--cv-surface, #111827)',
+  elevated: 'var(--cv-surface-elevated, #172033)',
+  text: 'var(--cv-text, #F8FAFC)',
+  sub: 'var(--cv-text-secondary, #CBD5E1)',
+  muted: 'var(--cv-text-secondary, #94A3B8)',
+  border: 'var(--cv-border, rgba(148,163,184,0.20))',
   red: '#F87171',
   amber: '#FBBF24',
   green: '#34D399',
@@ -57,26 +57,26 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
   const assigned = visiblePatients.filter(patient => patient.assignedToMe && patient.status !== 'discharged')
 
   return (
-    <div style={{ background: T.bg, minHeight: 'calc(100dvh - 190px)', paddingBottom: 88, border: '1px solid ' + T.border, borderRadius: 24, overflow: 'hidden', boxShadow: '0 18px 46px rgba(0,0,0,0.28)' }}>
-      <div style={{ background: 'radial-gradient(circle at 85% 15%, rgba(45,212,191,0.20), transparent 38%), linear-gradient(145deg, #0F2B2C 0%, #111827 58%, #172033 100%)', padding: '30px 20px 24px', borderBottom: '1px solid ' + T.border }}>
+    <div data-commercial-ward-home style={{ background: T.bg, minHeight: 'calc(100dvh - 190px)', paddingBottom: 88, border: '1px solid ' + T.border, borderRadius: 24, overflow: 'hidden', boxShadow: 'var(--cv-shadow, 0 18px 46px rgba(0,0,0,0.28))' }}>
+      <div style={{ background: 'var(--cv-surface-elevated, #172033)', padding: '30px 20px 24px', borderBottom: '1px solid ' + T.border }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.72)', letterSpacing: 1, marginBottom: 4 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: T.sub, letterSpacing: 1, marginBottom: 4 }}>
               CLINIVERSE AI · CARE
             </div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>
+            <div style={{ fontSize: 26, fontWeight: 800, color: T.text, lineHeight: 1.1 }}>
               Care Workflow Simulation
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 6 }}>
+            <div style={{ fontSize: 12, color: T.sub, marginTop: 6 }}>
               Simulated cases · Human review · No real patient data
             </div>
           </div>
           <div style={{ background: 'rgba(45,212,191,0.10)', border: '1px solid rgba(45,212,191,0.34)', borderRadius: 20, padding: '5px 10px' }}>
-            <span style={{ fontSize: 10, fontWeight: 800, color: '#fff', letterSpacing: 0.8 }}>SIMULATION</span>
+            <span style={{ fontSize: 10, fontWeight: 800, color: T.text, letterSpacing: 0.8 }}>SIMULATION</span>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 20, background: 'rgba(8,12,22,0.46)', border: '1px solid ' + T.border, borderRadius: 16, padding: '12px 8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 20, background: 'var(--cv-surface-subtle, rgba(8,12,22,0.46))', border: '1px solid ' + T.border, borderRadius: 16, padding: '12px 8px' }}>
           {[
             { label: 'Seen', value: MOCK_CENSUS.seen },
             { label: 'Assigned', value: MOCK_CENSUS.assigned },
@@ -84,8 +84,8 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
             { label: 'Consults', value: MOCK_CENSUS.consultsRequested },
           ].map(item => (
             <div key={item.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>{item.value}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.68)', fontWeight: 600 }}>{item.label}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: T.text }}>{item.value}</div>
+              <div style={{ fontSize: 10, color: T.sub, fontWeight: 600 }}>{item.label}</div>
             </div>
           ))}
         </div>
@@ -101,7 +101,7 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
               const style = EVENT_COLOR[event.type]
               return (
                 <div key={event.id} style={{ background: style.bg, border: '1px solid ' + style.color + '30', borderRadius: 12, padding: '8px 12px', minWidth: 160, flexShrink: 0 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: style.color, letterSpacing: 1, marginBottom: 3 }}>{style.label}</div>
+                  <div style={{ fontSize: 9, fontWeight: 800, color: T.text, letterSpacing: 1, marginBottom: 3 }}>{style.label}</div>
                   <div style={{ fontSize: 12, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{event.label}</div>
                   <div style={{ fontSize: 10, color: T.muted, marginTop: 3 }}>{event.time}</div>
                 </div>
@@ -149,13 +149,13 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
                   if (caseUnlocked) onSelectPatient?.(patient.id)
                   else onUpgrade?.()
                 }}
-                style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: '0 10px 24px rgba(0,0,0,0.18)' }}
+                style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: 'var(--cv-shadow, 0 10px 24px rgba(0,0,0,0.18))' }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{patient.name}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    {!caseUnlocked ? <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 7px', borderRadius: 99, background: 'rgba(96,165,250,0.14)', color: '#60A5FA' }}>PRO</span> : null}
-                    <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 99, background: priority.bg, color: priority.color }}>{priority.label}</span>
+                    {!caseUnlocked ? <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 7px', borderRadius: 99, background: 'rgba(96,165,250,0.14)', color: T.text }}>PRO</span> : null}
+                    <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 99, background: priority.bg, color: T.text }}>{priority.label}</span>
                   </div>
                 </div>
                 <div style={{ fontSize: 12, color: T.sub, marginBottom: 6 }}>{patient.diagnosis}</div>
