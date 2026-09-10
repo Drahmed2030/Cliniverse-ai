@@ -24,16 +24,17 @@ const WardIndex = dynamic(() => import('./ward'), {
 })
 
 const C = {
-  bg: '#080C16',
-  panel: '#111827',
-  elevated: '#172033',
-  border: 'rgba(148,163,184,0.20)',
-  text: '#F8FAFC',
-  sub: '#94A3B8',
-  blue: '#3B82F6',
-  teal: '#14B8A6',
-  violet: '#8B5CF6',
-  gold: '#D4A72C',
+  bg: 'var(--cv-bg)',
+  panel: 'var(--cv-surface)',
+  elevated: 'var(--cv-surface-elevated)',
+  subtle: 'var(--cv-surface-subtle)',
+  border: 'var(--cv-border)',
+  text: 'var(--cv-text)',
+  sub: 'var(--cv-text-secondary)',
+  blue: 'var(--cv-blue)',
+  teal: 'var(--cv-teal)',
+  violet: 'var(--cv-violet)',
+  gold: 'var(--cv-gold)',
 }
 
 function getNativeHeaderTopPadding() {
@@ -81,9 +82,20 @@ function ReleaseShell() {
   }
 
   return (
-    <main data-release-shell data-commercial-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
+    <main
+      data-release-shell
+      data-commercial-shell
+      style={{
+        minHeight: '100dvh',
+        background: C.bg,
+        color: C.text,
+        paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`,
+        isolation: 'isolate',
+      }}
+    >
       <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
+        data-commercial-content
         style={{
           maxWidth: 1180,
           margin: '0 auto',
@@ -122,7 +134,19 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
     : `max(${nativeTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
 
   return (
-    <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
+    <header
+      data-release-header
+      data-commercial-chrome
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+        borderBottom: `1px solid ${C.border}`,
+        background: 'var(--cv-nav-bg)',
+        backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
+      }}
+    >
       <div
         data-release-header-inner
         style={{
@@ -140,10 +164,22 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
         }}
       >
         <div>
-          <div style={{ fontSize: 16, fontWeight: 800 }}>{current.title}</div>
-          <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{current.sub}</div>
+          <div style={{ fontSize: '1rem', fontWeight: 800 }}>{current.title}</div>
+          <div style={{ fontSize: '0.75rem', color: C.sub, marginTop: 3 }}>{current.sub}</div>
         </div>
-        <div aria-label="Cliniverse human review status" style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.5, color: C.teal, border: '1px solid rgba(20,184,166,0.28)', borderRadius: 999, padding: '6px 9px', whiteSpace: 'nowrap' }}>
+        <div
+          aria-label="Cliniverse human review status"
+          style={{
+            fontSize: '0.6875rem',
+            fontWeight: 800,
+            letterSpacing: '0.05em',
+            color: C.teal,
+            border: `1px solid ${C.border}`,
+            borderRadius: 999,
+            padding: '6px 9px',
+            whiteSpace: 'nowrap',
+          }}
+        >
           HUMAN-REVIEWED
         </div>
       </div>
@@ -160,27 +196,61 @@ function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void })
   ]
 
   return (
-    <section aria-labelledby="today-title">
-      <div style={{ padding: '24px 20px', borderRadius: 24, border: `1px solid ${C.border}`, background: `linear-gradient(145deg, ${C.panel}, ${C.elevated})`, marginBottom: 14 }}>
-        <div style={{ color: C.blue, fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>CLINIVERSE</div>
-        <h1 id="today-title" style={{ fontSize: 28, lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
-        <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: 14 }}>
+    <section aria-labelledby="today-title" data-commercial-surface="today">
+      <div
+        style={{
+          padding: '24px 20px',
+          borderRadius: 24,
+          border: `1px solid ${C.border}`,
+          background: `linear-gradient(145deg, ${C.panel}, ${C.elevated})`,
+          marginBottom: 14,
+        }}
+      >
+        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>CLINIVERSE</div>
+        <h1 id="today-title" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
+        <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: '0.9375rem' }}>
           Continue learning, review progress, explore approved experiences, or manage your account. Clinical Intelligence remains separately gated and is not exposed from primary navigation.
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
+      <div data-commercial-card-grid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
         {cards.map(card => (
-          <button key={card.tab} type="button" onClick={() => onNavigate(card.tab)} style={{ textAlign: 'left', minHeight: 164, padding: 18, borderRadius: 20, border: `1px solid ${C.border}`, background: C.panel, color: C.text, cursor: 'pointer' }}>
-            <div style={{ color: card.accent, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>{card.eyebrow}</div>
-            <div style={{ fontSize: 17, fontWeight: 800, marginTop: 10 }}>{card.title}</div>
-            <div style={{ color: C.sub, fontSize: 12, lineHeight: 1.6, marginTop: 8 }}>{card.text}</div>
-            <div style={{ color: card.accent, fontSize: 12, fontWeight: 800, marginTop: 14 }}>Open →</div>
+          <button
+            key={card.tab}
+            type="button"
+            onClick={() => onNavigate(card.tab)}
+            style={{
+              textAlign: 'left',
+              minHeight: 164,
+              padding: 18,
+              borderRadius: 20,
+              border: `1px solid ${C.border}`,
+              background: C.panel,
+              color: C.text,
+              cursor: 'pointer',
+            }}
+          >
+            <div style={{ color: card.accent, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>{card.eyebrow}</div>
+            <div style={{ fontSize: '1.0625rem', fontWeight: 800, marginTop: 10 }}>{card.title}</div>
+            <div style={{ color: C.sub, fontSize: '0.8125rem', lineHeight: 1.6, marginTop: 8 }}>{card.text}</div>
+            <div style={{ color: card.accent, fontSize: '0.8125rem', fontWeight: 800, marginTop: 14 }}>Open →</div>
           </button>
         ))}
       </div>
 
-      <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 16, border: '1px solid rgba(212,167,44,0.22)', background: 'rgba(212,167,44,0.06)', color: '#D8C690', fontSize: 12, lineHeight: 1.55 }}>
+      <div
+        data-commercial-safety-note
+        style={{
+          marginTop: 14,
+          padding: '14px 16px',
+          borderRadius: 16,
+          border: `1px solid ${C.border}`,
+          background: C.subtle,
+          color: C.sub,
+          fontSize: '0.8125rem',
+          lineHeight: 1.55,
+        }}
+      >
         Current safety boundary: no real-patient workflow activation and no ungated clinical AI from this commercial shell.
       </div>
     </section>
@@ -189,14 +259,28 @@ function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void })
 
 function ProgressSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   return (
-    <section aria-labelledby="progress-title">
+    <section aria-labelledby="progress-title" data-commercial-surface="progress">
       <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
-        <div style={{ color: C.violet, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>COMPETENCY</div>
-        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 24 }}>Progress grows from governed evidence.</h1>
-        <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
+        <div style={{ color: C.violet, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>COMPETENCY</div>
+        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Progress grows from governed evidence.</h1>
+        <p style={{ margin: 0, color: C.sub, fontSize: '0.875rem', lineHeight: 1.65, maxWidth: 760 }}>
           Mastery, due reviews and longitudinal competency will appear here only when backed by the governed ECG and Echo competency pipeline. No synthetic score is shown as learner truth.
         </p>
-        <button type="button" onClick={() => onNavigate('learn')} style={{ marginTop: 16, minHeight: 44, borderRadius: 14, border: `1px solid ${C.border}`, background: C.elevated, color: C.text, padding: '0 16px', fontWeight: 800, cursor: 'pointer' }}>
+        <button
+          type="button"
+          onClick={() => onNavigate('learn')}
+          style={{
+            marginTop: 16,
+            minHeight: 44,
+            borderRadius: 14,
+            border: `1px solid ${C.border}`,
+            background: C.elevated,
+            color: C.text,
+            padding: '0 16px',
+            fontWeight: 800,
+            cursor: 'pointer',
+          }}
+        >
           Go to Learn →
         </button>
       </div>
@@ -219,7 +303,11 @@ void ReleaseIntelligenceGate
 
 function SectionLoading({ label }: { label: string }) {
   return (
-    <div style={{ padding: 16, borderRadius: 18, border: `1px solid ${C.border}`, background: C.panel, color: C.sub }} role="status" aria-live="polite">
+    <div
+      style={{ padding: 16, borderRadius: 18, border: `1px solid ${C.border}`, background: C.panel, color: C.sub }}
+      role="status"
+      aria-live="polite"
+    >
       {label}…
     </div>
   )
