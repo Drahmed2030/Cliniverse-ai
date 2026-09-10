@@ -1,14 +1,14 @@
 'use client'
 
 const C = {
-  panel: '#111827',
-  elevated: '#172033',
-  border: 'rgba(148,163,184,0.20)',
-  text: '#F8FAFC',
-  sub: '#94A3B8',
-  blue: '#3B82F6',
-  teal: '#14B8A6',
-  gold: '#D4A72C',
+  panel: 'var(--cv-surface)',
+  elevated: 'var(--cv-surface-elevated)',
+  border: 'var(--cv-border)',
+  text: 'var(--cv-text)',
+  sub: 'var(--cv-text-secondary)',
+  blue: 'var(--cv-blue)',
+  teal: 'var(--cv-teal)',
+  gold: 'var(--cv-gold)',
 }
 
 type SourceState = 'manual' | 'device' | 'sample' | 'not_connected'
@@ -53,9 +53,9 @@ export default function LifeDeviceBoundary() {
   return (
     <section aria-labelledby="life-device-title">
       <div style={cardStyle}>
-        <div style={{ color: C.blue, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>LIFE & DEVICES</div>
-        <h2 id="life-device-title" style={{ margin: '7px 0 8px', fontSize: 22 }}>Know where every health value came from.</h2>
-        <p style={{ margin: 0, color: C.sub, fontSize: 12, lineHeight: 1.65 }}>
+        <div style={{ color: C.gold, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>LIFE & DEVICES</div>
+        <h2 id="life-device-title" style={{ margin: '7px 0 8px', fontSize: 'clamp(1.3rem, 2vw, 1.6rem)' }}>Know where every health value came from.</h2>
+        <p style={{ margin: 0, color: C.sub, fontSize: '0.9rem', lineHeight: 1.65 }}>
           Cliniverse separates manual wellness context, verified device data and samples so no user has to guess whether a value is actually connected.
         </p>
       </div>
@@ -64,19 +64,19 @@ export default function LifeDeviceBoundary() {
         {items.map(item => (
           <article key={item.title} style={cardStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: 15, fontWeight: 800 }}>{item.title}</div>
-              <span style={{ color: color[item.state], border: `1px solid ${color[item.state]}44`, borderRadius: 999, padding: '4px 7px', fontSize: 9, fontWeight: 800, whiteSpace: 'nowrap' }}>
+              <div style={{ fontSize: '1rem', fontWeight: 800 }}>{item.title}</div>
+              <span style={{ color: color[item.state], border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
                 {label[item.state]}
               </span>
             </div>
-            <p style={{ color: C.sub, fontSize: 11, lineHeight: 1.6, margin: '10px 0 0' }}>{item.detail}</p>
+            <p style={{ color: C.sub, fontSize: '0.85rem', lineHeight: 1.6, margin: '10px 0 0' }}>{item.detail}</p>
           </article>
         ))}
       </div>
 
       <div style={{ ...cardStyle, marginTop: 10, background: C.elevated }}>
-        <div style={{ color: C.teal, fontSize: 11, fontWeight: 800 }}>Connection contract</div>
-        <div style={{ color: C.sub, fontSize: 11, lineHeight: 1.65, marginTop: 6 }}>
+        <div style={{ color: C.teal, fontSize: '0.85rem', fontWeight: 800 }}>Connection contract</div>
+        <div style={{ color: C.sub, fontSize: '0.85rem', lineHeight: 1.65, marginTop: 6 }}>
           Connected metrics must carry a source, timestamp and permission-aware connection state. Until that contract is implemented natively, the release UI must say Not connected.
         </div>
       </div>
