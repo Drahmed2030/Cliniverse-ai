@@ -59,7 +59,7 @@ export default function MeHub() {
   return (
     <section aria-labelledby="me-title" data-commercial-me-surface>
       <div style={introStyle}>
-        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>ONE ACCOUNT DESTINATION</div>
+        <div style={{ color: C.gold, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>ONE ACCOUNT DESTINATION</div>
         <h1 id="me-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Me</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 720 }}>
           Profile, plan, learning achievements, Life, privacy and settings share one identity and one account state across Cliniverse.
