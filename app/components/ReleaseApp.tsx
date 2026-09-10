@@ -20,7 +20,7 @@ import {
 
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
-  loading: () => <SectionLoading label="Loading Care" />,
+  loading: () => <SectionLoading label="Loading learning" />,
 })
 
 const C = {
@@ -44,10 +44,6 @@ function getNativeHeaderTopPadding() {
     || (/Macintosh/.test(window.navigator.userAgent) && window.navigator.maxTouchPoints > 1)
 
   if (!isIOSWebView && !isCompactViewport && !isTouchTablet) return null
-
-  // XCUITest requires the first accessible heading to begin below native
-  // system chrome. Keep deterministic fallbacks for WKWebView launches that
-  // temporarily expose zero CSS safe-area values.
   return window.innerWidth >= 768 ? 34 : 69
 }
 
@@ -64,7 +60,7 @@ export default function ReleaseApp() {
 }
 
 function ReleaseShell() {
-  const [tab, setTab] = useState<ReleaseTab>('home')
+  const [tab, setTab] = useState<ReleaseTab>('today')
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
@@ -79,13 +75,13 @@ function ReleaseShell() {
     return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
   }, [])
 
-  const handleAtlasNavigate = (destination: AtlasDestination) => {
+  const handleExploreNavigate = (destination: AtlasDestination) => {
     if (destination.workspace) setCareWorkspace(destination.workspace)
-    setTab(destination.tab)
+    setTab(destination.tab === 'care' ? 'learn' : 'me')
   }
 
   return (
-    <main data-release-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
+    <main data-release-shell data-commercial-shell style={{ minHeight: '100dvh', background: C.bg, color: C.text, paddingBottom: `calc(92px + ${NATIVE_SAFE_AREA_BOTTOM})`, isolation: 'isolate' }}>
       <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
       <div
         style={{
@@ -97,14 +93,14 @@ function ReleaseShell() {
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
-        {tab === 'home' && <HomeSurface onNavigate={setTab} />}
-        {tab === 'care' && (
-          <ErrorBoundary section="Care">
+        {tab === 'today' && <TodaySurface onNavigate={setTab} />}
+        {tab === 'learn' && (
+          <ErrorBoundary section="Learn">
             <WardIndex initialWorkspace={careWorkspace} />
           </ErrorBoundary>
         )}
-        {tab === 'intelligence' && <ReleaseIntelligenceGate />}
-        {tab === 'atlas' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
+        {tab === 'progress' && <ProgressSurface onNavigate={setTab} />}
+        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleExploreNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
@@ -114,16 +110,16 @@ function ReleaseShell() {
 
 function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
-    home: { title: 'Cliniverse AI', sub: 'Healthcare Intelligence by NeuraOps' },
-    care: { title: 'Care', sub: 'Cardiology learning, simulated workflows and human review' },
-    intelligence: { title: 'Intelligence', sub: 'Release-gated AI workspace' },
-    atlas: { title: 'Atlas', sub: 'Curated clinical tools and references' },
-    me: { title: 'Me', sub: 'Profile, Life, plan, privacy and settings' },
+    today: { title: 'Today', sub: 'Your next clear learning action' },
+    learn: { title: 'Learn', sub: 'Governed cardiology learning and simulation' },
+    progress: { title: 'Progress', sub: 'Competency, review cadence and learning history' },
+    explore: { title: 'Explore', sub: 'Curated learning tools and approved experiences' },
+    me: { title: 'Me', sub: 'Account, plan, privacy and settings' },
   }
   const current = titles[active]
-  const topPadding = nativeTopPadding === null
+  const topPadding = nativeHeaderTopPadding === null
     ? `calc(10px + ${NATIVE_SAFE_AREA_TOP})`
-    : `max(${nativeTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
+    : `max(${nativeHeaderTopPadding}px, calc(10px + ${NATIVE_SAFE_AREA_TOP}))`
 
   return (
     <header data-release-header style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: `1px solid ${C.border}`, background: 'rgba(8,12,22,0.97)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}>
@@ -148,28 +144,28 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
           <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{current.sub}</div>
         </div>
         <div aria-label="Cliniverse human review status" style={{ fontSize: 10, fontWeight: 800, letterSpacing: 0.5, color: C.teal, border: '1px solid rgba(20,184,166,0.28)', borderRadius: 999, padding: '6px 9px', whiteSpace: 'nowrap' }}>
-          HUMAN-IN-THE-LOOP
+          HUMAN-REVIEWED
         </div>
       </div>
     </header>
   )
 }
 
-function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
+function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'care', eyebrow: 'CARE OPERATIONS', title: 'Open cardiology learning', text: 'Run fictional Ward, Cardiology Operations and Nexus learning workflows with human review.', accent: C.teal },
-    { tab: 'intelligence', eyebrow: 'CLINICAL INTELLIGENCE', title: 'Review AI release boundary', text: 'AI assistance stays gated until disclosure, consent and clinical-claims review are complete.', accent: C.violet },
-    { tab: 'atlas', eyebrow: 'ATLAS', title: 'Browse curated tools', text: 'See capabilities only after they are clearly classified for the current release.', accent: C.blue },
-    { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage Me', text: 'Keep profile, Life, plan, privacy and settings under one identity.', accent: C.gold },
+    { tab: 'learn', eyebrow: 'CONTINUE', title: 'Resume learning', text: 'Continue governed cardiology learning and simulation from one place.', accent: C.teal },
+    { tab: 'progress', eyebrow: 'PROGRESS', title: 'Review your progress', text: 'See competency and review state as governed evidence becomes available.', accent: C.violet },
+    { tab: 'explore', eyebrow: 'EXPLORE', title: 'Discover approved experiences', text: 'Browse curated learning tools without leaving the trusted release boundary.', accent: C.blue },
+    { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage your plan', text: 'Review account, Cliniverse PRO, restore purchases, privacy and support.', accent: C.gold },
   ]
 
   return (
-    <section aria-labelledby="home-title">
+    <section aria-labelledby="today-title">
       <div style={{ padding: '24px 20px', borderRadius: 24, border: `1px solid ${C.border}`, background: `linear-gradient(145deg, ${C.panel}, ${C.elevated})`, marginBottom: 14 }}>
-        <div style={{ color: C.blue, fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>CLINIVERSE AI · BY NEURAOPS</div>
-        <h1 id="home-title" style={{ fontSize: 28, lineHeight: 1.12, margin: '9px 0 10px' }}>One clear path through healthcare intelligence.</h1>
+        <div style={{ color: C.blue, fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>CLINIVERSE</div>
+        <h1 id="today-title" style={{ fontSize: 28, lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
         <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: 14 }}>
-          Care operations, curated tools and account controls remain available only within the current release boundary. AI features are enabled only after their privacy, consent and clinical-safety gates pass.
+          Continue learning, review progress, explore approved experiences, or manage your account. Clinical Intelligence remains separately gated and is not exposed from primary navigation.
         </p>
       </div>
 
@@ -185,21 +181,25 @@ function HomeSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) 
       </div>
 
       <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 16, border: '1px solid rgba(212,167,44,0.22)', background: 'rgba(212,167,44,0.06)', color: '#D8C690', fontSize: 12, lineHeight: 1.55 }}>
-        Release safety: this build is not cleared for real patient data. Human review remains required for healthcare workflows.
+        Current safety boundary: no real-patient workflow activation and no ungated clinical AI from this commercial shell.
       </div>
     </section>
   )
 }
 
-function ReleaseIntelligenceGate() {
+function ProgressSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   return (
-    <section aria-labelledby="intelligence-gate-title" style={{ padding: 22, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
-      <div style={{ color: C.violet, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>RELEASE GATE</div>
-      <h2 id="intelligence-gate-title" style={{ margin: '9px 0 8px', fontSize: 22 }}>Clinical Intelligence is not enabled in this release build.</h2>
-      <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
-        User-entered content will not be sent to third-party AI providers until explicit disclosure and consent, provider/data-use review, and clinical-claims validation are complete. Do not enter patient-identifiable information into Cliniverse AI.
-      </p>
-      <div style={{ marginTop: 14, fontSize: 12, color: C.teal, fontWeight: 800 }}>Human review remains the release default.</div>
+    <section aria-labelledby="progress-title">
+      <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
+        <div style={{ color: C.violet, fontSize: 10, fontWeight: 800, letterSpacing: 1 }}>COMPETENCY</div>
+        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 24 }}>Progress grows from governed evidence.</h1>
+        <p style={{ margin: 0, color: C.sub, fontSize: 13, lineHeight: 1.65, maxWidth: 760 }}>
+          Mastery, due reviews and longitudinal competency will appear here only when backed by the governed ECG and Echo competency pipeline. No synthetic score is shown as learner truth.
+        </p>
+        <button type="button" onClick={() => onNavigate('learn')} style={{ marginTop: 16, minHeight: 44, borderRadius: 14, border: `1px solid ${C.border}`, background: C.elevated, color: C.text, padding: '0 16px', fontWeight: 800, cursor: 'pointer' }}>
+          Go to Learn →
+        </button>
+      </div>
     </section>
   )
 }
