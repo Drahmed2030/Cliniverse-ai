@@ -1,0 +1,99 @@
+/* Cliniverse Commercial Visual System 2026
+ * Scoped to the commercial release shell so legacy clinical surfaces can migrate
+ * incrementally without a global theme fork.
+ */
+
+[data-commercial-shell] {
+  color-scheme: light dark;
+  --cv-bg: #f7f8fb;
+  --cv-surface: rgba(255, 255, 255, 0.86);
+  --cv-surface-elevated: #ffffff;
+  --cv-surface-subtle: #eef1f5;
+  --cv-border: rgba(15, 23, 42, 0.12);
+  --cv-text: #111827;
+  --cv-text-secondary: #5b6472;
+  --cv-blue: #0a84ff;
+  --cv-teal: #0f8f83;
+  --cv-violet: #6d5ce7;
+  --cv-gold: #9a6a00;
+  --cv-nav-bg: rgba(247, 248, 251, 0.82);
+  --cv-nav-selected: rgba(10, 132, 255, 0.12);
+  --cv-nav-inactive: #667085;
+  --cv-shadow: 0 16px 44px rgba(15, 23, 42, 0.12);
+  --cv-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif;
+
+  background: var(--cv-bg);
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-commercial-shell] {
+    --cv-bg: #080c16;
+    --cv-surface: rgba(17, 24, 39, 0.88);
+    --cv-surface-elevated: #172033;
+    --cv-surface-subtle: #111827;
+    --cv-border: rgba(148, 163, 184, 0.22);
+    --cv-text: #f8fafc;
+    --cv-text-secondary: #a6b0bf;
+    --cv-blue: #409cff;
+    --cv-teal: #2dd4bf;
+    --cv-violet: #a78bfa;
+    --cv-gold: #e5b94c;
+    --cv-nav-bg: rgba(8, 12, 22, 0.82);
+    --cv-nav-selected: rgba(64, 156, 255, 0.16);
+    --cv-nav-inactive: #98a2b3;
+    --cv-shadow: 0 16px 44px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media (prefers-contrast: more) {
+  [data-commercial-shell] {
+    --cv-border: currentColor;
+    --cv-text-secondary: var(--cv-text);
+    --cv-nav-inactive: var(--cv-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-commercial-shell] *,
+  [data-commercial-shell] *::before,
+  [data-commercial-shell] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+[data-commercial-shell] :is(button, a, input, textarea, select) {
+  font: inherit;
+}
+
+[data-commercial-shell] :focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--cv-blue) 72%, transparent);
+  outline-offset: 2px;
+}
+
+/* Functional glass is reserved for navigation/chrome, not clinical content. */
+[data-commercial-navigation],
+[data-release-header] {
+  background: var(--cv-nav-bg) !important;
+  border-color: var(--cv-border) !important;
+  box-shadow: var(--cv-shadow);
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+}
+
+[data-commercial-navigation] button {
+  color: var(--cv-nav-inactive) !important;
+}
+
+[data-commercial-navigation] button[aria-current="page"] {
+  color: var(--cv-text) !important;
+  background: var(--cv-nav-selected) !important;
+}
