@@ -11,8 +11,9 @@ test('visual QA matrix covers compact expanded and wide clinical geometry', () =
   assert.match(source, /COMPACT/)
   assert.match(source, /EXPANDED/)
   assert.match(source, /WIDE_CLINICAL/)
-  assert.match(source, /minWidth:\s*900/)
+  assert.match(source, /minWidth:\s*700/)
   assert.match(source, /minWidth:\s*1280/)
+  assert.match(source, /maxWidth:\s*699/)
 })
 
 test('visual QA matrix requires light dark and increased contrast coverage', () => {
@@ -28,6 +29,7 @@ test('visual QA matrix includes accessibility large type and geometry-driven nav
   assert.match(source, /BOTTOM_TABS/)
   assert.match(source, /ADAPTIVE_RAIL/)
   assert.match(source, /deviceNameForksProhibited:\s*true/)
+  assert.match(source, /expandedStartsAtPx:\s*700/)
 })
 
 test('live device validation remains mandatory before release', () => {
