@@ -1,8 +1,9 @@
 import type { WardPatient } from './types'
 
 export type HandoverStage = 'brief' | 'review' | 'gaps' | 'handover' | 'complete'
-export type HandoverAction = 'start' | 'review-record' | 'mark-unknown' | 'assume-stable' | 'complete-handover'
+export type HandoverAction = 'start' | 'review-record' | 'mark-unknown' | 'assume-stable' | 'complete-handover' | 'retain-pending' | 'assume-done' | 'retain-unassigned' | 'assume-received'
 export interface HandoverSession {
+  scenario?: 'pending-items' | 'receiving-clinician'
   stage: HandoverStage
   patient: WardPatient
   events: Array<{ action: HandoverAction; at: string; label: string }>
