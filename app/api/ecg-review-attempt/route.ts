@@ -37,9 +37,11 @@ export async function POST(request: Request) {
       body.reviewedPdfSha256 !== RECORD10_REVIEW_PDF.sha256 || body.reviewContext !== 'confirmed-external-iphone-xs-max-ios-18.7.10') return reply({ error: 'Confirmed reviewed-file and device context required' }, 422)
     // Context is an explicit human report, not browser/hardware attestation.
     const service = createClient(supabaseUrl, key, { auth: { persistSession: false, autoRefreshToken: false } })
+    let credentialRole = 'opaque'
+    try { const role = JSON.parse(Buffer.from(key.split('.')[1], 'base64url').toString()).role; credentialRole = ['service_role','anon','authenticated'].includes(role) ? role : 'other' } catch {}
     const writer = { async rpc(name: string, args: Record<string, unknown>) {
       const result = await service.rpc(name, args)
-      if (result.error) console.error('ecg-save-rpc', { code: result.error.code, reason: ['eligibility-changed', 'case-not-eligible', 'invalid-prepared-evidence', 'attempt-identity-conflict'].includes(result.error.message) ? result.error.message : 'database-error' })
+      if (result.error) console.error('ecg-save-rpc', { code: result.error.code, credentialRole, deniedObject: /^permission denied for (schema|table|function) [a-zA-Z0-9_]+$/.test(result.error.message) ? result.error.message : undefined, reason: ['eligibility-changed', 'case-not-eligible', 'invalid-prepared-evidence', 'attempt-identity-conflict'].includes(result.error.message) ? result.error.message : 'database-error' })
       return result
     } }
     const submit = async () => {
