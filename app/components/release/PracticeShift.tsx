@@ -5,12 +5,15 @@ import { preparationChecks } from '../../lib/ward/reviewPreparation'
 
 import { reviewRequests, createReviewWorklist, changeRequest, type ReviewRequestId } from '../../lib/ward/reviewWorklist'
 
+import { reviewMediaBindings } from '../../lib/ward/reviewMediaBinding'
+
 const button = { minHeight: 44, padding: '10px 16px', borderRadius: 12, border: '1px solid var(--cv-border)', background: 'var(--cv-surface-elevated)', color: 'var(--cv-text)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }
 const card = { padding: 20, marginBottom: 16, borderRadius: 22, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' }
 export default function PracticeShift({ onWard, onProgress, onPathway }: { onWard: () => void; onProgress: () => void; onPathway: () => void }) {
   const [requests, setRequests] = useState(createReviewWorklist)
   const [selected, setSelected] = useState<ReviewRequestId>('SIM-ECG-001')
   const preparation = requests[selected]
+  const media = reviewMediaBindings[selected]
   const request = reviewRequests.find(item => item.id === selected)!
   return <div>
     <section aria-labelledby="practice-shift-title" style={card}>
@@ -35,6 +38,13 @@ export default function PracticeShift({ onWard, onProgress, onPathway }: { onWar
       <h3>{request.modality} · {selected}</h3>
       <p>{request.purpose}</p>
       <dl><dt>Source</dt><dd>{request.source}</dd><dt>Examination file</dt><dd>{request.attachment}</dd><dt>Assigned clinician</dt><dd>None — simulation only</dd></dl>
+      <aside aria-label="Linked educational media" style={{ padding: 16, border: '1px solid var(--cv-border)', borderRadius: 12, marginBottom: 12 }}>
+        <h4 style={{ marginTop: 0 }}>{media.title}</h4>
+        <p>{media.source} · {media.availability}</p>
+        <p>{media.instruction}</p>
+        <a style={button} href={media.href} target="_blank" rel="noopener noreferrer">Open {request.modality} educational viewer · new tab</a>
+        <p style={{ color: 'var(--cv-text-secondary)' }}>Separate educational example, not this request’s examination. Opening it does not complete any checklist or verify this referral. Keep this tab open to retain your preparation.</p>
+      </aside>
       <p>Checkboxes rehearse the workflow; they do not verify an examination, grant access, or assign a clinician. The ECG and Echo learning links above are separate cases.</p>
       <p>Rehearse checking a request before a colleague reviews an ECG or Echo. This checklist uses no patient data and does not connect to a hospital.</p>
       <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
