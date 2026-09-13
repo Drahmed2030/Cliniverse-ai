@@ -135,3 +135,36 @@
     max-width: 96px !important;
   }
 }
+
+/* Learning surfaces use the release palette, including explicit answer states. */
+[data-commercial-shell] {
+  --cv-learning-action: #0f766e;
+  --cv-learning-success: #e2f4ee;
+  --cv-learning-error: #fff0ef;
+  --cv-learning-danger: #b42318;
+}
+@media (prefers-color-scheme: dark) {
+  [data-commercial-shell] {
+    --cv-learning-success: #123c36;
+    --cv-learning-error: #431f24;
+    --cv-learning-danger: #fda29b;
+  }
+}
+[data-codelab] { overflow-wrap: anywhere; }
+[data-codelab] button { transition: background-color 150ms, border-color 150ms; }
+[data-codelab] button:active:not(:disabled) { filter: brightness(.94); }
+[data-learning-summary] {
+  border: 1px solid var(--cv-border);
+  border-top: 3px solid var(--cv-teal);
+  border-radius: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  margin-bottom: 20px;
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+}
+[data-learning-summary] h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 8px 0 12px; }
+[data-learning-summary] p { color: var(--cv-text-secondary); max-width: 65ch; }
+[data-learning-tracks] { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px; margin: 20px 0; }
+[data-learning-tracks] article { padding: 20px; background: var(--cv-surface-subtle); border-radius: 16px; }
+[data-learning-tracks] progress { width: 100%; accent-color: var(--cv-teal); }
+[data-learning-summary] button { min-height: 44px; border-radius: 12px; padding: 10px 20px; border: 1px solid var(--cv-border); background: var(--cv-learning-action); color: white; cursor: pointer; }

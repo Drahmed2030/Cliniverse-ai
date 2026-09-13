@@ -6,10 +6,11 @@ import { BLS_LESSONS } from '../../lib/codelab/blsLessons'
 import { ACLS_LESSONS } from '../../lib/codelab/aclsLessons'
 import { createLessonCompletionRepository, validateLessonCompletion, type LessonCompletion } from '../../lib/lessonCompletion'
 import CodeLabHub from './CodeLabHub'
+import LessonProgressSummary from './LessonProgressSummary'
 
 const lessons = [...BLS_LESSONS, ...ACLS_LESSONS]
 const repository = createLessonCompletionRepository(supabase)
-type Props = { isPro: boolean; onUpgrade: () => void; onBack: () => void }
+type Props = { isPro: boolean; onUpgrade: () => void; onBack: () => void; view?: 'workspace' | 'summary'; onOpen?: () => void }
 type Catalog = Record<string, string>
 
 async function makeCatalog(): Promise<Catalog> {
@@ -37,6 +38,7 @@ export default function AccountCodeLab(props: Props) {
     return () => { active = false; data.subscription.unsubscribe() }
   }, [])
   if (!account.ready) return <p role="status">Checking your learning account…</p>
+  if (!account.id && props.view === 'summary') return <p role="status">Sign in to see your learning record.</p>
   if (!account.id) return <><p role="status">Sign in to save completed lessons. Guest progress lasts while Code Lab is open.</p><CodeLabHub key={`guest:${account.epoch}`} {...props} progressMode="session" /></>
   return <OwnedCodeLab key={`${account.id}:${account.epoch}`} {...props} owner={account.id} />
 }
@@ -126,6 +128,14 @@ function OwnedCodeLab({ owner, ...props }: Props & { owner: string }) {
     setPending(row)
     try { sessionStorage.setItem(storageKey, JSON.stringify(row)) } catch { /* In-memory retry remains available. */ }
     return persist(row)
+  }
+
+  if (props.view === 'summary') {
+    const latest = [...results].sort((a, b) => Date.parse(b.completed_at) - Date.parse(a.completed_at))[0]
+    const latestTitle = lessons.find(lesson => catalog?.[lesson.id] === latest?.case_id)?.title
+    return <LessonProgressSummary completedIds={completedIds} latestTitle={latestTitle}
+      loading={!catalog && !loadFailed} failed={loadFailed}
+      onRetry={() => setReload(value => value + 1)} onOpen={props.onOpen ?? props.onBack} />
   }
 
   return <>

@@ -24,7 +24,7 @@ function runner(component, props) {
   return { hooks, render() { cursor = 0; current = hooks; const tree = component(props); pending.splice(0).forEach(fn => fn()); return tree }, dispose() { effects.forEach(e => e?.cleanup?.()) } }
 }
 let current
-function setup() {
+function setup(view = 'workspace') {
   const state = { owner: A, rows: [], storage: new Map(), failLoad: false, failSave: false, saveCalls: [], listener: null, delay: null }
   const repo = { async load(owner, ids) { if (state.failLoad) throw Error('offline'); return state.rows.filter(r => r.user_id === owner && ids.includes(r.case_id)) }, async save(row) {
     state.saveCalls.push(row)
@@ -42,10 +42,11 @@ function setup() {
     if (name.endsWith('/blsLessons')) return { BLS_LESSONS, BLS_DISCLAIMER }
     if (name.endsWith('/aclsLessons')) return { ACLS_LESSONS, ACLS_DISCLAIMER }
     if (name.endsWith('/lessonCompletion')) return { createLessonCompletionRepository: () => repo, validateLessonCompletion }
+    if (name === './LessonProgressSummary') return { __esModule: true, default: 'LessonProgressSummary' }
     if (name === './CodeLabHub') return { __esModule: true, default: 'CodeLabHub' }
     return require(name)
   } })
-  const props = { isPro: true, onUpgrade() {}, onBack() {} }
+  const props = { view, isPro: true, onUpgrade() {}, onBack() {} }
   const outer = runner(exports.default, props)
   async function mount() { outer.render(); await tick(); const node = outer.render(); const inner = runner(node.type, node.props); inner.render(); await tick(); return inner }
   const hub = inner => nodes(inner.render()).find(n => n.type === 'CodeLabHub')
@@ -117,4 +118,35 @@ test('late save acknowledgement after unmount does not mutate the disposed works
   assert.equal(await request, false)
   assert.equal(h.state.storage.size, 1, 'retain retry identity until the owner restores and confirms it')
   h.outer.dispose()
+})
+
+
+test('summary restores only current-version account completions without writing learning results', async () => {
+  const h = setup('summary')
+  const lesson = BLS_LESSONS[0]
+  const digest = await webcrypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(lesson)))
+  const version = Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('')
+  h.state.rows = [{ id: '10000000-0000-4000-8000-000000000001', user_id: A, case_id: `codelab:${lesson.id}:${version}`, errors: 0, xp_earned: 0, completed_at: '2026-09-13T00:00:00Z' },
+    { id: '10000000-0000-4000-8000-000000000002', user_id: B, case_id: `codelab:${BLS_LESSONS[1].id}:${version}`, errors: 0, xp_earned: 0, completed_at: '2026-09-13T00:00:00Z' }]
+  const inner = await h.mount()
+  const summary = inner.render()
+  assert.equal(summary.type, 'LessonProgressSummary')
+  assert.deepEqual(Array.from(summary.props.completedIds), [lesson.id])
+  assert.equal(summary.props.latestTitle, lesson.title)
+  assert.equal(summary.props.loading, false)
+  assert.equal(h.state.saveCalls.length, 0)
+  inner.dispose(); h.outer.dispose()
+})
+
+test('summary distinguishes load failure from empty history and retries', async () => {
+  const h = setup('summary'); h.state.failLoad = true
+  const inner = await h.mount()
+  assert.equal(inner.render().props.failed, true)
+  h.state.failLoad = false
+  inner.render().props.onRetry()
+  inner.render(); await tick()
+  assert.equal(inner.render().props.failed, false)
+  assert.equal(inner.render().props.completedIds.length, 0)
+  assert.equal(h.state.saveCalls.length, 0)
+  inner.dispose(); h.outer.dispose()
 })

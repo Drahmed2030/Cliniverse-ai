@@ -18,6 +18,11 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../lib/nativeSafeArea'
 
+const AccountLearningSummary = dynamic(() => import('./ward/AccountCodeLab'), {
+  ssr: false,
+  loading: () => <SectionLoading label="Loading saved lessons" />,
+})
+
 const WardIndex = dynamic(() => import('./ward'), {
   ssr: false,
   loading: () => <SectionLoading label="Loading learning" />,
@@ -76,6 +81,8 @@ function ReleaseShell() {
     return () => window.removeEventListener('resize', syncNativeHeaderTopPadding)
   }, [])
 
+  const openCodeLab = () => { setCareWorkspace('codelab'); setTab('learn') }
+
   const handleAtlasNavigate = (destination: AtlasDestination) => {
     if (destination.workspace) setCareWorkspace(destination.workspace)
     setTab(destination.tab === 'care' ? 'learn' : 'me')
@@ -105,13 +112,13 @@ function ReleaseShell() {
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
-        {tab === 'today' && <TodaySurface onNavigate={setTab} />}
+        {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
             <WardIndex initialWorkspace={careWorkspace} />
           </ErrorBoundary>
         )}
-        {tab === 'progress' && <ProgressSurface onNavigate={setTab} />}
+        {tab === 'progress' && <ProgressSurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub />}
       </div>
@@ -187,7 +194,7 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
   )
 }
 
-function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
+function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
   const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
     { tab: 'learn', eyebrow: 'CONTINUE', title: 'Resume learning', text: 'Continue governed cardiology learning and simulation from one place.', accent: C.teal },
     { tab: 'progress', eyebrow: 'PROGRESS', title: 'Review your progress', text: 'See competency and review state as governed evidence becomes available.', accent: C.violet },
@@ -209,10 +216,11 @@ function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void })
         <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>CLINIVERSE</div>
         <h1 id="today-title" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
         <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: '0.9375rem' }}>
-          Continue learning, review progress, explore approved experiences, or manage your account. Clinical Intelligence remains separately gated and is not exposed from primary navigation.
+          A little practice, a clearer next step. Follow your learning record and return to the skills you want to strengthen.
         </p>
       </div>
 
+      <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
       <div data-commercial-card-grid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
         {cards.map(card => (
           <button
@@ -251,20 +259,21 @@ function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void })
           lineHeight: 1.55,
         }}
       >
-        Current safety boundary: no real-patient workflow activation and no ungated clinical AI from this commercial shell.
+        For education and simulation. Keep real patient information outside this workspace.
       </div>
     </section>
   )
 }
 
-function ProgressSurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
+function ProgressSurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
   return (
     <section aria-labelledby="progress-title" data-commercial-surface="progress">
+      <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
       <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
         <div style={{ color: C.violet, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>COMPETENCY</div>
-        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Progress grows from governed evidence.</h1>
+        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Clinical competency</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: '0.875rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Mastery, due reviews and longitudinal competency will appear here only when backed by the governed ECG and Echo competency pipeline. No synthetic score is shown as learner truth.
+          Your saved lessons appear above. ECG and Echo competency assessments will appear separately when available.
         </p>
         <button
           type="button"

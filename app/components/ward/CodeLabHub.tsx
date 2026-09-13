@@ -2,7 +2,7 @@
 /**
  * CodeLabHub.tsx
  * Entry: Ward tab → Code Lab button
- * Design: dark mode (#0B1220) — intentionally separate from app Light 2026 system
+ * Design: shared semantic light/dark surfaces within the commercial shell
  * Disclaimer: permanent footer, every screen
  */
 
@@ -124,7 +124,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'l
   }
 
   return (
-    <div style={styles.root}>
+    <div style={styles.root} data-codelab>
       {/* Header */}
       <div style={styles.header}>
         <button onClick={onBack} style={styles.backBtn}>
@@ -145,18 +145,18 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'l
         <div style={styles.progressRow}>
           <div style={styles.progressRing}>
             <svg width={56} height={56} viewBox="0 0 56 56">
-              <circle cx={28} cy={28} r={24} fill="none" stroke="#1E293B" strokeWidth={5} />
+              <circle cx={28} cy={28} r={24} fill="none" stroke="var(--cv-border, #334155)" strokeWidth={5} />
               <circle
                 cx={28} cy={28} r={24}
                 fill="none"
-                stroke="#0D9488"
+                stroke="var(--cv-teal, #2dd4bf)"
                 strokeWidth={5}
                 strokeDasharray={`${2 * Math.PI * 24}`}
                 strokeDashoffset={`${2 * Math.PI * 24 * (1 - pct / 100)}`}
                 strokeLinecap="round"
                 transform="rotate(-90 28 28)"
               />
-              <text x={28} y={33} textAnchor="middle" fill="#F8FAFC" fontSize={13} fontWeight={700}>
+              <text x={28} y={33} textAnchor="middle" fill="var(--cv-text, #F8FAFC)" fontSize={13} fontWeight={700}>
                 {pct}%
               </text>
             </svg>
@@ -173,7 +173,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'l
         <div role="group" aria-label="Learning track" style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
           {(['bls', 'acls'] as const).map(track => (
             <button key={track} type="button" aria-pressed={activeTrack === track}
-              style={{ ...styles.backBtn, minHeight: 44, padding: '8px 16px', border: '1px solid currentColor' }}
+              style={{ ...styles.backBtn, minHeight: 44, padding: '8px 16px', border: '1px solid currentColor', borderRadius: 12, color: activeTrack === track ? 'var(--cv-teal, #2dd4bf)' : 'var(--cv-text-secondary, #94A3B8)', background: activeTrack === track ? 'var(--cv-learning-success, #042F2E)' : 'transparent', fontWeight: activeTrack === track ? 800 : 500 }}
               onClick={() => { setActiveTrack(track); setActiveLesson(null); }}>
               {track.toUpperCase()}
             </button>
@@ -199,14 +199,14 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'l
               <div style={styles.lessonLeft}>
                 <div style={{
                   ...styles.lessonNum,
-                  background: done ? "#0D9488" : locked ? "#1E293B" : "#1E40AF",
-                  color: locked ? "#475569" : "#F8FAFC",
+                  background: done ? "var(--cv-learning-action, #0f766e)" : locked ? "var(--cv-border, #334155)" : "var(--cv-learning-action, #0f766e)",
+                  color: locked ? "var(--cv-text-secondary, #94A3B8)" : "#fff",
                 }}>
                   {done ? "✓" : locked ? "🔒" : lesson.order}
                 </div>
                 <div>
                   <div style={styles.lessonTitle}>{lesson.title}</div>
-                  <div style={styles.lessonMeta}>~{lesson.durationMin} min</div>
+                  <div style={styles.lessonMeta}>~{lesson.durationMin} min{done ? " · Completed" : locked ? " · PRO" : ""}</div>
                 </div>
               </div>
               <div style={styles.lessonArrow}>
@@ -258,11 +258,15 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'l
 // ─── styles ───────────────────────────────────────────────────────────────────
 const styles: Record<string, React.CSSProperties> = {
   root: {
-    minHeight: "100vh",
-    background: "#0B1220",
-    color: "#F8FAFC",
+    minHeight: "auto",
+    border: "1px solid var(--cv-border, #334155)",
+    borderRadius: 24,
+    maxWidth: 880,
+    margin: "0 auto",
+    background: "var(--cv-surface-elevated, #0B1220)",
+    color: "var(--cv-text, #F8FAFC)",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
-    paddingBottom: 100,
+    paddingBottom: 24,
     overflowY: "auto",
   },
   header: {
@@ -274,15 +278,16 @@ const styles: Record<string, React.CSSProperties> = {
   backBtn: {
     background: "none",
     border: "none",
-    color: "#94A3B8",
+    color: "var(--cv-text-secondary, #94A3B8)",
     fontSize: 15,
     cursor: "pointer",
+    minHeight: 44,
     padding: "8px 0",
   },
   proBadge: {
-    background: "#1E40AF",
-    color: "#F8FAFC",
-    fontSize: 11,
+    background: "var(--cv-learning-action, #0f766e)",
+    color: "#fff",
+    fontSize: 12,
     fontWeight: 700,
     letterSpacing: 1,
     padding: "3px 10px",
@@ -290,12 +295,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   hero: {
     padding: "24px 20px 20px",
-    borderBottom: "1px solid #1E293B",
+    borderBottom: "1px solid var(--cv-border, #334155)",
   },
   heroEyebrow: {
-    fontSize: 10,
+    fontSize: 12,
     letterSpacing: 2,
-    color: "#0D9488",
+    color: "var(--cv-teal, #2dd4bf)",
     fontWeight: 700,
     marginBottom: 6,
   },
@@ -308,7 +313,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   heroSub: {
     fontSize: 15,
-    color: "#94A3B8",
+    color: "var(--cv-text-secondary, #94A3B8)",
     marginBottom: 20,
   },
   progressRow: {
@@ -321,27 +326,27 @@ const styles: Record<string, React.CSSProperties> = {
   progressLabel: {
     fontSize: 14,
     fontWeight: 700,
-    color: "#F8FAFC",
+    color: "var(--cv-text, #F8FAFC)",
   },
   progressSub: {
     fontSize: 12,
-    color: "#94A3B8",
+    color: "var(--cv-text-secondary, #94A3B8)",
     marginTop: 2,
   },
   section: {
     padding: "20px 20px 0",
   },
   sectionLabel: {
-    fontSize: 10,
+    fontSize: 12,
     letterSpacing: 2,
-    color: "#475569",
+    color: "var(--cv-text-secondary, #94A3B8)",
     fontWeight: 700,
     marginBottom: 12,
   },
   lessonCard: {
     width: "100%",
-    background: "#111827",
-    border: "1px solid #1E293B",
+    background: "var(--cv-surface-subtle, #111827)",
+    border: "1px solid var(--cv-border, #334155)",
     borderRadius: 14,
     padding: "14px 16px",
     display: "flex",
@@ -349,16 +354,18 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "space-between",
     marginBottom: 10,
     cursor: "pointer",
+    minHeight: 44,
     textAlign: "left",
     transition: "border-color 0.15s",
   },
   lessonDone: {
-    borderColor: "#0D9488",
-    opacity: 0.8,
+    borderColor: "var(--cv-teal, #2dd4bf)",
+    opacity: 1,
   },
   lessonLocked: {
-    opacity: 0.5,
+    opacity: 1,
     cursor: "pointer",
+    minHeight: 44,
   },
   lessonLeft: {
     display: "flex",
@@ -379,27 +386,27 @@ const styles: Record<string, React.CSSProperties> = {
   lessonTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#F8FAFC",
+    color: "var(--cv-text, #F8FAFC)",
     marginBottom: 2,
   },
   lessonMeta: {
     fontSize: 12,
-    color: "#64748B",
+    color: "var(--cv-text-secondary, #94A3B8)",
   },
   lessonArrow: {
-    color: "#475569",
+    color: "var(--cv-text-secondary, #94A3B8)",
     fontSize: 16,
   },
   trackCardDisabled: {
     display: "flex",
     alignItems: "flex-start",
     gap: 12,
-    background: "#0F172A",
-    border: "1px solid #1E293B",
+    background: "var(--cv-surface-subtle, #0F172A)",
+    border: "1px solid var(--cv-border, #334155)",
     borderRadius: 14,
     padding: "14px 16px",
     marginBottom: 10,
-    opacity: 0.4,
+    opacity: 1,
   },
   trackIcon: {
     fontSize: 20,
@@ -409,60 +416,62 @@ const styles: Record<string, React.CSSProperties> = {
   trackTitle: {
     fontSize: 14,
     fontWeight: 600,
-    color: "#F8FAFC",
+    color: "var(--cv-text, #F8FAFC)",
     marginBottom: 2,
   },
   trackDesc: {
     fontSize: 12,
-    color: "#64748B",
+    color: "var(--cv-text-secondary, #94A3B8)",
   },
   upgradeBanner: {
     margin: "20px",
-    background: "linear-gradient(135deg, #1E40AF 0%, #0D9488 100%)",
+    background: "var(--cv-learning-action, #0f766e)",
     borderRadius: 16,
     padding: "16px 18px",
   },
   upgradeText: {
     fontSize: 13,
-    color: "rgba(248,250,252,0.85)",
+    color: "#fff",
     marginBottom: 10,
     lineHeight: 1.4,
   },
   upgradeBtn: {
-    background: "#F8FAFC",
-    color: "#1E40AF",
+    background: "#fff",
+    color: "var(--cv-learning-action, #0f766e)",
     border: "none",
     borderRadius: 10,
     padding: "10px 20px",
     fontWeight: 700,
     fontSize: 14,
     cursor: "pointer",
+    minHeight: 44,
     width: "100%",
   },
   ahaCta: {
     margin: "20px 20px 0",
-    background: "#111827",
+    background: "var(--cv-surface-subtle, #111827)",
     borderRadius: 14,
     padding: "14px 16px",
-    border: "1px solid #1E293B",
+    border: "1px solid var(--cv-border, #334155)",
   },
   ahaText: {
     fontSize: 13,
-    color: "#94A3B8",
+    color: "var(--cv-text-secondary, #94A3B8)",
     marginBottom: 4,
   },
   ahaLink: {
     fontSize: 14,
-    color: "#0D9488",
+    color: "var(--cv-teal, #2dd4bf)",
     fontWeight: 600,
     cursor: "pointer",
+    minHeight: 44,
   },
   disclaimer: {
     margin: "16px 20px 0",
-    fontSize: 11,
-    color: "#475569",
+    fontSize: 12,
+    color: "var(--cv-text-secondary, #94A3B8)",
     lineHeight: 1.6,
-    borderTop: "1px solid #1E293B",
+    borderTop: "1px solid var(--cv-border, #334155)",
     paddingTop: 14,
   },
 };
