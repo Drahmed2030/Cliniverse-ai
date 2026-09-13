@@ -20,6 +20,7 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../lib/nativeSafeArea'
 
+const PracticeShift = dynamic(() => import('./release/PracticeShift'), { ssr: false, loading: () => <SectionLoading label="Loading training shift" /> })
 const WardSavedPractice = dynamic(() => import('./ward/WardSavedPractice'), { ssr: false, loading: () => <SectionLoading label="Loading Ward practice" /> })
 const AssessmentHistory = dynamic(() => import('./release/AssessmentHistory'), { ssr: false, loading: () => <SectionLoading label="Loading assessments" /> })
 
@@ -123,6 +124,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
+        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCareWorkspace('cardiology'); setTab('learn') }} />}
         {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
