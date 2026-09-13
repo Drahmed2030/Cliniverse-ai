@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "caseId": "ecg-governed-case-001",
+  "recordId": 10,
+  "verifiedAtDate": "2026-09-13",
+  "artifact": {
+    "filename": "cliniverse-record10-regenerated-review.pdf",
+    "sha256": "237865bfb5092573904802afabf10d4b51f2c21af85ef27a49d5c8a839962fc5",
+    "bytes": 557798,
+    "pages": 4
+  },
+  "comparison": {
+    "originalSha256": "20dd81f5a9b8a1abaff1e1c2278fafb0bdf4668ef0766cfad96a2954e037ee85",
+    "pages": [
+      {
+        "page": 1,
+        "mediaBox": [
+          0.0,
+          0.0,
+          841.8898,
+          1190.551
+        ],
+        "contentStreamSha256": "1cf59bf7b4f6ed0ba650be44f35d85410fa7cb0593d393513cb14353e974020c",
+        "originalContentStreamIdentical": true,
+        "onlyPreparedDateChanged": false
+      },
+      {
+        "page": 2,
+        "mediaBox": [
+          0.0,
+          0.0,
+          841.8898,
+          1190.551
+        ],
+        "contentStreamSha256": "c6e2c39548e11070ae198500cc1f30f0b7f0688ceb36a5273fc38482c034a4ca",
+        "originalContentStreamIdentical": true,
+        "onlyPreparedDateChanged": false
+      },
+      {
+        "page": 3,
+        "mediaBox": [
+          0.0,
+          0.0,
+          595.2756,
+          841.8898
+        ],
+        "contentStreamSha256": "d94a19ee24e8d5fb791e68a4a3ccaf9b02607dc1c4be5f5e6c0b1237c6a5c093",
+        "originalContentStreamIdentical": true,
+        "onlyPreparedDateChanged": false
+      },
+      {
+        "page": 4,
+        "mediaBox": [
+          0.0,
+          0.0,
+          595.2756,
+          841.8898
+        ],
+        "contentStreamSha256": "c6afd78dcf356721ab7ab5e1e372137d81c85b96efa36980d45e90cff1b71159",
+        "originalContentStreamIdentical": false,
+        "onlyPreparedDateChanged": true
+      }
+    ],
+    "preparedDate": {
+      "original": "2026-09-09",
+      "recovered": "2026-09-12"
+    },
+    "visualReview": "all-four-pages-rendered-and-inspected"
+  },
+  "historicalDeviceObservations": [
+    {
+      "device": "iPhone XS Max",
+      "os": "iOS 18.7.10",
+      "source": "founder confirmation and earlier conversation screenshots",
+      "scope": [
+        "four-page PDF viewing",
+        "zoom",
+        "rotation"
+      ],
+      "artifactAssociation": "founder re-uploaded requested reviewed PDF; no device-side checksum captured"
+    },
+    {
+      "device": "iPad",
+      "os": null,
+      "source": "founder confirmation in prior conversation",
+      "scope": [
+        "PDF viewing",
+        "zoom",
+        "rotation"
+      ],
+      "artifactAssociation": "founder re-uploaded requested reviewed PDF; model and OS not recorded"
+    }
+  ],
+  "limits": [
+    "PDF viewing observations do not establish physical print calibration",
+    "No current adaptive in-app renderer baseline asserted",
+    "No independent publisher checksum verification",
+    "No promotion or score persistence authorization created"
+  ],
+  "deviceBaselineBoundEventCreated": false,
+  "learnerReady": false
+}
