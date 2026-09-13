@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { Capacitor } from '@capacitor/core'
 import { useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
@@ -56,21 +57,25 @@ function getNativeHeaderTopPadding() {
   return window.innerWidth >= 768 ? 34 : 69
 }
 
-export default function ReleaseApp() {
+export default function ReleaseApp({ reviewPreview = false }: { reviewPreview?: boolean }) {
   return (
     <AuthGate allowGuest={false}>
-      {() => (
+      {user => (
         <SubscriptionPurchaseProvider>
-          <ReleaseShell />
+          <ReleaseShell key={user.id} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
         </SubscriptionPurchaseProvider>
       )}
     </AuthGate>
   )
 }
 
-function ReleaseShell() {
+function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
   const appearance = useAppearance()
-  const [tab, setTab] = useState<ReleaseTab>('today')
+  const [tab, setTab] = useState<ReleaseTab>(() => {
+    // AuthGate mounts this shell after restoring the client session.
+    const view = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('view')
+    return view === 'learn' || view === 'progress' ? view : 'today'
+  })
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall } = useCliniverseSubscription()
@@ -120,6 +125,13 @@ function ReleaseShell() {
         {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
+            {showEcgReview && <section aria-labelledby="ecg-review-entry-title" style={{ padding: 20, marginBottom: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
+              <p style={{ color: C.sub, margin: '0 0 8px' }}>ECG · REVIEW PREVIEW</p>
+              <h2 id="ecg-review-entry-title" style={{ margin: '0 0 8px' }}>Record 10 · Rhythm recognition</h2>
+              <p style={{ color: C.sub, lineHeight: 1.6 }}>Open the reviewed 12-lead tracing, answer the rhythm question, and find your saved result in Progress. Have your reviewed PDF ready to select.</p>
+              <Link href="/labs/ecg-account-review" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '8px 16px', borderRadius: 12, border: `1px solid ${C.border}`, background: C.elevated, color: C.text }}>Open ECG practice →</Link>
+              <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
+            </section>}
             <WardIndex initialWorkspace={careWorkspace} />
           </ErrorBoundary>
         )}

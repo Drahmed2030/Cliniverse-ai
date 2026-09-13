@@ -89,7 +89,10 @@ function Review({ owner }: { owner: string }) {
     } catch { if (generation.current.active && epoch === generation.current.epoch) setStatus('This file does not match the reviewed PDF, or could not be read. Select the original review file.') }
   }
   return <main className="ecg-review" style={{ maxWidth: 1100, margin: '0 auto', padding: 24, color: 'var(--text-primary)', lineHeight: 1.6 }}>
-    <Link href="/">Back to Cliniverse</Link>
+    <nav aria-label="ECG practice navigation" style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+      <Link href="/?view=learn" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44 }}>Back to Learn</Link>
+      <Link href="/?view=progress" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44 }}>View saved progress</Link>
+    </nav>
     <header><p className="review-eyebrow">CLINIVERSE · ECG PRACTICE</p><h1>Read the tracing. Review your answer.</h1><p>Record 10 · 12 leads · 10 seconds</p></header>
     <p>Inspect the reviewed tracing and the accepted rhythm question. Save an educational answer using the previously confirmed review context when account saving is available.</p>
     <p role="status" className="review-status">{status}</p>
