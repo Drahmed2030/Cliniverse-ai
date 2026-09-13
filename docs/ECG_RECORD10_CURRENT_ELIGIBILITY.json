@@ -1,0 +1,25 @@
+{
+  "decisionId": "d65a059a1379e4af9e0b1b99abadde75317bcc36a2bfe09c4b27b30464e23ad7",
+  "policy": {
+    "id": "ecg-evidence-eligibility",
+    "version": "1.0.0"
+  },
+  "evidenceDigest": "cfb642ad2da855098016b1cd9c341d099e1cf595bbef28638adf854c2168c934",
+  "decision": "HOLD",
+  "learnerReady": false,
+  "promotionAuthorized": false,
+  "integrityValid": true,
+  "deviceBaselineBound": false,
+  "evidenceEventIds": [
+    "ecg-record-10-probed-v1",
+    "ecg-record-10-clinical-attested-v1",
+    "ecg-record-10-privacy-attested-v1",
+    "ecg-record-10-promotion-hold-v1"
+  ],
+  "blockers": [
+    "current-authorized-promotion-required",
+    "device-ledger-binding-required",
+    "exact-renderer-evidence-required"
+  ],
+  "evidenceLedgerBound": true
+}
