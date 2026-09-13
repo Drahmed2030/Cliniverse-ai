@@ -123,7 +123,7 @@ function ReleaseShell() {
         )}
         {tab === 'progress' && <ProgressSurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
-        {tab === 'me' && <MeHub />}
+        {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />
     </main>

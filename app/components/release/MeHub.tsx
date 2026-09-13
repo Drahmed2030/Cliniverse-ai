@@ -1,142 +1,46 @@
 'use client'
 
-import AppearanceSettings from './AppearanceSettings'
+import type { ReactNode } from 'react'
 import MeAccountSummary from './MeAccountSummary'
-import AchievementsHub from './AchievementsHub'
-import LifeDeviceBoundary from './LifeDeviceBoundary'
+import AppearanceSettings from './AppearanceSettings'
 
-const C = {
-  panel: 'var(--cv-surface)',
-  elevated: 'var(--cv-surface-elevated)',
-  border: 'var(--cv-border)',
-  text: 'var(--cv-text)',
-  sub: 'var(--cv-text-secondary)',
-  blue: 'var(--cv-blue)',
-  teal: 'var(--cv-teal)',
-  gold: 'var(--cv-gold)',
-}
-
-type Status = 'ready' | 'foundation' | 'gated'
-
-const sections: Array<{
-  title: string
-  description: string
-  status: Status
-  detail: string
-  links?: Array<{ label: string; href: string }>
-}> = [
-  {
-    title: 'Life',
-    description: 'Personal wellness context kept separate from clinical workflow data.',
-    status: 'gated',
-    detail: 'Manual entries are labelled as manual. Device data appears only after a real Apple Health integration is verified.',
-  },
-  {
-    title: 'Privacy & Support',
-    description: 'Security, data controls, support and account preferences in one predictable place.',
-    status: 'ready',
-    detail: 'Privacy, terms and support links are available from the release account surface.',
-    links: [
-      { label: 'Privacy', href: '/privacy' },
-      { label: 'Terms', href: '/terms' },
-      { label: 'Support', href: '/support' },
-    ],
-  },
+const links = [
+  { label: 'Contact support', href: '/support', detail: 'Get help with your account or the app.' },
+  { label: 'Privacy', href: '/privacy', detail: 'Understand how your information is handled.' },
+  { label: 'Terms', href: '/terms', detail: 'Review the terms of using Cliniverse.' },
 ]
 
-const statusLabel: Record<Status, string> = {
-  ready: 'Release structure ready',
-  foundation: 'Foundation in progress',
-  gated: 'Gated until verified',
-}
-
-const statusColor: Record<Status, string> = {
-  ready: C.teal,
-  foundation: C.blue,
-  gated: C.gold,
-}
-
-export default function MeHub() {
-  return (
-    <section aria-labelledby="me-title" data-commercial-me-surface>
-      <div style={introStyle}>
-        <div style={{ color: C.gold, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>ONE ACCOUNT DESTINATION</div>
-        <h1 id="me-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Me</h1>
-        <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 720 }}>
-          Profile, plan, learning achievements, Life, privacy and settings share one identity and one account state across Cliniverse.
-        </p>
-      </div>
-
-      <AppearanceSettings />
+export default function MeHub({ learningSummary, onOpenProgress }: { learningSummary: ReactNode; onOpenProgress: () => void }) {
+  return <section aria-labelledby="me-title" data-commercial-me-surface>
+    <header style={{ marginBottom: 20 }}>
+      <div style={{ color: 'var(--cv-gold)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>YOUR CLINIVERSE</div>
+      <h1 id="me-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Me</h1>
+      <p style={{ color: 'var(--cv-text-secondary)', margin: 0 }}>Manage your profile, learning, display and subscription.</p>
+    </header>
+    <div style={{ display: 'grid', gap: 16 }}>
       <MeAccountSummary />
-
-      <div style={{ marginTop: 12 }}>
-        <AchievementsHub />
-      </div>
-
-      <div style={{ marginTop: 12 }}>
-        <LifeDeviceBoundary />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 10, marginTop: 12 }}>
-        {sections.map(section => (
-          <article key={section.title} style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start' }}>
-              <div style={{ fontSize: '1rem', fontWeight: 800 }}>{section.title}</div>
-              <span
-                style={{
-                  color: statusColor[section.status],
-                  border: `1px solid color-mix(in srgb, ${statusColor[section.status]} 35%, transparent)`,
-                  borderRadius: 999,
-                  padding: '4px 7px',
-                  fontSize: '0.72rem',
-                  fontWeight: 800,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {statusLabel[section.status]}
-              </span>
-            </div>
-            <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '10px 0 0' }}>{section.description}</p>
-            <div style={{ marginTop: 12, padding: 11, borderRadius: 12, background: C.elevated, color: C.sub, fontSize: '0.85rem', lineHeight: 1.55 }}>
-              {section.detail}
-            </div>
-            {section.links ? (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
-                {section.links.map(link => (
-                  <a key={link.href} href={link.href} style={{ padding: '8px 11px', borderRadius: 999, border: `1px solid ${C.border}`, color: C.teal, textDecoration: 'none', fontSize: '0.85rem', fontWeight: 800 }}>
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            ) : null}
-          </article>
-        ))}
-      </div>
-
-      <div style={{ ...cardStyle, marginTop: 10, borderColor: C.border }}>
-        <div style={{ fontSize: '0.85rem', fontWeight: 800, color: C.teal }}>Identity rule</div>
-        <div style={{ marginTop: 5, color: C.sub, fontSize: '0.82rem', lineHeight: 1.6 }}>
-          Authentication owns the user; Profile owns professional metadata; Entitlement owns access; Life owns wellness context. No surface may create a second identity or activate PRO locally.
+      <AppearanceSettings />
+      <section aria-label="Your saved learning">
+        {learningSummary}
+        <button type="button" onClick={onOpenProgress} style={{ ...actionStyle, marginTop: 10 }}>View learning progress →</button>
+      </section>
+      <section aria-labelledby="help-title" style={cardStyle}>
+        <h2 id="help-title" style={headingStyle}>Help & privacy</h2>
+        <div style={{ display: 'grid', gap: 8 }}>
+          {links.map(link => <a key={link.href} href={link.href} style={{ ...actionStyle, display: 'block', textDecoration: 'none', color: 'var(--cv-blue)' }}>
+            <span style={{ fontWeight: 700 }}>{link.label} →</span>
+            <span style={{ display: 'block', color: 'var(--cv-text-secondary)', fontWeight: 400, fontSize: '0.875rem', marginTop: 4 }}>{link.detail}</span>
+          </a>)}
         </div>
-      </div>
-    </section>
-  )
+      </section>
+      <details style={cardStyle}>
+        <summary style={{ minHeight: 44, cursor: 'pointer', fontWeight: 700 }}>Connections & devices</summary>
+        <p style={{ color: 'var(--cv-text-secondary)' }}>Apple Health and Apple Watch are not connected in this version. No device readings are imported.</p>
+        <p style={{ color: 'var(--cv-text-secondary)', marginBottom: 0 }}>Hospital and NeuraOps connections are not available from this account yet.</p>
+      </details>
+    </div>
+  </section>
 }
-
-const introStyle = {
-  padding: 16,
-  borderRadius: 18,
-  border: `1px solid ${C.border}`,
-  background: C.panel,
-  color: C.text,
-  marginBottom: 12,
-} as const
-
-const cardStyle = {
-  padding: 16,
-  borderRadius: 18,
-  border: `1px solid ${C.border}`,
-  background: C.panel,
-  color: C.text,
-} as const
+const headingStyle = { fontSize: '1rem', margin: '0 0 12px' } as const
+const cardStyle = { padding: 16, borderRadius: 18, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' } as const
+const actionStyle = { minHeight: 44, width: '100%', boxSizing: 'border-box', padding: '12px 16px', borderRadius: 12, border: '1px solid var(--cv-border)', background: 'var(--cv-surface-elevated)', color: 'var(--cv-teal)', textAlign: 'left', cursor: 'pointer', fontWeight: 600 } as const

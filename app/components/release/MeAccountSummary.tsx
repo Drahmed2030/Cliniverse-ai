@@ -19,7 +19,7 @@ const C = {
   sub: 'var(--cv-text-secondary)',
   blue: 'var(--cv-blue)',
   teal: 'var(--cv-teal)',
-  danger: '#b42318',
+  danger: 'var(--cv-learning-danger)',
 }
 
 export default function MeAccountSummary() {
@@ -88,7 +88,7 @@ export default function MeAccountSummary() {
       <section style={cardStyle} aria-labelledby="profile-account-title">
         <div id="profile-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Profile</div>
         <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-          Authenticated professional metadata. Email ownership comes from the signed-in account.
+          Update the name shown on your account. Your sign-in email is read-only.
         </div>
 
         {profile ? (
@@ -108,12 +108,12 @@ export default function MeAccountSummary() {
       <section style={cardStyle} aria-labelledby="plan-account-title">
         <div id="plan-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Plan</div>
         <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-          App Store controls the localized price and renewal. Cliniverse activates PRO only after server verification.
+          View available plans or restore an existing purchase in the iOS app.
         </div>
         <div style={{ marginTop: 12, padding: 12, borderRadius: 12, background: C.elevated }}>
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, textTransform: 'capitalize' }}>{entitlement?.tier ?? 'free'}</div>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, textTransform: 'capitalize' }}>{entitlement ? entitlement.tier : 'Plan unavailable'}</div>
           <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-            Status: {entitlement?.status ?? 'unknown'} · Source: {entitlement?.source ?? 'none'}
+            {entitlement ? `Status: ${entitlement.status}` : 'Your subscription status could not be confirmed.'}
           </div>
           {entitlement?.expiresAt ? <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
           {primaryProduct ? (
@@ -189,14 +189,13 @@ const inputStyle = {
   color: C.text,
   padding: '11px 12px',
   fontSize: '0.95rem',
-  outline: 'none',
 } as const
 
 const primaryButtonStyle = {
   minHeight: 44,
   borderRadius: 12,
   border: `1px solid ${C.border}`,
-  background: C.blue,
+  background: 'var(--cv-learning-action)',
   color: '#FFFFFF',
   fontSize: '0.95rem',
   fontWeight: 800,
