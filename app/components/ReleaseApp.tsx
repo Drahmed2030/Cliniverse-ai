@@ -20,6 +20,7 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../lib/nativeSafeArea'
 
+const WardSavedPractice = dynamic(() => import('./ward/WardSavedPractice'), { ssr: false, loading: () => <SectionLoading label="Loading Ward practice" /> })
 const AssessmentHistory = dynamic(() => import('./release/AssessmentHistory'), { ssr: false, loading: () => <SectionLoading label="Loading assessments" /> })
 
 const AccountLearningSummary = dynamic(() => import('./ward/AccountCodeLab'), {
@@ -135,7 +136,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
             <WardIndex initialWorkspace={careWorkspace} reviewSessions={showEcgReview} />
           </ErrorBoundary>
         )}
-        {tab === 'progress' && <ProgressSurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
+        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
         {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
@@ -282,11 +283,12 @@ function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: Release
   )
 }
 
-function ProgressSurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
+function ProgressSurface({ onNavigate, onOpenCodeLab, showWardPractice }: { showWardPractice: boolean; onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
   return (
     <section aria-labelledby="progress-title" data-commercial-surface="progress">
       <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
       <AssessmentHistory />
+      {showWardPractice && <WardSavedPractice onOpen={() => onNavigate('learn')} />}
       <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
         <div style={{ color: C.violet, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>COMPETENCY</div>
         <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Clinical competency</h1>
