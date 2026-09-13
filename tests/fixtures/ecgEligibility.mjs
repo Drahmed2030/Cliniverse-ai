@@ -1,0 +1,8 @@
+import { ECG_RECORD_10_EVIDENCE_EVENTS } from '../../app/lib/clinicalIntelligence/ecgRecord10EvidenceLedgerBinding.ts'
+import { ECG_ELIGIBILITY_POLICY } from '../../app/lib/clinicalIntelligence/ecgEligibilityDecision.ts'
+export function fixture() {
+ const target={canonicalWaveformSha256:'a'.repeat(64),outputArtifactSha256:'b'.repeat(64),platformFamily:'BROWSER_PDF_VIEWERS',rendererId:'fixture-pdf',rendererVersion:'1',layoutPolicyId:'layout',layoutPolicyVersion:'1',calibrationPolicyId:'calibration',calibrationPolicyVersion:'1',outputRecipeId:'recipe',outputRecipeVersion:'1'}
+ const device={...structuredClone(ECG_RECORD_10_EVIDENCE_EVENTS[0]),eventId:'fixture-device',kind:'DEVICE_BASELINE_BOUND',occurredAt:'2026-09-13T10:00:00Z',parentEventIds:['ecg-record-10-probed-v1']}
+ const promotion={...structuredClone(device),eventId:'fixture-promotion',kind:'PROMOTION_DECIDED',decision:'PROMOTE',occurredAt:'2026-09-13T10:01:00Z',actor:{actorType:'HUMAN',actorId:'fixture-authority'},humanAttestation:{scope:'PROMOTION_AUTHORITY',attested:true},policies:[{policyId:ECG_ELIGIBILITY_POLICY.id,policyVersion:ECG_ELIGIBILITY_POLICY.version}],parentEventIds:[device.eventId,'ecg-record-10-clinical-attested-v1','ecg-record-10-privacy-attested-v1']}
+ return {events:[...structuredClone(ECG_RECORD_10_EVIDENCE_EVENTS),device,promotion],target,authorizedPromotionActorIds:['fixture-authority'],deviceBinding:{eventId:device.eventId,evidence:{fingerprint:{...target},platformFamily:target.platformFamily,exactOutputArtifactSha256:target.outputArtifactSha256,currentDeviceEvidence:true,geometryPreserved:true,fullTimelinePreserved:true,leadIdentityPreserved:true,calibrationPreserved:true,annotationsReadable:true,deviations:[]}}}
+}
