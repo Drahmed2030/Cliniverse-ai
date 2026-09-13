@@ -6,8 +6,8 @@
  */
 
 import React, { useState } from "react";
-import { BlsLesson, BLS_DISCLAIMER } from "../../lib/codelab/blsLessons";
-import { type ACLSLesson, ACLS_DISCLAIMER } from "../../lib/codelab/aclsLessons";
+import { type BlsLesson, BLS_DISCLAIMER, BLS_LESSONS } from "../../lib/codelab/blsLessons";
+import { type ACLSLesson, ACLS_DISCLAIMER, ACLS_LESSONS } from "../../lib/codelab/aclsLessons";
 
 interface Props {
   lesson: BlsLesson | ACLSLesson;
@@ -91,7 +91,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
       <div style={S.header}>
         <button onClick={onBack} style={S.backBtn}>← Back</button>
         <div style={S.lessonTag}>
-          BLS · {lesson.order}/{6} · ~{lesson.durationMin} min
+          {lesson.track.toUpperCase()} · {lesson.order}/{lesson.track === "acls" ? ACLS_LESSONS.length : BLS_LESSONS.length} · ~{lesson.durationMin} min
         </div>
       </div>
 
@@ -318,6 +318,15 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                     : "Review the key points and try again"}
                 </div>
               </div>
+              <details style={S.reviewBlock}>
+                <summary style={S.reviewSummary}>Review this lesson</summary>
+                <p style={S.keyText}>Revisit the lesson’s key points before you continue.</p>
+                <ul style={S.reviewList}>
+                  {lesson.keyPoints.map((point, index) => (
+                    <li key={index} style={S.keyText}>{point}</li>
+                  ))}
+                </ul>
+              </details>
               {canComplete && (
                 <button style={S.completeBtn} disabled={completionDisabled} onClick={() => onComplete(lesson.mcqs.length - mcqScore)}>
                   {completionLabel ?? '✓ Mark Lesson Complete'}
@@ -346,6 +355,23 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
 }
 
 const playerStyles: Record<string, React.CSSProperties> = {
+  reviewBlock: {
+    border: "1px solid #334155",
+    borderRadius: 12,
+    padding: "0 16px 12px",
+    marginBottom: 16,
+  },
+  reviewSummary: {
+    minHeight: 44,
+    padding: "12px 0",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+  reviewList: {
+    paddingLeft: 20,
+    display: "grid",
+    gap: 12,
+  },
   root: {
     minHeight: "100vh",
     background: "#0B1220",
