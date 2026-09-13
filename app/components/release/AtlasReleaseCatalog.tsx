@@ -15,7 +15,7 @@ type ReleaseAccess = 'FREE' | 'PRO' | 'ACCOUNT'
 
 export interface AtlasDestination {
   tab: ReleaseDestination
-  workspace?: 'ward' | 'cardiology' | 'nexus'
+  workspace?: 'ward' | 'cardiology' | 'nexus' | 'codelab'
 }
 
 interface Props {
@@ -31,6 +31,14 @@ const releasePaths: Array<{
   action: string
   details: string[]
 }> = [
+  {
+    title: 'Code Lab',
+    description: 'Build your BLS and ACLS knowledge with short lessons, practice and question reviews.',
+    access: 'FREE',
+    destination: { tab: 'care', workspace: 'codelab' },
+    action: 'Open Code Lab',
+    details: ['First two lessons per track free', 'Account-saved completion', 'PRO for all lessons'],
+  },
   {
     title: 'Ward Simulation',
     description: 'Open the first fictional case and review the complete simulated care journey without purchasing PRO.',
@@ -75,10 +83,10 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
   return (
     <section aria-labelledby="atlas-title" data-commercial-explore-surface>
       <div style={introStyle}>
-        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>CURRENT RELEASE TOUR</div>
+        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>FIND YOUR NEXT PRACTICE</div>
         <h1 id="atlas-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Atlas</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Use this map to reach every active release area. Labels distinguish the free preview, PRO learning content and account controls.
+          Choose a learning activity that fits your next step. See what you can explore freely and what is included with PRO.
         </p>
       </div>
 
@@ -115,7 +123,7 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
           <div style={{ color: C.violet, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>APP STORE PLAN</div>
           <h2 id="atlas-plan-title" style={{ fontSize: '1.05rem', margin: '7px 0 6px' }}>Review Cliniverse PRO</h2>
           <p style={{ margin: 0, color: C.sub, fontSize: '0.9rem', lineHeight: 1.55 }}>
-            The plan sheet loads the title, renewal period and localized price from StoreKit. PRO activates only after server verification.
+            See available plans and pricing in the iOS app, or restore an existing App Store subscription.
           </p>
           <button type="button" onClick={onOpenPlan} style={{ ...actionStyle, color: C.violet }}>
             View plan →
@@ -123,7 +131,7 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
         </section>
 
         <p style={boundaryStyle}>
-          Release boundary: third-party clinical AI, diagnosis, prescribing, real-patient workflows and device-health integrations are not part of this version.
+          Designed for learning and simulation. Not for diagnosis, prescribing or managing real patient care.
         </p>
       </div>
     </section>

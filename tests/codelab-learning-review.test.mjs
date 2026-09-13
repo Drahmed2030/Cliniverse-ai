@@ -52,7 +52,7 @@ function answer(app, lesson, correct) {
     const oi = correct ? question.answerIndex : (question.answerIndex + 1) % question.options.length
     const container = nodes(app.render()).find(n => n.type === 'div' && text(n.props.children?.[0]) === question.q)
     assert.ok(container, `question ${qi + 1}`)
-    const choices = nodes(container).filter(n => n.type === 'div' && n.props.onClick && nodes(n).some(child => child.type === 'div' && text(child) === question.options[oi]))
+    const choices = nodes(container).filter(n => n.type === 'button' && n.props.onClick && nodes(n).some(child => child.type === 'span' && text(child) === question.options[oi]))
     assert.ok(choices.length, `question ${qi + 1}`)
     choices[0].props.onClick()
   }
@@ -92,4 +92,37 @@ test('lesson review preserves passing completion and service-disabled completion
     if (!disabled) { complete.props.onClick(); assert.deepEqual(app.completions, [0]) }
     else assert.deepEqual(app.completions, [])
   }
+})
+
+test('answer controls expose selection, lock after submission and name the correct result', () => {
+  const lesson = bls.BLS_LESSONS[0], app = harness(lesson)
+  questions(app)
+  assert.equal(button(app, 'Submit Answers').props.disabled, true)
+  const options = nodes(app.render()).filter(n => n.type === 'button' && 'aria-pressed' in n.props)
+  options[0].props.onClick()
+  assert.equal(nodes(app.render()).filter(n => n.type === 'button' && n.props['aria-pressed']).length, 1)
+  answer(app, lesson, true)
+  const submitted = nodes(app.render()).filter(n => n.type === 'button' && 'aria-pressed' in n.props)
+  assert.ok(submitted.every(n => n.props.disabled))
+  assert.equal(submitted.filter(n => text(n).includes('Correct answer')).length, lesson.mcqs.length)
+})
+
+test('practice step buttons swap sequence and checklist controls toggle selected state', () => {
+  const sequence = [...bls.BLS_LESSONS, ...acls.ACLS_LESSONS].find(l => l.practice.type === 'sequence')
+  const app = harness(sequence)
+  button(app, 'Start Practice').props.onClick()
+  const steps = () => nodes(app.render()).filter(n => n.type === 'button' && 'aria-pressed' in n.props)
+  const before = steps().map(text)
+  steps()[0].props.onClick()
+  assert.equal(steps()[0].props['aria-pressed'], true)
+  steps()[1].props.onClick()
+  assert.ok(text(steps()[0]).includes(sequence.practice.items[1]))
+  assert.ok(text(steps()[1]).includes(sequence.practice.items[0]))
+  assert.notDeepEqual(steps().map(text), before)
+  const checklist = [...bls.BLS_LESSONS, ...acls.ACLS_LESSONS].find(l => l.practice.type === 'checklist')
+  const check = harness(checklist)
+  button(check, 'Start Practice').props.onClick()
+  const control = () => nodes(check.render()).find(n => n.type === 'button' && 'aria-pressed' in n.props)
+  control().props.onClick(); assert.equal(control().props['aria-pressed'], true)
+  control().props.onClick(); assert.equal(control().props['aria-pressed'], false)
 })

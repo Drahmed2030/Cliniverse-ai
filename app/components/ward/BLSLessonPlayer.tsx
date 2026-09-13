@@ -134,9 +134,9 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
           {/* Sequence */}
           {lesson.practice.type === "sequence" && lesson.practice.items && (
             <div>
-              <div style={S.seqNote}>Tap two items to swap their order</div>
+              <div style={S.seqNote}>Select two steps to swap their order</div>
               {sequenceOrder.map((origIdx, position) => (
-                <div
+                <button type="button" aria-pressed={seqSelected === position}
                   key={origIdx}
                   style={{
                     ...S.seqItem,
@@ -144,9 +144,9 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                   }}
                   onClick={() => handleSeqTap(position)}
                 >
-                  <div style={S.seqNum}>{position + 1}</div>
-                  <div style={S.seqText}>{lesson.practice.items![origIdx]}</div>
-                </div>
+                  <span style={S.seqNum}>{position + 1}</span>
+                  <span style={S.seqText}>{lesson.practice.items![origIdx]}</span>
+                </button>
               ))}
             </div>
           )}
@@ -169,7 +169,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                 <div style={{ marginTop: 16 }}>
                   <div style={S.checklistLabel}>Self-check</div>
                   {lesson.practice.items.map((item, i) => (
-                    <div
+                    <button type="button" aria-pressed={checkedItems.has(i)}
                       key={i}
                       style={{
                         ...S.checkItem,
@@ -181,14 +181,14 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                         setCheckedItems(next);
                       }}
                     >
-                      <div style={{
+                      <span style={{
                         ...S.checkbox,
                         ...(checkedItems.has(i) ? S.checkboxDone : {}),
                       }}>
                         {checkedItems.has(i) ? "✓" : ""}
-                      </div>
-                      <div style={S.checkText}>{item}</div>
-                    </div>
+                      </span>
+                      <span style={S.checkText}>{item}</span>
+                    </button>
                   ))}
                 </div>
               )}
@@ -199,7 +199,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
           {lesson.practice.type === "checklist" && lesson.practice.items && (
             <div>
               {lesson.practice.items.map((item, i) => (
-                <div
+                <button type="button" aria-pressed={checkedItems.has(i)}
                   key={i}
                   style={{
                     ...S.checkItem,
@@ -211,14 +211,14 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                     setCheckedItems(next);
                   }}
                 >
-                  <div style={{
+                  <span style={{
                     ...S.checkbox,
                     ...(checkedItems.has(i) ? S.checkboxDone : {}),
                   }}>
                     {checkedItems.has(i) ? "✓" : ""}
-                  </div>
-                  <div style={S.checkText}>{item}</div>
-                </div>
+                  </span>
+                  <span style={S.checkText}>{item}</span>
+                </button>
               ))}
             </div>
           )}
@@ -235,7 +235,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                   : "Interactive scenario coming in next update"}
               </div>
               <div style={S.placeholderSub}>
-                Complete the checklist above to proceed
+                You can continue to the knowledge check while this activity is being prepared.
               </div>
             </div>
           )}
@@ -259,14 +259,17 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
         <div style={S.phaseBlock}>
           <div style={S.phaseLabel}>CHECK YOUR KNOWLEDGE</div>
           {lesson.mcqs.map((mcq, qi) => (
-            <div key={qi} style={S.mcqBlock}>
+            <div key={qi} style={S.mcqBlock} role="group" aria-label={mcq.q}>
               <div style={S.mcqQ}>{mcq.q}</div>
               {mcq.options.map((opt, oi) => {
                 const selected = mcqAnswers[qi] === oi;
                 const correct = mcq.answerIndex === oi;
                 const showResult = mcqSubmitted;
                 return (
-                  <div
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={mcqSubmitted}
                     key={oi}
                     style={{
                       ...S.mcqOption,
@@ -281,11 +284,11 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                       setMcqAnswers(next);
                     }}
                   >
-                    <div style={S.mcqLetter}>
+                    <span style={S.mcqLetter} aria-hidden="true">
                       {String.fromCharCode(65 + oi)}
-                    </div>
-                    <div style={S.mcqText}>{opt}</div>
-                  </div>
+                    </span>
+                    <span style={S.mcqText}>{opt}{showResult && correct ? " — Correct answer" : showResult && selected ? " — Your answer" : ""}</span>
+                  </button>
                 );
               })}
               {mcqSubmitted && 'explanation' in mcq && typeof mcq.explanation === 'string' && (
@@ -296,6 +299,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
 
           {!mcqSubmitted ? (
             <button
+              disabled={!mcqAnswers.every((a) => a !== null)}
               style={mcqAnswers.every((a) => a !== null) ? S.primaryBtn : S.primaryBtnDisabled}
               onClick={() => {
                 if (mcqAnswers.every((a) => a !== null)) setMcqSubmitted(true);
@@ -508,6 +512,9 @@ const playerStyles: Record<string, React.CSSProperties> = {
     marginBottom: 10,
   },
   seqItem: {
+    width: "100%",
+    textAlign: "left",
+    font: "inherit",
     display: "flex",
     alignItems: "center",
     gap: 12,
@@ -592,6 +599,9 @@ const playerStyles: Record<string, React.CSSProperties> = {
     marginBottom: 10,
   },
   checkItem: {
+    width: "100%",
+    textAlign: "left",
+    font: "inherit",
     display: "flex",
     alignItems: "center",
     gap: 12,
@@ -662,6 +672,9 @@ const playerStyles: Record<string, React.CSSProperties> = {
     marginBottom: 12,
   },
   mcqOption: {
+    width: "100%",
+    textAlign: "left",
+    font: "inherit",
     display: "flex",
     alignItems: "flex-start",
     gap: 10,
