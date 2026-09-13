@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ECG_RECORD10_QUESTION } from '../../lib/competency/ecgRecord10Question'
 import AuthGate from '../../components/auth/AuthGate'
@@ -11,13 +11,45 @@ export default function EcgAccountReview() {
   return <AuthGate allowGuest={false}>{user => <Review key={user.id} owner={user.id} />}</AuthGate>
 }
 function Review({ owner }: { owner: string }) {
+  const currentUrl = useRef('')
+  const generation = useRef({ epoch: 0, active: false })
   const [allowed, setAllowed] = useState(false)
   const [status, setStatus] = useState('Checking review access…')
   const [pdf, setPdf] = useState('')
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
-  const currentUrl = useRef('')
-  const generation = useRef({ epoch: 0, active: false })
+  const [confirmed, setConfirmed] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [history, setHistory] = useState<Array<{eventId:string;createdAt:string;score:number}>>([])
+  const attempt = useRef('')
+  const [locked, setLocked] = useState(false)
+  const loadHistory = useCallback(async () => {
+    const { data } = await supabase.auth.getSession()
+    if (data.session?.user.id !== owner) throw Error('Account changed')
+    const response = await fetch('/api/ecg-review-attempt', { headers: { Authorization: `Bearer ${data.session.access_token}` }, cache: 'no-store' })
+    if (!response.ok) throw Error('History unavailable')
+    const body = await response.json()
+    if (generation.current.active) setHistory(body.attempts)
+  }, [owner])
+  async function saveAnswer() {
+    if (!confirmed || !pdf || !answer || saving || saved) return
+    setSaving(true); setLocked(true)
+    try {
+      const { data } = await supabase.auth.getSession()
+      if (data.session?.user.id !== owner) throw Error('Account changed')
+      if (!attempt.current) attempt.current = crypto.randomUUID()
+      const response = await fetch('/api/ecg-review-attempt', { method: 'POST', headers: { Authorization: `Bearer ${data.session.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({
+        reviewedPdfSha256: RECORD10_REVIEW_PDF.sha256, reviewContext: 'confirmed-external-iphone-xs-max-ios-18.7.10',
+        submission: { attemptId: attempt.current, caseId: 'ecg-governed-case-001', rubricVersion: ECG_RECORD10_QUESTION.version, answers: [{ questionId: ECG_RECORD10_QUESTION.id, optionId: answer }] }
+      }) })
+      const result = await response.json()
+      if (!response.ok || result.state !== 'saved') throw Error('Save not confirmed')
+      if (!generation.current.active) return
+      setSaved(true); setStatus('Result saved to your account.'); await loadHistory()
+    } catch { if (generation.current.active) setStatus('Save or history refresh not confirmed. Retry the same answer, or reload to check history.') }
+    finally { if (generation.current.active) setSaving(false) }
+  }
   useEffect(() => {
     let cancelled = false
     const lifecycle = generation.current
@@ -29,14 +61,15 @@ function Review({ owner }: { owner: string }) {
       const response = await fetch('/api/echo-review-access', { headers: { Authorization: `Bearer ${data.session.access_token}` }, cache: 'no-store', signal: AbortSignal.timeout(15000) })
       if (cancelled) return
       setAllowed(response.ok)
+      if (response.ok) void loadHistory().catch(() => {})
       setStatus(response.ok ? 'Select the reviewed PDF to begin. The file stays on this device.' : 'This page is restricted to the review account.')
     })().catch(() => { if (!cancelled) setStatus('Access could not be verified. Reload to retry.') })
     return () => { cancelled = true; lifecycle.active = false; lifecycle.epoch++; if (currentUrl.current) URL.revokeObjectURL(currentUrl.current) }
-  }, [owner])
+  }, [owner, loadHistory])
   async function selectFile(file?: File) {
-    const epoch = ++generation.current.epoch
+    const epoch = (generation.current = { ...generation.current, epoch: generation.current.epoch + 1 }).epoch
     if (currentUrl.current) URL.revokeObjectURL(currentUrl.current)
-    currentUrl.current = ''; setPdf(''); setAnswer(''); setRevealed(false)
+    currentUrl.current = ''; setPdf(''); setAnswer(''); setRevealed(false); setConfirmed(false); setSaved(false); attempt.current = ''; setLocked(false)
     if (!file) { setStatus('No file selected.'); return }
     setStatus('Verifying the reviewed file…')
     try {
@@ -52,11 +85,11 @@ function Review({ owner }: { owner: string }) {
   return <main className="ecg-review" style={{ maxWidth: 1100, margin: '0 auto', padding: 24, color: 'var(--text-primary)', lineHeight: 1.6 }}>
     <Link href="/">Back to Cliniverse</Link>
     <h1>ECG · Record 10 review</h1>
-    <p>Inspect the reviewed tracing and the accepted rhythm question. Assessment scoring is not enabled.</p>
+    <p>Inspect the reviewed tracing and the accepted rhythm question. Account saving is available for the confirmed external review context below.</p>
     <p role="status">{status}</p>
     {allowed && <>
       <label htmlFor="review-pdf">Reviewed file: {RECORD10_REVIEW_PDF.filename}</label>
-      <input id="review-pdf" type="file" accept="application/pdf,.pdf" onChange={e => void selectFile(e.target.files?.[0])} />
+      <input id="review-pdf" type="file" disabled={saving} accept="application/pdf,.pdf" onChange={e => void selectFile(e.target.files?.[0])} />
       {pdf && <>
         <p><a href={pdf} target="_blank" rel="noreferrer">Open verified PDF in a separate viewer</a></p>
         <object data={pdf} type="application/pdf" aria-label="Reviewed 12-lead ECG, four pages" style={{ width: '100%', height: '65vh', minHeight: 320 }}>
@@ -64,18 +97,21 @@ function Review({ owner }: { owner: string }) {
         </object>
         <section aria-labelledby="rhythm-question">
           <h2 id="rhythm-question">Accepted question · {ECG_RECORD10_QUESTION.prompt}</h2>
-          <p>Accepted skill: sinus-rhythm-recognition. One question, weight 1. Scoring and account saving are not enabled for this review.</p>
-          <fieldset><legend>Select one answer</legend>
+          <p>Accepted skill: sinus-rhythm-recognition. One question, weight 1. This records one educational rhythm answer; it is not a measure of clinical competence.</p>
+          <fieldset disabled={saving || saved || locked}><legend>Select one answer</legend>
             {ECG_RECORD10_QUESTION.options.map(option => <label key={option.id} style={{ display: 'block', padding: 10 }}>
               <input type="radio" name="rhythm" checked={answer === option.id} onChange={() => { setAnswer(option.id); setRevealed(false) }} /> {option.label}
             </label>)}
           </fieldset>
+          <label><input type="checkbox" checked={confirmed} disabled={saving || saved} onChange={e => setConfirmed(e.target.checked)} /> I reviewed this verified PDF in the external viewer on iPhone XS Max, iOS 18.7.10. This is my device-use report.</label>
+          <button disabled={!answer || !confirmed || saving || saved} onClick={() => void saveAnswer()}>{saved ? 'Saved to account' : saving ? 'Saving…' : 'Save reviewed answer'}</button>
           <button disabled={!answer} onClick={() => setRevealed(true)}>Show reviewed interpretation</button>
           {revealed && <p role="status">The existing human review identifies sinus rhythm. Source: ECG Record 10 Human Clinical Attestation v1. This is feedback for reviewing the accepted question, not a saved result.</p>}
           <p>The final 106 ms remain unchanged and must not be used as a target morphology feature.</p>
         </section>
       </>}
     </>}
+    <section aria-label="Saved ECG results"><h2>Saved ECG results</h2>{history.length ? history.map(row => <p key={row.eventId}>{new Date(row.createdAt).toLocaleString()} · {Math.round(row.score * 100)}% for this question</p>) : <p>No saved results loaded.</p>}<button onClick={() => void loadHistory().catch(() => setStatus('History unavailable. Retry.'))}>Refresh saved results</button></section>
     <style>{`.ecg-review input[type=file],.ecg-review button{display:block;min-height:44px;margin:12px 0;max-width:100%}.ecg-review :focus-visible{outline:3px solid var(--accent,#00897b);outline-offset:3px}.ecg-review fieldset{border:1px solid var(--border-color,#64748b);border-radius:12px}.ecg-review p,.ecg-review label{overflow-wrap:anywhere}`}</style>
   </main>
 }
