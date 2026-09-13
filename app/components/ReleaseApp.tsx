@@ -78,6 +78,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
     const view = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('view')
     return view === 'learn' || view === 'progress' ? view : 'today'
   })
+  const [cardiologyModule, setCardiologyModule] = useState<'overview' | 'pathway'>('overview')
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall, entitlement } = useCliniverseSubscription()
@@ -95,7 +96,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
   const openCodeLab = () => { setCareWorkspace('codelab'); setTab('learn') }
 
   const handleAtlasNavigate = (destination: AtlasDestination) => {
-    if (destination.workspace) setCareWorkspace(destination.workspace)
+    if (destination.workspace) { setCareWorkspace(destination.workspace); setCardiologyModule('overview') }
     setTab(destination.tab === 'care' ? 'learn' : 'me')
   }
 
@@ -124,7 +125,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
-        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { if (!entitlement?.isPro) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
+        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!entitlement?.isPro) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
         {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
@@ -135,7 +136,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
               <Link href="/labs/ecg-account-review" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '8px 16px', borderRadius: 12, border: `1px solid ${C.border}`, background: C.elevated, color: C.text }}>Open ECG practice →</Link>
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
-            <WardIndex initialWorkspace={careWorkspace} reviewSessions={showEcgReview} />
+            <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} />
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={setTab} onOpenCodeLab={openCodeLab} />}

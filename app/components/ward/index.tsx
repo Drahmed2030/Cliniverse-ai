@@ -20,6 +20,7 @@ export type CareWorkspace = 'ward' | 'cardiology' | 'nexus' | 'codelab'
 interface Props {
   initialWorkspace?: CareWorkspace
   reviewSessions?: boolean
+  initialCardiologyModule?: 'overview' | 'pathway'
 }
 
 const workspaces: Array<{
@@ -64,7 +65,7 @@ const C = {
   blue: 'var(--cv-blue)',
 }
 
-export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false }: Props) {
+export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, initialCardiologyModule = 'overview' }: Props) {
   const [workspace, setWorkspace] = useState<CareWorkspace>(initialWorkspace === 'codelab' ? 'codelab' : 'ward')
   const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
     initialWorkspace === 'ward' || initialWorkspace === 'codelab' ? null : initialWorkspace,
@@ -172,7 +173,7 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
 
       {activeWorkspace === 'cardiology' && isPro ? (
         <ErrorBoundary section="Cardiology Operations">
-          <CardiologyOperations />
+          <CardiologyOperations initialModule={initialCardiologyModule} />
         </ErrorBoundary>
       ) : null}
 

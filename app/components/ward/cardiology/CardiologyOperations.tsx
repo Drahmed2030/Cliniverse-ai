@@ -20,8 +20,8 @@ const modules: Array<{ id: CardiologyModuleId; label: string }> = [
   { id: 'handover', label: 'Handover' },
 ]
 
-export default function CardiologyOperations() {
-  const [activeModule, setActiveModule] = useState<CardiologyModuleId>('overview')
+export default function CardiologyOperations({ initialModule = 'overview' }: { initialModule?: CardiologyModuleId }) {
+  const [activeModule, setActiveModule] = useState<CardiologyModuleId>(initialModule)
   const {
     state,
     saveStatus,

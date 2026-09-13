@@ -57,9 +57,9 @@ export default function PracticeShift({ onWard, onProgress, onPathway }: { onWar
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <button type="button" style={button} disabled={preparation.checked.length !== preparationChecks.length || preparation.prepared} onClick={() => setRequests(current => changeRequest(current, selected, { kind: 'prepare' }))}>Prepare simulated request</button>
         <button type="button" style={button} onClick={() => setRequests(current => changeRequest(current, selected, { kind: 'reset' }))}>Reset exercise</button>
-        <button type="button" style={button} onClick={onPathway}>Open coordination practice · PRO</button>
+        <button type="button" style={button} onClick={onPathway}>Practise STEMI coordination · PRO</button>
       </div>
-      <p style={{ color: 'var(--cv-text-secondary)' }}>Session-only exercise. Hospital access, examination delivery and urgent escalation are not active. The existing coordination workspace retains its subscription checks.</p>
+      <p style={{ color: 'var(--cv-text-secondary)' }}>Session-only exercise. Hospital access, examination delivery and urgent escalation are not active. Opens the existing QAPAS pathway simulation. Role changes and timeline events are fictional; no clinical activation occurs.</p>
     </section>
   </div>
 }
