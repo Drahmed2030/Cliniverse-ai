@@ -30,6 +30,16 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
     lesson.mcqs.map(() => null)
   );
   const [mcqSubmitted, setMcqSubmitted] = useState(false);
+  const phaseHeadingRef = React.useRef<HTMLHeadingElement | null>(null);
+  const resultRef = React.useRef<HTMLDivElement | null>(null);
+  const previousView = React.useRef({ phase, mcqSubmitted });
+  React.useEffect(() => {
+    const previous = previousView.current;
+    previousView.current = { phase, mcqSubmitted };
+    if (previous.phase === phase && previous.mcqSubmitted === mcqSubmitted) return;
+    (mcqSubmitted ? resultRef.current : phaseHeadingRef.current)?.focus();
+  }, [phase, mcqSubmitted]);
+
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerSec, setTimerSec] = useState(120);
   const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
@@ -104,7 +114,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
       {/* ── INTRO PHASE ── */}
       {phase === "intro" && (
         <div style={S.phaseBlock}>
-          <div style={S.phaseLabel}>KEY POINTS</div>
+          <h2 ref={phaseHeadingRef} tabIndex={-1} style={{ ...S.phaseLabel, marginTop: 0 }}>KEY POINTS</h2>
           {lesson.keyPoints.map((pt, i) => (
             <div key={i} style={S.keyPoint}>
               <div style={S.keyDot} />
@@ -128,7 +138,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
       {/* ── PRACTICE PHASE ── */}
       {phase === "practice" && (
         <div style={S.phaseBlock}>
-          <div style={S.phaseLabel}>PRACTICE</div>
+          <h2 ref={phaseHeadingRef} tabIndex={-1} style={{ ...S.phaseLabel, marginTop: 0 }}>PRACTICE</h2>
           <div style={S.practicePrompt}>{lesson.practice.prompt}</div>
 
           {/* Sequence */}
@@ -257,7 +267,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
       {/* ── MCQ PHASE ── */}
       {phase === "mcq" && (
         <div style={S.phaseBlock}>
-          <div style={S.phaseLabel}>CHECK YOUR KNOWLEDGE</div>
+          <h2 ref={phaseHeadingRef} tabIndex={-1} style={{ ...S.phaseLabel, marginTop: 0 }}>CHECK YOUR KNOWLEDGE</h2>
           {lesson.mcqs.map((mcq, qi) => (
             <div key={qi} style={S.mcqBlock} role="group" aria-label={mcq.q}>
               <div style={S.mcqQ}>{mcq.q}</div>
@@ -309,7 +319,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
             </button>
           ) : (
             <div>
-              <div style={{
+              <div ref={resultRef} tabIndex={-1} role="region" aria-label="Knowledge check result" style={{
                 ...S.scoreBlock,
                 background: mcqScore === lesson.mcqs.length ? "var(--cv-learning-success, #064E3B)" : "var(--cv-surface-subtle, #1E3A5F)",
               }}>
