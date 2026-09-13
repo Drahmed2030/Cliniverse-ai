@@ -23,8 +23,21 @@ function History({ owner }: { owner: string }) {
   const [refresh, setRefresh] = useState(0)
   const [exporting, setExporting] = useState(false)
   const [exportStatus, setExportStatus] = useState('')
+  const [exportUrl, setExportUrl] = useState<string | null>(null)
+  const exportUrlRef = useRef<string | null>(null)
+  const exportPending = useRef(false)
   const alive = useRef(false)
   const pending = useRef(false)
+  useEffect(() => {
+    const release = () => {
+      if (exportUrlRef.current) URL.revokeObjectURL(exportUrlRef.current)
+      exportUrlRef.current = null
+    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user.id !== owner) { release(); setExportUrl(null); setExportStatus('') }
+    })
+    return () => { subscription.unsubscribe(); release() }
+  }, [owner])
   useEffect(() => {
     alive.current = true
     let cancelled = false
@@ -46,7 +59,10 @@ function History({ owner }: { owner: string }) {
     finally { pending.current = false; if (alive.current) setBusy(false) }
   }
   async function exportHistory() {
-    if (exporting) return
+    if (exportPending.current) return
+    exportPending.current = true
+    if (exportUrlRef.current) URL.revokeObjectURL(exportUrlRef.current)
+    exportUrlRef.current = null; setExportUrl(null)
     setExporting(true); setExportStatus('Preparing your saved assessments…')
     try {
       const session = await supabase.auth.getSession()
@@ -57,12 +73,10 @@ function History({ owner }: { owner: string }) {
       const current = await supabase.auth.getSession()
       if (!alive.current || current.data.session?.user.id !== owner) return
       const url = URL.createObjectURL(blob)
-      const link = document.createElement('a'); link.href = url; link.download = 'cliniverse-assessments-xapi.json'
-      document.body.appendChild(link); link.click(); link.remove()
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
-      setExportStatus('Download requested. This file contains your account’s saved assessments.')
+      exportUrlRef.current = url; setExportUrl(url)
+      setExportStatus('Your file is ready. Select Download JSON to save it. You can retry the link while this page is open.')
     } catch { if (alive.current) setExportStatus('Export unavailable. Your saved history is unchanged. Please retry.') }
-    finally { if (alive.current) setExporting(false) }
+    finally { exportPending.current = false; if (alive.current) setExporting(false) }
   }
   return <section aria-labelledby="saved-assessments-title" style={{ marginBottom: 16, padding: 20, borderRadius: 22, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' }}>
     <h2 id="saved-assessments-title" style={{ margin: '0 0 8px' }}>Saved assessments</h2>
@@ -74,7 +88,8 @@ function History({ owner }: { owner: string }) {
     </li>)}</ul> : null}
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
       <button type="button" disabled={busy} onClick={() => { setBusy(true); setRefresh(value => value + 1) }} style={buttonStyle}>Refresh history</button>
-      <button type="button" disabled={exporting} onClick={exportHistory} style={buttonStyle}>{exporting ? 'Preparing export…' : 'Download assessments (xAPI)'}</button>
+      <button type="button" disabled={exporting} aria-busy={exporting} onClick={exportHistory} style={buttonStyle}>{exporting ? 'Preparing export…' : 'Prepare assessments (xAPI)'}</button>
+      {exportUrl ? <a href={exportUrl} download="cliniverse-assessments-xapi.json" style={{ ...buttonStyle, display: 'inline-flex', alignItems: 'center' }}>Download JSON</a> : null}
       {cursor ? <button type="button" disabled={busy} onClick={more} style={buttonStyle}>Load older attempts</button> : null}
     </div>
     <p role="status" aria-live="polite">{exportStatus}</p>
