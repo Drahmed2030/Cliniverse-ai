@@ -139,12 +139,16 @@
 /* Learning surfaces use the release palette, including explicit answer states. */
 [data-commercial-shell] {
   --cv-learning-action: #0f766e;
+  --cv-learning-on-danger: #ffffff;
+  --cv-learning-on-teal: #ffffff;
   --cv-learning-success: #e2f4ee;
   --cv-learning-error: #fff0ef;
   --cv-learning-danger: #b42318;
 }
 @media (prefers-color-scheme: dark) {
   [data-commercial-shell] {
+    --cv-learning-on-danger: #111827;
+    --cv-learning-on-teal: #111827;
     --cv-learning-success: #123c36;
     --cv-learning-error: #431f24;
     --cv-learning-danger: #fda29b;

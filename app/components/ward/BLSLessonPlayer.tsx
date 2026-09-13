@@ -580,7 +580,7 @@ const playerStyles: Record<string, React.CSSProperties> = {
   timerBtnStart: {
     width: "100%",
     background: "var(--cv-learning-danger, #f87171)",
-    color: "#fff",
+    color: "var(--cv-learning-on-danger, #111827)",
     border: "none",
     borderRadius: 14,
     padding: "14px",
@@ -643,7 +643,7 @@ const playerStyles: Record<string, React.CSSProperties> = {
   checkboxDone: {
     background: "var(--cv-teal, #2dd4bf)",
     border: "2px solid var(--cv-teal, #2dd4bf)",
-    color: "#fff",
+    color: "var(--cv-learning-on-teal, #111827)",
   },
   checkText: {
     fontSize: 14,
