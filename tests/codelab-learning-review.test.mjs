@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import vm from 'node:vm'
 import { createRequire } from 'node:module'
 import ts from 'typescript'
+import * as lessonSources from '../app/lib/codelab/lessonSources.ts'
 import * as bls from '../app/lib/codelab/blsLessons.ts'
 import * as acls from '../app/lib/codelab/aclsLessons.ts'
 
@@ -23,6 +24,7 @@ function harness(lesson, completionDisabled = false) {
   } }
   const exports = {}
   vm.runInNewContext(code, { exports, require(name) {
+    if (name.endsWith('/lessonSources')) return lessonSources
     if (name === 'react') return hooks
     if (name.endsWith('/blsLessons')) return bls
     if (name.endsWith('/aclsLessons')) return acls

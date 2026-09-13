@@ -6,6 +6,7 @@
  */
 
 import React, { useState } from "react";
+import { getLessonSourceReview, LESSON_SOURCES, SOURCE_CHECKED_ON } from "../../lib/codelab/lessonSources";
 import { type BlsLesson, BLS_DISCLAIMER, BLS_LESSONS } from "../../lib/codelab/blsLessons";
 import { type ACLSLesson, ACLS_DISCLAIMER, ACLS_LESSONS } from "../../lib/codelab/aclsLessons";
 
@@ -94,6 +95,7 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
 
   // ── Styles shared ─────────────────────────────────────────────────────────
   const S = playerStyles;
+  const sourceReview = getLessonSourceReview(lesson.id);
 
   return (
     <div style={S.root} data-codelab>
@@ -340,6 +342,12 @@ export default function BLSLessonPlayer({ lesson, onComplete, onBack, completion
                     <li key={index} style={S.keyText}>{point}</li>
                   ))}
                 </ul>
+                <h3 style={{ ...S.keyText, fontWeight: 700, marginTop: 20 }}>Sources & review status</h3>
+                <p style={S.keyText}>Reference links do not certify this lesson. Comparison of its statements with these guidelines is pending.</p>
+                {sourceReview ? <div style={{ display: 'grid', gap: 8 }}>
+                  {sourceReview.sourceIds.map(id => <a key={id} href={LESSON_SOURCES[id].url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cv-teal)', minHeight: 44, display: 'flex', alignItems: 'center', textDecoration: 'underline' }}>{LESSON_SOURCES[id].title} (opens in a new tab)</a>)}
+                  <p style={S.objective}>Reference pages checked: {SOURCE_CHECKED_ON}. Lesson review: pending.</p>
+                </div> : <p style={S.keyText}>No reference mapping is available for this lesson yet.</p>}
               </details>
               {canComplete && (
                 <button style={S.completeBtn} disabled={completionDisabled} onClick={() => onComplete(lesson.mcqs.length - mcqScore)}>
