@@ -101,9 +101,9 @@ export default function QapasDirectSimulation() {
     <section aria-labelledby="qapas-direct-title">
       <div style={{ ...panelStyle, background: 'linear-gradient(145deg, rgba(30,58,138,0.24), rgba(15,23,42,0.96))', marginBottom: 12 }}>
         <div style={{ color: C.blue, fontSize: 10, fontWeight: 900, letterSpacing: 1 }}>CARDIO NEXUS · SYNTHETIC PATHWAY</div>
-        <h3 id="qapas-direct-title" style={{ margin: '8px 0 7px', fontSize: 21 }}>QAPAS-DIRECT journey simulator</h3>
+        <h3 id="qapas-direct-title" style={{ margin: '8px 0 7px', fontSize: 21 }}>Cliniverse Cardiac Pathway</h3>
         <p style={{ margin: 0, color: C.sub, fontSize: 12, lineHeight: 1.65 }}>
-          Explore how a referral case becomes an MRN, encounter, Cath episode, and auditable KPI timeline. Every identifier and event below is fictional.
+          Explore how a referral case becomes an MRN, encounter, Cath episode, and auditable KPI timeline. Every identifier and event below is fictional. Roles and timing examples require validation against each hospital’s own policy before operational use.
         </p>
       </div>
 
@@ -166,7 +166,7 @@ export default function QapasDirectSimulation() {
         <div aria-live="polite" style={{ marginTop: 8, color: C.sub, fontSize: 10, lineHeight: 1.45 }}>{engineMessage}</div>
       </section>
 
-      <div aria-label="QAPAS-DIRECT pathway steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 7, marginBottom: 12 }}>
+      <div aria-label="Cardiac Pathway steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 7, marginBottom: 12 }}>
         {QAPAS_STEPS.map((step, index) => {
           const selected = activeStepIndex === index
           const completed = index < activeStepIndex

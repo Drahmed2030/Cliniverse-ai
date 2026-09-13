@@ -44,7 +44,7 @@ const workspaces: Array<{
   {
     id: 'cardiology',
     label: 'Cardiology Operations',
-    description: 'QAPAS and coordination practice',
+    description: 'Cardiac Pathway and coordination practice',
     premium: true,
   },
   {

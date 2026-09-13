@@ -13,7 +13,7 @@ import { useCardiologyOperations } from './useCardiologyOperations'
 
 const modules: Array<{ id: CardiologyModuleId; label: string }> = [
   { id: 'overview', label: 'On-call' },
-  { id: 'pathway', label: 'QAPAS Direct' },
+  { id: 'pathway', label: 'Cardiac Pathway' },
   { id: 'census', label: 'Census' },
   { id: 'surgery', label: 'Surgical' },
   { id: 'tasks', label: 'Notes & Orders' },

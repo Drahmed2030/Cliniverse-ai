@@ -59,7 +59,7 @@ export default function PracticeShift({ onWard, onProgress, onPathway }: { onWar
         <button type="button" style={button} onClick={() => setRequests(current => changeRequest(current, selected, { kind: 'reset' }))}>Reset exercise</button>
         <button type="button" style={button} onClick={onPathway}>Practise STEMI coordination · PRO</button>
       </div>
-      <p style={{ color: 'var(--cv-text-secondary)' }}>Session-only exercise. Hospital access, examination delivery and urgent escalation are not active. Opens the existing QAPAS pathway simulation. Role changes and timeline events are fictional; no clinical activation occurs.</p>
+      <p style={{ color: 'var(--cv-text-secondary)' }}>Session-only exercise. Hospital access, examination delivery and urgent escalation are not active. Opens the Cliniverse Cardiac Pathway simulation. Role changes and timeline events are fictional; no clinical activation occurs.</p>
     </section>
   </div>
 }

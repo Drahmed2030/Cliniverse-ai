@@ -49,7 +49,7 @@ const releasePaths: Array<{
   },
   {
     title: 'Cardiology Operations',
-    description: 'A PRO learning workspace for QAPAS Direct, census, surgical readiness, tasks and structured handover.',
+    description: 'A PRO learning workspace for Cardiac Pathway, census, surgical readiness, tasks and structured handover.',
     access: 'PRO',
     destination: { tab: 'care', workspace: 'cardiology' },
     action: 'Open Cardiology',

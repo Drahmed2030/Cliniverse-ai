@@ -38,7 +38,7 @@ const COPY = {
     title: "Cliniverse PRO",
     subtitle: "Unlock expanded cardiovascular learning and simulated care workflows",
     features: [
-      "Cardiology Operations and QAPAS workflow simulation",
+      "Cardiology Operations and Cardiac Pathway simulation",
       "Nexus role-based cardiovascular learning",
       "Expanded fictional Ward cases",
       "Related evidence for supported simulation templates",
@@ -58,7 +58,7 @@ const COPY = {
     title: "Cliniverse PRO",
     subtitle: "افتح تعليم القلب الموسع ومسارات الرعاية التدريبية",
     features: [
-      "محاكاة عمليات القلب ومسار QAPAS",
+      "محاكاة عمليات القلب ومسار القلب",
       "تعليم Nexus لأدوار فريق القلب",
       "حالات Ward تدريبية موسعة",
       "مراجع مرتبطة بقوالب المحاكاة المدعومة",

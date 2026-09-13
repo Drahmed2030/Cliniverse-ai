@@ -7,7 +7,7 @@ const read = relativePath => readFileSync(new URL(`../${relativePath}`, import.m
 test('Cardiology Operations exposes the QAPAS-DIRECT simulator', () => {
   const operations = read('app/components/ward/cardiology/CardiologyOperations.tsx')
 
-  assert.match(operations, /QAPAS Direct/)
+  assert.match(operations, /Cardiac Pathway/)
   assert.match(operations, /QapasDirectSimulation/)
   assert.match(operations, /activeModule === 'pathway'/)
 })
