@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import AuthGate from '../auth/AuthGate'
+import EcgSavedHistory from './EcgSavedHistory'
 import { supabase } from '../../supabase'
 import { createEchoAccountEventRepository } from '../../lib/competency/echoAccountEventRepository'
 import type { EchoCompetencyEvent } from '../../lib/competency/echoPersistenceContract'
@@ -77,7 +78,7 @@ function History({ owner }: { owner: string }) {
       {cursor ? <button type="button" disabled={busy} onClick={more} style={buttonStyle}>Load older attempts</button> : null}
     </div>
     <p role="status" aria-live="polite">{exportStatus}</p>
-    <p style={{ color: 'var(--cv-text-secondary)', marginBottom: 0 }}>ECG scored history is not available yet. Viewing an ECG does not count as a scored assessment.</p>
+    <EcgSavedHistory key={`${owner}:${refresh}`} owner={owner} refresh={refresh} />
   </section>
 }
 const buttonStyle = { minHeight: 44, borderRadius: 12, border: '1px solid var(--cv-border)', padding: '8px 14px', background: 'var(--cv-surface-elevated)', color: 'var(--cv-text)', cursor: 'pointer' } as const

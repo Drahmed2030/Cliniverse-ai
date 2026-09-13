@@ -5,6 +5,14 @@ import { getRecord10ReviewedPdfSnapshot } from '../../lib/clinicalIntelligence/e
 import { RECORD10_REVIEW_PDF } from '../../lib/clinicalIntelligence/ecgReviewedPdfIdentity'
 
 export const runtime = 'nodejs'
+// Configuration sanity check only. Supabase still authenticates the credential;
+// decoded JWT claims never grant application or database authority.
+function configuredKey(): string | null {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+  if (!key) return null
+  if (key.startsWith('sb_secret_') && key.length > 20) return key
+  try { return JSON.parse(Buffer.from(key.split('.')[1], 'base64url').toString()).role === 'service_role' ? key : null } catch { return null }
+}
 const headers = { 'Cache-Control': 'private, no-store' }
 const reply = (value: unknown, status = 200) => Response.json(value, { status, headers })
 async function context(request: Request) {
@@ -21,13 +29,13 @@ export async function GET(request: Request) {
   if (!c) return reply({ error: 'Review access required' }, 403)
   const result = await c.client.from('ecg_competency_attempts').select('event_id,created_at,evidence').eq('user_id', c.user.id).eq('case_id', 'ecg-governed-case-001').order('created_at', { ascending: false }).limit(20)
   if (result.error) return reply({ error: 'History unavailable' }, 503)
-  return reply({ attempts: result.data.map(row => ({ eventId: row.event_id, createdAt: row.created_at, score: row.evidence?.result?.overallScore })) })
+  return reply({ savingConfigured: Boolean(configuredKey()), attempts: result.data.map(row => ({ eventId: row.event_id, createdAt: row.created_at, score: row.evidence?.result?.overallScore })) })
 }
 export async function POST(request: Request) {
   const c = await context(request)
   if (!c) return reply({ error: 'Review access required' }, 403)
   if (request.headers.get('origin') !== new URL(request.url).origin) return reply({ error: 'Same-origin request required' }, 403)
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const key = configuredKey()
   if (!key) return reply({ error: 'Account saving is unavailable' }, 503)
   try {
     const text = await request.text()

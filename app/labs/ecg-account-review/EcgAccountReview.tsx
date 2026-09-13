@@ -20,6 +20,7 @@ function Review({ owner }: { owner: string }) {
   const [answer, setAnswer] = useState('')
   const [revealed, setRevealed] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
+  const [savingConfigured, setSavingConfigured] = useState(false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [historyState, setHistoryState] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -34,11 +35,11 @@ function Review({ owner }: { owner: string }) {
     const response = await fetch('/api/ecg-review-attempt', { headers: { Authorization: `Bearer ${data.session.access_token}` }, cache: 'no-store' })
     if (!response.ok) throw Error('History unavailable')
     const body = await response.json()
-    if (generation.current.active) { setHistory(body.attempts); setHistoryState('ready') }
+    if (generation.current.active) { setHistory(body.attempts); setSavingConfigured(body.savingConfigured === true); setHistoryState('ready') }
     } catch (error) { if (generation.current.active) setHistoryState('error'); throw error }
   }, [owner])
   async function saveAnswer() {
-    if (!confirmed || !pdf || !answer || saving || saved) return
+    if (!savingConfigured || !confirmed || !pdf || !answer || saving || saved) return
     setSaving(true); setLocked(true)
     try {
       const { data } = await supabase.auth.getSession()
@@ -90,7 +91,7 @@ function Review({ owner }: { owner: string }) {
   return <main className="ecg-review" style={{ maxWidth: 1100, margin: '0 auto', padding: 24, color: 'var(--text-primary)', lineHeight: 1.6 }}>
     <Link href="/">Back to Cliniverse</Link>
     <header><p className="review-eyebrow">CLINIVERSE · ECG PRACTICE</p><h1>Read the tracing. Review your answer.</h1><p>Record 10 · 12 leads · 10 seconds</p></header>
-    <p>Inspect the reviewed tracing and the accepted rhythm question. Account saving is available for the confirmed external review context below.</p>
+    <p>Inspect the reviewed tracing and the accepted rhythm question. Save an educational answer using the previously confirmed review context when account saving is available.</p>
     <p role="status" className="review-status">{status}</p>
     {allowed && <>
       <label htmlFor="review-pdf">Reviewed file: {RECORD10_REVIEW_PDF.filename}</label>
@@ -109,7 +110,8 @@ function Review({ owner }: { owner: string }) {
             </label>)}
           </fieldset>
           <label><input type="checkbox" checked={confirmed} disabled={saving || saved} onChange={e => setConfirmed(e.target.checked)} /> Use my previously confirmed review of this PDF on iPhone XS Max, iOS 18.7.10. This does not report a new device test.</label>
-          <button className="review-primary" disabled={!answer || !confirmed || saving || saved} onClick={() => void saveAnswer()}>{saved ? 'Saved to account' : saving ? 'Saving…' : 'Save reviewed answer'}</button>
+          <p role="status">{savingConfigured ? 'Account saving is configured.' : 'Account saving is currently unavailable. You can still review the tracing and interpretation.'}</p>
+          <button className="review-primary" disabled={!savingConfigured || !answer || !confirmed || saving || saved} onClick={() => void saveAnswer()}>{saved ? 'Saved to account' : saving ? 'Saving…' : 'Save reviewed answer'}</button>
           <button disabled={!answer} onClick={() => setRevealed(true)}>Show reviewed interpretation</button>
           {revealed && <p role="status">The existing human review identifies sinus rhythm. Source: ECG Record 10 Human Clinical Attestation v1. This is feedback for reviewing the accepted question, not a saved result.</p>}
           <p>The final 106 ms remain unchanged and must not be used as a target morphology feature.</p>
