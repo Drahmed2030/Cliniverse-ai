@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { ECG_RECORD10_QUESTION } from '../../lib/competency/ecgRecord10Question'
 import AuthGate from '../../components/auth/AuthGate'
 import { supabase } from '../../supabase'
 import { matchesReviewedEcgPdf, RECORD10_REVIEW_PDF } from '../../lib/clinicalIntelligence/ecgReviewedPdfIdentity'
@@ -51,7 +52,7 @@ function Review({ owner }: { owner: string }) {
   return <main className="ecg-review" style={{ maxWidth: 1100, margin: '0 auto', padding: 24, color: 'var(--text-primary)', lineHeight: 1.6 }}>
     <Link href="/">Back to Cliniverse</Link>
     <h1>ECG · Record 10 review</h1>
-    <p>Inspect the reviewed tracing and the proposed rhythm question. Assessment scoring is not enabled.</p>
+    <p>Inspect the reviewed tracing and the accepted rhythm question. Assessment scoring is not enabled.</p>
     <p role="status">{status}</p>
     {allowed && <>
       <label htmlFor="review-pdf">Reviewed file: {RECORD10_REVIEW_PDF.filename}</label>
@@ -62,15 +63,15 @@ function Review({ owner }: { owner: string }) {
           <p>Your browser does not embed PDF files. Use the separate viewer link above.</p>
         </object>
         <section aria-labelledby="rhythm-question">
-          <h2 id="rhythm-question">Draft question · What rhythm is shown?</h2>
-          <p>Proposed skill: sinus-rhythm-recognition. One question, weight 1. This draft does not award points or save an assessment.</p>
+          <h2 id="rhythm-question">Accepted question · {ECG_RECORD10_QUESTION.prompt}</h2>
+          <p>Accepted skill: sinus-rhythm-recognition. One question, weight 1. Scoring and account saving are not enabled for this review.</p>
           <fieldset><legend>Select one answer</legend>
-            {['Sinus rhythm', 'Atrial fibrillation', 'Atrial flutter', 'Unable to determine'].map(option => <label key={option} style={{ display: 'block', padding: 10 }}>
-              <input type="radio" name="rhythm" checked={answer === option} onChange={() => { setAnswer(option); setRevealed(false) }} /> {option}
+            {ECG_RECORD10_QUESTION.options.map(option => <label key={option.id} style={{ display: 'block', padding: 10 }}>
+              <input type="radio" name="rhythm" checked={answer === option.id} onChange={() => { setAnswer(option.id); setRevealed(false) }} /> {option.label}
             </label>)}
           </fieldset>
           <button disabled={!answer} onClick={() => setRevealed(true)}>Show reviewed interpretation</button>
-          {revealed && <p role="status">The existing human review identifies sinus rhythm. Source: ECG Record 10 Human Clinical Attestation v1. This is feedback for reviewing the draft, not a saved result.</p>}
+          {revealed && <p role="status">The existing human review identifies sinus rhythm. Source: ECG Record 10 Human Clinical Attestation v1. This is feedback for reviewing the accepted question, not a saved result.</p>}
           <p>The final 106 ms remain unchanged and must not be used as a target morphology feature.</p>
         </section>
       </>}
