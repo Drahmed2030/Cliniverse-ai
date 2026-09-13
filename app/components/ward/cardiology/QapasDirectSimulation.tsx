@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import TeamPerspective from './TeamPerspective'
 import { replayDecision } from '../../../lib/cardiology/decisionReplay'
 import {
   appendIdentifier,
@@ -179,6 +180,8 @@ export default function QapasDirectSimulation() {
         </button>
         <div aria-live="polite" style={{ marginTop: 8, color: C.sub, fontSize: 10, lineHeight: 1.45 }}>{engineMessage}</div>
       </section>
+
+      <TeamPerspective current={nexusCase} previous={previousAttempt} onRole={setActiveRole} />
 
       <section aria-labelledby="decision-replay-title" style={{ ...panelStyle, marginBottom: 12 }}>
         <h4 id="decision-replay-title">Replay a decision</h4>
