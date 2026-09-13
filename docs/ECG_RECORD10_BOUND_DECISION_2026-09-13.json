@@ -1,0 +1,23 @@
+{
+  "decisionId": "65d8cb87fd3b9200bed45b1c2a5295c482b8124ac80d8bd00eed95db4ad75438",
+  "policy": {
+    "id": "ecg-evidence-eligibility",
+    "version": "1.0.0"
+  },
+  "evidenceDigest": "544c05346a2b8f9ce8cd9eb9b5fa6e262bb3a75bab643b3ddb093f4c572d942c",
+  "decision": "LEARNER_ELIGIBLE",
+  "learnerReady": true,
+  "promotionAuthorized": true,
+  "integrityValid": true,
+  "deviceBaselineBound": true,
+  "evidenceEventIds": [
+    "ecg-record-10-probed-v1",
+    "ecg-record-10-clinical-attested-v1",
+    "ecg-record-10-privacy-attested-v1",
+    "ecg-record-10-promotion-hold-v1",
+    "record10-reconstruction-bound-v1",
+    "record10-reviewed-pdf-iphone-user-evidence-v1",
+    "record10-reviewed-pdf-educational-promotion-v1"
+  ],
+  "blockers": []
+}
