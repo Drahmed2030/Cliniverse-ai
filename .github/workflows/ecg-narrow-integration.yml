@@ -1,0 +1,33 @@
+name: ECG narrow integration
+
+on:
+  pull_request:
+    branches: [strategy/commercial-activation-v1]
+    paths:
+      - 'app/lib/clinicalIntelligence/**'
+      - 'app/lib/governance/**'
+      - 'app/lib/competency/**'
+      - 'tests/ecg-*.test.mjs'
+      - '.github/workflows/ecg-narrow-integration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-and-account-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix tools/echo-db-tests
+      - name: ECG, Echo and account regression tests
+        run: node --test tests/ecg-eligibility-decision.test.mjs tests/ecg-record-10-evidence-ledger-binding.test.mjs tests/ecg-account-attempt.test.mjs tests/echo-account-history.test.mjs tests/echo-account-attempt.test.mjs tests/echo-account-events.test.mjs tests/lesson-completion.test.mjs tools/echo-db-tests/schema.test.mjs
+      - run: npx tsc --noEmit
+      - name: Targeted lint
+        run: npx eslint app/lib/clinicalIntelligence/ecgEligibilityDecision.ts app/lib/clinicalIntelligence/ecgRecord10EvidenceLedgerBinding.ts app/lib/competency/ecgGovernedAccountAttempt.ts
