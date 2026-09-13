@@ -38,6 +38,7 @@
     "app/terms/**/*.tsx",
     "app/api/**/*.ts",
     "app/labs/echo-account-review/**/*.tsx",
+    "app/labs/ecg-account-review/**/*.tsx",
     "app/api/**/*.tsx",
     "app/components/ReleaseApp.tsx",
     "app/components/ReleaseNav.tsx",

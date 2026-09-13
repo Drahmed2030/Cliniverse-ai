@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [strategy/commercial-activation-v1, integration/ecg-record10-account-evidence-v1, integration/ecg-atomic-account-save-v1]
     paths:
+      - 'app/labs/ecg-account-review/**'
+      - 'tsconfig.json'
       - 'app/lib/clinicalIntelligence/**'
       - 'app/lib/governance/**'
       - 'app/lib/competency/**'
@@ -35,7 +37,7 @@ jobs:
       - run: npm ci
       - run: npm ci --prefix tools/echo-db-tests
       - name: ECG, Echo and account regression tests
-        run: node --test tests/ecg-answer-submission.test.mjs tests/xapi-export.test.mjs tests/ecg-eligibility-decision.test.mjs tests/ecg-record-10-evidence-ledger-binding.test.mjs tests/ecg-account-attempt.test.mjs tests/echo-account-history.test.mjs tests/echo-account-attempt.test.mjs tests/echo-account-events.test.mjs tests/lesson-completion.test.mjs tools/echo-db-tests/schema.test.mjs tools/echo-db-tests/ecg-atomic.test.mjs
+        run: node --test tests/ecg-reviewed-pdf-identity.test.mjs tests/ecg-answer-submission.test.mjs tests/xapi-export.test.mjs tests/ecg-eligibility-decision.test.mjs tests/ecg-record-10-evidence-ledger-binding.test.mjs tests/ecg-account-attempt.test.mjs tests/echo-account-history.test.mjs tests/echo-account-attempt.test.mjs tests/echo-account-events.test.mjs tests/lesson-completion.test.mjs tools/echo-db-tests/schema.test.mjs tools/echo-db-tests/ecg-atomic.test.mjs
       - run: npx tsc --noEmit
       - name: Targeted lint
-        run: npx eslint app/lib/competency/ecgAnswerSubmission.ts app/lib/clinicalIntelligence/ecgEligibilityDecision.ts app/lib/clinicalIntelligence/ecgRecord10EvidenceLedgerBinding.ts app/lib/competency/ecgGovernedAccountAttempt.ts app/lib/competency/ecgAtomicAccountSave.ts app/lib/learningExport app/api/learning-export/route.ts app/components/release/AssessmentHistory.tsx
+        run: npx eslint app/labs/ecg-account-review app/lib/clinicalIntelligence/ecgReviewedPdfIdentity.ts app/lib/competency/ecgAnswerSubmission.ts app/lib/clinicalIntelligence/ecgEligibilityDecision.ts app/lib/clinicalIntelligence/ecgRecord10EvidenceLedgerBinding.ts app/lib/competency/ecgGovernedAccountAttempt.ts app/lib/competency/ecgAtomicAccountSave.ts app/lib/learningExport app/api/learning-export/route.ts app/components/release/AssessmentHistory.tsx
