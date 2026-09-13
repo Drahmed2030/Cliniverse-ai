@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { replayDecision } from '../../../lib/cardiology/decisionReplay'
 import {
   appendIdentifier,
   applyNexusEvent,
@@ -37,6 +38,8 @@ const stateStepIndex: Record<NexusCase['state'], number> = {
 }
 
 export default function QapasDirectSimulation() {
+  const [checkpoints, setCheckpoints] = useState<NexusCase[]>([])
+  const [previousAttempt, setPreviousAttempt] = useState<NexusCase | null>(null)
   const [activeStepIndex, setActiveStepIndex] = useState(0)
   const [activeRole, setActiveRole] = useState<QapasRoleId>('referring')
   const [nexusCase, setNexusCase] = useState(() => createNexusCase('SIM-QD-001', 'SIM-REF-001', SIMULATION_STARTED_AT))
@@ -92,9 +95,20 @@ export default function QapasDirectSimulation() {
       progressedCase = clockResult.value
     }
 
+    setCheckpoints(current => [...current, nexusCase])
     setNexusCase(progressedCase)
     setActiveStepIndex(stateStepIndex[progressedCase.state])
     setEngineMessage(`${event.type} appended by ${roleLabel(activeRole)}. Human authority preserved.`)
+  }
+
+  const replayFrom = (index: number) => {
+    const replay = replayDecision(nexusCase, checkpoints, index)
+    if (!replay) return
+    setPreviousAttempt(replay.previousAttempt)
+    setNexusCase(replay.current)
+    setCheckpoints(replay.checkpoints)
+    setActiveStepIndex(stateStepIndex[replay.current.state])
+    setEngineMessage('Practice restarted from the selected decision. Choose a role; authorization rules still apply.')
   }
 
   return (
@@ -164,6 +178,29 @@ export default function QapasDirectSimulation() {
               : `Switch to ${nextTransition.allowedRoles.map(roleLabel).join(' or ')}`}
         </button>
         <div aria-live="polite" style={{ marginTop: 8, color: C.sub, fontSize: 10, lineHeight: 1.45 }}>{engineMessage}</div>
+      </section>
+
+      <section aria-labelledby="decision-replay-title" style={{ ...panelStyle, marginBottom: 12 }}>
+        <h4 id="decision-replay-title">Replay a decision</h4>
+        <p style={{ color: C.sub, fontSize: 12 }}>Revisit a completed decision and practise another team role. The most recent prior attempt remains below for comparison. Practice stays in this session; leaving or reloading clears it.</p>
+        {checkpoints.length === 0 ? <p>Record an authorized event to unlock replay.</p> : (
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {checkpoints.map((checkpoint, index) => (
+              <button key={`${checkpoint.state}-${index}`} type="button" onClick={() => replayFrom(index)} style={{ ...compactButtonStyle, minHeight: 44 }}>
+                Replay before {getNextTransition(checkpoint.state)?.eventType}
+              </button>
+            ))}
+          </div>
+        )}
+        <details>
+          <summary style={{ minHeight: 44, cursor: 'pointer' }}>Current attempt · {nexusCase.events.length} events</summary>
+          <ol>{nexusCase.events.map(event => <li key={event.eventId}>{event.type} · {roleLabel(event.actorRole)}</li>)}</ol>
+        </details>
+        {previousAttempt && <details open>
+          <summary style={{ minHeight: 44, cursor: 'pointer' }}>Previous attempt · {previousAttempt.state} · {previousAttempt.events.length} events</summary>
+          <ol>{previousAttempt.events.map(event => <li key={event.eventId}>{event.type} · {roleLabel(event.actorRole)}</li>)}</ol>
+        </details>}
+        <p style={{ color: C.sub, fontSize: 12 }}>Compare the responsible roles and event order. Synthetic timings do not measure clinical performance.</p>
       </section>
 
       <div aria-label="Cardiac Pathway steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 7, marginBottom: 12 }}>
