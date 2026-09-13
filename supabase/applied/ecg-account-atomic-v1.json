@@ -1,0 +1,24 @@
+{
+  "projectId": "zbiujqxinvcxvuviuenx",
+  "migrationName": "ecg_account_atomic_v1",
+  "migrationVersion": "20260913111435",
+  "sourcePath": "supabase/drafts/ecg_account_atomic_v1.sql",
+  "sourceSha256": "12529b84be31ae0cbdfffffadae4a5e6b2e99824aa098ee26625ac3c6f11430f",
+  "userAuthorization": "2026-09-13 request to apply reviewed database draft",
+  "applied": true,
+  "verification": {
+    "bothTablesRlsEnabledAndForced": true,
+    "securityInvoker": true,
+    "authenticatedInsert": false,
+    "authenticatedRpcExecute": false,
+    "anonymousRpcExecute": false,
+    "serviceRpcExecute": true,
+    "serviceHoldRejection": "PASS",
+    "clientRpcDenial": "PASS",
+    "attemptRows": 0,
+    "registryRows": 0
+  },
+  "securityAdvisor": "Private current_decisions has RLS with no policies (intentional deny-all for client roles; trusted service bypass only).",
+  "learnerActivation": false,
+  "httpEndpointConnected": false
+}
