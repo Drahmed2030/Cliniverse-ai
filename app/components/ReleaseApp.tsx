@@ -81,7 +81,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
   const [cardiologyModule, setCardiologyModule] = useState<'overview' | 'pathway'>('overview')
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
-  const { openPaywall, entitlement } = useCliniverseSubscription()
+  const { openPaywall, canAccessPremium } = useCliniverseSubscription()
 
   useEffect(() => {
     const syncNativeHeaderTopPadding = () => {
@@ -125,7 +125,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
-        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!entitlement?.isPro) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
+        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!canAccessPremium) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
         {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">

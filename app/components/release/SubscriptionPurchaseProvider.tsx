@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react'
 import PaywallScreen from '../PaywallScreen'
+import { supabase } from '../../supabase'
 import { completeStoreKitPurchase } from '../../lib/apple-purchase-verification-client'
 import { createCapacitorStoreKitController } from '../../lib/capacitor-storekit-controller'
 import { getOwnEntitlement, type CliniverseEntitlement } from '../../lib/entitlements'
@@ -20,6 +21,8 @@ import type {
 } from '../../lib/storekit-purchase-contract'
 
 interface SubscriptionContextValue {
+  reviewerAccess: boolean
+  canAccessPremium: boolean
   entitlement: CliniverseEntitlement | null
   entitlementLoading: boolean
   products: StoreProduct[]
@@ -41,6 +44,26 @@ export default function SubscriptionPurchaseProvider({ children }: { children: R
   const [storeBusy, setStoreBusy] = useState(false)
   const [storeMessage, setStoreMessage] = useState('')
   const [paywallOpen, setPaywallOpen] = useState(false)
+
+  const [reviewerAccess, setReviewerAccess] = useState(false)
+  useEffect(() => {
+    let generation = 0
+    let active = true
+    const check = async () => {
+      const run = ++generation
+      setReviewerAccess(false)
+      try {
+        const { data } = await supabase.auth.getSession()
+        if (!data.session) return
+        const response = await fetch('/api/reviewer-feature-access', { cache: 'no-store', headers: { Authorization: `Bearer ${data.session.access_token}` } })
+        const payload = response.ok ? await response.json() : null
+        if (active && run === generation) setReviewerAccess(payload?.allowed === true)
+      } catch { /* Access remains denied on failure. */ }
+    }
+    void check()
+    const { data: subscription } = supabase.auth.onAuthStateChange(() => { generation++; setReviewerAccess(false); setTimeout(() => { if (active) void check() }, 0) })
+    return () => { active = false; generation++; subscription.subscription.unsubscribe() }
+  }, [])
 
   const products = useMemo(() => catalogProducts(catalog), [catalog])
 
@@ -171,6 +194,8 @@ export default function SubscriptionPurchaseProvider({ children }: { children: R
   }, [storeBusy, storeKit])
 
   const contextValue = useMemo<SubscriptionContextValue>(() => ({
+    reviewerAccess,
+    canAccessPremium: Boolean(entitlement?.isPro) || reviewerAccess,
     entitlement,
     entitlementLoading,
     products,
@@ -180,6 +205,7 @@ export default function SubscriptionPurchaseProvider({ children }: { children: R
     openPaywall,
     refreshEntitlement,
   }), [
+    reviewerAccess,
     catalogLoading,
     entitlement,
     entitlementLoading,
@@ -192,6 +218,7 @@ export default function SubscriptionPurchaseProvider({ children }: { children: R
 
   return (
     <SubscriptionContext.Provider value={contextValue}>
+      {reviewerAccess && <p role="status" style={{ padding: 12 }}>Reviewer preview access · No administrator privileges · Apple subscription unchanged</p>}
       {children}
       {paywallOpen ? (
         <PaywallScreen

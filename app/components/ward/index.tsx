@@ -72,8 +72,8 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
   )
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
   const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
-  const { entitlement, entitlementLoading, openPaywall } = useCliniverseSubscription()
-  const isPro = Boolean(entitlement?.isPro)
+  const { canAccessPremium, entitlementLoading, openPaywall } = useCliniverseSubscription()
+  const isPro = canAccessPremium
   const activeWorkspace = isPro && pendingWorkspace ? pendingWorkspace : workspace
 
   const handleRequestConsult = (patientId: string) => {
