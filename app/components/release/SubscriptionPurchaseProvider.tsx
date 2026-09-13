@@ -218,7 +218,7 @@ export default function SubscriptionPurchaseProvider({ children }: { children: R
 
   return (
     <SubscriptionContext.Provider value={contextValue}>
-      {reviewerAccess && <p role="status" style={{ padding: 12 }}>Reviewer preview access · No administrator privileges · Apple subscription unchanged</p>}
+      {reviewerAccess && <p role="status" style={{ padding: 12 }}>Reviewer access · No administrator privileges · Apple subscription unchanged</p>}
       {children}
       {paywallOpen ? (
         <PaywallScreen

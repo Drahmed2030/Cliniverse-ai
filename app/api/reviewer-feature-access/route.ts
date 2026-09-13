@@ -3,7 +3,7 @@ import { reviewerFeatureAccess } from '../../lib/reviewerFeatureAccess'
 
 export async function GET(request: Request) {
   const headers = { 'Cache-Control': 'private, no-store' }
-  if (process.env.VERCEL_ENV !== 'preview') return Response.json({ allowed: false }, { status: 404, headers })
+  if (process.env.VERCEL_ENV !== 'preview' && process.env.VERCEL_ENV !== 'production') return Response.json({ allowed: false }, { status: 404, headers })
   const token = request.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1]
   if (!token) return Response.json({ allowed: false }, { status: 401, headers })
   try {

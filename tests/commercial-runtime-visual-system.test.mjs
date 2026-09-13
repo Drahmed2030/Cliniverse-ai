@@ -12,7 +12,10 @@ test('runtime visual system follows system light and dark appearance', () => {
   assert.match(layout, /colorScheme:\s*"light dark"/)
   assert.match(layout, /prefers-color-scheme: light/)
   assert.match(layout, /prefers-color-scheme: dark/)
-  assert.match(css, /color-scheme:\s*light dark/)
+  assert.match(css, /color-scheme:\s*light;/)
+  assert.match(css, /color-scheme:\s*dark;/)
+  assert.match(css, /data-appearance="dark"/)
+  assert.match(css, /:not\(\[data-appearance="light"\]\)/)
   assert.match(css, /@media \(prefers-color-scheme: dark\)/)
 })
 
