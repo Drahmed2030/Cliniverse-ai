@@ -1,0 +1,97 @@
+'use client'
+
+import { AbsoluteFill, interpolate, Loop, OffthreadVideo, staticFile, useCurrentFrame } from 'remotion'
+import {
+  compileClinicalMedia,
+  type ClinicalMediaFormat,
+  type ClinicalMediaLocale,
+} from '../../lib/clinicalMedia/clinicalMediaCompiler'
+import { A4C_NORMAL_CLINICAL_STUDIO_ASSET } from '../../lib/clinicalMedia/licensedEchoAsset'
+import { LOCAL_DCM_REVIEW } from '../../lib/clinicalMedia/localDcmReview'
+import styles from './clinical-media.module.css'
+
+export interface EchoA4cMediaCompositionProps {
+  locale: ClinicalMediaLocale
+  format: ClinicalMediaFormat
+  reducedMotion?: boolean
+  localDcmReview?: boolean
+  expandedCine?: boolean
+}
+
+const SCENE_FACTS: Record<string, string[]> = {
+  'source-and-view': ['Real cine frames', 'Apical four-chamber view', 'Source label: normal'],
+  'view-landmarks': ['Both atria', 'Both ventricles', 'AV valve planes and septa'],
+  'motion-boundary': ['User-controlled playback', 'No EF calculation', 'No pathology exclusion'],
+  'rights-and-review': ['CC BY-SA 3.0', 'Acquisition timestamp masked', 'Checksums frozen'],
+}
+
+export default function EchoA4cMediaComposition({
+  locale,
+  format,
+  reducedMotion = false,
+  localDcmReview = false,
+  expandedCine = false,
+}: EchoA4cMediaCompositionProps) {
+  const dcm = process.env.NODE_ENV === 'development' && localDcmReview
+  const frame = useCurrentFrame()
+  const media = compileClinicalMedia(locale, format, 'echo-a4c-normal')
+  const scene = media.scenes.find(item => frame >= item.startFrame && frame < item.endFrame)
+    ?? media.scenes[media.scenes.length - 1]
+  const localFrame = Math.max(0, frame - scene.startFrame)
+  const enter = reducedMotion || dcm || expandedCine
+    ? 1
+    : interpolate(localFrame, [0, 18], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
+  const progress = reducedMotion ? 100 : ((frame + 1) / media.durationInFrames) * 100
+  const frameClass = [styles.frame, styles[format], expandedCine ? styles.cineFocus : null].filter(Boolean).join(' ')
+  const mediaPath = A4C_NORMAL_CLINICAL_STUDIO_ASSET.cine.mediaPath.replace(/^\//, '')
+
+  return (
+    <AbsoluteFill className={frameClass} dir="ltr">
+      <header className={styles.brandRow}>
+        <div className={styles.brandLockup}>
+          <span aria-hidden="true" className={styles.brandMark}>C</span>
+          <span>CLINIVERSE AI · REAL ECHO CINE</span>
+        </div>
+        <span className={styles.realMediaBadge}>{dcm?'DCM candidate · local review only':'Licensed · Preview'}</span>
+      </header>
+
+      <section
+        className={styles.scene}
+        style={{ opacity: enter, transform: `translateY(${reducedMotion ? 0 : (1 - enter) * 18}px)` }}
+      >
+        <div className={styles.copy}>
+          <p className={styles.kicker}>{dcm?'DCM candidate':scene.kicker}</p>
+          <h2>{dcm?'Local review only':scene.title}</h2>
+          <p>{dcm?'Not learner-ready · clinical review pending · privacy review pending':scene.body}</p>
+          <ul className={styles.realEchoFacts}>
+            {(dcm?['No numerical EF claims','No assessment or progression','Source-labelled DCM; specialist review pending']:(SCENE_FACTS[scene.id] ?? [])).map(fact => <li key={fact}>{fact}</li>)}
+          </ul>
+        </div>
+
+        <div className={`${styles.visual} ${styles.realEchoCompositionVisual}`}>
+          <div className={styles.realEchoVideoFrame} style={dcm?{aspectRatio: "648 / 480"}:undefined}>
+            <Loop durationInFrames={dcm?44:A4C_NORMAL_CLINICAL_STUDIO_ASSET.cine.remotionLoopFrames} layout="none">
+              <OffthreadVideo
+                aria-label="Licensed real apical four-chamber echocardiography cine"
+                muted
+                pauseWhenBuffering
+                src={dcm?LOCAL_DCM_REVIEW.mediaUrl:staticFile(mediaPath)}
+                style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain', objectPosition: 'center center' }}
+              />
+            </Loop>
+          </div>
+          <div className={styles.realEchoMediaMeta}>
+            <span>{dcm?'DCM · A4C · 648×480 · 51 fps':'A4C · 624×480 · 51 fps'}</span>
+            <strong>REAL CLINICAL MEDIA</strong>
+          </div>
+        </div>
+      </section>
+
+      <footer className={styles.footerRow}>
+        <span>{dcm?'CardioNetworks / AMC Echolab · CC BY-SA 3.0 derivative':'CardioNetworks / Vdbilt · CC BY-SA 3.0 derivative'}</span>
+        <div aria-hidden="true" className={styles.progress}><span style={{ width: `${progress}%` }} /></div>
+        <span>{dcm?'Local review · pending approval':media.assetVersion}</span>
+      </footer>
+    </AbsoluteFill>
+  )
+}
