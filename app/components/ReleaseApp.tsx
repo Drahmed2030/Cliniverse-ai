@@ -19,6 +19,8 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../lib/nativeSafeArea'
 
+const AssessmentHistory = dynamic(() => import('./release/AssessmentHistory'), { ssr: false, loading: () => <SectionLoading label="Loading assessments" /> })
+
 const AccountLearningSummary = dynamic(() => import('./ward/AccountCodeLab'), {
   ssr: false,
   loading: () => <SectionLoading label="Loading saved lessons" />,
@@ -272,11 +274,12 @@ function ProgressSurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: Rele
   return (
     <section aria-labelledby="progress-title" data-commercial-surface="progress">
       <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
+      <AssessmentHistory />
       <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
         <div style={{ color: C.violet, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>COMPETENCY</div>
         <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Clinical competency</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: '0.875rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Your saved lessons appear above. ECG and Echo competency assessments will appear separately when available.
+          Saved lessons and assessment attempts appear separately above. Competency levels require their own verified evidence.
         </p>
         <button
           type="button"

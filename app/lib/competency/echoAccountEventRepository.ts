@@ -67,6 +67,29 @@ export function createEchoAccountEventRepository(client: SupabaseClient, timeout
       if (event.userId !== userId || event.eventId !== eventId) throw new Error('Echo evidence owner mismatch')
       return event
     },
+    async historyPage(userId: string, cursor: { createdAt: string; eventId: string } | null = null, pageSize = 20) {
+      if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 50) throw new Error('Invalid history page size')
+      if (cursor && (!Number.isFinite(Date.parse(cursor.createdAt)) || !cursor.eventId.trim())) throw new Error('Invalid history cursor')
+      await owner(userId)
+      let query = client.from('echo_competency_events').select('event_id,user_id,case_id,task_id,task_version,skill_id,selected_answer,normalized_score,confidence,response_time_ms,observed_at,created_at')
+        .eq('user_id', userId).order('created_at', { ascending: false }).order('event_id', { ascending: false }).limit(pageSize + 1)
+      if (cursor) {
+        // Quote PostgREST values; event identities may contain punctuation.
+        const time = JSON.stringify(cursor.createdAt)
+        const id = JSON.stringify(cursor.eventId)
+        query = query.or(`created_at.lt.${time},and(created_at.eq.${time},event_id.lt.${id})`)
+      }
+      const result = await bounded(query)
+      checkError(result.error)
+      await owner(userId)
+      const raw = result.data ?? []
+      const rows = raw.map(decode)
+      if (rows.some(row => row.userId !== userId)) throw new Error('Echo history owner mismatch')
+      const events = rows.slice(0, pageSize)
+      const last = raw[pageSize - 1]
+      // Keep database timestamp precision for deterministic keyset pagination.
+      return { events, nextCursor: rows.length > pageSize && last ? { createdAt: String(last.created_at), eventId: last.event_id } : null }
+    },
     async loadLatest(userId: string, identity: { caseId: string; taskId: string; taskVersion: string }): Promise<EchoCompetencyEvent | null> {
       await owner(userId)
       const result = await bounded(client.from('echo_competency_events').select(columns)
