@@ -132,7 +132,7 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
               <Link href="/labs/ecg-account-review" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '8px 16px', borderRadius: 12, border: `1px solid ${C.border}`, background: C.elevated, color: C.text }}>Open ECG practice →</Link>
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
-            <WardIndex initialWorkspace={careWorkspace} />
+            <WardIndex initialWorkspace={careWorkspace} reviewSessions={showEcgReview} />
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}

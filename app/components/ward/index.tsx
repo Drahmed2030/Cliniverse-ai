@@ -9,6 +9,7 @@ import { MOCK_PATIENTS } from '../../lib/ward'
 import CardiologyOperations from './cardiology'
 import PatientJourney from './PatientJourney'
 import WardHome from './WardHome'
+const WardHandoverSession = dynamic(() => import('./WardHandoverSession'), { loading: () => <p role="status">Loading handover practice…</p> })
 
 const AccountCodeLab = dynamic(() => import('./AccountCodeLab'), {
   loading: () => <p role="status">Loading Code Lab…</p>,
@@ -18,6 +19,7 @@ export type CareWorkspace = 'ward' | 'cardiology' | 'nexus' | 'codelab'
 
 interface Props {
   initialWorkspace?: CareWorkspace
+  reviewSessions?: boolean
 }
 
 const workspaces: Array<{
@@ -62,7 +64,7 @@ const C = {
   blue: 'var(--cv-blue)',
 }
 
-export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
+export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false }: Props) {
   const [workspace, setWorkspace] = useState<CareWorkspace>(initialWorkspace === 'codelab' ? 'codelab' : 'ward')
   const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
     initialWorkspace === 'ward' || initialWorkspace === 'codelab' ? null : initialWorkspace,
@@ -163,6 +165,7 @@ export default function WardIndex({ initialWorkspace = 'ward' }: Props) {
 
       {activeWorkspace === 'ward' ? (
         <ErrorBoundary section="Ward Simulation">
+          {reviewSessions && <WardHandoverSession />}
           <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={openPaywall} />
         </ErrorBoundary>
       ) : null}
