@@ -36,7 +36,12 @@ export async function POST(request: Request) {
     if (!body || Object.keys(body).some(k => !['submission','reviewedPdfSha256','reviewContext'].includes(k)) ||
       body.reviewedPdfSha256 !== RECORD10_REVIEW_PDF.sha256 || body.reviewContext !== 'confirmed-external-iphone-xs-max-ios-18.7.10') return reply({ error: 'Confirmed reviewed-file and device context required' }, 422)
     // Context is an explicit human report, not browser/hardware attestation.
-    const writer = createClient(supabaseUrl, key, { auth: { persistSession: false, autoRefreshToken: false } })
+    const service = createClient(supabaseUrl, key, { auth: { persistSession: false, autoRefreshToken: false } })
+    const writer = { async rpc(name: string, args: Record<string, unknown>) {
+      const result = await service.rpc(name, args)
+      if (result.error) console.error('ecg-save-rpc', { code: result.error.code, reason: ['eligibility-changed', 'case-not-eligible', 'invalid-prepared-evidence', 'attempt-identity-conflict'].includes(result.error.message) ? result.error.message : 'database-error' })
+      return result
+    } }
     const submit = async () => {
       const id = body.submission?.attemptId
       if (typeof id !== 'string' || !/^[a-f0-9-]{36}$/i.test(id)) throw Error('Invalid attempt')
@@ -50,5 +55,5 @@ export async function POST(request: Request) {
     let result
     try { result = await submit() } catch { result = await submit() }
     return reply(result, result.state === 'saved' ? 200 : 409)
-  } catch { return reply({ error: 'Save not confirmed. Retry the unchanged attempt or reload the saved history.' }, 409) }
+  } catch (error) { console.error('ecg-save-rejected', { reason: error instanceof Error && ['Unbound ECG answer rubric','Stale ECG rubric reference','History unavailable','Invalid ECG save acknowledgement'].includes(error.message) ? error.message : 'submission-rejected' }); return reply({ error: 'Save not confirmed. Retry the unchanged attempt or reload the saved history.' }, 409) }
 }
