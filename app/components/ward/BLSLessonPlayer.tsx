@@ -7,17 +7,20 @@
 
 import React, { useState } from "react";
 import { BlsLesson, BLS_DISCLAIMER } from "../../lib/codelab/blsLessons";
+import { type ACLSLesson, ACLS_DISCLAIMER } from "../../lib/codelab/aclsLessons";
 
 interface Props {
-  lesson: BlsLesson;
+  lesson: BlsLesson | ACLSLesson;
   isPro: boolean;
-  onComplete: () => void;
+  onComplete: (errors: number) => void;
+  completionDisabled?: boolean;
+  completionLabel?: string;
   onBack: () => void;
 }
 
 type Phase = "intro" | "practice" | "mcq" | "done";
 
-export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: Props) {
+export default function BLSLessonPlayer({ lesson, onComplete, onBack, completionDisabled = false, completionLabel }: Props) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [checkedItems, setCheckedItems] = useState<Set<number>>(new Set());
   const [sequenceOrder, setSequenceOrder] = useState<number[]>(
@@ -30,9 +33,11 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerSec, setTimerSec] = useState(120);
   const timerRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  React.useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
   // ── Timer for compression practice ────────────────────────────────────────
   function startTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
     setTimerRunning(true);
     setTimerSec(120);
     timerRef.current = setInterval(() => {
@@ -172,7 +177,7 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
                       }}
                       onClick={() => {
                         const next = new Set(checkedItems);
-                        next.has(i) ? next.delete(i) : next.add(i);
+                        if (next.has(i)) next.delete(i); else next.add(i);
                         setCheckedItems(next);
                       }}
                     >
@@ -202,7 +207,7 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
                   }}
                   onClick={() => {
                     const next = new Set(checkedItems);
-                    next.has(i) ? next.delete(i) : next.add(i);
+                    if (next.has(i)) next.delete(i); else next.add(i);
                     setCheckedItems(next);
                   }}
                 >
@@ -235,6 +240,14 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
             </div>
           )}
 
+          {lesson.practice.type === 'algorithm' && lesson.practice.items && (
+            <ol>{lesson.practice.items.map(item => <li key={item}>{item}</li>)}</ol>
+          )}
+          {lesson.track === 'acls' && lesson.practice.type === 'drug_drill' && (
+            <dl>{lesson.practice.drugs?.map(drug => <React.Fragment key={drug.name}>
+              <dt>{drug.name}</dt><dd>{drug.dose} · {drug.indication} · {drug.timing}</dd>
+            </React.Fragment>)}</dl>
+          )}
           <button style={S.primaryBtn} onClick={() => setPhase("mcq")}>
             Continue to Questions →
           </button>
@@ -275,6 +288,9 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
                   </div>
                 );
               })}
+              {mcqSubmitted && 'explanation' in mcq && typeof mcq.explanation === 'string' && (
+                <p>{mcq.explanation}</p>
+              )}
             </div>
           ))}
 
@@ -303,8 +319,8 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
                 </div>
               </div>
               {canComplete && (
-                <button style={S.completeBtn} onClick={onComplete}>
-                  ✓ Mark Lesson Complete
+                <button style={S.completeBtn} disabled={completionDisabled} onClick={() => onComplete(lesson.mcqs.length - mcqScore)}>
+                  {completionLabel ?? '✓ Mark Lesson Complete'}
                 </button>
               )}
               {!canComplete && (
@@ -324,7 +340,7 @@ export default function BLSLessonPlayer({ lesson, isPro, onComplete, onBack }: P
       )}
 
       {/* Disclaimer */}
-      <div style={S.disclaimer}>{BLS_DISCLAIMER}</div>
+      <div style={S.disclaimer}>{lesson.track === 'acls' ? ACLS_DISCLAIMER : BLS_DISCLAIMER}</div>
     </div>
   );
 }

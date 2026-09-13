@@ -15,6 +15,8 @@ interface CodeLabHubProps {
   isPro: boolean;
   onUpgrade: () => void;
   onBack: () => void;
+  progressMode?: 'local' | 'session';
+  accountProgress?: { completedIds: string[]; complete: (lessonId: string, errors: number) => Promise<boolean>; saving: boolean; ready: boolean };
 }
 
 interface TrackProgress {
@@ -25,7 +27,9 @@ function loadProgress(): TrackProgress {
   if (typeof window === "undefined") return { completedIds: [] };
   try {
     const raw = localStorage.getItem("codelab_bls_progress");
-    return raw ? JSON.parse(raw) : { completedIds: [] };
+    const parsed = raw ? JSON.parse(raw) : null;
+    return { completedIds: Array.isArray(parsed?.completedIds)
+      ? parsed.completedIds.filter((id: unknown): id is string => typeof id === 'string') : [] };
   } catch {
     return { completedIds: [] };
   }
@@ -66,17 +70,23 @@ const TRACKS = [
   },
 ];
 
-export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps) {
+export default function CodeLabHub({ isPro, onUpgrade, onBack, progressMode = 'local', accountProgress }: CodeLabHubProps) {
   const [progress, setProgress] = useState<TrackProgress>({ completedIds: [] });
   const [activeTrack, setActiveTrack] = useState<"bls" | "acls">("bls");
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
   useEffect(() => {
-    setProgress(loadProgress());
-  }, []);
+    if (progressMode === 'session') return;
+    const refresh = () => setProgress(loadProgress());
+    const frame = requestAnimationFrame(refresh);
+    window.addEventListener('storage', refresh);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('storage', refresh); };
+  }, [progressMode]);
 
-  const completedCount = progress.completedIds.length;
-  const totalBLS = BLS_LESSONS.length;
+  const lessons = activeTrack === 'bls' ? BLS_LESSONS : ACLS_LESSONS;
+  const completedIds = accountProgress?.completedIds ?? progress.completedIds;
+  const completedCount = lessons.filter(lesson => completedIds.includes(lesson.id)).length;
+  const totalBLS = lessons.length;
   const pct = Math.round((completedCount / totalBLS) * 100);
 
   // PRO gate: free = lessons 1–2 only
@@ -85,21 +95,29 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
     return lessonOrder <= 2;
   }
 
-  function handleLessonComplete(lessonId: string) {
+  async function handleLessonComplete(lessonId: string, errors = 0) {
+    if (accountProgress) {
+      if (await accountProgress.complete(lessonId, errors)) setActiveLesson(null);
+      return;
+    }
     const next = { completedIds: [...new Set([...progress.completedIds, lessonId])] };
     setProgress(next);
-    localStorage.setItem("codelab_bls_progress", JSON.stringify(next));
+    if (progressMode === 'local') {
+      try { localStorage.setItem("codelab_bls_progress", JSON.stringify(next)); } catch { /* Keep this session usable when storage is unavailable. */ }
+    }
     setActiveLesson(null);
   }
 
   if (activeLesson) {
-    const lesson = BLS_LESSONS.find((l) => l.id === activeLesson);
-    if (!lesson) return null;
-    return (
+    const lesson = lessons.find((l) => l.id === activeLesson);
+    if (lesson && canAccess(lesson.order)) return (
       <BLSLessonPlayer
+        key={lesson.id}
         lesson={lesson}
         isPro={isPro}
-        onComplete={() => handleLessonComplete(lesson.id)}
+        onComplete={(errors) => { void handleLessonComplete(lesson.id, errors); }}
+        completionDisabled={Boolean(accountProgress && (!accountProgress.ready || accountProgress.saving))}
+        completionLabel={accountProgress ? (accountProgress.saving ? 'Saving…' : 'Save lesson completion') : undefined}
         onBack={() => setActiveLesson(null)}
       />
     );
@@ -144,7 +162,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
             </svg>
           </div>
           <div style={styles.progressText}>
-            <div style={styles.progressLabel}>BLS Track</div>
+            <div style={styles.progressLabel}>{activeTrack.toUpperCase()} Track</div>
             <div style={styles.progressSub}>{completedCount} / {totalBLS} lessons complete</div>
           </div>
         </div>
@@ -152,9 +170,18 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
 
       {/* BLS Lessons */}
       <div style={styles.section}>
-        <div style={styles.sectionLabel}>BLS TRACK — 6 LESSONS</div>
-        {(activeTrack === 'bls' ? BLS_LESSONS : ACLS_LESSONS).map((lesson) => {
-          const done = progress.completedIds.includes(lesson.id);
+        <div role="group" aria-label="Learning track" style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+          {(['bls', 'acls'] as const).map(track => (
+            <button key={track} type="button" aria-pressed={activeTrack === track}
+              style={{ ...styles.backBtn, minHeight: 44, padding: '8px 16px', border: '1px solid currentColor' }}
+              onClick={() => { setActiveTrack(track); setActiveLesson(null); }}>
+              {track.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div style={styles.sectionLabel}>{activeTrack.toUpperCase()} TRACK — {lessons.length} LESSONS</div>
+        {lessons.map((lesson) => {
+          const done = completedIds.includes(lesson.id);
           const locked = !canAccess(lesson.order);
           return (
             <button
@@ -208,7 +235,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
       {!isPro && (
         <div style={styles.upgradeBanner}>
           <div style={styles.upgradeText}>
-            Free: Lessons 1–2 only · PRO unlocks full BLS, ACLS, Megacode & debrief history
+            Free: Lessons 1–2 in each track · PRO unlocks all BLS and ACLS lessons
           </div>
           <button style={styles.upgradeBtn} onClick={onUpgrade}>
             Upgrade to PRO
@@ -223,7 +250,7 @@ export default function CodeLabHub({ isPro, onUpgrade, onBack }: CodeLabHubProps
       </div>
 
       {/* Disclaimer */}
-      <div style={styles.disclaimer}>{BLS_DISCLAIMER}</div>
+      <div style={styles.disclaimer}>{activeTrack === 'bls' ? BLS_DISCLAIMER : ACLS_DISCLAIMER}</div>
     </div>
   );
 }
