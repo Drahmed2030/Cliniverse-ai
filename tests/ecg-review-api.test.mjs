@@ -13,7 +13,7 @@ const source=readFileSync(new URL('../app/api/ecg-review-attempt/route.ts',impor
 const js=ts.transpile(source,{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022})
 const route=await import('data:text/javascript;base64,'+Buffer.from('const {createClient,supabaseUrl,supabaseAnonKey,submitApprovedRecord10Answers,getRecord10ReviewedPdfSnapshot,RECORD10_REVIEW_PDF}=globalThis.__ecgRouteTest;\n'+js).toString('base64'))
 const oldEnv={node:process.env.NODE_ENV,vercel:process.env.VERCEL_ENV,key:process.env.SUPABASE_SERVICE_ROLE_KEY}
-process.env.NODE_ENV='test';process.env.VERCEL_ENV='preview';process.env.SUPABASE_SERVICE_ROLE_KEY='test-only'
+process.env.NODE_ENV='test';process.env.VERCEL_ENV='preview';process.env.SUPABASE_SERVICE_ROLE_KEY='test.'+Buffer.from(JSON.stringify({role:'service_role'})).toString('base64url')+'.test'
 const payload={reviewedPdfSha256:RECORD10_REVIEW_PDF.sha256,reviewContext:'confirmed-external-iphone-xs-max-ios-18.7.10',submission:{attemptId:'10000000-0000-4000-8000-000000000001',caseId:'ecg-governed-case-001',rubricVersion:'1.0.0',answers:[{questionId:'record10-rhythm-v1',optionId:'sinus'}]}}
 const request=(body=payload,origin='https://example.test')=>new Request('https://example.test/api/ecg-review-attempt',{method:'POST',headers:{authorization:'Bearer test',origin},body:JSON.stringify(body)})
 test('API saves approved answer and exact retry returns a single row; changed answer rejected',async()=>{
@@ -29,5 +29,13 @@ test('API blocks wrong artifact, absent identity, cross origin and production wi
  authenticated=false;assert.equal((await route.POST(request())).status,403);authenticated=true
  process.env.VERCEL_ENV='production';assert.equal((await route.POST(request())).status,403);process.env.VERCEL_ENV='preview'
  assert.equal(writes,count)
+})
+test('anon credential is rejected before the RPC and reported unavailable to the UI',async()=>{
+ const key=process.env.SUPABASE_SERVICE_ROLE_KEY;const count=writes
+ process.env.SUPABASE_SERVICE_ROLE_KEY='test.'+Buffer.from(JSON.stringify({role:'anon'})).toString('base64url')+'.test'
+ assert.equal((await route.POST(request())).status,503)
+ const response=await route.GET(new Request('https://example.test',{headers:{authorization:'Bearer test'}}))
+ assert.equal((await response.json()).savingConfigured,false);assert.equal(writes,count)
+ process.env.SUPABASE_SERVICE_ROLE_KEY=key
 })
 test.after(()=>{for(const [k,v] of [['NODE_ENV',oldEnv.node],['VERCEL_ENV',oldEnv.vercel],['SUPABASE_SERVICE_ROLE_KEY',oldEnv.key]])if(v===undefined)delete process.env[k];else process.env[k]=v;delete globalThis.__ecgRouteTest})
