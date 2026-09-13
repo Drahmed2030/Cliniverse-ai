@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
+import { useAppearance } from './release/AppearanceSettings'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
 import type { AtlasDestination } from './release/AtlasReleaseCatalog'
 import type { CareWorkspace } from './ward'
@@ -66,6 +67,7 @@ export default function ReleaseApp() {
 }
 
 function ReleaseShell() {
+  const appearance = useAppearance()
   const [tab, setTab] = useState<ReleaseTab>('today')
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
@@ -92,6 +94,7 @@ function ReleaseShell() {
     <main
       data-release-shell
       data-commercial-shell
+      data-appearance={appearance}
       style={{
         minHeight: '100dvh',
         background: C.bg,

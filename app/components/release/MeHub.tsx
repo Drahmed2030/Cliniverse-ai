@@ -1,5 +1,6 @@
 'use client'
 
+import AppearanceSettings from './AppearanceSettings'
 import MeAccountSummary from './MeAccountSummary'
 import AchievementsHub from './AchievementsHub'
 import LifeDeviceBoundary from './LifeDeviceBoundary'
@@ -66,6 +67,7 @@ export default function MeHub() {
         </p>
       </div>
 
+      <AppearanceSettings />
       <MeAccountSummary />
 
       <div style={{ marginTop: 12 }}>
