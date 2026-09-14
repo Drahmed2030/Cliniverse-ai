@@ -56,7 +56,7 @@ async function isolatedAccount(page: Page) {
 }
 
 async function explain(page: Page, title: string) {
-  await page.getByRole('button', { name: new RegExp(`Explore draft\\s*:\\s*${title}`) }).click()
+  await page.getByRole('button', { name: new RegExp(`Start case\\s*:\\s*${title}`) }).click()
   await page.getByRole('button', { name: 'Continue to question', exact: true }).click()
   await page.getByRole('radio').first().check()
   await page.getByRole('button', { name: 'Review explanation', exact: true }).click()

@@ -6,7 +6,7 @@ test('A4C media opens the existing viewer with a return path', async ({ page, co
   // This navigation test uses no account or remote database.
   await context.route('https://*.supabase.co/**', route => route.abort())
   await page.goto('/labs/case-batch-preview')
-  await page.getByRole('button', { name: /Explore draft\s*:\s*Apical four-chamber orientation/ }).click()
+  await page.getByRole('button', { name: /Start case\s*:\s*Apical four-chamber orientation/ }).click()
   const popup = context.waitForEvent('page')
   await page.getByRole('link', { name: /Open the existing A4C cine viewer/ }).click()
   const viewer = await popup
@@ -36,7 +36,7 @@ for (const size of sizes) test(`case flow / ${size.name}`, async ({ page }, test
   page.on('pageerror', error => errors.push(error.message))
   await page.goto('/labs/case-batch-preview')
   if (size.large) await page.addStyleTag({ content: 'html { font-size: 200% !important; }' })
-  await expect(page.getByRole('button', { name: /Explore draft/ })).toHaveCount(20)
+  await expect(page.getByRole('button', { name: /Start case/ })).toHaveCount(20)
   async function checkLayout(label: string) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     const overflowing = await page.locator('main article, main section, dialog[open]').evaluateAll(nodes => nodes.filter(n => n.scrollWidth > n.clientWidth + 1).length)
@@ -46,7 +46,7 @@ for (const size of sizes) test(`case flow / ${size.name}`, async ({ page }, test
   }
   await checkLayout('catalogue')
   await page.getByRole('button', { name: 'ECG', exact: true }).click()
-  const first = page.getByRole('button', { name: /Explore draft\s*:\s*Anterior STEMI/ })
+  const first = page.getByRole('button', { name: /Start case\s*:\s*Anterior STEMI/ })
   await first.click()
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
   await page.getByRole('button', { name: 'Continue to question' }).click()
@@ -54,6 +54,8 @@ for (const size of sizes) test(`case flow / ${size.name}`, async ({ page }, test
   await page.getByRole('radio').nth(1).check()
   await page.getByRole('button', { name: 'Review explanation', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Understand the reasoning' })).toBeVisible()
+  await page.getByText('Sources & review', { exact: true }).click()
+  await expect(page.getByText('Sources & review', { exact: true }).locator('..')).toHaveAttribute('open', '')
   await checkLayout('explanation')
   await page.goBack()
   await expect(page.getByRole('radio').nth(1)).toBeChecked()

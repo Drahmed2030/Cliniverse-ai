@@ -67,7 +67,7 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
         <Link className={styles.brand} href="/">Cliniverse <span>Learning studio</span></Link>
         <button ref={help} type="button" onClick={() => dialog.current?.showModal()}>How this works</button>
       </header>
-      <aside className={styles.notice} aria-label="Editorial status">Editorial preview · Medical review of {cases.filter(item => item.clinicalReview === 'user-confirmed').length} text cases confirmed by the project owner. {caseMediaLinks.length} supplementary media link available; remaining cases await matched media. {accountProgress ? 'Only explicitly confirmed completions are saved; unfinished answers remain in this session.' : 'Session answers are not saved to your account.'}</aside>
+      <details className={styles.notice}><summary>About this learning preview</summary><p>Editorial preview · Medical review of {cases.filter(item => item.clinicalReview === 'user-confirmed').length} text cases confirmed by the project owner. {caseMediaLinks.length} supplementary media link available; remaining cases await matched media. {accountProgress ? 'Only explicitly confirmed completions are saved; unfinished answers remain in this session.' : 'Session answers are not saved to your account.'}</p></details>
       {accountProgress && <section className={styles.panel} aria-label="Account progress">
         <p role="status" aria-live="polite">{accountProgress.message}</p>
         <p>{accountProgress.completedIds.length} current text exercises saved. Completion is not clinical competency certification.</p>
@@ -76,23 +76,23 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
       </section>}
       {!active ? <>
         <p className={styles.eyebrow}>ECG / ECHO / CLINICAL REASONING</p>
-        <h1 ref={heading} tabIndex={-1}>One case. A clearer way to think.</h1>
-        <p className={styles.intro}>Explore the case, make a choice, then unpack the reasoning. Each draft connects a clinical skill with an explanation and a patient conversation.</p>
+        <h1 ref={heading} tabIndex={-1}>Make your next decision count.</h1>
+        <p className={styles.intro}>Learn the finding. Explain the decision. Explore a case, choose an answer, then practise explaining it to a patient.</p>
         <div className={styles.filters} role="group" aria-label="Filter cases">
           {['All','ECG','Echo','Integrated'].map(name => <button key={name} type="button" aria-pressed={filter === name} onClick={() => setFilter(name)}>{name}</button>)}
         </div>
-        <p role="status">{visible.length} of {cases.length} drafts shown</p>
+        <p role="status">{visible.length} of {cases.length} cases shown</p>
         <div className={styles.grid}>
           {visible.map(item => <article key={item.id} className={styles.card}>
-            <p className={styles.eyebrow}>{item.track} · DRAFT</p>
+            <p className={styles.eyebrow}>{item.track} · WRITTEN CASE</p>
             <h2>{item.title}</h2><p>{item.objective}</p>
             {accountProgress?.completedIds.includes(item.id) && <p>Text exercise completion saved</p>}
-            <button id={`open-${item.id}`} type="button" className={styles.primary} onClick={() => { lastOpened.current = item.id; navigate(`#${item.id}/0`) }}>Explore draft<span className={styles.srOnly}>: {item.title}</span></button>
+            <button id={`open-${item.id}`} type="button" className={styles.primary} onClick={() => { lastOpened.current = item.id; navigate(`#${item.id}/0`) }}>Start case<span className={styles.srOnly}>: {item.title}</span></button>
           </article>)}
         </div>
       </> : <article className={styles.lesson}>
-        <button type="button" onClick={() => step === 0 ? navigate('') : go(step - 1)}>{step === 0 ? '← Back to cases' : '← Previous step'}</button>
-        <p className={styles.eyebrow}>{active.track} · EDITORIAL DRAFT</p>
+        <button type="button" className={styles.navigation} onClick={() => step === 0 ? navigate('') : go(step - 1)}>{step === 0 ? '← Back to cases' : '← Previous step'}</button>
+        <p className={styles.eyebrow}>{active.track} · WRITTEN CASE</p>
         <h1 ref={heading} tabIndex={-1}>{active.title}</h1>
         <ol className={styles.steps} aria-label="Case stages">
           {['Explore','Decide','Explain'].map((label,index) => <li key={label} aria-current={step === index ? 'step' : undefined}>{index + 1}. {label}</li>)}
@@ -121,17 +121,17 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
                 <span>{option}</span>
               </label>)}
             </fieldset>
-            <p className={styles.secondary}>Choose one option to reveal the draft explanation.</p>
+            <p className={styles.secondary}>Choose one option to reveal the explanation.</p>
             <button type="button" className={styles.primary} disabled={answers[active.id] === undefined} onClick={() => { setSubmitted(current => ({ ...current, [active.id]: true })); go(2) }}>Review explanation</button>
           </> : <>
             <h2 id="lesson-section">Understand the reasoning</h2>
             <p><strong>Your choice: </strong>{active.options[answers[active.id]]}</p>
-            <p><strong>Draft answer: </strong>{active.options[active.answer]}</p>
+            <p><strong>Suggested answer: </strong>{active.options[active.answer]}</p>
             <p>{active.explanation}</p>
             <h3>Explain it to the patient</h3><p>{active.communication}</p>
-            <h3>Sources for editorial review</h3>
+            <details className={styles.review}><summary>Sources &amp; review</summary>
             <p className={styles.secondary}>The project owner confirmed medical review of this text. The source audit scope is recorded below; media review and release readiness are tracked separately.</p>
-            <ul className={styles.sources}>{active.sourceIds.map(id => <li key={id}><a href={sources[id].url} target="_blank" rel="noopener noreferrer">{sources[id].title} · opens new tab</a><p>{sources[id].scope}</p></li>)}</ul>
+            <ul className={styles.sources}>{active.sourceIds.map(id => <li key={id}><a href={sources[id].url} target="_blank" rel="noopener noreferrer">{sources[id].title} · opens new tab</a><p>{sources[id].scope}</p></li>)}</ul></details>
             {accountProgress && <>
               <p>Confirm you have reviewed the explanation to save this text exercise. This does not record a media assessment.</p>
               <button type="button" className={`${styles.primary} ${styles.saveButton}`}
@@ -156,7 +156,7 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
     }} onCancel={event => { event.preventDefault(); closeHelp() }}>
       <button type="button" onClick={closeHelp}>Close explanation</button>
       <h2 id="help-title">A focused case journey</h2>
-      <ol><li>Explore the scenario and its learning goal.</li><li>Choose an answer. You can revisit the scenario without leaving the question.</li><li>Read the draft reasoning and open the source separately.</li></ol>
+      <ol><li>Explore the scenario and its learning goal.</li><li>Choose an answer. You can revisit the scenario without leaving the question.</li><li>Read the reasoning and open the source separately.</li></ol>
       <p>Previous step and browser Back preserve your answers during this session. Returning to the list keeps your filter. Refreshing clears answers.</p>
       <p>Medical review of the text was confirmed by the project owner. Available media links reuse existing viewers and preserve their access checks. Most cases still need matching media. {accountProgress ? 'Use the explicit save button after reviewing an explanation, and wait for confirmation. Unfinished answers are not restored after refresh.' : 'This preview does not record account progress.'} This does not replace Ward, Code Lab, BLS or ACLS.</p>
     </dialog>

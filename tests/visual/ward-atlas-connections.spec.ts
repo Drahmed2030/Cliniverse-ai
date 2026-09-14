@@ -30,7 +30,7 @@ test('reviewer can study related cases from Ward and Atlas without changing acco
     return route.abort()
   })
   await page.goto('/?view=learn')
-  const section = page.getByRole('region', { name: 'Connect evidence to your Ward handover' })
+  const section = page.getByRole('region', { name: 'Make your handover clear.' })
   await expect(section).toBeVisible({ timeout: 30_000 })
   await section.getByText('ECG: report versus tracing', { exact: true }).click()
   await expect(section).toContainText('Attribute that description to the record')
