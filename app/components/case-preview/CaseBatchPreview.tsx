@@ -17,9 +17,20 @@ function navigate(hash: string) {
   window.dispatchEvent(new PopStateEvent('popstate'))
 }
 
-export default function CaseBatchPreview({ cases, sources }: {
+export interface CaseAccountProgress {
+  ready: boolean
+  saving: boolean
+  message: string
+  completedIds: string[]
+  retryLoad?: () => void
+  retrySave?: () => void
+  complete: (caseId: string, answer: number) => Promise<boolean>
+}
+
+export default function CaseBatchPreview({ cases, sources, accountProgress }: {
   cases: CasePreview[]
   sources: Record<string, { title: string; url: string; scope: string }>
+  accountProgress?: CaseAccountProgress
 }) {
   const hash = useSyncExternalStore(subscribe, snapshot, serverSnapshot)
   const [filter, setFilter] = useState('All')
@@ -55,7 +66,13 @@ export default function CaseBatchPreview({ cases, sources }: {
         <Link className={styles.brand} href="/">Cliniverse <span>Learning studio</span></Link>
         <button ref={help} type="button" onClick={() => dialog.current?.showModal()}>How this works</button>
       </header>
-      <aside className={styles.notice} aria-label="Editorial status">Editorial preview · Medical review of {cases.filter(item => item.clinicalReview === 'user-confirmed').length} text cases confirmed by the project owner. {caseMediaLinks.length} supplementary media link available; remaining cases await matched media. Session answers are not saved to your account.</aside>
+      <aside className={styles.notice} aria-label="Editorial status">Editorial preview · Medical review of {cases.filter(item => item.clinicalReview === 'user-confirmed').length} text cases confirmed by the project owner. {caseMediaLinks.length} supplementary media link available; remaining cases await matched media. {accountProgress ? 'Only explicitly confirmed completions are saved; unfinished answers remain in this session.' : 'Session answers are not saved to your account.'}</aside>
+      {accountProgress && <section className={styles.panel} aria-label="Account progress">
+        <p role="status" aria-live="polite">{accountProgress.message}</p>
+        <p>{accountProgress.completedIds.length} current text exercises saved. Completion is not clinical competency certification.</p>
+        {accountProgress.retryLoad && <button type="button" onClick={accountProgress.retryLoad}>Retry loading progress</button>}
+        {accountProgress.retrySave && <button type="button" disabled={accountProgress.saving} onClick={accountProgress.retrySave}>{accountProgress.saving ? 'Saving…' : 'Retry saving completion'}</button>}
+      </section>}
       {!active ? <>
         <p className={styles.eyebrow}>ECG / ECHO / CLINICAL REASONING</p>
         <h1 ref={heading} tabIndex={-1}>One case. A clearer way to think.</h1>
@@ -68,6 +85,7 @@ export default function CaseBatchPreview({ cases, sources }: {
           {visible.map(item => <article key={item.id} className={styles.card}>
             <p className={styles.eyebrow}>{item.track} · DRAFT</p>
             <h2>{item.title}</h2><p>{item.objective}</p>
+            {accountProgress?.completedIds.includes(item.id) && <p>Text exercise completion saved</p>}
             <button id={`open-${item.id}`} type="button" className={styles.primary} onClick={() => { lastOpened.current = item.id; navigate(`#${item.id}/0`) }}>Explore draft<span className={styles.srOnly}>: {item.title}</span></button>
           </article>)}
         </div>
@@ -113,6 +131,14 @@ export default function CaseBatchPreview({ cases, sources }: {
             <h3>Sources for editorial review</h3>
             <p className={styles.secondary}>The project owner confirmed medical review of this text. The source audit scope is recorded below; media review and release readiness are tracked separately.</p>
             <ul className={styles.sources}>{active.sourceIds.map(id => <li key={id}><a href={sources[id].url} target="_blank" rel="noopener noreferrer">{sources[id].title} · opens new tab</a><p>{sources[id].scope}</p></li>)}</ul>
+            {accountProgress && <>
+              <p>Confirm you have reviewed the explanation to save this text exercise. This does not record a media assessment.</p>
+              <button type="button" className={styles.primary}
+                disabled={!accountProgress.ready || accountProgress.saving || accountProgress.completedIds.includes(active.id)}
+                onClick={() => { void accountProgress.complete(active.id, answers[active.id]) }}>
+                {accountProgress.completedIds.includes(active.id) ? 'Completion saved' : accountProgress.saving ? 'Saving…' : 'I reviewed the explanation — save completion'}
+              </button>
+            </>}
             <div className={styles.actions}><button type="button" onClick={() => go(1)}>Revisit question</button><button type="button" className={styles.primary} onClick={() => navigate('')}>Back to cases</button></div>
           </>}
         </section>
@@ -130,7 +156,7 @@ export default function CaseBatchPreview({ cases, sources }: {
       <h2 id="help-title">A focused case journey</h2>
       <ol><li>Explore the scenario and its learning goal.</li><li>Choose an answer. You can revisit the scenario without leaving the question.</li><li>Read the draft reasoning and open the source separately.</li></ol>
       <p>Previous step and browser Back preserve your answers during this session. Returning to the list keeps your filter. Refreshing clears answers.</p>
-      <p>Medical review of the text was confirmed by the project owner. Available media links reuse existing viewers and preserve their access checks. Most cases still need matching media. This preview does not record account progress or replace Ward, Code Lab, BLS or ACLS.</p>
+      <p>Medical review of the text was confirmed by the project owner. Available media links reuse existing viewers and preserve their access checks. Most cases still need matching media. {accountProgress ? 'Use the explicit save button after reviewing an explanation, and wait for confirmation. Unfinished answers are not restored after refresh.' : 'This preview does not record account progress.'} This does not replace Ward, Code Lab, BLS or ACLS.</p>
     </dialog>
   </main>
 }

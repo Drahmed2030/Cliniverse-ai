@@ -41,11 +41,11 @@ const releasePaths: Array<{
   },
   {
     title: 'Ward Simulation',
-    description: 'Open the first fictional case and review the complete simulated care journey without purchasing PRO.',
+    description: 'Apply clinical reasoning to the first free fictional case: review the record, recognise missing information and practise a structured handover.',
     access: 'FREE',
     destination: { tab: 'care', workspace: 'ward' },
     action: 'Open Ward',
-    details: ['Fictional records', 'Human review', 'Related evidence entry'],
+    details: ['Review facts and gaps', 'Practise a handover', 'Check save confirmation'],
   },
   {
     title: 'Cardiology Operations',
@@ -86,16 +86,16 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
         <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>FIND YOUR NEXT PRACTICE</div>
         <h1 id="atlas-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Atlas</h1>
         <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Choose a learning activity that fits your next step. See what you can explore freely and what is included with PRO.
+          Choose what you want to practise: build knowledge in Code Lab, apply it in Ward, then review your work. Each destination below explains its access and learning scope.
         </p>
       </div>
 
       <div style={{ display: 'grid', gap: 10 }}>
         {releasePaths.map(path => (
           <article key={path.title} style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <div style={{ fontSize: '1rem', fontWeight: 800 }}>{path.title}</div>
+                <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>{path.title}</h2>
                 <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>{path.description}</p>
               </div>
               <span style={{ color: accessColor[path.access], border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
@@ -148,6 +148,8 @@ const introStyle = {
 } as const
 
 const cardStyle = {
+  minWidth: 0,
+  overflowWrap: 'anywhere',
   padding: 16,
   borderRadius: 18,
   border: `1px solid ${C.border}`,
@@ -167,7 +169,10 @@ const detailStyle = {
 
 const actionStyle = {
   width: '100%',
-  minHeight: 44,
+  minHeight: 48,
+  padding: 12,
+  whiteSpace: 'normal',
+  overflowWrap: 'anywhere',
   marginTop: 14,
   borderRadius: 13,
   border: `1px solid ${C.border}`,

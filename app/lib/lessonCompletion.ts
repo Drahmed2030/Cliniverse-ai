@@ -25,6 +25,16 @@ function sameCompletion(a: LessonCompletion, b: LessonCompletion) {
 }
 
 export function createLessonCompletionRepository(client: SupabaseClient, timeoutMs = 15_000) {
+  return createCompletionRepository(client, validateLessonCompletion, timeoutMs)
+}
+
+// Shared INSERT/read-back mechanism; callers supply their own content boundary.
+// The Code Lab entry above keeps its original validator and public signature.
+export function createCompletionRepository(
+  client: SupabaseClient,
+  validate: (row: LessonCompletion) => void,
+  timeoutMs = 15_000,
+) {
   async function bounded<T>(request: PromiseLike<T>): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined
     try {
@@ -49,7 +59,7 @@ export function createLessonCompletionRepository(client: SupabaseClient, timeout
           .order('completed_at', { ascending: false }).limit(1).maybeSingle())
         if (error) throw error
         if (!data) return null
-        validateLessonCompletion(data)
+        validate(data)
         if (data.user_id !== owner || data.case_id !== caseId) throw new Error('Completion owner mismatch')
         return data as LessonCompletion
       }))
@@ -57,7 +67,7 @@ export function createLessonCompletionRepository(client: SupabaseClient, timeout
       return rows.filter((row): row is LessonCompletion => row !== null)
     },
     async save(row: LessonCompletion): Promise<LessonCompletion> {
-      validateLessonCompletion(row)
+      validate(row)
       await requireOwner(row.user_id)
       // INSERT only, matching the existing append-only RLS/grants. Keep the
       // UUID on retries; never upsert an existing learner's evidence.

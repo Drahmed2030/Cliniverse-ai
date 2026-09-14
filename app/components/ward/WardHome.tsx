@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { DEPARTMENTS, MOCK_PATIENTS, MOCK_LIVE_EVENTS, MOCK_CENSUS } from '../../lib/ward'
+import { DEPARTMENTS, MOCK_PATIENTS } from '../../lib/ward'
 
 const T = {
   teal: 'var(--cv-teal, #2DD4BF)',
@@ -16,13 +16,6 @@ const T = {
   red: '#F87171',
   amber: '#FBBF24',
   green: '#34D399',
-}
-
-const EVENT_COLOR = {
-  admitted: { bg: 'rgba(16,185,129,0.10)', color: '#10B981', label: 'ADMITTED' },
-  discharged: { bg: 'rgba(100,116,139,0.10)', color: '#64748B', label: 'DISCHARGED' },
-  transfer: { bg: 'rgba(245,158,11,0.10)', color: '#F59E0B', label: 'TRANSFER' },
-  critical: { bg: 'rgba(239,68,68,0.10)', color: '#EF4444', label: 'CRITICAL' },
 }
 
 const PRIORITY_COLOR = {
@@ -57,15 +50,15 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
   const assigned = visiblePatients.filter(patient => patient.assignedToMe && patient.status !== 'discharged')
 
   return (
-    <div data-commercial-ward-home style={{ background: T.bg, minHeight: 'calc(100dvh - 190px)', paddingBottom: 88, border: '1px solid ' + T.border, borderRadius: 24, overflow: 'hidden', boxShadow: 'var(--cv-shadow, 0 18px 46px rgba(0,0,0,0.28))' }}>
+    <div data-commercial-ward-home style={{ overflowWrap: 'anywhere', minWidth: 0, background: T.bg, minHeight: 'calc(100dvh - 190px)', paddingBottom: 88, border: '1px solid ' + T.border, borderRadius: 24, overflow: 'hidden', boxShadow: 'var(--cv-shadow, 0 18px 46px rgba(0,0,0,0.28))' }}>
       <div style={{ background: 'var(--cv-surface-elevated, #172033)', padding: '30px 20px 24px', borderBottom: '1px solid ' + T.border }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: T.sub, letterSpacing: 1, marginBottom: 4 }}>
-              CLINIVERSE AI · CARE
+              CLINIVERSE AI · APPLY YOUR LEARNING
             </div>
             <div style={{ fontSize: 26, fontWeight: 800, color: T.text, lineHeight: 1.1 }}>
-              Care Workflow Simulation
+              Ward Simulation
             </div>
             <div style={{ fontSize: 12, color: T.sub, marginTop: 6 }}>
               Simulated cases · Human review · No real patient data
@@ -76,53 +69,32 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginTop: 20, background: 'var(--cv-surface-subtle, rgba(8,12,22,0.46))', border: '1px solid ' + T.border, borderRadius: 16, padding: '12px 8px' }}>
-          {[
-            { label: 'Seen', value: MOCK_CENSUS.seen },
-            { label: 'Assigned', value: MOCK_CENSUS.assigned },
-            { label: 'Discharged', value: MOCK_CENSUS.discharged },
-            { label: 'Consults', value: MOCK_CENSUS.consultsRequested },
-          ].map(item => (
-            <div key={item.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: T.text }}>{item.value}</div>
-              <div style={{ fontSize: 10, color: T.sub, fontWeight: 600 }}>{item.label}</div>
-            </div>
-          ))}
-        </div>
+        <section aria-labelledby="ward-learning-goal" style={{ marginTop: 20, color: T.text, lineHeight: 1.65 }}>
+          <h2 id="ward-learning-goal" style={{ fontSize: '1.1rem', margin: '0 0 8px' }}>Turn a case into a clear handover</h2>
+          <ol style={{ paddingInlineStart: 24, margin: 0 }}>
+            <li>Review the fictional record and distinguish known facts from missing information.</li>
+            <li>Practise a decision, then review the explanation and any unsupported assumptions.</li>
+            <li>Prepare the handover and check the save confirmation before leaving.</li>
+          </ol>
+          <p style={{ marginBottom: 0 }}>Start with the first free case. The other case entries retain their PRO access requirements.</p>
+        </section>
       </div>
 
       <div style={{ padding: '16px 16px 0' }}>
-        <section style={{ marginBottom: 20 }} aria-labelledby="simulation-board-heading">
-          <div id="simulation-board-heading" style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
-            SIMULATION BOARD
-          </div>
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
-            {MOCK_LIVE_EVENTS.map(event => {
-              const style = EVENT_COLOR[event.type]
-              return (
-                <div key={event.id} style={{ background: style.bg, border: '1px solid ' + style.color + '30', borderRadius: 12, padding: '8px 12px', minWidth: 160, flexShrink: 0 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: T.text, letterSpacing: 1, marginBottom: 3 }}>{style.label}</div>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: T.text, lineHeight: 1.3 }}>{event.label}</div>
-                  <div style={{ fontSize: 10, color: T.muted, marginTop: 3 }}>{event.time}</div>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-
         <section style={{ marginBottom: 20 }} aria-labelledby="department-heading">
           <div id="department-heading" style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
             DEPARTMENTS
           </div>
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, paddingBottom: 4 }}>
             {[{ id: 'all', label: 'All', icon: '🏥' }, ...DEPARTMENTS].map(department => {
               const active = selectedDept === department.id
               return (
                 <button
                   key={department.id}
                   type="button"
+                  aria-pressed={active}
                   onClick={() => setSelectedDept(department.id)}
-                  style={{ background: active ? T.tealD : T.elevated, border: '1px solid ' + (active ? T.teal : T.border), borderRadius: 20, padding: '7px 14px', fontSize: 12, fontWeight: 700, color: active ? '#fff' : T.sub, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5 }}
+                  style={{ background: active ? T.tealD : T.elevated, border: '1px solid ' + (active ? T.teal : T.border), minHeight: 44, borderRadius: 20, padding: '7px 14px', fontSize: 12, fontWeight: 700, color: active ? '#fff' : T.sub, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5 }}
                 >
                   <span aria-hidden="true">{department.icon}</span> {department.label}
                 </button>
@@ -151,7 +123,7 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
                 }}
                 style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: 'var(--cv-shadow, 0 10px 24px rgba(0,0,0,0.18))' }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{patient.name}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     {!caseUnlocked ? <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 7px', borderRadius: 99, background: 'rgba(96,165,250,0.14)', color: T.text }}>PRO</span> : null}
@@ -159,7 +131,7 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
                   </div>
                 </div>
                 <div style={{ fontSize: 12, color: T.sub, marginBottom: 6 }}>{patient.diagnosis}</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: 11, color: T.muted }}>{'Bed ' + patient.bed + ' · ' + patient.department.toUpperCase()}</span>
                   <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 99, background: T.bg, border: '1px solid ' + T.border, color: T.sub }}>
                     {STATUS_LABEL[patient.status] || patient.status}

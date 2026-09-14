@@ -36,18 +36,22 @@ test('legacy adaptations and new drafts are distinguished without inflating appr
 test('server entry rejects production before rendering or serializing the draft catalogue', () => {
   const source = readFileSync(new URL('../app/labs/case-batch-preview/page.tsx', import.meta.url), 'utf8')
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText
-  function invoke(env) {
+  function invoke(env, cloud = {}, allowed = env === 'development') {
     const exports = {}
     let rendered = false
-    const context = { exports, process: { env: { NODE_ENV: env } }, require: name => {
+    const context = { exports, process: { env: { NODE_ENV: env, ...cloud } }, require: name => {
       if (name === 'next/navigation') return { notFound: () => { throw new Error('NOT_FOUND') } }
       if (name === 'react/jsx-runtime') return { jsx: () => { rendered = true; return 'preview' } }
       if (name.includes('CaseBatchPreview')) return { default: () => null }
       return { batch20, sourceRegistry }
     } }
     vm.runInNewContext(compiled, context)
-    if (env !== 'development') { assert.throws(() => exports.default(), /NOT_FOUND/); assert.equal(rendered, false) }
+    if (!allowed) { assert.throws(() => exports.default(), /NOT_FOUND/); assert.equal(rendered, false) }
     else { assert.equal(exports.default(), 'preview'); assert.equal(rendered, true) }
   }
   for (const env of ['production','test',undefined,'development']) invoke(env)
+  invoke('production', { VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'qa/case-batch20-cloud' }, true)
+  invoke('production', { VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: 'qa/case-batch20-cloud', CASE_ACCOUNT_PREVIEW_ENABLED: 'true' }, false)
+  invoke('production', { VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: 'main', CASE_ACCOUNT_PREVIEW_ENABLED: 'true' }, false)
+  invoke('production', { VERCEL_ENV: 'preview' }, false)
 })
