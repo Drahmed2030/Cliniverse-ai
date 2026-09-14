@@ -19,7 +19,7 @@ export interface CaseMediaLink {
 const a4c = A4C_NORMAL_CLINICAL_STUDIO_ASSET
 export const caseMediaLinks: readonly CaseMediaLink[] = [{
   caseId: 'a4c-orientation', assetId: a4c.assetId, sourceId: a4c.cine.sourceId,
-  href: '/labs/echo-account-review', title: 'Open the existing A4C cine viewer',
+  href: '/labs/echo-account-review?from=a4c-orientation', title: 'Open the existing A4C cine viewer',
   purpose: 'Supplementary view-orientation example. This source-labelled normal cine is not evidence for pathology or measurements in another case.',
   prerequisite: 'The existing viewer requires sign-in and an authorised review account. Opens in a new tab to preserve this exercise.',
   creator: a4c.rights.creator, licenseId: a4c.rights.licenseId,

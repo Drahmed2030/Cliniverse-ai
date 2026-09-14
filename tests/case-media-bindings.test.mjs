@@ -10,7 +10,7 @@ test('the linked cine matches the frozen derivative bytes and attribution', () =
   const link = mediaForCase('a4c-orientation')
   const bytes = readFileSync(new URL('../public/clinical-media/echo/a4c-normal-cardionetworks-v1.mp4', import.meta.url))
   assert.equal(createHash('sha256').update(bytes).digest('hex'), link.sha256)
-  assert.equal(link.href, '/labs/echo-account-review')
+  assert.equal(link.href, '/labs/echo-account-review?from=a4c-orientation')
   assert.equal(link.licenseId, 'CC-BY-SA-3.0')
   assert.ok(link.creator && link.sourceUrl && link.licenseUrl)
 })

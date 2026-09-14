@@ -1,6 +1,26 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
+test('A4C media opens the existing viewer with a return path', async ({ page, context }, testInfo) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  // This navigation test uses no account or remote database.
+  await context.route('https://*.supabase.co/**', route => route.abort())
+  await page.goto('/labs/case-batch-preview')
+  await page.getByRole('button', { name: /Explore draft\s*:\s*Apical four-chamber orientation/ }).click()
+  const popup = context.waitForEvent('page')
+  await page.getByRole('link', { name: /Open the existing A4C cine viewer/ }).click()
+  const viewer = await popup
+  const back = viewer.getByRole('link', { name: 'Return to A4C orientation case' })
+  await expect(back).toBeVisible()
+  await expect(back).toHaveAttribute('href', '/labs/case-batch-preview#a4c-orientation/0')
+  expect(await viewer.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await viewer.screenshot({ path: testInfo.outputPath('a4c-return.png'), fullPage: true })
+  await back.click()
+  await expect(viewer.getByRole('heading', { name: 'Apical four-chamber orientation', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Apical four-chamber orientation', exact: true })).toBeVisible()
+  await viewer.close()
+})
+
 const sizes = [
   { name: 'small-phone', width: 375, height: 812, large: false },
   { name: 'phone', width: 390, height: 844, large: false },

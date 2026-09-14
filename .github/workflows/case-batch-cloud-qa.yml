@@ -19,30 +19,30 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Focused content and boundary tests
-        run: node --test tests/case-media-bindings.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs
+        run: node --test tests/case-media-bindings.test.mjs tests/case-media-return.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs
       - name: Typecheck new preview
         run: |
           npx next typegen
           npx tsc --noEmit --strict --skipLibCheck --target es2017 --module esnext --moduleResolution bundler --jsx react-jsx --allowImportingTsExtensions --esModuleInterop next-env.d.ts app/labs/case-batch-preview/page.tsx app/components/case-preview/CaseBatchPreview.tsx content/medical/batch20.ts content/medical/caseMedia.ts
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
-      - name: Six viewport interaction and accessibility checks
+      - name: Case navigation, media return and accessibility checks
         run: npx playwright test --config=playwright.case-preview.config.ts
       - name: Isolated account saving checks at three widths in light and dark
         run: npx playwright test --config=playwright.case-account.config.ts
       - name: Preserve report and screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: case-batch-qa-${{ github.sha }}
           path: |

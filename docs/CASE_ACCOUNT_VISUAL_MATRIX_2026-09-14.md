@@ -22,6 +22,19 @@ targeted application typecheck and ESLint passed. Existing completion suite: 30/
 Browser execution status must be obtained from the corresponding workflow run, not inferred
 from discovery or unit tests. Existing six-viewport preview suite remains in the workflow.
 
+## Verified cloud result
+
+Run https://github.com/Drahmed2030/Cliniverse-ai/actions/runs/34834112588
+on commit 84846acebd8a9c060521f7a5ded3d993085edf64 completed successfully.
+Account matrix: 12 PASS, 0 FAIL, 0 SKIP (two tests at each of six width/theme combinations).
+Existing preview matrix: 6 PASS, 0 FAIL, 0 SKIP.
+Cloud content/boundary suite: 15 PASS, 0 FAIL, 0 SKIP; preview typecheck passed.
+Account matrix asserts zero Axe WCAG A/AA violations and zero tested horizontal overflow.
+Saved, pending and rejected states have screenshots; no failures required traces.
+Artifact 10343667368 contains reports and screenshots (9,515,005 bytes), retained until
+2026-09-17. SHA256 fb5dfb1c4980052f5806dae8e36d6eb7be1d266e93d45841e4d559655d5f20a2.
+This evidence update is local only to avoid triggering a redundant build for documentation.
+
 Limits: Chromium viewport/touch emulation is not a physical iPhone, safe-area/notch validation,
 or Safari validation. A held API response is deterministic latency simulation, not full 3G
 network emulation. Entire-page CLS, screen-reader speech and native Dynamic Type are not
