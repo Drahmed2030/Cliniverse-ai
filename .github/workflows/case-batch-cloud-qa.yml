@@ -42,7 +42,7 @@ jobs:
         run: npx playwright test --config=playwright.case-account.config.ts
       - name: Preserve report and screenshots
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: case-batch-qa-${{ github.sha }}
           path: |

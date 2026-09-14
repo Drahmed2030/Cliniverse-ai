@@ -18,11 +18,16 @@ Base: 84846acebd8a9c060521f7a5ded3d993085edf64, qa/case-batch20-cloud.
   returns to the case, and checks that the original case tab is retained. This is navigation
   verification without a real session; it does not assert authenticated cine playback.
 - Three route tests cover allowlisting, environment restriction and preservation of the gated viewer.
-- checkout/setup-node/upload-artifact now use v5, whose official releases support Node 24.
+- checkout/setup-node use v5; upload-artifact uses v6, whose action.yml explicitly declares node24.
 
 ## Local validation
 18 targeted content/media/route tests PASS; ESLint and git diff --check PASS.
 Cloud workflow result must be recorded separately after completion.
+
+Initial cloud run 34835666673 on 4df78d0: 18 content/route tests, 7 preview/navigation
+tests, and 12 account visual tests passed with zero failures/skips. Artifact 10344655239
+contains reports/screenshots and expires 2026-09-17. A residual Node 20 warning named
+upload-artifact@v5, so the upload action was corrected to v6 after inspecting its action.yml.
 
 ## Remaining
 Artifact-specific clinical/privacy/device review and intact eligible files are required before
