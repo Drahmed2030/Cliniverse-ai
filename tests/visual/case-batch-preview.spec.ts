@@ -26,7 +26,7 @@ for (const size of sizes) test(`case flow / ${size.name}`, async ({ page }, test
   }
   await checkLayout('catalogue')
   await page.getByRole('button', { name: 'ECG', exact: true }).click()
-  const first = page.getByRole('button', { name: /Explore draft: Anterior STEMI/ })
+  const first = page.getByRole('button', { name: /Explore draft\s*:\s*Anterior STEMI/ })
   await first.click()
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
   await page.getByRole('button', { name: 'Continue to question' }).click()
