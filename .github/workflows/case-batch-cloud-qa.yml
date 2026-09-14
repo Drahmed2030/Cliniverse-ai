@@ -1,0 +1,48 @@
+name: Case batch cloud QA
+
+on:
+  push:
+    branches: [qa/case-batch20-cloud]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: case-batch-cloud-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Focused content and boundary tests
+        run: node --test tests/case-media-bindings.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs
+      - name: Typecheck new preview
+        run: npx tsc --noEmit --strict --skipLibCheck --target es2017 --module esnext --moduleResolution bundler --jsx react-jsx --allowImportingTsExtensions --esModuleInterop next-env.d.ts app/labs/case-batch-preview/page.tsx app/components/case-preview/CaseBatchPreview.tsx content/medical/batch20.ts content/medical/caseMedia.ts
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium --only-shell
+      - name: Six viewport interaction and accessibility checks
+        run: npx playwright test --config=playwright.case-preview.config.ts
+      - name: Preserve report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: case-batch-qa-${{ github.sha }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: warn
+          retention-days: 3

@@ -1,0 +1,12 @@
+{
+  "recordedAt": "2026-09-14",
+  "actor": "project-owner user",
+  "basis": "Explicit confirmation in this conversation",
+  "statement": "المحتوي تمت مراجعته طبيا ممتاز قم بربط الوسائط",
+  "scope": "Medical text review confirmation for the 20-case batch only; not media approval, external specialist attestation, source-audit completion or publication authorisation",
+  "caseCount": 20,
+  "snapshotPath": "content/medical/batch20.ts",
+  "snapshotSha256": "4650ae783d6a76377b8b71f395020f51aba333b83358dce2f53ba919ccc5bdab",
+  "priorStatus": "pending",
+  "status": "user-confirmed"
+}

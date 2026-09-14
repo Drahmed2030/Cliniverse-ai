@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-14",
+  "repository": "https://github.com/Drahmed2030/Cliniverse-ai",
+  "baseCommit": "d019f5fccbe0606090a1ab5ee88944c29d268b15",
+  "scope": "Source audit; no clinical validation or live API tests",
+  "branchesListed": 39,
+  "treesReviewed": [
+    {
+      "files": 431,
+      "name": "cliniverse/unification-v1",
+      "sha": "712ffaba9ba8dab1a0206de762623bc4eb104bfa",
+      "truncated": false
+    },
+    {
+      "files": 466,
+      "name": "main",
+      "sha": "4ee88504e5aeda108d90fe80372c4a08eb518c8b",
+      "truncated": false
+    },
+    {
+      "files": 914,
+      "name": "feature/echo-competency-engine-v1",
+      "sha": "fa820b345e85bb8e541d5400e36c48516abba62e",
+      "truncated": false
+    },
+    {
+      "files": 400,
+      "name": "feature/signal-codelab",
+      "sha": "91282845e07011fec1af94b585652840003f4160",
+      "truncated": false
+    },
+    {
+      "files": 401,
+      "name": "feature/megacode-v2",
+      "sha": "ce717125d02d8f74b60b192f924b7b12d2308421",
+      "truncated": false
+    },
+    {
+      "files": 403,
+      "name": "feature/neura-agent-api⁠",
+      "sha": "6f46b7f80a570468ceaa001feac5347c647a7629",
+      "truncated": false
+    }
+  ],
+  "counts": {
+    "clinicalLibrary": {
+      "actualCases": 7,
+      "actualGroups": 5,
+      "displayedSpecialties": 8,
+      "displayedCaseTotal": 248
+    },
+    "ward": {
+      "baseTemplates": 6,
+      "deferredExtraTemplates": 8
+    },
+    "diagnosticDetective": 3,
+    "errorAutopsy": 3,
+    "difficultConversations": 5,
+    "rapidFireQuestions": 30,
+    "weeklyPearls": 3
+  },
+  "identicalAcrossSelectedBranchesAndBase": [
+    {
+      "path": "app/components/AfiaHome.tsx",
+      "blob": "167ff39d590cdd3c31f0e5391fd6e2caefa0ecc7"
+    },
+    {
+      "path": "app/components/ClinicalLibrary.tsx",
+      "blob": "531a63de5a14dd310e8dad89b64431ef8ad2b3cd"
+    },
+    {
+      "path": "app/components/LabReference.tsx",
+      "blob": "5c3c3584de786a9dd21d5078effacd3dc4180738"
+    },
+    {
+      "path": "app/components/LabsReference.tsx",
+      "blob": "ae42e3aa7c4d87b8812a25aa55097882ced6ddad"
+    }
+  ],
+  "preserve": [
+    "Code Lab",
+    "BLS",
+    "ACLS",
+    "StoreKit",
+    "release API gates",
+    "existing approved Echo assets"
+  ],
+  "implementationStatus": "recommendations only; previous local batch unchanged"
+}

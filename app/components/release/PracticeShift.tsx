@@ -6,6 +6,7 @@ import { preparationChecks } from '../../lib/ward/reviewPreparation'
 import { reviewRequests, createReviewWorklist, changeRequest, type ReviewRequestId } from '../../lib/ward/reviewWorklist'
 
 import { reviewMediaBindings } from '../../lib/ward/reviewMediaBinding'
+import { learningJourney } from '../../lib/ward/learningJourney'
 
 const button = { minHeight: 44, padding: '10px 16px', borderRadius: 12, border: '1px solid var(--cv-border)', background: 'var(--cv-surface-elevated)', color: 'var(--cv-text)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }
 const card = { padding: 20, marginBottom: 16, borderRadius: 22, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' }
@@ -19,11 +20,21 @@ export default function PracticeShift({ onWard, onProgress, onPathway }: { onWar
     <section aria-labelledby="practice-shift-title" style={card}>
       <p style={{ color: 'var(--cv-teal)' }}>LEARN · REVIEW PREVIEW</p>
       <h2 id="practice-shift-title">Your training shift</h2>
-      <p>Choose one focused practice, save your work, then return to your learning record. These are separate educational cases.</p>
+      <p>Choose one skill to practise. Inspect the evidence, answer the questions, then review your saved progress. These are separate educational cases.</p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 18rem), 1fr))', gap: 16, marginBottom: 20 }}>
+        {learningJourney.map(activity => <article key={activity.id} aria-labelledby={`practice-${activity.id}-title`} style={{ padding: 16, minWidth: 0, border: '1px solid var(--cv-border)', borderRadius: 16, background: 'var(--cv-surface-elevated)' }}>
+          <h3 id={`practice-${activity.id}-title`} style={{ marginTop: 0 }}>{activity.title}</h3>
+          <p>{activity.objective}</p>
+          <p id={`practice-${activity.id}-prerequisite`} style={{ color: 'var(--cv-text-secondary)' }}><strong>Before you start: </strong>{activity.prerequisite}</p>
+          <ol style={{ paddingInlineStart: 24, lineHeight: 1.65 }}>
+            {activity.steps.map(step => <li key={step} style={{ marginBottom: 8 }}>{step}</li>)}
+          </ol>
+          <Link style={button} href={activity.href} aria-describedby={`practice-${activity.id}-prerequisite`}>Open {activity.title} →</Link>
+        </article>)}
+      </div>
+      <p style={{ color: 'var(--cv-text-secondary)' }}>These examples are not paired examinations from one patient. Opening a viewer does not record completion, demonstrate clinical competence, or unlock PRO.</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
         <button type="button" style={button} onClick={onWard}>Practise a Ward handover</button>
-        <Link style={button} href="/labs/ecg-account-review">ECG · Rhythm recognition</Link>
-        <Link style={button} href="/labs/echo-account-review">Echo · A4C recognition</Link>
         <button type="button" style={button} onClick={onProgress}>Review saved progress</button>
       </div>
       <p style={{ color: 'var(--cv-text-secondary)' }}>Ward offers three documentation tasks using one fictional case. ECG requires the reviewed PDF. Content availability follows its review status; no daily release schedule is promised.</p>
