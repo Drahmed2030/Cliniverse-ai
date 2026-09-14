@@ -19,6 +19,9 @@ test('reviewer can study related cases from Ward and Atlas without changing acco
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers })
     if (url.hostname === 'zbiujqxinvcxvuviuenx.supabase.co') {
       if (url.pathname === '/auth/v1/user') return route.fulfill({ json: user, headers })
+      // AuthGate requires an existing profile. An empty response would trigger
+      // account bootstrap INSERT, correctly blocked by this read-only fixture.
+      if (url.pathname === '/rest/v1/profiles') return route.fulfill({ json: [{ id: user.id, name: 'Synthetic reviewer', rank: 'Clinical Learner' }], headers })
       if (url.pathname.startsWith('/rest/v1/')) return route.fulfill({ json: [], headers })
     }
     if (url.origin === 'http://127.0.0.1:3101' && url.pathname === '/api/reviewer-feature-access') {
