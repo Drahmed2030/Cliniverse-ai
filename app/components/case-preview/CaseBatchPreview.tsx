@@ -119,7 +119,13 @@ export default function CaseBatchPreview({ cases, sources }: {
       </article>}
       <footer className={styles.footer}>Cliniverse · Educational design preview · No clinical service or competency certification</footer>
     </div>
-    <dialog ref={dialog} className={styles.dialog} aria-labelledby="help-title" onCancel={event => { event.preventDefault(); closeHelp() }}>
+    <dialog ref={dialog} className={styles.dialog} aria-labelledby="help-title" onKeyDown={event => {
+      // This dialog has one interactive control; keep Tab in the modal.
+      if (event.key === 'Tab') {
+        event.preventDefault()
+        event.currentTarget.querySelector<HTMLButtonElement>('button')?.focus()
+      }
+    }} onCancel={event => { event.preventDefault(); closeHelp() }}>
       <button type="button" onClick={closeHelp}>Close explanation</button>
       <h2 id="help-title">A focused case journey</h2>
       <ol><li>Explore the scenario and its learning goal.</li><li>Choose an answer. You can revisit the scenario without leaving the question.</li><li>Read the draft reasoning and open the source separately.</li></ol>
