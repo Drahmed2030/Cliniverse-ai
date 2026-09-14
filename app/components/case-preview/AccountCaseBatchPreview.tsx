@@ -38,6 +38,7 @@ function OwnedCases({ owner, cases, sources }: Props & { owner: string }) {
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [savingCaseId, setSavingCaseId] = useState<string | undefined>()
   const [pending, setPending] = useState<LessonCompletion | null>(null)
   const [reload, setReload] = useState(0)
   const live = useRef(false), busy = useRef(false)
@@ -94,7 +95,7 @@ function OwnedCases({ owner, cases, sources }: Props & { owner: string }) {
     if (!live.current || !ready || busy.current || pendingRef.current || completedIds.includes(id)) return false
     const item = cases.find(c => c.id === id)
     if (!item) return false
-    busy.current = true; setSaving(true)
+    busy.current = true; setSavingCaseId(id); setSaving(true)
     try {
       const row = await prepareCaseCompletion(item, sources, { id: crypto.randomUUID(), owner, answer,
         explanationReviewed: true, completedAt: new Date().toISOString() })
@@ -111,11 +112,11 @@ function OwnedCases({ owner, cases, sources }: Props & { owner: string }) {
   }
   function retrySave() {
     if (!live.current || busy.current || !ready || !pendingRef.current) return
-    busy.current = true; setSaving(true); setMessage('Confirming the pending save…')
+    busy.current = true; setSavingCaseId(pendingRef.current.case_id.split(':')[1]); setSaving(true); setMessage('Confirming the pending save…')
     void persist(pendingRef.current)
   }
   return <CaseBatchPreview cases={cases} sources={sources} accountProgress={{
-    completedIds, message, saving, ready: ready && !pending,
+    completedIds, message, saving, savingCaseId: saving ? savingCaseId : undefined, ready: ready && !pending,
     complete, retrySave: pending ? retrySave : undefined,
     retryLoad: failed ? () => { setFailed(false); setMessage('Retrying progress loading…'); setReload(n => n + 1) } : undefined,
   }} />

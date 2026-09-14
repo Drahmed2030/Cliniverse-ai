@@ -20,6 +20,7 @@ function navigate(hash: string) {
 export interface CaseAccountProgress {
   ready: boolean
   saving: boolean
+  savingCaseId?: string
   message: string
   completedIds: string[]
   retryLoad?: () => void
@@ -133,10 +134,11 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
             <ul className={styles.sources}>{active.sourceIds.map(id => <li key={id}><a href={sources[id].url} target="_blank" rel="noopener noreferrer">{sources[id].title} · opens new tab</a><p>{sources[id].scope}</p></li>)}</ul>
             {accountProgress && <>
               <p>Confirm you have reviewed the explanation to save this text exercise. This does not record a media assessment.</p>
-              <button type="button" className={styles.primary}
+              <button type="button" className={`${styles.primary} ${styles.saveButton}`}
                 disabled={!accountProgress.ready || accountProgress.saving || accountProgress.completedIds.includes(active.id)}
                 onClick={() => { void accountProgress.complete(active.id, answers[active.id]) }}>
-                {accountProgress.completedIds.includes(active.id) ? 'Completion saved' : accountProgress.saving ? 'Saving…' : 'I reviewed the explanation — save completion'}
+                <span aria-hidden="true" className={styles.saveMeasure}>I reviewed the explanation — save completion</span>
+                <span>{accountProgress.completedIds.includes(active.id) ? 'Completion saved' : accountProgress.savingCaseId === active.id ? 'Saving…' : 'I reviewed the explanation — save completion'}</span>
               </button>
             </>}
             <div className={styles.actions}><button type="button" onClick={() => go(1)}>Revisit question</button><button type="button" className={styles.primary} onClick={() => navigate('')}>Back to cases</button></div>

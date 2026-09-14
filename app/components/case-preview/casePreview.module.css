@@ -47,6 +47,9 @@
 .dialog::backdrop { background: rgb(2 6 23 / .72); }
 .dialog ol { padding-inline-start: 24px; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.root .saveButton { display: inline-grid; }
+.saveButton > span { grid-area: 1 / 1; align-self: center; }
+.saveMeasure { visibility: hidden; }
 @media (prefers-color-scheme: dark) { .root { --case-bg: #0f172a; --case-surface: #1e293b; --case-ink: #f8fafc; --case-muted: #cbd5e1; --case-line: #64748b; --case-accent: #5eead4; --case-on-accent: #0f172a; color-scheme: dark; } }
 @media (max-width: 400px) { .card, .panel, .dialog { padding: 16px; } }
 @media (prefers-reduced-motion: reduce) { .root *, .root *::before, .root *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
