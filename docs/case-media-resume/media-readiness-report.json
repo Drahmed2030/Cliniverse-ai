@@ -1,0 +1,224 @@
+{
+  "scope": "Media inventory only. Supplementary links do not establish complete case matching or release readiness.",
+  "sourceCommit": "fa820b345e85bb8e541d5400e36c48516abba62e",
+  "counts": {
+    "cases": 20,
+    "supplementaryLinks": 1,
+    "deferred": 5,
+    "missing": 14
+  },
+  "rows": [
+    {
+      "caseId": "anterior-stemi",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "non-st-elevation",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "acute-heart-failure",
+      "track": "Integrated",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "hypertensive-emergency",
+      "track": "Integrated",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "atrial-fibrillation",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "atrial-flutter",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "regular-narrow-tachycardia",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "complete-av-block",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "wide-complex-tachycardia",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "qt-review",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "hyperkalaemia",
+      "track": "ECG",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "a4c-orientation",
+      "track": "Echo",
+      "status": "supplementary-link",
+      "assetId": "echo-a4c-normal-cardionetworks-v1-en",
+      "sha256": "89e311b8a841a2a6813d4c5ba470aede46ba85780d42b2124330fc01846c783c",
+      "scope": "Supplementary view-orientation example. This source-labelled normal cine is not evidence for pathology or measurements in another case."
+    },
+    {
+      "caseId": "dilated-lv",
+      "track": "Echo",
+      "status": "deferred",
+      "candidateId": "echo-a4c-dcm-e00476",
+      "sha256": "7aa9c9b446c84f6de3af0eaf3cbcfd0821b5f70f8b12d031fa027b083079397f",
+      "evidenceUrl": "https://github.com/Drahmed2030/Cliniverse-ai/blob/fa820b345e85bb8e541d5400e36c48516abba62e/docs/echo-media-lab-2026-09-06/echo-a4c-dcm-e00476/derivative-v1/readiness.json",
+      "sourceBlobSha": "cca3d94141c9cf6cb7a3362ba1c5c6a8a5a50169",
+      "sourceLearnerReady": false,
+      "blockers": [
+        "privacy-review-incomplete",
+        "clinical-review-incomplete",
+        "device-playback-review-incomplete",
+        "exact-derivative-not-installed-in-this-branch",
+        "case-media-pairing-review-required"
+      ]
+    },
+    {
+      "caseId": "hypertrophic-phenotype",
+      "track": "Echo",
+      "status": "deferred",
+      "candidateId": "echo-a4c-severe-hcm-mm0002",
+      "sha256": "39f7d2930a1383c688723871887c02e75ddd932819a01b176bbc6e03cb6cf913",
+      "evidenceUrl": "https://github.com/Drahmed2030/Cliniverse-ai/blob/fa820b345e85bb8e541d5400e36c48516abba62e/docs/echo-media-lab-2026-09-07/batch-01-pathology-derivatives/echo-a4c-severe-hcm-mm0002/readiness.json",
+      "sourceBlobSha": "3d937b74f5e273916c9585b69844ba32c95519f4",
+      "sourceLearnerReady": false,
+      "blockers": [
+        "specialist-clinical-review-pending",
+        "final-privacy-review-pending",
+        "device-playback-pending",
+        "post-derivative-governance-required",
+        "exact-derivative-not-installed-in-this-branch",
+        "case-media-pairing-review-required"
+      ]
+    },
+    {
+      "caseId": "aortic-stenosis",
+      "track": "Echo",
+      "status": "deferred",
+      "candidateId": "echo-psax-severe-as-e00261",
+      "sha256": "1f2e57f80802dc0f13c1c8732d8b48f05b228e39cdcd408a91956a76877fb715",
+      "evidenceUrl": "https://github.com/Drahmed2030/Cliniverse-ai/blob/fa820b345e85bb8e541d5400e36c48516abba62e/docs/echo-media-lab-2026-09-07/batch-01-pathology-derivatives/echo-psax-severe-as-e00261/readiness.json",
+      "sourceBlobSha": "70a8e84199b234e125806458cca8a86cd0d21cff",
+      "sourceLearnerReady": false,
+      "blockers": [
+        "specialist-clinical-review-pending",
+        "final-privacy-review-pending",
+        "device-playback-pending",
+        "post-derivative-governance-required",
+        "exact-derivative-not-installed-in-this-branch",
+        "case-media-pairing-review-required"
+      ]
+    },
+    {
+      "caseId": "mitral-regurgitation",
+      "track": "Echo",
+      "status": "deferred",
+      "candidateId": "echo-a4c-flail-mv-e00466",
+      "sha256": null,
+      "evidenceUrl": "https://github.com/Drahmed2030/Cliniverse-ai/blob/fa820b345e85bb8e541d5400e36c48516abba62e/docs/echo-media-lab-2026-09-07/batch-01-pathology-derivatives/echo-a4c-flail-mv-e00466/readiness.json",
+      "sourceBlobSha": "0163e1b3d0774f482b4673d07e66476f085421ce",
+      "sourceLearnerReady": false,
+      "blockers": [
+        "usableViewContext",
+        "Dark anatomy, uncertain A4C landmarks and flail mechanism obscured by color; specialist visibility review required before transformation.",
+        "specialist-clinical-review-pending",
+        "final-privacy-review-pending",
+        "device-playback-pending",
+        "post-derivative-governance-required",
+        "no-verified-derivative",
+        "case-media-pairing-review-required"
+      ]
+    },
+    {
+      "caseId": "diastolic-function",
+      "track": "Echo",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "rv-strain",
+      "track": "Echo",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    },
+    {
+      "caseId": "pericardial-effusion",
+      "track": "Echo",
+      "status": "deferred",
+      "candidateId": "echo-a4c-pericardial-effusion-e00674",
+      "sha256": "ac4ae1abd4ba3a14f050a5e2222af0a8a46f910669934892eac2b6e1f89e7d1a",
+      "evidenceUrl": "https://github.com/Drahmed2030/Cliniverse-ai/blob/fa820b345e85bb8e541d5400e36c48516abba62e/docs/echo-media-lab-2026-09-07/batch-01-pathology-derivatives/echo-a4c-pericardial-effusion-e00674/readiness.json",
+      "sourceBlobSha": "3a64bdbc1f719849b2f71abf48d5f6fc18448cec",
+      "sourceLearnerReady": false,
+      "blockers": [
+        "specialist-clinical-review-pending",
+        "final-privacy-review-pending",
+        "device-playback-pending",
+        "post-derivative-governance-required",
+        "exact-derivative-not-installed-in-this-branch",
+        "case-media-pairing-review-required"
+      ]
+    },
+    {
+      "caseId": "echo-quality",
+      "track": "Echo",
+      "status": "missing",
+      "blockers": [
+        "matching-media-not-selected"
+      ]
+    }
+  ],
+  "installedA4cChecksumVerified": true
+}

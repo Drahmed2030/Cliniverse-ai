@@ -33,7 +33,16 @@ test('Ward and Atlas connections retain separate accessible sections and safe ne
     const tree = render('../app/components/ward/WardCaseConnections.tsx', { context })
     assert.equal(tree.props['aria-labelledby'], `${context}-evidence-title`)
     const all = nodes(tree)
-    assert.equal(all.filter(n => n.type === 'details').length, 3)
+    assert.equal(all.filter(n => n.type === 'details').length, 6)
+    const notes = all.filter(n => n.type === 'textarea')
+    assert.equal(notes.length, 3)
+    for (const note of notes) {
+      assert.ok(all.some(n => n.type === 'label' && n.props.htmlFor === note.props.id))
+      assert.ok(all.some(n => n.props?.id === note.props['aria-describedby']))
+      assert.ok(note.props.id.startsWith(`${context}-`))
+      assert.equal(note.props.maxLength, 600)
+      assert.equal(note.props.onChange, undefined)
+    }
     const links = all.filter(n => n.type === 'a')
     assert.equal(links.length, 3)
     for (const [i, link] of links.entries()) {
