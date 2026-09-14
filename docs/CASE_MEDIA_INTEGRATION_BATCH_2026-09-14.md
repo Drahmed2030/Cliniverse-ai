@@ -29,6 +29,12 @@ tests, and 12 account visual tests passed with zero failures/skips. Artifact 103
 contains reports/screenshots and expires 2026-09-17. A residual Node 20 warning named
 upload-artifact@v5, so the upload action was corrected to v6 after inspecting its action.yml.
 
+Final cloud run https://github.com/Drahmed2030/Cliniverse-ai/actions/runs/34835932021
+on 045d308556bdfb40896ff3a927cffd42e492374d succeeded: 18 content/route,
+7 navigation/preview and 12 account visual tests PASS; zero FAIL/SKIP.
+Artifact upload completed and the final job log contains no Node.js 20 deprecation warning.
+Final evidence appended locally to avoid a documentation-only rebuild.
+
 ## Remaining
 Artifact-specific clinical/privacy/device review and intact eligible files are required before
 activating the five pathology candidates. No evidence currently authorizes that promotion.

@@ -1,3 +1,5 @@
+import WardCaseConnections from '../ward/WardCaseConnections'
+
 const C = {
   panel: 'var(--cv-surface)',
   elevated: 'var(--cv-surface-elevated)',
@@ -21,6 +23,7 @@ export interface AtlasDestination {
 interface Props {
   onNavigate: (destination: AtlasDestination) => void
   onOpenPlan: () => void
+  caseLibraryPreview?: boolean
 }
 
 const releasePaths: Array<{
@@ -79,7 +82,7 @@ const accessColor: Record<ReleaseAccess, string> = {
   ACCOUNT: C.blue,
 }
 
-export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
+export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan, caseLibraryPreview = false }: Props) {
   return (
     <section aria-labelledby="atlas-title" data-commercial-explore-surface>
       <div style={introStyle}>
@@ -90,6 +93,7 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan }: Props) {
         </p>
       </div>
 
+      {caseLibraryPreview && <WardCaseConnections context="atlas" />}
       <div style={{ display: 'grid', gap: 10 }}>
         {releasePaths.map(path => (
           <article key={path.title} style={cardStyle}>

@@ -13,7 +13,7 @@ function component(path, mocks = {}) {
   return exports.default
 }
 function nodes(n) { return !n || typeof n !== 'object' ? [] : Array.isArray(n) ? n.flatMap(nodes) : [n, ...nodes(n.props?.children)] }
-const Atlas = component('../app/components/release/AtlasReleaseCatalog.tsx')
+const Atlas = component('../app/components/release/AtlasReleaseCatalog.tsx', { '../ward/WardCaseConnections': { default: 'WardCaseConnections' } })
 test('Atlas activities retain their existing destinations and plan is a separate action', () => {
   const destinations = []; let plans = 0
   const buttons = nodes(Atlas({ onNavigate: d => destinations.push(d), onOpenPlan: () => plans++ })).filter(n => n.type === 'button')

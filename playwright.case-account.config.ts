@@ -2,8 +2,8 @@ import { defineConfig } from '@playwright/test'
 
 // Deliberately local-only: this suite must never use a real account or preview URL.
 export default defineConfig({
-  testDir: './tests/visual', testMatch: /case-account-progress\.spec\.ts/,
-  workers: 1, retries: 0, timeout: 90_000,
+  testDir: './tests/visual', testMatch: /(?:case-account-progress|ward-atlas-connections)\.spec\.ts/,
+  workers: 1, retries: 0, timeout: 90_000, maxFailures: 1,
   outputDir: 'test-results/case-account',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report/case-account', open: 'never' }]],
   use: { baseURL: 'http://127.0.0.1:3101', serviceWorkers: 'block',

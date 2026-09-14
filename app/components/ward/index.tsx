@@ -20,6 +20,7 @@ export type CareWorkspace = 'ward' | 'cardiology' | 'nexus' | 'codelab'
 interface Props {
   initialWorkspace?: CareWorkspace
   reviewSessions?: boolean
+  caseLibraryPreview?: boolean
   initialCardiologyModule?: 'overview' | 'pathway'
 }
 
@@ -65,7 +66,7 @@ const C = {
   blue: 'var(--cv-blue)',
 }
 
-export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, initialCardiologyModule = 'overview' }: Props) {
+export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, caseLibraryPreview = false, initialCardiologyModule = 'overview' }: Props) {
   const [workspace, setWorkspace] = useState<CareWorkspace>(initialWorkspace === 'codelab' ? 'codelab' : 'ward')
   const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
     initialWorkspace === 'ward' || initialWorkspace === 'codelab' ? null : initialWorkspace,
@@ -166,7 +167,7 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
 
       {activeWorkspace === 'ward' ? (
         <ErrorBoundary section="Ward Simulation">
-          {reviewSessions && <WardHandoverSession />}
+          {reviewSessions && <WardHandoverSession caseLibraryPreview={caseLibraryPreview} />}
           <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={openPaywall} />
         </ErrorBoundary>
       ) : null}

@@ -59,19 +59,19 @@ function getNativeHeaderTopPadding() {
   return window.innerWidth >= 768 ? 34 : 69
 }
 
-export default function ReleaseApp({ reviewPreview = false }: { reviewPreview?: boolean }) {
+export default function ReleaseApp({ reviewPreview = false, caseLibraryPreview = false }: { reviewPreview?: boolean; caseLibraryPreview?: boolean }) {
   return (
     <AuthGate allowGuest={false}>
       {user => (
         <SubscriptionPurchaseProvider>
-          <ReleaseShell key={user.id} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
+          <ReleaseShell key={user.id} caseLibraryPreview={caseLibraryPreview} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
         </SubscriptionPurchaseProvider>
       )}
     </AuthGate>
   )
 }
 
-function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
+function ReleaseShell({ showEcgReview, caseLibraryPreview }: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
   const appearance = useAppearance()
   const [tab, setTab] = useState<ReleaseTab>(() => {
     // AuthGate mounts this shell after restoring the client session.
@@ -136,11 +136,11 @@ function ReleaseShell({ showEcgReview }: { showEcgReview: boolean }) {
               <Link href="/labs/ecg-account-review" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '8px 16px', borderRadius: 12, border: `1px solid ${C.border}`, background: C.elevated, color: C.text }}>Open ECG practice →</Link>
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
-            <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} />
+            <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} caseLibraryPreview={showEcgReview && caseLibraryPreview} />
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
-        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} />}
+        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
         {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
       <ReleaseNav active={tab} onChange={setTab} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import AuthGate from '../auth/AuthGate'
+import WardCaseConnections from './WardCaseConnections'
 import { supabase } from '../../supabase'
 import { advancePractice, createPractice, nextScenario, scenarioFor } from '../../lib/ward/handoverScenarios'
 import { checkpointHandover, restoreHandover } from '../../lib/ward/handoverCheckpoint'
@@ -11,8 +12,8 @@ import { draftHandover, type HandoverAction } from '../../lib/ward/handoverSessi
 const card = { background: 'var(--cv-surface)', color: 'var(--cv-text)', border: '1px solid var(--cv-border)', borderRadius: 20, padding: 20, marginBottom: 16 }
 const button = { minHeight: 44, padding: '10px 16px', borderRadius: 12, border: '1px solid var(--cv-border)', background: 'var(--cv-surface-elevated)', color: 'var(--cv-text)', cursor: 'pointer' }
 const labels = { brief: 'Brief', review: 'Review the record', gaps: 'Check the gaps', handover: 'Draft the handover', complete: 'Session summary' }
-export default function WardHandoverSession() {
-  return <AuthGate allowGuest={false}>{user => <AccountSession key={user.id} owner={user.id} />}</AuthGate>
+export default function WardHandoverSession({ caseLibraryPreview = false }: { caseLibraryPreview?: boolean }) {
+  return <AuthGate allowGuest={false}>{user => <><AccountSession key={user.id} owner={user.id} />{caseLibraryPreview && <WardCaseConnections context="ward" />}</>}</AuthGate>
 }
 const repository=handoverAccountRepository(supabase)
 function AccountSession({owner}:{owner:string}) {

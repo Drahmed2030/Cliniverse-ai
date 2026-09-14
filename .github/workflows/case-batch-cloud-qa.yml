@@ -30,9 +30,12 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Focused content and boundary tests
         run: node --test tests/case-media-bindings.test.mjs tests/case-media-return.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs
+      - name: Ward and Atlas compatibility
+        run: node --test tests/ward-*.test.mjs tests/atlas-codelab-entry.test.mjs
       - name: Typecheck new preview
         run: |
           npx next typegen
+          npx tsc --noEmit
           npx tsc --noEmit --strict --skipLibCheck --target es2017 --module esnext --moduleResolution bundler --jsx react-jsx --allowImportingTsExtensions --esModuleInterop next-env.d.ts app/labs/case-batch-preview/page.tsx app/components/case-preview/CaseBatchPreview.tsx content/medical/batch20.ts content/medical/caseMedia.ts
       - name: Install Chromium
         run: npx playwright install --with-deps chromium --only-shell
