@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import type { CasePreview } from '../../../content/medical/batch20'
-import { decisionReviewDraft as draft, parseDecisionObservation, type DecisionObservation } from '../../../content/medical/decisionReview'
+import { decisionReviewDraft as draft, parseDecisionObservation,getPathFeedback, type DecisionObservation } from '../../../content/medical/decisionReview'
 import styles from './casePreview.module.css'
 
 export default function DecisionReview({ lesson }: { lesson: CasePreview }) {
@@ -44,7 +44,9 @@ export default function DecisionReview({ lesson }: { lesson: CasePreview }) {
       <p><strong>Your revised reasoning: </strong>{after.evidence}</p>
       <p><strong>Suggested answer from the existing case: </strong>{lesson.options[lesson.answer]}</p>
       <p>{lesson.explanation}</p>
-      <p>The additional note repeats the observation; it does not supply the missing measurements. Compare the evidence behind each choice, not simply whether you changed your answer. These two confidence entries do not establish calibration or competence.</p>
+<p>{getPathFeedback(before?.decision ?? 0, after.decision)}</p>
+<p>Compare the evidence behind each choice, not simply whether the decision changed. These two confidence entries do not establish calibration or competence.</p>
+
       <label htmlFor="decision-reflection">{draft.reflection}</label>
       <textarea className={styles.practiceInput} id="decision-reflection" rows={3} maxLength={600} autoComplete="off" />
       <p>Optional reflection only. No automated assessment is made of your written reasoning.</p>
