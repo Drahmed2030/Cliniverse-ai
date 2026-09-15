@@ -50,6 +50,7 @@
 .root .saveButton { display: inline-grid; }
 .saveButton > span { grid-area: 1 / 1; align-self: center; }
 .saveMeasure { visibility: hidden; }
+.practiceInput { display: block; box-sizing: border-box; width: 100%; min-height: 48px; margin-block: 8px 20px; padding: 12px; border: 1px solid var(--case-line); border-radius: 12px; color: var(--case-ink); background: var(--case-surface); font: inherit; }
 @media (prefers-color-scheme: dark) { .root { --case-bg: #0f172a; --case-surface: #1e293b; --case-ink: #f8fafc; --case-muted: #cbd5e1; --case-line: #64748b; --case-accent: #5eead4; --case-on-accent: #0f172a; color-scheme: dark; } }
 @media (max-width: 400px) { .card, .panel, .dialog { padding: 16px; } }
 @media (prefers-reduced-motion: reduce) { .root *, .root *::before, .root *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }

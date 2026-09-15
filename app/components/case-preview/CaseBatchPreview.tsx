@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import type { CasePreview } from '../../../content/medical/batch20'
 import { mediaForCase, mediaGap, caseMediaLinks } from '../../../content/medical/caseMedia'
 import styles from './casePreview.module.css'
+import DecisionReview from './DecisionReview'
 
 function subscribe(callback: () => void) {
   window.addEventListener('popstate', callback)
@@ -111,6 +112,7 @@ export default function CaseBatchPreview({ cases, sources, accountProgress }: {
                 <p>{media.creator} · <a href={media.licenseUrl} target="_blank" rel="noopener noreferrer">{media.licenseId} · new tab</a> · <a href={media.sourceUrl} target="_blank" rel="noopener noreferrer">Original source · new tab</a></p>
               </> : <p>{mediaGap(active.id)}</p>}
             </aside>
+            {active.id === 'aortic-stenosis' && <DecisionReview key={active.id} lesson={active} />}
             <button type="button" className={styles.primary} onClick={() => go(1)}>Continue to question</button>
           </> : step === 1 ? <>
             <h2 id="lesson-section">Make your choice</h2>

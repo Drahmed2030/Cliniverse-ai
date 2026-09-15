@@ -29,6 +29,43 @@ const sizes = [
   { name: 'tablet-landscape', width: 1180, height: 820, large: false },
   { name: 'desktop', width: 1440, height: 1000, large: false },
 ]
+for (const width of [375, 768, 1280]) test(`decision review / ${width}`, async ({ page, context }, info) => {
+  await page.setViewportSize({ width, height: 900 })
+  await page.emulateMedia({ colorScheme: width === 375 ? 'dark' : 'light', reducedMotion: 'reduce' })
+  const writes: string[] = []
+  await context.route('**/*', route => {
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(route.request().method())) { writes.push(route.request().url()); return route.abort() }
+    return route.continue()
+  })
+  await page.goto('/labs/case-batch-preview#aortic-stenosis/0')
+  const practice = page.locator('details').filter({ has: page.getByText('Try a decision review · optional draft', { exact: true }) })
+  await practice.locator('summary').click()
+  await expect(practice.getByText(/An additional written note/)).toHaveCount(0)
+  await practice.getByRole('button', { name: 'Commit decision and reveal note' }).click()
+  await expect(practice.getByRole('heading', { name: 'Your initial decision' })).toBeVisible()
+  await practice.getByRole('radio').first().check()
+  await practice.getByRole('spinbutton').fill('70')
+  await practice.getByRole('textbox').fill('Doppler and flow information are missing.')
+  await practice.getByRole('button', { name: 'Commit decision and reveal note' }).click()
+  await expect(practice.getByRole('heading', { name: 'Review the additional note' })).toBeFocused()
+  await practice.getByRole('radio').first().check()
+  await practice.getByRole('spinbutton').fill('70')
+  await practice.getByRole('textbox').fill('The note repeats the same observation.')
+  await practice.getByRole('button', { name: 'Compare decisions', exact: true }).click()
+  await expect(practice.getByRole('heading', { name: 'Compare your decisions' })).toBeFocused()
+  await expect(practice).toContainText('Doppler and flow information are missing.')
+  await expect(practice).toContainText('The note repeats the same observation.')
+  expect((await new AxeBuilder({ page }).include('main').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([])
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  await page.screenshot({ path: info.outputPath('decision-review.png'), fullPage: true })
+  await practice.getByRole('button', { name: 'Start a new review' }).click()
+  await expect(practice.getByRole('spinbutton')).toHaveValue('')
+  await expect(practice.getByRole('heading', { name: 'Your initial decision' })).toBeFocused()
+  await page.getByRole('button', { name: '← Back to cases' }).click()
+  await page.getByRole('button', { name: /Start case\s*:\s*Anterior STEMI/ }).click()
+  await expect(page.getByText('Try a decision review · optional draft')).toHaveCount(0)
+  expect(writes).toEqual([])
+})
 for (const size of sizes) test(`case flow / ${size.name}`, async ({ page }, testInfo) => {
   await page.setViewportSize(size)
   await page.emulateMedia({ colorScheme: size.large ? 'dark' : 'light', reducedMotion: 'reduce' })
