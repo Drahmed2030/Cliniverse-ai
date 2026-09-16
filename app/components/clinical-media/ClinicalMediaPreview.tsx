@@ -13,7 +13,6 @@ import { ECHO_A4C_PREVIEW_STUDY } from '../../lib/clinicalMedia/echoPreviewStudy
 import { createEchoStudyCompetencyState, recordEchoClipCompetency } from '../../lib/competency/echoStudyCompetencyState'
 import { createEchoStudySession } from '../../lib/competency/echoStudySessionController'
 import { buildEchoStudySummary } from '../../lib/competency/echoStudySummary'
-import DoorToEcgMediaComposition from './DoorToEcgMediaComposition'
 import EchoA4cLesson from './EchoA4cLesson'
 import EchoA4cMediaComposition from './EchoA4cMediaComposition'
 import EchoStudyNavigation from './EchoStudyNavigation'
@@ -24,7 +23,7 @@ import { LOCAL_DCM_REVIEW } from '../../lib/clinicalMedia/localDcmReview'
 import styles from './clinical-media.module.css'
 
 const FORMAT_ORDER: ClinicalMediaFormat[] = ['landscape', 'portrait', 'square']
-const PROGRAM_ORDER = ['echo-a4c-normal', 'door-to-ecg'] as const satisfies readonly ClinicalMediaProgram[]
+const PROGRAM_ORDER = ['echo-a4c-normal'] as const satisfies readonly ClinicalMediaProgram[]
 const RESPONSIVE_PLAYER_STYLE = { width: '100%' } satisfies CSSProperties
 const PLAYER_VIEWPORT_CLASS = {
   landscape: styles.landscapePlayerViewport,
@@ -40,15 +39,6 @@ const PROGRAM_COPY = {
     status: {
       summary: 'Licensed cine · rights verified',
       detail: 'The English lesson copy and answer key remain Preview-only until clinical approval. No learner or Production release is enabled.',
-    },
-  },
-  'door-to-ecg': {
-    label: 'ECG · Current prototype',
-    title: 'Clinical Studio · ECG learning engine',
-    body: 'A governed synthetic signal proves the current interaction while calibrated PhysioNet cases remain the next independent ingestion tranche.',
-    status: {
-      summary: 'Synthetic signal · controlled prototype',
-      detail: 'No real ECG record has been ingested yet. The signal contract remains separate from ECHO cine and cannot be presented as a clinical tracing.',
     },
   },
 } as const satisfies Record<typeof PROGRAM_ORDER[number], {
@@ -90,7 +80,7 @@ export default function ClinicalMediaPreview({ echoOnly = false, onAssessment }:
   const frameCount=dcmReview?44:media.durationInFrames
   const playerKey=`${media.compilationId}-${dcmReview}`
   const copy=dcmReview?{title:'DCM candidate · local review only',body:'Not learner-ready · clinical review pending · privacy review pending. Assessments, scoring, persistence and progression disabled.',status:{summary:'Local review only · not learner-ready',detail:'Clinical review pending · privacy review pending. No numerical EF claims. CardioNetworks ECHOpedia / AMC Echolab · CC BY-SA 3.0. Re-encoded with one-pixel right padding; no crop or interpolation.'}}:PROGRAM_COPY[program]
-  const Composition=program==='echo-a4c-normal'?EchoA4cMediaComposition:DoorToEcgMediaComposition
+  const Composition=EchoA4cMediaComposition
   const playerViewportClass=`${styles.playerViewport} ${PLAYER_VIEWPORT_CLASS[format]}`
 
   return <section className={styles.previewShell} aria-labelledby="clinical-media-preview-title" data-testid="clinical-media-preview" dir="ltr">
