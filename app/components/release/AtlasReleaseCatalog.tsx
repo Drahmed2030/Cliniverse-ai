@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import WardCaseConnections from '../ward/WardCaseConnections'
 
 const C = {
@@ -122,6 +123,22 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan, caseLibrar
             </button>
           </article>
         ))}
+
+        <article style={cardStyle}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>ECG Challenge</h2>
+              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>5 ECG cases with findings and explanations</p>
+            </div>
+            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
+              FREE
+            </span>
+          </div>
+
+          <Link href="/labs/ecg-challenge" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+            Open ECG Challenge →
+          </Link>
+        </article>
 
         <section aria-labelledby="atlas-plan-title" style={{ ...cardStyle, borderColor: C.border }}>
           <div style={{ color: C.violet, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>APP STORE PLAN</div>
