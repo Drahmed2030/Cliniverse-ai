@@ -19,7 +19,8 @@ interface EcgCase {
   explain: string
   xpReward: number
   heartRate?: number
-  imagePath?: string
+  imagePaths?: string[]
+  imageCaptions?: string[]
 }
 
 const ECG_CASES: EcgCase[] = [
@@ -125,7 +126,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'ST elevation in lateral leads (I, aVL, V5-V6) with reciprocal inferior depression. Concern for left main or diagonal LAD occlusion. Activate cath lab — door-to-balloon <90 min.',
     xpReward: 50,
     heartRate: 88,
-    imagePath: '/ecg-cases/stemi-lateral.png',
+    imagePaths: ['/ecg-cases/stemi-lateral-1.jpg'],
   },
   {
     id: 'afib-rvr',
@@ -144,7 +145,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Irregularly irregular rhythm without P waves = atrial fibrillation. Rate >100 = rapid ventricular response. Rate control with beta-blocker or non-dihydropyridine CCB; assess CHA2DS2-VASc for anticoagulation.',
     xpReward: 40,
     heartRate: 150,
-    imagePath: '/ecg-cases/afib-rvr.png',
+    imagePaths: ['/ecg-cases/afib-rvr-1.jpg', '/ecg-cases/afib-rvr-2.jpg', '/ecg-cases/afib-rvr-3.jpg'],
   },
   {
     id: 'complete-hb',
@@ -163,7 +164,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Complete AV dissociation with atrial rate > ventricular rate = third-degree AV block. Urgent transcutaneous pacing; transvenous pacemaker. Risk of asystole.',
     xpReward: 50,
     heartRate: 35,
-    imagePath: '/ecg-cases/complete-hb.png',
+    imagePaths: ['/ecg-cases/complete-hb-1.jpg'],
   },
   {
     id: 'vt-monomorphic',
@@ -182,7 +183,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Wide-complex regular tachycardia with uniform QRS morphology = monomorphic VT. Unstable: synchronized cardioversion. Stable: IV amiodarone. Avoid verapamil.',
     xpReward: 50,
     heartRate: 160,
-    imagePath: '/ecg-cases/vt-monomorphic.png',
+    imagePaths: ['/ecg-cases/vt-monomorphic-1.jpg', '/ecg-cases/vt-monomorphic-2.jpg', '/ecg-cases/vt-monomorphic-3.jpg'],
   },
   {
     id: 'hyperkalemia-severe',
@@ -201,7 +202,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Peaked T waves + flattened P + prolonged PR = severe hyperkalemia. K+ >7.0 → risk of VF/asystole. Treat: IV calcium gluconate, insulin/dextrose, salbutamol. Emergency dialysis in ESRD.',
     xpReward: 40,
     heartRate: 72,
-    imagePath: '/ecg-cases/hyperkalemia-severe.png',
+    imagePaths: ['/ecg-cases/hyperkalemia-severe-1.jpg'],
   },
   {
     id: 'wellens',
@@ -220,7 +221,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Wellens Type B: biphasic T waves in V2-V3 with preserved R waves in a pain-free patient = critical proximal LAD stenosis. Urgent angiography. High risk of extensive anterior MI within days.',
     xpReward: 50,
     heartRate: 78,
-    imagePath: '/ecg-cases/wellens.png',
+    imagePaths: ['/ecg-cases/wellens-1.jpg', '/ecg-cases/wellens-2.jpg', '/ecg-cases/wellens-3.jpg'],
   },
   {
     id: 'brugada',
@@ -239,7 +240,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Type 1 Brugada pattern: coved ST elevation ≥2mm with T inversion in V1-V2. Risk of polymorphic VT/VF and sudden death. Avoid triggers (fever, sodium channel blockers). ICD evaluation and electrophysiology referral.',
     xpReward: 50,
     heartRate: 82,
-    imagePath: '/ecg-cases/brugada.png',
+    imagePaths: ['/ecg-cases/brugada-1.png'],
   },
 ]
 
@@ -289,6 +290,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const [score, setScore] = useState(0)
   const [animOffset, setAnimOffset] = useState(0)
   const [imgError, setImgError] = useState(false)
+  const [imgIdx, setImgIdx] = useState(0)
   const animRef = useRef<number>(0)
   const svgW = 340, svgH = 80
 
@@ -305,6 +307,8 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
     return () => { if (animRef.current) cancelAnimationFrame(animRef.current) }
   }, [caseIdx])
 
+  useEffect(() => { setImgError(false) }, [caseIdx, imgIdx])
+
   const handleAnswer = (i: number) => {
     if (selected !== null) return
     setSelected(i)
@@ -319,10 +323,11 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
     setCaseIdx(i => (i + 1) % ECG_CASES.length)
     setSelected(null)
     setShowFindings(false)
-    setImgError(false)
+    setImgIdx(0)
   }
 
   const ecgPath = generateEcgPath(current.id, svgW, svgH)
+  const imagePaths = current.imagePaths
 
   return (
     <div style={{ fontFamily: '-apple-system, sans-serif', paddingBottom: 20 }}>
@@ -362,11 +367,11 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
           </svg>
 
           {/* ECG Line */}
-          {current.imagePath ? (
+          {imagePaths && imagePaths.length > 0 ? (
             imgError ? (
               <div style={{ height: svgH, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontSize: 11, fontWeight: 600 }}>ECG signal preview pending</div>
             ) : (
-              <img src={current.imagePath} alt={`${current.title} ECG tracing`} style={{ width: '100%', height: svgH, objectFit: 'contain', display: 'block' }} onError={() => setImgError(true)} />
+              <img src={imagePaths[imgIdx]} alt={`${current.title} ECG tracing${imagePaths.length > 1 ? ` (${imgIdx + 1} of ${imagePaths.length})` : ''}`} style={{ width: '100%', height: svgH, objectFit: 'contain', display: 'block' }} onError={() => setImgError(true)} />
             )
           ) : (
             <svg width="100%" height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} style={{ display: 'block' }}>
@@ -387,6 +392,17 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
             {current.heartRate ?? (current.id === 'heartblock' ? 32 : current.id === 'vt' ? 180 : 110)} bpm
           </div>
         </div>
+
+        {imagePaths && imagePaths.length > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, padding: '0 2px' }}>
+            <button type="button" onClick={() => setImgIdx(i => (i - 1 + imagePaths.length) % imagePaths.length)} style={{ background: 'none', border: 'none', color: '#00C4B4', fontSize: 13, fontWeight: 700, cursor: 'pointer', padding: '4px 8px' }}>‹ Prev</button>
+            <span style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>{imgIdx + 1} / {imagePaths.length}</span>
+            <button type="button" onClick={() => setImgIdx(i => (i + 1) % imagePaths.length)} style={{ background: 'none', border: 'none', color: '#00C4B4', fontSize: 13, fontWeight: 700, cursor: 'pointer', padding: '4px 8px' }}>Next ›</button>
+          </div>
+        )}
+        {current.imageCaptions?.[imgIdx] && (
+          <div style={{ fontSize: 11, color: '#64748b', textAlign: 'center', marginBottom: 4, fontStyle: 'italic' }}>{current.imageCaptions[imgIdx]}</div>
+        )}
         <div style={{ fontSize: 10, color: '#94a3b8', textAlign: 'center', marginBottom: 4 }}>25mm/s · 10mm/mV · Lead II</div>
       </div>
 
