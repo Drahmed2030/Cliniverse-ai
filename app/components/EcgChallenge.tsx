@@ -134,7 +134,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const [showFindings, setShowFindings] = useState(false)
   const [score, setScore] = useState(0)
   const [animOffset, setAnimOffset] = useState(0)
-  const animRef = useRef<number>()
+  const animRef = useRef<number>(0)
   const svgW = 340, svgH = 80
 
   const current = ECG_CASES[caseIdx]
