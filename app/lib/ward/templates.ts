@@ -194,6 +194,20 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     ],
     dischargeCriteria: ["Tolerating diet progression", "Pain controlled", "Wound acceptable"],
   },
+    {
+    id: "acs_ruleout",
+    title: "Chest Pain — Rule Out ACS",
+    departmentFlow: ["ed"],
+    baseDiagnosis: "Chest pain — R/O ACS",
+    priority: "urgent",
+    expectedStayHours: 24,
+    ageRange: [30, 70],
+    sexBias: "any",
+    workupPack: [],
+    initialOrders: [],
+    decisionPoints: [],
+    dischargeCriteria: [],
+  },
 ];
 
 export function getTemplate(id: string): CaseTemplate | undefined {

@@ -192,7 +192,7 @@ export const MOCK_PATIENTS: WardPatient[] = [
   },
   {
     id: "w5",
-    templateId: "stemi_anterior",
+    templateId: "acs_ruleout",
     name: "Yusuf Mansour",
     age: 34,
     sex: "M",
