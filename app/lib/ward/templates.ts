@@ -29,10 +29,29 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     decisionPoints: [
       {
         id: "d1",
-        prompt: "ED: next best immediate action?",
+        prompt: "Post-PCI day 2. Vitals stable. What is your priority in this morning's assessment?",
         options: [
-          { id: "a", label: "Activate cath lab pathway", effect: "Faster reperfusion" },
-          { id: "b", label: "Wait for full labs only", effect: "Delay risk" },
+          { id: "a", label: "Routine monitoring — no specific assessment needed", effect: "Insufficient. 'Stable vitals' in day 2 post-anterior STEMI does not mean 'no assessment'. Anterior MI affects LV function — a focused assessment is required." },
+          { id: "b", label: "Focused assessment: JVP, lung bases, peripheral pulses, access site, activity tolerance", effect: "Correct. Anterior STEMI carries higher risk of LV dysfunction. Assess for early heart failure, access site complications, and arrhythmia risk — even with stable vitals." },
+          { id: "c", label: "Immediate discharge planning — vitals stable", effect: "Premature. Stable vitals alone do not establish discharge readiness after anterior STEMI. Discharge criteria require clinical stability for 24h + ambulation without symptoms + no recurrent ischemia." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "Nurse reports: 'Patient walked to the bathroom, had to sit and catch his breath. Says he feels fine now.' What do you do?",
+        options: [
+          { id: "a", label: "Expected post-MI weakness — no action needed", effect: "Risky. New exertional dyspnea in day 2 post-anterior STEMI may be the first sign of early heart failure. Assuming 'expected weakness' without assessment can miss progressive LV dysfunction." },
+          { id: "b", label: "Order BNP, echocardiogram, chest X-ray. Continue DAPT.", effect: "Correct. New exertional dyspnea warrants assessment for early heart failure. DAPT must continue — stopping in the first 3 months post-PCI risks stent thrombosis." },
+          { id: "c", label: "Hold DAPT temporarily — possible bleeding concern", effect: "Dangerous. Holding DAPT in day 2 post-PCI significantly increases stent thrombosis risk. There is no bleeding signal here — the symptom is dyspnea, not hemorrhage." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "Echo: EF 45%, mild pulmonary congestion. After 48h of diuresis: patient walks without symptoms, no chest pain, vitals stable. Next step?",
+        options: [
+          { id: "a", label: "Discharge now — patient looks well", effect: "Premature. 'Looks well' is not a discharge criterion. Objective criteria must be met — and one stable day is not enough." },
+          { id: "b", label: "Discharge when: 24h clinical stability + ambulation without symptoms + no recurrent ischemia + medication reconciliation + follow-up scheduled", effect: "Correct. These are the standard post-MI discharge criteria. Each element matters — especially follow-up and medication reconciliation." },
+          { id: "c", label: "Continue inpatient stay for 7 days", effect: "Unnecessary. Prolonged stay increases infection and deconditioning risk without improving outcomes. Once criteria met, discharge with close follow-up is appropriate." },
         ],
       },
     ],
