@@ -1,7 +1,9 @@
 "use client";
+import { useState } from "react";
 import RelatedEvidencePanel from "./RelatedEvidencePanel";
 import ClinicalPanelV2 from "./ClinicalPanelV2";
 import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
+import { getTemplate } from "../../lib/ward/templates";
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_TOP,
@@ -78,6 +80,7 @@ export default function PatientJourney({
   onUpgrade,
 }: Props) {
   const accent = priorityColor(patient.priority);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
 
   return (
     <div
@@ -215,6 +218,50 @@ export default function PatientJourney({
               </div>
             ) : <Empty text="No workup items" />}
           </Section>
+
+          {(() => {
+            const template = getTemplate(patient.templateId)
+            if (!template?.decisionPoints?.length) return null
+            return (
+              <Section title="Decision Points">
+                {template.decisionPoints.map((dp) => (
+                  <div key={dp.id} style={{ marginBottom: 16 }}>
+                    <p style={{ fontWeight: 600, marginBottom: 8 }}>{dp.prompt}</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {dp.options.map((opt) => {
+                        const isSelected = selectedOptions[dp.id] === opt.id
+                        return (
+                          <div key={opt.id}>
+                            <button
+                              type="button"
+                              onClick={() => setSelectedOptions((prev) => ({ ...prev, [dp.id]: opt.id }))}
+                              style={{
+                                textAlign: "left",
+                                padding: "8px 12px",
+                                borderRadius: 8,
+                                border: isSelected ? "2px solid #6366f1" : "1px solid #e5e7eb",
+                                background: isSelected ? "#eef2ff" : "transparent",
+                                cursor: "pointer",
+                                width: "100%",
+                                fontSize: 14,
+                              }}
+                            >
+                              {opt.label}
+                            </button>
+                            {isSelected && (
+                              <p style={{ marginTop: 6, marginLeft: 12, fontSize: 13, color: "#4b5563" }}>
+                                {opt.effect}
+                              </p>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </Section>
+            )
+          })()}
 
           <Section title="Related Evidence">
             <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} onUpgrade={onUpgrade} />
