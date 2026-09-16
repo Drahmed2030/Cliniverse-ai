@@ -74,7 +74,7 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     dischargeCriteria: ["Afebrile", "Stable O₂ on room air or baseline", "Oral abx tolerated"],
   },
   {
-    id: "dka",
+    id: "dka_legacy",
     title: "Diabetic Ketoacidosis",
     departmentFlow: ["ed", "im"],
     baseDiagnosis: "Diabetic Ketoacidosis",
@@ -207,6 +207,56 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     initialOrders: [],
     decisionPoints: [],
     dischargeCriteria: [],
+  },
+    {
+    id:"dka",
+    title: "Diabetic Ketoacidosis — Refined",
+    departmentFlow: ["ed", "im"],
+    baseDiagnosis: "Diabetic Ketoacidosis",
+    priority: "critical",
+    expectedStayHours: 36,
+    ageRange: [16, 60],
+    sexBias: "any",
+    workupPack: [
+      { kind: "chem", title: "Chemistry + glucose", summary: "High glucose · anion gap acidosis", critical: true },
+      { kind: "cbc", title: "CBC", summary: "Hemoconcentration possible" },
+      { kind: "abg", title: "ABG", summary: "Metabolic acidosis", critical: true },
+    ],
+    initialOrders: [
+      { label: "IV fluid resuscitation", impact: "Restore volume" },
+      { label: "Insulin infusion protocol", impact: "Close anion gap" },
+      { label: "Electrolyte replacement", impact: "Prevent arrhythmia" },
+    ],
+    decisionPoints: [
+      {
+        id: "d1",
+        prompt: "DKA confirmed on labs. What is your first priority?",
+        options: [
+          { id: "a", label: "IV fluid resuscitation first", effect: "Correct. Volume resuscitation precedes insulin — starting insulin in a volume-depleted patient risks cardiovascular collapse." },
+          { id: "b", label: "Insulin bolus immediately", effect: "Risky. Insulin before fluids shifts glucose and potassium intracellularly in a hypovolemic patient — cardiovascular collapse risk." },
+          { id: "c", label: "Sodium bicarbonate push", effect: "Not indicated at this stage. Bicarbonate is reserved for pH < 6.9; routine use worsens hypokalemia and cerebral edema risk." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "Potassium is 3.1 mmol/L. Insulin infusion is next. What now?",
+        options: [
+          { id: "a", label: "Replace potassium before or with insulin", effect: "Correct. Insulin drives K+ into cells — starting insulin with K+ 3.1 risks severe hypokalemia and arrhythmia." },
+          { id: "b", label: "Start insulin, replace potassium later", effect: "Dangerous. Insulin will drop K+ further. Severe hypokalemia can cause fatal arrhythmias within minutes." },
+          { id: "c", label: "No action — potassium normalises with fluids", effect: "Incorrect. Fluids alone do not correct hypokalemia; insulin worsens it. Active replacement is required." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "Anion gap closed. Patient tolerating oral intake. Next step?",
+        options: [
+          { id: "a", label: "Overlap IV insulin with subcutaneous for 1–2 hours", effect: "Correct. Overlap prevents rebound hyperglycemia and ketosis while subcutaneous insulin reaches steady state." },
+          { id: "b", label: "Stop IV insulin immediately", effect: "Risky. Abrupt discontinuation before subcutaneous absorption causes rebound DKA within hours." },
+          { id: "c", label: "Continue IV insulin until discharge", effect: "Unnecessary. Once gap is closed and patient eats, transition is safe — prolonging IV delays discharge." },
+        ],
+      },
+    ],
+    dischargeCriteria: ["Gap closed", "Tolerating oral intake", "Education completed"],
   },
 ];
 
