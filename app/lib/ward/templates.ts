@@ -64,10 +64,29 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     decisionPoints: [
       {
         id: "d1",
-        prompt: "Disposition after ED workup?",
+        prompt: "CURB-65 = 1. Patient is stable. Where do you manage?",
         options: [
-          { id: "a", label: "Admit medical ward", effect: "Monitored treatment" },
-          { id: "b", label: "Discharge on oral therapy", effect: "Risk if hypoxic" },
+          { id: "a", label: "Outpatient oral antibiotics", effect: "Reasonable. CURB-65 0–1 supports outpatient care if social factors and comorbidities allow. Verify follow-up and adherence." },
+          { id: "b", label: "Admit to medical ward", effect: "Reasonable if oxygen requirement, comorbidity, or social factors present. CURB-65 alone does not decide disposition — clinical judgment matters." },
+          { id: "c", label: "Admit to ICU", effect: "Not indicated. ICU is reserved for respiratory failure, septic shock, or multi-organ dysfunction requiring support." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "Blood cultures pending. When do you start antibiotics?",
+        options: [
+          { id: "a", label: "Within 1 hour of diagnosis", effect: "Correct. Early antibiotic administration within 1h of recognition improves survival in severe CAP. Do not wait for cultures." },
+          { id: "b", label: "After blood cultures return", effect: "Dangerous delay. Cultures take 24–48h — delaying antibiotics increases mortality. Draw cultures, then give antibiotics immediately." },
+          { id: "c", label: "After chest X-ray confirms infiltrate", effect: "Unnecessary delay. Clinical suspicion with compatible findings is sufficient. CXR supports but does not gate antibiotic initiation." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "Day 3. Fever resolved, O₂ saturation stable on room air, tolerating oral intake. Next step?",
+        options: [
+          { id: "a", label: "Switch IV to oral antibiotics and plan discharge", effect: "Correct. Clinical stability for 24h + tolerating oral intake + stable oxygenation = criteria for oral switch and discharge planning." },
+          { id: "b", label: "Continue IV antibiotics for full 7 days", effect: "Unnecessary. IV-to-oral switch is safe once stable and reduces length of stay, cost, and line complications." },
+          { id: "c", label: "Repeat chest X-ray before any change", effect: "Not required. Radiographic improvement lags clinical recovery by weeks. Repeat CXR is for non-resolving or worsening cases." },
         ],
       },
     ],
