@@ -231,10 +231,29 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     decisionPoints: [
       {
         id: "d1",
-        prompt: "Fever day 1 post-op — first action?",
+        prompt: "Post-op day 1 after omental patch repair for perforated peptic ulcer. Patient is stable. What is your morning priority?",
         options: [
-          { id: "a", label: "Examine · vitals · targeted workup", effect: "Avoid missed complication" },
-          { id: "b", label: "Ignore as normal", effect: "Risk delay" },
+          { id: "a", label: "Routine monitoring — vitals are stable", effect: "Insufficient. Post-op day 1 after abdominal surgery is the highest-risk window for anastomotic leak, sepsis, and atelectasis. Stable vitals do not exclude early complications." },
+          { id: "b", label: "Focused assessment: temperature, HR, abdominal exam, drain output, wound, respiratory exam", effect: "Correct. Post-op day 1 requires structured assessment for the common complications: leak (abdominal pain, tachycardia), sepsis (fever), atelectasis (hypoxia), bleeding (drain output)." },
+          { id: "c", label: "Immediate discharge planning", effect: "Premature. Post-op day 1 is too early — discharge requires afebrile 48h, tolerating diet, drain removed, wound clean." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "Day 1 post-op: Temp 38.5°C, HR 118, BP 108/68. Abdomen tender. What is your next step?",
+        options: [
+          { id: "a", label: "Likely atelectasis — chest physiotherapy only", effect: "Incomplete. Atelectasis is common but does not explain tachycardia + abdominal tenderness + borderline BP. Missing an anastomotic leak can be fatal." },
+          { id: "b", label: "Full septic screen: blood cultures, CXR, wound swab, drain fluid analysis, urgent surgical review", effect: "Correct. Post-op fever + tachycardia + abdominal tenderness on day 1 requires urgent evaluation for anastomotic leak. Do not wait — early detection changes outcome." },
+          { id: "c", label: "Antipyretics and reassess in 24 hours", effect: "Dangerous delay. Waiting 24h in suspected anastomotic leak risks peritonitis, sepsis, and death. Investigate now." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "Day 4 post-op. Afebrile 48h, tolerating soft diet, wound clean, drain removed. What is the discharge plan?",
+        options: [
+          { id: "a", label: "Discharge with PPI 8 weeks + H. pylori test at 4-6 weeks + NSAID avoidance", effect: "Correct. Standard post-perforation plan: PPI therapy, delayed H. pylori testing (testing during acute phase has false negatives), permanent NSAID avoidance, and follow-up." },
+          { id: "b", label: "Discharge with no medication — ulcer was repaired", effect: "Incomplete. Surgical repair does not treat the underlying ulcer cause. H. pylori eradication or NSAID cessation is essential to prevent recurrence." },
+          { id: "c", label: "Continue inpatient for 7 more days", effect: "Unnecessary. Once afebrile 48h, tolerating diet, wound clean, and drain removed, discharge is appropriate. Prolonged stay adds risk without benefit." },
         ],
       },
     ],
