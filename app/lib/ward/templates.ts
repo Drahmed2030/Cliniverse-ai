@@ -113,10 +113,29 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     decisionPoints: [
       {
         id: "d1",
-        prompt: "After CT rules out bleed, next focus?",
+        prompt: "Last known well: 2.5 hours ago. CT head: no hemorrhage. What is your next step?",
         options: [
-          { id: "a", label: "Perfusion / stroke team pathway", effect: "Best outcome window" },
-          { id: "b", label: "Routine ward admit only", effect: "May miss intervention window" },
+          { id: "a", label: "IV thrombolysis if no contraindications", effect: "Correct. Within 4.5h window with no hemorrhage on CT — thrombolysis is indicated. Check BP <185/110, no anticoagulation, no recent surgery. Time is brain." },
+          { id: "b", label: "Wait for MRI before any decision", effect: "Unnecessary delay. Non-contrast CT excludes hemorrhage and is sufficient for thrombolysis decision. MRI delays treatment past the window." },
+          { id: "c", label: "Start aspirin and admit", effect: "Insufficient. Aspirin alone is not acute reperfusion. Thrombolysis is the priority within the window — antiplatelets start 24h after thrombolysis." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "BP is 178/96. Patient is a candidate for thrombolysis. What do you do?",
+        options: [
+          { id: "a", label: "Lower BP to <185/110 before thrombolysis", effect: "Correct. BP must be <185/110 before IV thrombolysis. Use labetalol 10mg IV or nicardipine infusion. After thrombolysis, keep <180/105 for 24h." },
+          { id: "b", label: "Lower BP aggressively to <140/90", effect: "Dangerous. Over-lowering in acute stroke worsens penumbra perfusion. Target is permissive — only lower if above threshold." },
+          { id: "c", label: "No action — BP is acceptable", effect: "Incorrect. 178/96 exceeds the 185/110 threshold for thrombolysis. Must lower before giving tPA." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "24 hours post-thrombolysis. Patient stable. No hemorrhage on repeat CT. Next step?",
+        options: [
+          { id: "a", label: "Start aspirin, swallow assessment, DVT prophylaxis", effect: "Correct. Antiplatelet starts 24h after thrombolysis once hemorrhage excluded. Swallow assessment before oral intake. DVT prophylaxis with IPC or LMWH." },
+          { id: "b", label: "Start therapeutic anticoagulation immediately", effect: "Incorrect. Therapeutic anticoagulation is not routine in acute ischemic stroke unless cardioembolic indication (e.g. AF) — and even then, delayed 4-14 days depending on infarct size." },
+          { id: "c", label: "Discharge home — patient is stable", effect: "Premature. Needs swallow assessment, rehabilitation planning, secondary prevention, and stroke unit monitoring for at least 48-72h." },
         ],
       },
     ],
