@@ -35,43 +35,45 @@ interface Props {
 
 const COPY = {
   en: {
-    title: "Cliniverse PRO",
-    subtitle: "Unlock expanded cardiovascular learning and simulated care workflows",
+    title: "Try Cliniverse PRO free for 7 days",
+    subtitle: "Full access. Cancel anytime.",
+    trialDefault: "7 days free, then",
     features: [
-      "Cardiology Operations and Cardiac Pathway simulation",
-      "Nexus role-based cardiovascular learning",
-      "Expanded fictional Ward cases",
-      "Related evidence for supported simulation templates",
-      "Verified access on your signed-in Cliniverse account",
+      "Ward Simulation — 7 cases × 3 decision stations",
+      "ECG Challenge — 12 real ECG cases with multi-image views",
+      "Echo Studies — real cardiac ultrasound with guided assessment",
+      "Code Lab — 12 lessons (BLS + ACLS)",
+      "Progress tracking across all cases",
     ],
     monthly: "Monthly",
     yearly: "Yearly",
     best: "Best value",
-    continue: "Continue",
+    startTrial: "Start my free trial",
     unavailable: "Purchases are not available yet",
     restore: "Restore purchases",
     legal: "Terms · Privacy",
-    renew: "Payment is charged to your Apple ID after confirmation. The subscription renews automatically until canceled. Manage or cancel it in Apple ID subscription settings.",
+    renew: "Auto-renewing. Cancel anytime in Settings. By continuing, you agree to our Terms and Privacy Policy.",
     loadingPrice: "Loading from App Store…",
   },
   ar: {
-    title: "Cliniverse PRO",
-    subtitle: "افتح تعليم القلب الموسع ومسارات الرعاية التدريبية",
+    title: "جرّب Cliniverse PRO مجانًا لمدة 7 أيام",
+    subtitle: "وصول كامل. ألغِ في أي وقت.",
+    trialDefault: "7 أيام مجانية، ثم",
     features: [
-      "محاكاة عمليات القلب ومسار القلب",
-      "تعليم Nexus لأدوار فريق القلب",
-      "حالات Ward تدريبية موسعة",
-      "مراجع مرتبطة بقوالب المحاكاة المدعومة",
-      "وصول موثق عبر حساب Cliniverse المسجل",
+      "محاكاة Ward — 7 حالات × 3 محطات قرار",
+      "تحدي تخطيط القلب — 12 حالة تخطيط قلب حقيقية بعرض متعدد الصور",
+      "دراسات الإيكو — تصوير قلب حقيقي بالموجات فوق الصوتية مع تقييم موجّه",
+      "معمل الأكواد — 12 درسًا (BLS + ACLS)",
+      "تتبع التقدم عبر جميع الحالات",
     ],
     monthly: "شهري",
     yearly: "سنوي",
     best: "أفضل قيمة",
-    continue: "متابعة",
+    startTrial: "ابدأ تجربتي المجانية",
     unavailable: "المشتريات غير متاحة بعد",
     restore: "استعادة المشتريات",
     legal: "الشروط · الخصوصية",
-    renew: "يخصم المبلغ من Apple ID بعد التأكيد. يتجدد الاشتراك تلقائيا حتى تلغيه. تدير الاشتراك أو تلغيه من إعدادات اشتراكات Apple ID.",
+    renew: "يتجدد تلقائيًا. يمكنك الإلغاء في أي وقت من الإعدادات. بالمتابعة، فإنك توافق على الشروط وسياسة الخصوصية.",
     loadingPrice: "جارٍ تحميل السعر من App Store…",
   },
 };
@@ -97,7 +99,8 @@ export default function PaywallSheet({
   const selectedProduct = products.find(product => product.plan === plan) || products[0]
   const selectedPlan = selectedProduct?.plan || plan
   const canPurchase = purchaseEnabled && !busy && Boolean(selectedProduct?.displayPrice)
-  const cta = busy ? "…" : canPurchase ? (trialLabel || t.continue) : t.unavailable;
+  const cta = busy ? "…" : canPurchase ? t.startTrial : t.unavailable;
+  const trialCopy = trialLabel ?? t.trialDefault
 
   return (
     <div dir={dir} onClick={onClose} style={{ position:"fixed", inset:0, zIndex:100, background:"rgba(2,6,23,0.72)", display:"flex", alignItems:"flex-end", justifyContent:"center" }}>
@@ -140,6 +143,8 @@ export default function PaywallSheet({
         )}
 
         {statusLabel ? <div role="status" aria-live="polite" style={{ textAlign:"center", fontSize:12, color:T.sub, marginBottom:10 }}>{statusLabel}</div> : null}
+
+        {canPurchase && trialCopy ? <div style={{ textAlign:"center", fontSize:12, color:T.sub, marginBottom:8 }}>{trialCopy}</div> : null}
 
         <button type="button" disabled={!canPurchase} onClick={() => { if (canPurchase) void onSubscribe(selectedPlan); }} style={{ width:"100%", border:"none", borderRadius:16, padding:"14px 16px", background:T.tealD, color:T.white, fontSize:15, fontWeight:800, marginBottom:10, opacity:canPurchase ? 1 : 0.5, cursor:canPurchase ? "pointer" : "not-allowed" }}>
           {cta}
