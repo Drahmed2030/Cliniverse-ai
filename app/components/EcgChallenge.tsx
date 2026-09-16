@@ -1,7 +1,28 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 
-const ECG_CASES = [
+interface EcgFinding {
+  label: string
+  color: string
+  note: string
+}
+
+interface EcgCase {
+  id: string
+  title: string
+  difficulty: string
+  diffColor: string
+  description: string
+  options: string[]
+  correct: number
+  findings: EcgFinding[]
+  explain: string
+  xpReward: number
+  heartRate?: number
+  imagePath?: string
+}
+
+const ECG_CASES: EcgCase[] = [
   {
     id: 'stemi',
     title: 'STEMI — Anterior',
@@ -87,6 +108,139 @@ const ECG_CASES = [
     explain: 'Hyperkalaemia progression: peaked T → flat P → wide QRS → sine wave → VF. Immediate: Calcium gluconate 10ml IV (stabilises membrane). Then: insulin/dextrose, salbutamol, dialysis.',
     xpReward: 50,
   },
+  {
+    id: 'stemi-lateral',
+    title: 'Lateral STEMI',
+    difficulty: 'CRITICAL',
+    diffColor: '#ff3b30',
+    description: 'Male 62 years. Ongoing chest pain 90 minutes. ST elevation in lateral leads.',
+    options: ['Normal Sinus Rhythm', 'Lateral STEMI', 'Acute Pericarditis', 'LVH with strain'],
+    correct: 1,
+    findings: [
+      { label: 'P Wave', color: '#00C4B4', note: 'Sinus origin' },
+      { label: 'ST Segment', color: '#ff3b30', note: 'Elevation 2-3mm in I, aVL, V5-V6 ⚠' },
+      { label: 'Reciprocal', color: '#ff3b30', note: 'ST depression in III, aVF ⚠' },
+      { label: 'QRS', color: '#30d158', note: 'Narrow — no aberrancy' },
+    ],
+    explain: 'ST elevation in lateral leads (I, aVL, V5-V6) with reciprocal inferior depression. Concern for left main or diagonal LAD occlusion. Activate cath lab — door-to-balloon <90 min.',
+    xpReward: 50,
+    heartRate: 88,
+    imagePath: '/ecg-cases/stemi-lateral.png',
+  },
+  {
+    id: 'afib-rvr',
+    title: 'Atrial Fibrillation with RVR',
+    difficulty: 'INTERMEDIATE',
+    diffColor: '#ff9500',
+    description: 'Female 74 years. Palpitations, dyspnea. Irregularly irregular pulse.',
+    options: ['Sinus Tachycardia', 'Atrial Flutter', 'Atrial Fibrillation with RVR', 'Multifocal Atrial Tachycardia'],
+    correct: 2,
+    findings: [
+      { label: 'P Wave', color: '#ff3b30', note: 'Absent — no organized atrial activity' },
+      { label: 'Rhythm', color: '#ff3b30', note: 'Irregularly irregular' },
+      { label: 'Rate', color: '#ff9500', note: '140-160 bpm' },
+      { label: 'QRS', color: '#30d158', note: 'Narrow — no aberrancy' },
+    ],
+    explain: 'Irregularly irregular rhythm without P waves = atrial fibrillation. Rate >100 = rapid ventricular response. Rate control with beta-blocker or non-dihydropyridine CCB; assess CHA2DS2-VASc for anticoagulation.',
+    xpReward: 40,
+    heartRate: 150,
+    imagePath: '/ecg-cases/afib-rvr.png',
+  },
+  {
+    id: 'complete-hb',
+    title: 'Complete Heart Block',
+    difficulty: 'CRITICAL',
+    diffColor: '#ff3b30',
+    description: 'Male 78 years. Syncope. Bradycardia with AV dissociation.',
+    options: ['First-degree AV block', 'Mobitz Type I', 'Mobitz Type II', 'Complete (third-degree) AV block'],
+    correct: 3,
+    findings: [
+      { label: 'P Wave', color: '#00C4B4', note: 'Regular, rate ~90' },
+      { label: 'QRS', color: '#ff3b30', note: 'Regular, rate ~35 — no relation to P' },
+      { label: 'PR Interval', color: '#ff3b30', note: 'Variable — AV dissociation' },
+      { label: 'QRS Width', color: '#ff9500', note: 'Wide (>120 ms) — ventricular escape' },
+    ],
+    explain: 'Complete AV dissociation with atrial rate > ventricular rate = third-degree AV block. Urgent transcutaneous pacing; transvenous pacemaker. Risk of asystole.',
+    xpReward: 50,
+    heartRate: 35,
+    imagePath: '/ecg-cases/complete-hb.png',
+  },
+  {
+    id: 'vt-monomorphic',
+    title: 'Monomorphic Ventricular Tachycardia',
+    difficulty: 'CRITICAL',
+    diffColor: '#ff3b30',
+    description: 'Male 68 years. Prior MI. Palpitations, hypotension. Wide-complex tachycardia.',
+    options: ['SVT with aberrancy', 'Monomorphic VT', 'Torsades de Pointes', 'Ventricular fibrillation'],
+    correct: 1,
+    findings: [
+      { label: 'Rate', color: '#ff3b30', note: '~160 bpm' },
+      { label: 'QRS', color: '#ff3b30', note: 'Wide (>140 ms), uniform morphology' },
+      { label: 'P Wave', color: '#ff3b30', note: 'Absent — no visible atrial activity' },
+      { label: 'Axis', color: '#ff3b30', note: 'Extreme axis — precordial concordance' },
+    ],
+    explain: 'Wide-complex regular tachycardia with uniform QRS morphology = monomorphic VT. Unstable: synchronized cardioversion. Stable: IV amiodarone. Avoid verapamil.',
+    xpReward: 50,
+    heartRate: 160,
+    imagePath: '/ecg-cases/vt-monomorphic.png',
+  },
+  {
+    id: 'hyperkalemia-severe',
+    title: 'Severe Hyperkalemia',
+    difficulty: 'INTERMEDIATE',
+    diffColor: '#ff9500',
+    description: 'Female 58 years. ESRD, missed dialysis. Generalized weakness.',
+    options: ['Normal sinus rhythm', 'Hyperkalemia with peaked T waves', 'Hyperacute anterior STEMI', 'Brugada pattern'],
+    correct: 1,
+    findings: [
+      { label: 'T Waves', color: '#ff3b30', note: 'Tall, narrow, peaked — most prominent V2-V4 ⚠' },
+      { label: 'PR Interval', color: '#ff9500', note: 'Prolonged' },
+      { label: 'P Wave', color: '#ff9500', note: 'Flattened, low amplitude' },
+      { label: 'QRS', color: '#ff9500', note: 'Mildly widened' },
+    ],
+    explain: 'Peaked T waves + flattened P + prolonged PR = severe hyperkalemia. K+ >7.0 → risk of VF/asystole. Treat: IV calcium gluconate, insulin/dextrose, salbutamol. Emergency dialysis in ESRD.',
+    xpReward: 40,
+    heartRate: 72,
+    imagePath: '/ecg-cases/hyperkalemia-severe.png',
+  },
+  {
+    id: 'wellens',
+    title: 'Wellens Syndrome (Type B)',
+    difficulty: 'INTERMEDIATE',
+    diffColor: '#ff9500',
+    description: 'Male 55 years. Chest pain resolved. Biphasic T waves V2-V3.',
+    options: ['Normal ECG', 'Wellens syndrome — Type B', 'Anterior STEMI', 'Benign early repolarization'],
+    correct: 1,
+    findings: [
+      { label: 'T Wave V2-V3', color: '#ff3b30', note: 'Biphasic — initial negative, terminal positive ⚠' },
+      { label: 'ST Segment', color: '#ff9500', note: 'Isoelectric or minimal elevation' },
+      { label: 'R Waves', color: '#30d158', note: 'Preserved precordial R progression' },
+      { label: 'Troponin', color: '#00C4B4', note: 'Normal or mildly elevated' },
+    ],
+    explain: 'Wellens Type B: biphasic T waves in V2-V3 with preserved R waves in a pain-free patient = critical proximal LAD stenosis. Urgent angiography. High risk of extensive anterior MI within days.',
+    xpReward: 50,
+    heartRate: 78,
+    imagePath: '/ecg-cases/wellens.png',
+  },
+  {
+    id: 'brugada',
+    title: 'Brugada Pattern — Type 1',
+    difficulty: 'INTERMEDIATE',
+    diffColor: '#ff9500',
+    description: 'Male 42 years. Syncope. Family history of sudden cardiac death.',
+    options: ['Right bundle branch block', 'Brugada pattern — Type 1', 'Left bundle branch block', 'Normal variant'],
+    correct: 1,
+    findings: [
+      { label: 'V1-V2', color: '#ff3b30', note: 'Coved ST elevation ≥2mm with T-wave inversion ⚠' },
+      { label: 'QRS', color: '#ff9500', note: 'RBBB-like pattern (rSR\')' },
+      { label: 'PR Interval', color: '#00C4B4', note: 'Normal to short' },
+      { label: 'Rhythm', color: '#00C4B4', note: 'Sinus' },
+    ],
+    explain: 'Type 1 Brugada pattern: coved ST elevation ≥2mm with T inversion in V1-V2. Risk of polymorphic VT/VF and sudden death. Avoid triggers (fever, sodium channel blockers). ICD evaluation and electrophysiology referral.',
+    xpReward: 50,
+    heartRate: 82,
+    imagePath: '/ecg-cases/brugada.png',
+  },
 ]
 
 // ECG Path generator
@@ -134,6 +288,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const [showFindings, setShowFindings] = useState(false)
   const [score, setScore] = useState(0)
   const [animOffset, setAnimOffset] = useState(0)
+  const [imgError, setImgError] = useState(false)
   const animRef = useRef<number>(0)
   const svgW = 340, svgH = 80
 
@@ -164,6 +319,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
     setCaseIdx(i => (i + 1) % ECG_CASES.length)
     setSelected(null)
     setShowFindings(false)
+    setImgError(false)
   }
 
   const ecgPath = generateEcgPath(current.id, svgW, svgH)
@@ -206,21 +362,29 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
           </svg>
 
           {/* ECG Line */}
-          <svg width="100%" height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} style={{ display: 'block' }}>
-            {/* Glow effect */}
-            <filter id="ecgGlow">
-              <feGaussianBlur stdDeviation="2" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-            <path d={ecgPath} fill="none" stroke="rgba(0,255,157,0.3)" strokeWidth={4} strokeLinecap="round" />
-            <path d={ecgPath} fill="none" stroke="#00ff9d" strokeWidth={2} strokeLinecap="round" filter="url(#ecgGlow)" />
-            {/* Animated scan line */}
-            <line x1={animOffset} y1={0} x2={animOffset} y2={svgH} stroke="rgba(0,255,157,0.4)" strokeWidth={1} />
-          </svg>
+          {current.imagePath ? (
+            imgError ? (
+              <div style={{ height: svgH, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontSize: 11, fontWeight: 600 }}>ECG signal preview pending</div>
+            ) : (
+              <img src={current.imagePath} alt={`${current.title} ECG tracing`} style={{ width: '100%', height: svgH, objectFit: 'contain', display: 'block' }} onError={() => setImgError(true)} />
+            )
+          ) : (
+            <svg width="100%" height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} style={{ display: 'block' }}>
+              {/* Glow effect */}
+              <filter id="ecgGlow">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+              <path d={ecgPath} fill="none" stroke="rgba(0,255,157,0.3)" strokeWidth={4} strokeLinecap="round" />
+              <path d={ecgPath} fill="none" stroke="#00ff9d" strokeWidth={2} strokeLinecap="round" filter="url(#ecgGlow)" />
+              {/* Animated scan line */}
+              <line x1={animOffset} y1={0} x2={animOffset} y2={svgH} stroke="rgba(0,255,157,0.4)" strokeWidth={1} />
+            </svg>
+          )}
 
           {/* Rate display */}
           <div style={{ position: 'absolute', top: 8, right: 12, fontSize: 10, color: '#00ff9d', fontWeight: 700, letterSpacing: 1 }}>
-            {current.id === 'heartblock' ? '32' : current.id === 'vt' ? '180' : current.id === 'afib' ? '110' : '110'} bpm
+            {current.heartRate ?? (current.id === 'heartblock' ? 32 : current.id === 'vt' ? 180 : 110)} bpm
           </div>
         </div>
         <div style={{ fontSize: 10, color: '#94a3b8', textAlign: 'center', marginBottom: 4 }}>25mm/s · 10mm/mV · Lead II</div>
