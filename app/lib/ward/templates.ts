@@ -266,12 +266,56 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     baseDiagnosis: "Chest pain — R/O ACS",
     priority: "urgent",
     expectedStayHours: 24,
-    ageRange: [30, 70],
+    ageRange: [25, 60],
     sexBias: "any",
-    workupPack: [],
-    initialOrders: [],
-    decisionPoints: [],
-    dischargeCriteria: [],
+    workupPack: [
+      { kind: "ecg", title: "12-lead ECG", summary: "Non-diagnostic — no ST elevation", critical: true },
+      { kind: "troponin", title: "High-sensitivity troponin (0h)", summary: "Pending", critical: true },
+      { kind: "cbc", title: "CBC", summary: "Within normal limits" },
+      { kind: "chem", title: "Chemistry panel", summary: "Renal function normal" },
+      { kind: "cxr", title: "Chest X-ray", summary: "No acute pathology" },
+    ],
+    initialOrders: [
+      { label: "Continuous cardiac monitoring", impact: "Detect arrhythmia" },
+      { label: "IV access, serial troponin at 0h and 3h", impact: "Detect myocardial injury" },
+      { label: "Aspirin 300mg PO (if no contraindication)", impact: "Antiplatelet if ACS confirmed" },
+    ],
+    decisionPoints: [
+      {
+        id: "d1",
+        prompt: "34M with 2h central chest pain. ECG: no ST elevation, no depression. Troponin 0h pending. What is your initial risk stratification?",
+        options: [
+          { id: "a", label: "Low risk — discharge now with outpatient follow-up", effect: "Premature. Troponin 0h is pending. Discharge before serial troponin and risk scoring misses NSTEMI and unstable angina." },
+          { id: "b", label: "Apply HEART score and admit for serial troponin + monitoring", effect: "Correct. HEART score (History, ECG, Age, Risk factors, Troponin) stratifies risk. Serial troponin at 0h and 3h detects evolving injury. Observation is standard." },
+          { id: "c", label: "Activate cath lab immediately", effect: "Not indicated. No ST elevation on ECG — emergent catheterization is for STEMI. NSTEMI workup is medical first." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "3h troponin: mildly elevated (0.05 ng/mL, upper limit 0.04). Patient remains asymptomatic, ECG unchanged. What is your interpretation?",
+        options: [
+          { id: "a", label: "NSTEMI — start dual antiplatelet and admit for cardiology", effect: "Correct. Troponin rise with clinical chest pain = NSTEMI (Type 1 MI) until proven otherwise. Start DAPT, admit under cardiology, plan risk-stratified angiography." },
+          { id: "b", label: "False positive — troponin elevation is non-specific", effect: "Dangerous assumption. Troponin elevation in the right clinical context = myocardial injury. Other causes (myocarditis, PE, renal failure) must be excluded, not assumed." },
+          { id: "c", label: "Discharge and repeat troponin in 24 hours as outpatient", effect: "Unsafe. NSTEMI requires inpatient monitoring for arrhythmia, further troponin rise, and ischemia. Outpatient follow-up misses complications." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "Day 1. Troponin peaked at 0.12, trending down. Patient asymptomatic. Echo: normal LV function. What next?",
+        options: [
+          { id: "a", label: "Risk-stratified invasive angiography during admission (GRACE score-based)", effect: "Correct. NSTEMI with intermediate-high GRACE score benefits from early invasive strategy (<72h). Timing depends on risk: immediate for very high risk, <24h for high, <72h for intermediate." },
+          { id: "b", label: "Discharge on medical therapy alone", effect: "Insufficient for most NSTEMI. Conservative management is reserved for low-risk or comorbidity-limiting cases. Most NSTEMI benefits from angiography." },
+          { id: "c", label: "Immediate CABG referral", effect: "Not first-line. CABG is reserved for specific anatomy (left main, three-vessel disease with high SYNTAX score, or failed PCI). Angiography first to define anatomy." },
+        ],
+      },
+    ],
+    dischargeCriteria: [
+      "No recurrent chest pain for 24h",
+      "Troponin trending down",
+      "Tolerating oral medications",
+      "Cardiology follow-up scheduled",
+      "Cardiac rehab referral",
+    ],
   },
     {
     id:"dka",
