@@ -163,10 +163,29 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     decisionPoints: [
       {
         id: "d1",
-        prompt: "Severe features present — next step?",
+        prompt: "34 weeks gestation. BP 168/112. Proteinuria 3+. Severe headache and visual changes. What is your first priority?",
         options: [
-          { id: "a", label: "Urgent OB escalation", effect: "Safer maternal-fetal plan" },
-          { id: "b", label: "Observe without escalation", effect: "High risk" },
+          { id: "a", label: "Start IV magnesium sulfate and antihypertensives", effect: "Correct. Severe pre-eclampsia = MgSO4 for seizure prophylaxis + BP control (labetalol or hydralazine IV). Delivery planning follows once stable." },
+          { id: "b", label: "Immediate cesarean section before stabilizing", effect: "Risky. Delivery is definitive treatment, but rushing to surgery before BP control and MgSO4 increases maternal stroke and seizure risk. Stabilize first unless non-reassuring fetal status." },
+          { id: "c", label: "Oral antihypertensives and admission for observation", effect: "Insufficient. Severe features (headache, visual changes, BP >160/110) require IV therapy and MgSO4 — oral agents are too slow." },
+        ],
+      },
+      {
+        id: "d2",
+        prompt: "BP controlled to 148/96. Magnesium infusion running. Fetal heart tracing reassuring. Gestation 34 weeks. What now?",
+        options: [
+          { id: "a", label: "Plan delivery within 24 hours after stabilization", effect: "Correct. Severe pre-eclampsia at ≥34 weeks = delivery recommended after maternal stabilization. Corticosteroids for fetal lung maturity if not already given (though benefit at 34w is marginal)." },
+          { id: "b", label: "Expectant management until 37 weeks", effect: "Incorrect. Expectant management beyond 34 weeks in severe pre-eclampsia increases risk of maternal stroke, HELLP, and placental abruption. Delivery is indicated." },
+          { id: "c", label: "Discharge with BP monitoring", effect: "Dangerous. Severe pre-eclampsia requires inpatient management until delivery. Discharge risks eclampsia, stroke, or abruption at home." },
+        ],
+      },
+      {
+        id: "d3",
+        prompt: "48 hours postpartum. BP still 156/102. Patient asymptomatic. What is your plan?",
+        options: [
+          { id: "a", label: "Continue antihypertensives, monitor BP, reassess at 6 weeks", effect: "Correct. Postpartum hypertension may persist or worsen for up to 6 weeks. Continue treatment, target <140/90. Do not stop early — eclampsia risk remains elevated postpartum." },
+          { id: "b", label: "Stop all antihypertensives — delivery resolved the cause", effect: "Incorrect. Pre-eclampsia can worsen postpartum, especially days 3–6. Continue monitoring and treatment. Eclampsia risk persists for 4 weeks after delivery." },
+          { id: "c", label: "Start ACE inhibitor immediately", effect: "Depends. ACE inhibitors are safe postpartum and often preferred — but avoid if breastfeeding a preterm infant due to renal concerns. Start only if BP remains uncontrolled on first-line agents." },
         ],
       },
     ],
