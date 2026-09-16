@@ -40,7 +40,7 @@ const COPY = {
     trialDefault: "7 days free, then",
     features: [
       "Ward Simulation — 7 cases × 3 decision stations",
-      "ECG Challenge — 12 real ECG cases with multi-image views",
+      "ECG Challenge — 7 real ECG cases with multi-image views",
       "Echo Studies — real cardiac ultrasound with guided assessment",
       "Code Lab — 12 lessons (BLS + ACLS)",
       "Progress tracking across all cases",
@@ -61,7 +61,7 @@ const COPY = {
     trialDefault: "7 أيام مجانية، ثم",
     features: [
       "محاكاة Ward — 7 حالات × 3 محطات قرار",
-      "تحدي تخطيط القلب — 12 حالة تخطيط قلب حقيقية بعرض متعدد الصور",
+      "تحدي تخطيط القلب — 7 حالات تخطيط قلب حقيقية بعرض متعدد الصور",
       "دراسات الإيكو — تصوير قلب حقيقي بالموجات فوق الصوتية مع تقييم موجّه",
       "معمل الأكواد — 12 درسًا (BLS + ACLS)",
       "تتبع التقدم عبر جميع الحالات",

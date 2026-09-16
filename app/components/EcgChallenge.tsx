@@ -26,91 +26,6 @@ interface EcgCase {
 
 const ECG_CASES: EcgCase[] = [
   {
-    id: 'stemi',
-    title: 'STEMI — Anterior',
-    difficulty: 'CRITICAL',
-    diffColor: '#ff3b30',
-    description: 'Male 58 years. Severe chest pain 45 minutes.',
-    options: ['Normal Sinus Rhythm', 'Anterior STEMI', 'LBBB', 'Pericarditis'],
-    correct: 1,
-    findings: [
-      { label: 'P Wave', color: '#00C4B4', note: 'Normal — sinus origin' },
-      { label: 'ST Segment', color: '#ff3b30', note: 'Elevation 3mm V1-V4 ⚠' },
-      { label: 'T Wave', color: '#ff9500', note: 'Hyperacute — tall peaked' },
-      { label: 'QRS', color: '#30d158', note: 'Narrow — no aberrancy' },
-    ],
-    explain: 'ST elevation ≥1mm in ≥2 contiguous leads. Anterior STEMI: V1-V4 involvement. Culprit vessel: LAD. Activate Cath Lab — door-to-balloon < 90 min.',
-    xpReward: 50,
-  },
-  {
-    id: 'afib',
-    title: 'Atrial Fibrillation',
-    difficulty: 'INTERMEDIATE',
-    diffColor: '#ff9500',
-    description: 'Female 67 years. Palpitations, irregular pulse.',
-    options: ['Sinus Tachycardia', 'Atrial Flutter', 'Atrial Fibrillation', 'VT'],
-    correct: 2,
-    findings: [
-      { label: 'P Wave', color: '#ff3b30', note: 'Absent — replaced by fibrillatory baseline ⚠' },
-      { label: 'RR Interval', color: '#ff9500', note: 'Irregularly irregular ⚠' },
-      { label: 'QRS', color: '#30d158', note: 'Narrow — normal conduction' },
-      { label: 'Rate', color: '#00C4B4', note: '110 bpm — rapid ventricular response' },
-    ],
-    explain: 'AF hallmarks: absent P waves, irregularly irregular rhythm, fibrillatory baseline. Rate control first (target HR < 110). Anticoagulate if CHA₂DS₂-VASc ≥ 2.',
-    xpReward: 40,
-  },
-  {
-    id: 'heartblock',
-    title: 'Complete Heart Block',
-    difficulty: 'CRITICAL',
-    diffColor: '#ff3b30',
-    description: 'Male 72 years. Syncope. HR 32 bpm.',
-    options: ['1st Degree AV Block', '2nd Degree Mobitz II', 'Complete AV Block', 'Sinus Bradycardia'],
-    correct: 2,
-    findings: [
-      { label: 'P Wave', color: '#00C4B4', note: 'Present — rate 75/min, independent' },
-      { label: 'QRS', color: '#ff3b30', note: 'Wide escape — rate 32/min ⚠' },
-      { label: 'PR Interval', color: '#ff9500', note: 'Variable — no fixed relationship ⚠' },
-      { label: 'AV Dissociation', color: '#00C4B4', note: 'Complete — P and QRS independent ⚠' },
-    ],
-    explain: 'Complete (3rd degree) AV block: P waves and QRS completely dissociated. Ventricular escape rate 30-40/min. Urgent transcutaneous pacing. Permanent pacemaker required.',
-    xpReward: 60,
-  },
-  {
-    id: 'vt',
-    title: 'Ventricular Tachycardia',
-    difficulty: 'CRITICAL',
-    diffColor: '#ff3b30',
-    description: 'Male 55 years. Collapse. Post-MI history.',
-    options: ['SVT with aberrancy', 'Ventricular Tachycardia', 'AF with WPW', 'Hyperkalaemia'],
-    correct: 1,
-    findings: [
-      { label: 'QRS Width', color: '#ff3b30', note: '> 120ms — broad complex ⚠' },
-      { label: 'Rate', color: '#ff9500', note: '180 bpm — regular tachycardia ⚠' },
-      { label: 'AV Dissociation', color: '#00C4B4', note: 'Present — capture/fusion beats ⚠' },
-      { label: 'Axis', color: '#00C4B4', note: 'Northwest axis — extreme deviation' },
-    ],
-    explain: 'VT: broad complex tachycardia >100/min. If pulseless → immediate defibrillation. If pulse present → amiodarone 300mg IV. Treat underlying ischaemia.',
-    xpReward: 70,
-  },
-  {
-    id: 'hyperk',
-    title: 'Hyperkalaemia',
-    difficulty: 'INTERMEDIATE',
-    diffColor: '#ff9500',
-    description: 'Male 67 years. CKD. K+ 7.2 mEq/L.',
-    options: ['Normal', 'Hypokalaemia', 'Hyperkalaemia', 'Digoxin toxicity'],
-    correct: 2,
-    findings: [
-      { label: 'T Wave', color: '#ff3b30', note: 'Tall peaked — tented ⚠' },
-      { label: 'P Wave', color: '#ff9500', note: 'Flattened — disappearing ⚠' },
-      { label: 'QRS', color: '#00C4B4', note: 'Widening — sine wave pattern ⚠' },
-      { label: 'PR Interval', color: '#00C4B4', note: 'Prolonged — first degree block' },
-    ],
-    explain: 'Hyperkalaemia progression: peaked T → flat P → wide QRS → sine wave → VF. Immediate: Calcium gluconate 10ml IV (stabilises membrane). Then: insulin/dextrose, salbutamol, dialysis.',
-    xpReward: 50,
-  },
-  {
     id: 'stemi-lateral',
     title: 'Lateral STEMI',
     difficulty: 'CRITICAL',
@@ -245,7 +160,9 @@ const ECG_CASES: EcgCase[] = [
   },
 ]
 
-// ECG Path generator
+// SVG fallback for cases with no imagePaths. All current cases have real images,
+// so this is unreachable today — kept as a safety net for a future image-less case,
+// not as a retry path for a failed image load (that's the "preview pending" text below).
 function generateEcgPath(type: string, width: number, height: number): string {
   const mid = height / 2
   const points: [number, number][] = []
