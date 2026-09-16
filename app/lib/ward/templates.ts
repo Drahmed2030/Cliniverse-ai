@@ -74,36 +74,6 @@ export const CASE_TEMPLATES: CaseTemplate[] = [
     dischargeCriteria: ["Afebrile", "Stable O₂ on room air or baseline", "Oral abx tolerated"],
   },
   {
-    id: "dka_legacy",
-    title: "Diabetic Ketoacidosis",
-    departmentFlow: ["ed", "im"],
-    baseDiagnosis: "Diabetic Ketoacidosis",
-    priority: "critical",
-    expectedStayHours: 36,
-    ageRange: [16, 60],
-    workupPack: [
-      { kind: "chem", title: "Chemistry + glucose", summary: "High glucose · anion gap acidosis", critical: true },
-      { kind: "cbc", title: "CBC", summary: "Hemoconcentration possible" },
-      { kind: "abg", title: "ABG", summary: "Metabolic acidosis", critical: true },
-    ],
-    initialOrders: [
-      { label: "IV fluid resuscitation", impact: "Restore volume" },
-      { label: "Insulin infusion protocol", impact: "Close anion gap" },
-      { label: "Electrolyte replacement", impact: "Prevent arrhythmia" },
-    ],
-    decisionPoints: [
-      {
-        id: "d1",
-        prompt: "First priority in ED?",
-        options: [
-          { id: "a", label: "Fluids then insulin protocol", effect: "Safer DKA pathway" },
-          { id: "b", label: "Insulin before fluids", effect: "Higher risk" },
-        ],
-      },
-    ],
-    dischargeCriteria: ["Gap closed", "Tolerating oral intake", "Education completed"],
-  },
-  {
     id: "stroke_ischemic",
     title: "Ischemic Stroke",
     departmentFlow: ["ed", "im"],
