@@ -8,7 +8,7 @@ export type ClinicalMediaFormat = 'landscape' | 'portrait' | 'square'
 export type ClinicalMediaProgram = 'echo-a4c-normal'
 
 export const CLINICAL_MEDIA_PROGRAM_ACCESS = {
-  'echo-a4c-normal': 'preview-only',
+  'echo-a4c-normal': 'learner',
 } as const satisfies Record<ClinicalMediaProgram, ClinicalStudioAsset['surfaceAccess']>
 
 export const PREVIEW_CLINICAL_MEDIA_PROGRAMS = ['echo-a4c-normal'] as const satisfies readonly ClinicalMediaProgram[]

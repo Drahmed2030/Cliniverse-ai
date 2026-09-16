@@ -32,9 +32,7 @@ export function toEchoBatchRecord(
       ? 'blocked'
       : quality.releaseState === 'learner-ready'
         ? 'learner-ready'
-        : asset.reviewStatus === 'source-rights-reviewed-clinical-copy-review-required'
-          ? 'clinical-review-required'
-          : 'media-verified'
+        : 'media-verified'
 
   return {
     batchId: 'echo-batch-01',

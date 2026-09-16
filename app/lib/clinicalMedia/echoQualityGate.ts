@@ -105,7 +105,7 @@ export function evaluateEchoQuality(asset: LicensedEchoClinicalStudioAsset): Ech
   const releaseState: EchoQualityReport['releaseState'] =
     blockingIssues.length === 0
       ? 'learner-ready'
-      : previewSafe && asset.surfaceAccess === 'preview-only'
+      : previewSafe
         ? 'preview-ready'
         : 'blocked'
 

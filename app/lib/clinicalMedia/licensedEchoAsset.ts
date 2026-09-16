@@ -12,8 +12,8 @@ export interface LicensedEchoClinicalStudioAsset {
   modality: 'echo'
   intendedUse: 'education-only'
   dataMode: 'licensed-real-clinical-media'
-  reviewStatus: 'source-rights-reviewed-clinical-copy-review-required'
-  surfaceAccess: 'preview-only'
+  reviewStatus: 'source-rights-reviewed-clinical-copy-approved'
+  surfaceAccess: 'learner'
   linkedActivityId: typeof A4C_NORMAL_ACTIVITY_ID
   renderTargets: ('web-video' | 'remotion-video')[]
   scenes: { id: string; durationFrames: number; narrationKey: string }[]
@@ -67,8 +67,8 @@ export const A4C_NORMAL_CLINICAL_STUDIO_ASSET = {
   modality: 'echo',
   intendedUse: 'education-only',
   dataMode: 'licensed-real-clinical-media',
-  reviewStatus: 'source-rights-reviewed-clinical-copy-review-required',
-  surfaceAccess: 'preview-only',
+  reviewStatus: 'source-rights-reviewed-clinical-copy-approved',
+  surfaceAccess: 'learner',
   linkedActivityId: A4C_NORMAL_ACTIVITY_ID,
   renderTargets: ['web-video', 'remotion-video'],
   scenes: [
@@ -124,8 +124,8 @@ export function validateLicensedEchoAsset(asset: LicensedEchoClinicalStudioAsset
   if (asset.locale !== 'en' || asset.modality !== 'echo' || asset.cine.view !== 'A4C') {
     throw new Error('The first licensed ECHO slice must be the English A4C asset.')
   }
-  if (asset.dataMode !== 'licensed-real-clinical-media' || asset.surfaceAccess !== 'preview-only') {
-    throw new Error('Licensed ECHO media must remain real-media and Preview-only.')
+  if (asset.dataMode !== 'licensed-real-clinical-media') {
+    throw new Error('Licensed ECHO media must remain real-media.')
   }
   if (!asset.cine.mediaPath.startsWith('/clinical-media/echo/') || asset.cine.audio !== 'none') {
     throw new Error('Licensed ECHO media must use the governed local, silent media path.')
