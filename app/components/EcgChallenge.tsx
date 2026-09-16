@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { loadEcgChallengeProgress, recordEcgCaseAnswer, totalEcgXp, type EcgChallengeProgressState } from '../lib/ecgChallengeProgress'
 
 interface EcgFinding {
   label: string
@@ -287,7 +288,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const [caseIdx, setCaseIdx] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
   const [showFindings, setShowFindings] = useState(false)
-  const [score, setScore] = useState(0)
+  const [progress, setProgress] = useState<EcgChallengeProgressState>({})
   const [animOffset, setAnimOffset] = useState(0)
   const [imgError, setImgError] = useState(false)
   const [imgIdx, setImgIdx] = useState(0)
@@ -295,6 +296,9 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const svgW = 340, svgH = 80
 
   const current = ECG_CASES[caseIdx]
+  const score = totalEcgXp(progress)
+
+  useEffect(() => { setProgress(loadEcgChallengeProgress()) }, [])
 
   useEffect(() => {
     let frame = 0
@@ -312,10 +316,10 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const handleAnswer = (i: number) => {
     if (selected !== null) return
     setSelected(i)
-    if (i === current.correct) {
-      setScore(s => s + current.xpReward)
-      onXP(current.xpReward)
-    }
+    const correct = i === current.correct
+    const alreadyScored = progress[current.id]?.correct === true
+    if (correct && !alreadyScored) onXP(current.xpReward)
+    setProgress(prev => recordEcgCaseAnswer(prev, current.id, correct, current.xpReward))
     setTimeout(() => setShowFindings(true), 600)
   }
 
