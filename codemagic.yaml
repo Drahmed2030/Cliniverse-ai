@@ -68,6 +68,7 @@ workflows:
         script: |
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :ITSAppUsesNonExemptEncryption false" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Cliniverse AI" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string Cliniverse AI" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString 1.1" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Add :CFBundleShortVersionString string 1.1" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Add :CliniverseLaunchGuardVersion string 1" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :CliniverseLaunchGuardVersion 1" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Add :CliniverseIconSourceSHA256 string 80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ios/App/App/Info.plist || /usr/libexec/PlistBuddy -c "Set :CliniverseIconSourceSHA256 80f5ca80668ce7d95b5853cffee1a6c32e31d28974a1e4cff115498b5ea7bf09" ios/App/App/Info.plist
           IOS_BUILD_NUMBER="${BUILD_NUMBER:?Codemagic BUILD_NUMBER is required}"
