@@ -78,3 +78,22 @@ Next: verify the web change locally, deploy the exact candidate commit to the ca
 - The next candidate makes compact-width clearance unconditional and recognizes touch tablets plus modern iPad desktop user agents, while keeping desktop layouts unchanged.
 
 Next: verify and promote the narrow activation correction, then run one final non-publishing evidence build. Do not create an IPA, merge, or submit to Apple.
+
+## 2026-09-17
+
+### Native screenshot gate — resolved
+
+- Root cause confirmed: the build 26–30 geometry failures traced through native inset/hydration fixes, but the screenshot test itself was also asserting against stale UI copy (`"One clear path through healthcare intelligence."`, tab labels `"Care"`/`"Atlas"`) that no longer matched the live `ReleaseNav` shell (`"One clear next step."`, `"Learn"`/`"Explore"`).
+- Commit `1cdacf9` ("restore ECG competency/adaptive-selection engine, wire Atlas knowledge-graph card, and reconcile native screenshot automation with current release UI") rewrote all five wait-text/tab-label assertions in `native/screenshot/CliniverseScreenshotTests.swift` to match current release copy. **[repo-verified: confirmed by diff.]**
+- Repository tests pass `370/370`; `npx tsc --noEmit` clean; `npx next build` compiles clean with a full route manifest. **[repo-verified, re-run this session.]**
+
+### Build 67 — reported outcome
+
+The following is **externally reported**, not independently verifiable from this sandbox (no Codemagic, App Store Connect, or TestFlight access exists here). Full detail: `docs/APPLE_BUILD_67_OUTCOME_2026-09-17.md`.
+
+- v1.1 Build 67 reported to have built successfully in Codemagic.
+- Reported to have passed Apple binary validation.
+- Reported available and installed via TestFlight.
+- Reported exercised on a real iPhone across: onboarding, Learn, Ward, ECG Challenge, Echo/Cliniverse Studio, Code Lab, Me.
+
+Next: independently confirm the Build 67 outcome above directly against Codemagic, App Store Connect and TestFlight before treating any release gate as closed on the strength of this report alone. Do not create a new IPA, merge, promote production, or submit to Apple from this log entry — see `docs/APPLE_RC1_REVIEWER_PACKAGE.md` for the outstanding reviewer-access and final-external-check items that remain unchecked regardless of Build 67's outcome.

@@ -3,6 +3,7 @@
 import type { ReactNode } from 'react'
 import MeAccountSummary from './MeAccountSummary'
 import AppearanceSettings from './AppearanceSettings'
+import TopicsIFollow from './TopicsIFollow'
 
 const links = [
   { label: 'Contact support', href: '/support', detail: 'Get help with your account or the app.' },
@@ -20,6 +21,7 @@ export default function MeHub({ learningSummary, onOpenProgress }: { learningSum
     <div style={{ display: 'grid', gap: 16 }}>
       <MeAccountSummary />
       <AppearanceSettings />
+      <TopicsIFollow />
       <section aria-label="Your saved learning">
         {learningSummary}
         <button type="button" onClick={onOpenProgress} style={{ ...actionStyle, marginTop: 10 }}>View learning progress →</button>

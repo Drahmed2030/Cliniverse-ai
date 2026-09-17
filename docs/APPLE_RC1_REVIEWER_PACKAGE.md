@@ -6,6 +6,12 @@ This package is the release-scoped source for App Store Connect metadata and rev
 
 The recovered Wave 1 review findings, response draft and physical-device recording script are tracked in `docs/APPLE_WAVE1_RESPONSE_AND_EVIDENCE.md`.
 
+## 2026-09-17 update — native screenshot gate resolved, Build 67 candidate
+
+- The native screenshot-geometry drift tracked through builds 26–30 below (`docs/RELEASE_GATE_EXECUTION_LOG.md`) was a symptom of `native/screenshot/CliniverseScreenshotTests.swift` asserting against stale wait-text/tab-label copy (`"One clear path through healthcare intelligence."`, `"Care"`, `"Atlas"`) that no longer matched the live `ReleaseNav` UI (`"One clear next step."`, `"Learn"`, `"Explore"`). This was reconciled in commit `1cdacf9` — all five assertions in that test file now match current release copy. **[repo-verified: confirmed by diff of `1cdacf9`.]**
+- The current release candidate is **v1.1 Build 67** (`CFBundleShortVersionString 1.1` / `package.json` `1.1.0`, `CFBundleVersion` set from Codemagic's `BUILD_NUMBER=67` per `codemagic.yaml`). Full outcome record: `docs/APPLE_BUILD_67_OUTCOME_2026-09-17.md`. **Reported outcome (Codemagic build success, Apple binary validation, TestFlight install, on-device exercise) is not independently verifiable from this sandbox — no Codemagic/App Store Connect/TestFlight access exists here. Treat as externally reported until confirmed against those systems directly.**
+- **This does not lift the overall HOLD.** The Reviewer access gate and Final external checks sections below still contain unchecked items (product-metadata attachment, display-name capitalization, clean-device install test, mailbox send/receive/reply test, App Store Connect privacy/rating/compliance confirmations) that are unrelated to the screenshot fix and were not addressed by this update. See "Submission decision" at the end of this document.
+
 ## Product metadata draft
 
 | Field | Release value | Gate |
@@ -137,4 +143,11 @@ Screenshot rules:
 
 ## Submission decision
 
-This document prepares the package; it does not authorize submission. Current decision remains **HOLD** until Runtime, Security, Native and reviewer-access gates all pass.
+This document prepares the package; it does not authorize submission. Current decision remains **HOLD**.
+
+- **Native gate:** the screenshot-geometry blocker (builds 26–30) is resolved (`1cdacf9`), and Build 67 is reported to have passed Codemagic and Apple binary validation — but this report is externally sourced and not independently confirmed from this sandbox. Re-verify directly against Codemagic/App Store Connect before treating the Native gate as closed.
+- **Runtime and Security gates:** unchanged by this update — status as last documented, not re-verified in this pass.
+- **Reviewer-access gate:** unchanged — several items remain unchecked above (product-version attachment, display-name capitalization, clean-device install test).
+- **Final external checks:** unchanged — all items remain unchecked above (mailbox test, HTTP 200 checks, privacy/rating/compliance confirmations).
+
+Do not select Add for Review, Update Review or Resubmit until every gate above is independently confirmed closed, not just reported closed.
