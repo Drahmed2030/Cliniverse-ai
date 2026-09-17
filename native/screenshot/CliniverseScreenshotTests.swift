@@ -32,14 +32,14 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Home") {
-            try waitForText("One clear path through healthcare intelligence.")
-            assertSystemChromeClear("Cliniverse AI")
+            try waitForText("One clear next step.")
+            assertSystemChromeClear("Today")
             capture("01-home")
         }
 
         try runStep("Capture Care") {
-            try openTab("Care", waitingFor: "Care Workflow Simulation")
-            assertSystemChromeClear("Care")
+            try openTab("Learn", waitingFor: "Ward Simulation")
+            assertSystemChromeClear("Learn")
             capture("02-care")
         }
 
@@ -65,13 +65,13 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Atlas") {
-            try openTab("Atlas", waitingFor: "CURRENT RELEASE TOUR")
-            assertSystemChromeClear("Atlas")
+            try openTab("Explore", waitingFor: "FIND YOUR NEXT PRACTICE")
+            assertSystemChromeClear("Explore")
             capture("05-atlas")
         }
 
         try runStep("Capture Me privacy surface") {
-            try openTab("Me", waitingFor: "ONE ACCOUNT DESTINATION")
+            try openTab("Me", waitingFor: "YOUR CLINIVERSE")
             let privacyLink = app.links["Privacy"]
             try reveal(privacyLink, maximumSwipes: 10)
             privacyLink.tap()
@@ -91,7 +91,7 @@ final class CliniverseScreenshotTests: XCTestCase {
     }
 
     private func signInIfNeeded() throws {
-        let homeTitle = app.staticTexts["One clear path through healthcare intelligence."]
+        let homeTitle = app.staticTexts["One clear next step."]
         if homeTitle.waitForExistence(timeout: 4) {
             return
         }

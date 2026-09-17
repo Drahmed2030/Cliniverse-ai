@@ -1,6 +1,7 @@
 'use client'
 import { useIntelligence } from '../hooks/useIntelligence'
 import { useState, useEffect } from 'react'
+import KnowledgeMatchCard from './KnowledgeMatchCard'
 
 const L = {
   canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
@@ -407,6 +408,10 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
               <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:8}}>EXAMINATION</div>
               <div style={{fontSize:14,color:L.textSub,lineHeight:1.7}}>{activeCase.examination}</div>
             </div>
+            <KnowledgeMatchCard
+              queryText={`${activeCase.title}. ${activeCase.history}`}
+              currentFindings={activeCase.labs}
+            />
             <div style={{background:L.surface,border:`1px solid ${L.border}`,borderLeft:'4px solid #7C3AED',borderRadius:20,padding:'16px 18px',boxShadow:L.shadowSm}}>
               <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:8}}>ECG</div>
               <div style={{fontSize:14,color:L.textSub,lineHeight:1.7}}>{activeCase.ecg}</div>

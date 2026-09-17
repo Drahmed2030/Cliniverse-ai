@@ -1,6 +1,17 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { loadEcgChallengeProgress, recordEcgCaseAnswer, totalEcgXp, type EcgChallengeProgressState } from '../lib/ecgChallengeProgress'
+import { evaluateEcgScoringAttemptV1, type EcgScoringAttemptV1 } from '../lib/clinicalIntelligence/ecgScoringCompetencyContract'
+import { updateEcgSkillMasteryV1, type EcgMasteryStateV1, type EcgMasteryEvidenceV1 } from '../lib/clinicalIntelligence/ecgLongitudinalMasteryContract'
+import { selectNextEcgCaseV1, type EcgAdaptiveCaseCandidateV1 } from '../lib/clinicalIntelligence/ecgAdaptiveCaseSelectionContract'
+
+/**
+ * Session-only learner id for the deterministic contracts below — this screen
+ * has no account/auth context and must not read or write any persisted state.
+ */
+const SESSION_LEARNER_ID = 'ecg-challenge-session'
+/** These 7 cases are pre-authored static quiz content, not a governed Record10 attestation. */
+const STATIC_CONTENT_ATTESTATION_ID = 'ecg-challenge-static-quiz-v1'
 
 interface EcgFinding {
   label: string
@@ -30,16 +41,16 @@ const ECG_CASES: EcgCase[] = [
     title: 'Lateral STEMI',
     difficulty: 'CRITICAL',
     diffColor: '#ff3b30',
-    description: 'Male 62 years. Ongoing chest pain 90 minutes. ST elevation in lateral leads.',
+    description: 'Male 62 years. History of myocardial infarction a few months ago (with resuscitated VF arrest at the time). ECG now shows lateral changes.',
     options: ['Normal Sinus Rhythm', 'Lateral STEMI', 'Acute Pericarditis', 'LVH with strain'],
     correct: 1,
     findings: [
-      { label: 'P Wave', color: '#00C4B4', note: 'Sinus origin' },
-      { label: 'ST Segment', color: '#ff3b30', note: 'Elevation 2-3mm in I, aVL, V5-V6 ⚠' },
-      { label: 'Reciprocal', color: '#ff3b30', note: 'ST depression in III, aVF ⚠' },
-      { label: 'QRS', color: '#30d158', note: 'Narrow — no aberrancy' },
+      { label: 'Rhythm', color: '#00C4B4', note: 'Sinus rhythm' },
+      { label: 'QRS', color: '#ff9500', note: 'Rightward axis; wide Q waves in I, aVL; poor R-wave progression anteriorly' },
+      { label: 'ST Segment', color: '#ff3b30', note: 'Slight elevation in I, aVL ⚠' },
+      { label: 'T Wave', color: '#ff9500', note: 'Inversion in the lateral leads' },
     ],
-    explain: 'ST elevation in lateral leads (I, aVL, V5-V6) with reciprocal inferior depression. Concern for left main or diagonal LAD occlusion. Activate cath lab — door-to-balloon <90 min.',
+    explain: 'Slight ST elevation in I, aVL with lateral T-wave inversion, wide Q waves in I/aVL, and poor anterior R-wave progression — consistent with a lateral wall myocardial infarction. Correlate with troponin and clinical course to guide reperfusion decision-making.',
     xpReward: 50,
     heartRate: 88,
     imagePaths: ['/ecg-cases/stemi-lateral-1.jpg'],
@@ -61,7 +72,7 @@ const ECG_CASES: EcgCase[] = [
     explain: 'Irregularly irregular rhythm without P waves = atrial fibrillation. Rate >100 = rapid ventricular response. Rate control with beta-blocker or non-dihydropyridine CCB; assess CHA2DS2-VASc for anticoagulation.',
     xpReward: 40,
     heartRate: 150,
-    imagePaths: ['/ecg-cases/afib-rvr-1.jpg', '/ecg-cases/afib-rvr-2.jpg', '/ecg-cases/afib-rvr-3.jpg'],
+    imagePaths: ['/ecg-cases/afib-rvr-1.jpg', '/ecg-cases/afib-rvr-2.jpg'],
   },
   {
     id: 'complete-hb',
@@ -91,15 +102,15 @@ const ECG_CASES: EcgCase[] = [
     options: ['SVT with aberrancy', 'Monomorphic VT', 'Torsades de Pointes', 'Ventricular fibrillation'],
     correct: 1,
     findings: [
-      { label: 'Rate', color: '#ff3b30', note: '~160 bpm' },
-      { label: 'QRS', color: '#ff3b30', note: 'Wide (>140 ms), uniform morphology' },
+      { label: 'Rate', color: '#ff3b30', note: '~270 bpm' },
+      { label: 'QRS', color: '#ff3b30', note: 'Wide complex, uniform (monomorphic) morphology' },
       { label: 'P Wave', color: '#ff3b30', note: 'Absent — no visible atrial activity' },
-      { label: 'Axis', color: '#ff3b30', note: 'Extreme axis — precordial concordance' },
+      { label: 'VT Criteria', color: '#ff3b30', note: 'RBBB-pattern QRS — monomorphic R in V1, R/S <1 in V6 (favors VT over SVT)' },
     ],
     explain: 'Wide-complex regular tachycardia with uniform QRS morphology = monomorphic VT. Unstable: synchronized cardioversion. Stable: IV amiodarone. Avoid verapamil.',
     xpReward: 50,
-    heartRate: 160,
-    imagePaths: ['/ecg-cases/vt-monomorphic-1.jpg', '/ecg-cases/vt-monomorphic-2.jpg', '/ecg-cases/vt-monomorphic-3.jpg'],
+    heartRate: 270,
+    imagePaths: ['/ecg-cases/vt-monomorphic-1.jpg'],
   },
   {
     id: 'hyperkalemia-severe',
@@ -122,11 +133,11 @@ const ECG_CASES: EcgCase[] = [
   },
   {
     id: 'wellens',
-    title: 'Wellens Syndrome (Type B)',
+    title: 'Wellens Syndrome',
     difficulty: 'INTERMEDIATE',
     diffColor: '#ff9500',
     description: 'Male 55 years. Chest pain resolved. Biphasic T waves V2-V3.',
-    options: ['Normal ECG', 'Wellens syndrome — Type B', 'Anterior STEMI', 'Benign early repolarization'],
+    options: ['Normal ECG', 'Wellens syndrome', 'Anterior STEMI', 'Benign early repolarization'],
     correct: 1,
     findings: [
       { label: 'T Wave V2-V3', color: '#ff3b30', note: 'Biphasic — initial negative, terminal positive ⚠' },
@@ -134,10 +145,10 @@ const ECG_CASES: EcgCase[] = [
       { label: 'R Waves', color: '#30d158', note: 'Preserved precordial R progression' },
       { label: 'Troponin', color: '#00C4B4', note: 'Normal or mildly elevated' },
     ],
-    explain: 'Wellens Type B: biphasic T waves in V2-V3 with preserved R waves in a pain-free patient = critical proximal LAD stenosis. Urgent angiography. High risk of extensive anterior MI within days.',
+    explain: 'Wellens syndrome: biphasic T waves in V2-V3 with preserved R waves in a pain-free patient = critical proximal LAD stenosis. Urgent angiography. High risk of extensive anterior MI within days.',
     xpReward: 50,
     heartRate: 78,
-    imagePaths: ['/ecg-cases/wellens-1.jpg', '/ecg-cases/wellens-2.jpg', '/ecg-cases/wellens-3.jpg'],
+    imagePaths: ['/ecg-cases/wellens-2.jpg'],
   },
   {
     id: 'brugada',
@@ -210,7 +221,16 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   const [imgError, setImgError] = useState(false)
   const [imgIdx, setImgIdx] = useState(0)
   const animRef = useRef<number>(0)
+  const attemptSeq = useRef(0)
   const svgW = 340, svgH = 80
+
+  // In-memory only (session scoped) — no account/auth context here, so this
+  // must never be persisted. Cleared whenever this component unmounts.
+  const [masteryBySkill, setMasteryBySkill] = useState<Record<string, EcgMasteryStateV1>>({})
+  const [evidenceBySkill, setEvidenceBySkill] = useState<Record<string, EcgMasteryEvidenceV1[]>>({})
+  const [lastSeenBySkill, setLastSeenBySkill] = useState<Record<string, string>>({})
+  const [criticalMissBySkill, setCriticalMissBySkill] = useState<Record<string, boolean>>({})
+  const [lastOutcome, setLastOutcome] = useState<{ outcome: string; band: string | null } | null>(null)
 
   const current = ECG_CASES[caseIdx]
   const score = totalEcgXp(progress)
@@ -237,14 +257,106 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
     const alreadyScored = progress[current.id]?.correct === true
     if (correct && !alreadyScored) onXP(current.xpReward)
     setProgress(prev => recordEcgCaseAnswer(prev, current.id, correct, current.xpReward))
+
+    const now = new Date().toISOString()
+    attemptSeq.current += 1
+    const attemptId = `${SESSION_LEARNER_ID}:${current.id}:${attemptSeq.current}`
+
+    const attempt: EcgScoringAttemptV1 = {
+      scoringVersion: '1.0.0',
+      caseId: current.id,
+      attemptId,
+      learnerId: SESSION_LEARNER_ID,
+      gateState: 'LEARNER_ELIGIBLE',
+      referenceAuthority: 'HUMAN_REVIEWED',
+      humanClinicalAttestationId: STATIC_CONTENT_ATTESTATION_ID,
+      dimensions: [{
+        skillId: current.id,
+        weight: 1,
+        score: correct ? 1 : 0,
+        criticalMiss: !correct && current.difficulty === 'CRITICAL',
+      }],
+    }
+    const scoring = evaluateEcgScoringAttemptV1(attempt)
+
+    let band: string | null = null
+    if (scoring.decision === 'SCORED') {
+      const skillScore = scoring.skillScores[0]
+      const nextEvidence: EcgMasteryEvidenceV1[] = [
+        ...(evidenceBySkill[current.id] ?? []),
+        {
+          eventId: `${attemptId}:evidence`,
+          learnerId: SESSION_LEARNER_ID,
+          skillId: current.id,
+          score: skillScore.score,
+          occurredAt: now,
+          evidenceEventIds: [attemptId],
+        },
+      ]
+      const masteryResult = updateEcgSkillMasteryV1(masteryBySkill[current.id] ?? null, nextEvidence, now)
+      setEvidenceBySkill(prev => ({ ...prev, [current.id]: nextEvidence }))
+      if (masteryResult.decision === 'UPDATED' && masteryResult.updatedMastery !== null && masteryResult.band) {
+        band = masteryResult.band
+        setMasteryBySkill(prev => ({
+          ...prev,
+          [current.id]: {
+            masteryVersion: '1.0.0',
+            learnerId: SESSION_LEARNER_ID,
+            skillId: current.id,
+            mastery: masteryResult.updatedMastery as number,
+            band: masteryResult.band as EcgMasteryStateV1['band'],
+            evidenceCount: masteryResult.evidenceCount,
+            lastObservedAt: now,
+            algorithmId: 'ecg-challenge-session-v1',
+            algorithmVersion: '1.0.0',
+          },
+        }))
+      }
+      setCriticalMissBySkill(prev => ({ ...prev, [current.id]: skillScore.criticalMiss }))
+      setLastOutcome({ outcome: scoring.outcome, band })
+    }
+    setLastSeenBySkill(prev => ({ ...prev, [current.id]: now }))
     setTimeout(() => setShowFindings(true), 600)
   }
 
   const next = () => {
-    setCaseIdx(i => (i + 1) % ECG_CASES.length)
+    const now = new Date().toISOString()
+    const candidates: EcgAdaptiveCaseCandidateV1[] = ECG_CASES
+      .filter(c => c.id !== current.id)
+      .map(c => ({
+        caseId: c.id,
+        learnerEligible: true,
+        governedSkillIds: [c.id],
+        qualityScore: 1,
+        lastSeenAt: lastSeenBySkill[c.id] ?? null,
+      }))
+    const skillStates = ECG_CASES
+      .map(c => masteryBySkill[c.id])
+      .filter((m): m is EcgMasteryStateV1 => Boolean(m))
+      .map(m => ({
+        skillId: m.skillId,
+        mastery: m.mastery,
+        band: m.band,
+        recentCriticalMiss: criticalMissBySkill[m.skillId] === true,
+      }))
+
+    const selection = selectNextEcgCaseV1({
+      selectionVersion: '1.0.0',
+      learnerId: SESSION_LEARNER_ID,
+      now,
+      skillStates,
+      candidates,
+    })
+
+    const selectedIdx = selection.decision === 'SELECTED' && selection.caseId
+      ? ECG_CASES.findIndex(c => c.id === selection.caseId)
+      : -1
+
+    setCaseIdx(selectedIdx >= 0 ? selectedIdx : (caseIdx + 1) % ECG_CASES.length)
     setSelected(null)
     setShowFindings(false)
     setImgIdx(0)
+    setLastOutcome(null)
   }
 
   const ecgPath = generateEcgPath(current.id, svgW, svgH)
@@ -259,8 +371,8 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
           <span style={{ fontSize: 13, color: '#00C4B4', fontWeight: 700 }}>⚡ {score} XP</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
-          {ECG_CASES.map((_, i) => (
-            <div key={i} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= caseIdx ? '#00C4B4' : 'rgba(0,0,0,0.08)' }} />
+          {ECG_CASES.map((c, i) => (
+            <div key={i} style={{ flex: 1, height: 3, borderRadius: 2, background: i === caseIdx ? '#00C4B4' : progress[c.id] ? '#00C4B499' : 'rgba(0,0,0,0.08)' }} />
           ))}
         </div>
       </div>
@@ -368,6 +480,11 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
                 </div>
               </div>
             ))}
+            {lastOutcome?.band && (
+              <div style={{ marginTop: 2, fontSize: 11, color: '#1d4ed8', fontWeight: 700 }}>
+                🎯 Skill mastery: {lastOutcome.band} (session only)
+              </div>
+            )}
           </div>
 
           {/* Explanation */}
@@ -379,7 +496,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
           </div>
 
           <button onClick={next} style={{ width: '100%', padding: '15px', borderRadius: 16, border: 'none', background:'var(--bg-base,#F7F9FC)', color: 'var(--text-primary, #0A1628)', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,196,180,0.25)' }}>
-            {caseIdx < ECG_CASES.length - 1 ? 'Next ECG →' : 'Restart Challenge 🔄'}
+            Next ECG →
           </button>
         </div>
       )}

@@ -342,7 +342,7 @@ test('active Care surfaces preserve the dark release identity', () => {
   }
 
   const home = read('app/components/ward/WardHome.tsx')
-  assert.match(home, /Care Workflow Simulation/)
+  assert.match(home, /Ward Simulation/)
   assert.match(home, /No real patient data/)
   assert.match(home, /#080C16/)
 })
