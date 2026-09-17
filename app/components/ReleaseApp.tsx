@@ -12,6 +12,7 @@ import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
 import type { AtlasDestination } from './release/AtlasReleaseCatalog'
 import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
+import OnboardingScreens from './release/OnboardingScreens'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
@@ -59,16 +60,39 @@ function getNativeHeaderTopPadding() {
   return window.innerWidth >= 768 ? 34 : 69
 }
 
+const ONBOARDING_SEEN_KEY = 'cliniverse:onboarding:seen'
+
 export default function ReleaseApp({ reviewPreview = false, caseLibraryPreview = false }: { reviewPreview?: boolean; caseLibraryPreview?: boolean }) {
   return (
     <AuthGate allowGuest={false}>
       {user => (
         <SubscriptionPurchaseProvider>
-          <ReleaseShell key={user.id} caseLibraryPreview={caseLibraryPreview} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
+          <OnboardingOrShell key={user.id} caseLibraryPreview={caseLibraryPreview} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
         </SubscriptionPurchaseProvider>
       )}
     </AuthGate>
   )
+}
+
+function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
+  const [seen, setSeen] = useState<boolean | null>(null)
+  const { openPaywall } = useCliniverseSubscription()
+
+  useEffect(() => {
+    let hasSeen = true
+    try { hasSeen = localStorage.getItem(ONBOARDING_SEEN_KEY) === 'true' } catch { /* localStorage unavailable — treat as seen */ }
+    setSeen(hasSeen)
+  }, [])
+
+  function complete(startTrial: boolean) {
+    try { localStorage.setItem(ONBOARDING_SEEN_KEY, 'true') } catch { /* best-effort persistence only */ }
+    setSeen(true)
+    if (startTrial) openPaywall()
+  }
+
+  if (seen === null) return null
+  if (!seen) return <OnboardingScreens onComplete={complete} />
+  return <ReleaseShell {...props} />
 }
 
 function ReleaseShell({ showEcgReview, caseLibraryPreview }: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
