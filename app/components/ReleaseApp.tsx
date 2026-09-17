@@ -75,23 +75,27 @@ export default function ReleaseApp({ reviewPreview = false, caseLibraryPreview =
 }
 
 function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
-  const [seen, setSeen] = useState<boolean | null>(null)
+  const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null)
   const { openPaywall } = useCliniverseSubscription()
 
   useEffect(() => {
     let hasSeen = true
     try { hasSeen = localStorage.getItem(ONBOARDING_SEEN_KEY) === 'true' } catch { /* localStorage unavailable — treat as seen */ }
-    setSeen(hasSeen)
+    // A deep link (e.g. ?view=learn) means the user is headed somewhere specific —
+    // don't interrupt that with onboarding. Not persisted: next launch without a
+    // deep link still shows onboarding if they haven't seen it.
+    const hasDeepLink = new URLSearchParams(window.location.search).has('view')
+    setShowOnboarding(!hasSeen && !hasDeepLink)
   }, [])
 
   function complete(startTrial: boolean) {
     try { localStorage.setItem(ONBOARDING_SEEN_KEY, 'true') } catch { /* best-effort persistence only */ }
-    setSeen(true)
+    setShowOnboarding(false)
     if (startTrial) openPaywall()
   }
 
-  if (seen === null) return null
-  if (!seen) return <OnboardingScreens onComplete={complete} />
+  if (showOnboarding === null) return null
+  if (showOnboarding) return <OnboardingScreens onComplete={complete} />
   return <ReleaseShell {...props} />
 }
 
