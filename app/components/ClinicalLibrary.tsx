@@ -2,6 +2,7 @@
 import { useIntelligence } from '../hooks/useIntelligence'
 import { useState, useEffect } from 'react'
 import KnowledgeMatchCard from './KnowledgeMatchCard'
+import { getContentByModule } from '../lib/contentCatalog'
 
 const L = {
   canvas:'#F8FAFC', surface:'#FFFFFF', raised:'#F1F5F9', border:'#E2E8F0',
@@ -15,16 +16,21 @@ const L = {
 const spring = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
 const smooth = 'all 0.3s cubic-bezier(0.4,0,0.2,1)'
 
-const SPECIALTIES = [
-  { id:'cardiology',   label:'Cardiology',    icon:'🫀', color:L.red,    img:'https://images.unsplash.com/photo-1628348070889-cb656235b4eb?w=800&q=80', cases:42 },
-  { id:'neurology',    label:'Neurology',     icon:'🧠', color:L.violet, img:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80', cases:38 },
-  { id:'infectious',   label:'Infectious',    icon:'🦠', color:L.amber,  img:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80', cases:35 },
-  { id:'respiratory',  label:'Respiratory',   icon:'🫁', color:L.cobalt, img:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80', cases:28 },
-  { id:'critical',     label:'Critical Care', icon:'🏥', color:L.red,    img:'https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=800&q=80', cases:45 },
-  { id:'gastro',       label:'Gastro',        icon:'🔬', color:L.teal,   img:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80', cases:22 },
-  { id:'endocrine',    label:'Endocrine',     icon:'⚗️', color:L.orange, img:'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80', cases:18 },
-  { id:'renal',        label:'Nephrology',    icon:'💧', color:L.cobalt, img:'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80', cases:20 },
-]
+// Presentation metadata only (icon/color/image) — not a content-count claim.
+// Real case counts per specialty are derived at runtime from the canonical
+// catalog (app/lib/contentCatalog.ts) below, never hardcoded here. A
+// specialty only appears in the rendered grid if the catalog actually has
+// at least one ready case for it — see visibleSpecialties in the component.
+const SPECIALTY_META: Record<string, { label: string; icon: string; color: string; img: string }> = {
+  cardiology:  { label:'Cardiology',    icon:'🫀', color:L.red,    img:'https://images.unsplash.com/photo-1628348070889-cb656235b4eb?w=800&q=80' },
+  neurology:   { label:'Neurology',     icon:'🧠', color:L.violet, img:'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80' },
+  infectious:  { label:'Infectious',    icon:'🦠', color:L.amber,  img:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80' },
+  respiratory: { label:'Respiratory',   icon:'🫁', color:L.cobalt, img:'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80' },
+  critical:    { label:'Critical Care', icon:'🏥', color:L.red,    img:'https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=800&q=80' },
+  gastro:      { label:'Gastro',        icon:'🔬', color:L.teal,   img:'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80' },
+  endocrine:   { label:'Endocrine',     icon:'⚗️', color:L.orange, img:'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80' },
+  renal:       { label:'Nephrology',    icon:'💧', color:L.cobalt, img:'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80' },
+}
 
 const CASES: Record<string, any[]> = {
   cardiology: [
@@ -333,6 +339,31 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
   const [aiComment, setAiComment] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
 
+  // Real counts only — derived from the canonical catalog, never hardcoded.
+  // Empty array (not null) while loading, so the UI shows 0 rather than a
+  // stale or invented number during the brief fetch.
+  const [catalogCounts, setCatalogCounts] = useState<Record<string, number>>({})
+  useEffect(() => {
+    let active = true
+    getContentByModule('clinical_library').then(items => {
+      if (!active) return
+      const ready = items.filter(item => item.readiness === 'ready')
+      const counts: Record<string, number> = {}
+      for (const item of ready) {
+        if (!item.category) continue
+        counts[item.category] = (counts[item.category] ?? 0) + 1
+      }
+      setCatalogCounts(counts)
+    }).catch(() => { /* Leave counts empty — the UI shows 0, never a guessed number. */ })
+    return () => { active = false }
+  }, [])
+
+  const totalCaseCount = Object.values(catalogCounts).reduce((sum, n) => sum + n, 0)
+  const visibleSpecialties = Object.entries(catalogCounts)
+    .filter(([, count]) => count > 0)
+    .map(([id, count]) => ({ id, count, ...SPECIALTY_META[id] }))
+    .filter(spec => spec.label)
+
   const getAIComment = async () => {
     if(!activeCase) return
     setAiLoading(true)
@@ -548,7 +579,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
 
   // Specialty view
   if(specialty) {
-    const spec = SPECIALTIES.find(s=>s.id===specialty)
+    const spec = visibleSpecialties.find(s=>s.id===specialty)
     const cases = CASES[specialty] || []
     const filtered = cases.filter(c=>
       !searchQuery || c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -570,7 +601,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
           <div style={{position:'absolute',bottom:16,left:16}}>
             <div style={{fontSize:28,marginBottom:4}}>{spec?.icon}</div>
             <div style={{fontSize:24,fontWeight:900,color:'white'}}>{spec?.label}</div>
-            <div style={{fontSize:12,color:'rgba(255,255,255,0.7)'}}>{spec?.cases} cases · Evidence-based</div>
+            <div style={{fontSize:12,color:'rgba(255,255,255,0.7)'}}>{spec?.count} case{spec?.count===1?'':'s'} · Evidence-based</div>
           </div>
         </div>
 
@@ -630,10 +661,10 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(15,23,42,0.15),rgba(15,23,42,0.92))'}}/>
         <div style={{position:'absolute',top:16,left:16,background:'rgba(16,185,129,0.2)',backdropFilter:'blur(12px)',border:'1px solid rgba(16,185,129,0.3)',borderRadius:99,padding:'5px 14px',display:'flex',alignItems:'center',gap:6}}>
           <div style={{width:7,height:7,borderRadius:'50%',background:L.sage,boxShadow:`0 0 8px ${L.sage}`}}/>
-          <span style={{fontSize:10,fontWeight:700,color:'white',letterSpacing:1}}>500+ CASES · EVIDENCE-BASED</span>
+          <span style={{fontSize:10,fontWeight:700,color:'white',letterSpacing:1}}>{totalCaseCount} CASE{totalCaseCount===1?'':'S'} · EVIDENCE-BASED</span>
         </div>
         <div style={{position:'absolute',bottom:16,left:16,right:16}}>
-          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:6}}>GLOBAL CLINICAL LIBRARY · 8 SPECIALTIES</div>
+          <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:'rgba(255,255,255,0.7)',marginBottom:6}}>CLINICAL LIBRARY · {visibleSpecialties.length} SPECIALT{visibleSpecialties.length===1?'Y':'IES'}</div>
           <div style={{fontSize:28,fontWeight:900,color:'white',letterSpacing:-0.6,marginBottom:4}}>🏥 Clinical Library</div>
           <div style={{fontSize:13,color:'rgba(255,255,255,0.75)'}}>History · Labs · Imaging · Management · AI Pearls</div>
         </div>
@@ -643,8 +674,8 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
         {/* Stats */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:16}}>
           {[
-            {label:'Cases',value:'500+',color:L.teal},
-            {label:'Specialties',value:'8',color:L.cobalt},
+            {label:'Cases',value:String(totalCaseCount),color:L.teal},
+            {label:'Specialties',value:String(visibleSpecialties.length),color:L.cobalt},
             {label:'AI Powered',value:'100%',color:L.violet},
           ].map(s=>(
             <div key={s.label} style={{background:L.surface,border:`1px solid ${L.border}`,borderRadius:14,padding:'12px 8px',textAlign:'center',boxShadow:L.shadowSm}}>
@@ -657,7 +688,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
         {/* Specialties grid */}
         <div style={{fontSize:10,fontWeight:700,letterSpacing:1.5,color:L.textMuted,marginBottom:10}}>SELECT SPECIALTY</div>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
-          {SPECIALTIES.map(spec=>(
+          {visibleSpecialties.map(spec=>(
             <div key={spec.id}
               onClick={()=>{ setSpecialty(spec.id); track('ClinicalLibrary','select_specialty',{specialty:spec.id}) }}
               onMouseDown={()=>setPressed(spec.id)} onMouseUp={()=>setPressed(null)}
@@ -671,7 +702,7 @@ export default function ClinicalLibrary({ onXP }:{ onXP?:(n:number)=>void }) {
               <div style={{position:'absolute',inset:0,padding:'12px',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
                 <div style={{fontSize:20,marginBottom:3}}>{spec.icon}</div>
                 <div style={{fontSize:13,fontWeight:800,color:'white'}}>{spec.label}</div>
-                <div style={{fontSize:10,color:'rgba(255,255,255,0.7)'}}>{spec.cases} cases</div>
+                <div style={{fontSize:10,color:'rgba(255,255,255,0.7)'}}>{spec.count} case{spec.count===1?'':'s'}</div>
               </div>
             </div>
           ))}
