@@ -9,6 +9,15 @@
 -- deferred_capabilities_safe_hold.sql service-role-only lockdown — if that
 -- posture is wanted again, apply that draft's own logic for these two
 -- tables explicitly, as its own decision.
+--
+-- LEGACY POLICY NOTE: staging verification (2026-09-18) found two
+-- pre-Batch-5 PUBLIC-role policies ("public read nodes", "public read
+-- edges") that the forward migration now explicitly drops. This rollback
+-- deliberately does NOT recreate them — there is no documented, approved
+-- reason to restore a PUBLIC-role read policy, and doing so would be less
+-- safe than the "revoke all privileges, no policy" state below. Rolling
+-- back returns to the safest no-client-access shape, not to whatever
+-- undocumented pre-Batch-5 state existed.
 
 begin;
 

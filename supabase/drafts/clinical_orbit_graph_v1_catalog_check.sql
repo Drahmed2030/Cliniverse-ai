@@ -18,6 +18,27 @@ where schemaname = 'public' and tablename in ('kg_nodes', 'kg_edges')
 order by tablename, policyname;
 -- Expected: exactly one SELECT policy per table, both "..._select_authenticated".
 
+-- 2a) Legacy pre-Batch-5 PUBLIC-role policies must be absent. Live staging
+-- verification (2026-09-18) found "public read nodes" / "public read edges"
+-- predating this migration; the forward migration now drops them
+-- explicitly. This query must return zero rows.
+select schemaname, tablename, policyname, roles, cmd
+from pg_policies
+where schemaname = 'public'
+  and (
+    (tablename = 'kg_nodes' and policyname = 'public read nodes')
+    or (tablename = 'kg_edges' and policyname = 'public read edges')
+  );
+-- Expected: 0 rows. Any row returned means the legacy policy was not removed.
+
+-- 2b) Exactly one policy per table, no more, no less.
+select tablename, count(*) as policy_count
+from pg_policies
+where schemaname = 'public' and tablename in ('kg_nodes', 'kg_edges')
+group by tablename
+order by tablename;
+-- Expected: kg_nodes = 1, kg_edges = 1.
+
 -- 3) Table-level privileges.
 select 'kg_nodes' as table_name,
        has_table_privilege('authenticated', 'public.kg_nodes', 'SELECT') as authenticated_select,
@@ -61,6 +82,8 @@ where schemaname = 'public' and tablename = 'kg_nodes'
 -- Expected: both present.
 
 -- 5) Row counts, once seeded (Section 5 of the batch).
+-- Verified on staging 2026-09-18: kg_nodes = 17, kg_edges = 12, matching
+-- CLINICAL_ORBIT_NODE_SEED / CLINICAL_ORBIT_EDGE_SEED exactly.
 select 'kg_nodes' as table_name, count(*) from public.kg_nodes
 union all
 select 'kg_edges', count(*) from public.kg_edges;

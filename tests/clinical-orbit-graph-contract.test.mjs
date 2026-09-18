@@ -211,6 +211,45 @@ test('exactly one SELECT-only policy exists per table', () => {
   assert.match(migration, /create policy "kg_edges_select_authenticated"\s*\n\s*on public\.kg_edges\s*\n\s*for select\s*\n\s*to authenticated/)
 })
 
+// ── Legacy PUBLIC policy reconciliation (found during live staging verification, 2026-09-18) ──
+
+test('the migration explicitly drops the legacy pre-Batch-5 PUBLIC policies before creating the intended ones', () => {
+  const migration = read('supabase/drafts/clinical_orbit_graph_v1.sql')
+  assert.match(migration, /drop policy if exists "public read nodes" on public\.kg_nodes;/)
+  assert.match(migration, /drop policy if exists "public read edges" on public\.kg_edges;/)
+
+  const dropLegacyNodesIdx = migration.indexOf('drop policy if exists "public read nodes"')
+  const dropLegacyEdgesIdx = migration.indexOf('drop policy if exists "public read edges"')
+  const createNodesIdx = migration.indexOf('create policy "kg_nodes_select_authenticated"')
+  const createEdgesIdx = migration.indexOf('create policy "kg_edges_select_authenticated"')
+  assert.ok(dropLegacyNodesIdx > -1 && dropLegacyNodesIdx < createNodesIdx, 'legacy kg_nodes policy must be dropped before the intended one is created')
+  assert.ok(dropLegacyEdgesIdx > -1 && dropLegacyEdgesIdx < createEdgesIdx, 'legacy kg_edges policy must be dropped before the intended one is created')
+})
+
+test('the migration does not rely on REVOKE alone — self-verification asserts exact policy-catalog convergence', () => {
+  const migration = read('supabase/drafts/clinical_orbit_graph_v1.sql')
+  assert.match(migration, /raise exception 'kg_nodes must have exactly one policy/)
+  assert.match(migration, /raise exception 'kg_edges must have exactly one policy/)
+  assert.match(migration, /raise exception 'legacy policy "public read nodes" still exists on kg_nodes';/)
+  assert.match(migration, /raise exception 'legacy policy "public read edges" still exists on kg_edges';/)
+  assert.match(migration, /from pg_policies where schemaname = 'public' and tablename = 'kg_nodes'\) != 1/)
+  assert.match(migration, /from pg_policies where schemaname = 'public' and tablename = 'kg_edges'\) != 1/)
+})
+
+test('the rollback does not recreate the legacy PUBLIC policies', () => {
+  const rollback = read('supabase/drafts/clinical_orbit_graph_v1.rollback.sql')
+  assert.equal(/create policy "public read nodes"/i.test(rollback), false)
+  assert.equal(/create policy "public read edges"/i.test(rollback), false)
+  assert.match(rollback, /does NOT recreate them/)
+})
+
+test('the catalog check verifies the legacy policies are absent and exactly one policy remains per table', () => {
+  const check = read('supabase/drafts/clinical_orbit_graph_v1_catalog_check.sql')
+  assert.match(check, /policyname = 'public read nodes'/)
+  assert.match(check, /policyname = 'public read edges'/)
+  assert.match(check, /group by tablename/)
+})
+
 test('service_role management path is preserved — no explicit grant/revoke SQL statement touches it, same as Batch 3/4', () => {
   const migration = read('supabase/drafts/clinical_orbit_graph_v1.sql')
   const sqlStatements = migration

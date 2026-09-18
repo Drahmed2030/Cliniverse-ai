@@ -1,6 +1,6 @@
 # Clinical Orbit v1 — Knowledge Graph Foundation
 
-Status: **STATIC ONLY — NOT STAGED, NOT SEEDED, NOT DEPLOYED.** All new code and the migration draft exist only in this working tree. `supabase/drafts/clinical_orbit_graph_v1.sql` has not been applied anywhere, staging or production. No graph data has ever been written to a real database. See "Staging" below for what's actually required before that changes.
+Status: **BATCH 5 STAGING: VERIFIED.** Applied to Supabase staging (`xhwotblarwsxoanpiloe`) 2026-09-18. Catalog: **72 rows** (truth-matched against `app/lib/contentCatalogSeed.ts`, including the new `cha2ds2_vasc` item). Graph: **17 nodes / 12 edges** (matching `CLINICAL_ORBIT_NODE_SEED`/`CLINICAL_ORBIT_EDGE_SEED` identities, content references, source/target/relation/evidence/provenance values exactly). Security: authenticated SELECT-only, anon denied, client writes denied. Legacy public policies (`"public read nodes"`, `"public read edges"`, pre-dating Batch 5) were **found during live staging verification, removed, and the migration reconciled to drop them deterministically on any future apply** — see "Staging" below. **Production Supabase is unchanged** — no migration, no seed, no write of any kind.
 
 ## Objective
 
@@ -46,7 +46,7 @@ Both are enforced twice — a TypeScript `as const` union with a type guard, and
 
 Every edge is grounded in either a real, ready+visible catalog item (`evidenceStatus: 'reviewed'`, provenance pointing at the actual source file) or an honest admission that the connection exists but the target isn't learner-visible yet (`evidenceStatus: 'pending_review'`). Two edges are **deliberately** left pointing at hidden content — the batch20 Anterior STEMI ECG case (`media_pending`) and the CHA₂DS₂-VASc calculator (real logic in `ClinicalCalculators.tsx`, but that component has no importer and is unreachable from `ReleaseApp`, same as Batch 4's `ClinicalLibrary` finding) — specifically so the hidden-content filtering requirement is proven against real data, not only synthetic test fixtures. The Heart Failure anchor's two known items are *both* currently hidden; rather than fabricate a third, visible connection to make the anchor look more complete, it's represented honestly as an anchor with no visible content yet.
 
-Seeding this to Supabase (`cha2ds2_vasc` catalog item + all 17 graph nodes/12 edges) has **not been done** — see "Staging" below.
+Seeded to Supabase staging 2026-09-18 (`cha2ds2_vasc` catalog item + all 17 graph nodes/12 edges) — see "Staging" below for the verified result.
 
 ## Section 6 — Staging migration
 
@@ -56,9 +56,26 @@ Seeding this to Supabase (`cha2ds2_vasc` catalog item + all 17 graph nodes/12 ed
 - Adds `kg_nodes.content_catalog_id` (FK to `clinical_content_catalog`, nullable, `on delete set null`), a unique index on it, a unique index on `metadata->>'node_key'`, and a `node_type` CHECK.
 - Adds `kg_edges.provenance_ref`, `kg_edges.evidence_status` (+ CHECK), a `relationship` CHECK, and a uniqueness constraint on `(source_node_id, target_node_id, relationship)`.
 - RLS: enabled on both tables; `authenticated` gets SELECT only (one policy per table); `anon` gets nothing; no INSERT/UPDATE/DELETE policy for anyone — service_role manages the table via its default RLS-bypass, undisturbed, same as `clinical_content_catalog`.
-- Self-verifying: a `do $orbit_assertions$` block checks RLS is on, authenticated SELECT exists, authenticated has no write privilege, and anon has no SELECT — `raise exception` on any failure, so a bad apply can't silently succeed.
+- Self-verifying: a `do $orbit_assertions$` block checks RLS is on, authenticated SELECT exists, authenticated has no write privilege, anon has no SELECT, and — after the staging-verification reconciliation below — that the policy catalog itself converges to exactly the one intended SELECT policy per table with no legacy policy surviving — `raise exception` on any failure, so a bad apply can't silently succeed.
 
-**Not applied to staging or production.** Applying it, then running `scripts/seed-clinical-orbit-graph.mjs` (which requires `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`, supports `--dry-run`, validates the manifest for duplicate node_keys/dangling edges before writing, and reads back every write per this repo's own RLS lesson), is external follow-up work for whoever runs the next staging window — same pattern as every other batch's Supabase step.
+**Applied to staging (`xhwotblarwsxoanpiloe`), 2026-09-18. Not applied to production** — `zbiujqxinvcxvuviuenx` is unchanged. `scripts/seed-clinical-orbit-graph.mjs` was then run against staging (validated the manifest for duplicate node_keys/dangling edges before writing, resolved each node's `catalogRef` to a real `clinical_content_catalog.id`, read back every write per this repo's own RLS lesson).
+
+### Legacy PUBLIC policies found during live staging verification
+
+Live inspection of staging during the apply found two policies pre-dating Batch 5: **`"public read nodes"`** on `kg_nodes` and **`"public read edges"`** on `kg_edges`. This migration's `revoke all privileges ... from anon, authenticated` already meant these policies granted no *effective* access (a policy without a backing table privilege is inert), so no unintended read access actually occurred at any point. However, leaving them in the policy catalog was not acceptable: it left more than the one intended policy per table, and a future privilege change could have made them live again without anyone re-auditing policies at that time.
+
+They were dropped externally on staging, and `clinical_orbit_graph_v1.sql` was reconciled (this same apply) to `drop policy if exists "public read nodes"` / `"public read edges"` explicitly and unconditionally, **before** creating the intended `..._select_authenticated` policies — so privileges and the policy catalog both converge to the same deterministic state on any future apply, not just on this one. The self-verification block now also asserts the exact policy count (1 per table) and the specific absence of both legacy policy names, rather than checking privileges alone. The rollback deliberately does **not** recreate the legacy policies — there is no documented, approved reason to restore a PUBLIC-role read policy, and the safest rollback target is "no client policy at all," not a guess at pre-Batch-5 state.
+
+**Verified staging security state (2026-09-18):**
+
+| | `kg_nodes` | `kg_edges` |
+|---|---|---|
+| authenticated SELECT | TRUE | TRUE |
+| authenticated INSERT/UPDATE/DELETE | FALSE | FALSE |
+| anon SELECT | FALSE | FALSE |
+| policies present | `kg_nodes_select_authenticated` only | `kg_edges_select_authenticated` only |
+
+**Verified staging row counts (2026-09-18):** `kg_nodes` = 17, `kg_edges` = 12 — exact match to `CLINICAL_ORBIT_NODE_SEED`/`CLINICAL_ORBIT_EDGE_SEED`. Catalog `clinical_content_catalog` = 72 rows, including the new `cha2ds2_vasc` item — exact match to `app/lib/contentCatalogSeed.ts`.
 
 ## Section 7 — Query adapter
 

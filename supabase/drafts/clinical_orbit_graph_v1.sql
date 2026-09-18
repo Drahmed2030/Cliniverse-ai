@@ -20,6 +20,16 @@
 -- evaluation_cases, evaluation_runs, generated_cases, mood_logs,
 -- nexus_cases, nexus_messages, nexus_votes) are NOT touched by this
 -- migration at all.
+--
+-- STAGING APPLY NOTE (2026-09-18): this migration was applied to staging
+-- (xhwotblarwsxoanpiloe) and passed. Live inspection during that apply
+-- found two legacy PUBLIC-role policies pre-dating Batch 5 — "public read
+-- nodes" and "public read edges" — that this migration's original REVOKE
+-- did not remove from the policy catalog (REVOKE removes effective
+-- privileges, not the policy rows themselves). They were dropped manually
+-- on staging, then this file was reconciled below to drop them
+-- deterministically on any future apply. See docs/CLINICAL_ORBIT_V1.md for
+-- the full verified staging result.
 
 begin;
 
@@ -103,6 +113,20 @@ revoke all privileges on table public.kg_edges from anon, authenticated;
 grant select on table public.kg_nodes to authenticated;
 grant select on table public.kg_edges to authenticated;
 
+-- Legacy pre-Batch-5 PUBLIC-role policies found during live staging
+-- verification (2026-09-18) — "public read nodes" / "public read edges".
+-- The REVOKE above already meant they granted no *effective* anon access
+-- (no table privilege for anon/authenticated to back them), but leaving a
+-- stale PUBLIC policy in the policy catalog is not acceptable: it would
+-- make the final policy state non-deterministic (more than the one
+-- intended policy per table) and could become live again if a future
+-- change re-grants a table privilege without also re-auditing policies.
+-- Dropped explicitly, unconditionally, before the intended policy is
+-- (re)created, so privileges AND the policy catalog both converge to the
+-- same deterministic end state — never rely on REVOKE alone for this.
+drop policy if exists "public read nodes" on public.kg_nodes;
+drop policy if exists "public read edges" on public.kg_edges;
+
 drop policy if exists "kg_nodes_select_authenticated" on public.kg_nodes;
 create policy "kg_nodes_select_authenticated"
   on public.kg_nodes
@@ -155,6 +179,29 @@ begin
   if has_table_privilege('anon', 'public.kg_nodes', 'SELECT')
      or has_table_privilege('anon', 'public.kg_edges', 'SELECT') then
     raise exception 'anon can read the graph — not intended for this release';
+  end if;
+
+  -- Policy catalog must converge to exactly the one intended policy per
+  -- table — REVOKE alone is not sufficient proof of a clean state, since a
+  -- stale policy (e.g. a legacy PUBLIC-role policy) can persist in
+  -- pg_policies even once its effective privileges are revoked.
+  if (select count(*) from pg_policies where schemaname = 'public' and tablename = 'kg_nodes') != 1 then
+    raise exception 'kg_nodes must have exactly one policy — found a different count, the policy catalog is not in the intended deterministic state';
+  end if;
+  if (select count(*) from pg_policies where schemaname = 'public' and tablename = 'kg_edges') != 1 then
+    raise exception 'kg_edges must have exactly one policy — found a different count, the policy catalog is not in the intended deterministic state';
+  end if;
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'kg_nodes' and policyname = 'kg_nodes_select_authenticated') then
+    raise exception 'kg_nodes is missing its intended kg_nodes_select_authenticated policy';
+  end if;
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'kg_edges' and policyname = 'kg_edges_select_authenticated') then
+    raise exception 'kg_edges is missing its intended kg_edges_select_authenticated policy';
+  end if;
+  if exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'kg_nodes' and policyname = 'public read nodes') then
+    raise exception 'legacy policy "public read nodes" still exists on kg_nodes';
+  end if;
+  if exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'kg_edges' and policyname = 'public read edges') then
+    raise exception 'legacy policy "public read edges" still exists on kg_edges';
   end if;
 end
 $orbit_assertions$;
