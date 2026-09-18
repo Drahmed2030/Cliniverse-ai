@@ -1,26 +1,43 @@
 # RLS Isolation — Batch 3 Status
 
-**BATCH 3 STATUS: BLOCKED-STAGING**
+**BATCH 3 STATUS: STAGING VERIFIED — PRODUCTION NOT APPLIED**
 
-Source branch: `security/rls-user-data-isolation` @ `72cb123`. This batch performed a full static reconciliation of that branch against the already-applied Apple RC1 RLS migration (`supabase/migrations/20260827044500_apple_rc1_runtime_trust.sql`, live in production since 2026-08-27) and produced corrected, staging-only draft artifacts. **Nothing from this batch has been applied to any Supabase project — production or staging.**
+Source branch: `security/rls-user-data-isolation` @ `72cb123`.
 
-## Reasons blocked
+The source branch was first statically reconciled against the already-applied Apple RC1 RLS migration. On 2026-09-18, the reconciled migration was then applied to the existing Supabase **staging** branch only (project ref `xhwotblarwsxoanpiloe`). Production project `zbiujqxinvcxvuviuenx` was inspected read-only and was **not changed**.
 
-1. **Migration `003_release_surface_rls_completion.sql`, as written on the source branch, requires a GRANT fix before it can work.** RC1 already ran `revoke all privileges on table public.cases/public.user_progress from anon, authenticated`. An RLS policy only filters rows a role already has the underlying table-level privilege to see — it does not restore a revoked GRANT. Applying `003` as-is would create policies for `cases` and `user_progress` that exist in `pg_policies` but are permanently unreachable, silently failing to deliver the intended authenticated read access. The corrected version — `supabase/drafts/rls_isolation_reconciled_v1.sql` — adds the missing `GRANT SELECT` / `GRANT SELECT, INSERT, UPDATE` statements alongside the policies, plus self-verifying assertions that abort the transaction if the fix doesn't actually take effect.
+## What was verified on staging
 
-2. **The source branch's own rollback files must not be used against current production.** `001_user_data_rls_hardening.rollback.sql`, `002_entitlement_rpc_hardening.rollback.sql`, and `003_release_surface_rls_completion.rollback.sql` all roll back to the **pre-RC1** legacy state — restoring public profile read/insert/update, restoring `is_user_pro` execute to anon/authenticated/PUBLIC, and fully disabling RLS on `cases`/`user_progress`/`leaderboard`. Running any of them today would not just undo this batch's work, it would reopen every hole RC1 already closed. `supabase/drafts/rls_isolation_reconciled_v1.rollback.sql` is the corrected replacement — it rolls back only to the RC1-hardened state, never further.
+- RLS remains enabled on `profiles`, `subscriptions`, `case_completions`, `mcq_answers`, `cases`, `user_progress`, and `leaderboard`.
+- `cases` is authenticated read-only.
+- `user_progress` is authenticated own-row SELECT/INSERT/UPDATE.
+- `leaderboard` remains deny-by-default for anon/authenticated.
+- `is_user_pro(uuid)` is not executable by anon/authenticated and remains executable by `service_role`.
+- Current real-auth/profile code needs authenticated `profiles` SELECT/INSERT/UPDATE privileges and entitlement code needs authenticated `subscriptions` SELECT; those grants were included in the reconciled staging migration because the live/staging catalog showed they were otherwise missing.
+- Two-user isolation was exercised inside a transaction using synthetic user UUIDs and a simulated authenticated JWT claim. User A could read/update/insert only A-owned rows; attempts to read/update/insert User B-owned rows were blocked by RLS. The transaction was rolled back, so no test rows persisted.
 
-3. **Live schema inspection and two-user isolation testing require a staging Supabase environment this sandbox does not have.** No `.env`, no Supabase CLI, and no network credentials exist here (confirmed directly, repeatedly, across this whole v1.2 execution). Section 2 (live schema read-only check), Section 5 (staging apply), and Section 6 (positive/negative security tests, two-user isolation) of the Batch 3 plan could not be executed and are marked UNVERIFIED / NOT RUN / STAGING REQUIRED accordingly — not assumed passing.
+## Why the source-branch migration was not applied as-is
 
-## What's safe to build on
+1. `003_release_surface_rls_completion.sql` created policies for `cases`/`user_progress` but did not restore the table-level GRANTs that RC1 had revoked, leaving the policies unreachable.
+2. The source rollback files restore the pre-RC1 legacy state and must not be used against current production.
+3. Current app code also requires authenticated INSERT/UPDATE on `profiles` and authenticated SELECT on `subscriptions`; the staging catalog confirmed those grants were missing before reconciliation.
 
-- `supabase/drafts/rls_isolation_reconciled_v1.sql` — the reconciled migration, draft form, with inline rationale for every deviation from the source branch and a self-verifying assertion block.
-- `supabase/drafts/rls_isolation_reconciled_v1.rollback.sql` — the corrected rollback, scoped to undo only what the reconciled migration adds.
-- `supabase/drafts/rls_isolation_reconciled_v1_catalog_check.sql` — read-only post-apply verification queries (no writes), adapted from the source branch's own catalog-check test to also cover the GRANT-level fix.
+## Production state
 
-## Next steps (not part of this batch)
+**No Batch 3 migration has been applied to production.**
 
-1. Obtain a staging Supabase project.
-2. Apply `rls_isolation_reconciled_v1.sql` there only.
-3. Run `rls_isolation_reconciled_v1_catalog_check.sql` and the full positive/negative/two-user isolation test matrix from `CLINIVERSE_V1_2_EXECUTION_PLAN.md`'s Batch 3 section.
-4. Only after all of that passes, seek explicit production migration-window approval.
+Production remains on its existing applied migration set. The next production step requires an explicit migration-window decision after reviewing this staging evidence and the reconciled rollback.
+
+## Security-advisor follow-up
+
+Supabase Security Advisor on staging still reports multiple RLS-enabled tables with no policies. Some are intentionally deny-by-default or deferred surfaces; they remain a security backlog item before institutional mode. The advisor also reports the `vector` extension installed in the `public` schema. Neither finding was changed by this batch.
+
+## Canonical artifacts
+
+- `supabase/drafts/rls_isolation_reconciled_v1.sql` — reconciled SQL, updated to match the staging-validated shape.
+- `supabase/drafts/rls_isolation_reconciled_v1.rollback.sql` — rollback to the pre-Batch-3 staging/RC1 state.
+- `supabase/drafts/rls_isolation_reconciled_v1_catalog_check.sql` — read-only verification queries for the staged shape.
+
+## Next step
+
+Production promotion is **not automatic**. If approved later, promote only the reconciled migration that matches this evidence, then immediately re-run catalog checks and production read-only verification.
