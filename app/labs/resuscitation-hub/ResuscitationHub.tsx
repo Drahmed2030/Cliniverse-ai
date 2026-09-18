@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { RESUSCITATION_LEARNING_UNITS } from '../../lib/resuscitation/curriculumContract.ts'
+import { RESUSCITATION_LEARNING_UNITS, catalogReviewStatusFor } from '../../lib/resuscitation/curriculumContract.ts'
 import { RESUSCITATION_SCENARIOS } from '../../lib/resuscitation/scenarios/index.ts'
 import type { ResuscitationScenario } from '../../lib/resuscitation/scenarioContract.ts'
 import {
@@ -109,20 +109,35 @@ export default function ResuscitationHub() {
         {section === 'simulate' ? (
           <section aria-labelledby="simulate-title">
             <h2 id="simulate-title" style={{ fontSize: 14 }}>Governed simulations</h2>
-            {RESUSCITATION_SCENARIOS.map(scenario => (
-              <div className={styles.card} key={scenario.scenarioId}>
-                <div className={styles.cardRow}>
-                  <div>
-                    <p className={styles.cardTitle}>{scenario.title}</p>
-                    <p className={styles.cardSub}>v{scenario.version} · {scenario.phases.length} phases</p>
+            {RESUSCITATION_SCENARIOS.map(scenario => {
+              // Learner launchability is gated by the catalog row for this
+              // exact scenarioId, not by scenario.reviewStatus (that field
+              // is the scenario manifest's own declared governance state —
+              // see curriculumContract.ts's catalogReviewStatusFor header).
+              // Registry presence alone is never sufficient for exposure.
+              const learnerReady = catalogReviewStatusFor(scenario.scenarioId) === 'reviewed'
+              return (
+                <div className={styles.card} key={scenario.scenarioId}>
+                  <div className={styles.cardRow}>
+                    <div>
+                      <p className={styles.cardTitle}>{scenario.title}</p>
+                      <p className={styles.cardSub}>v{scenario.version} · {scenario.phases.length} phases</p>
+                    </div>
+                    <span className={`${styles.badge} ${learnerReady ? styles.badgeReady : styles.badgePending}`}>
+                      {learnerReady ? 'Reviewed' : 'Under clinical review'}
+                    </span>
                   </div>
-                  <span className={`${styles.badge} ${styles.badgePending}`}>Pending review</span>
+                  <button
+                    className={styles.launchButton}
+                    disabled={!learnerReady}
+                    onClick={() => { if (learnerReady) setActiveScenario(scenario) }}
+                    type="button"
+                  >
+                    {learnerReady ? 'Start simulation' : 'Under clinical review — not yet available'}
+                  </button>
                 </div>
-                <button className={styles.launchButton} onClick={() => setActiveScenario(scenario)} type="button">
-                  Start simulation
-                </button>
-              </div>
-            ))}
+              )
+            })}
           </section>
         ) : null}
 

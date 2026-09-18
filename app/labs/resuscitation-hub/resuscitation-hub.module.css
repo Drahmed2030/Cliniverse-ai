@@ -39,6 +39,7 @@
 
 .launchButton { min-height: 44px; width: 100%; margin-top: 10px; border-radius: 12px; border: 0; background: var(--rh-blue); color: white; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
 .launchButton:focus-visible { outline: 3px solid var(--rh-cyan); outline-offset: 3px; }
+.launchButton:disabled { background: var(--rh-raised); color: var(--rh-muted); cursor: not-allowed; }
 .secondaryButton { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--rh-border); background: var(--rh-raised); color: var(--rh-text); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 
 .disclaimer { margin-top: 24px; color: var(--rh-muted); font-size: 11px; text-align: center; }

@@ -24,7 +24,18 @@ import type { ResuscitationCompetencyDomainId, ResuscitationLearningUnit, Resusc
 // not yet in the catalog under its own source_key) have no existing
 // catalog row to look up, so they fail closed to 'pending_clinical_review'.
 
-function catalogReviewStatusFor(sourceKey: string): ResuscitationReviewStatus {
+// Exported (governance fix): the exact same catalog-authoritative lookup
+// used for lesson reviewStatus above is also the correct — and only —
+// gate for whether a governed simulation scenario is learner-launchable.
+// A scenario's own declared `reviewStatus` field (scenarioContract.ts)
+// describes the scenario manifest's OWN governance state, the same way
+// calculatorRegistry.ts's `learnerReadiness` field does for Clinical
+// Reference (see learnerExposure.ts's header) — it is informational, not
+// authoritative. The catalog row for that exact scenarioId/source_key is
+// the sole authority on learner exposure, so ResuscitationHub.tsx calls
+// this same function (by scenarioId) rather than reading
+// scenario.reviewStatus directly to decide launchability.
+export function catalogReviewStatusFor(sourceKey: string): ResuscitationReviewStatus {
   const catalogItem = CLINICAL_CONTENT_CATALOG_SEED.find(item => item.source_key === sourceKey)
   if (!catalogItem) return 'pending_clinical_review'
   return isAvailable(catalogItem) ? 'reviewed' : 'pending_clinical_review'

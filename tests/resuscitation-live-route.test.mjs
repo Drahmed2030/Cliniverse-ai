@@ -6,7 +6,8 @@ import { CLINICAL_ORBIT_NODE_SEED, CLINICAL_ORBIT_EDGE_SEED } from '../app/lib/c
 import { getOrbitNeighbors, getOrbitCenter } from '../app/lib/clinicalOrbitGraphQueries.ts'
 import { CLINICAL_CONTENT_CATALOG_SEED } from '../app/lib/contentCatalogSeed.ts'
 import { isAvailable, countByContentType } from '../app/lib/contentCatalogQueries.ts'
-import { RESUSCITATION_LEARNING_UNITS, validateResuscitationLearningUnits } from '../app/lib/resuscitation/curriculumContract.ts'
+import { RESUSCITATION_LEARNING_UNITS, validateResuscitationLearningUnits, catalogReviewStatusFor } from '../app/lib/resuscitation/curriculumContract.ts'
+import { RESUSCITATION_SCENARIOS } from '../app/lib/resuscitation/scenarios/index.ts'
 
 const CATALOG = CLINICAL_CONTENT_CATALOG_SEED
 const GRAPH = { nodes: CLINICAL_ORBIT_NODE_SEED, edges: CLINICAL_ORBIT_EDGE_SEED }
@@ -72,6 +73,69 @@ test('scenario logic is not hardcoded into the React component — the player on
   assert.match(hub, /currentPhase\?\.actions\.map/)
 })
 
+// ── Learner readiness gate (governance fix) ──────────────────────────────
+
+test('all three governed scenarios still declare reviewStatus pending_clinical_review at the manifest level', () => {
+  for (const scenario of RESUSCITATION_SCENARIOS) {
+    assert.equal(scenario.reviewStatus, 'pending_clinical_review')
+  }
+})
+
+test('catalog rows for the three governed scenarios are review_required, not ready', () => {
+  for (const sourceKey of ['resus_vf_pvt_v1', 'resus_pea_asystole_v1', 'resus_unstable_bradycardia_v1']) {
+    const item = CATALOG.find(candidate => candidate.source_key === sourceKey)
+    assert.ok(item, `missing catalog row: ${sourceKey}`)
+    assert.equal(item.readiness, 'review_required')
+    assert.equal(item.visibility, 'visible', `${sourceKey} should stay listed/discoverable, just not launchable`)
+    assert.equal(isAvailable(item), false)
+  }
+})
+
+test('registry presence alone does not make a scenario learner-ready — the catalog row is the sole authority', () => {
+  // Every governed scenario is present in RESUSCITATION_SCENARIOS (the
+  // registry) — that alone must not be read as "ready." catalogReviewStatusFor
+  // looks the scenarioId up in the catalog, exactly as it already does for
+  // lessons, and is the one function ResuscitationHub.tsx calls to gate
+  // launch — never scenario.reviewStatus directly.
+  for (const scenario of RESUSCITATION_SCENARIOS) {
+    assert.equal(catalogReviewStatusFor(scenario.scenarioId), 'pending_clinical_review')
+  }
+})
+
+test('ResuscitationHub disables launch for a scenario the catalog marks review_required, and never calls setActiveScenario unconditionally', () => {
+  const hub = read('app/labs/resuscitation-hub/ResuscitationHub.tsx')
+  assert.match(hub, /const learnerReady = catalogReviewStatusFor\(scenario\.scenarioId\) === 'reviewed'/)
+  assert.match(hub, /disabled=\{!learnerReady\}/)
+  assert.match(hub, /onClick=\{\(\) => \{ if \(learnerReady\) setActiveScenario\(scenario\) \}\}/)
+  assert.equal(/onClick=\{\(\) => setActiveScenario\(scenario\)\}/.test(hub), false)
+})
+
+test('ResuscitationHub shows an "Under clinical review" state, not a silent disable with no explanation', () => {
+  const hub = read('app/labs/resuscitation-hub/ResuscitationHub.tsx')
+  assert.match(hub, /Under clinical review/)
+})
+
+test('no reviewer bypass was introduced in the hub — there is no reviewer/admin scope override anywhere in the component', () => {
+  const hub = read('app/labs/resuscitation-hub/ResuscitationHub.tsx')
+  assert.equal(/reviewerScope|isReviewer|reviewerBypass|adminOverride/i.test(hub), false)
+})
+
+test('ready lessons and drills remain fully usable and are not gated by the scenario fix', () => {
+  const lessons = RESUSCITATION_LEARNING_UNITS.filter(unit => unit.kind === 'lesson')
+  assert.equal(lessons.length, 12)
+  for (const lesson of lessons) assert.equal(lesson.reviewStatus, 'reviewed')
+})
+
+test('old Megacode v2 PE/Sepsis scenarios (MegacodeRunner.tsx) remain unpromoted — no catalog row exposes them as learner-ready', () => {
+  for (const sourceKey of ['mega_pe_01', 'mega_sepsis_01', 'mega_vf_01']) {
+    const item = CATALOG.find(candidate => candidate.source_key === sourceKey)
+    assert.equal(item, undefined, `${sourceKey} must not have a catalog row — MegacodeRunner.tsx is not wired into any live path`)
+  }
+  const megacode = CATALOG.find(item => item.source_key === 'megacode_v1')
+  assert.ok(megacode, 'the existing, separate megacode_v1 row must remain untouched')
+  assert.equal(megacode.readiness, 'ready')
+})
+
 // ── UI: mobile layout, timeline, keyboard, reduced motion, touch targets ──
 
 test('the event timeline has a keyboard-accessible toggle, not swipe-only access', () => {
@@ -114,11 +178,32 @@ test('Cardiac Arrest/ACLS links to the live Resuscitation Simulation Engine', ()
   assert.ok(neighbors.some(n => n.node.nodeKey === 'content:resuscitation:simulation:resuscitation_simulation_engine'))
 })
 
-test('the VF/pVT scenario links to real ECG rhythm-recognition content', () => {
+test('the VF/pVT scenario node is excluded from the default learner Clinical Orbit scope while pending clinical review', () => {
+  // The scenario's catalog row is now review_required (governance fix),
+  // so isNodeAvailable fails closed for it in the default (non-reviewer)
+  // scope — getOrbitCenter returns null and getOrbitNeighbors returns [],
+  // exactly like any other not-yet-ready content node. This is the
+  // existing Clinical Orbit gate (clinicalOrbitGraphQueries.ts) doing its
+  // job automatically once the catalog row was corrected — no new
+  // filtering code was added to clinicalOrbit.ts itself.
+  const center = getOrbitCenter(GRAPH, CATALOG, 'content:resuscitation:scenario:resus_vf_pvt_v1')
+  assert.equal(center, null)
   const neighbors = getOrbitNeighbors(GRAPH, CATALOG, 'content:resuscitation:scenario:resus_vf_pvt_v1')
+  assert.deepEqual(neighbors, [])
+})
+
+test('the VF/pVT scenario -> ECG edge still resolves in explicit reviewer scope, proving this is a real gate, not a broken link', () => {
+  // reviewerScope is an existing, already-documented option on every
+  // Clinical Orbit query (clinicalOrbitGraphQueries.ts OrbitQueryOptions)
+  // — used here only to prove the edge/target data itself is intact, not
+  // to grant learners any bypass. ResuscitationHub.tsx never sets this
+  // option (see the "no reviewer bypass" test below).
+  const center = getOrbitCenter(GRAPH, CATALOG, 'content:resuscitation:scenario:resus_vf_pvt_v1', { reviewerScope: true })
+  assert.ok(center)
+  const neighbors = getOrbitNeighbors(GRAPH, CATALOG, 'content:resuscitation:scenario:resus_vf_pvt_v1', { reviewerScope: true })
   assert.ok(neighbors.some(n => n.node.nodeKey === 'content:ecg:case:vt-monomorphic'))
   const ecgNode = getOrbitCenter(GRAPH, CATALOG, 'content:ecg:case:vt-monomorphic')
-  assert.ok(ecgNode)
+  assert.ok(ecgNode, 'the ECG target itself is independently ready/visible, unaffected by the scenario fix')
 })
 
 test('both new Batch 9 Clinical Orbit edges are reviewed (both targets are genuinely live/visible/ready) and carry provenance', () => {
@@ -158,9 +243,9 @@ test('lesson/drill/simulation/scenario/debrief/receipt_schema/competency_map are
   assert.equal(resuscitationModuleCases.length, 0)
 })
 
-test('every reachable Batch 9 catalog row is visible+ready and declares the live route', () => {
+test('every reachable, non-scenario Batch 9 catalog row is visible+ready and declares the live route', () => {
   const sourceKeys = [
-    'resuscitation_simulation_engine', 'resus_vf_pvt_v1', 'resus_pea_asystole_v1', 'resus_unstable_bradycardia_v1',
+    'resuscitation_simulation_engine',
     'resuscitation_codelab_drills', 'resuscitation_debrief_engine', 'resuscitation_competency_map',
   ]
   for (const sourceKey of sourceKeys) {
@@ -168,6 +253,16 @@ test('every reachable Batch 9 catalog row is visible+ready and declares the live
     assert.ok(item, `missing catalog row: ${sourceKey}`)
     assert.equal(isAvailable(item), true)
     assert.equal(item.route, '/labs/resuscitation-hub')
+  }
+})
+
+test('the three governed scenario rows are listed (visible) and route correctly, but are NOT available (review_required)', () => {
+  for (const sourceKey of ['resus_vf_pvt_v1', 'resus_pea_asystole_v1', 'resus_unstable_bradycardia_v1']) {
+    const item = CATALOG.find(candidate => candidate.source_key === sourceKey)
+    assert.ok(item, `missing catalog row: ${sourceKey}`)
+    assert.equal(item.route, '/labs/resuscitation-hub')
+    assert.equal(item.visibility, 'visible')
+    assert.equal(isAvailable(item), false)
   }
 })
 
