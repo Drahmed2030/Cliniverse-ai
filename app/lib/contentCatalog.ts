@@ -18,10 +18,16 @@ import {
 // what "available" means. See docs/CLINICAL_CONTENT_CATALOG_V1.md.
 //
 // The catalog migration (supabase/drafts/clinical_content_catalog_v1.sql)
-// has not been applied to production as of this batch. Until it's promoted,
-// every call below transparently falls back to CLINICAL_CONTENT_CATALOG_SEED
-// — the exact same manifest a future seed script would upsert into Supabase.
-// There is deliberately no second, independently-maintained set of numbers.
+// is applied and truth-match verified (71/71, zero drift) on Supabase
+// staging (xhwotblarwsxoanpiloe) as of 2026-09-18, seeded from
+// CLINICAL_CONTENT_CATALOG_SEED via scripts/seed-clinical-content-catalog.mjs.
+// It has NOT been applied to production. In any environment where the real
+// table is reachable (staging today; production once promoted), calls below
+// read from Supabase directly; everywhere else — including this sandbox,
+// which has no Supabase network access at all — they transparently fall
+// back to CLINICAL_CONTENT_CATALOG_SEED, the exact same manifest the seed
+// script upserts. There is deliberately no second, independently-maintained
+// set of numbers, so the two paths can never silently disagree.
 //
 // The actual filtering/counting logic lives in contentCatalogQueries.ts as
 // plain, network-free functions — this file only decides which item array

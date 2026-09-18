@@ -2,6 +2,11 @@
 -- READ-ONLY. Run only after applying clinical_content_catalog_v1.sql to a
 -- STAGING project. Not to be run against production without explicit
 -- migration-window approval.
+--
+-- Already run once against staging (xhwotblarwsxoanpiloe) on 2026-09-18 —
+-- all checks below passed (RLS enabled, authenticated SELECT-only, anon
+-- denied, unique/CHECK constraints present and enforced under a rolled-back
+-- throwaway transaction). Re-run after any future change to this table.
 
 -- 1) Table exists and RLS is enabled.
 select n.nspname as schema_name, c.relname as table_name, c.relrowsecurity as rls_enabled

@@ -1,6 +1,6 @@
 # Clinical Content Catalog v1
 
-Status: **SCHEMA DRAFTED — NOT APPLIED TO PRODUCTION OR STAGING FROM THIS SANDBOX.** See "Staging" below.
+Status: **STAGING VERIFIED — PRODUCTION NOT APPLIED.** Applied to Supabase staging (`xhwotblarwsxoanpiloe`) 2026-09-18; truth-match gate passed 71/71 against `app/lib/contentCatalogSeed.ts` with zero drift. Production (`zbiujqxinvcxvuviuenx`) is unchanged. See "Staging" below.
 
 ## Objective
 
@@ -28,7 +28,20 @@ The live, reachable surfaces this batch was asked to check — `AtlasReleaseCata
 
 ## Staging
 
-This sandbox has no Supabase credentials, CLI, or network access (verified directly at the start of this batch, consistent with every prior batch this v1.2 execution has run). The catalog migration, its rollback, and its catalog-check queries are drafted and ready in `supabase/drafts/`, following the exact same pattern Batch 3 used successfully — drafted here, applied to staging by a process with real credentials, then synced back. Until that happens, the app runs entirely on `contentCatalogSeed.ts`'s local fallback, which `app/lib/contentCatalog.ts` reports via `getContentCatalogSource()`.
+This sandbox has no Supabase credentials, CLI, or network access — every part of this batch that touched a real database was drafted here and applied externally, then synced back, the same pattern Batch 3 used. That external apply is now complete:
+
+**Applied to staging (`xhwotblarwsxoanpiloe`), 2026-09-18:**
+- `clinical_content_catalog_v1.sql` — table created, RLS enabled, authenticated SELECT-only, anon denied, unique + three CHECK constraints present and confirmed enforced (duplicate logical item, invalid `access_tier`, invalid `visibility`, invalid `readiness` all rejected inside a throwaway transaction that was then rolled back).
+- Seed: `scripts/seed-clinical-content-catalog.mjs` upserted the full manifest. Row count: **71**.
+- **Truth Match Gate: PASS.** Every field (`source_key`, `module`, `content_type`, `title`, `category`, `access_tier`, `visibility`, `readiness`, `route`, `provenance_ref`, `source_revision`, `sort_order`) compared exactly between `app/lib/contentCatalogSeed.ts` and the staging table. 0 missing rows, 0 extra rows, 0 metadata mismatches across all 10 modules.
+
+**Not applied to production.** `zbiujqxinvcxvuviuenx` is unchanged — no migration, no seed, no write of any kind. Promotion requires the same explicit migration-window decision every other v1.2 production step does.
+
+In staging (and, later, production once promoted), `app/lib/contentCatalog.ts` reads real rows from `public.clinical_content_catalog`. Everywhere else — including this sandbox — it transparently falls back to `contentCatalogSeed.ts`, reported via `getContentCatalogSource()`. Because the fallback is drawn from the exact file the seed script upserts, the two paths cannot silently disagree; the truth-match run above is the proof for this pass, not a standing guarantee that needs re-trusting blindly — re-run it after any future seed-manifest change.
+
+**Current staging counts** (2026-09-18): 71 total, 34 visible+ready. By module: `academy` 1/0, `cardiology_ops` 1/1, `clinical_library` 7/0 (all 7 hidden — see below), `codelab` 13/13, `ecg` 7/7, `ecg_batch20` 11/0, `echo` 1/1, `echo_batch20` 9/0, `reference` 6/5, `ward` 15/7. By readiness+visibility: `ready+visible` 34, `ready+hidden` 7, `review_required+hidden` 14, `review_required+visible` 1, `media_pending+hidden` 14, `labs+hidden` 1. By access tier: `free` 69, `pro` 2.
+
+**Echo scope note:** the single live, learner-ready Echo item (`echo-a4c-normal-cardionetworks-v1`) and the 9 `echo_batch20` candidates (5 `review_required` — dilated-lv, hypertrophic-phenotype, aortic-stenosis, mitral-regurgitation, pericardial-effusion; 3 `media_pending` — diastolic-function, rv-strain, echo-quality; 1 `labs` — a4c-orientation) remain exactly as truthfully classified in this batch — none visible. Expanding Echo readiness (Echo Intelligence Atlas, Study Model, Phenotype Graph, Competency Interactions, Comparison Mode) is explicitly out of scope here and reserved for a later phase.
 
 ## Readiness semantics, precisely
 

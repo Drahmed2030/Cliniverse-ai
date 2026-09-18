@@ -1,6 +1,9 @@
 -- Cliniverse clinical content catalog — control-plane index, not a content store.
 --
--- DRAFT / STAGING ONLY. NOT APPLIED TO PRODUCTION.
+-- APPLIED TO STAGING (xhwotblarwsxoanpiloe) 2026-09-18, truth-match verified
+-- against app/lib/contentCatalogSeed.ts (71/71, zero drift). NOT APPLIED TO
+-- PRODUCTION (zbiujqxinvcxvuviuenx) — do not run this against production
+-- without an explicit migration-window decision.
 --
 -- This table indexes and governs content that already lives in the repo
 -- (app/lib/ward/*, public/ecg-cases/*, app/lib/codelab/*, etc.) and in other
