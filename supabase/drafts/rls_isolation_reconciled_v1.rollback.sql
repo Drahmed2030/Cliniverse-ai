@@ -1,37 +1,35 @@
 -- Rollback for supabase/drafts/rls_isolation_reconciled_v1.sql
 --
--- DRAFT / STAGING ONLY. NOT APPLIED.
---
--- IMPORTANT — this is deliberately NOT the same as the source branch's
--- 001/002/003 .rollback.sql files. Those restore the PRE-RC1 legacy state
--- (public profile read/insert/update, is_user_pro executable by anon/
--- authenticated/PUBLIC, RLS fully disabled on cases/user_progress/
--- leaderboard). Running them today, after RC1 is already live in production,
--- would REOPEN every hole RC1 already closed — not just undo this
--- reconciled migration. This file only undoes what
--- rls_isolation_reconciled_v1.sql itself added, returning the database to
--- exactly the RC1-hardened state, not further back than that.
+-- STAGING-VALIDATED BATCH 3 ROLLBACK.
+-- Returns the database to the pre-Batch-3 RC1-hardened privilege shape.
+-- It does NOT restore the older pre-RC1 public policies.
 
 begin;
 
 set local lock_timeout = '5s';
 set local statement_timeout = '60s';
 
--- CASES: return to RC1's deny-all state.
+-- Restore profile/subscription grants to the catalog state observed before Batch 3.
+revoke insert, update on table public.profiles from authenticated;
+-- SELECT on profiles pre-existed and is intentionally preserved.
+
+revoke select on table public.subscriptions from authenticated;
+
+-- CASES: return to RC1 deny-by-default state.
 drop policy if exists "cases_select_authenticated" on public.cases;
 revoke select on table public.cases from authenticated;
--- RLS stays enabled — RC1 already enabled it and this rollback must not
--- weaken that regardless of this migration's own outcome.
+-- Keep RLS enabled.
 
--- USER_PROGRESS: return to RC1's deny-all state.
+-- USER_PROGRESS: return to RC1 deny-by-default state.
 drop policy if exists "user_progress_select_own" on public.user_progress;
 drop policy if exists "user_progress_insert_own" on public.user_progress;
 drop policy if exists "user_progress_update_own" on public.user_progress;
 revoke select, insert, update on table public.user_progress from authenticated;
+-- Keep RLS enabled.
 
--- ENTITLEMENT RPC: leave the service_role grant in place. Removing it would
--- not restore any prior production state (RC1 never explicitly granted or
--- revoked it for service_role) and could break a legitimate server-side
--- caller if one exists. Not part of this rollback's scope.
+-- LEADERBOARD was already deny-by-default before Batch 3; leave unchanged.
+
+-- Leave service_role execute on is_user_pro in place. Removing it could break a
+-- legitimate server-side caller and is not required to restore a safe RC1 state.
 
 commit;
