@@ -1,48 +1,69 @@
--- Cliniverse RLS reconciled-migration post-apply catalog verification
--- READ-ONLY metadata checks only. Run only after the reconciled migration
--- (rls_isolation_reconciled_v1.sql) has been applied to a STAGING project and
--- only after the approved migration window for production.
---
--- Adapted from security/rls-user-data-isolation @ 72cb123's
--- supabase/tests/rls_post_apply_catalog_check.sql, extended to also verify
--- the two things RC1 alone does not cover (see rls_isolation_reconciled_v1.sql's
--- header for the reconciliation rationale): the cases/user_progress table-level
--- GRANTs the new policies depend on, and service_role's is_user_pro grant.
+-- Cliniverse RLS Batch 3 post-apply catalog verification
+-- READ-ONLY. Updated after staging validation on 2026-09-18.
 
--- 1) RLS state for every table this reconciliation touches.
+-- 1) RLS state.
 select n.nspname as schema_name, c.relname as table_name, c.relrowsecurity as rls_enabled
 from pg_class c
 join pg_namespace n on n.oid = c.relnamespace
-where n.nspname = 'public' and c.relname in ('cases', 'user_progress', 'leaderboard')
+where n.nspname = 'public'
+  and c.relname in ('profiles','subscriptions','case_completions','mcq_answers','cases','user_progress','leaderboard')
 order by c.relname;
--- Expected: rls_enabled = true for all three (leaderboard was already true via RC1).
+-- Expected: true for all rows.
 
--- 2) Effective RLS policies on the reconciled tables.
+-- 2) Policies.
 select schemaname, tablename, policyname, roles, cmd, qual, with_check
 from pg_policies
-where schemaname = 'public' and tablename in ('cases', 'user_progress', 'leaderboard')
+where schemaname = 'public'
+  and tablename in ('profiles','subscriptions','case_completions','mcq_answers','cases','user_progress','leaderboard')
 order by tablename, policyname;
--- Expected: cases has exactly "cases_select_authenticated" (SELECT); user_progress
--- has exactly the 3 own-row policies; leaderboard has zero policies.
+-- Expected:
+-- profiles: own SELECT/INSERT/UPDATE
+-- subscriptions: own SELECT
+-- case_completions: own SELECT/INSERT
+-- mcq_answers: own SELECT/INSERT
+-- cases: authenticated SELECT
+-- user_progress: own SELECT/INSERT/UPDATE
+-- leaderboard: no client policy
 
--- 3) Table-level GRANTs the policies above depend on (the part RC1's REVOKE ALL
---    would otherwise leave unreachable).
-select 'cases' as table_name, has_table_privilege('authenticated', 'public.cases', 'SELECT') as authenticated_select,
-       has_table_privilege('authenticated', 'public.cases', 'INSERT') as authenticated_insert,
-       has_table_privilege('authenticated', 'public.cases', 'UPDATE') as authenticated_update
+-- 3) Table-level privileges required by the current app contracts.
+select 'profiles' as table_name,
+       has_table_privilege('authenticated','public.profiles','SELECT') as can_select,
+       has_table_privilege('authenticated','public.profiles','INSERT') as can_insert,
+       has_table_privilege('authenticated','public.profiles','UPDATE') as can_update,
+       has_table_privilege('authenticated','public.profiles','DELETE') as can_delete
 union all
-select 'user_progress', has_table_privilege('authenticated', 'public.user_progress', 'SELECT'),
-       has_table_privilege('authenticated', 'public.user_progress', 'INSERT'),
-       has_table_privilege('authenticated', 'public.user_progress', 'UPDATE');
--- Expected: cases → select=true, insert=false, update=false.
---           user_progress → select=true, insert=true, update=true.
+select 'subscriptions',
+       has_table_privilege('authenticated','public.subscriptions','SELECT'),
+       has_table_privilege('authenticated','public.subscriptions','INSERT'),
+       has_table_privilege('authenticated','public.subscriptions','UPDATE'),
+       has_table_privilege('authenticated','public.subscriptions','DELETE')
+union all
+select 'cases',
+       has_table_privilege('authenticated','public.cases','SELECT'),
+       has_table_privilege('authenticated','public.cases','INSERT'),
+       has_table_privilege('authenticated','public.cases','UPDATE'),
+       has_table_privilege('authenticated','public.cases','DELETE')
+union all
+select 'user_progress',
+       has_table_privilege('authenticated','public.user_progress','SELECT'),
+       has_table_privilege('authenticated','public.user_progress','INSERT'),
+       has_table_privilege('authenticated','public.user_progress','UPDATE'),
+       has_table_privilege('authenticated','public.user_progress','DELETE')
+union all
+select 'leaderboard',
+       has_table_privilege('authenticated','public.leaderboard','SELECT'),
+       has_table_privilege('authenticated','public.leaderboard','INSERT'),
+       has_table_privilege('authenticated','public.leaderboard','UPDATE'),
+       has_table_privilege('authenticated','public.leaderboard','DELETE');
 
--- 4) Leaderboard remains fully deny-by-default (RC1's state, untouched here).
-select has_table_privilege('anon', 'public.leaderboard', 'SELECT') as anon_select,
-       has_table_privilege('authenticated', 'public.leaderboard', 'SELECT') as authenticated_select;
--- Expected: both false.
+-- Expected:
+-- profiles       true,true,true,false
+-- subscriptions  true,false,false,false
+-- cases          true,false,false,false
+-- user_progress  true,true,true,false
+-- leaderboard    false,false,false,false
 
--- 5) Entitlement RPC grants.
+-- 4) Entitlement RPC.
 select p.proname,
        has_function_privilege('anon', p.oid, 'EXECUTE') as anon_can_execute,
        has_function_privilege('authenticated', p.oid, 'EXECUTE') as authenticated_can_execute,
@@ -50,5 +71,4 @@ select p.proname,
 from pg_proc p
 join pg_namespace n on n.oid = p.pronamespace
 where n.nspname = 'public' and p.proname = 'is_user_pro';
--- Expected: anon_can_execute=false, authenticated_can_execute=false,
---           service_role_can_execute=true.
+-- Expected: false,false,true.
