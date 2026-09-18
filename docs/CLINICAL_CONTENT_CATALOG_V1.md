@@ -1,6 +1,6 @@
 # Clinical Content Catalog v1
 
-Status: **STAGING VERIFIED — PRODUCTION NOT APPLIED.** Applied to Supabase staging (`xhwotblarwsxoanpiloe`) 2026-09-18; truth-match gate passed 71/71 against `app/lib/contentCatalogSeed.ts` with zero drift. Production (`zbiujqxinvcxvuviuenx`) is unchanged. See "Staging" below.
+Status: **STAGING VERIFIED (Batch 4, 71 rows) — LOCAL SEED NOW 72, RESEED NOT YET APPLIED — PRODUCTION NOT APPLIED.** Applied to Supabase staging (`xhwotblarwsxoanpiloe`) 2026-09-18; truth-match gate passed 71/71 against `app/lib/contentCatalogSeed.ts` as it stood at Batch 4's close, with zero drift at that time. Batch 5 (Clinical Orbit) additively appended one more item (`cha2ds2_vasc`) to the same seed manifest for its Atrial Fibrillation anchor — see "Known drift after Batch 5" below. Production (`zbiujqxinvcxvuviuenx`) is unchanged. See "Staging" below.
 
 ## Objective
 
@@ -32,14 +32,22 @@ This sandbox has no Supabase credentials, CLI, or network access — every part 
 
 **Applied to staging (`xhwotblarwsxoanpiloe`), 2026-09-18:**
 - `clinical_content_catalog_v1.sql` — table created, RLS enabled, authenticated SELECT-only, anon denied, unique + three CHECK constraints present and confirmed enforced (duplicate logical item, invalid `access_tier`, invalid `visibility`, invalid `readiness` all rejected inside a throwaway transaction that was then rolled back).
-- Seed: `scripts/seed-clinical-content-catalog.mjs` upserted the full manifest. Row count: **71**.
-- **Truth Match Gate: PASS.** Every field (`source_key`, `module`, `content_type`, `title`, `category`, `access_tier`, `visibility`, `readiness`, `route`, `provenance_ref`, `source_revision`, `sort_order`) compared exactly between `app/lib/contentCatalogSeed.ts` and the staging table. 0 missing rows, 0 extra rows, 0 metadata mismatches across all 10 modules.
+- Seed: `scripts/seed-clinical-content-catalog.mjs` upserted the full manifest as it stood at Batch 4's close. Row count at that time: **71**.
+- **Truth Match Gate: PASS (as of Batch 4, 2026-09-18).** Every field (`source_key`, `module`, `content_type`, `title`, `access_tier`, `visibility`, `readiness`, `route`, `provenance_ref`, `source_revision`, `sort_order`) compared exactly between `app/lib/contentCatalogSeed.ts` and the staging table at that time. 0 missing rows, 0 extra rows, 0 metadata mismatches across all 10 modules. This PASS result describes that point in time — it is not re-verified below.
+
+### Known drift after Batch 5
+
+Batch 5 (Clinical Orbit) added one new item to `app/lib/contentCatalogSeed.ts` — `cha2ds2_vasc` (`reference` module, `calculator` content type, `hidden`/`ready`) — as the real catalog anchor for Clinical Orbit's Atrial Fibrillation `measured_by` edge. This is an additive, in-scope catalog change (a real calculator confirmed present in `ClinicalCalculators.tsx`, same "component unreachable from ReleaseApp" pattern as the existing `clinical_library` items), not a correction to Batch 4's work.
+
+As of this addition, the **local seed manifest has 72 items**, while **Supabase staging still has 71 rows** — the new item has not yet been seeded there (this sandbox has no Supabase credentials, per the standing constraint). This is expected, known drift, not a silent inconsistency: staging will read **71** via `app/lib/contentCatalog.ts` until an operator re-runs `scripts/seed-clinical-content-catalog.mjs` against staging, at which point it should read 72 and a fresh truth-match should be re-run and recorded here. Until that reseed happens, do not treat "71" or "72" as the current staging count without re-checking — treat this section as the live note of record instead.
 
 **Not applied to production.** `zbiujqxinvcxvuviuenx` is unchanged — no migration, no seed, no write of any kind. Promotion requires the same explicit migration-window decision every other v1.2 production step does.
 
 In staging (and, later, production once promoted), `app/lib/contentCatalog.ts` reads real rows from `public.clinical_content_catalog`. Everywhere else — including this sandbox — it transparently falls back to `contentCatalogSeed.ts`, reported via `getContentCatalogSource()`. Because the fallback is drawn from the exact file the seed script upserts, the two paths cannot silently disagree; the truth-match run above is the proof for this pass, not a standing guarantee that needs re-trusting blindly — re-run it after any future seed-manifest change.
 
-**Current staging counts** (2026-09-18): 71 total, 34 visible+ready. By module: `academy` 1/0, `cardiology_ops` 1/1, `clinical_library` 7/0 (all 7 hidden — see below), `codelab` 13/13, `ecg` 7/7, `ecg_batch20` 11/0, `echo` 1/1, `echo_batch20` 9/0, `reference` 6/5, `ward` 15/7. By readiness+visibility: `ready+visible` 34, `ready+hidden` 7, `review_required+hidden` 14, `review_required+visible` 1, `media_pending+hidden` 14, `labs+hidden` 1. By access tier: `free` 69, `pro` 2.
+**Current staging counts** (2026-09-18, as last truth-matched in Batch 4 — see "Known drift after Batch 5" above): 71 total, 34 visible+ready. By module: `academy` 1/0, `cardiology_ops` 1/1, `clinical_library` 7/0 (all 7 hidden — see below), `codelab` 13/13, `ecg` 7/7, `ecg_batch20` 11/0, `echo` 1/1, `echo_batch20` 9/0, `reference` 6/5, `ward` 15/7. By readiness+visibility: `ready+visible` 34, `ready+hidden` 7, `review_required+hidden` 14, `review_required+visible` 1, `media_pending+hidden` 14, `labs+hidden` 1. By access tier: `free` 69, `pro` 2.
+
+**Local manifest counts after Batch 5** (not yet applied to staging): 72 total — the above plus `reference` module `cha2ds2_vasc` (`ready`/`hidden`/`free`), so `reference` becomes 7 items (6/5 → 7/5) and total ready+hidden becomes 8. These are manifest-only numbers until the reseed above happens.
 
 **Echo scope note:** the single live, learner-ready Echo item (`echo-a4c-normal-cardionetworks-v1`) and the 9 `echo_batch20` candidates (5 `review_required` — dilated-lv, hypertrophic-phenotype, aortic-stenosis, mitral-regurgitation, pericardial-effusion; 3 `media_pending` — diastolic-function, rv-strain, echo-quality; 1 `labs` — a4c-orientation) remain exactly as truthfully classified in this batch — none visible. Expanding Echo readiness (Echo Intelligence Atlas, Study Model, Phenotype Graph, Competency Interactions, Comparison Mode) is explicitly out of scope here and reserved for a later phase.
 

@@ -44,7 +44,7 @@ async function loadAllItems(): Promise<CatalogItem[]> {
   try {
     const { data, error } = await supabase
       .from('clinical_content_catalog')
-      .select('source_key,module,content_type,title,category,access_tier,visibility,readiness,route,provenance_ref,source_revision,sort_order')
+      .select('id,source_key,module,content_type,title,category,access_tier,visibility,readiness,route,provenance_ref,source_revision,sort_order')
       .order('sort_order', { ascending: true })
 
     if (error || !data) throw error ?? new Error('no data')
@@ -71,6 +71,11 @@ export function _resetContentCatalogCacheForTests(): void {
 /** Which source actually answered the last query — 'supabase' or 'local-fallback'. Null before any query has run. */
 export function getContentCatalogSource(): 'supabase' | 'local-fallback' | null {
   return cacheSource
+}
+
+/** The full, unfiltered catalog — for callers that need to cross-reference against it themselves, e.g. app/lib/clinicalOrbit.ts resolving a graph node's catalogRef. Most callers should use one of the filtered functions below instead. */
+export async function getAllCatalogItems(): Promise<CatalogItem[]> {
+  return loadAllItems()
 }
 
 export async function getVisibleContent(options?: CatalogQueryOptions): Promise<CatalogItem[]> {

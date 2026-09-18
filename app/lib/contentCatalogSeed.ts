@@ -18,6 +18,8 @@ export type Visibility = 'visible' | 'hidden'
 export type Readiness = 'ready' | 'review_required' | 'media_pending' | 'labs'
 
 export interface ClinicalContentCatalogSeedItem {
+  /** Only present when this item came from a real Supabase row — the seed manifest itself never sets this, since seed items don't have a DB id until they're written. Used by app/lib/clinicalOrbit.ts to join a graph node's content_catalog_id back to the catalog item it references. */
+  id?: string
   source_key: string
   module: string
   content_type: string
@@ -126,6 +128,11 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
   { source_key: 'pubmed', module: 'reference', content_type: 'tool', title: 'PubMed Search', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/pubmed', provenance_ref: 'app/api/pubmed/route.ts', sort_order: 93 },
   { source_key: 'clinical_trials', module: 'reference', content_type: 'tool', title: 'ClinicalTrials.gov Search', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/clinical-trials', provenance_ref: 'app/api/clinical-trials/route.ts', sort_order: 94 },
   { source_key: 'doc_analyzer', module: 'reference', content_type: 'tool', title: 'Doc Analyzer', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/api/analyze-doc', provenance_ref: 'app/api/analyze-doc/route.ts, app/components/DocAnalyzer.tsx (PHI/DLP contract not yet approved)', sort_order: 95 },
+  // Added in Batch 5 for Clinical Orbit's Atrial Fibrillation anchor
+  // (measured_by CHA2DS2-VASc) — real calculator logic confirmed present in
+  // ClinicalCalculators.tsx (id 'cha2ds2'), component confirmed unreachable
+  // from ReleaseApp (no importer found), same pattern as ClinicalLibrary.
+  { source_key: 'cha2ds2_vasc', module: 'reference', content_type: 'calculator', title: 'CHA₂DS₂-VASc', category: 'cardiology', access_tier: 'free', visibility: 'hidden', readiness: 'ready', provenance_ref: 'app/components/ClinicalCalculators.tsx (id: cha2ds2; component unreachable)', sort_order: 96 },
 
   // ── ClinicalLibrary: 7 real cases across 5 specialties with backing
   // content. readiness=ready because the case content itself is real and
