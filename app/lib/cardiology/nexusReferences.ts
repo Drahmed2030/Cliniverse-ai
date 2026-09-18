@@ -15,6 +15,18 @@ export interface NexusReference {
 
 export const NEXUS_REFERENCE_REGISTRY: NexusReference[] = [
   {
+    id: 'DEMO-PATHWAY-RULESET-V1',
+    title: 'Cliniverse synthetic pathway demonstration ruleset',
+    publisher: 'Cliniverse AI',
+    authority: 'local-approved',
+    version: '1.0-demo',
+    effectiveDate: '2026-09-03',
+    jurisdiction: 'Global demonstration; not locally adopted',
+    sourceUrl: null,
+    status: 'requires-local-review',
+    scope: 'Defines the fictional Door-to-ECG threshold used by Pathway Replay Intelligence. Synthetic demonstration only — not an executable clinical rule.',
+  },
+  {
     id: 'QAPAS-DIRECT-LOCAL',
     title: 'QAPAS-DIRECT local STEMI pathway',
     publisher: 'Prince Sultan Cardiac Center Qassim / Qassim Health Cluster',

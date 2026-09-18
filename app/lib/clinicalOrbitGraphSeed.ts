@@ -49,6 +49,13 @@ export const CLINICAL_ORBIT_NODE_SEED: ClinicalOrbitNode[] = [
   { nodeKey: 'content:echo:cine:echo-a4c-normal-cardionetworks-v1', nodeType: 'content', label: 'Echo: Normal A4C', catalogRef: { module: 'echo', contentType: 'cine', sourceKey: 'echo-a4c-normal-cardionetworks-v1' } },
   { nodeKey: 'content:echo_batch20:cine:dilated-lv', nodeType: 'content', label: 'Echo: Dilated LV / DCM (batch20)', catalogRef: { module: 'echo_batch20', contentType: 'cine', sourceKey: 'dilated-lv' } },
   { nodeKey: 'content:echo_batch20:cine:hypertrophic-phenotype', nodeType: 'content', label: 'Echo: Hypertrophic Phenotype / HCM (batch20)', catalogRef: { module: 'echo_batch20', contentType: 'cine', sourceKey: 'hypertrophic-phenotype' } },
+
+  // Batch 7: Pathway Replay Intelligence v2. Two content nodes only, to
+  // stay within the Batch 6-reconciled curated-seed ceiling (<=24 nodes,
+  // <=20 edges) without renegotiating it again — see the edge seed below
+  // for why only 2 of Section 12's 3 suggested links were added.
+  { nodeKey: 'content:pathway:pathway:stemi-replay-demo-v2', nodeType: 'content', label: 'STEMI Pathway Replay', catalogRef: { module: 'pathway', contentType: 'pathway', sourceKey: 'pathway-replay-stemi-demo-v2' } },
+  { nodeKey: 'content:pathway:drill:door-to-ecg-drill-v1', nodeType: 'content', label: 'Door-to-ECG acquisition drill', catalogRef: { module: 'pathway', contentType: 'drill', sourceKey: 'pathway-replay-door-to-ecg-drill-v1' } },
 ]
 
 export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
@@ -91,4 +98,14 @@ export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
   { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'content:echo_batch20:cine:hypertrophic-phenotype', relation: 'demonstrates', evidenceStatus: 'pending_review', provenanceRef: 'docs/case-media-resume/echo-readiness-snapshot.json (echo-a4c-severe-hcm-mm0002) — artifact integrity verified, clinical/privacy/device review pending' },
   { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'content:echo:cine:echo-a4c-normal-cardionetworks-v1', relation: 'compares_with', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalMedia/echoComparison.ts — comparison not yet eligible; HCM side is not learner-ready' },
   { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'condition:dcm_phenotype', relation: 'compares_with', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalMedia/echoComparison.ts — comparison not yet eligible; neither side is learner-ready' },
+
+  // Batch 7: Pathway Replay Intelligence v2. Both edges are 'reviewed' —
+  // both targets are genuinely live, visible/ready catalog content, unlike
+  // most of the hidden/pending_review proof edges above. Deliberately only
+  // 2 of Section 12's 3 suggested links (skipping the internal
+  // pathway->drill next_learning_step edge, which the Pathway Replay UI
+  // itself already expresses as its own drill-stage transition) to stay
+  // within the existing <=20 edge ceiling without renegotiating it again.
+  { sourceNodeKey: 'condition:anterior_stemi_acs', targetNodeKey: 'content:pathway:pathway:stemi-replay-demo-v2', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/labs/pathway-replay/page.tsx — ready, visible, fictional-simulation-only' },
+  { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:pathway:drill:door-to-ecg-drill-v1', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/codelab/trainingActivity.ts (DOOR_TO_ECG_CODE_LAB_ACTIVITY) — ready, visible, Code Lab training pathway' },
 ]

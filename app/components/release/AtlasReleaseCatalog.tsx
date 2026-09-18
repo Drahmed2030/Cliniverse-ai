@@ -172,6 +172,22 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan, caseLibrar
           </Link>
         </article>
 
+        <article style={cardStyle}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Pathway Replay</h2>
+              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Fictional STEMI pathway replay with a governed Code Lab drill and tamper-evident receipt trail</p>
+            </div>
+            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
+              FREE
+            </span>
+          </div>
+
+          <Link href="/labs/pathway-replay" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+            Open Pathway Replay →
+          </Link>
+        </article>
+
         <section aria-labelledby="atlas-plan-title" style={{ ...cardStyle, borderColor: C.border }}>
           <div style={{ color: C.violet, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>APP STORE PLAN</div>
           <h2 id="atlas-plan-title" style={{ fontSize: '1.05rem', margin: '7px 0 6px' }}>Review Cliniverse PRO</h2>

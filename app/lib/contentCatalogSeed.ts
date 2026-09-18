@@ -173,4 +173,16 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
   // Next-best-evidence learning activity — tied to the one learner-ready
   // Echo study (Normal A4C); see app/lib/competency/echoLearningActivity.ts.
   { source_key: 'echo-activity-a4c-normal-next-best-evidence', module: 'echo', content_type: 'activity', title: 'A4C Normal: What would you inspect next?', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', provenance_ref: 'app/lib/competency/echoLearningActivity.ts (echo-activity:a4c-normal-next-best-evidence)', sort_order: 114 },
+
+  // ── Batch 7: Pathway Replay Intelligence v2. content_type differentiates
+  // 'pathway' (the governed replay/closure experience itself), 'drill' (the
+  // targeted Code Lab practice activity it links to), 'replay_activity'
+  // (the reassessment/closure evidence-review step), and 'receipt_schema'
+  // (the tamper-evident receipt contract itself — a governance artifact,
+  // never learner-browsable content, kept hidden). None of these count as
+  // a clinical case; see app/lib/cardiology/pathwaySession.ts.
+  { source_key: 'pathway-replay-stemi-demo-v2', module: 'pathway', content_type: 'pathway', title: 'STEMI Pathway Replay (fictional demonstration)', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/pathway-replay', provenance_ref: 'app/lib/cardiology/pathwayReplayAgents.ts (STEMI_REPLAY_DEMO); app/labs/pathway-replay/page.tsx — live, reachable', sort_order: 115 },
+  { source_key: 'pathway-replay-door-to-ecg-drill-v1', module: 'pathway', content_type: 'drill', title: 'Door-to-ECG acquisition drill', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/pathway-replay', provenance_ref: 'app/lib/codelab/trainingActivity.ts (DOOR_TO_ECG_CODE_LAB_ACTIVITY) — live, reachable from the pathway drill stage', sort_order: 116 },
+  { source_key: 'pathway-replay-reassessment-closure-v1', module: 'pathway', content_type: 'replay_activity', title: 'Reassessment and closure brief', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/pathway-replay', provenance_ref: 'app/lib/cardiology/pathwaySession.ts (completePathwayReassessment, createPathwayClosureBrief) — live, reachable from the pathway reassessment stage', sort_order: 117 },
+  { source_key: 'pathway-replay-receipt-v2-schema', module: 'pathway', content_type: 'receipt_schema', title: 'Pathway Replay tamper-evident receipt schema', category: 'cardiology', access_tier: 'free', visibility: 'hidden', readiness: 'labs', provenance_ref: 'app/lib/codelab/trainingActivity.ts, app/lib/cardiology/pathwayEvent.ts — governance/schema artifact, never learner-browsable', sort_order: 118 },
 ]
