@@ -146,17 +146,23 @@ test('the curated graph stays within the current deliberately-reconciled ceiling
   // count here duplicates that decision and goes stale every time a later
   // batch legitimately reconciles it again, so this checks the bound
   // rather than a batch-specific snapshot.
-  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 26)
-  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 22)
+  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 30)
+  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 25)
 })
 
 // ── Catalog integration ──────────────────────────────────────────────────
 
 test('pathway/drill/replay_activity/receipt_schema are differentiated content types, never counted as a clinical "case"', () => {
+  // 'pathway' and 'replay_activity' remain Pathway Replay-module-specific,
+  // so they stay exact. 'drill' and 'receipt_schema' are shared vocabulary
+  // terms other modules (e.g. Batch 9's resuscitation module) also use
+  // legitimately — checked as "at least the one Pathway Replay row", not
+  // pinned to an exact cross-module count that goes stale every time
+  // another batch adds a real drill/receipt_schema row.
   assert.equal(countByContentType(CATALOG, 'pathway'), 1)
-  assert.equal(countByContentType(CATALOG, 'drill'), 1)
+  assert.ok(countByContentType(CATALOG, 'drill') >= 1)
   assert.equal(countByContentType(CATALOG, 'replay_activity'), 1)
-  assert.equal(countByContentType(CATALOG, 'receipt_schema'), 1)
+  assert.ok(countByContentType(CATALOG, 'receipt_schema') >= 1)
   const pathwayModuleCaseRows = CATALOG.filter(item => item.module === 'pathway' && item.content_type === 'case')
   assert.equal(pathwayModuleCaseRows.length, 0)
 })

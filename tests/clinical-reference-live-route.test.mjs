@@ -138,11 +138,14 @@ test('every Batch 8 Clinical Orbit edge carries real provenance', () => {
   for (const edge of batch8Edges) assert.ok(edge.provenanceRef && edge.provenanceRef.trim().length > 0)
 })
 
-test('the curated graph ceiling was deliberately reconciled to <=26/<=22, not silently exceeded', () => {
-  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 26)
-  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 22)
-  assert.equal(CLINICAL_ORBIT_NODE_SEED.length, 26)
-  assert.equal(CLINICAL_ORBIT_EDGE_SEED.length, 22)
+test('the curated graph stays within the current deliberately-reconciled ceiling — no silent creep past it', () => {
+  // See tests/clinical-orbit-graph-contract.test.mjs's own ceiling test for
+  // the authoritative current bound and its history — pinning an exact
+  // snapshot here goes stale every time a later batch legitimately
+  // reconciles the ceiling again (as Batch 9 just did), so this checks the
+  // bound, not a batch-specific count.
+  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 30)
+  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 25)
 })
 
 // ── Catalog integration ──────────────────────────────────────────────────

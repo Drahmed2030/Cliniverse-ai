@@ -175,6 +175,22 @@ export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan, caseLibrar
         <article style={cardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
             <div>
+              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Resuscitation Hub</h2>
+              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>BLS/ACLS curriculum, Code Lab drills, governed VF/PEA/bradycardia simulations with Rapid Replay, and competency progress</p>
+            </div>
+            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
+              FREE
+            </span>
+          </div>
+
+          <Link href="/labs/resuscitation-hub" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
+            Open Resuscitation Hub →
+          </Link>
+        </article>
+
+        <article style={cardStyle}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+            <div>
               <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Clinical Reference</h2>
               <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Governed calculators, drug identity, dosing and interactions — every result sourced</p>
             </div>

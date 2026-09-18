@@ -63,6 +63,12 @@ export const CLINICAL_ORBIT_NODE_SEED: ClinicalOrbitNode[] = [
   // for why only 2 of Section 12's 3 suggested links were added.
   { nodeKey: 'content:pathway:pathway:stemi-replay-demo-v2', nodeType: 'content', label: 'STEMI Pathway Replay', catalogRef: { module: 'pathway', contentType: 'pathway', sourceKey: 'pathway-replay-stemi-demo-v2' } },
   { nodeKey: 'content:pathway:drill:door-to-ecg-drill-v1', nodeType: 'content', label: 'Door-to-ECG acquisition drill', catalogRef: { module: 'pathway', contentType: 'drill', sourceKey: 'pathway-replay-door-to-ecg-drill-v1' } },
+
+  // Batch 9: Resuscitation Intelligence Foundation. All three targets are
+  // genuinely live/reachable at /labs/resuscitation-hub or /labs/ecg-challenge.
+  { nodeKey: 'content:resuscitation:simulation:resuscitation_simulation_engine', nodeType: 'content', label: 'Resuscitation Simulation Engine', catalogRef: { module: 'resuscitation', contentType: 'simulation', sourceKey: 'resuscitation_simulation_engine' } },
+  { nodeKey: 'content:resuscitation:scenario:resus_vf_pvt_v1', nodeType: 'content', label: 'Ventricular Fibrillation / Pulseless VT (simulation)', catalogRef: { module: 'resuscitation', contentType: 'scenario', sourceKey: 'resus_vf_pvt_v1' } },
+  { nodeKey: 'content:ecg:case:vt-monomorphic', nodeType: 'content', label: 'ECG: Monomorphic Ventricular Tachycardia', catalogRef: { module: 'ecg', contentType: 'case', sourceKey: 'vt-monomorphic' } },
 ]
 
 export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
@@ -123,4 +129,8 @@ export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
   // within the existing <=20 edge ceiling without renegotiating it again.
   { sourceNodeKey: 'condition:anterior_stemi_acs', targetNodeKey: 'content:pathway:pathway:stemi-replay-demo-v2', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/labs/pathway-replay/page.tsx — ready, visible, fictional-simulation-only' },
   { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:pathway:drill:door-to-ecg-drill-v1', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/codelab/trainingActivity.ts (DOOR_TO_ECG_CODE_LAB_ACTIVITY) — ready, visible, Code Lab training pathway' },
+
+  // Batch 9: Resuscitation Intelligence Foundation.
+  { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:resuscitation:simulation:resuscitation_simulation_engine', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/labs/resuscitation-hub/ResuscitationHub.tsx — ready, visible, live' },
+  { sourceNodeKey: 'content:resuscitation:scenario:resus_vf_pvt_v1', targetNodeKey: 'content:ecg:case:vt-monomorphic', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/resuscitation/scenarios/vfPvtScenario.ts + public/ecg-cases/ATTRIBUTION.md — both ready, visible; rhythm-recognition learning content related to the VF/pVT pathway' },
 ]

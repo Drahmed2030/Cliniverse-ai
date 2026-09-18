@@ -1,0 +1,88 @@
+.shell {
+  --rh-canvas: #0b0f19;
+  --rh-surface: #111827;
+  --rh-raised: #1f2937;
+  --rh-border: #374151;
+  --rh-text: #ffffff;
+  --rh-secondary: #e5e7eb;
+  --rh-muted: #94a3b8;
+  --rh-blue: #3b82f6;
+  --rh-cyan: #06b6d4;
+  --rh-green: #10b981;
+  --rh-yellow: #fcd34d;
+  --rh-red: #fca5a5;
+  min-height: 100dvh;
+  background: var(--rh-canvas);
+  color: var(--rh-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif;
+}
+
+.page { width: min(1100px, 100%); margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom)); padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+
+.eyebrow { margin: 0; color: var(--rh-cyan); font-size: 11px; font-weight: 750; letter-spacing: 0.11em; }
+.header h1 { margin: 8px 0; font-size: clamp(26px, 4vw, 34px); }
+.header p { margin: 0; color: var(--rh-secondary); font-size: 13px; }
+.backLink { min-height: 44px; display: inline-flex; align-items: center; color: var(--rh-secondary); font-size: 13px; text-decoration: none; margin-top: 10px; }
+
+.tabBar { display: flex; gap: 6px; margin: 20px 0; overflow-x: auto; padding-bottom: 2px; }
+.tabButton { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--rh-border); background: var(--rh-surface); color: var(--rh-secondary); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.tabButtonActive { border-color: var(--rh-cyan); background: rgba(6,182,212,.14); color: var(--rh-text); }
+.tabButton:focus-visible { outline: 3px solid var(--rh-cyan); outline-offset: 2px; }
+
+.card { padding: 16px 18px; border: 1px solid var(--rh-border); border-radius: 16px; background: var(--rh-surface); margin-bottom: 10px; }
+.cardRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cardTitle { font-size: 14px; font-weight: 800; margin: 0; }
+.cardSub { font-size: 11px; color: var(--rh-muted); margin: 4px 0 0; }
+.badge { padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; flex: 0 0 auto; }
+.badgePending { background: rgba(252,211,77,.14); color: var(--rh-yellow); }
+.badgeReady { background: rgba(16,185,129,.14); color: var(--rh-green); }
+
+.launchButton { min-height: 44px; width: 100%; margin-top: 10px; border-radius: 12px; border: 0; background: var(--rh-blue); color: white; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+.launchButton:focus-visible { outline: 3px solid var(--rh-cyan); outline-offset: 3px; }
+.secondaryButton { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--rh-border); background: var(--rh-raised); color: var(--rh-text); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+.disclaimer { margin-top: 24px; color: var(--rh-muted); font-size: 11px; text-align: center; }
+
+/* ── Simulation player ────────────────────────────────────────────── */
+
+.simShell { display: flex; flex-direction: column; min-height: 100dvh; }
+.simStrip { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: rgba(17,24,39,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rh-border); }
+.simStrip strong { font-size: 13px; }
+.simStrip small { display: block; color: var(--rh-muted); font-size: 10px; margin-top: 2px; }
+.simTimer { font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+.simBody { flex: 1; padding: 16px; max-width: 640px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+
+.actionGrid { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.actionButton { min-height: 52px; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--rh-border); background: var(--rh-surface); color: var(--rh-text); font: inherit; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; }
+.actionButton:focus-visible { outline: 3px solid var(--rh-cyan); outline-offset: 3px; }
+.actionCritical { border-color: rgba(252,211,77,.4); }
+
+.timelineToggle { min-height: 44px; width: 100%; margin-top: 16px; border-radius: 12px; border: 1px solid var(--rh-border); background: var(--rh-raised); color: var(--rh-secondary); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.timeline { margin-top: 10px; max-height: 40vh; overflow-y: auto; touch-action: pan-y; padding: 10px; border-radius: 12px; background: var(--rh-raised); border: 1px solid var(--rh-border); }
+.timelineRow { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(148,163,184,.12); font-size: 11px; }
+.timelineRow:last-child { border-bottom: 0; }
+.timelineOk { color: var(--rh-green); }
+.timelineBad { color: var(--rh-red); }
+
+.pauseOverlay { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; background: rgba(0,0,0,.6); }
+.pauseSheet { width: 100%; max-width: 640px; margin: 0 auto; background: var(--rh-surface); border-top: 1px solid var(--rh-yellow); border-radius: 20px 20px 0 0; padding: 20px; }
+.pauseSheet h2 { margin: 6px 0; font-size: 16px; color: var(--rh-yellow); }
+.pauseSheet p { margin: 8px 0; font-size: 13px; color: var(--rh-secondary); line-height: 1.55; }
+.pauseActions { display: flex; gap: 10px; margin-top: 16px; }
+
+.debriefSection { padding: 16px; border-radius: 14px; background: var(--rh-surface); border: 1px solid var(--rh-border); margin-bottom: 12px; }
+.debriefSection h3 { margin: 0 0 8px; font-size: 12px; color: var(--rh-cyan); letter-spacing: .06em; text-transform: uppercase; }
+.debriefSection p, .debriefSection li { font-size: 13px; color: var(--rh-secondary); line-height: 1.55; }
+.debriefSection ul { margin: 0; padding-left: 18px; }
+
+@media (max-width: 760px) {
+  .page { padding-left: max(18px, env(safe-area-inset-left)); padding-right: max(18px, env(safe-area-inset-right)); }
+}
+@media (max-width: 430px) {
+  .page { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell *, .shell *::before, .shell *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+  .timeline { touch-action: auto; }
+}
