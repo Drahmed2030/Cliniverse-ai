@@ -156,4 +156,21 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
   // app/components/ward/), consistent with the master report's "not
   // live-tested" note.
   { source_key: 'clinical_academy', module: 'academy', content_type: 'workspace', title: 'Clinical Academy', access_tier: 'pro', visibility: 'hidden', readiness: 'review_required', provenance_ref: 'app/components/ClinicalAcademy.tsx (confirmed unreachable from ReleaseApp — no importer found)', sort_order: 110 },
+
+  // ── Batch 6: Echo Intelligence Atlas phenotypes. content_type='phenotype'
+  // is distinct from the existing echo/echo_batch20 'cine' rows above — a
+  // phenotype groups studies, it is not itself a cine. Readiness is derived
+  // from app/lib/clinicalMedia/echoPhenotype.ts's deriveEchoPhenotypeReadiness
+  // (weakest member study wins) and mirrored here by hand; see
+  // docs/ECHO_INTELLIGENCE_ATLAS_V1.md for the reconciliation. Normal is
+  // ready/visible because its one member study (the existing 'echo' module
+  // row above) already is; DCM/HCM are hidden/review_required because their
+  // member studies have zero verified playable media and an incomplete
+  // clinical/privacy review — see app/lib/clinicalMedia/echoStudyRecord.ts.
+  { source_key: 'echo-phenotype-normal', module: 'echo', content_type: 'phenotype', title: 'Normal (phenotype)', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', provenance_ref: 'app/lib/clinicalMedia/echoPhenotype.ts (echo-phenotype:normal)', sort_order: 111 },
+  { source_key: 'echo-phenotype-dcm', module: 'echo_batch20', content_type: 'phenotype', title: 'Dilated cardiomyopathy (phenotype)', category: 'cardiology', access_tier: 'free', visibility: 'hidden', readiness: 'review_required', provenance_ref: 'app/lib/clinicalMedia/echoPhenotype.ts (echo-phenotype:dcm); docs/case-media-resume/echo-readiness-snapshot.json (echo-a4c-dcm-e00476)', sort_order: 112 },
+  { source_key: 'echo-phenotype-hcm', module: 'echo_batch20', content_type: 'phenotype', title: 'Hypertrophic cardiomyopathy (phenotype)', category: 'cardiology', access_tier: 'free', visibility: 'hidden', readiness: 'review_required', provenance_ref: 'app/lib/clinicalMedia/echoPhenotype.ts (echo-phenotype:hcm); docs/case-media-resume/echo-readiness-snapshot.json (echo-a4c-severe-hcm-mm0002)', sort_order: 113 },
+  // Next-best-evidence learning activity — tied to the one learner-ready
+  // Echo study (Normal A4C); see app/lib/competency/echoLearningActivity.ts.
+  { source_key: 'echo-activity-a4c-normal-next-best-evidence', module: 'echo', content_type: 'activity', title: 'A4C Normal: What would you inspect next?', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'ready', provenance_ref: 'app/lib/competency/echoLearningActivity.ts (echo-activity:a4c-normal-next-best-evidence)', sort_order: 114 },
 ]

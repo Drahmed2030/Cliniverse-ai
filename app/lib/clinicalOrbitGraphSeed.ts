@@ -33,6 +33,22 @@ export const CLINICAL_ORBIT_NODE_SEED: ClinicalOrbitNode[] = [
   { nodeKey: 'content:codelab:scenario:megacode_v1', nodeType: 'content', label: 'Megacode', catalogRef: { module: 'codelab', contentType: 'scenario', sourceKey: 'megacode_v1' } },
   { nodeKey: 'content:codelab:lesson:acls_01_systematic', nodeType: 'content', label: 'ACLS: Systematic Approach', catalogRef: { module: 'codelab', contentType: 'lesson', sourceKey: 'acls_01_systematic' } },
   { nodeKey: 'content:codelab:lesson:acls_02_vf_vt', nodeType: 'content', label: 'ACLS: VF/pVT', catalogRef: { module: 'codelab', contentType: 'lesson', sourceKey: 'acls_02_vf_vt' } },
+
+  // ── Batch 6: Echo Intelligence Atlas. Two new condition anchors (DCM/HCM
+  // phenotype) plus content nodes for the three real catalog cine items
+  // they reference. Every edge touching these anchors is pending_review
+  // (see the edge seed below) — none are 'reviewed' — so by design none
+  // appear in a default (non-reviewer) Clinical Orbit query, matching
+  // clinical_content_catalog's own hidden/review_required state for the
+  // DCM/HCM cines. condition:dcm_phenotype and condition:hcm_phenotype
+  // themselves ARE always-reachable concept anchors (no catalogRef), same
+  // as condition:heart_failure — reaching them just shows zero neighbors
+  // in learner scope today, which is the honest state.
+  { nodeKey: 'condition:dcm_phenotype', nodeType: 'condition', label: 'Dilated Cardiomyopathy (Echo phenotype)' },
+  { nodeKey: 'condition:hcm_phenotype', nodeType: 'condition', label: 'Hypertrophic Cardiomyopathy (Echo phenotype)' },
+  { nodeKey: 'content:echo:cine:echo-a4c-normal-cardionetworks-v1', nodeType: 'content', label: 'Echo: Normal A4C', catalogRef: { module: 'echo', contentType: 'cine', sourceKey: 'echo-a4c-normal-cardionetworks-v1' } },
+  { nodeKey: 'content:echo_batch20:cine:dilated-lv', nodeType: 'content', label: 'Echo: Dilated LV / DCM (batch20)', catalogRef: { module: 'echo_batch20', contentType: 'cine', sourceKey: 'dilated-lv' } },
+  { nodeKey: 'content:echo_batch20:cine:hypertrophic-phenotype', nodeType: 'content', label: 'Echo: Hypertrophic Phenotype / HCM (batch20)', catalogRef: { module: 'echo_batch20', contentType: 'cine', sourceKey: 'hypertrophic-phenotype' } },
 ]
 
 export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
@@ -60,4 +76,19 @@ export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
   { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:codelab:scenario:megacode_v1', relation: 'demonstrates', evidenceStatus: 'reviewed', provenanceRef: 'app/components/ward/CodeBlue.tsx — ready, visible' },
   { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:codelab:lesson:acls_01_systematic', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/codelab/aclsLessons.ts — ready, visible' },
   { sourceNodeKey: 'content:codelab:lesson:acls_01_systematic', targetNodeKey: 'content:codelab:lesson:acls_02_vf_vt', relation: 'next_learning_step', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/codelab/aclsLessons.ts — sequential lesson ordering (acls_01 → acls_02)' },
+
+  // Batch 6: Echo Intelligence Atlas. Every edge below is deliberately
+  // pending_review — DCM/HCM have zero verified playable media and an
+  // incomplete clinical/privacy review (app/lib/clinicalMedia/echoStudyRecord.ts),
+  // so no comparison or demonstration involving them is asserted as
+  // reviewed, even where the OTHER side (Normal) is itself ready/visible.
+  // This keeps getOrbitNeighbors() returning zero DCM/HCM neighbors in
+  // default learner scope, matching echoComparison.ts's own contrastive
+  // gating, which likewise blocks every DCM/HCM comparison today.
+  { sourceNodeKey: 'condition:dcm_phenotype', targetNodeKey: 'content:echo_batch20:cine:dilated-lv', relation: 'demonstrates', evidenceStatus: 'pending_review', provenanceRef: 'docs/case-media-resume/echo-readiness-snapshot.json (echo-a4c-dcm-e00476) — rights verified, clinical/privacy/device review incomplete' },
+  { sourceNodeKey: 'condition:dcm_phenotype', targetNodeKey: 'content:echo:cine:echo-a4c-normal-cardionetworks-v1', relation: 'compares_with', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalMedia/echoComparison.ts — comparison not yet eligible; DCM side is not learner-ready' },
+  { sourceNodeKey: 'condition:dcm_phenotype', targetNodeKey: 'condition:heart_failure', relation: 'related_to', evidenceStatus: 'pending_review', provenanceRef: 'General clinical association (dilated cardiomyopathy is a recognized cause of heart failure) — not sourced from a specific governed reference in this repo; kept pending_review rather than asserted as reviewed.' },
+  { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'content:echo_batch20:cine:hypertrophic-phenotype', relation: 'demonstrates', evidenceStatus: 'pending_review', provenanceRef: 'docs/case-media-resume/echo-readiness-snapshot.json (echo-a4c-severe-hcm-mm0002) — artifact integrity verified, clinical/privacy/device review pending' },
+  { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'content:echo:cine:echo-a4c-normal-cardionetworks-v1', relation: 'compares_with', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalMedia/echoComparison.ts — comparison not yet eligible; HCM side is not learner-ready' },
+  { sourceNodeKey: 'condition:hcm_phenotype', targetNodeKey: 'condition:dcm_phenotype', relation: 'compares_with', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalMedia/echoComparison.ts — comparison not yet eligible; neither side is learner-ready' },
 ]

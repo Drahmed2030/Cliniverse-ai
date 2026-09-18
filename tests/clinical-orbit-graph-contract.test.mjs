@@ -37,9 +37,19 @@ test('every content node catalogRef in the seed resolves to a real catalog item'
   }
 })
 
+const EXPECTED_CONDITION_ANCHOR_KEYS = [
+  'condition:anterior_stemi_acs',
+  'condition:atrial_fibrillation',
+  'condition:heart_failure',
+  'condition:severe_hyperkalemia',
+  'condition:cardiac_arrest_acls',
+  'condition:dcm_phenotype',
+  'condition:hcm_phenotype',
+]
+
 test('concept nodes (condition anchors) have no catalogRef and are always available', () => {
   const conditionNodes = CLINICAL_ORBIT_NODE_SEED.filter(n => n.nodeType === 'condition')
-  assert.equal(conditionNodes.length, 5)
+  assert.deepEqual(conditionNodes.map(n => n.nodeKey).sort(), [...EXPECTED_CONDITION_ANCHOR_KEYS].sort())
   for (const node of conditionNodes) {
     assert.equal(node.catalogRef, undefined)
     assert.equal(isNodeAvailable(node, CATALOG, false), true)
@@ -338,9 +348,15 @@ test('no catalog item used as a Clinical Orbit content node exposes an API-only 
 
 // ── Small, high-quality seed — not fabricated richness ────────────────────
 
-test('the seed is 5 curated anchors, not all 72 catalog items blindly seeded', () => {
+test('the seed remains a small curated graph, not the full catalog', () => {
   const anchors = CLINICAL_ORBIT_NODE_SEED.filter(n => n.nodeType === 'condition')
-  assert.equal(anchors.length, 5)
-  assert.ok(CLINICAL_ORBIT_NODE_SEED.length < 20, 'seed should stay small and curated for v1')
-  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length < 15)
+  assert.equal(anchors.length, 7)
+  assert.deepEqual(anchors.map(n => n.nodeKey).sort(), [...EXPECTED_CONDITION_ANCHOR_KEYS].sort())
+  // Deliberate bounded ceiling (raised from the Batch 5 <20/<15 guard to
+  // accommodate Batch 6's genuine DCM/HCM Echo additions) — not a permanent
+  // product limit, but still a real guard against uncontrolled/automatic
+  // ontology expansion. Any future growth past this must be a deliberate
+  // decision, not a silent creep.
+  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 24, 'seed should stay a small, deliberately curated graph')
+  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 20, 'seed should stay a small, deliberately curated graph')
 })

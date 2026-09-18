@@ -61,3 +61,8 @@ export function filterByModule(items: CatalogItem[], module: string): CatalogIte
 export function filterByAccessTier(items: CatalogItem[], accessTier: AccessTier, options?: Omit<CatalogQueryOptions, 'accessTier'>): CatalogItem[] {
   return filterVisibleContent(items, { ...options, accessTier })
 }
+
+/** All items of a given content_type, any readiness/visibility — a truthful, unfiltered structural count. Used by callers (e.g. Echo Intelligence Atlas) that must differentiate content_type buckets like 'cine' vs 'phenotype' vs 'activity' rather than lumping everything into one "case" count. */
+export function countByContentType(items: CatalogItem[], contentType: string, options?: CatalogQueryOptions): number {
+  return applyFilters(items.filter(item => item.content_type === contentType), options).length
+}

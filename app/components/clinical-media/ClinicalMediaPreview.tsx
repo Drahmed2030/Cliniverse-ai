@@ -17,6 +17,7 @@ import EchoA4cLesson from './EchoA4cLesson'
 import EchoA4cMediaComposition from './EchoA4cMediaComposition'
 import EchoStudyNavigation from './EchoStudyNavigation'
 import EchoStudySummaryPanel from './EchoStudySummaryPanel'
+import EchoIntelligenceAtlasPanel from './EchoIntelligenceAtlasPanel'
 import EchoPlaybackControls from './EchoPlaybackControls'
 import { studioPlayerCapabilities } from '../../lib/clinicalMedia/studioPlayerCapabilities'
 import { LOCAL_DCM_REVIEW } from '../../lib/clinicalMedia/localDcmReview'
@@ -103,6 +104,7 @@ export default function ClinicalMediaPreview({ echoOnly = false, onAssessment }:
     {capabilities.assessment&&!dcmReview&&program==='echo-a4c-normal'?<>
       <EchoA4cLesson onAssessment={onAssessment} reducedMotion={reducedMotion} onCompetencySignal={({mastery,taskId,observedAt})=>setEchoCompetency(current=>recordEchoClipCompetency({state:current,study:ECHO_A4C_PREVIEW_STUDY,clipId:echoSession.activeClipId,mastery,taskId,updatedAt:observedAt}))}/>
       <EchoStudySummaryPanel summary={echoSummary} recommendation={null}/>
+      <EchoIntelligenceAtlasPanel/>
     </>:null}
   </section>
 }
