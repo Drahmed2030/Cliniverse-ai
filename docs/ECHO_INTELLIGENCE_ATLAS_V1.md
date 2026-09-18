@@ -183,7 +183,19 @@ What changed: `app/components/clinical-media/ClinicalMediaPreview.tsx` now rende
 
 ## 17. Staging / production status
 
-- **Supabase staging:** not applied — no new migration was drafted for this batch. Confirmed unnecessary by test, not just unattempted: existing `supabase/drafts/clinical_orbit_graph_v1.sql` and `supabase/drafts/clinical_content_catalog_v1.sql` already allow every node type, relation, and content_type value this batch uses.
-- **Supabase production:** unchanged.
-- **Deployment:** not deployed. This batch's work is uncommitted on `qa/case-batch20-cloud` as of this document's authoring.
+**BATCH 6 EXTERNAL STAGING: VERIFIED**
+
+No new schema migration was required for this batch — confirmed unnecessary by test, not just unattempted: existing `supabase/drafts/clinical_orbit_graph_v1.sql` and `supabase/drafts/clinical_content_catalog_v1.sql` already allow every node type, relation, and content_type value this batch uses. The four new catalog rows and the Echo graph additions were reconciled directly into the existing `clinical_content_catalog`/`kg_nodes`/`kg_edges` tables on the staging project (`xhwotblarwsxoanpiloe`) by the operator, then reported back and cross-checked against this repo's local seed manifests. This sandbox has no live Supabase network/credential access, so the numbers below are operator-reported staging state, cross-verified against the local manifest counts this repo can compute directly (Sections 4, 12–13) — the two matched exactly, which is the confirmation recorded here.
+
+| Check | Result |
+|---|---|
+| Catalog truth match (source_key, module, content_type, title, category, access_tier, visibility, readiness, route, provenance_ref, source_revision, sort_order) | **76 / 76 PASS** — 0 missing rows, 0 extra rows, 0 metadata drift |
+| Clinical Orbit node match | **22 / 22 PASS** — 0 node drift |
+| Clinical Orbit edge match | **18 / 18 PASS** — 0 edge drift |
+| Echo learner-scope gating (Normal visible/ready; DCM/HCM cine + phenotype hidden/review_required; all DCM/HCM edges `pending_review` and excluded from default-scope queries) | **PASS** |
+| RLS/security posture (`clinical_content_catalog`, `kg_nodes`, `kg_edges`: authenticated SELECT-only, anon denied, no INSERT) — existing Batch 4/5 posture, unmodified by this batch | **PASS** |
+
+- **Supabase staging:** applied and verified (table above).
+- **Supabase production (`zbiujqxinvcxvuviuenx`):** unchanged.
+- **Deployment:** not deployed. This batch's application code is committed and pushed to `qa/case-batch20-cloud` (see repository history); production Vercel has not been promoted to include it.
 - **App Store / Codemagic:** out of scope for this batch; no native-identity-affecting change was made.
