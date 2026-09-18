@@ -1,0 +1,102 @@
+.shell {
+  --oc-panel: #111827;
+  --oc-elevated: #172033;
+  --oc-border: rgba(148,163,184,0.20);
+  --oc-text: #F8FAFC;
+  --oc-sub: #94A3B8;
+  --oc-teal: #2DD4BF;
+  --oc-blue: #60A5FA;
+  --oc-gold: #FBBF24;
+  --oc-red: #F87171;
+  color: var(--oc-text);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.intro { margin: 0; color: var(--oc-sub); font-size: 12px; line-height: 1.55; }
+
+.pulseStrip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pulseTile { min-height: 44px; border-radius: 14px; border: 1px solid var(--oc-border); background: var(--oc-panel); padding: 10px 12px; }
+.pulseTileAccent { border-color: rgba(248,113,113,0.45); }
+.pulseValue { font-size: 20px; font-weight: 900; }
+.pulseTileAccent .pulseValue { color: var(--oc-red); }
+.pulseLabel { font-size: 10px; color: var(--oc-sub); margin-top: 2px; }
+
+.encounterRail { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0; -webkit-overflow-scrolling: touch; }
+.encounterRail:focus-visible { outline: 3px solid var(--oc-teal); outline-offset: 3px; }
+.encounterChip { min-height: 44px; flex: 0 0 auto; border-radius: 12px; border: 1px solid var(--oc-border); background: var(--oc-elevated); color: var(--oc-sub); padding: 0 14px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+.encounterChipActive { border-color: rgba(45,212,191,0.6); background: rgba(13,148,136,0.22); color: var(--oc-teal); }
+.encounterChip:focus-visible { outline: 3px solid var(--oc-teal); outline-offset: 2px; }
+
+.railControls { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.railButton { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--oc-border); background: var(--oc-panel); color: var(--oc-text); font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+.railButton:disabled { opacity: 0.4; cursor: not-allowed; }
+.railButton:focus-visible { outline: 3px solid var(--oc-teal); outline-offset: 2px; }
+.railPosition { color: var(--oc-sub); font-size: 11px; }
+
+.consoleGrid { display: grid; grid-template-columns: 1fr; gap: 12px; min-width: 0; }
+.centerColumn, .rightColumn { display: grid; gap: 12px; align-content: start; min-width: 0; }
+
+/* Visual QA fix (Batch 10 gate): grid items default to a content-based
+   minimum width, so without min-width: 0 here, .beamRow's own
+   overflow-x: auto never gets a chance to engage — the whole chain above
+   grows to fit the Care Beam's intrinsic content instead, and the excess
+   is silently clipped by the page's own overflow-x: hidden rather than
+   being reachable by any scroll. min-width: 0 on every grid item in the
+   chain (.shell's own items, .consoleGrid, .centerColumn/.rightColumn,
+   .panel) restores the intended "beam scrolls inside its own container"
+   behavior at every breakpoint. */
+.panel { border-radius: 16px; border: 1px solid var(--oc-border); background: var(--oc-panel); padding: 14px; min-width: 0; }
+.panelLabel { color: var(--oc-blue); font-size: 10px; font-weight: 900; letter-spacing: 0.08em; margin-bottom: 10px; }
+.emptyNote { margin: 0; color: var(--oc-sub); font-size: 12px; line-height: 1.5; }
+
+.beamRow { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.beamNode { flex: 0 0 128px; border-radius: 12px; border: 1px solid var(--oc-border); background: var(--oc-elevated); padding: 10px; }
+.beamNodeLabel { font-size: 12px; font-weight: 800; }
+.beamNodeState { font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 6px; }
+.beamNodeMeta { font-size: 10px; color: var(--oc-sub); margin-top: 4px; }
+.beamNode_completed { border-color: rgba(45,212,191,0.5); }
+.beamNode_completed .beamNodeState { color: var(--oc-teal); }
+.beamNode_current { border-color: rgba(96,165,250,0.55); }
+.beamNode_current .beamNodeState { color: var(--oc-blue); }
+.beamNode_pending .beamNodeState { color: var(--oc-sub); }
+.beamNode_blocked { border-color: rgba(248,113,113,0.55); }
+.beamNode_blocked .beamNodeState { color: var(--oc-red); }
+
+.workList, .ownershipList, .blockerList, .exceptionList { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.procedureRow { display: grid; gap: 4px; padding-bottom: 8px; border-bottom: 1px solid rgba(148,163,184,0.12); }
+.workItem, .ownershipRow, .exceptionRow { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; border-bottom: 1px solid rgba(148,163,184,0.12); padding-bottom: 8px; }
+.workItemStatus { color: var(--oc-blue); font-weight: 800; }
+.workItemOwner { color: var(--oc-sub); }
+.blockerList { color: var(--oc-gold); font-size: 11px; padding-left: 16px; list-style: disc; }
+.exceptionEncounter { color: var(--oc-sub); font-weight: 800; }
+
+.readyBadge, .notReadyBadge { display: inline-flex; min-height: 32px; align-items: center; border-radius: 999px; padding: 0 12px; font-size: 11px; font-weight: 900; }
+.readyBadge { background: rgba(45,212,191,0.14); color: var(--oc-teal); }
+.notReadyBadge { background: rgba(251,191,36,0.14); color: var(--oc-gold); }
+
+.disclaimer { margin: 4px 0 0; color: var(--oc-sub); font-size: 10px; text-align: center; }
+
+@media (min-width: 720px) {
+  .pulseStrip { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .consoleGrid { grid-template-columns: 1.4fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .shell { grid-template-columns: 200px 1.4fr 1fr; grid-template-areas: "pulse pulse pulse" "rail center right" "railControls center right"; }
+  .pulseStrip { grid-area: pulse; }
+  .encounterRail { grid-area: rail; flex-direction: column; overflow-x: visible; overflow-y: auto; max-height: 60vh; }
+  .encounterChip { width: 100%; text-align: left; }
+  .railControls { grid-area: railControls; flex-direction: column; align-items: stretch; }
+  .consoleGrid { display: contents; }
+  .centerColumn { grid-area: center; }
+  .rightColumn { grid-area: right; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell *, .shell *::before, .shell *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+  .encounterRail, .beamRow { scroll-behavior: auto; }
+}

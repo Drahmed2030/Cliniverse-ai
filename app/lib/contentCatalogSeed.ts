@@ -115,11 +115,17 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
   { source_key: 'bls_06_team', module: 'codelab', content_type: 'lesson', title: 'BLS: Team Dynamics', category: 'BLS', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/?view=learn', provenance_ref: 'app/lib/codelab/blsLessons.ts', sort_order: 71 },
   { source_key: 'megacode_v1', module: 'codelab', content_type: 'scenario', title: 'Megacode', category: 'Simulation', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/?view=learn', provenance_ref: 'app/components/ward/CodeBlue.tsx', sort_order: 72 },
 
-  // ── Cardiology Operations: 5-module PRO workspace, merged and wired into
+  // ── Cardiology Operations: PRO workspace, merged and wired into
   // WardIndex/ReleaseApp behind canAccessPremium. Cataloged as one workspace
-  // item, not 5 separate routes — its modules are internal tabs, not
-  // independently addressable content.
-  { source_key: 'cardiology_operations', module: 'cardiology_ops', content_type: 'workspace', title: 'Cardiology Operations', category: 'Simulation', access_tier: 'pro', visibility: 'visible', readiness: 'ready', route: '/?view=learn', provenance_ref: 'app/components/ward/cardiology/*, app/components/ReleaseApp.tsx (careWorkspace=cardiology)', sort_order: 80 },
+  // item, not one row per internal tab — its modules (including Batch 10's
+  // new Console/Care Beam/Work Queue/Procedure Board/Handover Engine views)
+  // are internal tabs over one shared operational model, not independently
+  // addressable content. Adding a separate row per tab would contradict
+  // this same precedent this comment already established; see
+  // docs/CARDIOLOGY_OPERATIONS_V2.md Section 23 for the explicit decision
+  // not to catalog operations_workspace/work_queue/procedure_board/
+  // handover/care_beam as separate rows.
+  { source_key: 'cardiology_operations', module: 'cardiology_ops', content_type: 'workspace', title: 'Cardiology Operations', category: 'Simulation', access_tier: 'pro', visibility: 'visible', readiness: 'ready', route: '/?view=learn', provenance_ref: 'app/components/ward/cardiology/* (incl. OperationsConsole.tsx, app/lib/cardiologyOperations/*), app/components/ReleaseApp.tsx (careWorkspace=cardiology)', sort_order: 80 },
 
   // ── Clinical Reference proxies: live, FREE, unauthenticated passthroughs.
   { source_key: 'fda_openfda', module: 'reference', content_type: 'tool', title: 'FDA openFDA Lookup', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/fda', provenance_ref: 'app/api/fda/route.ts', sort_order: 90 },

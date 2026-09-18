@@ -69,6 +69,14 @@ export const CLINICAL_ORBIT_NODE_SEED: ClinicalOrbitNode[] = [
   { nodeKey: 'content:resuscitation:simulation:resuscitation_simulation_engine', nodeType: 'content', label: 'Resuscitation Simulation Engine', catalogRef: { module: 'resuscitation', contentType: 'simulation', sourceKey: 'resuscitation_simulation_engine' } },
   { nodeKey: 'content:resuscitation:scenario:resus_vf_pvt_v1', nodeType: 'content', label: 'Ventricular Fibrillation / Pulseless VT (simulation)', catalogRef: { module: 'resuscitation', contentType: 'scenario', sourceKey: 'resus_vf_pvt_v1' } },
   { nodeKey: 'content:ecg:case:vt-monomorphic', nodeType: 'content', label: 'ECG: Monomorphic Ventricular Tachycardia', catalogRef: { module: 'ecg', contentType: 'case', sourceKey: 'vt-monomorphic' } },
+
+  // Batch 10: Cardiology Operations Intelligence v2. One node for the
+  // single cataloged PRO workspace (its Console/Care Beam/QAPAS pathway
+  // tabs are internal, not separately cataloged — see
+  // docs/CARDIOLOGY_OPERATIONS_V2.md Section 23). At the current 30-node
+  // ceiling: any further Batch 10 orbit growth needs an explicit
+  // reconciliation, same as every prior batch's ceiling note above.
+  { nodeKey: 'content:cardiology_ops:workspace:cardiology_operations', nodeType: 'content', label: 'Cardiology Operations (Console, Care Beam, QAPAS pathway)', catalogRef: { module: 'cardiology_ops', contentType: 'workspace', sourceKey: 'cardiology_operations' } },
 ]
 
 export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
@@ -133,4 +141,9 @@ export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
   // Batch 9: Resuscitation Intelligence Foundation.
   { sourceNodeKey: 'condition:cardiac_arrest_acls', targetNodeKey: 'content:resuscitation:simulation:resuscitation_simulation_engine', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/labs/resuscitation-hub/ResuscitationHub.tsx — ready, visible, live' },
   { sourceNodeKey: 'content:resuscitation:scenario:resus_vf_pvt_v1', targetNodeKey: 'content:ecg:case:vt-monomorphic', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/lib/resuscitation/scenarios/vfPvtScenario.ts + public/ecg-cases/ATTRIBUTION.md — both ready, visible; rhythm-recognition learning content related to the VF/pVT pathway' },
+
+  // Batch 10: Cardiology Operations Intelligence v2. One link only — the
+  // STEMI/ACS condition to the (now Console/Care-Beam-equipped) Cardiology
+  // Operations workspace. At the current <=25 edge ceiling.
+  { sourceNodeKey: 'condition:anterior_stemi_acs', targetNodeKey: 'content:cardiology_ops:workspace:cardiology_operations', relation: 'related_to', evidenceStatus: 'reviewed', provenanceRef: 'app/components/ward/cardiology/OperationsConsole.tsx, app/components/ward/cardiology/QapasDirectSimulation.tsx — ready, visible, PRO-gated' },
 ]

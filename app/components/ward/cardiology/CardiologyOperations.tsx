@@ -4,8 +4,9 @@ import { useState } from 'react'
 import type { CardiologyModuleId } from '../../../lib/cardiology'
 import ChestPainCensus from './ChestPainCensus'
 import NotesOrdersTracker from './NotesOrdersTracker'
+import OperationsConsole from './OperationsConsole'
 import OperationsOverview from './OperationsOverview'
-import QapasDirectSimulation from './QapasDirectSimulation'
+import QapasDirectSimulation, { createInitialQapasCase } from './QapasDirectSimulation'
 import StructuredHandover from './StructuredHandover'
 import SurgicalList from './SurgicalList'
 import { CARDIOLOGY_COLORS as C, compactButtonStyle, panelStyle } from './styles'
@@ -13,6 +14,7 @@ import { useCardiologyOperations } from './useCardiologyOperations'
 
 const modules: Array<{ id: CardiologyModuleId; label: string }> = [
   { id: 'overview', label: 'On-call' },
+  { id: 'console', label: 'Console' },
   { id: 'pathway', label: 'Cardiac Pathway' },
   { id: 'census', label: 'Census' },
   { id: 'surgery', label: 'Surgical' },
@@ -31,6 +33,11 @@ export default function CardiologyOperations({ initialModule = 'overview' }: { i
     saveHandover,
     resetSimulation,
   } = useCardiologyOperations()
+  // Batch 10 Section 9: lifted here (not owned inside QapasDirectSimulation)
+  // so the Operations Console can project the exact same live Nexus ledger
+  // onto a Care Beam — one shared model, not two independently drifting
+  // copies of the same pathway.
+  const [nexusCase, setNexusCase] = useState(createInitialQapasCase)
 
   return (
     <section aria-labelledby="cardiology-operations-title" style={{ color: C.text }}>
@@ -60,7 +67,8 @@ export default function CardiologyOperations({ initialModule = 'overview' }: { i
       </nav>
 
       {activeModule === 'overview' && <OperationsOverview cases={state.cases} tasks={state.tasks} onOpenModule={setActiveModule} />}
-      {activeModule === 'pathway' && <QapasDirectSimulation />}
+      {activeModule === 'console' && <OperationsConsole nexusCase={nexusCase} state={state} />}
+      {activeModule === 'pathway' && <QapasDirectSimulation nexusCase={nexusCase} onNexusCaseChange={setNexusCase} />}
       {activeModule === 'census' && <ChestPainCensus cases={state.cases} onCycleStatus={cycleCaseStatus} />}
       {activeModule === 'surgery' && <SurgicalList items={state.surgicalItems} onToggle={toggleSurgicalCheck} />}
       {activeModule === 'tasks' && <NotesOrdersTracker tasks={state.tasks} onCycleStatus={cycleTaskStatus} />}

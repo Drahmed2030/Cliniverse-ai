@@ -23,7 +23,17 @@ import {
 import { CARDIOLOGY_COLORS as C, compactButtonStyle, panelStyle } from './styles'
 
 const roleLabel = (id: QapasRoleId) => QAPAS_ROLES.find(role => role.id === id)?.label ?? id
-const SIMULATION_STARTED_AT = '2026-08-31T08:00:00.000Z'
+export const SIMULATION_STARTED_AT = '2026-08-31T08:00:00.000Z'
+
+/**
+ * Batch 10 Section 9: the caseId/referral-case-id below are the shared
+ * identity the Cardiology Operations Console (OperationsConsole.tsx) uses
+ * to render this exact same Nexus ledger as a Care Beam — a single live
+ * NexusCase, not two independently drifting copies.
+ */
+export function createInitialQapasCase(): NexusCase {
+  return createNexusCase('SIM-QD-001', 'SIM-REF-001', SIMULATION_STARTED_AT)
+}
 
 const stateStepIndex: Record<NexusCase['state'], number> = {
   draft: 0,
@@ -38,12 +48,17 @@ const stateStepIndex: Record<NexusCase['state'], number> = {
   'quality-validated': 7,
 }
 
-export default function QapasDirectSimulation() {
+interface QapasDirectSimulationProps {
+  /** Batch 10 Section 9: lifted to CardiologyOperations.tsx so the Operations Console can project the exact same live ledger onto a Care Beam — see createInitialQapasCase() above. */
+  nexusCase: NexusCase
+  onNexusCaseChange: (next: NexusCase) => void
+}
+
+export default function QapasDirectSimulation({ nexusCase, onNexusCaseChange: setNexusCase }: QapasDirectSimulationProps) {
   const [checkpoints, setCheckpoints] = useState<NexusCase[]>([])
   const [previousAttempt, setPreviousAttempt] = useState<NexusCase | null>(null)
   const [activeStepIndex, setActiveStepIndex] = useState(0)
   const [activeRole, setActiveRole] = useState<QapasRoleId>('referring')
-  const [nexusCase, setNexusCase] = useState(() => createNexusCase('SIM-QD-001', 'SIM-REF-001', SIMULATION_STARTED_AT))
   const [engineMessage, setEngineMessage] = useState('Ready for the first authorized event.')
   const activeStep = QAPAS_STEPS[activeStepIndex]
   const activeRoleDetails = QAPAS_ROLES.find(role => role.id === activeRole) ?? QAPAS_ROLES[0]
