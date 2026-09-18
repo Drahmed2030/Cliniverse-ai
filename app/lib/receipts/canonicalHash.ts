@@ -10,6 +10,15 @@
 // verifier recompute the hash from a payload and confirm nothing was
 // altered after creation. See docs referencing "tamper-evident structural
 // receipt" for the exact language this repo uses.
+//
+// TERMINOLOGY: this is DETERMINISTIC CANONICAL JSON + SHA-256 — recursive
+// key-sorting, not a formally verified RFC 8785 JSON Canonicalization
+// Scheme (JCS) implementation (JCS additionally specifies Unicode
+// normalization and ECMA-262 number serialization, neither handled here).
+// Sufficient for this repo's constrained receipt/event payloads. Never
+// describe this as "RFC 8785 JCS + SHA-256" anywhere in this repo unless a
+// real, conformance-tested JCS implementation replaces it. See
+// docs/PATHWAY_REPLAY_INTELLIGENCE_V2.md Section 4.
 
 /** Deterministically orders object keys (recursively) so JSON.stringify output is stable regardless of construction order. Arrays keep their given order — order is meaningful there. */
 export function canonicalize(value: unknown): unknown {
