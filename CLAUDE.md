@@ -43,10 +43,16 @@ This file is a **durable execution contract**, not a project status log. It tell
 
 CLAUDE.md must never embed facts that change batch-to-batch. When you need current state, read it from source, not from memory of an earlier conversation:
 
-- **Overall plan / batch sequence:** `CLINIVERSE_V1_2_EXECUTION_PLAN.md`
-- **Canonical recovery/architecture reference** (supersedes older recovery audits): `CLINIVERSE_MASTER_RECOVERY_UNIFICATION_REPORT_V2.md`
+- **Current platform architecture/state (start here):** `docs/CLINIVERSE_PLATFORM_STATE_V1_2.md` — the canonical snapshot of what's actually built, batch-by-batch, and the governance model that applies to all of it. Refreshed at batch boundaries, not continuously; still verify a specific claim against source before acting on it.
+- **Overall plan / batch sequence:** `CLINIVERSE_V1_2_EXECUTION_PLAN.md` — **historical**, not current: actual delivered work diverged from this plan for Batches 9–10 (it describes "Megacode v2" and "Institutional sandbox preparation"; what was actually built is Resuscitation Intelligence and Cardiology Operations Intelligence v2 — a deliberate re-scoping, not a silent drop). Useful for Batches 1–8's original reasoning, not for what Batch 9/10 actually are.
+- **Canonical recovery/architecture reference** (supersedes older recovery audits, itself a pre-Batch-4 snapshot — cross-check against `docs/CLINIVERSE_PLATFORM_STATE_V1_2.md` for anything Batches 4–10 have since changed): `CLINIVERSE_MASTER_RECOVERY_UNIFICATION_REPORT_V2.md`
 - **Content catalog truth layer, current staging/local counts, drift notes:** `docs/CLINICAL_CONTENT_CATALOG_V1.md`
 - **Clinical Orbit graph status, staging verification result:** `docs/CLINICAL_ORBIT_V1.md`
+- **Echo Intelligence Atlas (study/phenotype/measurement model, staging status):** `docs/ECHO_INTELLIGENCE_ATLAS_V1.md`
+- **Pathway Replay Intelligence (event stream, receipts, staging status):** `docs/PATHWAY_REPLAY_INTELLIGENCE_V2.md`
+- **Clinical Reference Intelligence (calculators/dosing/interactions, review status):** `docs/CLINICAL_REFERENCE_INTELLIGENCE_V2.md`
+- **Cardiology Operations Intelligence v2 (Operational Core, Care Beam, reconciliation record):** `docs/CARDIOLOGY_OPERATIONS_V2.md`
+- **Build-with-Claude tool evaluation rules (advisory-only, no auto-install):** `docs/CLINIVERSE_ENGINEERING_TOOLCHAIN.md`
 - **Batch-specific status docs** live in `docs/` (e.g. `RLS_ISOLATION_BATCH3_STATUS.md`) — grep `docs/` for the batch you care about rather than assuming this file knows.
 - **Current HEAD, branch state, uncommitted work:** `git status`, `git log` — always live, never stale.
 - **Current App Store / native review status, Bundle ID, Capacitor state:** verify directly (ask the user, or inspect `capacitor.config.json` / `ios/App/`) before any action that depends on it — do not assume a status from an old conversation still holds. (As of this writing, `capacitor.config.json` and `ios/App/` already exist in the repo — do not assume Capacitor conversion is still pending.)
@@ -94,9 +100,40 @@ There is no capability registry in this repo today. Do not create a large one sp
 
 ---
 
-## 6. Batch 6 guardrails (contract only — Batch 6 itself is not started)
+## 6. Durable engineering principles (learned across Batches 6–10)
 
-When Echo work is eventually implemented, it must:
+These are standing rules, not a status log — for what's actually built today, see `docs/CLINIVERSE_PLATFORM_STATE_V1_2.md`.
+
+**A. Domain truth.**
+- Prefer one canonical domain model over multiple feature-local state models.
+- Derived UI state must be projected from canonical data/events where possible.
+- Never duplicate counts/statuses that can be derived deterministically.
+
+**B. Event-driven systems.** For workflow/simulation systems:
+- append-only event history where appropriate
+- deterministic transitions
+- provenance
+- explicit actor/role
+- no silent state mutation
+
+**C. UI quality.** For substantial UI changes:
+- real browser/device rendering is required before closeout where feasible — source/CSS inspection alone is not visual QA
+- responsive matrix must include compact/mobile, tablet, landscape, and desktop
+- swipe/drag always needs keyboard/tap parity
+- reduced motion must be respected
+- essential information must never rely on color alone
+- no horizontal overflow
+- visualization state must derive from domain truth
+
+**D. Institution-grade UX.**
+- Prefer: calm operational density, progressive disclosure, clear ownership, provenance/evidence visibility, responsive console layouts.
+- Avoid: generic SaaS card walls, decorative dashboards with duplicated metrics, visualizations that store their own truth.
+
+**E. Clinical AI.** AI may summarize, explain, organize, or assist review of governed evidence. AI may **not** independently become authority for: diagnosis, dosing, interactions, learner-ready clinical claims, competency certification, or autonomous operational escalation.
+
+**F. Integration architecture.** Internal domain models remain vendor/FHIR-version neutral. FHIR/SMART/CDS/DICOM/vendor integrations belong behind adapters. Do not model the entire product directly as FHIR resources.
+
+**G. Media/Echo contracts** (the durable version of what was once "Batch 6 guardrails" — Echo Intelligence Atlas is now implemented; see `docs/ECHO_INTELLIGENCE_ATLAS_V1.md`). Any future Echo work must:
 - Reuse the existing Echo Studio/media contracts (`app/lib/clinicalMedia/*`) rather than building a parallel media model.
 - Model at the **study** level, not "one video = one case" — separate study / cine / view / finding / measurement / phenotype / activity as distinct concepts.
 - Preserve license, provenance, and review status on every asset and measurement.
@@ -111,9 +148,9 @@ When Echo work is eventually implemented, it must:
 
 - Next.js App Router, TypeScript, deployed on Vercel.
 - Supabase Postgres + pgvector. Production: `zbiujqxinvcxvuviuenx.supabase.co`. Staging: `xhwotblarwsxoanpiloe.supabase.co`. Never confuse the two — production changes require explicit, separate approval after staging verification.
-- Styling: inline `style` objects per component, using `var(--cv-*)` tokens from `app/commercial-visual-system.css`. No Tailwind/Shadcn.
+- Styling: inline `style` objects per component, using `var(--cv-*)` tokens from `app/commercial-visual-system.css`. No Tailwind/Shadcn. **Known, undecided drift:** a few complex Labs surfaces (`ResuscitationHub.tsx`, `OperationsConsole.tsx`, Batches 9–10) use scoped CSS Modules with their own local custom properties (`--rh-*`, `--oc-*`) instead of `var(--cv-*)` — real, not yet reconciled; see `docs/CLINIVERSE_PLATFORM_STATE_V1_2.md` §G. Don't treat either pattern as universally "the" convention without checking which one the surface you're touching already uses.
 - `app/page.tsx` renders `ReleaseApp` (`app/components/ReleaseApp.tsx`) — imports via relative paths (`./components/X`), not `@/components/X` (no path alias configured).
-- Top-level navigation contract: `FloatingNav.tsx` exports `type Tab = 'hub' | 'ward' | 'oracle' | 'tools' | 'me'` with props `{ active, onChange }` (not `tab`/`setTab`) — this is the stable, external nav contract. `ReleaseApp.tsx` maintains its own richer internal tab/routing state on top of it; don't assume the two use identical string values. Multiple `page.tsx.bak*` files in `app/` are dead code from an earlier navigation iteration (including an old `MAIN_TABS` swipe implementation) — not live, not imported, safe to ignore unless a batch explicitly asks you to clean them up.
+- Top-level navigation contract: `ReleaseNav.tsx` exports `type ReleaseTab = 'today' | 'learn' | 'progress' | 'explore' | 'me'` with props `{ active, onChange }`, rendered by `ReleaseApp.tsx` (`app/page.tsx`'s real entry point) — this is the live, external nav contract. `app/components/FloatingNav.tsx` (`type Tab = 'hub' | 'ward' | 'oracle' | 'tools' | 'me'`) still exists in the tree but has **zero importers anywhere in the live app** — confirmed dead code, not a fallback or secondary contract; do not design against it or assume it still matters. Inside `learn`, `ReleaseApp.tsx` further routes by `careWorkspace: 'ward' | 'cardiology' | 'nexus' | 'codelab'` (`app/components/ward/index.tsx`) — a nested routing state, not the top-level contract. Multiple `page.tsx.bak*` files in `app/` are dead code from an earlier navigation iteration (including an old `MAIN_TABS` swipe implementation) — not live, not imported, safe to ignore unless a batch explicitly asks you to clean them up.
 - Two-tier test pattern (established Batch 4, reused since): pure, network-free logic lives in `*Queries.ts` files and is directly unit-tested with `node --test`; anything touching `app/supabase.ts` (even transitively) is verified via static source-contract regex assertions instead of execution, since there's no live Supabase reachable in tests. Relative imports of a **value** (not `import type`) between two files under test must use an explicit `.ts` extension (Node's native TS-stripping test runner requires it even though Next.js's bundler doesn't) — see `app/lib/engagement/client.ts` or `app/lib/clinicalOrbitGraphQueries.ts` for the pattern.
 
 ---
