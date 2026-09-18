@@ -2,58 +2,71 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+// Batch 8 fix: this route was previously mislabeled — despite the "RxNorm
+// Lookup" catalog title, its implementation actually called openFDA +
+// PubMed (duplicating app/api/fda/route.ts) and never touched RxNorm at
+// all. This rewrite makes it a real RxNorm identity adapter against NLM's
+// public RxNav REST API (no API key required) — see
+// app/lib/clinicalReference/drugIdentity.ts for the normalized
+// DrugIdentity contract this feeds.
+
+const RXNAV_BASE = "https://rxnav.nlm.nih.gov/REST";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const drug = searchParams.get("drug") || "aspirin";
-  
+  const drug = searchParams.get("drug");
+
+  if (!drug || !drug.trim()) {
+    return NextResponse.json({ error: "Missing required 'drug' query parameter" }, { status: 400 });
+  }
+
   try {
-    // Use OpenFDA for drug info + interactions
-    const [fdaRes, pubmedRes] = await Promise.all([
-      fetch(`https://api.fda.gov/drug/label.json?search=openfda.generic_name:"${encodeURIComponent(drug)}"&limit=1`),
-      fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(drug)}+drug+interaction&retmax=3&retmode=json`)
-    ]);
+    const rxcuiRes = await fetch(`${RXNAV_BASE}/rxcui.json?name=${encodeURIComponent(drug)}&search=1`);
+    const rxcuiData = await rxcuiRes.json();
+    const rxcui: string | undefined = rxcuiData?.idGroup?.rxnormId?.[0];
 
-    const fdaData = await fdaRes.json();
-    const pubmedData = await pubmedRes.json();
-    const result = fdaData.results?.[0];
-
-    if (!result) return NextResponse.json({ 
-      drug,
-      error: "Drug not found",
-      suggestion: "Try generic name"
-    });
-
-    // Get PubMed articles
-    const ids = pubmedData.esearchresult?.idlist || [];
-    let articles = [];
-    if (ids.length > 0) {
-      const sumRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.join(",")}&retmode=json`);
-      const sumData = await sumRes.json();
-      articles = ids.map((id: string) => ({
-        title: sumData.result?.[id]?.title || "",
-        year: sumData.result?.[id]?.pubdate?.split(" ")?.[0] || "",
-        url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`
-      }));
+    if (!rxcui) {
+      return NextResponse.json({
+        query: drug,
+        found: false,
+        error: "No RxNorm identity found for this name",
+      });
     }
 
-    return NextResponse.json({
-      name: result.openfda?.generic_name?.[0] || drug,
-      brandName: result.openfda?.brand_name?.[0] || "",
-      manufacturer: result.openfda?.manufacturer_name?.[0] || "",
-      drugClass: result.openfda?.pharm_class_epc?.[0] || "",
-      dosage: result.dosage_and_administration?.[0]?.substring(0, 300) || "",
-      warnings: result.warnings?.[0]?.substring(0, 300) || "",
-      contraindications: result.contraindications?.[0]?.substring(0, 200) || "",
-      interactions: result.drug_interactions?.[0]?.substring(0, 300) || "",
-      sideEffects: result.adverse_reactions?.[0]?.substring(0, 200) || "",
-      pubmedArticles: articles,
-      source: "FDA + PubMed"
-    });
+    const [propsRes, relatedRes] = await Promise.all([
+      fetch(`${RXNAV_BASE}/rxcui/${rxcui}/properties.json`),
+      fetch(`${RXNAV_BASE}/rxcui/${rxcui}/related.json?tty=BN+IN+SBD+SCD`),
+    ]);
+    const propsData = await propsRes.json();
+    const relatedData = await relatedRes.json();
 
+    const groups: Array<{ tty?: string; conceptProperties?: Array<{ name: string; rxcui: string }> }> =
+      relatedData?.relatedGroup?.conceptGroup ?? [];
+
+    const brandNames = groups
+      .filter(group => group.tty === "BN")
+      .flatMap(group => group.conceptProperties ?? [])
+      .map(concept => concept.name);
+
+    const ingredients = groups
+      .filter(group => group.tty === "IN")
+      .flatMap(group => group.conceptProperties ?? [])
+      .map(concept => ({ rxcui: concept.rxcui, name: concept.name }));
+
+    return NextResponse.json({
+      query: drug,
+      found: true,
+      rxcui,
+      genericName: propsData?.properties?.name ?? drug,
+      synonym: propsData?.properties?.synonym ?? null,
+      tty: propsData?.properties?.tty ?? null,
+      brandNames: [...new Set(brandNames)],
+      ingredientIds: ingredients,
+      sourceVersion: "RxNav REST (NLM RxNorm)",
+      retrievedAt: new Date().toISOString(),
+      source: "RxNorm",
+    });
   } catch (e: any) {
-    return NextResponse.json({ 
-      error: "Drug lookup failed",
-      details: e.message 
-    }, { status: 500 });
+    return NextResponse.json({ error: "RxNorm lookup failed", details: e?.message }, { status: 500 });
   }
 }

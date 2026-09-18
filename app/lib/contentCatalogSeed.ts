@@ -123,16 +123,40 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
 
   // ── Clinical Reference proxies: live, FREE, unauthenticated passthroughs.
   { source_key: 'fda_openfda', module: 'reference', content_type: 'tool', title: 'FDA openFDA Lookup', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/fda', provenance_ref: 'app/api/fda/route.ts', sort_order: 90 },
-  { source_key: 'rxnorm', module: 'reference', content_type: 'tool', title: 'RxNorm Lookup', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/rxnorm', provenance_ref: 'app/api/rxnorm/route.ts', sort_order: 91 },
+  // Batch 8: this route was previously mislabeled — it called openFDA +
+  // PubMed, not RxNorm. Rewritten to a real RxNav-backed RxNorm identity
+  // adapter; provenance_ref/title now match what it actually does.
+  { source_key: 'rxnorm', module: 'reference', content_type: 'tool', title: 'RxNorm Lookup', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/rxnorm', provenance_ref: 'app/api/rxnorm/route.ts (Batch 8: rewritten to call RxNav/RxNorm; previously called openFDA+PubMed under a mismatched title)', sort_order: 91 },
+  { source_key: 'dailymed', module: 'reference', content_type: 'tool', title: 'DailyMed/SPL Lookup', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/dailymed', provenance_ref: 'app/api/dailymed/route.ts (Batch 8, new)', sort_order: 91.5 },
   { source_key: 'who_meds', module: 'reference', content_type: 'tool', title: 'WHO Medicines Reference', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/who-meds', provenance_ref: 'app/api/who-meds/route.ts', sort_order: 92 },
   { source_key: 'pubmed', module: 'reference', content_type: 'tool', title: 'PubMed Search', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/pubmed', provenance_ref: 'app/api/pubmed/route.ts', sort_order: 93 },
   { source_key: 'clinical_trials', module: 'reference', content_type: 'tool', title: 'ClinicalTrials.gov Search', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/api/clinical-trials', provenance_ref: 'app/api/clinical-trials/route.ts', sort_order: 94 },
   { source_key: 'doc_analyzer', module: 'reference', content_type: 'tool', title: 'Doc Analyzer', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/api/analyze-doc', provenance_ref: 'app/api/analyze-doc/route.ts, app/components/DocAnalyzer.tsx (PHI/DLP contract not yet approved)', sort_order: 95 },
-  // Added in Batch 5 for Clinical Orbit's Atrial Fibrillation anchor
-  // (measured_by CHA2DS2-VASc) — real calculator logic confirmed present in
-  // ClinicalCalculators.tsx (id 'cha2ds2'), component confirmed unreachable
-  // from ReleaseApp (no importer found), same pattern as ClinicalLibrary.
-  { source_key: 'cha2ds2_vasc', module: 'reference', content_type: 'calculator', title: 'CHA₂DS₂-VASc', category: 'cardiology', access_tier: 'free', visibility: 'hidden', readiness: 'ready', provenance_ref: 'app/components/ClinicalCalculators.tsx (id: cha2ds2; component unreachable)', sort_order: 96 },
+  // Batch 8: superseded the Batch 5 row. The old ClinicalCalculators.tsx
+  // "ready" rating was based on a formula with a real bug (age scored via
+  // two independent booleans, allowing an impossible double-count and a
+  // max score of 10 instead of 9) — see
+  // app/lib/clinicalReference/calculatorRegistry.ts's header comment for
+  // the full audit. The corrected calculator is now live and reachable at
+  // /labs/clinical-reference, but its interpretation/management text has
+  // not had a fresh human clinical review pass in this batch, so
+  // readiness is honestly 'review_required' (matching this registry's own
+  // learnerReadiness), not carried over as 'ready'. visibility='visible'
+  // + readiness='review_required' matches the existing doc_analyzer
+  // pattern above: the tool is genuinely reachable, but won't surface in
+  // a learner-facing query until reviewed (see isAvailable()).
+  { source_key: 'cha2ds2_vasc', module: 'reference', content_type: 'calculator', title: 'CHA₂DS₂-VASc', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (cha2ds2_vasc) — corrected age-scoring bug, live at /labs/clinical-reference', sort_order: 96 },
+  { source_key: 'cha2ds2_va', module: 'reference', content_type: 'calculator', title: 'CHA₂DS₂-VA', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (cha2ds2_va) — sex-neutral 2024 ESC-positioned variant', sort_order: 96.1 },
+  { source_key: 'timi_nstemi', module: 'reference', content_type: 'calculator', title: 'TIMI Risk Score (NSTEMI/UA)', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (timi_nstemi)', sort_order: 96.2 },
+  { source_key: 'wells_pe', module: 'reference', content_type: 'calculator', title: 'Wells Score (PE)', category: 'pulmonology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (wells_pe)', sort_order: 96.3 },
+  { source_key: 'heart_score', module: 'reference', content_type: 'calculator', title: 'HEART Score', category: 'cardiology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (heart_score)', sort_order: 96.4 },
+  { source_key: 'curb_65', module: 'reference', content_type: 'calculator', title: 'CURB-65', category: 'pulmonology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (curb_65)', sort_order: 96.5 },
+  { source_key: 'qsofa', module: 'reference', content_type: 'calculator', title: 'qSOFA', category: 'critical_care', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/calculatorRegistry.ts (qsofa) — corrected "activate sepsis protocol" command language to an evaluation prompt', sort_order: 96.6 },
+  { source_key: 'clinical_reference_drug_identity', module: 'reference', content_type: 'drug_reference', title: 'Drug Identity Reference (RxNorm)', category: 'pharmacology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/drugIdentity.ts — 12-drug governed seed + live RxNorm adapter', sort_order: 97 },
+  { source_key: 'clinical_reference_renal_dosing', module: 'reference', content_type: 'renal_rule', title: 'Renal Dosing Reference', category: 'pharmacology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/renalDosingRules.ts — 8 governed drug dosing rules, restructured from RenalDosingAI.tsx, LLM authority removed', sort_order: 98 },
+  { source_key: 'clinical_reference_drug_interactions', module: 'reference', content_type: 'interaction_rule', title: 'Drug Interaction Reference', category: 'pharmacology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/drugInteractionRules.ts — 9 governed interaction pairs, restructured from ClinicalStrip.tsx, LLM authority removed', sort_order: 99 },
+  { source_key: 'clinical_reference_label_evidence', module: 'reference', content_type: 'evidence_source', title: 'Drug Label Evidence (DailyMed)', category: 'pharmacology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/lib/clinicalReference/drugLabelEvidence.ts — governed seed summaries + live DailyMed identity/version adapter', sort_order: 100 },
+  { source_key: 'clinical_reference_workspace', module: 'reference', content_type: 'reference_workspace', title: 'Clinical Reference Workspace', category: 'pharmacology', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/clinical-reference', provenance_ref: 'app/labs/clinical-reference/ClinicalReferenceWorkspace.tsx — search-first workspace joining calculators, drug identity, dosing and interactions', sort_order: 101 },
 
   // ── ClinicalLibrary: 7 real cases across 5 specialties with backing
   // content. readiness=ready because the case content itself is real and

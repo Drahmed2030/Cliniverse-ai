@@ -352,11 +352,13 @@ test('the seed remains a small curated graph, not the full catalog', () => {
   const anchors = CLINICAL_ORBIT_NODE_SEED.filter(n => n.nodeType === 'condition')
   assert.equal(anchors.length, 7)
   assert.deepEqual(anchors.map(n => n.nodeKey).sort(), [...EXPECTED_CONDITION_ANCHOR_KEYS].sort())
-  // Deliberate bounded ceiling (raised from the Batch 5 <20/<15 guard to
-  // accommodate Batch 6's genuine DCM/HCM Echo additions) — not a permanent
-  // product limit, but still a real guard against uncontrolled/automatic
-  // ontology expansion. Any future growth past this must be a deliberate
-  // decision, not a silent creep.
-  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 24, 'seed should stay a small, deliberately curated graph')
-  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 20, 'seed should stay a small, deliberately curated graph')
+  // Deliberate bounded ceiling — raised from Batch 5's <20/<15 guard to
+  // <=24/<=20 for Batch 6's genuine DCM/HCM Echo additions, and now to
+  // <=26/<=22 for Batch 8's two genuine Clinical Reference links
+  // (CHA2DS2-VA measured_by AF, and the heart-failure-relevant renal
+  // dosing reference). Not a permanent product limit, but still a real
+  // guard against uncontrolled/automatic ontology expansion. Any future
+  // growth past this must be a deliberate decision, not a silent creep.
+  assert.ok(CLINICAL_ORBIT_NODE_SEED.length <= 26, 'seed should stay a small, deliberately curated graph')
+  assert.ok(CLINICAL_ORBIT_EDGE_SEED.length <= 22, 'seed should stay a small, deliberately curated graph')
 })

@@ -26,6 +26,13 @@ export const CLINICAL_ORBIT_NODE_SEED: ClinicalOrbitNode[] = [
   { nodeKey: 'content:ecg_batch20:case:anterior-stemi', nodeType: 'content', label: 'ECG: Anterior STEMI (batch20)', catalogRef: { module: 'ecg_batch20', contentType: 'case', sourceKey: 'anterior-stemi' } },
   { nodeKey: 'content:ecg:case:afib-rvr', nodeType: 'content', label: 'ECG: Atrial Fibrillation with RVR', catalogRef: { module: 'ecg', contentType: 'case', sourceKey: 'afib-rvr' } },
   { nodeKey: 'content:reference:calculator:cha2ds2_vasc', nodeType: 'calculator', label: 'CHA₂DS₂-VASc', catalogRef: { module: 'reference', contentType: 'calculator', sourceKey: 'cha2ds2_vasc' } },
+  // Batch 8: sex-neutral variant, 2024 ESC-positioned — see
+  // app/lib/clinicalReference/calculatorRegistry.ts's positioning note.
+  { nodeKey: 'content:reference:calculator:cha2ds2_va', nodeType: 'calculator', label: 'CHA₂DS₂-VA', catalogRef: { module: 'reference', contentType: 'calculator', sourceKey: 'cha2ds2_va' } },
+  // Batch 8: aggregate renal dosing reference (8 governed drugs) —
+  // digoxin among them is heart-failure-relevant, justifying the
+  // heart_failure -> related_to edge below.
+  { nodeKey: 'content:reference:renal_rule:clinical_reference_renal_dosing', nodeType: 'content', label: 'Renal Dosing Reference', catalogRef: { module: 'reference', contentType: 'renal_rule', sourceKey: 'clinical_reference_renal_dosing' } },
   { nodeKey: 'content:clinical_library:case:c2', nodeType: 'content', label: 'Case: Acute Decompensated Heart Failure', catalogRef: { module: 'clinical_library', contentType: 'case', sourceKey: 'c2' } },
   { nodeKey: 'content:ecg_batch20:case:acute-heart-failure', nodeType: 'content', label: 'ECG: Acute Heart Failure (batch20)', catalogRef: { module: 'ecg_batch20', contentType: 'case', sourceKey: 'acute-heart-failure' } },
   { nodeKey: 'content:ecg:case:hyperkalemia-severe', nodeType: 'content', label: 'ECG: Severe Hyperkalemia', catalogRef: { module: 'ecg', contentType: 'case', sourceKey: 'hyperkalemia-severe' } },
@@ -68,7 +75,15 @@ export const CLINICAL_ORBIT_EDGE_SEED: ClinicalOrbitEdge[] = [
   // Atrial Fibrillation
   { sourceNodeKey: 'condition:atrial_fibrillation', targetNodeKey: 'content:ecg:case:afib-rvr', relation: 'demonstrates', evidenceStatus: 'reviewed', provenanceRef: 'public/ecg-cases/ATTRIBUTION.md (afib-rvr) — ready, visible' },
   // Deliberately hidden target (real calculator, unreachable component) — proves the "only if calculator is actually present" + filtering requirements together.
-  { sourceNodeKey: 'condition:atrial_fibrillation', targetNodeKey: 'content:reference:calculator:cha2ds2_vasc', relation: 'measured_by', evidenceStatus: 'pending_review', provenanceRef: 'app/components/ClinicalCalculators.tsx (id: cha2ds2) — real logic, component unreachable from ReleaseApp' },
+  // Batch 8: provenanceRef updated — the old ClinicalCalculators.tsx
+  // implementation this pointed to had a real scoring bug (see
+  // app/lib/clinicalReference/calculatorRegistry.ts) and is superseded.
+  // evidenceStatus stays pending_review, matching the catalog's honest
+  // 'review_required' readiness (the tool is now live and correct, but
+  // has not had a fresh human clinical review pass in this batch).
+  { sourceNodeKey: 'condition:atrial_fibrillation', targetNodeKey: 'content:reference:calculator:cha2ds2_vasc', relation: 'measured_by', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalReference/calculatorRegistry.ts (cha2ds2_vasc) — corrected, live at /labs/clinical-reference, pending clinical review' },
+  { sourceNodeKey: 'condition:atrial_fibrillation', targetNodeKey: 'content:reference:calculator:cha2ds2_va', relation: 'measured_by', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalReference/calculatorRegistry.ts (cha2ds2_va) — live at /labs/clinical-reference, pending clinical review' },
+  { sourceNodeKey: 'condition:heart_failure', targetNodeKey: 'content:reference:renal_rule:clinical_reference_renal_dosing', relation: 'related_to', evidenceStatus: 'pending_review', provenanceRef: 'app/lib/clinicalReference/renalDosingRules.ts (digoxin) — heart-failure-relevant governed dosing rule, live at /labs/clinical-reference, pending clinical review' },
 
   // Heart Failure — both known items are hidden today; kept honest rather
   // than padded with a fabricated visible connection.
