@@ -28,14 +28,22 @@ function isTopic(value: unknown): value is ClinicianInterestTopic {
   return typeof value === 'string' && TOPIC_OPTIONS.some(option => option.topic === value)
 }
 
+const EMPTY: ClinicianInterestTopic[] = []
+let cachedRaw: string | null | undefined
+let cachedValue: ClinicianInterestTopic[] = EMPTY
+
 function snapshot(): ClinicianInterestTopic[] {
   if (sessionSelection) return sessionSelection
   try {
     const raw = localStorage.getItem(key)
-    const parsed = raw ? JSON.parse(raw) : []
-    return Array.isArray(parsed) ? parsed.filter(isTopic) : []
+    if (raw !== cachedRaw) {
+      cachedRaw = raw
+      const parsed = raw ? JSON.parse(raw) : []
+      cachedValue = Array.isArray(parsed) ? parsed.filter(isTopic) : EMPTY
+    }
+    return cachedValue
   } catch {
-    return []
+    return EMPTY
   }
 }
 
@@ -59,7 +67,7 @@ function setSelection(next: ClinicianInterestTopic[]) {
 }
 
 function useTopicsIFollow() {
-  return useSyncExternalStore(subscribe, snapshot, () => [] as ClinicianInterestTopic[])
+  return useSyncExternalStore(subscribe, snapshot, () => EMPTY)
 }
 
 export default function TopicsIFollow() {
