@@ -36,7 +36,7 @@ const COPY = {
     groups: [
       { icon: Stethoscope, title: "Learn & simulate", items: ["Ward Simulation — fictional care-flow cases", "Resuscitation Intelligence — scenario simulation with debrief", "Code Lab — 12 lessons (BLS + ACLS)"] },
       { icon: HeartPulse, title: "Interpret", items: ["ECG Challenge — 7 real ECG cases with multi-image views", "Echo Studies — real cardiac ultrasound with guided assessment"] },
-      { icon: BookOpen, title: "Reference & operate", items: ["Clinical Reference — calculators, dosing and interactions with review status", "Cardiology Operations — full console and Care Beam coordination practice"] },
+      { icon: BookOpen, title: "Reference & operate", items: ["Clinical Reference — source-linked reference tools with capability-level review status", "Cardiology Operations — full console and Care Beam coordination practice"] },
       { icon: RotateCcw, title: "Track & review", items: ["Pathway Replay — event-based case replay with an evidence trail", "Progress and mastery tracking across every case"] },
     ] as CapabilityGroup[],
     monthly: "Monthly",
@@ -56,7 +56,7 @@ const COPY = {
     groups: [
       { icon: Stethoscope, title: "تعلّم ومارس", items: ["محاكاة Ward — حالات افتراضية لمسار الرعاية", "ذكاء الإنعاش — محاكاة سيناريوهات مع مراجعة الأداء", "معمل الأكواد — 12 درسًا (BLS + ACLS)"] },
       { icon: HeartPulse, title: "فسّر", items: ["تحدي تخطيط القلب — 7 حالات حقيقية بعرض متعدد الصور", "دراسات الإيكو — تصوير قلب حقيقي مع تقييم موجّه"] },
-      { icon: BookOpen, title: "مرجع وتشغيل", items: ["المرجع السريري — حاسبات وجرعات وتفاعلات مع حالة المراجعة", "عمليات أمراض القلب — وحدة تحكم كاملة وتنسيق Care Beam"] },
+      { icon: BookOpen, title: "مرجع وتشغيل", items: ["المرجع السريري — أدوات مرجعية مرتبطة بالمصادر مع حالة المراجعة لكل قدرة", "عمليات أمراض القلب — وحدة تحكم كاملة وتنسيق Care Beam"] },
       { icon: RotateCcw, title: "تتبّع وراجع", items: ["إعادة تشغيل المسار — إعادة عرض الحالات مع سجل أدلة", "تتبع التقدم والإتقان عبر جميع الحالات"] },
     ] as CapabilityGroup[],
     monthly: "شهري",
