@@ -156,6 +156,41 @@
   }
 }
 
+/* Visual system foundation (UI-A) — additive named tokens for values already in
+ * ad hoc use across release surfaces. These introduce no new colors: surfaces
+ * and motion alias existing tokens rather than duplicating hex/timing values,
+ * so light/dark and reduced-motion behavior stay governed by the blocks above. */
+[data-commercial-shell] {
+  --cv-text-display: clamp(1.75rem, 4vw, 2.5rem);
+  --cv-text-title: clamp(1.375rem, 3vw, 1.75rem);
+  --cv-text-section: clamp(1.125rem, 2vw, 1.375rem);
+  --cv-text-body: 0.9375rem;
+  --cv-text-support: 0.8125rem;
+  --cv-text-caption: 0.75rem;
+  --cv-text-eyebrow: 0.6875rem;
+
+  --cv-space-1: 4px;
+  --cv-space-2: 8px;
+  --cv-space-3: 12px;
+  --cv-space-4: 16px;
+  --cv-space-5: 20px;
+  --cv-space-6: 24px;
+  --cv-space-7: 32px;
+
+  --cv-radius-sm: 12px;
+  --cv-radius-md: 16px;
+  --cv-radius-lg: 20px;
+  --cv-radius-xl: 24px;
+
+  --cv-surface-base: var(--cv-surface);
+  --cv-surface-soft: var(--cv-surface-subtle);
+  --cv-surface-emphasis: color-mix(in srgb, var(--cv-teal) 10%, var(--cv-surface-elevated));
+
+  --cv-motion-fast: 150ms;
+  --cv-motion-base: 250ms;
+  --cv-motion-slow: 420ms;
+}
+
 /* Learning surfaces use the release palette, including explicit answer states. */
 [data-commercial-shell] {
   --cv-learning-action: #0f766e;

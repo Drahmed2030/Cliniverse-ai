@@ -223,21 +223,6 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
           <div style={{ fontSize: '1rem', fontWeight: 800 }}>{current.title}</div>
           <div style={{ fontSize: '0.75rem', color: C.sub, marginTop: 3 }}>{current.sub}</div>
         </div>
-        <div
-          aria-label="Cliniverse human review status"
-          style={{
-            fontSize: '0.6875rem',
-            fontWeight: 800,
-            letterSpacing: '0.05em',
-            color: C.teal,
-            border: `1px solid ${C.border}`,
-            borderRadius: 999,
-            padding: '6px 9px',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          HUMAN-REVIEWED
-        </div>
       </div>
     </header>
   )

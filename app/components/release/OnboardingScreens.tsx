@@ -1,9 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Check, ChevronLeft, Gift, GraduationCap, Sparkles, type LucideIcon } from 'lucide-react'
+import { AnimatePresence, motion, useReducedMotion, type PanInfo } from 'framer-motion'
+import {
+  Activity,
+  BookOpen,
+  Check,
+  ChevronLeft,
+  GraduationCap,
+  LayoutGrid,
+  RotateCcw,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react'
 import { useAppearance } from './AppearanceSettings'
+import { FeatureFlow, CapabilityBeam, AnchorFrame, EditorialMark, SelectionSummary } from './OnboardingVisuals'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
@@ -11,45 +25,21 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../../lib/nativeSafeArea'
 
-interface OnboardingStep {
-  icon: LucideIcon
-  title: string
-  body?: string
-  bullets?: string[]
-  cta: string
-  secondary?: string
-}
+const INTERESTS = ['ECG', 'Echo', 'Resuscitation', 'Cardiology Operations', 'Clinical Reference'] as const
+const INTERESTS_KEY = 'cliniverse:onboarding:interests'
 
-const STEPS: OnboardingStep[] = [
-  {
-    icon: Sparkles,
-    title: 'Welcome to Cliniverse',
-    body: 'Master clinical reasoning with interactive cases designed by clinicians.',
-    cta: 'Next',
-  },
-  {
-    icon: GraduationCap,
-    title: 'Learn by doing, not memorizing',
-    bullets: [
-      'Ward Simulation — real clinical decisions, step by step',
-      'ECG Challenge — 7 real ECG cases with multi-image views',
-      'Echo Studies — real cardiac ultrasound with guided assessment',
-      'Code Lab — 12 lessons (BLS + ACLS)',
-    ],
-    cta: 'Next',
-  },
-  {
-    icon: Gift,
-    title: 'Start with 7 days free',
-    body: 'Full access. No commitment. Cancel anytime.',
-    bullets: [
-      'All Ward, ECG, Echo, and Code Lab cases',
-      'Progress tracking across every case',
-      'Weekly new content',
-    ],
-    cta: 'Start my free trial →',
-    secondary: 'Maybe later',
-  },
+const WHAT_YOU_CAN_DO = [
+  { icon: GraduationCap, label: 'Learn', detail: 'Ward simulation, ECG, Echo, and Code Lab.' },
+  { icon: Activity, label: 'Studio', detail: 'Real cardiac ultrasound, assessed against evidence.' },
+  { icon: BookOpen, label: 'Reference', detail: 'Calculators, dosing, interactions — sourced.' },
+  { icon: LayoutGrid, label: 'Operations', detail: 'A live cardiology console, not a mockup.' },
+]
+
+const HOW_IT_WORKS = [
+  { icon: ShieldCheck, label: 'Evidence' },
+  { icon: Target, label: 'Practice' },
+  { icon: RotateCcw, label: 'Replay' },
+  { icon: TrendingUp, label: 'Progress' },
 ]
 
 interface Props {
@@ -58,15 +48,16 @@ interface Props {
 
 export default function OnboardingScreens({ onComplete }: Props) {
   const appearance = useAppearance()
+  const prefersReducedMotion = useReducedMotion()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState(1)
+  const [interests, setInterests] = useState<string[]>([])
 
-  const current = STEPS[step]
-  const isLast = step === STEPS.length - 1
-  const Icon = current.icon
+  const totalSteps = 5
+  const isLast = step === totalSteps - 1
 
   function next() {
-    if (isLast) { onComplete(true); return }
+    if (isLast) return
     setDirection(1)
     setStep(s => s + 1)
   }
@@ -75,6 +66,21 @@ export default function OnboardingScreens({ onComplete }: Props) {
     if (step === 0) return
     setDirection(-1)
     setStep(s => s - 1)
+  }
+
+  function toggleInterest(name: string) {
+    setInterests(prev => (prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]))
+  }
+
+  function finish(startTrial: boolean) {
+    try { localStorage.setItem(INTERESTS_KEY, JSON.stringify(interests)) } catch { /* best-effort only */ }
+    onComplete(startTrial)
+  }
+
+  function handleDragEnd(_: unknown, info: PanInfo) {
+    const threshold = 60
+    if (info.offset.x < -threshold) next()
+    else if (info.offset.x > threshold) back()
   }
 
   return (
@@ -99,14 +105,14 @@ export default function OnboardingScreens({ onComplete }: Props) {
       <div className="cv-onboarding-glow cv-onboarding-glow-a" aria-hidden="true" />
       <div className="cv-onboarding-glow cv-onboarding-glow-b" aria-hidden="true" />
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 36, marginBottom: 8 }}>
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, marginBottom: 8 }}>
         <button
           type="button"
           onClick={back}
           aria-label="Back"
           style={{
-            width: 36,
-            height: 36,
+            width: 44,
+            height: 44,
             display: 'grid',
             placeItems: 'center',
             borderRadius: 999,
@@ -116,14 +122,14 @@ export default function OnboardingScreens({ onComplete }: Props) {
             cursor: step === 0 ? 'default' : 'pointer',
             opacity: step === 0 ? 0 : 1,
             pointerEvents: step === 0 ? 'none' : 'auto',
-            transition: 'opacity 200ms ease',
+            transition: 'opacity var(--cv-motion-base) ease',
           }}
         >
           <ChevronLeft size={18} />
         </button>
 
-        <div role="group" aria-label={`Step ${step + 1} of ${STEPS.length}`} style={{ display: 'flex', gap: 7 }}>
-          {STEPS.map((_, i) => (
+        <div role="group" aria-label={`Step ${step + 1} of ${totalSteps}`} style={{ display: 'flex', gap: 7 }}>
+          {Array.from({ length: totalSteps }).map((_, i) => (
             <motion.span
               key={i}
               aria-hidden="true"
@@ -134,7 +140,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
                 height: 7,
                 borderRadius: 999,
                 background: i === step ? 'var(--cv-teal)' : 'var(--cv-border)',
-                transition: 'background-color 250ms ease',
+                transition: 'background-color var(--cv-motion-base) ease',
               }}
             />
           ))}
@@ -143,14 +149,14 @@ export default function OnboardingScreens({ onComplete }: Props) {
         {!isLast ? (
           <button
             type="button"
-            onClick={() => onComplete(false)}
+            onClick={() => finish(false)}
             style={{
-              minHeight: 36,
+              minHeight: 44,
               padding: '0 4px',
               border: 'none',
               background: 'transparent',
               color: 'var(--cv-text-secondary)',
-              fontSize: '0.8125rem',
+              fontSize: 'var(--cv-text-support)',
               fontWeight: 700,
               cursor: 'pointer',
             }}
@@ -158,130 +164,191 @@ export default function OnboardingScreens({ onComplete }: Props) {
             Skip
           </button>
         ) : (
-          <div style={{ width: 36 }} aria-hidden="true" />
+          <div style={{ width: 44 }} aria-hidden="true" />
         )}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="cv-onboarding-card"
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          margin: 'auto',
-          width: '100%',
-          maxWidth: 440,
-          borderRadius: 28,
-          padding: '32px 26px',
-          overflow: 'hidden',
-        }}
-      >
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={step}
-            custom={direction}
-            initial={{ x: direction > 0 ? 36 : -36, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direction > 0 ? -36 : 36, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          >
-            <div
-              aria-hidden="true"
-              className="cv-onboarding-icon"
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 20,
-                display: 'grid',
-                placeItems: 'center',
-                marginBottom: 22,
-              }}
+      <div className="cv-onboarding-layout">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="cv-onboarding-card"
+        >
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={step}
+              custom={direction}
+              drag={prefersReducedMotion ? false : 'x'}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.5}
+              onDragEnd={handleDragEnd}
+              initial={{ x: direction > 0 ? 36 : -36, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: direction > 0 ? -36 : 36, opacity: 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              <Icon size={30} color="var(--cv-teal)" strokeWidth={2} />
-            </div>
+              <StepContent step={step} interests={interests} onToggleInterest={toggleInterest} />
+            </motion.div>
+          </AnimatePresence>
 
-            <h1
-              id="onboarding-title"
-              style={{
-                fontSize: 28,
-                fontWeight: 800,
-                lineHeight: 1.15,
-                letterSpacing: '-0.02em',
-                color: 'var(--cv-teal)',
-                margin: '0 0 12px',
-              }}
-            >
-              {current.title}
-            </h1>
+          <div style={{ marginTop: 26 }}>
+            {!isLast ? (
+              <button type="button" onClick={next} className="cv-onboarding-cta">
+                Next
+              </button>
+            ) : (
+              <>
+                <button type="button" onClick={() => finish(true)} className="cv-onboarding-cta">
+                  Start my free trial →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => finish(false)}
+                  className="cv-onboarding-secondary"
+                >
+                  Enter Cliniverse
+                </button>
+              </>
+            )}
+          </div>
+        </motion.div>
 
-            {current.body ? (
-              <p style={{ fontSize: 16, lineHeight: 1.55, color: 'var(--cv-text-secondary)', margin: '0 0 8px' }}>
-                {current.body}
-              </p>
-            ) : null}
-
-            {current.bullets ? (
-              <ul style={{ listStyle: 'none', margin: '14px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {current.bullets.map(bullet => (
-                  <li key={bullet} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        flexShrink: 0,
-                        width: 20,
-                        height: 20,
-                        marginTop: 1,
-                        borderRadius: 999,
-                        display: 'grid',
-                        placeItems: 'center',
-                        background: 'var(--cv-nav-selected)',
-                        color: 'var(--cv-teal)',
-                      }}
-                    >
-                      <Check size={13} strokeWidth={3} />
-                    </span>
-                    <span style={{ fontSize: 15, lineHeight: 1.5, color: 'var(--cv-text)' }}>{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </motion.div>
-        </AnimatePresence>
-
-        <div style={{ marginTop: 26 }}>
-          <button type="button" onClick={next} className="cv-onboarding-cta">
-            {current.cta}
-          </button>
-          {current.secondary ? (
-            <button
-              type="button"
-              onClick={() => onComplete(false)}
-              style={{
-                width: '100%',
-                marginTop: 6,
-                border: 'none',
-                background: 'transparent',
-                color: 'var(--cv-text-secondary)',
-                fontSize: 13,
-                fontWeight: 650,
-                padding: '10px 8px 2px',
-                cursor: 'pointer',
-              }}
-            >
-              {current.secondary}
-            </button>
-          ) : null}
+        <div className="cv-onboarding-anchor" aria-hidden="true">
+          <StepAnchor step={step} interests={interests} />
         </div>
-      </motion.div>
+      </div>
 
       <style>{CSS}</style>
     </main>
+  )
+}
+
+/** Each step gets a composition tied to what that step is actually about — never a lone decorative icon. */
+function StepAnchor({ step, interests }: { step: number; interests: string[] }) {
+  if (step === 0) {
+    return (
+      <AnchorFrame tone="teal">
+        <EditorialMark icon={Sparkles} label="CLINIVERSE" tone="teal" />
+      </AnchorFrame>
+    )
+  }
+  if (step === 1) {
+    return (
+      <AnchorFrame tone="teal">
+        <FeatureFlow ariaLabel="What you can do in Cliniverse" items={WHAT_YOU_CAN_DO} large />
+      </AnchorFrame>
+    )
+  }
+  if (step === 2) {
+    return (
+      <AnchorFrame tone="violet">
+        <CapabilityBeam ariaLabel="How the system works" stages={HOW_IT_WORKS} orientation="vertical" large />
+      </AnchorFrame>
+    )
+  }
+  if (step === 3) {
+    return (
+      <AnchorFrame tone="teal">
+        <SelectionSummary options={INTERESTS} selected={interests} />
+      </AnchorFrame>
+    )
+  }
+  return (
+    <AnchorFrame tone="teal">
+      <EditorialMark icon={ShieldCheck} label="READY" tone="teal" />
+    </AnchorFrame>
+  )
+}
+
+function StepContent({
+  step,
+  interests,
+  onToggleInterest,
+}: {
+  step: number
+  interests: string[]
+  onToggleInterest: (name: string) => void
+}) {
+  if (step === 0) {
+    return (
+      <>
+        <StepIcon icon={Sparkles} />
+        <h1 id="onboarding-title" className="cv-onboarding-title">Cliniverse</h1>
+        <p className="cv-onboarding-body">Clinical intelligence for learning, interpretation, and operational practice.</p>
+      </>
+    )
+  }
+
+  if (step === 1) {
+    return (
+      <>
+        <p className="cv-onboarding-eyebrow">WHAT YOU CAN DO</p>
+        <h1 id="onboarding-title" className="cv-onboarding-title-sm">Everything in one governed workspace</h1>
+        <div style={{ marginTop: 18 }}>
+          <FeatureFlow ariaLabel="What you can do in Cliniverse" items={WHAT_YOU_CAN_DO} />
+        </div>
+      </>
+    )
+  }
+
+  if (step === 2) {
+    return (
+      <>
+        <p className="cv-onboarding-eyebrow">HOW THE SYSTEM WORKS</p>
+        <h1 id="onboarding-title" className="cv-onboarding-title-sm">Built on evidence, not guesses</h1>
+        <div style={{ marginTop: 22, marginBottom: 16 }}>
+          <CapabilityBeam ariaLabel="How the system works" stages={HOW_IT_WORKS} />
+        </div>
+        <p className="cv-onboarding-body">Every case is sourced. Every attempt is tracked.</p>
+      </>
+    )
+  }
+
+  if (step === 3) {
+    return (
+      <>
+        <p className="cv-onboarding-eyebrow">PERSONALIZE</p>
+        <h1 id="onboarding-title" className="cv-onboarding-title-sm">What are you here to work on?</h1>
+        <p className="cv-onboarding-body" style={{ marginBottom: 16 }}>You can change this anytime.</p>
+        <div role="group" aria-label="Choose your interests" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {INTERESTS.map(name => {
+            const active = interests.includes(name)
+            return (
+              <button
+                key={name}
+                type="button"
+                aria-pressed={active}
+                onClick={() => onToggleInterest(name)}
+                className="cv-onboarding-chip"
+                data-active={active}
+              >
+                {active && <Check size={13} strokeWidth={3} aria-hidden="true" />}
+                {name}
+              </button>
+            )
+          })}
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <StepIcon icon={ShieldCheck} />
+      <h1 id="onboarding-title" className="cv-onboarding-title">You&rsquo;re ready.</h1>
+      <p className="cv-onboarding-body" style={{ marginBottom: 14 }}>
+        Everything above is live — not a preview.
+      </p>
+    </>
+  )
+}
+
+function StepIcon({ icon: Icon }: { icon: LucideIcon }) {
+  return (
+    <div aria-hidden="true" className="cv-onboarding-icon">
+      <Icon size={30} color="var(--cv-teal)" strokeWidth={2} />
+    </div>
   )
 }
 
@@ -305,20 +372,38 @@ const CSS = `
     100% { opacity: 0.9; transform: scale(1.1) translate(12px, -10px); }
   }
 
-  .cv-onboarding-icon {
-    background: rgba(15, 118, 110, 0.14);
-    border: 1px solid rgba(15, 118, 110, 0.22);
+  .cv-onboarding-layout {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    width: 100%;
+    max-width: 440px;
+    gap: var(--cv-space-6);
   }
-  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-icon {
-    background: rgba(45, 212, 191, 0.14);
-    border: 1px solid rgba(45, 212, 191, 0.24);
-  }
-  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-icon {
-    background: rgba(45, 212, 191, 0.14);
-    border: 1px solid rgba(45, 212, 191, 0.24);
+
+  .cv-onboarding-anchor { display: none; }
+
+  @media (min-width: 700px) {
+    .cv-onboarding-layout {
+      max-width: 1040px;
+      align-items: stretch;
+    }
+    .cv-onboarding-card { flex: 1 1 45%; margin: auto 0; }
+    .cv-onboarding-anchor { display: block; flex: 1 1 55%; margin: auto 0; }
   }
 
   .cv-onboarding-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    border-radius: var(--cv-radius-xl);
+    padding: 32px 26px;
+    overflow: hidden;
     background: rgba(255, 255, 255, 0.68);
     border: 0.5px solid rgba(255, 255, 255, 0.22);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 20px 60px rgba(0, 0, 0, 0.08);
@@ -347,11 +432,81 @@ const CSS = `
     }
   }
 
+  .cv-onboarding-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--cv-radius-lg);
+    display: grid;
+    place-items: center;
+    margin-bottom: 22px;
+    background: rgba(15, 118, 110, 0.14);
+    border: 1px solid rgba(15, 118, 110, 0.22);
+  }
+  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-icon {
+    background: rgba(45, 212, 191, 0.14);
+    border: 1px solid rgba(45, 212, 191, 0.24);
+  }
+  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-icon {
+    background: rgba(45, 212, 191, 0.14);
+    border: 1px solid rgba(45, 212, 191, 0.24);
+  }
+
+  .cv-onboarding-eyebrow {
+    font-size: var(--cv-text-eyebrow);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--cv-teal);
+    margin: 0 0 8px;
+  }
+  .cv-onboarding-title {
+    font-size: var(--cv-text-display);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--cv-teal);
+    margin: 0 0 12px;
+  }
+  .cv-onboarding-title-sm {
+    font-size: var(--cv-text-title);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--cv-text);
+    margin: 0 0 4px;
+  }
+  .cv-onboarding-body {
+    font-size: var(--cv-text-body);
+    line-height: 1.55;
+    color: var(--cv-text-secondary);
+    margin: 0 0 8px;
+  }
+
+  .cv-onboarding-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--cv-border);
+    background: var(--cv-surface);
+    color: var(--cv-text);
+    font-size: var(--cv-text-support);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color var(--cv-motion-base) ease, border-color var(--cv-motion-base) ease;
+  }
+  .cv-onboarding-chip[data-active="true"] {
+    background: color-mix(in srgb, var(--cv-teal) 16%, var(--cv-surface));
+    border-color: color-mix(in srgb, var(--cv-teal) 55%, transparent);
+    color: var(--cv-teal);
+  }
+
   .cv-onboarding-cta {
     width: 100%;
     min-height: 50px;
     border: 1px solid rgba(15, 118, 110, 0.45);
-    border-radius: 16px;
+    border-radius: var(--cv-radius-md);
     padding: 14px 18px;
     font-size: 15px;
     font-weight: 800;
@@ -359,7 +514,7 @@ const CSS = `
     background: rgba(15, 118, 110, 0.20);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
     cursor: pointer;
-    transition: transform 180ms ease, box-shadow 180ms ease;
+    transition: transform var(--cv-motion-base) ease, box-shadow var(--cv-motion-base) ease;
   }
   [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-cta {
     border-color: rgba(45, 212, 191, 0.45);
@@ -389,6 +544,19 @@ const CSS = `
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 24px rgba(45, 212, 191, 0.45);
   }
   .cv-onboarding-cta:active { transform: scale(0.98); }
+
+  .cv-onboarding-secondary {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 8px;
+    border: 1px solid var(--cv-border);
+    border-radius: var(--cv-radius-md);
+    background: transparent;
+    color: var(--cv-text-secondary);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .cv-onboarding-glow-a, .cv-onboarding-glow-b { animation: none; }

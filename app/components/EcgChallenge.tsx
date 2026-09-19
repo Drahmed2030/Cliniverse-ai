@@ -238,6 +238,10 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
   useEffect(() => { setProgress(loadEcgChallengeProgress()) }, [])
 
   useEffect(() => {
+    // The scan-line is the only animated element on this screen with no static
+    // equivalent, so a reduced-motion preference stops the loop entirely rather
+    // than just shortening its duration.
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     let frame = 0
     const animate = () => {
       frame += 0.8
@@ -444,7 +448,7 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
         <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', marginBottom: 14, lineHeight: 1.5 }}>
           What is the most likely ECG diagnosis?
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div role="group" aria-label="Answer options" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {current.options.map((opt, i) => {
             let bg = 'rgba(255,255,255,0.7)', border = '1px solid rgba(0,0,0,0.07)', tc = '#0f172a'
             if (selected !== null) {
@@ -452,14 +456,20 @@ export default function EcgChallenge({ onXP }: { onXP: (n: number) => void }) {
               else if (i === selected) { bg = 'rgba(254,226,226,0.9)'; border = '2px solid #dc2626'; tc = '#7f1d1d' }
             }
             return (
-              <div key={i} onClick={() => handleAnswer(i)} style={{ background: bg, backdropFilter: 'blur(8px)', borderRadius: 12, padding: '13px 16px', border, cursor: selected === null ? 'pointer' : 'default', display: 'flex', alignItems: 'center', gap: 12, transition: 'all 0.2s' }}>
+              <button
+                key={i}
+                type="button"
+                aria-pressed={selected === i}
+                onClick={() => handleAnswer(i)}
+                style={{ textAlign: 'left', width: '100%', font: 'inherit', background: bg, backdropFilter: 'blur(8px)', borderRadius: 12, padding: '13px 16px', border, cursor: selected === null ? 'pointer' : 'default', display: 'flex', alignItems: 'center', gap: 12, transition: 'all 0.2s' }}
+              >
                 <div style={{ width: 26, height: 26, borderRadius: '50%', background: selected !== null && i === current.correct ? '#16a34a' : selected === i && i !== current.correct ? '#dc2626' : 'rgba(0,196,180,0.10)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ fontSize: 11, fontWeight: 800, color: selected !== null && (i === current.correct || i === selected) ? 'white' : '#00C4B4' }}>{['A', 'B', 'C', 'D'][i]}</span>
                 </div>
                 <span style={{ fontSize: 13, color: tc, fontWeight: 500, flex: 1 }}>{opt}</span>
-                {selected !== null && i === current.correct && <span>✅</span>}
-                {selected !== null && i === selected && i !== current.correct && <span>❌</span>}
-              </div>
+                {selected !== null && i === current.correct && <span aria-hidden="true">✅</span>}
+                {selected !== null && i === selected && i !== current.correct && <span aria-hidden="true">❌</span>}
+              </button>
             )
           })}
         </div>
