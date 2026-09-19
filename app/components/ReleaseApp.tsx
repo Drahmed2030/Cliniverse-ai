@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Capacitor } from '@capacitor/core'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
@@ -228,71 +228,43 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
   )
 }
 
+// Layout and control styling for this surface lives in commercial-visual-system.css
+// under [data-commercial-surface="today"] (UI-A3). Destinations and routes are unchanged.
 function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
-  const cards: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'learn', eyebrow: 'CONTINUE', title: 'Resume learning', text: 'Continue governed cardiology learning and simulation from one place.', accent: C.teal },
-    { tab: 'progress', eyebrow: 'PROGRESS', title: 'Review your progress', text: 'See competency and review state as governed evidence becomes available.', accent: C.violet },
-    { tab: 'explore', eyebrow: 'EXPLORE', title: 'Discover approved experiences', text: 'Browse curated learning tools without leaving the trusted release boundary.', accent: C.blue },
-    { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage your plan', text: 'Review account, Cliniverse PRO, restore purchases, privacy and support.', accent: C.gold },
+  const destinations: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
+    { tab: 'progress', eyebrow: 'PROGRESS', title: 'Review your progress', text: 'Competency and review state, as governed evidence becomes available.', accent: C.violet },
+    { tab: 'explore', eyebrow: 'EXPLORE', title: 'Discover approved experiences', text: 'Curated learning tools inside the trusted release boundary.', accent: C.blue },
+    { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage your plan', text: 'Account, Cliniverse PRO, restore purchases and support.', accent: C.gold },
   ]
 
   return (
     <section aria-labelledby="today-title" data-commercial-surface="today">
-      <div
-        style={{
-          padding: '24px 20px',
-          borderRadius: 24,
-          border: `1px solid ${C.border}`,
-          background: `linear-gradient(145deg, ${C.panel}, ${C.elevated})`,
-          marginBottom: 14,
-        }}
-      >
-        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>CLINIVERSE</div>
-        <h1 id="today-title" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
-        <p style={{ margin: 0, color: C.sub, lineHeight: 1.65, maxWidth: 760, fontSize: '0.9375rem' }}>
-          A little practice, a clearer next step. Follow your learning record and return to the skills you want to strengthen.
-        </p>
+      <div className="cv-today-primary">
+        <div className="cv-today-hero">
+          <div className="cv-today-eyebrow">CLINIVERSE</div>
+          <h1 id="today-title" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
+          <p>Follow your learning record and return to the skills you want to strengthen.</p>
+          <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume learning →</button>
+        </div>
+        <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
       </div>
 
-      <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
-      <div data-commercial-card-grid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 12 }}>
-        {cards.map(card => (
-          <button
-            key={card.tab}
-            type="button"
-            onClick={() => onNavigate(card.tab)}
-            style={{
-              textAlign: 'left',
-              minHeight: 164,
-              padding: 18,
-              borderRadius: 20,
-              border: `1px solid ${C.border}`,
-              background: C.panel,
-              color: C.text,
-              cursor: 'pointer',
-            }}
-          >
-            <div style={{ color: card.accent, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>{card.eyebrow}</div>
-            <div style={{ fontSize: '1.0625rem', fontWeight: 800, marginTop: 10 }}>{card.title}</div>
-            <div style={{ color: C.sub, fontSize: '0.8125rem', lineHeight: 1.6, marginTop: 8 }}>{card.text}</div>
-            <div style={{ color: card.accent, fontSize: '0.8125rem', fontWeight: 800, marginTop: 14 }}>Open →</div>
-          </button>
+      <ul className="cv-today-list" data-commercial-card-grid aria-label="More in Cliniverse">
+        {destinations.map(item => (
+          <li key={item.tab}>
+            <button type="button" className="cv-today-row" onClick={() => onNavigate(item.tab)} style={{ '--today-accent': item.accent } as CSSProperties}>
+              <span>
+                <span className="cv-today-row-eyebrow">{item.eyebrow}</span>
+                <span className="cv-today-row-title">{item.title}</span>
+                <span className="cv-today-row-text">{item.text}</span>
+              </span>
+              <span className="cv-today-row-go" aria-hidden="true">→</span>
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <div
-        data-commercial-safety-note
-        style={{
-          marginTop: 14,
-          padding: '14px 16px',
-          borderRadius: 16,
-          border: `1px solid ${C.border}`,
-          background: C.subtle,
-          color: C.sub,
-          fontSize: '0.8125rem',
-          lineHeight: 1.55,
-        }}
-      >
+      <div data-commercial-safety-note>
         For education and simulation. Keep real patient information outside this workspace.
       </div>
     </section>

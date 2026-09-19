@@ -235,3 +235,187 @@
 [data-learning-tracks] article { padding: 20px; background: var(--cv-surface-subtle); border-radius: 16px; }
 [data-learning-tracks] progress { width: 100%; accent-color: var(--cv-teal); }
 [data-learning-summary] button { min-height: 44px; border-radius: 12px; padding: 10px 20px; border: 1px solid var(--cv-border); background: var(--cv-learning-action); color: white; cursor: pointer; }
+
+/* UI-A3 — Today surface. Composition only: one primary action, the real learning
+ * summary kept compact and quiet, and the other destinations as one grouped list.
+ * Uses existing tokens (no new colors). Every rule is prefixed with the surface
+ * attribute both to scope it away from Progress/Me, which share the summary
+ * component, and to out-rank the shell's `font: inherit` control reset. */
+[data-commercial-surface="today"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-3);
+}
+[data-commercial-surface="today"] .cv-today-primary {
+  display: grid;
+  gap: var(--cv-space-3);
+  min-width: 0;
+}
+[data-commercial-surface="today"] .cv-today-hero {
+  padding: var(--cv-space-5);
+  border: 1px solid var(--cv-border);
+  border-radius: 18px;
+  background: var(--cv-surface-emphasis);
+}
+[data-commercial-surface="today"] .cv-today-eyebrow {
+  /* Today's identity accent (blue). Small text mixes toward the text token to stay AA on the tinted hero. */
+  color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text));
+  font-size: var(--cv-text-caption);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+[data-commercial-surface="today"] .cv-today-hero p {
+  margin: 0 0 var(--cv-space-4);
+  max-width: 60ch;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-body);
+  line-height: 1.55;
+}
+/* The one primary action: the teal / on-teal token pair keeps contrast in light and dark. */
+[data-commercial-surface="today"] .cv-today-cta {
+  width: 100%;
+  min-height: 50px;
+  padding: 14px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--cv-radius-md);
+  background: var(--cv-teal);
+  color: var(--cv-learning-on-teal);
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter var(--cv-motion-fast) ease;
+}
+[data-commercial-surface="today"] .cv-today-cta:hover { filter: brightness(1.06); }
+[data-commercial-surface="today"] .cv-today-cta:active { filter: brightness(0.94); }
+
+/* Real learning summary, compact: same data and copy, quieter chrome, secondary action. */
+[data-commercial-surface="today"] [data-learning-summary] {
+  margin: 0;
+  padding: var(--cv-space-4) var(--cv-space-5) var(--cv-space-5);
+  border: 1px solid var(--cv-border);
+  border-radius: 18px;
+  background: var(--cv-surface-base);
+}
+[data-commercial-surface="today"] [data-learning-summary] h2 {
+  margin: 6px 0;
+  font-size: var(--cv-text-section);
+  line-height: 1.25;
+}
+[data-commercial-surface="today"] [data-learning-summary] p {
+  margin: 0 0 var(--cv-space-3);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+[data-commercial-surface="today"] [data-learning-summary] > p:last-child {
+  margin: var(--cv-space-3) 0 0;
+  font-size: var(--cv-text-caption);
+}
+[data-commercial-surface="today"] [data-learning-tracks] {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: var(--cv-space-2);
+  margin: var(--cv-space-3) 0;
+}
+[data-commercial-surface="today"] [data-learning-tracks] article {
+  padding: var(--cv-space-3);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-soft);
+}
+[data-commercial-surface="today"] [data-learning-tracks] article strong { font-size: var(--cv-text-support); }
+[data-commercial-surface="today"] [data-learning-tracks] article p { margin: 2px 0 var(--cv-space-2); }
+[data-commercial-surface="today"] [data-learning-summary] button {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px var(--cv-space-5);
+  border: 1px solid color-mix(in srgb, var(--cv-teal) 50%, var(--cv-border));
+  border-radius: var(--cv-radius-md);
+  background: transparent;
+  color: var(--cv-teal);
+  font-weight: 800;
+}
+[data-commercial-surface="today"] [data-learning-summary] button:hover {
+  background: color-mix(in srgb, var(--cv-teal) 10%, transparent);
+}
+
+/* Other destinations: one grouped list instead of separate cards. */
+[data-commercial-surface="today"] .cv-today-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--cv-border);
+  border-radius: 18px;
+  background: var(--cv-surface-base);
+  overflow: hidden;
+}
+[data-commercial-surface="today"] .cv-today-list li + li { border-top: 1px solid var(--cv-border); }
+[data-commercial-surface="today"] .cv-today-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--cv-space-3);
+  width: 100%;
+  min-height: 64px;
+  padding: var(--cv-space-3) var(--cv-space-4);
+  border: 0;
+  background: transparent;
+  color: var(--cv-text);
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+[data-commercial-surface="today"] .cv-today-row:hover { background: var(--cv-surface-soft); }
+[data-commercial-surface="today"] .cv-today-row:focus-visible { outline-offset: -3px; }
+[data-commercial-surface="today"] .cv-today-row > span:first-child { display: block; min-width: 0; }
+[data-commercial-surface="today"] .cv-today-row-eyebrow,
+[data-commercial-surface="today"] .cv-today-row-title,
+[data-commercial-surface="today"] .cv-today-row-text { display: block; }
+[data-commercial-surface="today"] .cv-today-row-eyebrow {
+  color: color-mix(in srgb, var(--today-accent) 70%, var(--cv-text));
+  font-size: var(--cv-text-eyebrow);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+[data-commercial-surface="today"] .cv-today-row-title {
+  margin-top: 2px;
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+}
+[data-commercial-surface="today"] .cv-today-row-text {
+  margin-top: 2px;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.45;
+}
+[data-commercial-surface="today"] .cv-today-row-go {
+  color: var(--today-accent);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+[data-commercial-surface="today"] [data-commercial-safety-note] {
+  padding: var(--cv-space-3) var(--cv-space-4);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-md);
+  background: var(--cv-surface-soft);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+
+@media (min-width: 700px) {
+  [data-commercial-surface="today"] .cv-today-hero { padding: var(--cv-space-6); }
+  [data-commercial-surface="today"] .cv-today-cta,
+  [data-commercial-surface="today"] [data-learning-summary] button { width: auto; min-width: 220px; }
+}
+/* Wide: primary column (hero + summary) beside the destination list and safety note. */
+@media (min-width: 1000px) {
+  [data-commercial-surface="today"] {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "primary list" "primary note";
+    align-items: start;
+    gap: var(--cv-space-4);
+  }
+  [data-commercial-surface="today"] .cv-today-primary { grid-area: primary; }
+  [data-commercial-surface="today"] .cv-today-list { grid-area: list; }
+  [data-commercial-surface="today"] [data-commercial-safety-note] { grid-area: note; }
+}
