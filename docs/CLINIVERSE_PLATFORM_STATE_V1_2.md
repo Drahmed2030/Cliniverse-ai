@@ -32,7 +32,7 @@ Inside `learn`, `ReleaseApp.tsx` further routes by `careWorkspace: 'ward' | 'car
 | ECG governed content | pre-existing, hardened across batches | Learn tab, ECG Challenge | ACTIVE in production |
 | Pathway Replay Intelligence | 7 | `/labs/pathway-replay` | ACTIVE — staging verified (no schema needed), production not applied |
 | Clinical Reference Intelligence | 8 | `/labs/clinical-reference` | ACTIVE but `review_required` — reachable, not yet learner-default-visible pending clinical review |
-| Resuscitation Intelligence | 9 | `/labs/resuscitation-hub` | ACTIVE — BLS/ACLS/drills/engine ready; 3 governed scenarios `review_required` (gated, not launchable) pending clinical review |
+| Resuscitation Intelligence | 9 | `/labs/resuscitation-hub` | ACTIVE — BLS/ACLS lessons and engine ready; Code Lab drills and 3 governed scenarios `review_required` (gated, not launchable; drill content has no completed source review — see `app/lib/codelab/lessonSources.ts`) pending clinical review |
 | Cardiology Operations Intelligence | 10 | Learn → Cardiology Operations (PRO) → Console tab | ACTIVE, PRO-gated; Supabase untouched (no schema needed) |
 | Auth / entitlement / StoreKit boundary | 1–3 (+ ongoing hardening) | app-wide | ACTIVE — real Supabase-backed auth, StoreKit 2 entitlement authority live; RLS isolation hardening staging-verified, production promotion pending an explicit migration-window decision |
 | Engagement / evidence foundation | 2 (+ reused throughout 7–10) | app-wide, non-UI | ACTIVE — `evidenceProvenanceLedger.ts` pattern; canonical-JSON+SHA-256 receipts (Pathway Replay, Resuscitation) reuse this lineage |

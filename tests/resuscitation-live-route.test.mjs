@@ -243,10 +243,10 @@ test('lesson/drill/simulation/scenario/debrief/receipt_schema/competency_map are
   assert.equal(resuscitationModuleCases.length, 0)
 })
 
-test('every reachable, non-scenario Batch 9 catalog row is visible+ready and declares the live route', () => {
+test('every reachable, non-scenario, non-drill Batch 9 catalog row is visible+ready and declares the live route', () => {
   const sourceKeys = [
     'resuscitation_simulation_engine',
-    'resuscitation_codelab_drills', 'resuscitation_debrief_engine', 'resuscitation_competency_map',
+    'resuscitation_debrief_engine', 'resuscitation_competency_map',
   ]
   for (const sourceKey of sourceKeys) {
     const item = CATALOG.find(candidate => candidate.source_key === sourceKey)
@@ -264,6 +264,41 @@ test('the three governed scenario rows are listed (visible) and route correctly,
     assert.equal(item.visibility, 'visible')
     assert.equal(isAvailable(item), false)
   }
+})
+
+// Pre-TestFlight governance alignment. The drill catalog row used to say
+// visible/ready while every drill unit failed closed to pending_clinical_review
+// and the Hub rendered them "Pending review" with no launcher. The real review
+// record for the drill content (each lesson's practice block) is
+// app/lib/codelab/lessonSources.ts, which has no reviewed entry, so the catalog
+// row, the registry units and the Hub must all say "not learner-ready".
+test('the drill catalog row is listed (visible) but review_required, and is not available', () => {
+  const item = CATALOG.find(candidate => candidate.source_key === 'resuscitation_codelab_drills')
+  assert.ok(item, 'missing catalog row: resuscitation_codelab_drills')
+  assert.equal(item.route, '/labs/resuscitation-hub')
+  assert.equal(item.visibility, 'visible')
+  assert.equal(item.readiness, 'review_required')
+  assert.equal(isAvailable(item), false)
+  assert.equal(catalogReviewStatusFor('resuscitation_codelab_drills'), 'pending_clinical_review')
+})
+
+test('catalog row, drill registry units and Hub agree: drills are not learner-ready', async () => {
+  const { getLessonSourceReview } = await import('../app/lib/codelab/lessonSources.ts')
+  const drills = RESUSCITATION_LEARNING_UNITS.filter(unit => unit.kind === 'drill')
+  assert.equal(drills.length, 12)
+  for (const drill of drills) {
+    assert.equal(drill.reviewStatus, 'pending_clinical_review', `${drill.unitId} must fail closed`)
+    // The drill content is the lesson's own practice block; it cannot be more
+    // reviewed than the source review recorded for that lesson.
+    const lessonId = drill.unitId.replace(/::drill$/, '')
+    const sourceReview = getLessonSourceReview(lessonId)
+    assert.ok(sourceReview, `no source review record for ${lessonId}`)
+    assert.notEqual(sourceReview.reviewState, 'reviewed', `${lessonId} source review must not be reviewed while its drill is gated`)
+  }
+  const hub = read('app/labs/resuscitation-hub/ResuscitationHub.tsx')
+  const practice = hub.slice(hub.indexOf("section === 'practice'"), hub.indexOf("section === 'simulate'"))
+  assert.match(practice, /Pending review/)
+  assert.doesNotMatch(practice, /Reviewed|onClick|<Link|<button/)
 })
 
 test('the resuscitation receipt schema is a governance artifact, correctly hidden from learner scope', () => {

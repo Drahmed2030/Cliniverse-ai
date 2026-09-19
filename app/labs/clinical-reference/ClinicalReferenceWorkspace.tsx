@@ -113,7 +113,7 @@ export default function ClinicalReferenceWorkspace() {
         <header className={styles.header}>
           <p className={styles.eyebrow}>CLINIVERSE AI · CLINICAL REFERENCE</p>
           <h1>Clinical Reference</h1>
-          <p className={styles.subtitle}>Search calculators, drugs, dosing and interactions — every result shows its source and review status.</p>
+          <p className={styles.subtitle}>Source-linked drug identity and label lookups. Calculators, dosing and interaction tools appear here once they clear clinical review.</p>
           <Link className={styles.backLink} href="/">← Back to Cliniverse</Link>
         </header>
 
@@ -122,7 +122,7 @@ export default function ClinicalReferenceWorkspace() {
             aria-label="Search clinical reference"
             className={styles.searchInput}
             onChange={event => setQuery(event.target.value)}
-            placeholder="Search e.g. 'apixaban', 'AF stroke', 'CURB-65'..."
+            placeholder="Search e.g. 'RxNorm', 'DailyMed'..."
             type="search"
             value={query}
           />

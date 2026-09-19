@@ -231,14 +231,24 @@ export const CLINICAL_CONTENT_CATALOG_SEED: ClinicalContentCatalogSeedItem[] = [
   // Batch 8 already established for CHA2DS2-VASc/-VA and TIMI (rows
   // above): still listed/discoverable, never learner-launchable until a
   // real review promotes them. The overall simulation engine capability
-  // and the drill/debrief/competency_map rows below are NOT scenario
+  // and the debrief/competency_map rows below are NOT scenario
   // manifests themselves (no clinical-algorithm content of their own to
-  // review) and correctly remain ready.
+  // review) and remain ready.
+  //
+  // The drill row is the exception (pre-TestFlight governance alignment):
+  // each drill is a lesson's `practice` block reframed by
+  // curriculumContract.ts, and that content — including drug dose/timing
+  // tables — has an explicit source review recorded as 'pending' with no
+  // reviewer in app/lib/codelab/lessonSources.ts (pinned by
+  // tests/lesson-sources.test.mjs). The registry therefore fails every
+  // drill unit closed to 'pending_clinical_review', and the Hub renders
+  // them "Pending review" with no launcher. Catalog truth must match:
+  // listed (visible) but review_required until a real review promotes them.
   { source_key: 'resuscitation_simulation_engine', module: 'resuscitation', content_type: 'simulation', title: 'Resuscitation Simulation Engine', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/scenarioEngine.ts, app/labs/resuscitation-hub/ResuscitationHub.tsx — live, reachable', sort_order: 140 },
   { source_key: 'resus_vf_pvt_v1', module: 'resuscitation', content_type: 'scenario', title: 'Ventricular Fibrillation / Pulseless VT', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/scenarios/vfPvtScenario.ts — reviewStatus pending_clinical_review, not yet learner-launchable', sort_order: 141 },
   { source_key: 'resus_pea_asystole_v1', module: 'resuscitation', content_type: 'scenario', title: 'PEA / Asystole', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/scenarios/peaAsystoleScenario.ts — reviewStatus pending_clinical_review, not yet learner-launchable', sort_order: 142 },
   { source_key: 'resus_unstable_bradycardia_v1', module: 'resuscitation', content_type: 'scenario', title: 'Unstable Bradycardia', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/scenarios/unstableBradycardiaScenario.ts — reviewStatus pending_clinical_review, not yet learner-launchable', sort_order: 143 },
-  { source_key: 'resuscitation_codelab_drills', module: 'resuscitation', content_type: 'drill', title: 'Resuscitation Code Lab Drills', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/curriculumContract.ts — reframes existing app/lib/codelab/blsLessons.ts, aclsLessons.ts practice blocks as drills; no second drill framework', sort_order: 144 },
+  { source_key: 'resuscitation_codelab_drills', module: 'resuscitation', content_type: 'drill', title: 'Resuscitation Code Lab Drills', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'review_required', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/curriculumContract.ts — reframes existing app/lib/codelab/blsLessons.ts, aclsLessons.ts practice blocks as drills; no second drill framework', sort_order: 144 },
   { source_key: 'resuscitation_debrief_engine', module: 'resuscitation', content_type: 'debrief', title: 'Resuscitation Debrief Engine', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/debriefEngine.ts — deterministic, event-informed REACTION/DESCRIPTION/ANALYSIS/SUMMARY/NEXT PRACTICE debrief', sort_order: 145 },
   { source_key: 'resuscitation_competency_map', module: 'resuscitation', content_type: 'competency_map', title: 'Resuscitation Competency Map', category: 'resuscitation', access_tier: 'free', visibility: 'visible', readiness: 'ready', route: '/labs/resuscitation-hub', provenance_ref: 'app/lib/resuscitation/competencyDomains.ts — 10 measurable domains; unsupported hardware metrics explicitly excluded', sort_order: 146 },
   { source_key: 'resuscitation_receipt_schema', module: 'resuscitation', content_type: 'receipt_schema', title: 'Resuscitation evidence receipt schema', category: 'resuscitation', access_tier: 'free', visibility: 'hidden', readiness: 'labs', provenance_ref: 'app/lib/resuscitation/evidenceReceipt.ts — governance/schema artifact, never learner-browsable', sort_order: 147 },
