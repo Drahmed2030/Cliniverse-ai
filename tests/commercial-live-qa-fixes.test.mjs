@@ -59,8 +59,8 @@ test('section accent identities remain Today blue, Learn teal, Progress violet, 
   const explore = read('app/components/release/AtlasReleaseCatalog.tsx')
   const me = read('app/components/release/MeHub.tsx')
 
-  assert.match(app, /CLINIVERSE/)
-  assert.match(app, /C\.blue/)
+  // Today's blue identity lives on its account affordance (the Golden Surface dropped the CLINIVERSE eyebrow).
+  assert.match(app, /cv-today-account[\s\S]*?C\.blue/)
   assert.match(app, /COMPETENCY/)
   assert.match(app, /C\.violet/)
   assert.match(learn, /C\.teal/)

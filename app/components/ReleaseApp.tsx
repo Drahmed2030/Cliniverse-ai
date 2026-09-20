@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Capacitor } from '@capacitor/core'
+import { UserRound } from 'lucide-react'
 import { useEffect, useState, type CSSProperties } from 'react'
 import ErrorBoundary from './ErrorBoundary'
 import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
@@ -67,14 +68,14 @@ export default function ReleaseApp({ reviewPreview = false, caseLibraryPreview =
     <AuthGate allowGuest={false}>
       {user => (
         <SubscriptionPurchaseProvider>
-          <OnboardingOrShell key={user.id} caseLibraryPreview={caseLibraryPreview} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
+          <OnboardingOrShell key={user.id} caseLibraryPreview={caseLibraryPreview} accountInitial={user.email?.trim().charAt(0).toUpperCase() || null} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
         </SubscriptionPurchaseProvider>
       )}
     </AuthGate>
   )
 }
 
-function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
+function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean; accountInitial: string | null }) {
   const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null)
   const { openPaywall } = useCliniverseSubscription()
 
@@ -99,7 +100,7 @@ function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: 
   return <ReleaseShell {...props} />
 }
 
-function ReleaseShell({ showEcgReview, caseLibraryPreview }: { showEcgReview: boolean; caseLibraryPreview: boolean }) {
+function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { showEcgReview: boolean; caseLibraryPreview: boolean; accountInitial: string | null }) {
   const appearance = useAppearance()
   const [tab, setTab] = useState<ReleaseTab>(() => {
     // AuthGate mounts this shell after restoring the client session.
@@ -141,7 +142,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview }: { showEcgReview: bo
         isolation: 'isolate',
       }}
     >
-      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} />
+      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} accountInitial={accountInitial} onOpenAccount={() => setTab('me')} />
       <div
         data-commercial-content
         style={{
@@ -176,9 +177,9 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview }: { showEcgReview: bo
   )
 }
 
-function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativeTopPadding: number | null }) {
+function ReleaseHeader({ active, nativeTopPadding, accountInitial, onOpenAccount }: { active: ReleaseTab; nativeTopPadding: number | null; accountInitial: string | null; onOpenAccount: () => void }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
-    today: { title: 'Today', sub: 'Your next clear learning action' },
+    today: { title: 'Today', sub: '' },
     learn: { title: 'Learn', sub: 'Governed cardiology learning and simulation' },
     progress: { title: 'Progress', sub: 'Competency, review cadence and learning history' },
     explore: { title: 'Explore', sub: 'Curated learning tools and approved experiences' },
@@ -219,10 +220,31 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
           gap: 12,
         }}
       >
-        <div>
+        <div style={{ minWidth: 0 }}>
           <div style={{ fontSize: '1rem', fontWeight: 800 }}>{current.title}</div>
-          <div style={{ fontSize: '0.75rem', color: C.sub, marginTop: 3 }}>{current.sub}</div>
+          {active === 'today' ? (
+            // Today's support line lives in the shell header, under the title. The h1 keeps its exact
+            // text on its own element: native screenshot automation waits on "One clear next step.".
+            <div className="cv-today-lead">
+              <h1 id="today-title">One clear next step.</h1>{' '}
+              <p>Everything else can wait.</p>
+            </div>
+          ) : current.sub && <div style={{ fontSize: '0.75rem', color: C.sub, marginTop: 3 }}>{current.sub}</div>}
         </div>
+        {active === 'today' && (
+          <button
+            type="button"
+            className="cv-today-account"
+            aria-label="Account and plan"
+            onClick={onOpenAccount}
+            style={{
+              background: `color-mix(in srgb, ${C.blue} 14%, ${C.elevated})`,
+              borderColor: `color-mix(in srgb, ${C.blue} 55%, ${C.border})`,
+            }}
+          >
+            {accountInitial ?? <UserRound size={18} aria-hidden="true" />}
+          </button>
+        )}
       </div>
     </header>
   )
@@ -231,42 +253,28 @@ function ReleaseHeader({ active, nativeTopPadding }: { active: ReleaseTab; nativ
 // Layout and control styling for this surface lives in commercial-visual-system.css
 // under [data-commercial-surface="today"] (UI-A3). Destinations and routes are unchanged.
 function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
-  const destinations: Array<{ tab: ReleaseTab; eyebrow: string; title: string; text: string; accent: string }> = [
-    { tab: 'progress', eyebrow: 'PROGRESS', title: 'Review your progress', text: 'Competency and review state, as governed evidence becomes available.', accent: C.violet },
-    { tab: 'explore', eyebrow: 'EXPLORE', title: 'Discover approved experiences', text: 'Curated learning tools inside the trusted release boundary.', accent: C.blue },
-    { tab: 'me', eyebrow: 'ACCOUNT', title: 'Manage your plan', text: 'Account, Cliniverse PRO, restore purchases and support.', accent: C.gold },
-  ]
-
   return (
     <section aria-labelledby="today-title" data-commercial-surface="today">
-      <div className="cv-today-primary">
-        <div className="cv-today-hero">
-          <div className="cv-today-eyebrow">CLINIVERSE</div>
-          <h1 id="today-title" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', lineHeight: 1.12, margin: '9px 0 10px' }}>One clear next step.</h1>
-          <p>Follow your learning record and return to the skills you want to strengthen.</p>
-          <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume learning →</button>
-        </div>
-        <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
+      <section className="cv-today-next" aria-labelledby="today-next-title">
+        <div className="cv-today-eyebrow">NEXT ACTION</div>
+        <h2 id="today-next-title">Continue learning</h2>
+        <p>Follow your learning record and return to the skills you want to strengthen.</p>
+        <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume learning →</button>
+      </section>
+
+      {/* No review-scheduling data exists in this release, so this is a route to Progress, not a due count. */}
+      <div className="cv-today-review" data-commercial-card-grid>
+        <button type="button" className="cv-today-row" onClick={() => onNavigate('progress')} style={{ '--today-accent': C.violet } as CSSProperties}>
+          <span>
+            <span className="cv-today-row-eyebrow">REVIEW</span>
+            <span className="cv-today-row-title">Review your progress</span>
+            <span className="cv-today-row-text">Competency and review state, as governed evidence becomes available.</span>
+          </span>
+          <span className="cv-today-row-go" aria-hidden="true">→</span>
+        </button>
       </div>
 
-      <ul className="cv-today-list" data-commercial-card-grid aria-label="More in Cliniverse">
-        {destinations.map(item => (
-          <li key={item.tab}>
-            <button type="button" className="cv-today-row" onClick={() => onNavigate(item.tab)} style={{ '--today-accent': item.accent } as CSSProperties}>
-              <span>
-                <span className="cv-today-row-eyebrow">{item.eyebrow}</span>
-                <span className="cv-today-row-title">{item.title}</span>
-                <span className="cv-today-row-text">{item.text}</span>
-              </span>
-              <span className="cv-today-row-go" aria-hidden="true">→</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <div data-commercial-safety-note>
-        For education and simulation. Keep real patient information outside this workspace.
-      </div>
+      <AccountLearningSummary compact view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
     </section>
   )
 }

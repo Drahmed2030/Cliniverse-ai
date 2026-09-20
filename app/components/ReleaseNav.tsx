@@ -59,6 +59,8 @@ export default function ReleaseNav({ active, onChange }: Props) {
             style={{
               minWidth: 0,
               minHeight: 52,
+              // Default button padding leaves "Progress" too little room in the 76px side rail.
+              padding: '0 2px',
               border: 0,
               borderRadius: 16,
               background: selected ? 'var(--cv-nav-selected)' : 'transparent',
@@ -68,7 +70,9 @@ export default function ReleaseNav({ active, onChange }: Props) {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 4,
-              fontSize: '0.75rem',
+              // Labels scale with text size but are bounded by the column width (5 columns), so
+              // large text never truncates "Progress" / "Explore". The side rail caps this in CSS.
+              fontSize: 'min(0.75rem, 3.4vw)',
               lineHeight: 1.15,
               fontWeight: selected ? 700 : 600,
               cursor: 'pointer',

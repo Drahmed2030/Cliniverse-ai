@@ -26,7 +26,7 @@ test('today and progress expose commercial surface markers', () => {
   assert.match(source, /data-commercial-surface="today"/)
   assert.match(source, /data-commercial-surface="progress"/)
   assert.match(source, /data-commercial-card-grid/)
-  assert.match(source, /data-commercial-safety-note/)
+  // Today no longer carries a safety-note card (removed by the Today acceptance fix).
 })
 
 test('commercial core surfaces avoid fixed dark palette literals', () => {
@@ -38,7 +38,11 @@ test('commercial core surfaces avoid fixed dark palette literals', () => {
 
 test('commercial headings use scalable relative typography', () => {
   const source = read('app/components/ReleaseApp.tsx')
-  assert.match(source, /clamp\(1\.75rem, 4vw, 2\.25rem\)/)
+  // Today's headings are sized in the scoped stylesheet from rem-based tokens (Golden Surface), not inline.
+  const css = read('app/commercial-visual-system.css')
+  assert.match(css, /\.cv-today-lead h1,[\s\S]*?font-size: var\(--cv-text-body\)/)
+  assert.match(css, /\.cv-today-next h2 \{[^}]*font-size: var\(--cv-text-title\)/)
+  assert.match(css, /--cv-text-title: clamp\(1\.375rem, 3vw, 1\.75rem\)/)
   assert.match(source, /clamp\(1\.5rem, 3vw, 2rem\)/)
   assert.equal(/fontSize:\s*28\b/.test(source), false)
   assert.equal(/fontSize:\s*24\b/.test(source), false)

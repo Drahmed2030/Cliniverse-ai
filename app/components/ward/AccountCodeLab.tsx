@@ -10,7 +10,7 @@ import LessonProgressSummary from './LessonProgressSummary'
 
 const lessons = [...BLS_LESSONS, ...ACLS_LESSONS]
 const repository = createLessonCompletionRepository(supabase)
-type Props = { isPro: boolean; onUpgrade: () => void; onBack: () => void; view?: 'workspace' | 'summary'; onOpen?: () => void }
+type Props = { isPro: boolean; onUpgrade: () => void; onBack: () => void; view?: 'workspace' | 'summary'; onOpen?: () => void; compact?: boolean }
 type Catalog = Record<string, string>
 
 async function makeCatalog(): Promise<Catalog> {
@@ -134,7 +134,7 @@ function OwnedCodeLab({ owner, ...props }: Props & { owner: string }) {
     const latest = [...results].sort((a, b) => Date.parse(b.completed_at) - Date.parse(a.completed_at))[0]
     const latestTitle = lessons.find(lesson => catalog?.[lesson.id] === latest?.case_id)?.title
     return <LessonProgressSummary completedIds={completedIds} latestTitle={latestTitle}
-      loading={!catalog && !loadFailed} failed={loadFailed}
+      loading={!catalog && !loadFailed} failed={loadFailed} compact={props.compact}
       onRetry={() => setReload(value => value + 1)} onOpen={props.onOpen ?? props.onBack} />
   }
 
