@@ -10,7 +10,8 @@ const explore = read('app/components/release/AtlasReleaseCatalog.tsx')
 const css = read('app/commercial-visual-system.css')
 const stripComments = source => source.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
 const trackSource = stripComments(tracks)
-const learnCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing'))))
+// The Learn block runs until the Progress block begins (Progress has its own scoping test).
+const learnCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing')), css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory'))))
 const trackEntries = [...tracks.matchAll(/verb: '([^']+)',\s*title: '([^']+)',\s*description: '([^']+)',\s*accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)]
   .map(([, verb, title, description, accent, href]) => ({ verb, title, description, accent, href: href ?? null }))
 

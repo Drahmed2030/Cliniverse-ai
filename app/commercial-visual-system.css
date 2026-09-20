@@ -520,3 +520,189 @@
 @media (min-width: 700px) {
   [data-commercial-surface="learn"] .cv-learn-track { padding: var(--cv-space-6); }
 }
+
+/* Progress — evidence-led trajectory (Implementation Contract v2). Composition only: one quiet
+ * summary row, a hairline-divided "By track" list (ECG, Echo, Ward) inside a single surface, and
+ * one next step. Same semantic tokens as Today and Learn; every rule is prefixed with the surface
+ * attribute. No fills, glows or gradients carry meaning: each status is written out in text. The
+ * support line lives in the shared header. */
+[data-commercial-surface="progress"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-5);
+  max-width: 680px;
+  margin: 0 auto;
+}
+[data-commercial-surface="progress"] > section,
+[data-commercial-surface="progress"] > details { min-width: 0; margin: 0; }
+[data-commercial-surface="progress"] .cv-progress-eyebrow {
+  margin: 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+[data-commercial-surface="progress"] .cv-progress-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[data-commercial-surface="progress"] [data-progress-metrics] {
+  display: grid;
+  /* rem, not px: at larger text sizes tiles wrap onto a second row instead of breaking words. */
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  gap: var(--cv-space-2);
+  margin: var(--cv-space-3) 0 0;
+}
+[data-commercial-surface="progress"] [data-progress-metrics] > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--cv-space-3) var(--cv-space-4);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-soft);
+}
+[data-commercial-surface="progress"] [data-progress-metrics] dt {
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+[data-commercial-surface="progress"] [data-progress-metrics] dd {
+  margin: 0;
+  font-size: var(--cv-text-title);
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-commercial-surface="progress"] .cv-progress-tracks > ul {
+  margin: var(--cv-space-3) 0 0;
+  padding: 0 var(--cv-space-5);
+  list-style: none;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-elevated);
+}
+[data-commercial-surface="progress"] .cv-progress-track {
+  display: grid;
+  gap: var(--cv-space-2);
+  min-width: 0;
+  padding: var(--cv-space-5) 0;
+  overflow-wrap: anywhere;
+}
+[data-commercial-surface="progress"] .cv-progress-track + .cv-progress-track { border-top: 1px solid var(--cv-border); }
+[data-commercial-surface="progress"] .cv-progress-track-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--cv-space-1) var(--cv-space-3);
+}
+[data-commercial-surface="progress"] .cv-progress-track-head h3 {
+  margin: 0;
+  /* Small accent text mixes toward the text token to stay AA on the elevated surface. */
+  color: color-mix(in srgb, var(--track-accent) 70%, var(--cv-text));
+  font-size: var(--cv-text-title);
+  font-weight: 800;
+  line-height: 1.2;
+}
+[data-commercial-surface="progress"] .cv-progress-status {
+  color: var(--cv-text);
+  font-size: var(--cv-text-support);
+  font-weight: 700;
+}
+[data-commercial-surface="progress"] .cv-progress-track-text,
+[data-commercial-surface="progress"] .cv-progress-track-stage,
+[data-commercial-surface="progress"] .cv-progress-note,
+[data-commercial-surface="progress"] .cv-progress-next p {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-body);
+  line-height: 1.5;
+}
+[data-commercial-surface="progress"] .cv-progress-track-stage { font-size: var(--cv-text-support); }
+[data-commercial-surface="progress"] .cv-progress-note { margin-top: var(--cv-space-3); font-size: var(--cv-text-support); }
+[data-commercial-surface="progress"] .cv-progress-track progress {
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 3px;
+  background: var(--cv-surface-soft);
+  overflow: hidden;
+}
+[data-commercial-surface="progress"] .cv-progress-track progress::-webkit-progress-bar { background: var(--cv-surface-soft); }
+[data-commercial-surface="progress"] .cv-progress-track progress::-webkit-progress-value { background: color-mix(in srgb, var(--track-accent) 70%, var(--cv-text)); }
+[data-commercial-surface="progress"] .cv-progress-track progress::-moz-progress-bar { background: color-mix(in srgb, var(--track-accent) 70%, var(--cv-text)); }
+
+[data-commercial-surface="progress"] .cv-progress-track-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cv-space-2) var(--cv-space-4);
+  margin-top: var(--cv-space-1);
+}
+[data-commercial-surface="progress"] .cv-progress-track-actions :is(a, button),
+[data-commercial-surface="progress"] .cv-progress-next button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--track-accent, var(--cv-teal)) 70%, var(--cv-text));
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+[data-commercial-surface="progress"] .cv-progress-next {
+  padding: var(--cv-space-5);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-elevated);
+}
+[data-commercial-surface="progress"] .cv-progress-next h2 {
+  margin: var(--cv-space-1) 0 0;
+  font-size: var(--cv-text-section);
+  font-weight: 800;
+  line-height: 1.2;
+}
+[data-commercial-surface="progress"] .cv-progress-next p { margin-top: var(--cv-space-2); }
+[data-commercial-surface="progress"] .cv-progress-next button {
+  margin-top: var(--cv-space-2);
+  --track-accent: var(--cv-teal);
+}
+
+/* Detailed saved-record lists keep their own content; the disclosure only gives them a quiet home. */
+[data-commercial-surface="progress"] .cv-progress-records > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cv-space-3);
+  min-height: 44px;
+  padding: 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+/* Text glyph, not colour or motion, shows the open state; the empty alternative keeps it out of the accessible name. */
+[data-commercial-surface="progress"] .cv-progress-records > summary::after { content: "+"; content: "+" / ""; font-size: var(--cv-text-section); }
+[data-commercial-surface="progress"] .cv-progress-records[open] > summary::after { content: "−"; content: "−" / ""; }
+[data-commercial-surface="progress"] .cv-progress-records > summary::-webkit-details-marker { display: none; }
+[data-commercial-surface="progress"] .cv-progress-records[open] > summary { margin-bottom: var(--cv-space-3); }
+
+@media (min-width: 700px) {
+  [data-commercial-surface="progress"] .cv-progress-tracks > ul { padding: 0 var(--cv-space-6); }
+  [data-commercial-surface="progress"] .cv-progress-next { padding: var(--cv-space-6); }
+}

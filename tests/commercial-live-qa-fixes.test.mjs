@@ -53,7 +53,7 @@ test('Me account and achievement surfaces consume commercial semantic tokens', (
   }
 })
 
-test('section accent identities remain Today blue, Learn teal, Progress violet, Explore blue, Me gold', () => {
+test('section accent identities remain Today blue, Learn teal, Progress by-track (ECG teal, Echo violet, Ward blue), Explore blue, Me gold', () => {
   const app = read('app/components/ReleaseApp.tsx')
   const learn = read('app/components/ward/index.tsx')
   const explore = read('app/components/release/AtlasReleaseCatalog.tsx')
@@ -61,8 +61,11 @@ test('section accent identities remain Today blue, Learn teal, Progress violet, 
 
   // Today's blue identity lives on its account affordance (the Golden Surface dropped the CLINIVERSE eyebrow).
   assert.match(app, /cv-today-account[\s\S]*?C\.blue/)
-  assert.match(app, /COMPETENCY/)
-  assert.match(app, /C\.violet/)
+  // Progress v2 carries its identity per track (ECG teal, Echo violet, Ward blue) instead of one section accent.
+  const progress = read('app/components/release/ProgressTrajectory.tsx')
+  assert.match(progress, /ecg: \{ accent: 'var\(--cv-teal\)'/)
+  assert.match(progress, /echo: \{ accent: 'var\(--cv-violet\)'/)
+  assert.match(progress, /ward: \{ accent: 'var\(--cv-blue\)'/)
   assert.match(learn, /C\.teal/)
   assert.match(explore, /C\.blue/)
   assert.match(me, /var\(--cv-gold\)/)

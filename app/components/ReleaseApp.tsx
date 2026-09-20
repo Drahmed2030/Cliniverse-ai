@@ -26,6 +26,7 @@ import {
 const PracticeShift = dynamic(() => import('./release/PracticeShift'), { ssr: false, loading: () => <SectionLoading label="Loading training shift" /> })
 const WardSavedPractice = dynamic(() => import('./ward/WardSavedPractice'), { ssr: false, loading: () => <SectionLoading label="Loading Ward practice" /> })
 const AssessmentHistory = dynamic(() => import('./release/AssessmentHistory'), { ssr: false, loading: () => <SectionLoading label="Loading assessments" /> })
+const ProgressTrajectory = dynamic(() => import('./release/ProgressTrajectory'), { ssr: false, loading: () => <SectionLoading label="Loading progress" /> })
 
 const AccountLearningSummary = dynamic(() => import('./ward/AccountCodeLab'), {
   ssr: false,
@@ -185,7 +186,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
             )}
           </ErrorBoundary>
         )}
-        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={goTab} onOpenCodeLab={openCodeLab} />}
+        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={goTab} onOpenWard={() => { setCareWorkspace('ward'); setTab('learn') }} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
         {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
@@ -198,7 +199,7 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     today: { title: 'Today', sub: '' },
     learn: { title: 'Learn', sub: learnLanding ? 'Choose a practice track. Your progress stays connected.' : 'Governed cardiology learning and simulation' },
-    progress: { title: 'Progress', sub: 'Competency, review cadence and learning history' },
+    progress: { title: 'Progress', sub: 'See what is strengthening, what needs another pass, and where to go next.' },
     explore: { title: 'Explore', sub: 'Curated learning tools and approved experiences' },
     me: { title: 'Me', sub: 'Account, plan, privacy and settings' },
   }
@@ -238,7 +239,8 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
         }}
       >
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontSize: '1rem', fontWeight: 800 }}>{current.title}</div>
+          {/* Progress's h1 lives in the shared header (as Today's does), so its surface is labelled by it. */}
+          <div style={{ fontSize: '1rem', fontWeight: 800 }}>{active === 'progress' ? <h1 id="progress-title" style={{ margin: 0, font: 'inherit' }}>{current.title}</h1> : current.title}</div>
           {active === 'today' ? (
             // Today's support line lives in the shell header, under the title. The h1 keeps its exact
             // text on its own element: native screenshot automation waits on "One clear next step.".
@@ -296,36 +298,24 @@ function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: Release
   )
 }
 
-function ProgressSurface({ onNavigate, onOpenCodeLab, showWardPractice }: { showWardPractice: boolean; onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
+// Layout and control styling lives in commercial-visual-system.css under [data-commercial-surface="progress"].
+// The summary, tracks and next step come from ProgressTrajectory; the detailed saved-record lists (assessment
+// history and export, Ward saved practice, Code Lab lessons) stay reachable, unchanged, and load only when opened.
+function ProgressSurface({ onNavigate, onOpenWard, onOpenCodeLab, showWardPractice }: { showWardPractice: boolean; onNavigate: (tab: ReleaseTab) => void; onOpenWard: () => void; onOpenCodeLab: () => void }) {
+  const [recordsOpen, setRecordsOpen] = useState(false)
   return (
     <section aria-labelledby="progress-title" data-commercial-surface="progress">
-      <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
-      <AssessmentHistory />
-      {showWardPractice && <WardSavedPractice onOpen={() => onNavigate('learn')} />}
-      <div style={{ padding: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
-        <div style={{ color: C.violet, fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.08em' }}>COMPETENCY</div>
-        <h1 id="progress-title" style={{ margin: '8px 0 8px', fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Clinical competency</h1>
-        <p style={{ margin: 0, color: C.sub, fontSize: '0.875rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Saved lessons and assessment attempts appear separately above. Competency levels require their own verified evidence.
-        </p>
-        <button
-          type="button"
-          onClick={() => onNavigate('learn')}
-          style={{
-            marginTop: 16,
-            minHeight: 44,
-            borderRadius: 14,
-            border: `1px solid ${C.border}`,
-            background: C.elevated,
-            color: C.text,
-            padding: '0 16px',
-            fontWeight: 800,
-            cursor: 'pointer',
-          }}
-        >
-          Go to Learn →
-        </button>
-      </div>
+      <ProgressTrajectory includeWard={showWardPractice} onOpenWard={onOpenWard} onOpenLearn={() => onNavigate('learn')} />
+      <details className="cv-progress-records" onToggle={event => setRecordsOpen(event.currentTarget.open)}>
+        <summary>Saved records and export</summary>
+        {recordsOpen && (
+          <div>
+            <AssessmentHistory />
+            {showWardPractice && <WardSavedPractice onOpen={onOpenWard} />}
+            <AccountLearningSummary view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
+          </div>
+        )}
+      </details>
     </section>
   )
 }

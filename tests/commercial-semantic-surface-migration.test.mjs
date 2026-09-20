@@ -43,7 +43,10 @@ test('commercial headings use scalable relative typography', () => {
   assert.match(css, /\.cv-today-lead h1,[\s\S]*?font-size: var\(--cv-text-body\)/)
   assert.match(css, /\.cv-today-next h2 \{[^}]*font-size: var\(--cv-text-title\)/)
   assert.match(css, /--cv-text-title: clamp\(1\.375rem, 3vw, 1\.75rem\)/)
-  assert.match(source, /clamp\(1\.5rem, 3vw, 2rem\)/)
+  // Progress's page heading lives in the shared header (1rem, inherited); its own headings are token-sized in the scoped stylesheet.
+  assert.match(css, /\.cv-progress-track-head h3 \{[^}]*font-size: var\(--cv-text-title\)/)
+  assert.match(css, /\.cv-progress-next h2 \{[^}]*font-size: var\(--cv-text-section\)/)
+  assert.equal(/clamp\(1\.5rem, 3vw, 2rem\)/.test(source), false)
   assert.equal(/fontSize:\s*28\b/.test(source), false)
   assert.equal(/fontSize:\s*24\b/.test(source), false)
 })

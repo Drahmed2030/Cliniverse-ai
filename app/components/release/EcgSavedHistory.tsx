@@ -2,26 +2,32 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../supabase'
 
+export interface EcgSavedAnswer { id: string; at: string; score: number }
+
+/** The one reader of saved ECG answers, shared by this history list and the Progress trajectory so the eligibility gate lives in a single place. */
+export async function loadEcgSavedAnswers(owner: string): Promise<EcgSavedAnswer[]> {
+  const identity = await supabase.auth.getUser()
+  if (identity.error || identity.data.user?.id !== owner) throw Error('Account changed')
+  const result = await supabase.from('ecg_competency_attempts').select('event_id,created_at,evidence,decision_receipt').eq('user_id', owner).eq('case_id', 'ecg-governed-case-001').order('created_at', { ascending: false }).limit(20)
+  if (result.error) throw Error('History unavailable')
+  const current = await supabase.auth.getUser()
+  if (current.error || current.data.user?.id !== owner) throw Error('Account changed')
+  return result.data.flatMap(row => {
+    const score = row.evidence?.result?.overallScore
+    return row.decision_receipt?.decision === 'LEARNER_ELIGIBLE' && typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 1
+      ? [{id:row.event_id,at:row.created_at,score}] : []
+  })
+}
+
 /** Historical evidence only: this component cannot grant eligibility or write scores. */
 export default function EcgSavedHistory({ owner, refresh }: { owner: string; refresh: number }) {
-  const [rows, setRows] = useState<Array<{id:string;at:string;score:number}>>([])
+  const [rows, setRows] = useState<EcgSavedAnswer[]>([])
   const [state, setState] = useState<'loading'|'ready'|'error'>('loading')
   useEffect(() => {
     let cancelled = false
-    void (async () => {
-      const identity = await supabase.auth.getUser()
-      if (identity.error || identity.data.user?.id !== owner) throw Error('Account changed')
-      const result = await supabase.from('ecg_competency_attempts').select('event_id,created_at,evidence,decision_receipt').eq('user_id', owner).eq('case_id', 'ecg-governed-case-001').order('created_at', { ascending: false }).limit(20)
-      if (result.error) throw Error('History unavailable')
-      const current = await supabase.auth.getUser()
-      if (current.error || current.data.user?.id !== owner) throw Error('Account changed')
-      const items = result.data.flatMap(row => {
-        const score = row.evidence?.result?.overallScore
-        return row.decision_receipt?.decision === 'LEARNER_ELIGIBLE' && typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 1
-          ? [{id:row.event_id,at:row.created_at,score}] : []
-      })
+    loadEcgSavedAnswers(owner).then(items => {
       if (!cancelled) { setRows(items); setState('ready') }
-    })().catch(() => { if (!cancelled) setState('error') })
+    }).catch(() => { if (!cancelled) setState('error') })
     return () => { cancelled = true }
   }, [owner, refresh])
   return <section aria-labelledby="saved-ecg-title">
