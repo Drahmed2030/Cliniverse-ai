@@ -77,7 +77,8 @@ test('primary navigation is unchanged: Today, Learn, Progress, Explore, Me — n
 })
 
 test('Today styling uses existing tokens only and stays scoped to the Today surface', () => {
-  const block = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Today — Golden Surface'))))
+  // The Today block runs until the Learn block begins (Learn has its own scoping test).
+  const block = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Today — Golden Surface')), css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing'))))
   assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b/)
   assert.doesNotMatch(block, /\brgba?\(/)
   const rules = [...block.matchAll(/^([^\s@/}][^{]*)\{/gm)].map(match => match[1].trim())

@@ -77,7 +77,11 @@ for (const scenario of scenarios) {
 
     await nav.getByRole('button', { name: 'Learn' }).click()
     await expect(page.locator('[data-commercial-learn-surface]')).toBeVisible()
-    await expect(page.getByRole('button', { name: /^Ward Simulation/ })).toBeVisible()
+    // Learn is the three-track practice landing (ECG, Echo, Ward), not the legacy workspace switcher.
+    const tracks = page.getByRole('list', { name: 'Practice tracks' })
+    await expect(tracks.getByRole('link', { name: /INTERPRET.*ECG/s })).toBeVisible()
+    await expect(tracks.getByRole('link', { name: /OBSERVE.*Echo/s })).toBeVisible()
+    await expect(tracks.getByRole('button', { name: /DECIDE.*Ward/s })).toBeVisible()
 
     const accessibility = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])

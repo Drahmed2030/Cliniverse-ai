@@ -30,6 +30,8 @@ test('reviewer can study related cases from Ward and Atlas without changing acco
     return route.abort()
   })
   await page.goto('/?view=learn')
+  // Learn opens on the practice-track landing; the handover practice lives in the Ward track.
+  await page.getByRole('button', { name: /DECIDE.*Ward/s }).click()
   const section = page.getByRole('region', { name: 'Make your handover clear.' })
   await expect(section).toBeVisible({ timeout: 30_000 })
   await section.getByText('ECG: report versus tracing', { exact: true }).click()

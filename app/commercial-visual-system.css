@@ -450,3 +450,73 @@
   [data-commercial-surface="today"] .cv-today-cta,
   [data-commercial-surface="today"] [data-learning-compact] button { width: auto; min-width: 220px; }
 }
+
+/* Learn — practice-track landing (Implementation Contract v2). Composition only: three
+ * tracks (ECG, Echo, Ward), each one restrained surface with a semantic verb, a title, one
+ * sentence and a directional affordance. Same semantic tokens as Today; every rule is
+ * prefixed with the surface attribute. The support line lives in the shared header. */
+[data-commercial-surface="learn"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-3);
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+[data-commercial-surface="learn"] > li { min-width: 0; }
+[data-commercial-surface="learn"] .cv-learn-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--cv-space-4);
+  width: 100%;
+  min-height: 96px;
+  padding: var(--cv-space-5);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+  text-align: left;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: background-color var(--cv-motion-fast) ease, border-color var(--cv-motion-fast) ease;
+}
+[data-commercial-surface="learn"] .cv-learn-track:hover {
+  background: var(--cv-surface-soft);
+  border-color: color-mix(in srgb, var(--track-accent) 45%, var(--cv-border));
+}
+[data-commercial-surface="learn"] .cv-learn-track > span:first-child { display: block; min-width: 0; }
+[data-commercial-surface="learn"] .cv-learn-track-verb,
+[data-commercial-surface="learn"] .cv-learn-track-title,
+[data-commercial-surface="learn"] .cv-learn-track-text { display: block; }
+[data-commercial-surface="learn"] .cv-learn-track-verb {
+  /* Small text mixes toward the text token to stay AA on the elevated surface. */
+  color: color-mix(in srgb, var(--track-accent) 70%, var(--cv-text));
+  font-size: var(--cv-text-caption);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+[data-commercial-surface="learn"] .cv-learn-track-title {
+  margin-top: 2px;
+  font-size: var(--cv-text-title);
+  font-weight: 800;
+  line-height: 1.2;
+}
+[data-commercial-surface="learn"] .cv-learn-track-text {
+  max-width: 52ch;
+  margin-top: var(--cv-space-2);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-body);
+  line-height: 1.5;
+}
+[data-commercial-surface="learn"] .cv-learn-track-go {
+  color: color-mix(in srgb, var(--track-accent) 70%, var(--cv-text));
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+@media (min-width: 700px) {
+  [data-commercial-surface="learn"] .cv-learn-track { padding: var(--cv-space-6); }
+}

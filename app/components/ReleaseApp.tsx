@@ -10,6 +10,7 @@ import ReleaseNav, { type ReleaseTab } from './ReleaseNav'
 import MeHub from './release/MeHub'
 import { useAppearance } from './release/AppearanceSettings'
 import AtlasReleaseCatalog from './release/AtlasReleaseCatalog'
+import LearnTracks from './release/LearnTracks'
 import type { AtlasDestination } from './release/AtlasReleaseCatalog'
 import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
@@ -108,7 +109,8 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
     return view === 'learn' || view === 'progress' ? view : 'today'
   })
   const [cardiologyModule, setCardiologyModule] = useState<'overview' | 'pathway'>('overview')
-  const [careWorkspace, setCareWorkspace] = useState<CareWorkspace>('ward')
+  // null = the Learn practice-track landing; a value = an explicit workspace (deep links from Explore, Today, Progress, Me).
+  const [careWorkspace, setCareWorkspace] = useState<CareWorkspace | null>(null)
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall, canAccessPremium } = useCliniverseSubscription()
 
@@ -123,6 +125,8 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
   }, [])
 
   const openCodeLab = () => { setCareWorkspace('codelab'); setTab('learn') }
+  // Plain navigation to Learn always shows the landing; explicit workspace deep links set careWorkspace first.
+  const goTab = (next: ReleaseTab) => { if (next === 'learn') setCareWorkspace(null); setTab(next) }
 
   const handleAtlasNavigate = (destination: AtlasDestination) => {
     if (destination.workspace) { setCareWorkspace(destination.workspace); setCardiologyModule('overview') }
@@ -142,7 +146,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
         isolation: 'isolate',
       }}
     >
-      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} accountInitial={accountInitial} onOpenAccount={() => setTab('me')} />
+      <ReleaseHeader active={tab} nativeTopPadding={nativeHeaderTopPadding} accountInitial={accountInitial} learnLanding={careWorkspace === null} onOpenAccount={() => setTab('me')} />
       <div
         data-commercial-content
         style={{
@@ -155,7 +159,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
         }}
       >
         {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!canAccessPremium) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
-        {tab === 'today' && <TodaySurface onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
+        {tab === 'today' && <TodaySurface onNavigate={goTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
             {showEcgReview && <section aria-labelledby="ecg-review-entry-title" style={{ padding: 20, marginBottom: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
@@ -165,22 +169,35 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
               <Link href="/labs/ecg-account-review" style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, padding: '8px 16px', borderRadius: 12, border: `1px solid ${C.border}`, background: C.elevated, color: C.text }}>Open ECG practice →</Link>
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
-            <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} caseLibraryPreview={showEcgReview && caseLibraryPreview} />
+            {careWorkspace === null ? (
+              <LearnTracks onOpenWard={() => setCareWorkspace('ward')} />
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setCareWorkspace(null)}
+                  style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, marginBottom: 8, padding: '0 4px', border: 0, background: 'transparent', color: C.sub, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  ← Practice tracks
+                </button>
+                <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} caseLibraryPreview={showEcgReview && caseLibraryPreview} />
+              </>
+            )}
           </ErrorBoundary>
         )}
-        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={setTab} onOpenCodeLab={openCodeLab} />}
+        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={goTab} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
         {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
-      <ReleaseNav active={tab} onChange={setTab} />
+      <ReleaseNav active={tab} onChange={goTab} />
     </main>
   )
 }
 
-function ReleaseHeader({ active, nativeTopPadding, accountInitial, onOpenAccount }: { active: ReleaseTab; nativeTopPadding: number | null; accountInitial: string | null; onOpenAccount: () => void }) {
+function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding, onOpenAccount }: { active: ReleaseTab; nativeTopPadding: number | null; accountInitial: string | null; learnLanding: boolean; onOpenAccount: () => void }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     today: { title: 'Today', sub: '' },
-    learn: { title: 'Learn', sub: 'Governed cardiology learning and simulation' },
+    learn: { title: 'Learn', sub: learnLanding ? 'Choose a practice track. Your progress stays connected.' : 'Governed cardiology learning and simulation' },
     progress: { title: 'Progress', sub: 'Competency, review cadence and learning history' },
     explore: { title: 'Explore', sub: 'Curated learning tools and approved experiences' },
     me: { title: 'Me', sub: 'Account, plan, privacy and settings' },
