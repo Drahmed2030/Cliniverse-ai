@@ -1,0 +1,150 @@
+/* ECG v2 learner workspace. Composition only: media first, one column on phones and tablets in portrait, and
+ * media plus a supporting column from 1000px. Nothing is ever positioned over the tracing. Semantic tokens only;
+ * no colour, glow, shadow, gradient or motion carries meaning. State is written out in text, weight and border width.
+ * Every rule is scoped to the workspace attribute. The shell rule that pads for the side rail is out-ranked here. */
+[data-ecg-workspace][data-commercial-shell] {
+  /* The root layout paints a fixed, full-screen logo watermark at z-index 0. A stacking context of our own keeps that
+   * mark BEHIND the workspace, exactly as the shell does, so nothing is ever painted over the tracing. */
+  isolation: isolate;
+  box-sizing: border-box;
+  min-height: 100dvh;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+[data-ecg-workspace] .ecg-frame {
+  display: grid;
+  gap: var(--cv-space-6);
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  min-width: 0;
+}
+[data-ecg-workspace] .ecg-frame > * { min-width: 0; }
+
+[data-ecg-workspace] .ecg-top { display: flex; align-items: center; justify-content: space-between; gap: var(--cv-space-3); min-height: 44px; }
+[data-ecg-workspace] .ecg-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--cv-text);
+  font-size: var(--cv-text-body);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+[data-ecg-workspace] .ecg-chip {
+  min-width: 0;
+  padding: var(--cv-space-1) var(--cv-space-3);
+  border: 1px solid var(--cv-border);
+  border-radius: 999px;
+  color: var(--cv-text);
+  font-size: var(--cv-text-caption);
+  font-weight: 700;
+  text-align: right;
+}
+
+[data-ecg-workspace] .ecg-eyebrow { margin: 0 0 var(--cv-space-3); color: var(--cv-teal); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.1em; }
+[data-ecg-workspace] .ecg-title { margin: 0; font-size: var(--cv-text-title); font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; overflow-wrap: break-word; }
+[data-ecg-workspace] .ecg-title:focus { outline: none; }
+[data-ecg-workspace] .ecg-lead { max-width: 60ch; margin: var(--cv-space-3) 0 0; color: var(--cv-text-secondary); font-size: var(--cv-text-body); line-height: 1.55; }
+
+[data-ecg-workspace] .ecg-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cv-space-6); align-items: start; }
+[data-ecg-workspace] .ecg-side { display: grid; gap: var(--cv-space-5); min-width: 0; }
+
+/* The media pane owns its whole box: caption and notes sit below the tracing, never on it. */
+[data-ecg-workspace] .ecg-media { border: 1px solid var(--cv-border); border-radius: var(--cv-radius-xl); background: var(--cv-surface-elevated); overflow: hidden; }
+[data-ecg-workspace] .ecg-tracing { display: block; width: 100%; height: clamp(320px, 62vh, 760px); border: 0; background: var(--cv-surface-elevated); }
+[data-ecg-workspace] .ecg-tracing-fallback { margin: 0; padding: var(--cv-space-5); color: var(--cv-text-secondary); font-size: var(--cv-text-body); }
+[data-ecg-workspace] .ecg-caption { margin: 0; padding: var(--cv-space-4) var(--cv-space-5); border-top: 1px solid var(--cv-border); color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+[data-ecg-workspace] .ecg-viewer-link { display: flex; align-items: center; min-height: 48px; padding: 0 var(--cv-space-5); border-top: 1px solid var(--cv-border); color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-size: var(--cv-text-support); font-weight: 700; }
+[data-ecg-workspace] .ecg-media-state { display: grid; gap: var(--cv-space-3); align-content: center; min-height: 220px; padding: var(--cv-space-6); }
+[data-ecg-workspace] .ecg-media-state h2 { margin: 0; font-size: var(--cv-text-section); font-weight: 800; line-height: 1.25; }
+[data-ecg-workspace] .ecg-media-state p { max-width: 60ch; margin: 0; color: var(--cv-text-secondary); font-size: var(--cv-text-body); line-height: 1.55; }
+
+[data-ecg-workspace] .ecg-note { margin: 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
+
+/* Stage rail: text and weight, not colour. The current stage is announced by aria-current. */
+[data-ecg-workspace] .ecg-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cv-space-2); margin: 0; padding: 0; list-style: none; }
+[data-ecg-workspace] .ecg-stages > li {
+  padding: var(--cv-space-3) 0 var(--cv-space-2);
+  border-bottom: 1px solid var(--cv-border);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+[data-ecg-workspace] .ecg-stages > li[aria-current="step"] { border-bottom-width: 3px; border-bottom-color: var(--cv-teal); color: var(--cv-text); font-weight: 800; }
+
+[data-ecg-workspace] .ecg-panel { display: grid; gap: var(--cv-space-3); }
+[data-ecg-workspace] .ecg-panel h2 { margin: 0; font-size: var(--cv-text-section); font-weight: 800; line-height: 1.25; }
+[data-ecg-workspace] .ecg-panel p { margin: 0; }
+
+[data-ecg-workspace] .ecg-question { margin: 0; padding: 0; border: 0; min-width: 0; }
+[data-ecg-workspace] .ecg-question > legend { padding: 0; margin-bottom: var(--cv-space-3); font-size: var(--cv-text-body); font-weight: 800; }
+[data-ecg-workspace] .ecg-option {
+  display: flex;
+  align-items: center;
+  gap: var(--cv-space-3);
+  min-height: 48px;
+  margin-bottom: var(--cv-space-2);
+  padding: var(--cv-space-2) var(--cv-space-4);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+  font-size: var(--cv-text-body);
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
+[data-ecg-workspace] .ecg-option input { width: 1.125rem; height: 1.125rem; margin: 0; flex: none; accent-color: var(--cv-teal); }
+[data-ecg-workspace] .ecg-option:has(input:checked) { border-width: 2px; border-color: var(--cv-teal); font-weight: 800; }
+[data-ecg-workspace] .ecg-option:has(input:disabled) { cursor: default; }
+
+[data-ecg-workspace] .ecg-cta {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px var(--cv-space-5);
+  border: 1px solid transparent;
+  border-radius: var(--cv-radius-md);
+  background: var(--cv-teal);
+  color: var(--cv-learning-on-teal);
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+[data-ecg-workspace] .ecg-cta:disabled { cursor: default; opacity: 0.6; }
+
+[data-ecg-workspace] .ecg-result { padding: var(--cv-space-4) var(--cv-space-5); border: 1px solid var(--cv-border); border-left: 4px solid var(--cv-teal); border-radius: var(--cv-radius-sm); background: var(--cv-surface-elevated); }
+[data-ecg-workspace] .ecg-result p + p { margin-top: var(--cv-space-2); }
+
+/* Provenance is disclosed on demand and never competes with the task. Blue marks evidence. */
+[data-ecg-workspace] .ecg-evidence { border-top: 1px solid var(--cv-border); }
+[data-ecg-workspace] .ecg-evidence > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--cv-space-4); min-height: 48px; cursor: pointer; list-style: none; color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-size: var(--cv-text-body); font-weight: 800; }
+[data-ecg-workspace] .ecg-evidence > summary::-webkit-details-marker { display: none; }
+[data-ecg-workspace] .ecg-evidence > summary::after { content: "+"; font-size: 1.25rem; }
+[data-ecg-workspace] .ecg-evidence[open] > summary::after { content: "\2212"; }
+[data-ecg-workspace] .ecg-evidence > summary:focus-visible { outline-offset: -3px; }
+[data-ecg-workspace] .ecg-evidence-body { display: grid; gap: var(--cv-space-4); padding-bottom: var(--cv-space-4); }
+[data-ecg-workspace] .ecg-evidence-body h3 { margin: 0; font-size: var(--cv-text-support); font-weight: 800; letter-spacing: 0.04em; }
+[data-ecg-workspace] .ecg-evidence-body section > * + * { margin-top: var(--cv-space-2); }
+[data-ecg-workspace] .ecg-evidence-body dl { display: grid; gap: var(--cv-space-2); margin: 0; }
+[data-ecg-workspace] .ecg-evidence-body dt { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 700; }
+[data-ecg-workspace] .ecg-evidence-body dd { margin: 0; font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
+[data-ecg-workspace] .ecg-evidence-body ol,
+[data-ecg-workspace] .ecg-evidence-body ul { display: grid; gap: var(--cv-space-2); margin: 0; padding-left: var(--cv-space-5); font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
+[data-ecg-workspace] .ecg-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--cv-text-caption); }
+
+@media (min-width: 700px) {
+  [data-ecg-workspace] .ecg-frame { gap: var(--cv-space-7); }
+  [data-ecg-workspace] .ecg-title { font-size: var(--cv-text-display); }
+}
+
+/* Landscape and desktop: the tracing stays dominant on the left; context, question and evidence form the right rail. */
+@media (min-width: 1000px) {
+  [data-ecg-workspace] .ecg-grid { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); }
+  [data-ecg-workspace] .ecg-tracing { height: clamp(420px, 72vh, 820px); }
+}

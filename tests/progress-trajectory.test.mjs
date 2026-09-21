@@ -163,7 +163,7 @@ test('Progress shows ECG, Echo and Ward as the canonical tracks, with the same d
   const ui = Object.fromEntries([...component.matchAll(/(ecg|echo|ward): \{ accent: '([^']+)', href: (?:'([^']+)'|null) \}/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
   assert.deepEqual(Object.keys(ui), ['ecg', 'echo', 'ward'])
   assert.deepEqual(ui, learnEntries)
-  assert.deepEqual(ui.ecg, { accent: 'var(--cv-teal)', href: '/labs/ecg-challenge' })
+  assert.deepEqual(ui.ecg, { accent: 'var(--cv-teal)', href: '/learn/ecg' })
   assert.deepEqual(ui.echo, { accent: 'var(--cv-violet)', href: '/labs/echo-preview' })
   assert.deepEqual(ui.ward, { accent: 'var(--cv-blue)', href: null })
   for (const legacy of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(legacy), `${legacy} is not a Progress track`)

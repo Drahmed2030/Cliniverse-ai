@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { CSSProperties } from 'react'
 
 // Learn is PRACTICE: three tracks, each opening an existing learner-facing destination.
-// ECG and Echo use the same free entries Explore already lists (no new route, no new engine).
+// ECG opens the governed ECG workspace (/learn/ecg); Echo opens its existing learner destination. No new engine.
 // Ward opens the existing Ward workspace in place. No resume/review metadata is shown because
 // no per-track real state is available here; nothing user-specific is invented.
 const TRACKS = [
@@ -14,7 +14,7 @@ const TRACKS = [
     title: 'ECG',
     description: 'Read the full tracing, commit an interpretation, then review the reasoning.',
     accent: 'var(--cv-teal)',
-    href: '/labs/ecg-challenge',
+    href: '/learn/ecg',
   },
   {
     id: 'echo',

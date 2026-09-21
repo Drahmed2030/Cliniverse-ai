@@ -20,7 +20,7 @@ import {
 
 // Same destinations the Learn landing uses for these tracks (guarded by tests/progress-trajectory.test.mjs).
 const TRACK_UI: Record<TrackId, { accent: string; href: string | null }> = {
-  ecg: { accent: 'var(--cv-teal)', href: '/labs/ecg-challenge' },
+  ecg: { accent: 'var(--cv-teal)', href: '/learn/ecg' },
   echo: { accent: 'var(--cv-violet)', href: '/labs/echo-preview' },
   ward: { accent: 'var(--cv-blue)', href: null },
 }
