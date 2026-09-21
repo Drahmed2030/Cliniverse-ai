@@ -19,14 +19,14 @@ interface RelatedEvidencePanelProps {
 }
 
 const T = {
-  white: "#111827",
-  text: "#F8FAFC",
-  sub: "#CBD5E1",
-  muted: "#94A3B8",
-  border: "rgba(148,163,184,0.20)",
-  teal: "#2DD4BF",
-  blue: "#60A5FA",
-  red: "#F87171",
+  white: "var(--ward-surface, #111827)",
+  text: "var(--ward-text, #F8FAFC)",
+  sub: "var(--ward-text-secondary, #CBD5E1)",
+  muted: "var(--ward-text-secondary, #94A3B8)",
+  border: "var(--ward-border, rgba(148,163,184,0.20))",
+  teal: "var(--ward-accent, #2DD4BF)",
+  blue: "var(--cv-blue, #60A5FA)",
+  red: "var(--ward-danger, #F87171)",
 };
 
 export default function RelatedEvidencePanel({
@@ -72,6 +72,8 @@ export default function RelatedEvidencePanel({
         }}
         style={{
           width: "100%",
+          minHeight: 48,
+          color: T.text,
           background: T.white,
           border: "1px solid " + T.border,
           borderRadius: 14,
@@ -82,16 +84,14 @@ export default function RelatedEvidencePanel({
           cursor: "pointer",
           marginBottom: 4,
           textAlign: "left",
-          opacity: isPro ? 1 : 0.78,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 18 }}>📚</span>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>
               Related Evidence
             </div>
-            <div style={{ fontSize: 11, color: T.muted }}>
+            <div style={{ fontSize: 12, color: T.muted }}>
               {isPro ? "PubMed · Guidelines" : "Available with Cliniverse PRO"}
             </div>
           </div>
@@ -99,10 +99,10 @@ export default function RelatedEvidencePanel({
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {!isPro && (
             <span style={{
-              fontSize: 9,
+              fontSize: 11,
               fontWeight: 800,
-              background: T.blue,
-              color: "#fff",
+              border: "1px solid " + T.blue,
+              color: T.text,
               borderRadius: 4,
               padding: "2px 6px",
             }}>
@@ -122,26 +122,33 @@ export default function RelatedEvidencePanel({
       borderRadius: 14,
       overflow: "hidden",
     }}>
-      <div
+      <button
+        type="button"
+        aria-expanded="true"
+        onClick={() => setExpanded(false)}
         style={{
+          width: "100%",
+          minHeight: 48,
           padding: "14px 16px",
+          border: 0,
           borderBottom: "1px solid " + T.border,
+          background: "transparent",
+          color: T.text,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          textAlign: "left",
           cursor: "pointer",
         }}
-        onClick={() => setExpanded(false)}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 16 }}>📚</span>
-          <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>Related Evidence</div>
-          <span style={{ fontSize: 10, fontWeight: 700, color: T.teal, border: "1px solid " + T.teal, borderRadius: 6, padding: "1px 6px" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 14, fontWeight: 700, color: T.text }}>Related Evidence</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: T.teal, border: "1px solid " + T.teal, borderRadius: 6, padding: "1px 6px" }}>
             PubMed
           </span>
-        </div>
-        <span style={{ color: T.muted, fontSize: 13 }}>↑ Close</span>
-      </div>
+        </span>
+        <span style={{ color: T.muted, fontSize: 13 }}>Close</span>
+      </button>
 
       <div style={{ padding: "12px 14px" }}>
         {loading && (
@@ -154,7 +161,7 @@ export default function RelatedEvidencePanel({
         {error && (
           <div style={{ fontSize: 12, color: T.red, padding: "12px 0" }}>
             {error}
-            <button type="button" onClick={() => void fetchEvidence()} style={{ marginLeft: 10, background: "none", border: "1px solid " + T.red, borderRadius: 6, color: T.red, fontSize: 11, padding: "2px 8px", cursor: "pointer" }}>
+            <button type="button" onClick={() => void fetchEvidence()} style={{ marginLeft: 10, background: "none", border: "1px solid " + T.red, borderRadius: 6, color: T.red, fontSize: 12, minHeight: 44, padding: "2px 12px", cursor: "pointer" }}>
               Retry
             </button>
           </div>
@@ -169,14 +176,14 @@ export default function RelatedEvidencePanel({
         {!loading && items.map((item) => (
           <div key={item.pmid} style={{ borderBottom: "1px solid " + T.border, paddingBottom: 12, marginBottom: 12 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-              <span style={{ fontSize: 9, fontWeight: 800, color: item.relevance === "High" ? T.teal : T.sub, border: "1px solid " + (item.relevance === "High" ? T.teal : T.border), borderRadius: 4, padding: "1px 6px" }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: item.relevance === "High" ? T.teal : T.sub, border: "1px solid " + (item.relevance === "High" ? T.teal : T.border), borderRadius: 4, padding: "1px 6px" }}>
                 {item.relevance} relevance
               </span>
-              <span style={{ fontSize: 10, color: T.muted }}>{item.year}</span>
+              <span style={{ fontSize: 12, color: T.muted }}>{item.year}</span>
             </div>
             <div style={{ fontSize: 13, fontWeight: 600, color: T.text, lineHeight: 1.4, marginBottom: 4 }}>{item.title}</div>
             <div style={{ fontSize: 11, color: T.muted, marginBottom: 8 }}>{item.authors} · {item.journal}</div>
-            <a href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600, color: T.teal, textDecoration: "none" }}>
+            <a href={`https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", minHeight: 44, fontSize: 13, fontWeight: 600, color: T.teal, textDecoration: "underline" }}>
               View on PubMed →
             </a>
           </div>

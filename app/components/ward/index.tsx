@@ -7,6 +7,7 @@ import NexusCardiovascularSlice from '../nexus/NexusCardiovascularSlice'
 import { useCliniverseSubscription } from '../release/SubscriptionPurchaseProvider'
 import { MOCK_PATIENTS } from '../../lib/ward'
 import CardiologyOperations from './cardiology'
+import './ward-v2.css'
 import PatientJourney from './PatientJourney'
 import WardHome from './WardHome'
 const WardHandoverSession = dynamic(() => import('./WardHandoverSession'), { loading: () => <p role="status">Loading handover practice…</p> })

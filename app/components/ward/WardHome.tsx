@@ -3,35 +3,22 @@
 import { useState } from 'react'
 import { DEPARTMENTS, MOCK_PATIENTS } from '../../lib/ward'
 
-const T = {
-  teal: 'var(--cv-teal, #2DD4BF)',
-  tealD: '#0F766E',
-  bg: 'var(--cv-bg, #080C16)',
-  white: 'var(--cv-surface, #111827)',
-  elevated: 'var(--cv-surface-elevated, #172033)',
-  text: 'var(--cv-text, #F8FAFC)',
-  sub: 'var(--cv-text-secondary, #CBD5E1)',
-  muted: 'var(--cv-text-secondary, #94A3B8)',
-  border: 'var(--cv-border, rgba(148,163,184,0.20))',
-  red: '#F87171',
-  amber: '#FBBF24',
-  green: '#34D399',
-}
+// Ward v2 case list. Styling lives in ward-v2.css (scoped to [data-ward-v2], semantic tokens only; the fallbacks below keep
+// the original dark release identity if a token is absent). The list shows every non-discharged simulated case: all seven
+// are catalogued visible and ready, and "assigned to me" has no meaning for a learner working through the fictional set.
+// Access is unchanged: the first case is free and every other case keeps its PRO requirement.
+const DARK_RELEASE_BG = 'var(--cv-bg, #080C16)'
 
-const PRIORITY_COLOR = {
-  critical: { bg: 'rgba(239,68,68,0.10)', color: '#EF4444', label: 'CRITICAL' },
-  urgent: { bg: 'rgba(245,158,11,0.10)', color: '#F59E0B', label: 'URGENT' },
-  stable: { bg: 'rgba(16,185,129,0.10)', color: '#10B981', label: 'STABLE' },
-}
+const PRIORITY_LABEL = { critical: 'Critical', urgent: 'Urgent', stable: 'Stable' }
 
 const STATUS_LABEL: Record<string, string> = {
   active: 'Active',
-  awaiting_orders: 'Awaiting Orders',
-  awaiting_consult: 'Awaiting Consult',
-  ready_for_discharge: 'Ready — Discharge',
-  in_treatment: 'In Treatment',
-  workup_pending: 'Workup Pending',
-  decision_needed: 'Decision Needed',
+  awaiting_orders: 'Awaiting orders',
+  awaiting_consult: 'Awaiting consult',
+  ready_for_discharge: 'Ready for discharge',
+  in_treatment: 'In treatment',
+  workup_pending: 'Workup pending',
+  decision_needed: 'Decision needed',
   discharged: 'Discharged',
 }
 
@@ -47,106 +34,80 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
   const visiblePatients = MOCK_PATIENTS.filter(
     patient => selectedDept === 'all' || patient.department === selectedDept,
   )
-  const assigned = visiblePatients.filter(patient => patient.assignedToMe && patient.status !== 'discharged')
+  const cases = visiblePatients.filter(patient => patient.status !== 'discharged')
 
   return (
-    <div data-commercial-ward-home style={{ overflowWrap: 'anywhere', minWidth: 0, background: T.bg, minHeight: 'calc(100dvh - 190px)', paddingBottom: 88, border: '1px solid ' + T.border, borderRadius: 24, overflow: 'hidden', boxShadow: 'var(--cv-shadow, 0 18px 46px rgba(0,0,0,0.28))' }}>
-      <div style={{ background: 'var(--cv-surface-elevated, #172033)', padding: '30px 20px 24px', borderBottom: '1px solid ' + T.border }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: T.sub, letterSpacing: 1, marginBottom: 4 }}>
-              CLINIVERSE AI · APPLY YOUR LEARNING
-            </div>
-            <div style={{ fontSize: 26, fontWeight: 800, color: T.text, lineHeight: 1.1 }}>
-              Ward Simulation
-            </div>
-            <div style={{ fontSize: 12, color: T.sub, marginTop: 6 }}>
-              Simulated cases · Human review · No real patient data
-            </div>
-          </div>
-          <div style={{ background: 'rgba(45,212,191,0.10)', border: '1px solid rgba(45,212,191,0.34)', borderRadius: 20, padding: '5px 10px' }}>
-            <span style={{ fontSize: 10, fontWeight: 800, color: T.text, letterSpacing: 0.8 }}>SIMULATION</span>
-          </div>
+    <div data-commercial-ward-home data-ward-v2 className="ward-home" style={{ background: DARK_RELEASE_BG }}>
+      <header>
+        <p className="ward-eyebrow">CLINIVERSE AI · APPLY YOUR LEARNING</p>
+        <h2 className="ward-title">Ward Simulation</h2>
+        <p className="ward-lead">Fictional cases · Human review · No real patient data</p>
+      </header>
+
+      <details className="ward-goal">
+        <summary id="ward-learning-goal">Turn a case into a clear handover</summary>
+        <ol>
+          <li>Review the fictional record and distinguish known facts from missing information.</li>
+          <li>Practise a decision, then review the explanation and any unsupported assumptions.</li>
+          <li>Prepare the handover and check the save confirmation before leaving.</li>
+        </ol>
+        <p>Start with the first free case. The other case entries retain their PRO access requirements.</p>
+      </details>
+
+      <section aria-labelledby="department-heading">
+        <div id="department-heading" className="ward-filter-label">DEPARTMENT</div>
+        <div className="ward-filter">
+          {[{ id: 'all', label: 'All' }, ...DEPARTMENTS].map(department => (
+            <button
+              key={department.id}
+              type="button"
+              className="ward-chip"
+              aria-pressed={selectedDept === department.id}
+              onClick={() => setSelectedDept(department.id)}
+            >
+              {department.label}
+            </button>
+          ))}
         </div>
+      </section>
 
-        <section aria-labelledby="ward-learning-goal" style={{ marginTop: 20, color: T.text, lineHeight: 1.65 }}>
-          <h2 id="ward-learning-goal" style={{ fontSize: '1.1rem', margin: '0 0 8px' }}>Turn a case into a clear handover</h2>
-          <ol style={{ paddingInlineStart: 24, margin: 0 }}>
-            <li>Review the fictional record and distinguish known facts from missing information.</li>
-            <li>Practise a decision, then review the explanation and any unsupported assumptions.</li>
-            <li>Prepare the handover and check the save confirmation before leaving.</li>
-          </ol>
-          <p style={{ marginBottom: 0 }}>Start with the first free case. The other case entries retain their PRO access requirements.</p>
-        </section>
-      </div>
-
-      <div style={{ padding: '16px 16px 0' }}>
-        <section style={{ marginBottom: 20 }} aria-labelledby="department-heading">
-          <div id="department-heading" style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
-            DEPARTMENTS
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, paddingBottom: 4 }}>
-            {[{ id: 'all', label: 'All', icon: '🏥' }, ...DEPARTMENTS].map(department => {
-              const active = selectedDept === department.id
+      <section aria-labelledby="assigned-heading">
+        <div id="assigned-heading" className="ward-cases-label">{'SIMULATED CASES (' + cases.length + ')'}</div>
+        {cases.length > 0 ? (
+          <ul className="ward-cases">
+            {cases.map(patient => {
+              const caseUnlocked = isPro || patient.id === 'w1'
               return (
-                <button
-                  key={department.id}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setSelectedDept(department.id)}
-                  style={{ background: active ? T.tealD : T.elevated, border: '1px solid ' + (active ? T.teal : T.border), minHeight: 44, borderRadius: 20, padding: '7px 14px', fontSize: 12, fontWeight: 700, color: active ? '#fff' : T.sub, cursor: 'pointer', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5 }}
-                >
-                  <span aria-hidden="true">{department.icon}</span> {department.label}
-                </button>
+                <li key={patient.id}>
+                  <button
+                    type="button"
+                    className="ward-case"
+                    data-priority={patient.priority}
+                    aria-label={caseUnlocked
+                      ? `Open ${patient.name} simulated case`
+                      : `Upgrade to Cliniverse PRO to open ${patient.name} simulated case`}
+                    onClick={() => {
+                      if (caseUnlocked) onSelectPatient?.(patient.id)
+                      else onUpgrade?.()
+                    }}
+                  >
+                    <span className="ward-case-name">{patient.name}</span>
+                    <span className="ward-case-dx">{patient.diagnosis}</span>
+                    <span className="ward-case-meta">{'Bed ' + patient.bed + ' · ' + patient.department.toUpperCase()}</span>
+                    <span className="ward-case-flags">
+                      <span className="ward-case-priority">{PRIORITY_LABEL[patient.priority]}</span>
+                      <span>{STATUS_LABEL[patient.status] || patient.status}</span>
+                      {!caseUnlocked ? <span className="ward-case-pro">PRO</span> : null}
+                    </span>
+                  </button>
+                </li>
               )
             })}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 20 }} aria-labelledby="assigned-heading">
-          <div id="assigned-heading" style={{ fontSize: 12, fontWeight: 700, color: T.sub, letterSpacing: 0.5, marginBottom: 10 }}>
-            {'MY ASSIGNED SIMULATED CASES (' + assigned.length + ')'}
-          </div>
-          {assigned.map(patient => {
-            const priority = PRIORITY_COLOR[patient.priority]
-            const caseUnlocked = isPro || patient.id === 'w1'
-            return (
-              <button
-                key={patient.id}
-                type="button"
-                aria-label={caseUnlocked
-                  ? `Open ${patient.name} simulated case`
-                  : `Upgrade to Cliniverse PRO to open ${patient.name} simulated case`}
-                onClick={() => {
-                  if (caseUnlocked) onSelectPatient?.(patient.id)
-                  else onUpgrade?.()
-                }}
-                style={{ width: '100%', textAlign: 'left', background: T.white, borderRadius: 16, border: '1px solid ' + T.border, borderLeft: '4px solid ' + priority.color, padding: '14px 16px', marginBottom: 10, cursor: 'pointer', boxShadow: 'var(--cv-shadow, 0 10px 24px rgba(0,0,0,0.18))' }}
-              >
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{patient.name}</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    {!caseUnlocked ? <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 7px', borderRadius: 99, background: 'rgba(96,165,250,0.14)', color: T.text }}>PRO</span> : null}
-                    <span style={{ fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 99, background: priority.bg, color: T.text }}>{priority.label}</span>
-                  </div>
-                </div>
-                <div style={{ fontSize: 12, color: T.sub, marginBottom: 6 }}>{patient.diagnosis}</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 11, color: T.muted }}>{'Bed ' + patient.bed + ' · ' + patient.department.toUpperCase()}</span>
-                  <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 99, background: T.bg, border: '1px solid ' + T.border, color: T.sub }}>
-                    {STATUS_LABEL[patient.status] || patient.status}
-                  </span>
-                </div>
-              </button>
-            )
-          })}
-          {assigned.length === 0 && (
-            <div style={{ textAlign: 'center', padding: 24, color: T.muted, fontSize: 13, background: T.white, border: '1px dashed ' + T.border, borderRadius: 14 }}>
-              No assigned simulated cases in this department.
-            </div>
-          )}
-        </section>
-      </div>
+          </ul>
+        ) : (
+          <p className="ward-empty">No simulated cases in this department.</p>
+        )}
+      </section>
     </div>
   )
 }

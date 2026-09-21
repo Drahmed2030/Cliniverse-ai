@@ -27,17 +27,18 @@ import {
 } from "./dischargeWriter";
 
 const T = {
-  teal: "#2DD4BF",
-  tealD: "#0F766E",
-  bg: "#080C16",
-  white: "#111827",
-  text: "#F8FAFC",
-  sub: "#CBD5E1",
-  muted: "#94A3B8",
-  border: "rgba(148,163,184,0.20)",
-  red: "#F87171",
-  amber: "#FBBF24",
-  green: "#34D399",
+  teal: "var(--ward-accent, #2DD4BF)",
+  tealD: "var(--ward-action, #0F766E)",
+  bg: "var(--cv-bg, #080C16)",
+  white: "var(--ward-surface, #111827)",
+  text: "var(--ward-text, #F8FAFC)",
+  sub: "var(--ward-text-secondary, #CBD5E1)",
+  muted: "var(--ward-text-secondary, #94A3B8)",
+  border: "var(--ward-border, rgba(148,163,184,0.20))",
+  red: "var(--ward-danger, #F87171)",
+  amber: "var(--ward-caution, #FBBF24)",
+  green: "var(--ward-accent, #34D399)",
+  onAction: "var(--ward-on-action, #fff)",
 };
 
 type Tab = "track" | "soap" | "meds" | "report" | "discharge";
@@ -184,7 +185,7 @@ export default function ClinicalPanelV2({
         </div>
       ) : null}
 
-      <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 2 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, paddingBottom: 2 }}>
         {tabs.map(function (t) {
           const active = tab === t.id;
           return (
@@ -195,13 +196,14 @@ export default function ClinicalPanelV2({
               }}
               style={{
                 flexShrink: 0,
+                minHeight: 44,
                 borderRadius: 99,
-                padding: "7px 12px",
+                padding: "7px 14px",
                 fontSize: 12,
                 fontWeight: 700,
                 border: active ? "1px solid " + T.tealD : "1px solid " + T.border,
                 background: active ? T.tealD : T.white,
-                color: active ? "#fff" : T.sub,
+                color: active ? T.onAction : T.sub,
               }}
             >
               {t.label}
@@ -252,7 +254,7 @@ export default function ClinicalPanelV2({
               style={{
                 border: "none",
                 background: T.tealD,
-                color: "#fff",
+                color: T.onAction,
                 borderRadius: 12,
                 padding: "10px 12px",
                 fontSize: 12,
@@ -391,7 +393,7 @@ function SoapView(props: {
             borderRadius: 12,
             padding: "12px 14px",
             background: T.tealD,
-            color: "#fff",
+            color: T.onAction,
             fontWeight: 800,
             fontSize: 13,
           }}

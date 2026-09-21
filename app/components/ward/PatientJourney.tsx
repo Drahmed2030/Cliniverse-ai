@@ -1,66 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RelatedEvidencePanel from "./RelatedEvidencePanel";
 import ClinicalPanelV2 from "./ClinicalPanelV2";
 import { STEMI_CLINICAL_BUNDLE } from "./stemiClinicalSeed";
 import { getTemplate } from "../../lib/ward/templates";
 import {
+  PRIORITY_LABEL,
+  caseStatusLabel,
+  learnerDecisionStages,
+  orderedTimeline,
+} from "../../lib/ward/journeyPresentation";
+import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_TOP,
 } from "../../lib/nativeSafeArea";
 
-import type {
-  WardPatient,
-  WorkupItem,
-  OrderItem,
-  TimelineEvent,
-  Priority,
-  CaseStatus,
-} from "../../lib/ward/types";
+import type { WardPatient, WorkupItem, OrderItem } from "../../lib/ward/types";
 
-const T = {
-  teal: "#2DD4BF",
-  tealD: "#0F766E",
-  bg: "#080C16",
-  white: "#111827",
-  text: "#F8FAFC",
-  sub: "#CBD5E1",
-  muted: "#94A3B8",
-  border: "rgba(148,163,184,0.20)",
-  red: "#F87171",
-  amber: "#FBBF24",
-  green: "#34D399",
-  blue: "#60A5FA",
-};
+// Ward v2 patient journey. Presentation around the existing Ward engine: the patient record, the template decision points,
+// the local consult request, the evidence panel and the notes panel are all the existing ones, unchanged in behaviour.
+// Order: who the patient is and where the case stands, the record, one decision step at a time with the reason behind it,
+// orders and consult, evidence, then notes and discharge. Styling lives in ward-v2.css (scoped, semantic tokens).
 
-function priorityColor(p: Priority) {
-  if (p === "critical") return T.red;
-  if (p === "urgent") return T.amber;
-  return T.green;
-}
-
-function statusLabel(s: CaseStatus) {
-  const map: Record<string, string> = {
-    arrived: "Arrived",
-    triaged: "Triaged",
-    workup_pending: "Workup Pending",
-    decision_needed: "Decision Needed",
-    admitted: "Admitted",
-    in_treatment: "In Treatment",
-    awaiting_orders: "Awaiting Orders",
-    awaiting_consult: "Awaiting Consult",
-    ready_for_discharge: "Ready for Discharge",
-    discharged: "Discharged",
-    transferred: "Transferred",
-  };
-  return map[s] || s;
-}
-
-function workupStatusColor(status: WorkupItem["status"]) {
-  if (status === "ready") return T.teal;
-  if (status === "reviewed") return T.green;
-  return T.muted;
-}
+const WORKUP_STATUS: Record<WorkupItem["status"], string> = { pending: "Pending", ready: "Ready", reviewed: "Reviewed" };
+const ORDER_STATUS: Record<OrderItem["status"], string> = { pending: "Pending", done: "Done", cancelled: "Cancelled" };
 
 interface Props {
   patient: WardPatient;
@@ -79,288 +42,206 @@ export default function PatientJourney({
   isPro = false,
   onUpgrade,
 }: Props) {
-  const accent = priorityColor(patient.priority);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const [stageIndex, setStageIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
 
+  // Move focus to the case heading when the journey opens, so keyboard and screen-reader users start at the patient.
+  useEffect(() => { headingRef.current?.focus({ preventScroll: true }); }, []);
+
+  const stages = learnerDecisionStages(getTemplate(patient.templateId));
+  const stage = stages[Math.min(stageIndex, stages.length - 1)];
+  const chosen = stage ? stage.options.find(option => option.id === selectedOptions[stage.id]) : undefined;
+  const timeline = orderedTimeline(patient.timeline);
+
   return (
-    <div
+    <article
       data-patient-journey
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 80,
-        background: T.bg,
-        colorScheme: "dark",
-        overflowY: "auto",
-      }}
+      data-ward-v2
+      className="wj"
+      aria-labelledby="wj-name"
     >
       <div
-        style={{
-          width: "100%",
-          maxWidth: 600,
-          margin: "0 auto",
-          paddingBottom: `calc(100px + ${NATIVE_SAFE_AREA_BOTTOM})`,
-        }}
+        className="wj-frame"
+        style={{ paddingBottom: `calc(100px + ${NATIVE_SAFE_AREA_BOTTOM})` }}
       >
-        <div data-patient-journey-top style={{ display: "flex", justifyContent: "center", paddingTop: `calc(10px + ${NATIVE_SAFE_AREA_TOP})` }}>
-          <div
-            style={{
-              width: 40,
-              height: 4,
-              borderRadius: 99,
-              background: T.border,
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            padding: "12px 20px 16px",
-            borderBottom: "1px solid " + T.border,
-            background: T.white,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: 12,
-            }}
-          >
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: T.muted,
-                  letterSpacing: 0.6,
-                  marginBottom: 4,
-                }}
-              >
-                PATIENT JOURNEY
-              </div>
-              <div
-                style={{
-                  fontSize: 20,
-                  fontWeight: 800,
-                  color: T.text,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {patient.name}
-              </div>
-              <div style={{ fontSize: 13, color: T.sub, marginTop: 4 }}>
+        <header data-patient-journey-top className="wj-head" style={{ paddingTop: `calc(16px + ${NATIVE_SAFE_AREA_TOP})` }}>
+          <div className="wj-head-row">
+            <div style={{ minWidth: 0 }}>
+              <p className="wj-kicker">PATIENT JOURNEY</p>
+              <h1 id="wj-name" ref={headingRef} tabIndex={-1} className="wj-name">{patient.name}</h1>
+              <p className="wj-demo">
                 {patient.age}
                 {patient.sex} · {patient.department.toUpperCase()}
                 {patient.bed ? " · Bed " + patient.bed : ""}
-              </div>
-              <div style={{ fontSize: 13, color: T.text, marginTop: 6, fontWeight: 600 }}>
-                {patient.diagnosis}
-              </div>
+              </p>
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                border: "1px solid " + T.border,
-                background: T.white,
-                borderRadius: 99,
-                padding: "8px 12px",
-                fontSize: 12,
-                fontWeight: 700,
-                color: T.sub,
-              }}
-            >
-              Close
-            </button>
+            <button type="button" className="wj-close" onClick={onClose}>Close</button>
           </div>
-
-          <div style={{ display: "flex", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
-            <Chip label={patient.priority.toUpperCase()} color={accent} soft />
-            <Chip label={statusLabel(patient.status)} color={T.sub} soft />
-            {patient.assignedToMe ? <Chip label="Assigned to you" color={T.teal} soft /> : null}
+          <div>
+            <p className="wj-state">{patient.diagnosis}</p>
+            <p className="wj-state-meta">{caseStatusLabel(patient.status)} · {PRIORITY_LABEL[patient.priority]} priority</p>
           </div>
-        </div>
+        </header>
 
-        <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
-          <Section title="Timeline">
-            {patient.timeline && patient.timeline.length > 0 ? (
-              patient.timeline.map(function (ev: TimelineEvent) {
-                return (
-                  <div key={ev.id} style={{ display: "flex", gap: 10, padding: "10px 0", borderBottom: "1px solid " + T.border }}>
-                    <div style={{ width: 8, height: 8, borderRadius: 99, marginTop: 6, background: T.teal, flexShrink: 0 }} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{ev.title}</div>
-                      {ev.detail ? <div style={{ fontSize: 12, color: T.sub, marginTop: 2 }}>{ev.detail}</div> : null}
-                      <div style={{ fontSize: 11, color: T.muted, marginTop: 4 }}>{formatTime(ev.at)} · {ev.type}</div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : <Empty text="No timeline events yet" />}
-          </Section>
-
-          <Section title="Workup">
+        <div className="wj-main">
+          <section className="wj-sec" aria-labelledby="wj-record">
+            <h2 id="wj-record" className="wj-h">Case record</h2>
             {patient.workup && patient.workup.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {patient.workup.map(function (w: WorkupItem) {
-                  return (
-                    <div key={w.id} style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 14, padding: "12px 14px", borderLeft: w.critical ? "3px solid " + T.red : "3px solid " + T.border }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{w.title}</div>
-                        <span style={{ fontSize: 10, fontWeight: 800, color: workupStatusColor(w.status), textTransform: "uppercase" }}>{w.status}</span>
+              <div className="wj-sec">
+                <p className="wj-sub">WORKUP</p>
+                <ul className="wj-rows">
+                  {patient.workup.map((w: WorkupItem) => (
+                    <li key={w.id}>
+                      <div className="wj-row-top">
+                        <span className="wj-row-title">{w.title}</span>
+                        <span className="wj-row-status">
+                          {w.critical ? <span className="wj-flag">Critical · </span> : null}
+                          {WORKUP_STATUS[w.status] ?? w.status}
+                        </span>
                       </div>
-                      {w.summary ? <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>{w.summary}</div> : null}
-                    </div>
-                  );
-                })}
+                      {w.summary ? <p className="wj-row-detail">{w.summary}</p> : null}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ) : <Empty text="No workup items" />}
-          </Section>
+            ) : null}
+            {timeline.length > 0 ? (
+              <div className="wj-sec">
+                <p className="wj-sub">COURSE SO FAR</p>
+                <ol className="wj-rows">
+                  {timeline.map(ev => (
+                    <li key={ev.id}>
+                      <span className="wj-row-title">{ev.title}</span>
+                      {ev.detail ? <p className="wj-row-detail">{ev.detail}</p> : null}
+                      <p className="wj-row-status">{formatTime(ev.at)}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ) : null}
+            {(!patient.workup || patient.workup.length === 0) && timeline.length === 0 ? (
+              <p className="wj-note">No workup or course has been recorded for this simulated case.</p>
+            ) : null}
+          </section>
 
-          {(() => {
-            const template = getTemplate(patient.templateId)
-            if (!template?.decisionPoints?.length) return null
-            return (
-              <Section title="Decision Points">
-                {template.decisionPoints.map((dp) => (
-                  <div key={dp.id} style={{ marginBottom: 16 }}>
-                    <p style={{ fontWeight: 600, marginBottom: 8 }}>{dp.prompt}</p>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                      {dp.options.map((opt) => {
-                        const isSelected = selectedOptions[dp.id] === opt.id
-                        return (
-                          <div key={opt.id}>
-                            <button
-                              type="button"
-                              onClick={() => setSelectedOptions((prev) => ({ ...prev, [dp.id]: opt.id }))}
-                              style={{
-                                textAlign: "left",
-                                padding: "8px 12px",
-                                borderRadius: 8,
-                                border: isSelected ? "2px solid #6366f1" : "1px solid #e5e7eb",
-                                background: isSelected ? "#eef2ff" : "transparent",
-                                cursor: "pointer",
-                                width: "100%",
-                                fontSize: 14,
-                              }}
-                            >
-                              {opt.label}
-                            </button>
-                            {isSelected && (
-                              <p style={{ marginTop: 6, marginLeft: 12, fontSize: 13, color: "#4b5563" }}>
-                                {opt.effect}
-                              </p>
-                            )}
-                          </div>
-                        )
-                      })}
+          <section className="wj-sec" aria-labelledby="wj-decision">
+            <h2 id="wj-decision" className="wj-h">Decision</h2>
+            {stage ? (
+              <div className="wj-decision wj-sec">
+                <p className="wj-step">STEP {Math.min(stageIndex, stages.length - 1) + 1} OF {stages.length}</p>
+                <fieldset className="wj-options">
+                  <legend>{stage.prompt}</legend>
+                  {stage.options.map(opt => (
+                    <label key={opt.id} className="wj-option">
+                      <input
+                        type="radio"
+                        name={"wj-" + stage.id}
+                        value={opt.id}
+                        checked={selectedOptions[stage.id] === opt.id}
+                        onChange={() => setSelectedOptions(prev => ({ ...prev, [stage.id]: opt.id }))}
+                      />
+                      <span>{opt.label}</span>
+                    </label>
+                  ))}
+                </fieldset>
+                <div role="status" aria-live="polite">
+                  {chosen ? (
+                    <div className="wj-response">
+                      <p className="wj-response-label">RESPONSE AND REASONING</p>
+                      <p className="wj-choice">Your choice: {chosen.label}</p>
+                      <p>{chosen.effect}</p>
                     </div>
-                  </div>
-                ))}
-              </Section>
-            )
-          })()}
+                  ) : (
+                    <p className="wj-note">Choose an option to see the response and the reasoning behind it.</p>
+                  )}
+                </div>
+                <div className="wj-stepnav">
+                  {stageIndex > 0 ? (
+                    <button type="button" className="wj-btn" onClick={() => setStageIndex(index => Math.max(0, index - 1))}>Previous step</button>
+                  ) : null}
+                  {stageIndex < stages.length - 1 ? (
+                    <button type="button" className="wj-btn" data-primary disabled={!chosen} onClick={() => setStageIndex(index => index + 1)}>Next step</button>
+                  ) : (
+                    <p className="wj-note">{chosen ? "That is the last step for this case." : "This is the last step for this case."}</p>
+                  )}
+                </div>
+                <p className="wj-note">Each step moves the case forward. The record shows the case at the start; later steps describe how it has changed.</p>
+              </div>
+            ) : (
+              <p className="wj-note">No decision practice is available for this case yet.</p>
+            )}
+          </section>
 
-          <Section title="Related Evidence">
-            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} onUpgrade={onUpgrade} />
-          </Section>
-
-          <Section title="Orders">
+          <section className="wj-sec wj-wide" aria-labelledby="wj-orders">
+            <h2 id="wj-orders" className="wj-h">Orders and consult</h2>
             {patient.orders && patient.orders.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {patient.orders.map(function (o: OrderItem) {
-                  return (
-                    <div key={o.id} style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 14, padding: "12px 14px", display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: T.text }}>{o.label}</div>
-                        {o.impact ? <div style={{ fontSize: 12, color: T.sub, marginTop: 3 }}>{o.impact}</div> : null}
-                      </div>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: o.status === "done" ? T.green : T.amber, textTransform: "uppercase" }}>{o.status}</span>
+              <ul className="wj-rows">
+                {patient.orders.map((o: OrderItem) => (
+                  <li key={o.id}>
+                    <div className="wj-row-top">
+                      <span className="wj-row-title">{o.label}</span>
+                      <span className="wj-row-status">{ORDER_STATUS[o.status] ?? o.status}</span>
                     </div>
-                  );
-                })}
-              </div>
-            ) : <Empty text="No orders yet" />}
-          </Section>
+                    {o.impact ? <p className="wj-row-detail">{o.impact}</p> : null}
+                  </li>
+                ))}
+              </ul>
+            ) : <p className="wj-note">No orders yet.</p>}
 
-          <Section title="Cross-Department Consult">
             {patient.consults && patient.consults.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 10 }}>
-                {patient.consults.map(function (c) {
-                  return (
-                    <div key={c.id} style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 14, padding: "12px 14px" }}>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: T.text }}>{c.fromDept.toUpperCase()} → {c.toDept.toUpperCase()}</div>
-                      <div style={{ fontSize: 12, color: T.sub, marginTop: 4 }}>{c.reason}</div>
-                      <div style={{ fontSize: 10, fontWeight: 800, color: c.status === "answered" ? T.green : T.amber, marginTop: 6, textTransform: "uppercase" }}>{c.status}</div>
-                      {c.answer ? <div style={{ fontSize: 12, color: T.text, marginTop: 6 }}>{c.answer}</div> : null}
+              <ul className="wj-rows">
+                {patient.consults.map(c => (
+                  <li key={c.id}>
+                    <div className="wj-row-top">
+                      <span className="wj-row-title">{c.fromDept.toUpperCase()} → {c.toDept.toUpperCase()}</span>
+                      <span className="wj-row-status">{c.status === "answered" ? "Answered" : "Requested"}</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <p className="wj-row-detail">{c.reason}</p>
+                    {c.answer ? <p className="wj-row-detail">{c.answer}</p> : null}
+                  </li>
+                ))}
+              </ul>
             ) : null}
 
             <button
               type="button"
+              className="wj-btn wj-consult-btn"
               onClick={function () { if (onRequestConsult) onRequestConsult(patient.id); }}
               disabled={consultRequested}
-              style={{ width: "100%", border: "1px solid " + T.teal, background: "rgba(45,212,191,0.08)", color: T.teal, borderRadius: 14, padding: "12px 14px", fontSize: 13, fontWeight: 800, cursor: consultRequested ? "default" : "pointer", opacity: consultRequested ? 0.7 : 1 }}
             >
               {consultRequested ? "Consult Requested" : "Request Consult"}
             </button>
             {consultRequested ? (
-              <p role="status" aria-live="polite" style={{ margin: "10px 0 0", color: T.sub, textAlign: "center", fontSize: 11 }}>
+              <p role="status" aria-live="polite" className="wj-note">
                 Simulated consult request recorded locally. No external message was sent.
               </p>
             ) : null}
-          </Section>
+          </section>
 
-          <div style={{ background: T.white, border: "1px solid " + T.border, borderRadius: 16, padding: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: T.text }}>AI Clinical Consult</div>
-            <div style={{ fontSize: 12, color: T.sub, marginTop: 4, lineHeight: 1.45 }}>
-              AI assistance is not enabled in this release flow. Keep simulation framing: educational only.
+          <section className="wj-sec wj-wide" aria-label="Related evidence">
+            <RelatedEvidencePanel templateId={patient.templateId} diagnosis={patient.diagnosis} isPro={isPro} onUpgrade={onUpgrade} />
+          </section>
+
+          <details className="wj-fold wj-wide">
+            <summary>Notes, medications and discharge</summary>
+            <div className="wj-fold-body">
+              <ClinicalPanelV2
+                patientId={patient.id}
+                patientName={patient.name}
+                diagnosis={patient.diagnosis}
+                bundle={patient.templateId === "stemi_anterior" ? STEMI_CLINICAL_BUNDLE : { metrics: [], medications: [], soapNotes: [], alerts: [] }}
+                canDischarge={patient.status === "ready_for_discharge" || patient.status === "discharged"}
+              />
             </div>
-          </div>
+          </details>
 
-          <ClinicalPanelV2
-            patientId={patient.id}
-            patientName={patient.name}
-            diagnosis={patient.diagnosis}
-            bundle={patient.templateId === "stemi_anterior" ? STEMI_CLINICAL_BUNDLE : { metrics: [], medications: [], soapNotes: [], alerts: [] }}
-            canDischarge={patient.status === "ready_for_discharge" || patient.status === "discharged"}
-          />
-          <div style={{ fontSize: 11, color: T.muted, textAlign: "center", paddingTop: 4 }}>
-            Simulation only · Practice safely · No real patient data
-          </div>
+          <p className="wj-foot wj-wide">
+            AI assistance is not enabled in this release flow. Simulation only · Practice safely · No real patient data
+          </p>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Section(props: { title: string; children: React.ReactNode }) {
-  return (
-    <section>
-      <div style={{ fontSize: 11, fontWeight: 800, color: T.muted, letterSpacing: 0.7, marginBottom: 8, textTransform: "uppercase" }}>{props.title}</div>
-      {props.children}
-    </section>
-  );
-}
-
-function Chip(props: { label: string; color: string; soft?: boolean }) {
-  return (
-    <span style={{ fontSize: 10, fontWeight: 800, color: props.color, background: props.soft ? props.color + "14" : "transparent", border: "1px solid " + props.color + "33", borderRadius: 99, padding: "4px 8px", textTransform: "uppercase" }}>
-      {props.label}
-    </span>
-  );
-}
-
-function Empty(props: { text: string }) {
-  return (
-    <div style={{ background: T.white, border: "1px dashed " + T.border, borderRadius: 14, padding: 14, fontSize: 12, color: T.muted }}>
-      {props.text}
-    </div>
+    </article>
   );
 }
 

@@ -1,0 +1,134 @@
+/* Ward v2: case list and patient journey. Composition and semantic tokens only. Every rule is scoped to [data-ward-v2], so
+ * nothing here reaches other surfaces. There is no animation, so reduced motion needs no override. Status is always carried by
+ * text as well as colour. The --ward-* names give the two legacy child panels (evidence, notes) one place to read the shell
+ * palette from; outside this scope they fall back to their original values. */
+[data-ward-v2] {
+  --ward-surface: var(--cv-surface-elevated);
+  --ward-surface-subtle: var(--cv-surface-subtle);
+  --ward-border: var(--cv-border);
+  --ward-text: var(--cv-text);
+  --ward-text-secondary: var(--cv-text-secondary);
+  --ward-accent: var(--cv-teal);
+  --ward-action: var(--cv-teal);
+  --ward-on-action: var(--cv-learning-on-teal, #fff);
+  --ward-danger: var(--cv-learning-danger, #b42318);
+  --ward-caution: var(--cv-gold);
+  min-width: 0;
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+  overflow-wrap: anywhere;
+}
+[data-ward-v2] :is(h1, h2, h3, p, ul, ol, dl, dd, fieldset) { margin: 0; padding: 0; }
+[data-ward-v2] :is(ul, ol) { list-style: none; }
+[data-ward-v2] button { font: inherit; }
+[data-ward-v2] :focus-visible { outline: 3px solid var(--cv-blue); outline-offset: 2px; }
+
+/* ---- Case list ---- */
+[data-ward-v2].ward-home { display: grid; gap: var(--cv-space-6); min-width: 0; padding-bottom: 88px; }
+[data-ward-v2] .ward-eyebrow { color: var(--cv-teal); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.1em; }
+[data-ward-v2] .ward-title { margin-top: var(--cv-space-1); font-size: var(--cv-text-title); font-weight: 800; line-height: 1.15; }
+[data-ward-v2] .ward-lead { margin-top: var(--cv-space-2); color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+[data-ward-v2] .ward-goal { max-width: 64ch; border-top: 1px solid var(--cv-border); border-bottom: 1px solid var(--cv-border); }
+[data-ward-v2] .ward-goal > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--cv-space-4); min-height: 48px; cursor: pointer; list-style: none; font-size: var(--cv-text-body); font-weight: 800; }
+[data-ward-v2] .ward-goal > summary::-webkit-details-marker { display: none; }
+[data-ward-v2] .ward-goal > summary::after { content: "+"; font-size: 1.25rem; }
+[data-ward-v2] .ward-goal[open] > summary::after { content: "\2212"; }
+[data-ward-v2] .ward-goal > summary:focus-visible { outline-offset: -3px; }
+[data-ward-v2] .ward-goal ol { list-style: decimal; padding-inline-start: var(--cv-space-5); display: grid; gap: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+[data-ward-v2] .ward-goal p { padding: var(--cv-space-2) 0 var(--cv-space-4); color: var(--cv-text-secondary); font-size: var(--cv-text-support); }
+
+[data-ward-v2] .ward-filter-label { margin-bottom: var(--cv-space-2); color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.08em; }
+[data-ward-v2] .ward-filter { display: flex; flex-wrap: wrap; gap: var(--cv-space-2); }
+[data-ward-v2] .ward-chip { min-height: 44px; padding: 0 var(--cv-space-4); border: 1px solid var(--cv-border); border-radius: 999px; background: transparent; color: var(--cv-text); font-size: var(--cv-text-support); font-weight: 700; cursor: pointer; }
+[data-ward-v2] .ward-chip[aria-pressed="true"] { border-color: var(--cv-teal); background: var(--cv-teal); color: var(--cv-learning-on-teal, #fff); }
+
+[data-ward-v2] .ward-cases-label { margin-bottom: var(--cv-space-2); color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.08em; }
+[data-ward-v2] .ward-cases { border-top: 1px solid var(--cv-border); }
+[data-ward-v2] .ward-cases li { border-bottom: 1px solid var(--cv-border); }
+[data-ward-v2] .ward-case { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--cv-space-1) var(--cv-space-4); align-items: start; width: 100%; min-height: 64px; padding: var(--cv-space-4) var(--cv-space-2); border: 0; border-inline-start: 4px solid var(--ward-priority, var(--cv-border)); background: transparent; color: var(--cv-text); text-align: start; cursor: pointer; }
+[data-ward-v2] .ward-case:hover { background: var(--cv-surface-subtle); }
+[data-ward-v2] .ward-case[data-priority="critical"] { --ward-priority: var(--cv-learning-danger, #b42318); }
+[data-ward-v2] .ward-case[data-priority="urgent"] { --ward-priority: var(--cv-gold); }
+[data-ward-v2] .ward-case[data-priority="stable"] { --ward-priority: var(--cv-teal); }
+[data-ward-v2] .ward-case-name { font-size: var(--cv-text-body); font-weight: 800; }
+[data-ward-v2] .ward-case-dx { grid-column: 1; color: var(--cv-text); font-size: var(--cv-text-support); line-height: 1.4; }
+[data-ward-v2] .ward-case-meta { grid-column: 1; color: var(--cv-text-secondary); font-size: var(--cv-text-caption); }
+[data-ward-v2] .ward-case-flags { grid-column: 2; grid-row: 1 / span 3; display: grid; justify-items: end; align-content: start; gap: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 700; text-align: end; }
+[data-ward-v2] .ward-case-priority { color: var(--cv-text); font-weight: 800; }
+[data-ward-v2] .ward-case-pro { padding: 1px var(--cv-space-2); border: 1px solid var(--cv-blue); border-radius: 999px; color: var(--cv-text); font-weight: 800; }
+[data-ward-v2] .ward-empty { padding: var(--cv-space-5) 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); }
+
+/* ---- Patient journey ---- */
+[data-ward-v2].wj { position: fixed; inset: 0; z-index: 80; overflow-y: auto; background: var(--cv-bg); overscroll-behavior: contain; }
+/* The journey is a full-screen layer above the shell, so it reserves the shell's own side gutter itself: the primary
+ * navigation rail (>= 700px) stays visible and must never sit over patient data. */
+[data-ward-v2] .wj-frame { --wj-gutter: max(20px, env(safe-area-inset-left, 0px)); box-sizing: border-box; width: 100%; max-width: calc(1040px + 2 * var(--wj-gutter)); margin: 0 auto; padding: 0 var(--wj-gutter); display: grid; gap: var(--cv-space-6); }
+[data-ward-v2] .wj-head { display: grid; gap: var(--cv-space-3); padding-bottom: var(--cv-space-5); border-bottom: 1px solid var(--cv-border); }
+[data-ward-v2] .wj-head-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--cv-space-4); }
+[data-ward-v2] .wj-kicker { color: var(--cv-teal); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.1em; }
+[data-ward-v2] .wj-name { margin-top: var(--cv-space-1); font-size: var(--cv-text-title); font-weight: 800; line-height: 1.15; }
+[data-ward-v2] .wj-demo { margin-top: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-support); }
+[data-ward-v2] .wj-state { margin-top: var(--cv-space-2); font-size: var(--cv-text-body); font-weight: 700; line-height: 1.4; }
+[data-ward-v2] .wj-state-meta { margin-top: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-support); font-weight: 700; }
+[data-ward-v2] .wj-close { flex: none; min-height: 44px; min-width: 44px; padding: 0 var(--cv-space-4); border: 1px solid var(--cv-border); border-radius: 999px; background: transparent; color: var(--cv-text); font-size: var(--cv-text-support); font-weight: 700; cursor: pointer; }
+
+[data-ward-v2] .wj-main { display: grid; gap: var(--cv-space-6); min-width: 0; }
+[data-ward-v2] .wj-main > * { min-width: 0; }
+[data-ward-v2] h2.wj-h { font-size: var(--cv-text-section); font-weight: 800; line-height: 1.2; }
+[data-ward-v2] .wj-sec { display: grid; gap: var(--cv-space-3); align-content: start; }
+[data-ward-v2] .wj-sub { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.08em; }
+[data-ward-v2] .wj-note { color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+
+[data-ward-v2] .wj-rows { border-top: 1px solid var(--cv-border); }
+[data-ward-v2] .wj-rows > li { display: grid; gap: var(--cv-space-1); padding: var(--cv-space-3) 0; border-bottom: 1px solid var(--cv-border); }
+[data-ward-v2] .wj-row-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--cv-space-1) var(--cv-space-3); }
+[data-ward-v2] .wj-row-title { font-size: var(--cv-text-body); font-weight: 700; }
+[data-ward-v2] .wj-row-status { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 800; }
+[data-ward-v2] .wj-row-detail { color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.45; }
+[data-ward-v2] .wj-flag { color: var(--cv-learning-danger, #b42318); font-weight: 800; }
+
+/* Decision: one step at a time. Each option is a labelled radio, so the selected state is a filled radio, a heavier border
+ * and bold text, never colour alone. */
+[data-ward-v2] .wj-decision { padding: var(--cv-space-5); border: 1px solid var(--cv-border); border-radius: var(--cv-radius-lg); background: var(--cv-surface-elevated); }
+[data-ward-v2] .wj-step { color: var(--cv-teal); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.08em; }
+[data-ward-v2] .wj-prompt { font-size: var(--cv-text-body); font-weight: 700; line-height: 1.5; }
+[data-ward-v2] .wj-options { display: grid; gap: var(--cv-space-2); min-width: 0; border: 0; }
+[data-ward-v2] .wj-options legend { padding: 0; margin-bottom: var(--cv-space-3); font-size: var(--cv-text-body); font-weight: 700; line-height: 1.5; }
+[data-ward-v2] .wj-option { display: flex; align-items: flex-start; gap: var(--cv-space-3); min-height: 48px; box-sizing: border-box; padding: var(--cv-space-3) var(--cv-space-4); border: 1px solid var(--cv-border); border-radius: var(--cv-radius-sm); background: var(--cv-bg); color: var(--cv-text); font-size: var(--cv-text-body); line-height: 1.4; cursor: pointer; }
+[data-ward-v2] .wj-option input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--cv-teal); }
+[data-ward-v2] .wj-option:has(input:checked) { border: 2px solid var(--cv-teal); padding: calc(var(--cv-space-3) - 1px) calc(var(--cv-space-4) - 1px); font-weight: 700; }
+[data-ward-v2] .wj-option:has(input:focus-visible) { outline: 3px solid var(--cv-blue); outline-offset: 2px; }
+[data-ward-v2] .wj-response { display: grid; gap: var(--cv-space-2); padding: var(--cv-space-4); border-inline-start: 4px solid var(--cv-teal); background: var(--cv-surface-subtle); border-radius: var(--cv-radius-sm); }
+[data-ward-v2] .wj-response-label { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 800; letter-spacing: 0.08em; }
+[data-ward-v2] .wj-response p { font-size: var(--cv-text-body); line-height: 1.55; }
+[data-ward-v2] .wj-choice { font-weight: 700; }
+[data-ward-v2] .wj-stepnav { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cv-space-3); }
+[data-ward-v2] .wj-btn { min-height: 48px; padding: 0 var(--cv-space-5); border: 1px solid var(--cv-border); border-radius: var(--cv-radius-sm); background: transparent; color: var(--cv-text); font-size: var(--cv-text-body); font-weight: 700; cursor: pointer; }
+[data-ward-v2] .wj-btn[data-primary] { border-color: var(--cv-teal); background: var(--cv-teal); color: var(--cv-learning-on-teal, #fff); }
+[data-ward-v2] .wj-btn:disabled { opacity: 0.6; cursor: default; }
+
+[data-ward-v2] .wj-consult-btn { width: 100%; }
+[data-ward-v2] .wj-fold { border-top: 1px solid var(--cv-border); }
+[data-ward-v2] .wj-fold > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--cv-space-4); min-height: 48px; cursor: pointer; list-style: none; font-size: var(--cv-text-body); font-weight: 800; }
+[data-ward-v2] .wj-fold > summary::-webkit-details-marker { display: none; }
+[data-ward-v2] .wj-fold > summary::after { content: "+"; font-size: 1.25rem; }
+[data-ward-v2] .wj-fold[open] > summary::after { content: "\2212"; }
+[data-ward-v2] .wj-fold > summary:focus-visible { outline-offset: -3px; }
+[data-ward-v2] .wj-fold-body { padding-bottom: var(--cv-space-4); }
+[data-ward-v2] .wj-foot { padding-top: var(--cv-space-2); color: var(--cv-text-secondary); font-size: var(--cv-text-caption); text-align: center; }
+
+@media (min-width: 900px) {
+  [data-ward-v2] .wj-main { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; column-gap: var(--cv-space-7); }
+  [data-ward-v2] .wj-wide { grid-column: 1 / -1; }
+}
+@media (min-width: 700px) {
+  [data-ward-v2].ward-home { gap: var(--cv-space-7); }
+  [data-ward-v2] .wj-frame { --wj-gutter: 104px; }
+}
+@media (min-width: 1280px) {
+  [data-ward-v2] .wj-frame { --wj-gutter: 128px; }
+}
+@media (prefers-contrast: more) {
+  [data-ward-v2] { --ward-border: currentColor; }
+  [data-ward-v2] .wj-decision, [data-ward-v2] .wj-option, [data-ward-v2] .wj-btn, [data-ward-v2] .wj-close, [data-ward-v2] .ward-chip { border-color: currentColor; }
+}
