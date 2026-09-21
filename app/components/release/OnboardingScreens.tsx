@@ -1,23 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion, type PanInfo } from 'framer-motion'
-import {
-  Activity,
-  BookOpen,
-  Check,
-  ChevronLeft,
-  GraduationCap,
-  LayoutGrid,
-  RotateCcw,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  TrendingUp,
-  type LucideIcon,
-} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useAppearance } from './AppearanceSettings'
-import { FeatureFlow, CapabilityBeam, AnchorFrame, EditorialMark, SelectionSummary } from './OnboardingVisuals'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
@@ -25,22 +9,22 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../../lib/nativeSafeArea'
 
-const INTERESTS = ['ECG', 'Echo', 'Resuscitation', 'Cardiology Operations', 'Clinical Reference'] as const
-const INTERESTS_KEY = 'cliniverse:onboarding:interests'
+// Onboarding v4 · Golden Entry. One question — "What is Cliniverse, and how should I use it?" — answered in two
+// quiet steps: the entry (what it is, and the Observe → Commit → Refine loop) and a ready step (where to start).
+// Completion is unchanged: onComplete(false) enters the app, onComplete(true) enters it and opens the existing
+// paywall. Nothing here grants access, stores a preference or fabricates progress; the only persistence is the
+// "seen" flag that ReleaseApp writes in its own onComplete handler.
+//
+// The previous interest step is gone on purpose: it wrote 'cliniverse:onboarding:interests', which nothing reads.
+// The real, readable preference is "Topics I follow" in Me.
 
-const WHAT_YOU_CAN_DO = [
-  { icon: GraduationCap, label: 'Learn', detail: 'Ward simulation, ECG, Echo, and Code Lab.' },
-  { icon: Activity, label: 'Studio', detail: 'Real cardiac ultrasound, assessed against evidence.' },
-  { icon: BookOpen, label: 'Reference', detail: 'Calculators, dosing, interactions — sourced.' },
-  { icon: LayoutGrid, label: 'Operations', detail: 'A live cardiology console, not a mockup.' },
+const PROOF = [
+  { number: '01', term: 'Observe', text: 'Start with the tracing, cine or case — before the label.' },
+  { number: '02', term: 'Commit', text: 'Choose the interpretation or next clinical step.' },
+  { number: '03', term: 'Refine', text: 'Use reasoning and evidence to sharpen the next attempt.' },
 ]
 
-const HOW_IT_WORKS = [
-  { icon: ShieldCheck, label: 'Evidence' },
-  { icon: Target, label: 'Practice' },
-  { icon: RotateCcw, label: 'Replay' },
-  { icon: TrendingUp, label: 'Progress' },
-]
+const TOTAL_STEPS = 2
 
 interface Props {
   onComplete: (startTrial: boolean) => void
@@ -48,175 +32,108 @@ interface Props {
 
 export default function OnboardingScreens({ onComplete }: Props) {
   const appearance = useAppearance()
-  const prefersReducedMotion = useReducedMotion()
   const [step, setStep] = useState(0)
-  const [direction, setDirection] = useState(1)
-  const [interests, setInterests] = useState<string[]>([])
+  const [direction, setDirection] = useState<'none' | 'forward' | 'back'>('none')
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const changed = useRef(false)
 
-  const totalSteps = 5
-  const isLast = step === totalSteps - 1
+  // After a step change, move focus to the new heading so keyboard and screen-reader users land on the new content.
+  useEffect(() => {
+    if (!changed.current) return
+    headingRef.current?.focus()
+  }, [step])
 
-  function next() {
-    if (isLast) return
-    setDirection(1)
-    setStep(s => s + 1)
+  function go(next: number) {
+    changed.current = true
+    setDirection(next > step ? 'forward' : 'back')
+    setStep(next)
   }
 
-  function back() {
-    if (step === 0) return
-    setDirection(-1)
-    setStep(s => s - 1)
-  }
-
-  function toggleInterest(name: string) {
-    setInterests(prev => (prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]))
-  }
-
-  function finish(startTrial: boolean) {
-    try { localStorage.setItem(INTERESTS_KEY, JSON.stringify(interests)) } catch { /* best-effort only */ }
-    onComplete(startTrial)
-  }
-
-  function handleDragEnd(_: unknown, info: PanInfo) {
-    const threshold = 60
-    if (info.offset.x < -threshold) next()
-    else if (info.offset.x > threshold) back()
-  }
+  // Skip and "Enter Cliniverse" both enter the app; neither changes entitlement or auth.
+  const enter = () => onComplete(false)
+  const openPlan = () => onComplete(true)
 
   return (
     <main
       data-commercial-shell
       data-appearance={appearance}
+      data-commercial-onboarding
       aria-labelledby="onboarding-title"
       className="cv-onboarding"
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 200,
-        minHeight: '100dvh',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        overflowY: 'auto',
         background: 'var(--cv-bg)',
         boxSizing: 'border-box',
-        padding: `max(18px, ${NATIVE_SAFE_AREA_TOP}) max(16px, ${NATIVE_SAFE_AREA_RIGHT}) max(20px, ${NATIVE_SAFE_AREA_BOTTOM}) max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
+        // The bottom safe area is applied by the action bar itself, so the pinned bar clears the home indicator.
+        padding: `max(18px, ${NATIVE_SAFE_AREA_TOP}) max(20px, ${NATIVE_SAFE_AREA_RIGHT}) 0 max(20px, ${NATIVE_SAFE_AREA_LEFT})`,
       }}
     >
-      <div className="cv-onboarding-glow cv-onboarding-glow-a" aria-hidden="true" />
-      <div className="cv-onboarding-glow cv-onboarding-glow-b" aria-hidden="true" />
+      <div className="cv-onboarding-frame">
+        <header className="cv-onboarding-bar">
+          <span className="cv-onboarding-wordmark">CLINIVERSE</span>
+          {step === 0
+            ? <button type="button" className="cv-onboarding-quiet" onClick={enter}>Skip</button>
+            : <button type="button" className="cv-onboarding-quiet" onClick={() => go(0)}>Back</button>}
+        </header>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, marginBottom: 8 }}>
-        <button
-          type="button"
-          onClick={back}
-          aria-label="Back"
-          style={{
-            width: 44,
-            height: 44,
-            display: 'grid',
-            placeItems: 'center',
-            borderRadius: 999,
-            border: '1px solid var(--cv-border)',
-            background: 'var(--cv-surface)',
-            color: 'var(--cv-text-secondary)',
-            cursor: step === 0 ? 'default' : 'pointer',
-            opacity: step === 0 ? 0 : 1,
-            pointerEvents: step === 0 ? 'none' : 'auto',
-            transition: 'opacity var(--cv-motion-base) ease',
-          }}
-        >
-          <ChevronLeft size={18} />
-        </button>
-
-        <div role="group" aria-label={`Step ${step + 1} of ${totalSteps}`} style={{ display: 'flex', gap: 7 }}>
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <motion.span
-              key={i}
-              aria-hidden="true"
-              animate={{ scale: i === step ? 1.2 : 1 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: 999,
-                background: i === step ? 'var(--cv-teal)' : 'var(--cv-border)',
-                transition: 'background-color var(--cv-motion-base) ease',
-              }}
-            />
-          ))}
+        <div className="cv-onboarding-step" key={step} data-direction={direction}>
+          {step === 0 ? (
+            <>
+              <p className="cv-onboarding-eyebrow">CLINICAL LEARNING · ONE SYSTEM</p>
+              <h1 id="onboarding-title" className="cv-onboarding-title" ref={headingRef} tabIndex={-1}>
+                <span>See the case.</span>
+                <span>Read the signal.</span>
+                <span>Make the decision.</span>
+              </h1>
+              <p className="cv-onboarding-body">
+                ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.
+              </p>
+              <ol className="cv-onboarding-proof" aria-label="How practice works">
+                {PROOF.map(item => (
+                  <li key={item.term}>
+                    <span className="cv-onboarding-number" aria-hidden="true">{item.number}</span>
+                    <span>
+                      <span className="cv-onboarding-term">{item.term}</span>
+                      <span className="cv-onboarding-text">{item.text}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <>
+              <p className="cv-onboarding-eyebrow">READY WHEN YOU ARE</p>
+              <h1 id="onboarding-title" className="cv-onboarding-title" ref={headingRef} tabIndex={-1}>
+                <span>Start with your next step.</span>
+              </h1>
+              <p className="cv-onboarding-body">
+                Today shows what to do next. Learn holds your ECG, Echo and Ward practice, and Progress shows what to revisit.
+              </p>
+            </>
+          )}
         </div>
 
-        {!isLast ? (
-          <button
-            type="button"
-            onClick={() => finish(false)}
-            style={{
-              minHeight: 44,
-              padding: '0 4px',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--cv-text-secondary)',
-              fontSize: 'var(--cv-text-support)',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
-            Skip
-          </button>
-        ) : (
-          <div style={{ width: 44 }} aria-hidden="true" />
-        )}
-      </div>
-
-      <div className="cv-onboarding-layout">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="cv-onboarding-card"
-        >
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={step}
-              custom={direction}
-              drag={prefersReducedMotion ? false : 'x'}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.5}
-              onDragEnd={handleDragEnd}
-              initial={{ x: direction > 0 ? 36 : -36, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: direction > 0 ? -36 : 36, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
-              <StepContent step={step} interests={interests} onToggleInterest={toggleInterest} />
-            </motion.div>
-          </AnimatePresence>
-
-          <div style={{ marginTop: 26 }}>
-            {!isLast ? (
-              <button type="button" onClick={next} className="cv-onboarding-cta">
-                Next
-              </button>
-            ) : (
-              <>
-                <button type="button" onClick={() => finish(true)} className="cv-onboarding-cta">
-                  Start my free trial →
-                </button>
-                <button
-                  type="button"
-                  onClick={() => finish(false)}
-                  className="cv-onboarding-secondary"
-                >
-                  Enter Cliniverse
-                </button>
-              </>
-            )}
+        <footer className="cv-onboarding-foot" style={{ paddingBottom: `max(20px, ${NATIVE_SAFE_AREA_BOTTOM})` }}>
+          {step === 0 ? (
+            <button type="button" className="cv-onboarding-cta" onClick={() => go(1)}>Continue</button>
+          ) : (
+            <>
+              <button type="button" className="cv-onboarding-cta" onClick={enter}>Enter Cliniverse</button>
+              <button type="button" className="cv-onboarding-secondary" onClick={openPlan}>See Cliniverse PRO options</button>
+            </>
+          )}
+          <div role="group" aria-label={`Step ${step + 1} of ${TOTAL_STEPS}`} className="cv-onboarding-progress">
+            {Array.from({ length: TOTAL_STEPS }).map((_, index) => (
+              <span key={index} aria-hidden="true" data-active={index === step} />
+            ))}
           </div>
-        </motion.div>
-
-        <div className="cv-onboarding-anchor" aria-hidden="true">
-          <StepAnchor step={step} interests={interests} />
-        </div>
+          {step === 0 ? <p className="cv-onboarding-tagline">Built for deliberate clinical practice.</p> : null}
+        </footer>
       </div>
 
       <style>{CSS}</style>
@@ -224,342 +141,170 @@ export default function OnboardingScreens({ onComplete }: Props) {
   )
 }
 
-/** Each step gets a composition tied to what that step is actually about — never a lone decorative icon. */
-function StepAnchor({ step, interests }: { step: number; interests: string[] }) {
-  if (step === 0) {
-    return (
-      <AnchorFrame tone="teal">
-        <EditorialMark icon={Sparkles} label="CLINIVERSE" tone="teal" />
-      </AnchorFrame>
-    )
-  }
-  if (step === 1) {
-    return (
-      <AnchorFrame tone="teal">
-        <FeatureFlow ariaLabel="What you can do in Cliniverse" items={WHAT_YOU_CAN_DO} large />
-      </AnchorFrame>
-    )
-  }
-  if (step === 2) {
-    return (
-      <AnchorFrame tone="violet">
-        <CapabilityBeam ariaLabel="How the system works" stages={HOW_IT_WORKS} orientation="vertical" large />
-      </AnchorFrame>
-    )
-  }
-  if (step === 3) {
-    return (
-      <AnchorFrame tone="teal">
-        <SelectionSummary options={INTERESTS} selected={interests} />
-      </AnchorFrame>
-    )
-  }
-  return (
-    <AnchorFrame tone="teal">
-      <EditorialMark icon={ShieldCheck} label="READY" tone="teal" />
-    </AnchorFrame>
-  )
-}
-
-function StepContent({
-  step,
-  interests,
-  onToggleInterest,
-}: {
-  step: number
-  interests: string[]
-  onToggleInterest: (name: string) => void
-}) {
-  if (step === 0) {
-    return (
-      <>
-        <StepIcon icon={Sparkles} />
-        <h1 id="onboarding-title" className="cv-onboarding-title">Cliniverse</h1>
-        <p className="cv-onboarding-body">Clinical intelligence for learning, interpretation, and operational practice.</p>
-      </>
-    )
-  }
-
-  if (step === 1) {
-    return (
-      <>
-        <p className="cv-onboarding-eyebrow">WHAT YOU CAN DO</p>
-        <h1 id="onboarding-title" className="cv-onboarding-title-sm">Everything in one governed workspace</h1>
-        <div style={{ marginTop: 18 }}>
-          <FeatureFlow ariaLabel="What you can do in Cliniverse" items={WHAT_YOU_CAN_DO} />
-        </div>
-      </>
-    )
-  }
-
-  if (step === 2) {
-    return (
-      <>
-        <p className="cv-onboarding-eyebrow">HOW THE SYSTEM WORKS</p>
-        <h1 id="onboarding-title" className="cv-onboarding-title-sm">Built on evidence, not guesses</h1>
-        <div style={{ marginTop: 22, marginBottom: 16 }}>
-          <CapabilityBeam ariaLabel="How the system works" stages={HOW_IT_WORKS} />
-        </div>
-        <p className="cv-onboarding-body">Every case is sourced. Every attempt is tracked.</p>
-      </>
-    )
-  }
-
-  if (step === 3) {
-    return (
-      <>
-        <p className="cv-onboarding-eyebrow">PERSONALIZE</p>
-        <h1 id="onboarding-title" className="cv-onboarding-title-sm">What are you here to work on?</h1>
-        <p className="cv-onboarding-body" style={{ marginBottom: 16 }}>You can change this anytime.</p>
-        <div role="group" aria-label="Choose your interests" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {INTERESTS.map(name => {
-            const active = interests.includes(name)
-            return (
-              <button
-                key={name}
-                type="button"
-                aria-pressed={active}
-                onClick={() => onToggleInterest(name)}
-                className="cv-onboarding-chip"
-                data-active={active}
-              >
-                {active && <Check size={13} strokeWidth={3} aria-hidden="true" />}
-                {name}
-              </button>
-            )
-          })}
-        </div>
-      </>
-    )
-  }
-
-  return (
-    <>
-      <StepIcon icon={ShieldCheck} />
-      <h1 id="onboarding-title" className="cv-onboarding-title">You&rsquo;re ready.</h1>
-      <p className="cv-onboarding-body" style={{ marginBottom: 14 }}>
-        Everything above is live — not a preview.
-      </p>
-    </>
-  )
-}
-
-function StepIcon({ icon: Icon }: { icon: LucideIcon }) {
-  return (
-    <div aria-hidden="true" className="cv-onboarding-icon">
-      <Icon size={30} color="var(--cv-teal)" strokeWidth={2} />
-    </div>
-  )
-}
-
+// Semantic tokens only. No glow, glass, shadow or ambient animation; the one motion is the step transition,
+// which is switched off entirely under prefers-reduced-motion. State is carried by text, width and weight, not colour alone.
 const CSS = `
-  .cv-onboarding-glow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .cv-onboarding-glow-a {
-    background: radial-gradient(circle at 20% 15%, color-mix(in srgb, var(--cv-teal) 22%, transparent), transparent 55%);
-    animation: cvOnboardingAmbient 8s ease-in-out infinite alternate;
-  }
-  .cv-onboarding-glow-b {
-    background: radial-gradient(circle at 82% 30%, color-mix(in srgb, var(--cv-violet) 16%, transparent), transparent 55%);
-    animation: cvOnboardingAmbient 8s ease-in-out infinite alternate-reverse;
-  }
-  @keyframes cvOnboardingAmbient {
-    0%   { opacity: 0.55; transform: scale(1) translate(0, 0); }
-    100% { opacity: 0.9; transform: scale(1.1) translate(12px, -10px); }
-  }
-
-  .cv-onboarding-layout {
-    position: relative;
-    z-index: 1;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    width: 100%;
-    max-width: 440px;
-    gap: var(--cv-space-6);
-  }
-
-  .cv-onboarding-anchor { display: none; }
-
-  @media (min-width: 700px) {
-    .cv-onboarding-layout {
-      max-width: 1040px;
-      align-items: stretch;
-    }
-    .cv-onboarding-card { flex: 1 1 45%; margin: auto 0; }
-    .cv-onboarding-anchor { display: block; flex: 1 1 55%; margin: auto 0; }
-  }
-
-  .cv-onboarding-card {
+  .cv-onboarding-frame {
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
-    border-radius: var(--cv-radius-xl);
-    padding: 32px 26px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.68);
-    border: 0.5px solid rgba(255, 255, 255, 0.22);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 20px 60px rgba(0, 0, 0, 0.08);
+    max-width: 560px;
+    margin: 0 auto;
+    gap: var(--cv-space-6);
+    min-width: 0;
   }
-  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-card {
-    background: rgba(20, 20, 30, 0.55);
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 20px 60px rgba(0, 0, 0, 0.35);
-  }
-  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-card {
-    background: rgba(20, 20, 30, 0.55);
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 20px 60px rgba(0, 0, 0, 0.35);
-  }
-  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .cv-onboarding-card {
-      backdrop-filter: blur(28px) saturate(180%);
-      -webkit-backdrop-filter: blur(28px) saturate(180%);
-    }
-  }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .cv-onboarding-card { background: rgba(255, 255, 255, 0.95); }
-    [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-card,
-    [data-commercial-shell][data-appearance="dark"] .cv-onboarding-card {
-      background: rgba(20, 20, 30, 0.95);
-    }
-  }
-
-  .cv-onboarding-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: var(--cv-radius-lg);
-    display: grid;
-    place-items: center;
-    margin-bottom: 22px;
-    background: rgba(15, 118, 110, 0.14);
-    border: 1px solid rgba(15, 118, 110, 0.22);
-  }
-  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-icon {
-    background: rgba(45, 212, 191, 0.14);
-    border: 1px solid rgba(45, 212, 191, 0.24);
-  }
-  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-icon {
-    background: rgba(45, 212, 191, 0.14);
-    border: 1px solid rgba(45, 212, 191, 0.24);
-  }
-
-  .cv-onboarding-eyebrow {
-    font-size: var(--cv-text-eyebrow);
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    color: var(--cv-teal);
-    margin: 0 0 8px;
-  }
-  .cv-onboarding-title {
-    font-size: var(--cv-text-display);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--cv-teal);
-    margin: 0 0 12px;
-  }
-  .cv-onboarding-title-sm {
-    font-size: var(--cv-text-title);
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-    color: var(--cv-text);
-    margin: 0 0 4px;
-  }
-  .cv-onboarding-body {
-    font-size: var(--cv-text-body);
-    line-height: 1.55;
-    color: var(--cv-text-secondary);
-    margin: 0 0 8px;
-  }
-
-  .cv-onboarding-chip {
-    display: inline-flex;
+  .cv-onboarding-bar {
+    display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
     min-height: 44px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid var(--cv-border);
-    background: var(--cv-surface);
-    color: var(--cv-text);
+  }
+  .cv-onboarding-wordmark {
+    font-size: var(--cv-text-support);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+  }
+  .cv-onboarding-quiet {
+    min-height: 44px;
+    padding: 0 var(--cv-space-2);
+    border: 0;
+    background: transparent;
+    color: var(--cv-text-secondary);
     font-size: var(--cv-text-support);
     font-weight: 700;
     cursor: pointer;
-    transition: background-color var(--cv-motion-base) ease, border-color var(--cv-motion-base) ease;
-  }
-  .cv-onboarding-chip[data-active="true"] {
-    background: color-mix(in srgb, var(--cv-teal) 16%, var(--cv-surface));
-    border-color: color-mix(in srgb, var(--cv-teal) 55%, transparent);
-    color: var(--cv-teal);
   }
 
+  .cv-onboarding-step { min-width: 0; animation: cvOnboardingStepIn var(--cv-motion-base) ease-out both; }
+  .cv-onboarding-step[data-direction="none"] { animation: none; }
+  .cv-onboarding-step[data-direction="back"] { --cv-onboarding-shift: -16px; }
+  .cv-onboarding-step[data-direction="forward"] { --cv-onboarding-shift: 16px; }
+  @keyframes cvOnboardingStepIn {
+    from { opacity: 0; transform: translateX(var(--cv-onboarding-shift, 16px)); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .cv-onboarding-eyebrow {
+    margin: 0 0 var(--cv-space-4);
+    color: var(--cv-teal);
+    font-size: var(--cv-text-caption);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  .cv-onboarding-title {
+    margin: 0 0 var(--cv-space-4);
+    font-size: var(--cv-text-display);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    overflow-wrap: break-word;
+  }
+  .cv-onboarding-title:focus { outline: none; }
+  .cv-onboarding-title > span { display: block; }
+  .cv-onboarding-body {
+    max-width: 46ch;
+    margin: 0;
+    color: var(--cv-text-secondary);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .cv-onboarding-proof {
+    margin: var(--cv-space-6) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--cv-border);
+  }
+  .cv-onboarding-proof > li {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: var(--cv-space-3);
+    padding: var(--cv-space-4) 0;
+    border-bottom: 1px solid var(--cv-border);
+  }
+  .cv-onboarding-number {
+    padding-top: 0.15rem;
+    color: var(--cv-teal);
+    font-size: var(--cv-text-caption);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+  .cv-onboarding-term,
+  .cv-onboarding-text { display: block; overflow-wrap: break-word; }
+  .cv-onboarding-term { font-size: var(--cv-text-body); font-weight: 800; line-height: 1.3; }
+  .cv-onboarding-text {
+    margin-top: var(--cv-space-1);
+    color: var(--cv-text-secondary);
+    font-size: var(--cv-text-body);
+    line-height: 1.5;
+  }
+
+  .cv-onboarding-foot {
+    display: grid;
+    gap: var(--cv-space-3);
+    margin-top: auto;
+    padding-top: var(--cv-space-4);
+  }
+  /* Keep the dominant action reachable at large text or short screens: the bar stays pinned while the copy scrolls. */
+  @media (min-height: 600px) {
+    .cv-onboarding-foot { position: sticky; bottom: 0; background: var(--cv-bg); }
+  }
   .cv-onboarding-cta {
     width: 100%;
-    min-height: 50px;
-    border: 1px solid rgba(15, 118, 110, 0.45);
+    min-height: 52px;
+    padding: 14px var(--cv-space-5);
+    border: 1px solid transparent;
     border-radius: var(--cv-radius-md);
-    padding: 14px 18px;
-    font-size: 15px;
+    background: var(--cv-teal);
+    color: var(--cv-learning-on-teal);
+    font-size: var(--cv-text-body);
     font-weight: 800;
-    color: var(--cv-text);
-    background: rgba(15, 118, 110, 0.20);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
     cursor: pointer;
-    transition: transform var(--cv-motion-base) ease, box-shadow var(--cv-motion-base) ease;
   }
-  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-cta {
-    border-color: rgba(45, 212, 191, 0.45);
-    background: rgba(45, 212, 191, 0.18);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-cta {
-    border-color: rgba(45, 212, 191, 0.45);
-    background: rgba(45, 212, 191, 0.18);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .cv-onboarding-cta {
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-    }
-  }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .cv-onboarding-cta { background: var(--cv-teal); border-color: var(--cv-teal); color: #ffffff; }
-  }
-  .cv-onboarding-cta:hover {
-    transform: scale(1.02);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 24px rgba(15, 118, 110, 0.45);
-  }
-  [data-commercial-shell]:where(:not([data-appearance="light"])) .cv-onboarding-cta:hover,
-  [data-commercial-shell][data-appearance="dark"] .cv-onboarding-cta:hover {
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 24px rgba(45, 212, 191, 0.45);
-  }
-  .cv-onboarding-cta:active { transform: scale(0.98); }
-
   .cv-onboarding-secondary {
     width: 100%;
     min-height: 44px;
-    margin-top: 8px;
+    padding: var(--cv-space-2) var(--cv-space-4);
     border: 1px solid var(--cv-border);
     border-radius: var(--cv-radius-md);
     background: transparent;
-    color: var(--cv-text-secondary);
-    font-size: 14px;
+    color: var(--cv-text);
+    font-size: var(--cv-text-body);
     font-weight: 700;
     cursor: pointer;
   }
+  .cv-onboarding-progress { display: flex; justify-content: center; gap: var(--cv-space-2); }
+  .cv-onboarding-progress > span {
+    width: 16px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--cv-border);
+  }
+  .cv-onboarding-progress > span[data-active="true"] { width: 40px; background: var(--cv-teal); }
+  .cv-onboarding-tagline {
+    margin: 0;
+    color: var(--cv-text-secondary);
+    font-size: var(--cv-text-support);
+    text-align: center;
+  }
+
+  /* Wide screens stay one editorial column, centred between the top bar and the bottom edge. */
+  @media (min-width: 700px) {
+    .cv-onboarding-frame { gap: var(--cv-space-7); }
+    .cv-onboarding-step { margin-top: auto; }
+    .cv-onboarding-foot { margin-top: 0; margin-bottom: auto; }
+    .cv-onboarding-title { font-size: clamp(2.5rem, 4.5vw, 3.5rem); }
+  }
+  @media (min-width: 700px) and (max-height: 900px) {
+    .cv-onboarding-frame { gap: var(--cv-space-5); }
+    .cv-onboarding-title { font-size: clamp(2.25rem, 4vw, 3rem); }
+    .cv-onboarding-proof { margin-top: var(--cv-space-5); }
+    .cv-onboarding-proof > li { padding: var(--cv-space-3) 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .cv-onboarding-glow-a, .cv-onboarding-glow-b { animation: none; }
-    .cv-onboarding-cta { transition: none; }
+    .cv-onboarding-step { animation: none; }
   }
 `
