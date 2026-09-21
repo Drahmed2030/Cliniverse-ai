@@ -20,9 +20,10 @@ function read(path) {
 
 test('Resuscitation Hub is reachable from exactly one Explore/Atlas entry point', () => {
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
-  const links = atlas.match(/href="\/labs\/resuscitation-hub"/g) ?? []
+  const links = atlas.match(/href: '\/labs\/resuscitation-hub'/g) ?? []
   assert.equal(links.length, 1)
-  assert.match(atlas, /Resuscitation Hub/)
+  // Explore v2 titles the row "Resuscitation" and labels it In review (see tests/explore-curated-discovery.test.mjs).
+  assert.match(atlas, /title: 'Resuscitation'/)
 })
 
 test('the resuscitation-hub route exists and renders the real hub component, not a stub', () => {

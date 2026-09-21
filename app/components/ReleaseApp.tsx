@@ -187,7 +187,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={goTab} onOpenWard={() => { setCareWorkspace('ward'); setTab('learn') }} onOpenCodeLab={openCodeLab} />}
-        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} onOpenPlan={openPaywall} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
+        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
         {tab === 'me' && <MeHub onOpenProgress={() => setTab('progress')} learningSummary={<AccountLearningSummary view="summary" isPro={false} onUpgrade={openCodeLab} onBack={openCodeLab} onOpen={openCodeLab} />} />}
       </div>
       <ReleaseNav active={tab} onChange={goTab} />
@@ -200,7 +200,7 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
     today: { title: 'Today', sub: '' },
     learn: { title: 'Learn', sub: learnLanding ? 'Choose a practice track. Your progress stays connected.' : 'Governed cardiology learning and simulation' },
     progress: { title: 'Progress', sub: 'See what is strengthening, what needs another pass, and where to go next.' },
-    explore: { title: 'Explore', sub: 'Curated learning tools and approved experiences' },
+    explore: { title: 'Explore', sub: 'Reference, operations and advanced practice — when you need them.' },
     me: { title: 'Me', sub: 'Account, plan, privacy and settings' },
   }
   const current = titles[active]
@@ -239,8 +239,8 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
         }}
       >
         <div style={{ minWidth: 0 }}>
-          {/* Progress's h1 lives in the shared header (as Today's does), so its surface is labelled by it. */}
-          <div style={{ fontSize: '1rem', fontWeight: 800 }}>{active === 'progress' ? <h1 id="progress-title" style={{ margin: 0, font: 'inherit' }}>{current.title}</h1> : current.title}</div>
+          {/* Progress and Explore keep their h1 in the shared header (as Today's does), so each surface is labelled by it. */}
+          <div style={{ fontSize: '1rem', fontWeight: 800 }}>{active === 'progress' || active === 'explore' ? <h1 id={`${active}-title`} style={{ margin: 0, font: 'inherit' }}>{current.title}</h1> : current.title}</div>
           {active === 'today' ? (
             // Today's support line lives in the shell header, under the title. The h1 keeps its exact
             // text on its own element: native screenshot automation waits on "One clear next step.".

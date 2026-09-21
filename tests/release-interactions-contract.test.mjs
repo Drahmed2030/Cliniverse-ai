@@ -6,21 +6,18 @@ function read(path) {
   return fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
 }
 
-test('Atlas is an interactive tour limited to verified release surfaces', () => {
+test('Explore is a curated discovery list limited to verified release surfaces', () => {
   const source = read('app/components/release/AtlasReleaseCatalog.tsx')
   const releaseApp = read('app/components/ReleaseApp.tsx')
   const ward = read('app/components/ward/index.tsx')
   assert.match(source, /<button/)
-  assert.match(source, /onNavigate\(path\.destination\)/)
-  assert.match(source, /workspace: 'ward'/)
+  assert.match(source, /onNavigate\(destination\)/)
   assert.match(source, /workspace: 'cardiology'/)
-  assert.match(source, /workspace: 'nexus'/)
-  assert.match(source, /Open Nexus/)
   assert.match(releaseApp, /setCareWorkspace\(destination\.workspace\)/)
   assert.match(releaseApp, /<WardIndex[^>]*initialWorkspace=\{careWorkspace\}/)
   assert.match(ward, /initialWorkspace === 'ward' \|\| initialWorkspace === 'codelab' \? null : initialWorkspace/)
-  assert.match(source, /onOpenPlan/)
-  assert.match(source, /FIND YOUR NEXT PRACTICE/)
+  assert.doesNotMatch(source, /onOpenPlan/)
+  assert.match(releaseApp, /Reference, operations and advanced practice — when you need them\./)
   assert.match(source, /Not for diagnosis, prescribing or managing real patient care/)
   assert.doesNotMatch(source, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
 })

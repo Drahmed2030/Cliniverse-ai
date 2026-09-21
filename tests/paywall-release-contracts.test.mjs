@@ -73,19 +73,19 @@ test('every visible premium action opens the shared paywall instead of staying d
   assert.doesNotMatch(evidence, /disabled=\{!isPro\}/)
 })
 
-test('Atlas links reviewers only to active release paths and the shared StoreKit plan', () => {
+test('Explore links only to active release paths; the StoreKit plan is owned by Me and the PRO workspace gate', () => {
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
   const release = read('app/components/ReleaseApp.tsx')
+  const me = read('app/components/release/MeAccountSummary.tsx')
 
   assert.match(atlas, /data-commercial-explore-surface/)
-  assert.match(atlas, /aria-labelledby="atlas-title"/)
-  assert.match(atlas, /Ward Simulation/)
+  assert.match(atlas, /aria-labelledby="explore-title"/)
   assert.match(atlas, /Cardiology Operations/)
-  assert.match(atlas, /Nexus Learning/)
-  assert.match(atlas, /onNavigate\(path\.destination\)/)
-  assert.match(atlas, /onOpenPlan/)
-  assert.match(atlas, /StoreKit price/)
-  assert.match(atlas, /Restore purchases/)
+  assert.match(atlas, /onNavigate\(destination\)/)
+  // Explore does not open the paywall itself; PRO is enforced by the workspace switcher and the plan lives in Me.
+  assert.doesNotMatch(atlas, /onOpenPlan|openPaywall/)
+  assert.match(me, /onClick=\{openPaywall\}/)
+  assert.match(me, /primaryProduct\.displayPrice/)
   assert.doesNotMatch(atlas, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
-  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} onOpenPlan=\{openPaywall\}/)
+  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=/)
 })

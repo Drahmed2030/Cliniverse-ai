@@ -21,11 +21,12 @@ test('Echo Intelligence Atlas panel is wired into the existing, already-gated Ec
     'EchoIntelligenceAtlasPanel must render inside the SAME gate as the existing lesson/summary panel, not a separately-gated surface')
 })
 
-test('Echo Preview remains reachable from exactly one Explore/Atlas entry point — no second Echo navigation system was created', () => {
+test('Echo Preview remains reachable from exactly one entry point (the Learn Echo track) — no second Echo navigation system was created', () => {
+  // Explore v2 no longer lists Echo Preview; Learn owns the practice-track entry.
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
-  const echoPreviewLinks = atlas.match(/href="\/labs\/echo-preview"/g) ?? []
-  assert.equal(echoPreviewLinks.length, 1)
-  assert.match(atlas, /Echo Preview/)
+  const learn = read('app/components/release/LearnTracks.tsx')
+  assert.equal((learn.match(/href: '\/labs\/echo-preview'/g) ?? []).length, 1)
+  assert.equal(atlas.includes('/labs/echo-preview'), false)
   // No competing labs route for the Atlas was introduced
   assert.equal(/href="\/labs\/echo-(intelligence|atlas)/.test(atlas), false)
 })

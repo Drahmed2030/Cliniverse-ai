@@ -67,6 +67,9 @@ test('section accent identities remain Today blue, Learn teal, Progress by-track
   assert.match(progress, /echo: \{ accent: 'var\(--cv-violet\)'/)
   assert.match(progress, /ward: \{ accent: 'var\(--cv-blue\)'/)
   assert.match(learn, /C\.teal/)
-  assert.match(explore, /C\.blue/)
+  // Explore's blue identity is its directional affordance, set in the scoped stylesheet.
+  const css = read('app/commercial-visual-system.css')
+  assert.match(css.slice(css.lastIndexOf('/*', css.indexOf('Explore — curated discovery'))), /\.cv-explore-row-go \{[^}]*var\(--cv-blue\)/)
+  assert.ok(explore.includes('cv-explore-row-go'))
   assert.match(me, /var\(--cv-gold\)/)
 })

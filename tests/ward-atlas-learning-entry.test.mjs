@@ -14,12 +14,11 @@ function component(path, mocks = {}) {
 }
 function nodes(n) { return !n || typeof n !== 'object' ? [] : Array.isArray(n) ? n.flatMap(nodes) : [n, ...nodes(n.props?.children)] }
 const Atlas = component('../app/components/release/AtlasReleaseCatalog.tsx', { '../ward/WardCaseConnections': { default: 'WardCaseConnections' } })
-test('Atlas activities retain their existing destinations and plan is a separate action', () => {
-  const destinations = []; let plans = 0
-  const buttons = nodes(Atlas({ onNavigate: d => destinations.push(d), onOpenPlan: () => plans++ })).filter(n => n.type === 'button')
+test('Explore keeps the existing destination for its one workspace entry; plan actions live in Me, not Explore', () => {
+  const destinations = []
+  const buttons = nodes(Atlas({ onNavigate: d => destinations.push(d) })).filter(n => n.type === 'button')
   buttons.forEach(n => n.props.onClick())
-  assert.deepEqual(destinations.map(d => d.workspace ?? d.tab), ['codelab', 'ward', 'cardiology', 'nexus', 'me'])
-  assert.equal(plans, 1)
+  assert.deepEqual(destinations.map(d => d.workspace ?? d.tab), ['cardiology'])
 })
 const patients = ['w1', 'w2'].map(id => ({ id, name: id, assignedToMe: true, status: 'active', priority: 'stable', department: 'cardiology', bed: id, diagnosis: 'Fictional case' }))
 const Ward = component('../app/components/ward/WardHome.tsx', {

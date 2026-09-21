@@ -1,20 +1,7 @@
 import Link from 'next/link'
 import WardCaseConnections from '../ward/WardCaseConnections'
 
-const C = {
-  panel: 'var(--cv-surface)',
-  elevated: 'var(--cv-surface-elevated)',
-  border: 'var(--cv-border)',
-  text: 'var(--cv-text)',
-  sub: 'var(--cv-text-secondary)',
-  blue: 'var(--cv-blue)',
-  teal: 'var(--cv-teal)',
-  violet: 'var(--cv-violet)',
-  gold: 'var(--cv-gold)',
-}
-
 type ReleaseDestination = 'care' | 'me'
-type ReleaseAccess = 'FREE' | 'PRO' | 'ACCOUNT'
 
 export interface AtlasDestination {
   tab: ReleaseDestination
@@ -23,273 +10,86 @@ export interface AtlasDestination {
 
 interface Props {
   onNavigate: (destination: AtlasDestination) => void
-  onOpenPlan: () => void
   caseLibraryPreview?: boolean
 }
 
-const releasePaths: Array<{
-  title: string
-  description: string
-  access: ReleaseAccess
-  destination: AtlasDestination
-  action: string
-  details: string[]
-}> = [
+// Explore is curated discovery: four destinations that do not compete with the core learning journey.
+// Learn owns practice entry (ECG, Echo, Ward), Me owns account and plan actions, and Code Lab and Nexus stay
+// reachable inside the Learn workspaces. Their routes and engines are untouched; they are just not listed here.
+//
+// Each status is a claim about real state and is checked against the content catalog by
+// tests/explore-curated-discovery.test.mjs, so a row cannot say "Available" for content the catalog holds:
+//   Clinical Reference  Available  the RxNorm and DailyMed lookups are ready; calculators, dosing and interactions
+//                                  are review_required and the workspace itself hides them
+//   Cardiology Operations  PRO     catalog tier is pro, and the Learn workspace switcher enforces the plan
+//   Resuscitation  In review       the scenarios and drills are review_required; the hub disables them
+//   Pathway Replay  Available      every visible row is ready, and the replay is fictional
+const DESTINATIONS = [
   {
-    title: 'Code Lab',
-    description: 'Build your BLS and ACLS knowledge with short lessons, practice and question reviews.',
-    access: 'FREE',
-    destination: { tab: 'care', workspace: 'codelab' },
-    action: 'Open Code Lab',
-    details: ['First two lessons per track free', 'Account-saved completion', 'PRO for all lessons'],
+    id: 'reference',
+    title: 'Clinical Reference',
+    status: 'Available',
+    description: 'Source-linked drug and label lookups. Calculators, dosing and interactions appear as they clear clinical review.',
+    href: '/labs/clinical-reference',
+    destination: null,
   },
   {
-    title: 'Ward Simulation',
-    description: 'Apply clinical reasoning to the first free fictional case: review the record, recognise missing information and practise a structured handover.',
-    access: 'FREE',
-    destination: { tab: 'care', workspace: 'ward' },
-    action: 'Open Ward',
-    details: ['Review facts and gaps', 'Practise a handover', 'Check save confirmation'],
-  },
-  {
+    id: 'cardiology',
     title: 'Cardiology Operations',
-    description: 'A PRO learning workspace for Cardiac Pathway, census, surgical readiness, tasks and structured handover.',
-    access: 'PRO',
+    status: 'PRO',
+    description: 'Structured learning workspace for pathways, tasks and handover.',
+    href: null,
     destination: { tab: 'care', workspace: 'cardiology' },
-    action: 'Open Cardiology',
-    details: ['Six interactive modules', 'Local simulation state', 'No clinical order transmission'],
   },
   {
-    title: 'Nexus Learning',
-    description: 'A PRO cardiovascular reliability exercise that coordinates four professional perspectives and a gated debrief.',
-    access: 'PRO',
-    destination: { tab: 'care', workspace: 'nexus' },
-    action: 'Open Nexus',
-    details: ['Four learning roles', 'Fictional reflections', 'Human-confirmed debrief'],
+    id: 'resuscitation',
+    title: 'Resuscitation',
+    status: 'In review',
+    description: 'Curriculum and simulations as reviewed content becomes available.',
+    href: '/labs/resuscitation-hub',
+    destination: null,
   },
   {
-    title: 'Account and subscription',
-    description: 'Review the profile, localized App Store plan, purchase restoration, privacy, terms and session controls.',
-    access: 'ACCOUNT',
-    destination: { tab: 'me' },
-    action: 'Open Me',
-    details: ['StoreKit price', 'Restore purchases', 'Privacy and support'],
+    id: 'pathway',
+    title: 'Pathway Replay',
+    status: 'Available',
+    description: 'Replay a fictional clinical pathway and inspect the decisions that shaped it.',
+    href: '/labs/pathway-replay',
+    destination: null,
   },
-]
+] as const
 
-const accessColor: Record<ReleaseAccess, string> = {
-  FREE: C.teal,
-  PRO: C.violet,
-  ACCOUNT: C.blue,
-}
-
-export default function AtlasReleaseCatalog({ onNavigate, onOpenPlan, caseLibraryPreview = false }: Props) {
+// Layout and control styling lives in commercial-visual-system.css under [data-commercial-surface="explore"].
+// The page title and support line live in the shared header, so this surface is labelled by that heading.
+export default function AtlasReleaseCatalog({ onNavigate, caseLibraryPreview = false }: Props) {
   return (
-    <section aria-labelledby="atlas-title" data-commercial-explore-surface>
-      <div style={introStyle}>
-        <div style={{ color: C.blue, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>FIND YOUR NEXT PRACTICE</div>
-        <h1 id="atlas-title" style={{ fontSize: 'clamp(1.6rem, 2.5vw, 2rem)', margin: '7px 0 8px' }}>Atlas</h1>
-        <p style={{ margin: 0, color: C.sub, fontSize: '0.95rem', lineHeight: 1.65, maxWidth: 760 }}>
-          Choose what you want to practise: build knowledge in Code Lab, apply it in Ward, then review your work. Each destination below explains its access and learning scope.
-        </p>
-      </div>
-
+    <section aria-labelledby="explore-title" data-commercial-surface="explore" data-commercial-explore-surface>
       {caseLibraryPreview && <WardCaseConnections context="atlas" />}
-      <div style={{ display: 'grid', gap: 10 }}>
-        {releasePaths.map(path => (
-          <article key={path.title} style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-              <div>
-                <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>{path.title}</h2>
-                <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>{path.description}</p>
-              </div>
-              <span style={{ color: accessColor[path.access], border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-                {path.access}
+      <ul className="cv-explore-list" aria-label="Explore destinations">
+        {DESTINATIONS.map(item => {
+          const body = (
+            <>
+              <span>
+                <span className="cv-explore-row-head">
+                  <span className="cv-explore-row-title">{item.title}</span>
+                  <span className="cv-explore-row-status">{item.status}</span>
+                </span>
+                <span className="cv-explore-row-text">{item.description}</span>
               </span>
-            </div>
-
-            <div aria-label={`${path.title} included capabilities`} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
-              {path.details.map(item => (
-                <span key={item} style={detailStyle}>{item}</span>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => onNavigate(path.destination)}
-              style={{ ...actionStyle, color: accessColor[path.access] }}
-            >
-              {path.action} →
-            </button>
-          </article>
-        ))}
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>ECG Challenge</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>5 ECG cases with findings and explanations</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/ecg-challenge" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open ECG Challenge →
-          </Link>
-        </article>
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Echo Preview</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Governed A4C normal study with video and assessment</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/echo-preview" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open Echo Preview →
-          </Link>
-        </article>
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Clinical Orbit</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Early prototype: explore how conditions and content connect</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/clinical-orbit" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open Clinical Orbit →
-          </Link>
-        </article>
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Resuscitation Hub</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>BLS/ACLS curriculum. Code Lab drills, governed simulations with Rapid Replay, and competency tracking are under clinical review.</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/resuscitation-hub" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open Resuscitation Hub →
-          </Link>
-        </article>
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Clinical Reference</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Reference workspace with source-linked drug identity and label lookups. Calculators, dosing and interaction tools are under clinical review.</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/clinical-reference" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open Clinical Reference →
-          </Link>
-        </article>
-
-        <article style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
-            <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 800, margin: 0 }}>Pathway Replay</h2>
-              <p style={{ color: C.sub, fontSize: '0.9rem', lineHeight: 1.55, margin: '7px 0 0' }}>Fictional STEMI pathway replay with a governed Code Lab drill and tamper-evident receipt trail</p>
-            </div>
-            <span style={{ color: accessColor.FREE, border: `1px solid ${C.border}`, borderRadius: 999, padding: '4px 7px', fontSize: '0.72rem', fontWeight: 800, whiteSpace: 'nowrap' }}>
-              FREE
-            </span>
-          </div>
-
-          <Link href="/labs/pathway-replay" style={{ ...actionStyle, color: accessColor.FREE, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none' }}>
-            Open Pathway Replay →
-          </Link>
-        </article>
-
-        <section aria-labelledby="atlas-plan-title" style={{ ...cardStyle, borderColor: C.border }}>
-          <div style={{ color: C.violet, fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em' }}>APP STORE PLAN</div>
-          <h2 id="atlas-plan-title" style={{ fontSize: '1.05rem', margin: '7px 0 6px' }}>Review Cliniverse PRO</h2>
-          <p style={{ margin: 0, color: C.sub, fontSize: '0.9rem', lineHeight: 1.55 }}>
-            See available plans and pricing in the iOS app, or restore an existing App Store subscription.
-          </p>
-          <button type="button" onClick={onOpenPlan} style={{ ...actionStyle, color: C.violet }}>
-            View plan →
-          </button>
-        </section>
-
-        <p style={boundaryStyle}>
-          Designed for learning and simulation. Not for diagnosis, prescribing or managing real patient care.
-        </p>
-      </div>
+              <span className="cv-explore-row-go" aria-hidden="true">→</span>
+            </>
+          )
+          const destination = item.destination
+          return (
+            <li key={item.id}>
+              {item.href
+                ? <Link className="cv-explore-row" href={item.href}>{body}</Link>
+                : destination && <button type="button" className="cv-explore-row" onClick={() => onNavigate(destination)}>{body}</button>}
+            </li>
+          )
+        })}
+      </ul>
+      <p className="cv-explore-boundary">Designed for learning and simulation. Not for diagnosis, prescribing or managing real patient care.</p>
     </section>
   )
 }
-
-const introStyle = {
-  padding: 16,
-  borderRadius: 18,
-  border: `1px solid ${C.border}`,
-  background: C.panel,
-  color: C.text,
-  marginBottom: 12,
-} as const
-
-const cardStyle = {
-  minWidth: 0,
-  overflowWrap: 'anywhere',
-  padding: 16,
-  borderRadius: 18,
-  border: `1px solid ${C.border}`,
-  background: C.panel,
-  color: C.text,
-} as const
-
-const detailStyle = {
-  padding: '6px 8px',
-  borderRadius: 999,
-  background: C.elevated,
-  color: C.sub,
-  fontSize: '0.78rem',
-  fontFamily: 'inherit',
-  border: `1px solid ${C.border}`,
-} as const
-
-const actionStyle = {
-  width: '100%',
-  minHeight: 48,
-  padding: 12,
-  whiteSpace: 'normal',
-  overflowWrap: 'anywhere',
-  marginTop: 14,
-  borderRadius: 13,
-  border: `1px solid ${C.border}`,
-  background: C.elevated,
-  fontSize: '0.9rem',
-  fontWeight: 800,
-  cursor: 'pointer',
-} as const
-
-const boundaryStyle = {
-  margin: 0,
-  padding: '12px 14px',
-  borderRadius: 14,
-  border: `1px solid ${C.border}`,
-  background: C.elevated,
-  color: C.gold,
-  fontSize: '0.82rem',
-  lineHeight: 1.55,
-} as const

@@ -18,9 +18,9 @@ const CATALOG = CLINICAL_CONTENT_CATALOG_SEED
 
 test('Pathway Replay is reachable from exactly one Explore/Atlas entry point — no second nav system', () => {
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
-  const links = atlas.match(/href="\/labs\/pathway-replay"/g) ?? []
+  const links = atlas.match(/href: '\/labs\/pathway-replay'/g) ?? []
   assert.equal(links.length, 1)
-  assert.match(atlas, /Pathway Replay/)
+  assert.match(atlas, /title: 'Pathway Replay'/)
 })
 
 test('the pathway-replay route exists and renders the real experience component, not a stub', () => {

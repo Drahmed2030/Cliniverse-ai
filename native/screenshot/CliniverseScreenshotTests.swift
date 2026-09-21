@@ -65,7 +65,7 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Atlas") {
-            try openTab("Explore", waitingFor: "FIND YOUR NEXT PRACTICE")
+            try openTab("Explore", waitingFor: "Reference, operations and advanced practice — when you need them.")
             assertSystemChromeClear("Explore")
             capture("05-atlas")
         }

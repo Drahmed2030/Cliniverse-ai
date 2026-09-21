@@ -18,9 +18,9 @@ const CATALOG = CLINICAL_CONTENT_CATALOG_SEED
 
 test('Clinical Reference is reachable from exactly one Explore/Atlas entry point', () => {
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
-  const links = atlas.match(/href="\/labs\/clinical-reference"/g) ?? []
+  const links = atlas.match(/href: '\/labs\/clinical-reference'/g) ?? []
   assert.equal(links.length, 1)
-  assert.match(atlas, /Clinical Reference/)
+  assert.match(atlas, /title: 'Clinical Reference'/)
 })
 
 test('the clinical-reference route exists and renders the real workspace, not a stub', () => {

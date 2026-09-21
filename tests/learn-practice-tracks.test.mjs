@@ -23,10 +23,14 @@ test('Learn landing has exactly the three approved practice tracks, in order', (
   ])
 })
 
-test('ECG and Echo open existing learner-facing routes that Explore already lists; Ward opens in place', () => {
+test('ECG and Echo open existing learner-facing routes (Learn owns their entry now); Ward opens in place', () => {
   assert.ok(existsSync(new URL('../app/labs/ecg-challenge/page.tsx', import.meta.url)))
   assert.ok(existsSync(new URL('../app/labs/echo-preview/page.tsx', import.meta.url)))
-  for (const href of ['/labs/ecg-challenge', '/labs/echo-preview']) assert.ok(explore.includes(`href="${href}"`), `Explore lists ${href}`)
+  // Explore v2 no longer lists them, so each has exactly one in-app entry: this track.
+  for (const href of ['/labs/ecg-challenge', '/labs/echo-preview']) {
+    assert.equal(tracks.split(`href: '${href}'`).length - 1, 1, `Learn lists ${href} once`)
+    assert.ok(!explore.includes(href), `Explore no longer lists ${href}`)
+  }
   assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{onOpenWard\}/)
   assert.match(app, /<LearnTracks onOpenWard=\{\(\) => setCareWorkspace\('ward'\)\} \/>/)
   // The reviewer-only ECG account-review route is not a learner track destination.
@@ -62,8 +66,10 @@ test('legacy engines and PRO gating in WardIndex are untouched and still reachab
   assert.match(ward, /if \(premium && !isPro\) \{\s*setPendingWorkspace\(nextWorkspace\)\s*openPaywall\(\)\s*return\s*\}/)
   assert.match(ward, /activeWorkspace === 'cardiology' && isPro/)
   assert.match(ward, /activeWorkspace === 'nexus' && isPro/)
-  // Explore keeps its own entries for all four workspaces.
-  for (const label of ['Code Lab', 'Ward Simulation', 'Cardiology Operations', 'Nexus Learning']) assert.ok(explore.includes(`title: '${label}'`))
+  // Explore v2 lists only Cardiology Operations of these; the others stay reachable in the workspace switcher above.
+  for (const label of ['Code Lab', 'Ward Simulation', 'Cardiology Operations', 'Nexus Learning']) assert.ok(ward.includes(`label: '${label}'`))
+  assert.ok(explore.includes("title: 'Cardiology Operations'"))
+  for (const label of ['Code Lab', 'Ward Simulation', 'Nexus Learning']) assert.ok(!stripComments(explore).includes(label))
 })
 
 test('Learn styling is scoped, token-only and restrained', () => {

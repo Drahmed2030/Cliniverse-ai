@@ -17,7 +17,8 @@ const wardSaved = read('app/components/ward/WardSavedPractice.tsx')
 const ecgHistory = read('app/components/release/EcgSavedHistory.tsx')
 const progressSurface = stripComments(app.slice(app.indexOf('function ProgressSurface'), app.indexOf('function ReleaseIntelligenceGate')))
 const header = app.slice(app.indexOf('function ReleaseHeader'), app.indexOf('function TodaySurface'))
-const progressCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory'))))
+// The Progress block runs until the Explore block begins (Explore has its own scoping test).
+const progressCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory')), css.lastIndexOf('/*', css.indexOf('Explore — curated discovery'))))
 
 const ready = data => ({ state: 'ready', data })
 const all = ({ ecg = ready({ count: 0, latestAt: null }), echo = ready({ count: 0, hasMore: false, latestAt: null }), ward = ready(null) } = {}) =>
@@ -192,7 +193,7 @@ test('every legitimate saved-record surface stays reachable, unchanged, and load
 
 test('Progress owns the page heading and support line in the shared header; navigation is unchanged', () => {
   assert.match(header, /progress: \{ title: 'Progress', sub: 'See what is strengthening, what needs another pass, and where to go next\.' \}/)
-  assert.match(header, /active === 'progress' \? <h1 id="progress-title"/)
+  assert.match(header, /active === 'progress' \|\| active === 'explore' \? <h1 id=\{`\$\{active\}-title`\}/)
   assert.match(app, /<section aria-labelledby="progress-title" data-commercial-surface="progress">/)
   assert.doesNotMatch(progressSurface, /<h1/)
   const nav = read('app/components/ReleaseNav.tsx')

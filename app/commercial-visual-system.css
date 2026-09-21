@@ -706,3 +706,88 @@
   [data-commercial-surface="progress"] .cv-progress-tracks > ul { padding: 0 var(--cv-space-6); }
   [data-commercial-surface="progress"] .cv-progress-next { padding: var(--cv-space-6); }
 }
+
+/* Explore — curated discovery (Implementation Contract v2). Composition only: one quiet list of
+ * four destinations inside a single surface, divided by hairlines. Each row is one interactive
+ * target (title, a written-out status, one sentence, a directional arrow), not a card with its own
+ * button. Same semantic tokens as Today, Learn and Progress; every rule is prefixed with the
+ * surface attribute. Status is text, never a colour or a pill. The support line lives in the
+ * shared header. */
+[data-commercial-surface="explore"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-4);
+  max-width: 680px;
+  margin: 0 auto;
+}
+[data-commercial-surface="explore"] > * { min-width: 0; }
+[data-commercial-surface="explore"] .cv-explore-list {
+  margin: 0;
+  padding: 0 var(--cv-space-5);
+  list-style: none;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-elevated);
+}
+[data-commercial-surface="explore"] .cv-explore-list > li + li { border-top: 1px solid var(--cv-border); }
+[data-commercial-surface="explore"] .cv-explore-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--cv-space-4);
+  width: 100%;
+  min-height: 72px;
+  margin: 0;
+  padding: var(--cv-space-5) 0;
+  border: 0;
+  background: transparent;
+  color: var(--cv-text);
+  text-align: left;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+[data-commercial-surface="explore"] .cv-explore-row > span:first-child { display: block; min-width: 0; }
+[data-commercial-surface="explore"] .cv-explore-row-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--cv-space-1) var(--cv-space-3);
+}
+[data-commercial-surface="explore"] .cv-explore-row-title {
+  font-size: var(--cv-text-section);
+  font-weight: 800;
+  line-height: 1.25;
+}
+[data-commercial-surface="explore"] .cv-explore-row-status {
+  color: var(--cv-text);
+  font-size: var(--cv-text-support);
+  font-weight: 700;
+  white-space: nowrap;
+}
+[data-commercial-surface="explore"] .cv-explore-row-text {
+  display: block;
+  max-width: 52ch;
+  margin-top: var(--cv-space-2);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-body);
+  line-height: 1.5;
+}
+[data-commercial-surface="explore"] .cv-explore-row-go {
+  color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text));
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+[data-commercial-surface="explore"] .cv-explore-row:focus-visible { outline-offset: -3px; }
+[data-commercial-surface="explore"] .cv-explore-boundary {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+
+@media (min-width: 700px) {
+  [data-commercial-surface="explore"] .cv-explore-list { padding: 0 var(--cv-space-6); }
+}
