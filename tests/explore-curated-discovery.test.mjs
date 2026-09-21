@@ -136,7 +136,7 @@ test('the engines and routes that left Explore are all still present and reachab
   // Learn owns ECG, Echo and Ward entry.
   const learn = read('app/components/release/LearnTracks.tsx')
   assert.equal(learn.match(/href: '\/learn\/ecg'/g).length, 1)
-  assert.equal(learn.match(/href: '\/labs\/echo-preview'/g).length, 1)
+  assert.equal(learn.match(/href: '\/learn\/echo'/g).length, 1)
   assert.match(learn, /onClick=\{onOpenWard\}/)
   // Code Lab and Nexus remain in the Learn workspace switcher, with their plan gates.
   const ward = read('app/components/ward/index.tsx')

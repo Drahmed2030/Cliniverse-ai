@@ -4,7 +4,7 @@ import Link from 'next/link'
 import type { CSSProperties } from 'react'
 
 // Learn is PRACTICE: three tracks, each opening an existing learner-facing destination.
-// ECG opens the governed ECG workspace (/learn/ecg); Echo opens its existing learner destination. No new engine.
+// ECG opens the governed ECG workspace (/learn/ecg) and Echo its learner workspace (/learn/echo), a shell around the existing Echo engine. No new engine.
 // Ward opens the existing Ward workspace in place. No resume/review metadata is shown because
 // no per-track real state is available here; nothing user-specific is invented.
 const TRACKS = [
@@ -22,7 +22,7 @@ const TRACKS = [
     title: 'Echo',
     description: 'Start with the cine, organize findings, then assign meaning.',
     accent: 'var(--cv-violet)',
-    href: '/labs/echo-preview',
+    href: '/learn/echo',
   },
   {
     id: 'ward',

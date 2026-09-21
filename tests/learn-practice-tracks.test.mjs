@@ -18,19 +18,21 @@ const trackEntries = [...tracks.matchAll(/verb: '([^']+)',\s*title: '([^']+)',\s
 test('Learn landing has exactly the three approved practice tracks, in order', () => {
   assert.deepEqual(trackEntries, [
     { verb: 'INTERPRET', title: 'ECG', description: 'Read the full tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg' },
-    { verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/labs/echo-preview' },
+    { verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo' },
     { verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and see the consequence of each decision.', accent: 'var(--cv-blue)', href: null },
   ])
 })
 
-test('ECG opens the governed ECG workspace and Echo an existing learner route (Learn owns their entry); Ward opens in place', () => {
+test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn owns their entry); Ward opens in place', () => {
   // ECG v2: the legacy quiz route still exists but is no longer any track's destination (see tests/ecg-learner-workspace.test.mjs).
   assert.ok(existsSync(new URL('../app/learn/ecg/page.tsx', import.meta.url)))
   assert.ok(existsSync(new URL('../app/labs/ecg-challenge/page.tsx', import.meta.url)))
+  // Echo v2: the studio preview route still exists (QA and governance) but is no longer any track's destination.
+  assert.ok(existsSync(new URL('../app/learn/echo/page.tsx', import.meta.url)))
   assert.ok(existsSync(new URL('../app/labs/echo-preview/page.tsx', import.meta.url)))
-  assert.ok(!tracks.includes('/labs/ecg-challenge'))
+  assert.ok(!tracks.includes('/labs/ecg-challenge') && !tracks.includes('/labs/echo-preview'))
   // Explore v2 no longer lists them, so each has exactly one in-app entry: this track.
-  for (const href of ['/learn/ecg', '/labs/echo-preview']) {
+  for (const href of ['/learn/ecg', '/learn/echo']) {
     assert.equal(tracks.split(`href: '${href}'`).length - 1, 1, `Learn lists ${href} once`)
     assert.ok(!explore.includes(href), `Explore no longer lists ${href}`)
   }

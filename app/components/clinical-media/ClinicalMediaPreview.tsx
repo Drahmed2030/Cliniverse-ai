@@ -2,7 +2,7 @@
 
 import type { EchoAssessmentResponse } from '../../lib/competency/echoAssessmentContract'
 import { Player, type PlayerRef } from '@remotion/player'
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
 import {
   CLINICAL_MEDIA_FORMATS,
   compileClinicalMediaPreview,
@@ -18,6 +18,7 @@ import EchoA4cMediaComposition from './EchoA4cMediaComposition'
 import EchoStudyNavigation from './EchoStudyNavigation'
 import EchoStudySummaryPanel from './EchoStudySummaryPanel'
 import EchoIntelligenceAtlasPanel from './EchoIntelligenceAtlasPanel'
+import EchoCineCaption from './EchoCineCaption'
 import EchoPlaybackControls from './EchoPlaybackControls'
 import { studioPlayerCapabilities } from '../../lib/clinicalMedia/studioPlayerCapabilities'
 import { LOCAL_DCM_REVIEW } from '../../lib/clinicalMedia/localDcmReview'
@@ -55,12 +56,21 @@ function subscribeToReducedMotion(onStoreChange:()=>void){const query=window.mat
 function readReducedMotionPreference(){return window.matchMedia('(prefers-reduced-motion: reduce)').matches}
 function readServerReducedMotionPreference(){return false}
 
-export default function ClinicalMediaPreview({ echoOnly = false, onAssessment }: {
+// Groups children in the learner layout only. In the studio layout it renders nothing extra, so that DOM is unchanged.
+function Region({ learner, className, children }: { learner: boolean; className: string; children: ReactNode }) {
+  return learner ? <div className={className}>{children}</div> : <>{children}</>
+}
+
+/** variant 'studio' (default) is the existing preview, unchanged. 'learner' is the Echo v2 layout: the same player, controls,
+ * assessment and provenance, arranged media-first and without the studio-only controls. */
+export default function ClinicalMediaPreview({ echoOnly = false, onAssessment, variant = 'studio' }: {
   echoOnly?: boolean
   onAssessment?: (responses: EchoAssessmentResponse[]) => void
+  variant?: 'studio' | 'learner'
 } = {}) {
+  const learner=variant==='learner'
   const playerRef=useRef<PlayerRef>(null)
-  const [expandedCine,setExpandedCine]=useState(false)
+  const [expandedCine,setExpandedCine]=useState(learner)
   const [loopPlayback,setLoopPlayback]=useState(false)
   const [dcmReview,setDcmReview]=useState(false)
   const [dcmStatus,setDcmStatus]=useState<'checking'|'ready'|'hold'>('checking')
@@ -84,27 +94,33 @@ export default function ClinicalMediaPreview({ echoOnly = false, onAssessment }:
   const Composition=EchoA4cMediaComposition
   const playerViewportClass=`${styles.playerViewport} ${PLAYER_VIEWPORT_CLASS[format]}`
 
-  return <section className={styles.previewShell} aria-labelledby="clinical-media-preview-title" data-testid="clinical-media-preview" dir="ltr">
-    <div className={styles.previewHeader}><div><h2 id="clinical-media-preview-title">{copy.title}</h2><p>{copy.body}</p></div><div className={styles.previewControls}>
+  return <section className={learner?`${styles.previewShell} ${styles.learnerLayout}`:styles.previewShell} {...(learner?{'aria-label':'Echo cine and A4C check'}:{'aria-labelledby':'clinical-media-preview-title'})} data-testid="clinical-media-preview" data-variant={variant} dir="ltr">
+    {learner?null:<div className={styles.previewHeader}><div><h2 id="clinical-media-preview-title">{copy.title}</h2><p>{copy.body}</p></div><div className={styles.previewControls}>
       {!echoOnly&&process.env.NODE_ENV==='development'?<button type="button" className={styles.controlButton} aria-pressed={dcmReview} onClick={()=>{setDcmStatus('checking');setLoopPlayback(!dcmReview);setDcmReview(!dcmReview);setProgram('echo-a4c-normal')}}>DCM candidate · local review only</button>:null}
       <div className={styles.controlSet}><span className={styles.controlLabel}>{CONTROL_COPY.program}</span><div aria-label={CONTROL_COPY.program} className={`${styles.controlGroup} ${styles.programControl}`} role="group">{(echoOnly ? ['echo-a4c-normal'] as const : PROGRAM_ORDER).map(option=><button disabled={dcmReview} aria-pressed={program===option} className={`${styles.controlButton} ${program===option?styles.activeControl:''}`} key={option} onClick={()=>{setProgram(option);setLoopPlayback(false);setExpandedCine(false)}} type="button">{PROGRAM_COPY[option].label}</button>)}</div></div>
       <div className={styles.controlSet}><span className={styles.controlLabel}>{CONTROL_COPY.ratio}</span><div aria-label={CONTROL_COPY.ratio} className={`${styles.controlGroup} ${styles.formatControl}`} role="group">{FORMAT_ORDER.map(option=><button aria-pressed={format===option} className={`${styles.controlButton} ${format===option?styles.activeControl:''}`} key={option} onClick={()=>setFormat(option)} type="button">{CLINICAL_MEDIA_FORMATS[option].label}</button>)}</div></div>
-    </div></div>
+    </div></div>}
 
-    <details className={styles.previewStatus} data-testid="clinical-media-status"><summary><span aria-hidden="true"/><strong>{copy.status.summary}</strong><small>Preview status</small></summary><p>{copy.status.detail}</p></details>
+    {learner?null:<details className={styles.previewStatus} data-testid="clinical-media-status"><summary><span aria-hidden="true"/><strong>{copy.status.summary}</strong><small>Preview status</small></summary><p>{copy.status.detail}</p></details>}
 
-    {capabilities.studyNavigation&&!dcmReview&&program==='echo-a4c-normal'?<EchoStudyNavigation study={ECHO_A4C_PREVIEW_STUDY} session={echoSession} competency={echoCompetency} onSessionChange={setEchoSession}/>:null}
+    {capabilities.studyNavigation&&!dcmReview&&program==='echo-a4c-normal'&&!(learner&&ECHO_A4C_PREVIEW_STUDY.clips.length<2)?<EchoStudyNavigation study={ECHO_A4C_PREVIEW_STUDY} session={echoSession} competency={echoCompetency} onSessionChange={setEchoSession}/>:null}
 
+    <Region learner={learner} className={styles.learnerMedia}>
     {dcmReview&&dcmStatus!=='ready'?<p role="status">{dcmStatus==='checking'?'Checking local derivative checksum…':'HOLD: derivative unavailable or checksum mismatch. No playback enabled.'}</p>:<div className={styles.playerStage} data-testid="clinical-media-stage"><div className={playerViewportClass} data-export-format={format} data-testid="clinical-media-player-viewport"><Player ref={playerRef} autoPlay={false} className={styles.player} clickToPlay component={Composition} compositionHeight={expandedCine&&capabilities.cine?480:media.height} compositionWidth={expandedCine&&capabilities.cine?(dcmReview?648:624):media.width} controls durationInFrames={dcmReview?44:media.durationInFrames} fps={dcmReview?51:media.fps} inputProps={{locale:'en' as const,format,reducedMotion,localDcmReview:dcmReview,expandedCine:expandedCine&&capabilities.cine}} key={playerKey} loop={loopPlayback} showVolumeControls={false} spaceKeyToPlayOrPause style={RESPONSIVE_PLAYER_STYLE}/></div></div>}
 
+    {learner&&(!dcmReview||dcmStatus==='ready')?<EchoCineCaption/>:null}
+
     {capabilities.frameNavigation&&(!dcmReview||dcmStatus==='ready')?<EchoPlaybackControls key={playerKey} playerRef={playerRef} frameCount={frameCount} cineReview={dcmReview} loop={loopPlayback} onLoopChange={setLoopPlayback} expanded={expandedCine} onExpandedChange={setExpandedCine}/>:null}
+    </Region>
 
-    <div className={styles.previewFooter}><span><strong>Device-fit preview</strong>{reducedMotion?` · ${CONTROL_COPY.reduced}`:''}</span><span>{dcmReview?'DCM · 648×480 · 44 frames · 51 fps · local review only':`Export ${media.durationInFrames/media.fps}s · ${media.width}×${media.height} · ${media.compilationId}`}</span></div>
+    {learner?null:<div className={styles.previewFooter}><span><strong>Device-fit preview</strong>{reducedMotion?` · ${CONTROL_COPY.reduced}`:''}</span><span>{dcmReview?'DCM · 648×480 · 44 frames · 51 fps · local review only':`Export ${media.durationInFrames/media.fps}s · ${media.width}×${media.height} · ${media.compilationId}`}</span></div>}
 
+    <Region learner={learner} className={styles.learnerReasoning}>
     {capabilities.assessment&&!dcmReview&&program==='echo-a4c-normal'?<>
       <EchoA4cLesson onAssessment={onAssessment} reducedMotion={reducedMotion} onCompetencySignal={({mastery,taskId,observedAt})=>setEchoCompetency(current=>recordEchoClipCompetency({state:current,study:ECHO_A4C_PREVIEW_STUDY,clipId:echoSession.activeClipId,mastery,taskId,updatedAt:observedAt}))}/>
       <EchoStudySummaryPanel summary={echoSummary} recommendation={null}/>
       <EchoIntelligenceAtlasPanel/>
     </>:null}
+    </Region>
   </section>
 }

@@ -1521,3 +1521,161 @@
     border-width: 2px;
   }
 }
+
+/* ── Learner layout (Echo v2) ─────────────────────────────────────────────────────────────────────────────────────
+ * Rendered only when ClinicalMediaPreview is given variant="learner". Same player, controls, assessment and provenance,
+ * arranged media first. The media unit (stage, caption, control shelf) keeps the module's dark imaging surface, as a
+ * viewer does. The reasoning zone maps the module's --replay-* hooks and its hard-coded colours to the shell tokens
+ * (light, dark and increased contrast), and uses rem-based sizes so large text reflows. Nothing sits over the cine.
+ * Tokens come from the [data-commercial-shell] ancestor. */
+.learnerLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-6);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.learnerMedia { min-width: 0; }
+.learnerMedia .playerStage { padding: 0; min-height: 0; border-radius: var(--cv-radius-lg) var(--cv-radius-lg) 0 0; }
+.learnerMedia .playerViewport { max-width: 100%; }
+.learnerMedia .player { border: 0; border-radius: 0; box-shadow: none; }
+.learnerMedia .cineControlShelf {
+  margin-top: var(--cv-space-3);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: var(--replay-raised, #1f2937);
+}
+.learnerCaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--cv-space-1) var(--cv-space-4);
+  margin: 0;
+  padding: var(--cv-space-3) var(--cv-space-4);
+  border: 1px solid var(--cv-border);
+  border-top: 0;
+  border-radius: 0 0 var(--cv-radius-lg) var(--cv-radius-lg);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.learnerCaption a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--cv-space-2); color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-weight: 700; }
+
+.learnerReasoning {
+  --replay-surface: var(--cv-surface-elevated);
+  --replay-raised: var(--cv-surface-soft);
+  --replay-text: var(--cv-text);
+  --replay-secondary: var(--cv-text-secondary);
+  --replay-muted: var(--cv-text-secondary);
+  --replay-border: var(--cv-border);
+  --replay-cyan: var(--cv-teal);
+  --replay-green: var(--cv-teal);
+  --replay-blue: var(--cv-teal);
+  --replay-red: var(--cv-learning-danger);
+  --echo-line: var(--cv-border);
+  --echo-line-soft: var(--cv-border);
+  --echo-panel: var(--cv-surface-elevated);
+  --echo-tile: var(--cv-surface-soft);
+  --echo-chip: var(--cv-surface-soft);
+  --echo-ok-line: var(--cv-border);
+  --echo-ok-bg: var(--cv-surface-soft);
+  --echo-text: var(--cv-text);
+  --echo-strong: var(--cv-text);
+  --echo-muted: var(--cv-text-secondary);
+  --echo-accent: var(--cv-teal);
+  --echo-fs-s: var(--cv-text-support);
+  --echo-fs-h: var(--cv-text-section);
+  display: grid;
+  gap: var(--cv-space-5);
+  min-width: 0;
+  color: var(--cv-text);
+}
+.learnerReasoning > * { min-width: 0; margin: 0; }
+
+.learnerReasoning .echoLesson { margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--cv-text); }
+.learnerReasoning .echoLessonHeader { display: grid; gap: var(--cv-space-3); }
+.learnerReasoning .echoLessonHeader h2 { max-width: none; margin: var(--cv-space-2) 0; font-size: var(--cv-text-section); line-height: 1.25; color: var(--cv-text); }
+.learnerReasoning .echoLessonHeader > div > p:last-child { color: var(--cv-text-secondary); font-size: var(--cv-text-body); line-height: 1.55; }
+.learnerReasoning .echoEyebrow { color: var(--cv-teal); font-size: var(--cv-text-caption); }
+.learnerReasoning .realMediaBadge { justify-self: start; border: 1px solid var(--cv-border); background: transparent; color: var(--cv-text-secondary); font-size: var(--cv-text-caption); }
+.learnerReasoning .reducedMotionNote { color: var(--cv-text-secondary); background: transparent; border-color: var(--cv-border); font-size: var(--cv-text-support); }
+
+.learnerReasoning .realEchoGuideGrid { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: var(--cv-space-4); border-top: 1px solid var(--cv-border); }
+.learnerReasoning .realEchoGuideGrid article { padding: var(--cv-space-3) 0; border: 0; border-bottom: 1px solid var(--cv-border); border-radius: 0; background: transparent; }
+.learnerReasoning .realEchoGuideGrid span { color: var(--cv-teal); font-size: var(--cv-text-caption); }
+.learnerReasoning .realEchoGuideGrid strong { color: var(--cv-text); font-size: var(--cv-text-body); }
+.learnerReasoning .realEchoGuideGrid p { color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+
+.learnerReasoning .echoAssessment { margin: 0; }
+.learnerReasoning .echoAssessment > h3 { margin: 0 0 var(--cv-space-3); font-size: var(--cv-text-section); color: var(--cv-text); }
+.learnerReasoning .echoQuestionGrid,
+.learnerReasoning .realEchoQuestionGrid { grid-template-columns: minmax(0, 1fr); gap: var(--cv-space-5); }
+.learnerReasoning .echoQuestion { padding: 0; border: 0; border-radius: 0; background: transparent; }
+.learnerReasoning .echoQuestion legend { color: var(--cv-text); font-size: var(--cv-text-body); line-height: 1.4; }
+.learnerReasoning .echoQuestion legend span { border: 1px solid var(--cv-border); background: transparent; color: var(--cv-text); font-size: var(--cv-text-support); }
+.learnerReasoning .echoOptions button {
+  min-height: 48px;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+  font-size: var(--cv-text-body);
+  overflow-wrap: break-word;
+}
+.learnerReasoning .echoOptions button:hover:not(:disabled) { border-color: var(--cv-teal); background: var(--cv-surface-soft); }
+.learnerReasoning .echoOptions button:focus-visible { outline: 3px solid color-mix(in srgb, var(--cv-blue) 72%, transparent); outline-offset: 2px; }
+/* The chosen option is marked by a thicker border, weight and a check mark, not colour alone. */
+.learnerReasoning .echoOptions .echoOptionSelected,
+.learnerReasoning .echoOptions .echoOptionSelected:hover { border: 2px solid var(--cv-teal); background: var(--cv-nav-selected); color: var(--cv-text); box-shadow: none; font-weight: 800; }
+.learnerReasoning .echoOptions .echoOptionSelected::before { content: "\2713\00a0"; content: "\2713\00a0" / ""; }
+
+.learnerReasoning .echoAssessmentActions { flex-wrap: wrap; }
+.learnerReasoning .echoAssessmentActions label { color: var(--cv-text); font-size: var(--cv-text-body); }
+.learnerReasoning .echoAssessmentActions select { min-height: 44px; border: 1px solid var(--cv-border); border-radius: var(--cv-radius-sm); background: var(--cv-surface-elevated); color: var(--cv-text); font-size: var(--cv-text-body); }
+.learnerReasoning .echoAssessmentActions > span { color: var(--cv-text-secondary); font-size: var(--cv-text-support); }
+.learnerReasoning .echoPrimaryAction,
+.learnerReasoning .echoSecondaryAction { min-height: 48px; padding: 0 var(--cv-space-5); border: 1px solid transparent; border-radius: var(--cv-radius-md); font-size: var(--cv-text-body); font-weight: 800; }
+.learnerReasoning .echoPrimaryAction { background: var(--cv-teal); color: var(--cv-learning-on-teal); }
+.learnerReasoning .echoPrimaryAction:disabled { opacity: 0.6; cursor: default; }
+.learnerReasoning .echoSecondaryAction { border-color: var(--cv-border); background: transparent; color: var(--cv-text); }
+
+.learnerReasoning .echoResultWarning,
+.learnerReasoning .echoResultSuccess { grid-template-columns: auto minmax(0, 1fr); border: 1px solid var(--cv-border); border-left: 4px solid var(--cv-teal); border-radius: var(--cv-radius-sm); background: var(--cv-surface-elevated); color: var(--cv-text); }
+.learnerReasoning .echoResultWarning { border-left-color: var(--cv-learning-danger); }
+.learnerReasoning .echoResultWarning span,
+.learnerReasoning .echoResultSuccess span { color: var(--cv-text-secondary); font-size: var(--cv-text-support); }
+
+.learnerReasoning .echoReceipt { border: 1px solid var(--cv-border); border-radius: var(--cv-radius-sm); background: var(--cv-surface-elevated); color: var(--cv-text); }
+.learnerReasoning .echoReceipt > header > span { border: 1px solid var(--cv-border); background: transparent; color: var(--cv-text-secondary); }
+.learnerReasoning .echoReceipt dl > div { border-color: var(--cv-border); background: transparent; }
+.learnerReasoning .echoReceipt dt { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); }
+.learnerReasoning .echoReceipt dd { color: var(--cv-text); font-size: var(--cv-text-support); overflow-wrap: anywhere; }
+.learnerReasoning .echoReceipt > p,
+.learnerReasoning .echoDisclaimer,
+.learnerReasoning .echoContractId { color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+
+.learnerReasoning .realEchoAttribution { margin: 0; border: 1px solid var(--cv-border); border-radius: var(--cv-radius-md); background: transparent; }
+.learnerReasoning .realEchoAttribution > summary { min-height: 56px; }
+.learnerReasoning .realEchoAttribution > summary strong { color: var(--cv-text); font-size: var(--cv-text-support); }
+.learnerReasoning .realEchoAttribution > summary > span:last-child { color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-size: var(--cv-text-support); }
+.learnerReasoning .realEchoAttribution > summary:focus-visible,
+.learnerReasoning .realEchoSourceLinks a:focus-visible { outline: 3px solid color-mix(in srgb, var(--cv-blue) 72%, transparent); outline-offset: 2px; }
+.learnerReasoning .realEchoAttribution[open] > summary { border-bottom-color: var(--cv-border); }
+.learnerReasoning .realEchoAttributionBody { grid-template-columns: minmax(0, 1fr); }
+.learnerReasoning .realEchoAttribution h3 { color: var(--cv-text); font-size: var(--cv-text-body); }
+.learnerReasoning .realEchoAttribution p:not(.echoEyebrow) { color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.55; }
+.learnerReasoning .realEchoSourceLinks { flex-direction: row; flex-wrap: wrap; }
+.learnerReasoning .realEchoSourceLinks a { border: 1px solid var(--cv-border); color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-size: var(--cv-text-support); }
+.learnerReasoning .realEchoSourceLinks a:hover { background: var(--cv-surface-soft); }
+
+/* Landscape and desktop: the cine stays dominant on the left and follows the reader; reasoning forms the right rail. */
+@media (min-width: 1000px) {
+  .learnerLayout { grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); align-items: start; }
+  .learnerMedia { position: sticky; top: var(--cv-space-4); }
+}
