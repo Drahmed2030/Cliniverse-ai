@@ -71,7 +71,7 @@ final class CliniverseScreenshotTests: XCTestCase {
         }
 
         try runStep("Capture Me privacy surface") {
-            try openTab("Me", waitingFor: "YOUR CLINIVERSE")
+            try openTab("Me", waitingFor: "Account, plan and preferences.")
             let privacyLink = app.links["Privacy"]
             try reveal(privacyLink, maximumSwipes: 10)
             privacyLink.tap()

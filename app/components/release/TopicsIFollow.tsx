@@ -70,6 +70,9 @@ function useTopicsIFollow() {
   return useSyncExternalStore(subscribe, snapshot, () => EMPTY)
 }
 
+// One preference row inside Me's Preferences list, disclosed on demand so the primary screen stays compact.
+// The summary states the real selection; styling lives in commercial-visual-system.css under
+// [data-commercial-surface="me"]. There is no single "learning focus" field, so the multi-topic model is shown as it is.
 export default function TopicsIFollow() {
   const selected = useTopicsIFollow()
 
@@ -77,33 +80,31 @@ export default function TopicsIFollow() {
     setSelection(selected.includes(topic) ? selected.filter(t => t !== topic) : [...selected, topic])
   }
 
+  const selectedLabels = TOPIC_OPTIONS.filter(option => selected.includes(option.topic)).map(option => option.label)
+
   return (
-    <section aria-labelledby="topics-i-follow-title" style={{ padding: 16, marginBottom: 12, borderRadius: 18, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' }}>
-      <h2 id="topics-i-follow-title" style={{ fontSize: '1rem', margin: '0 0 8px' }}>Topics I follow</h2>
-      <p style={{ color: 'var(--cv-text-secondary)', margin: '0 0 12px' }}>Helps tailor what you see across Learn and Explore. This does not send you any email or notification.</p>
-      <div role="group" aria-label="Topics I follow" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+    <details className="cv-me-disclosure">
+      <summary>
+        <span>
+          <span id="topics-i-follow-title" className="cv-me-item-title">Topics I follow</span>
+          <span className="cv-me-item-text">{selectedLabels.length ? selectedLabels.join(', ') : 'None selected'}</span>
+        </span>
+      </summary>
+      <p className="cv-me-note">Helps tailor what you see across Learn and Explore. This does not send you any email or notification.</p>
+      <div className="cv-me-choices" role="group" aria-labelledby="topics-i-follow-title">
         {TOPIC_OPTIONS.map(({ topic, label }) => (
           <button
             key={topic}
             type="button"
+            className="cv-me-choice"
             aria-pressed={selected.includes(topic)}
             onClick={() => toggle(topic)}
-            style={{
-              minHeight: 44,
-              padding: '10px 16px',
-              borderRadius: 12,
-              border: `1px solid ${selected.includes(topic) ? 'var(--cv-teal)' : 'var(--cv-border)'}`,
-              background: selected.includes(topic) ? 'var(--cv-nav-selected)' : 'var(--cv-surface-elevated)',
-              color: 'var(--cv-text)',
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
           >
             {label}
           </button>
         ))}
       </div>
-      <p style={{ color: 'var(--cv-text-secondary)', fontSize: '0.85rem', marginTop: 12, marginBottom: 0 }}>Applies to this browser or app on this device.</p>
-    </section>
+      <p className="cv-me-note">Applies to this browser or app on this device.</p>
+    </details>
   )
 }

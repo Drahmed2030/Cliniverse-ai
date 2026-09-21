@@ -791,3 +791,220 @@
 @media (min-width: 700px) {
   [data-commercial-surface="explore"] .cv-explore-list { padding: 0 var(--cv-space-6); }
 }
+
+/* Me — account, plan and preferences (Implementation Contract v2). Composition only: an identity line, then
+ * three groups (Plan, Preferences, Account & support) of hairline-divided rows inside one surface each. Rows are
+ * single interactive targets; nothing is a nested card. Same semantic tokens as Today, Learn, Progress and
+ * Explore; every rule is prefixed with the surface attribute. State is text or a check mark, never colour alone.
+ * The title and support line live in the shared header. */
+[data-commercial-surface="me"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--cv-space-6);
+  max-width: 680px;
+  margin: 0 auto;
+}
+[data-commercial-surface="me"] > * { min-width: 0; }
+/* Only free-text values (name, email, product, notes) may break anywhere; labels and choices never split a word. */
+[data-commercial-surface="me"] :is(.cv-me-identity, .cv-me-item, .cv-me-note, .cv-me-error, .cv-me-loading, .cv-me-field) { overflow-wrap: anywhere; }
+[data-commercial-surface="me"] .cv-me-loading { color: var(--cv-text-secondary); font-size: var(--cv-text-body); }
+
+[data-commercial-surface="me"] .cv-me-identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--cv-space-4);
+}
+[data-commercial-surface="me"] .cv-me-avatar {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid color-mix(in srgb, var(--cv-gold) 55%, var(--cv-border));
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--cv-gold) 12%, var(--cv-surface-elevated));
+  color: var(--cv-gold);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+[data-commercial-surface="me"] .cv-me-name { font-size: var(--cv-text-section); font-weight: 800; line-height: 1.25; }
+[data-commercial-surface="me"] .cv-me-email { margin-top: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-body); }
+[data-commercial-surface="me"] .cv-me-note {
+  max-width: 52ch;
+  margin: var(--cv-space-2) 0 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+[data-commercial-surface="me"] .cv-me-error {
+  margin-top: var(--cv-space-2);
+  color: var(--cv-learning-danger);
+  font-size: var(--cv-text-support);
+  font-weight: 700;
+}
+
+/* Name editing is disclosed on demand so the primary screen stays compact. */
+[data-commercial-surface="me"] .cv-me-edit { margin-top: calc(var(--cv-space-3) * -1); }
+[data-commercial-surface="me"] .cv-me-edit > summary,
+[data-commercial-surface="me"] .cv-me-disclosure > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+[data-commercial-surface="me"] .cv-me-edit > summary::-webkit-details-marker,
+[data-commercial-surface="me"] .cv-me-disclosure > summary::-webkit-details-marker { display: none; }
+[data-commercial-surface="me"] .cv-me-edit > summary {
+  color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text));
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+}
+[data-commercial-surface="me"] .cv-me-field { display: grid; gap: var(--cv-space-1); margin-top: var(--cv-space-2); }
+[data-commercial-surface="me"] .cv-me-field > span { color: var(--cv-text-secondary); font-size: var(--cv-text-support); font-weight: 700; }
+[data-commercial-surface="me"] .cv-me-field input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: var(--cv-space-2) var(--cv-space-3);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+  font-size: 1rem;
+}
+[data-commercial-surface="me"] .cv-me-save {
+  min-height: 44px;
+  margin-top: var(--cv-space-3);
+  padding: var(--cv-space-2) var(--cv-space-5);
+  border: 1px solid transparent;
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-teal);
+  color: var(--cv-learning-on-teal);
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+  cursor: pointer;
+}
+[data-commercial-surface="me"] .cv-me-save:disabled { cursor: default; opacity: 0.7; }
+
+[data-commercial-surface="me"] .cv-me-group { display: grid; gap: var(--cv-space-2); align-content: start; }
+[data-commercial-surface="me"] .cv-me-group-title {
+  margin: 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+[data-commercial-surface="me"] .cv-me-list {
+  margin: 0;
+  padding: 0 var(--cv-space-5);
+  list-style: none;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-elevated);
+}
+[data-commercial-surface="me"] .cv-me-list > li + li { border-top: 1px solid var(--cv-border); }
+
+[data-commercial-surface="me"] .cv-me-item,
+[data-commercial-surface="me"] .cv-me-pref { padding: var(--cv-space-4) 0; }
+[data-commercial-surface="me"] .cv-me-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--cv-space-1) var(--cv-space-3);
+}
+[data-commercial-surface="me"] .cv-me-item-title {
+  display: block;
+  margin: 0;
+  font-size: var(--cv-text-body);
+  font-weight: 800;
+  line-height: 1.3;
+}
+[data-commercial-surface="me"] .cv-me-plan-tier { text-transform: capitalize; }
+[data-commercial-surface="me"] .cv-me-item-status { color: var(--cv-text); font-size: var(--cv-text-support); font-weight: 700; }
+[data-commercial-surface="me"] .cv-me-item-text {
+  display: block;
+  margin-top: var(--cv-space-1);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+
+/* Rows: one control per row, text left, a directional arrow right. */
+[data-commercial-surface="me"] .cv-me-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--cv-space-4);
+  width: 100%;
+  min-height: 56px;
+  margin: 0;
+  padding: var(--cv-space-3) 0;
+  border: 0;
+  background: transparent;
+  color: var(--cv-text);
+  font-size: var(--cv-text-body);
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+[data-commercial-surface="me"] .cv-me-row:hover { background: var(--cv-surface-soft); }
+[data-commercial-surface="me"] .cv-me-row:focus-visible,
+[data-commercial-surface="me"] .cv-me-disclosure > summary:focus-visible { outline-offset: -3px; }
+[data-commercial-surface="me"] .cv-me-row-go {
+  color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text));
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+[data-commercial-surface="me"] .cv-me-signout { display: block; color: var(--cv-learning-danger); font-weight: 800; }
+[data-commercial-surface="me"] .cv-me-signout:disabled { cursor: default; opacity: 0.7; }
+[data-commercial-surface="me"] .cv-me-list .cv-me-error { margin: 0 0 var(--cv-space-3); }
+
+/* Preferences: a segmented choice row, and one disclosed row for topics. */
+[data-commercial-surface="me"] .cv-me-choices { display: flex; flex-wrap: wrap; gap: var(--cv-space-2); margin-top: var(--cv-space-3); }
+[data-commercial-surface="me"] .cv-me-choice {
+  flex: 1 1 auto;
+  min-width: max-content;
+  min-height: 44px;
+  padding: var(--cv-space-2) var(--cv-space-3);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-sm);
+  background: var(--cv-surface-soft);
+  color: var(--cv-text);
+  font-size: var(--cv-text-body);
+  font-weight: 600;
+  cursor: pointer;
+}
+[data-commercial-surface="me"] .cv-me-choice[aria-pressed="true"] {
+  border-color: var(--cv-teal);
+  background: var(--cv-nav-selected);
+  font-weight: 800;
+}
+/* The check mark is decorative: aria-pressed already carries the state, so keep it out of the accessible name
+ * (the alt-text form; a browser without it simply ignores the second declaration and keeps the first). */
+[data-commercial-surface="me"] .cv-me-choice[aria-pressed="true"]::before {
+  content: "\2713\00a0";
+  content: "\2713\00a0" / "";
+}
+[data-commercial-surface="me"] .cv-me-disclosure { padding: 0; }
+[data-commercial-surface="me"] .cv-me-disclosure > summary {
+  justify-content: space-between;
+  gap: var(--cv-space-4);
+  min-height: 56px;
+  padding: var(--cv-space-3) 0;
+}
+[data-commercial-surface="me"] .cv-me-disclosure > summary::after {
+  content: "+";
+  color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text));
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+[data-commercial-surface="me"] .cv-me-disclosure[open] > summary::after { content: "\2212"; }
+[data-commercial-surface="me"] .cv-me-disclosure > :not(summary) { margin-bottom: var(--cv-space-4); }
+[data-commercial-surface="me"] .cv-me-disclosure > .cv-me-choices { margin-bottom: 0; }
+
+@media (min-width: 700px) {
+  [data-commercial-surface="me"] .cv-me-list { padding: 0 var(--cv-space-6); }
+}

@@ -97,6 +97,12 @@ test('XCUITest captures the six approved surfaces and protects reviewer identity
   assert.doesNotMatch(source, /FIND YOUR NEXT PRACTICE|CURATED CAPABILITY LIBRARY/)
   assert.match(read('app/components/ReleaseApp.tsx'), /Reference, operations and advanced practice — when you need them\./)
   assert.doesNotMatch(atlasCatalog, /FIND YOUR NEXT PRACTICE/)
+  // Me v2: the native capture waits on the Me support line (shared header) and finds the Privacy row by its exact link name.
+  assert.match(source, /openTab\("Me", waitingFor: "Account, plan and preferences\."\)/)
+  assert.doesNotMatch(source, /YOUR CLINIVERSE/)
+  assert.match(source, /app\.links\["Privacy"\]/)
+  assert.match(read('app/components/ReleaseApp.tsx'), /me: \{ title: 'Me', sub: 'Account, plan and preferences\.' \}/)
+  assert.match(read('app/components/release/MeHub.tsx'), /<span>\{link\.label\}<\/span>\s*<span className="cv-me-row-go" aria-hidden="true">/)
   assert.match(wardHome, /`Open \$\{patient\.name\} simulated case`/)
   assert.match(wardHome, /patient\.id === 'w1'/)
   assert.doesNotMatch(source, /capture\([^\n]+\)[\s\S]{0,300}typeText\(/)

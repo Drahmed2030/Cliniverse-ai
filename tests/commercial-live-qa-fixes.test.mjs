@@ -35,14 +35,14 @@ test('Learn workspace uses semantic light-dark surfaces and readable selected te
 })
 
 test('Me primary identity accent is gold to match account identity', () => {
-  const source = read('app/components/release/MeHub.tsx')
-  assert.match(source, /YOUR CLINIVERSE/)
-  assert.match(source, /color:\s*'var\(--cv-gold\)'/)
+  // Me v2 has no eyebrow; the gold identity is the avatar, styled in the scoped stylesheet.
+  const css = read('app/commercial-visual-system.css')
+  assert.match(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))), /\.cv-me-avatar \{[^}]*color: var\(--cv-gold\)/)
+  assert.doesNotMatch(read('app/components/release/MeHub.tsx'), /YOUR CLINIVERSE/)
 })
 
 test('Me account and achievement surfaces consume commercial semantic tokens', () => {
   for (const path of [
-    'app/components/release/MeAccountSummary.tsx',
     'app/components/release/AchievementsHub.tsx',
     'app/components/release/LifeDeviceBoundary.tsx',
   ]) {
@@ -51,6 +51,8 @@ test('Me account and achievement surfaces consume commercial semantic tokens', (
     assert.match(source, /var\(--cv-text\)/)
     assert.equal(source.includes("panel: '#111827'"), false)
   }
+  // Me's own surface is token-styled in the scoped stylesheet (see the Me block in commercial-account-explore-semantic-migration.test.mjs).
+  assert.equal(read('app/components/release/MeAccountSummary.tsx').includes("panel: '#111827'"), false)
 })
 
 test('section accent identities remain Today blue, Learn teal, Progress by-track (ECG teal, Echo violet, Ward blue), Explore blue, Me gold', () => {
@@ -71,5 +73,6 @@ test('section accent identities remain Today blue, Learn teal, Progress by-track
   const css = read('app/commercial-visual-system.css')
   assert.match(css.slice(css.lastIndexOf('/*', css.indexOf('Explore — curated discovery'))), /\.cv-explore-row-go \{[^}]*var\(--cv-blue\)/)
   assert.ok(explore.includes('cv-explore-row-go'))
-  assert.match(me, /var\(--cv-gold\)/)
+  assert.match(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))), /var\(--cv-gold\)/)
+  assert.doesNotMatch(me, /#[0-9a-fA-F]{6}/)
 })

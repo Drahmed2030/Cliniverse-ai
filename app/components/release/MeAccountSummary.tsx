@@ -1,29 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { UserRound } from 'lucide-react'
 import { getCurrentUser } from '../../lib/identity'
 import { getOwnProfile, updateOwnProfile } from '../../lib/profile'
-import AccountSessionActions from '../auth/AccountSessionActions'
 import { useCliniverseSubscription } from './SubscriptionPurchaseProvider'
 
-interface ProfileState {
-  name: string
-  email: string
-}
-
-const C = {
-  panel: 'var(--cv-surface)',
-  elevated: 'var(--cv-surface-elevated)',
-  border: 'var(--cv-border)',
-  text: 'var(--cv-text)',
-  sub: 'var(--cv-text-secondary)',
-  blue: 'var(--cv-blue)',
-  teal: 'var(--cv-teal)',
-  danger: 'var(--cv-learning-danger)',
-}
-
+// Identity and plan for Me. Layout and control styling lives in commercial-visual-system.css under
+// [data-commercial-surface="me"]. Session actions and preferences are composed by MeHub.
 export default function MeAccountSummary() {
-  const [profile, setProfile] = useState<ProfileState | null>(null)
+  // name is null when no profile row could be read; email comes from Supabase Auth, never the profile row.
+  const [name, setName] = useState<string | null>(null)
+  const [draft, setDraft] = useState('')
+  const [email, setEmail] = useState('')
   const [profileLoading, setProfileLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -47,11 +36,11 @@ export default function MeAccountSummary() {
 
       if (!active) return
 
+      setEmail(userResult.data.user?.email || '')
       if (profileResult.data) {
-        setProfile({
-          name: profileResult.data.name || '',
-          email: userResult.data.user?.email || '',
-        })
+        const saved = profileResult.data.name || ''
+        setName(saved)
+        setDraft(saved)
       }
       setProfileLoading(false)
     }
@@ -63,12 +52,12 @@ export default function MeAccountSummary() {
   }, [])
 
   async function saveProfile() {
-    if (!profile || saving) return
+    if (name === null || saving) return
     setSaving(true)
     setMessage('')
 
     const result = await updateOwnProfile({
-      name: profile.name,
+      name: draft,
     })
 
     setSaving(false)
@@ -76,128 +65,85 @@ export default function MeAccountSummary() {
       setMessage('Profile update failed. Please try again.')
       return
     }
+    // Show what was persisted (the update trims the name), not what was typed.
+    const saved = result.data?.name ?? draft.trim()
+    setName(saved)
+    setDraft(saved)
     setMessage('Profile updated.')
   }
 
   if (profileLoading || entitlementLoading) {
-    return <div style={cardStyle}>Loading account…</div>
+    return <div className="cv-me-loading" role="status">Loading account…</div>
   }
 
+  // The saved profile name leads; the sign-in email stands in only when no name exists. Nothing is invented.
+  const displayName = name?.trim() || email
+  const initial = displayName.trim().charAt(0).toUpperCase()
+
   return (
-    <div style={{ display: 'grid', gap: 12 }}>
-      <section style={cardStyle} aria-labelledby="profile-account-title">
-        <div id="profile-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Profile</div>
-        <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-          Update the name shown on your account. Your sign-in email is read-only.
+    <>
+      <section className="cv-me-identity" aria-label="Account">
+        <span className="cv-me-avatar" aria-hidden="true">{initial || <UserRound size={22} />}</span>
+        <div>
+          {displayName ? <div className="cv-me-name">{displayName}</div> : null}
+          {email && email !== displayName ? <div className="cv-me-email">{email}</div> : null}
+          {name === null ? <div className="cv-me-note">Profile unavailable.</div> : null}
         </div>
-
-        {profile ? (
-          <div style={{ display: 'grid', gap: 10, marginTop: 14 }}>
-            <ReadOnlyField label="Email" value={profile.email} />
-            <EditableField label="Name" value={profile.name} onChange={(value) => setProfile({ ...profile, name: value })} />
-            <button type="button" onClick={saveProfile} disabled={saving} style={primaryButtonStyle}>
-              {saving ? 'Saving…' : 'Save profile'}
-            </button>
-            {message ? <div role="status" style={{ fontSize: '0.82rem', color: message.includes('failed') ? C.danger : C.teal }}>{message}</div> : null}
-          </div>
-        ) : (
-          <div style={{ color: C.danger, fontSize: '0.9rem', marginTop: 12 }}>Profile unavailable.</div>
-        )}
       </section>
+      {name !== null ? (
+        <details className="cv-me-edit">
+          <summary>Edit name</summary>
+          <label className="cv-me-field">
+            <span>Name</span>
+            <input aria-label="Name" value={draft} onChange={(event) => setDraft(event.target.value)} />
+          </label>
+          <p className="cv-me-note">Your sign-in email is read-only.</p>
+          <button type="button" className="cv-me-save" onClick={saveProfile} disabled={saving}>
+            {saving ? 'Saving…' : 'Save profile'}
+          </button>
+          {message ? <div role="status" className={message.includes('failed') ? 'cv-me-error' : 'cv-me-note'}>{message}</div> : null}
+        </details>
+      ) : null}
 
-      <section style={cardStyle} aria-labelledby="plan-account-title">
-        <div id="plan-account-title" style={{ fontSize: '1rem', fontWeight: 800 }}>Plan</div>
-        <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-          View available plans or restore an existing purchase in the iOS app.
-        </div>
-        <div style={{ marginTop: 12, padding: 12, borderRadius: 12, background: C.elevated }}>
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, textTransform: 'capitalize' }}>{entitlement ? entitlement.tier : 'Plan unavailable'}</div>
-          <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>
-            {entitlement ? `Status: ${entitlement.status}` : 'Your subscription status could not be confirmed.'}
-          </div>
-          {entitlement?.expiresAt ? <div style={{ color: C.sub, fontSize: '0.82rem', marginTop: 4 }}>Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
-          {primaryProduct ? (
-            <div style={{ color: C.text, fontSize: '0.9rem', fontWeight: 800, marginTop: 10 }}>
-              {primaryProduct.displayName} · {primaryProduct.displayPrice} · {primaryProduct.subscriptionPeriod}
+      <section className="cv-me-group" aria-labelledby="plan-account-title">
+        <h2 id="plan-account-title" className="cv-me-group-title">Plan</h2>
+        <ul className="cv-me-list">
+          <li className="cv-me-item">
+            <div className="cv-me-item-head">
+              <span className="cv-me-item-title cv-me-plan-tier">{entitlement ? entitlement.tier : 'Plan unavailable'}</span>
+              {entitlement ? <span className="cv-me-item-status">Status: {entitlement.status.replace('_', ' ')}</span> : null}
             </div>
+            {!entitlement ? <div className="cv-me-item-text">Your subscription status could not be confirmed.</div> : null}
+            {entitlement?.expiresAt ? <div className="cv-me-item-text">Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
+            {primaryProduct ? (
+              <div className="cv-me-item-text">
+                {primaryProduct.displayName} · {primaryProduct.displayPrice} · {primaryProduct.subscriptionPeriod}
+              </div>
+            ) : null}
+          </li>
+          <li>
+            <button type="button" className="cv-me-row" onClick={openPaywall}>
+              <span>{entitlement?.isPro ? 'View Cliniverse PRO plan' : 'Upgrade to Cliniverse PRO'}</span>
+              <span className="cv-me-row-go" aria-hidden="true">→</span>
+            </button>
+          </li>
+          {entitlement?.isPro ? (
+            <li>
+              <a
+                className="cv-me-row"
+                href="https://apps.apple.com/account/subscriptions"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Manage Apple subscription</span>
+                <span className="cv-me-row-go" aria-hidden="true">↗</span>
+              </a>
+            </li>
           ) : null}
-        </div>
-        <button type="button" onClick={openPaywall} style={{ ...primaryButtonStyle, width: '100%', marginTop: 10 }}>
-          {entitlement?.isPro ? 'View Cliniverse PRO plan' : 'Upgrade to Cliniverse PRO'}
-        </button>
-        {entitlement?.isPro ? (
-          <a
-            href="https://apps.apple.com/account/subscriptions"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'block', color: C.blue, textAlign: 'center', fontSize: '0.82rem', fontWeight: 800, marginTop: 10 }}
-          >
-            Manage Apple subscription
-          </a>
-        ) : null}
-        {storeMessage ? <div role="status" aria-live="polite" style={{ color: C.sub, fontSize: '0.82rem', lineHeight: 1.5, marginTop: 8 }}>{storeMessage}</div> : null}
+        </ul>
+        <p className="cv-me-note">View available plans or restore an existing purchase in the iOS app.</p>
+        {storeMessage ? <div role="status" aria-live="polite" className="cv-me-note">{storeMessage}</div> : null}
       </section>
-
-      <section style={cardStyle} aria-labelledby="session-account-title">
-        <div id="session-account-title" style={{ fontSize: '1rem', fontWeight: 800, marginBottom: 10 }}>Account session</div>
-        <AccountSessionActions />
-      </section>
-    </div>
+    </>
   )
 }
-
-function EditableField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
-  return (
-    <label>
-      <div style={labelStyle}>{label}</div>
-      <input aria-label={label} value={value} onChange={(event) => onChange(event.target.value)} style={inputStyle} />
-    </label>
-  )
-}
-
-function ReadOnlyField({ label, value }: { label: string; value: string }) {
-  return (
-    <label>
-      <div style={labelStyle}>{label}</div>
-      <input aria-label={label} value={value} readOnly aria-readonly="true" style={{ ...inputStyle, opacity: 0.72 }} />
-    </label>
-  )
-}
-
-const cardStyle = {
-  padding: 16,
-  borderRadius: 18,
-  border: `1px solid ${C.border}`,
-  background: C.panel,
-  color: C.text,
-} as const
-
-const labelStyle = {
-  fontSize: '0.78rem',
-  fontWeight: 800,
-  color: C.sub,
-  marginBottom: 5,
-  letterSpacing: '0.04em',
-} as const
-
-const inputStyle = {
-  width: '100%',
-  boxSizing: 'border-box',
-  borderRadius: 12,
-  border: `1px solid ${C.border}`,
-  background: C.elevated,
-  color: C.text,
-  padding: '11px 12px',
-  fontSize: '0.95rem',
-} as const
-
-const primaryButtonStyle = {
-  minHeight: 44,
-  borderRadius: 12,
-  border: `1px solid ${C.border}`,
-  background: 'var(--cv-learning-action)',
-  color: '#FFFFFF',
-  fontSize: '0.95rem',
-  fontWeight: 800,
-  cursor: 'pointer',
-} as const

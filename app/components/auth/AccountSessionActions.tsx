@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { signOut } from '../../lib/identity'
 
+// Styling lives in commercial-visual-system.css under [data-commercial-surface="me"] (.cv-me-signout).
 export default function AccountSessionActions() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -22,10 +23,10 @@ export default function AccountSessionActions() {
 
   return (
     <div>
-      <button type="button" onClick={handleSignOut} disabled={busy} style={{ width: '100%', minHeight: 44, borderRadius: 14, border: '1px solid rgba(248,113,113,0.28)', background: 'rgba(248,113,113,0.08)', color: '#FCA5A5', fontWeight: 800, cursor: busy ? 'default' : 'pointer', opacity: busy ? 0.7 : 1 }}>
+      <button type="button" className="cv-me-row cv-me-signout" onClick={handleSignOut} disabled={busy}>
         {busy ? 'Signing out…' : 'Sign out'}
       </button>
-      {error ? <div role="alert" style={{ marginTop: 8, color: '#FCA5A5', fontSize: 12 }}>{error}</div> : null}
+      {error ? <div role="alert" className="cv-me-error">{error}</div> : null}
     </div>
   )
 }

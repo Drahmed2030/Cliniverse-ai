@@ -15,7 +15,8 @@ const explore = read(explorePath)
 const exploreSource = stripComments(explore)
 const app = read('app/components/ReleaseApp.tsx')
 const css = read('app/commercial-visual-system.css')
-const exploreCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Explore — curated discovery'))))
+// The Explore block runs until the Me block begins (Me has its own scoping test).
+const exploreCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Explore — curated discovery')), css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))))
 const header = app.slice(app.indexOf('function ReleaseHeader'), app.indexOf('function TodaySurface'))
 
 const rows = [...explore.matchAll(/id: '([^']+)',\s*title: '([^']+)',\s*status: '([^']+)',\s*description: '([^']+)',\s*href: (?:'([^']+)'|null),\s*destination: (null|\{[^}]+\})/g)]
@@ -155,7 +156,7 @@ test('the engines and routes that left Explore are all still present and reachab
 
 test('Explore owns its page heading and support line in the shared header; navigation is unchanged', () => {
   assert.match(header, /explore: \{ title: 'Explore', sub: 'Reference, operations and advanced practice — when you need them\.' \}/)
-  assert.match(header, /active === 'progress' \|\| active === 'explore' \? <h1 id=\{`\$\{active\}-title`\}/)
+  assert.match(header, /active === 'progress' \|\| active === 'explore' \|\| active === 'me' \? <h1 id=\{`\$\{active\}-title`\}/)
   assert.match(explore, /<section aria-labelledby="explore-title" data-commercial-surface="explore" data-commercial-explore-surface>/)
   assert.doesNotMatch(exploreSource, /<h1|<h2/)
   assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=\{showEcgReview && caseLibraryPreview\} \/>/)

@@ -193,7 +193,7 @@ test('every legitimate saved-record surface stays reachable, unchanged, and load
 
 test('Progress owns the page heading and support line in the shared header; navigation is unchanged', () => {
   assert.match(header, /progress: \{ title: 'Progress', sub: 'See what is strengthening, what needs another pass, and where to go next\.' \}/)
-  assert.match(header, /active === 'progress' \|\| active === 'explore' \? <h1 id=\{`\$\{active\}-title`\}/)
+  assert.match(header, /active === 'progress' \|\| active === 'explore' \|\| active === 'me' \? <h1 id=\{`\$\{active\}-title`\}/)
   assert.match(app, /<section aria-labelledby="progress-title" data-commercial-surface="progress">/)
   assert.doesNotMatch(progressSurface, /<h1/)
   const nav = read('app/components/ReleaseNav.tsx')

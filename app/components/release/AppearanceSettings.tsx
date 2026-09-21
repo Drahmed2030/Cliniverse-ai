@@ -27,14 +27,15 @@ function setAppearance(value: Appearance) {
 export function useAppearance() {
   return useSyncExternalStore(subscribe, snapshot, () => 'system' as Appearance)
 }
+// One preference row inside Me's Preferences list; styling lives in commercial-visual-system.css under
+// [data-commercial-surface="me"]. The selected option is marked by weight and a check mark, not colour alone.
 export default function AppearanceSettings() {
   const appearance = useAppearance()
-  return <section aria-labelledby="appearance-title" style={{ padding: 16, marginBottom: 12, borderRadius: 18, border: '1px solid var(--cv-border)', background: 'var(--cv-surface)', color: 'var(--cv-text)' }}>
-    <h2 id="appearance-title" style={{ fontSize: '1rem', margin: '0 0 8px' }}>Appearance</h2>
-    <p style={{ color: 'var(--cv-text-secondary)', margin: '0 0 12px' }}>Choose your display. System follows your device’s light or dark setting.</p>
-    <div role="group" aria-label="Appearance" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-      {(['system', 'light', 'dark'] as const).map(value => <button key={value} type="button" aria-pressed={appearance === value} onClick={() => setAppearance(value)} style={{ minHeight: 44, flex: '1 1 100px', padding: '10px 16px', borderRadius: 12, border: `1px solid ${appearance === value ? 'var(--cv-teal)' : 'var(--cv-border)'}`, background: appearance === value ? 'var(--cv-nav-selected)' : 'var(--cv-surface-elevated)', color: 'var(--cv-text)', cursor: 'pointer', fontWeight: 600 }}>{value === 'system' ? 'System' : value === 'light' ? 'Light' : 'Dark'}</button>)}
+  return <div className="cv-me-pref">
+    <h3 id="appearance-title" className="cv-me-item-title">Appearance</h3>
+    <div className="cv-me-choices" role="group" aria-labelledby="appearance-title">
+      {(['system', 'light', 'dark'] as const).map(value => <button key={value} type="button" className="cv-me-choice" aria-pressed={appearance === value} onClick={() => setAppearance(value)}>{value === 'system' ? 'System' : value === 'light' ? 'Light' : 'Dark'}</button>)}
     </div>
-    <p style={{ color: 'var(--cv-text-secondary)', fontSize: '0.85rem', marginBottom: 0 }}>Applies to this browser or app on this device.</p>
-  </section>
+    <p className="cv-me-note">System follows your device’s light or dark setting. Applies to this browser or app on this device.</p>
+  </div>
 }

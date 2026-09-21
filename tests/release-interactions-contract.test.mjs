@@ -44,9 +44,10 @@ test('Me hub exposes privacy, terms, and support destinations', () => {
 
 test('Me renders one account-session surface', () => {
   const releaseApp = read('app/components/ReleaseApp.tsx')
-  const account = read('app/components/release/MeAccountSummary.tsx')
+  const hub = read('app/components/release/MeHub.tsx')
   assert.doesNotMatch(releaseApp, /AccountSessionActions/)
-  assert.match(account, /AccountSessionActions/)
+  assert.doesNotMatch(read('app/components/release/MeAccountSummary.tsx'), /AccountSessionActions/)
+  assert.equal(hub.match(/<AccountSessionActions \/>/g).length, 1)
 })
 
 test('consult requests are explicit local simulation state', () => {
