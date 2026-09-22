@@ -1245,3 +1245,18 @@
   [data-commercial-surface="learn"] .cv-learn-collection-head { grid-template-columns:1fr; align-items:start; }
   [data-commercial-surface="learn"] .cv-learn-collection-meta { white-space:normal; }
 }
+
+
+/* Connected-practice group: multiple graph-backed paths share one visual primitive. */
+[data-commercial-surface="learn"] .cv-learn-collections {
+  display: grid;
+  gap: var(--cv-space-3);
+}
+[data-commercial-surface="learn"] .cv-learn-collections > .cv-learn-group-head {
+  margin-bottom: var(--cv-space-1);
+}
+[data-commercial-surface="learn"] .cv-learn-collection-head h3 {
+  margin: var(--cv-space-1) 0 0;
+  font-size: var(--cv-text-section);
+  line-height: 1.25;
+}

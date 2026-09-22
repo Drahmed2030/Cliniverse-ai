@@ -24,19 +24,27 @@ const SYSTEMS: Entry[] = [
   { id:'nexus', verb:'COLLABORATE', title:'Nexus Learning', description:'Practise a four-role cardiovascular huddle.', accent:'var(--cv-violet)', workspace:'nexus' },
 ]
 
-const CARDIOLOGY_COLLECTION = CONTENT_COLLECTIONS.find(collection => collection.id === 'cardiology-practice')!
-const CARDIOLOGY_NODES = collectionNodes(CARDIOLOGY_COLLECTION)
+const LEARN_COLLECTION_IDS = ['cardiology-practice','acute-care-foundations'] as const
 
 const COLLECTION_DESTINATIONS: Record<string, { verb:string; href?:string; workspace?:Workspace }> = {
   'ecg-record-10': { verb:'INTERPRET', href:'/learn/ecg' },
   'echo-a4c-normal': { verb:'OBSERVE', href:'/learn/echo' },
   'ward-current-set': { verb:'DECIDE', workspace:'ward' },
   'pathway-replay': { verb:'REPLAY', href:'/labs/pathway-replay' },
+  'resuscitation-hub': { verb:'SIMULATE', href:'/labs/resuscitation-hub' },
+  'code-lab-bls': { verb:'PRACTISE', workspace:'codelab' },
+  'handover-practice': { verb:'COMMUNICATE', workspace:'handover' },
 }
 
 export default function LearnTracks({ onOpenWorkspace }: { onOpenWorkspace:(workspace:Workspace)=>void }) {
   return <div data-commercial-surface="learn" data-commercial-learn-surface>
-    <ConnectedPractice onOpenWorkspace={onOpenWorkspace}/>
+    <section className="cv-learn-collections" aria-labelledby="connected-practice-title">
+      <div className="cv-learn-group-head">
+        <h2 id="connected-practice-title">Connected practice</h2>
+        <p>Move across signals, simulation, decisions and communication without leaving one learning path.</p>
+      </div>
+      {LEARN_COLLECTION_IDS.map(collectionId => <ConnectedPractice key={collectionId} collectionId={collectionId} onOpenWorkspace={onOpenWorkspace}/>)}
+    </section>
     <TrackGroup title="Core practice" description="Interpret signals, observe media and make decisions." entries={CORE} onOpenWorkspace={onOpenWorkspace}/>
     <TrackGroup title="Advanced practice" description="Build depth through simulation, curriculum and replay." entries={ADVANCED} onOpenWorkspace={onOpenWorkspace}/>
     <TrackGroup title="Clinical systems" description="Reference and operational practice when you need the wider context." entries={SYSTEMS} onOpenWorkspace={onOpenWorkspace}/>
@@ -57,19 +65,22 @@ function TrackEntry({entry,onOpenWorkspace}:{entry:Entry;onOpenWorkspace:(worksp
 }
 
 
-function ConnectedPractice({onOpenWorkspace}:{onOpenWorkspace:(workspace:Workspace)=>void}) {
-  const totalMinutes=CARDIOLOGY_NODES.reduce((sum,node)=>sum+(node.durationMinutes??0),0)
-  return <section className="cv-learn-collection" aria-labelledby="cardiology-practice-title">
+function ConnectedPractice({collectionId,onOpenWorkspace}:{collectionId:string;onOpenWorkspace:(workspace:Workspace)=>void}) {
+  const collection=CONTENT_COLLECTIONS.find(item=>item.id===collectionId)
+  if(!collection) return null
+  const nodes=collectionNodes(collection)
+  const totalMinutes=nodes.reduce((sum,node)=>sum+(node.durationMinutes??0),0)
+  return <article className="cv-learn-collection" aria-labelledby={collectionId+'-title'}>
     <div className="cv-learn-collection-head">
       <div>
         <span className="cv-learn-collection-eyebrow">CONNECTED PRACTICE</span>
-        <h2 id="cardiology-practice-title">{CARDIOLOGY_COLLECTION.title}</h2>
-        <p>{CARDIOLOGY_COLLECTION.description}</p>
+        <h3 id={collectionId+'-title'}>{collection.title}</h3>
+        <p>{collection.description}</p>
       </div>
-      <span className="cv-learn-collection-meta">{CARDIOLOGY_NODES.length} steps · {totalMinutes} min</span>
+      <span className="cv-learn-collection-meta">{nodes.length} steps · {totalMinutes} min</span>
     </div>
     <ol className="cv-learn-collection-steps">
-      {CARDIOLOGY_NODES.map((node,index)=>{
+      {nodes.map((node,index)=>{
         const destination=COLLECTION_DESTINATIONS[node.id]
         if(!destination) return null
         const body=<>
@@ -88,5 +99,5 @@ function ConnectedPractice({onOpenWorkspace}:{onOpenWorkspace:(workspace:Workspa
         </li>
       })}
     </ol>
-  </section>
+  </article>
 }
