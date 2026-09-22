@@ -1,15 +1,17 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
-test('reviewer can study related cases from Ward and Atlas without changing account evidence', async ({ page, context }, info) => {
+test('reviewer can move from unified Learn into Ward v2 and Explore without changing account evidence', async ({ page, context }, info) => {
   const user = { id: '00000000-0000-4000-8000-000000000001', email: 'reviewer@cliniverseai.com',
     aud: 'authenticated', role: 'authenticated', email_confirmed_at: '2026-01-01T00:00:00Z',
     created_at: '2026-01-01T00:00:00Z', app_metadata: {}, user_metadata: {} }
+
   await context.addInitScript(({ user }) => {
     localStorage.setItem('sb-zbiujqxinvcxvuviuenx-auth-token', JSON.stringify({ user,
       access_token: 'synthetic-test-token', refresh_token: 'synthetic-test-refresh',
       expires_at: Math.floor(Date.now() / 1000) + 3600, expires_in: 3600, token_type: 'bearer' }))
   }, { user })
+
   const writes: string[] = []
   await context.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url())
@@ -19,8 +21,6 @@ test('reviewer can study related cases from Ward and Atlas without changing acco
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers })
     if (url.hostname === 'zbiujqxinvcxvuviuenx.supabase.co') {
       if (url.pathname === '/auth/v1/user') return route.fulfill({ json: user, headers })
-      // AuthGate requires an existing profile. An empty response would trigger
-      // account bootstrap INSERT, correctly blocked by this read-only fixture.
       if (url.pathname === '/rest/v1/profiles') return route.fulfill({ json: [{ id: user.id, name: 'Synthetic reviewer', rank: 'Clinical Learner' }], headers })
       if (url.pathname.startsWith('/rest/v1/')) return route.fulfill({ json: [], headers })
     }
@@ -29,41 +29,37 @@ test('reviewer can study related cases from Ward and Atlas without changing acco
     }
     return route.abort()
   })
+
   await page.goto('/?view=learn')
-  // Learn opens on the practice-track landing; the handover practice lives in the Ward track.
+  await expect(page.getByRole('heading', { name: 'Core practice', exact: true })).toBeVisible({ timeout: 30_000 })
   await page.getByRole('button', { name: /DECIDE.*Ward/s }).click()
-  const section = page.getByRole('region', { name: 'Make your handover clear.' })
-  await expect(section).toBeVisible({ timeout: 30_000 })
-  await section.getByText('ECG: report versus tracing', { exact: true }).click()
-  const reasoning = section.getByRole('textbox', { name: 'Your reasoning (optional)' }).first()
-  await expect(section.getByText('Try this wording:', { exact: true }).first()).not.toBeVisible()
-  await reasoning.fill('The record contains a summary. I would check the original tracing.')
-  await section.getByText('Compare with the example', { exact: true }).first().click()
-  await expect(section).toContainText('Attribute that description to the record')
-  await expect(section.getByText('Try this wording:', { exact: true }).first()).toBeVisible()
-  await section.getByText('ECG: report versus tracing', { exact: true }).click()
-  await section.getByText('ECG: report versus tracing', { exact: true }).click()
-  await expect(reasoning).toHaveValue('The record contains a summary. I would check the original tracing.')
-  const popup = context.waitForEvent('page')
-  await section.getByRole('link', { name: 'Study the related case · new tab' }).first().click()
-  const study = await popup
-  await expect(study.getByRole('heading', { name: 'Anterior STEMI', exact: true })).toBeVisible()
-  await study.close()
-  await expect(section).toBeVisible()
-  await expect(page.getByRole('status').filter({ hasText: 'No saved practice yet' })).toBeVisible()
+
+  await expect(page.getByRole('heading', { name: 'Ward Simulation', exact: true })).toBeVisible()
+  await expect(page.getByText('SIMULATED CASES (7)', { exact: true })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Open Hassan Al-Amri simulated case' }).click()
+  await expect(page.getByRole('heading', { name: 'Hassan Al-Amri', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Decision', exact: true })).toBeVisible()
+  await expect(page.getByText('Case record', { exact: true })).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  expect((await new AxeBuilder({ page }).include('[data-patient-journey]').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([])
+
+  await page.getByRole('button', { name: 'Close', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Ward Simulation', exact: true })).toBeVisible()
+
   await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Explore', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible()
-  await section.getByText('Echo: state what is missing', { exact: true }).click()
-  const echoTopic = section.locator('details').filter({ has: page.getByText('Echo: state what is missing', { exact: true }) })
-  await expect(echoTopic.getByRole('textbox')).toHaveValue('')
-  await echoTopic.getByText('Compare with the example', { exact: true }).click()
-  await expect(section).toContainText('Echo findings and an ejection fraction are not supplied')
+  await expect(page.getByText('Clinical Reference', { exact: true })).toBeVisible()
+  await expect(page.getByText('Cardiology Operations', { exact: true })).toBeVisible()
+  await expect(page.getByText('Resuscitation', { exact: true })).toBeVisible()
+  await expect(page.getByText('Pathway Replay', { exact: true })).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-  expect((await new AxeBuilder({ page }).include('[aria-labelledby="atlas-evidence-title"]').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([])
-  await page.screenshot({ path: info.outputPath('atlas-ward-connections.png'), fullPage: true })
-  // Explore v2 no longer lists Ward; Learn owns its entry.
+  expect((await new AxeBuilder({ page }).include('[data-commercial-surface="explore"]').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([])
+  await page.screenshot({ path: info.outputPath('unified-learn-ward-explore.png'), fullPage: true })
+
   await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Learn', exact: true }).click()
   await page.getByRole('button', { name: /DECIDE.*Ward/s }).click()
-  await expect(page.getByRole('heading', { name: 'A clearer handover', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Ward Simulation', exact: true })).toBeVisible()
+
   expect(writes).toEqual([])
 })
