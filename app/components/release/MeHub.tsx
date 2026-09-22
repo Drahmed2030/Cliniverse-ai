@@ -4,6 +4,7 @@ import MeAccountSummary from './MeAccountSummary'
 import AppearanceSettings from './AppearanceSettings'
 import TopicsIFollow from './TopicsIFollow'
 import AccountSessionActions from '../auth/AccountSessionActions'
+import DeleteAccountAction from '../auth/DeleteAccountAction'
 
 const links = [
   { label: 'Privacy', href: '/privacy' },
@@ -34,6 +35,7 @@ export default function MeHub() {
           </a>
         </li>)}
         <li><AccountSessionActions /></li>
+        <li><DeleteAccountAction /></li>
       </ul>
     </section>
   </section>

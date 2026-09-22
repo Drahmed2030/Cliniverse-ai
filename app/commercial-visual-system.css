@@ -1018,3 +1018,19 @@
 [data-commercial-surface="learn"] .cv-learn-group-head p { margin: var(--cv-space-1) 0 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
 [data-commercial-surface="learn"] .cv-learn-list { display: grid; gap: var(--cv-space-3); margin: 0; padding: 0; list-style: none; }
 [data-commercial-surface="learn"] .cv-learn-list > li { min-width: 0; }
+
+
+/* Account deletion: destructive action is explicit, reversible until final confirmation, and never styled as a primary CTA. */
+[data-commercial-surface="me"] .cv-me-delete { color: var(--cv-learning-danger); font-weight: 800; }
+[data-commercial-surface="me"] .cv-me-delete-panel { padding: var(--cv-space-4) 0; }
+[data-commercial-surface="me"] .cv-me-delete-panel h3 { margin: 0; color: var(--cv-learning-danger); font-size: var(--cv-text-body); }
+[data-commercial-surface="me"] .cv-me-delete-panel p { margin: var(--cv-space-2) 0 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.55; }
+[data-commercial-surface="me"] .cv-me-delete-panel a { color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-weight: 700; }
+[data-commercial-surface="me"] .cv-me-delete-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--cv-space-2); margin-top: var(--cv-space-3); }
+[data-commercial-surface="me"] .cv-me-delete-actions button { min-height: 44px; border-radius: var(--cv-radius-sm); font-size: var(--cv-text-body); font-weight: 800; cursor: pointer; }
+[data-commercial-surface="me"] .cv-me-delete-cancel { border: 1px solid var(--cv-border); background: var(--cv-surface-soft); color: var(--cv-text); }
+[data-commercial-surface="me"] .cv-me-delete-confirm { border: 1px solid color-mix(in srgb, var(--cv-learning-danger) 55%, var(--cv-border)); background: color-mix(in srgb, var(--cv-learning-danger) 12%, var(--cv-surface-elevated)); color: var(--cv-learning-danger); }
+[data-commercial-surface="me"] .cv-me-delete-actions button:disabled { cursor: default; opacity: .55; }
+@media (max-width: 430px) {
+  [data-commercial-surface="me"] .cv-me-delete-actions { grid-template-columns: 1fr; }
+}

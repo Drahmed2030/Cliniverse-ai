@@ -52,6 +52,12 @@ export function subscribeToAuthState(
   return supabase.auth.onAuthStateChange(callback)
 }
 
+export async function deleteCurrentAccount() {
+  return supabase.functions.invoke('delete-account', {
+    body: { confirmation: 'DELETE' },
+  })
+}
+
 export async function signOut() {
   return supabase.auth.signOut()
 }
