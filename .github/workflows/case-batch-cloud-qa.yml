@@ -29,7 +29,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Focused content and boundary tests
-        run: node --test tests/decision-review.test.mjs tests/case-media-bindings.test.mjs tests/case-media-return.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs tests/content-recovery-studio.test.mjs tests/recomposition-design-contract.test.mjs tests/content-graph.test.mjs
+        run: node --test tests/decision-review.test.mjs tests/case-media-bindings.test.mjs tests/case-media-return.test.mjs tests/case-batch20.test.mjs tests/legacy-cardiology-drafts.test.mjs tests/learning-journey.test.mjs tests/content-recovery-studio.test.mjs tests/recomposition-design-contract.test.mjs tests/content-graph.test.mjs tests/platform-contracts.test.mjs
       - name: Ward and Atlas compatibility
         run: node --test tests/ward-*.test.mjs tests/atlas-codelab-entry.test.mjs
       - name: Typecheck new preview
