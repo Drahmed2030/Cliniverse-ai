@@ -42,3 +42,24 @@ Each learning unit should eventually carry:
 
 ## Sites
 ChatGPT Sites can serve as a rapid internal operating surface/prototype for the Content Factory, but canonical content definitions, rights/provenance, learner state and release contracts remain in the Cliniverse/NeuraOps code/data plane.
+
+
+## Visual recomposition contract
+Recovered capability never inherits its historical theme. The current commercial visual system is the only learner-facing design language.
+
+Required:
+- commercial shell tokens for typography, surfaces, borders, spacing, radii and semantic color
+- the accepted adaptive navigation and shared release header
+- system Light/Dark, increased contrast, reduced motion and accessibility-large type behavior
+- minimum 44px interactive targets and visible focus state
+- one primary action hierarchy per surface
+
+Not permitted in recomposed learner surfaces:
+- copying legacy inline-style layouts
+- module-specific font stacks or independent theme objects
+- decorative gradients/glass as an alternate product identity
+- duplicate local tab/navigation systems
+- emoji-led primary navigation
+- engineering/provenance state as the main learner-facing status
+
+The first implementation primitive is `RecomposedModuleShell`. A recovered module must extract domain logic/content and render new presentation inside this system.

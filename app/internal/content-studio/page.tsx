@@ -50,7 +50,7 @@ export default function ContentStudioPage() {
               <p>{asset.notes}</p>
               <dl>
                 <div><dt>Source</dt><dd><code>{asset.sourcePath}</code></dd></div>
-                <div><dt>Recomposition</dt><dd>{asset.nextUse}</dd></div>
+                <div><dt>Presentation</dt><dd>{asset.presentation === 'recompose' ? 'Rebuild in current Cliniverse system' : asset.presentation}</dd></div><div><dt>Recomposition</dt><dd>{asset.nextUse}</dd></div>
               </dl>
             </article>
           ))}

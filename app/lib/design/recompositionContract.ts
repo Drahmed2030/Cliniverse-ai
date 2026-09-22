@@ -1,0 +1,31 @@
+export const RECOMPOSITION_DESIGN_CONTRACT = {
+  version: '1.0.0',
+  principle: 'Recover capability and content; rebuild presentation in the current Cliniverse visual system.',
+  requiredRoot: 'data-commercial-shell',
+  primitives: [
+    'cv-recomposed-module',
+    'cv-recomposed-header',
+    'cv-recomposed-section',
+    'cv-recomposed-list',
+    'cv-recomposed-row',
+    'cv-recomposed-primary',
+    'cv-recomposed-secondary',
+    'cv-recomposed-meta',
+  ],
+  tokens: {
+    color: ['--cv-bg','--cv-surface','--cv-surface-elevated','--cv-surface-subtle','--cv-border','--cv-text','--cv-text-secondary','--cv-blue','--cv-teal','--cv-violet','--cv-gold','--cv-learning-danger'],
+    type: ['--cv-text-display','--cv-text-title','--cv-text-section','--cv-text-body','--cv-text-support','--cv-text-caption','--cv-text-eyebrow'],
+    spacing: ['--cv-space-1','--cv-space-2','--cv-space-3','--cv-space-4','--cv-space-5','--cv-space-6','--cv-space-7'],
+    radius: ['--cv-radius-sm','--cv-radius-md','--cv-radius-lg','--cv-radius-xl'],
+  },
+  prohibitedPresentation: [
+    'legacy gradients as product identity',
+    'module-specific font stacks',
+    'hard-coded theme forks',
+    'glass cards for ordinary clinical content',
+    'emoji as primary product navigation',
+    'engineering status text in learner UI',
+    'duplicate local navigation bars',
+    'legacy inline-style layouts copied into recomposed surfaces',
+  ],
+} as const
