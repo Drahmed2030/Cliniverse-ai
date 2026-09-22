@@ -1140,3 +1140,108 @@
 @media (max-width: 520px) {
   [data-commercial-shell] .cv-recomposed-header { grid-template-columns: 1fr; align-items: start; }
 }
+
+
+/* Connected practice collection — graph-backed, same Learn language, no secondary app shell. */
+[data-commercial-surface="learn"] .cv-learn-collection {
+  display: grid;
+  gap: var(--cv-space-3);
+  padding: var(--cv-space-5);
+  border: 1px solid color-mix(in srgb, var(--cv-teal) 28%, var(--cv-border));
+  border-radius: var(--cv-radius-xl);
+  background: var(--cv-surface-emphasis);
+}
+[data-commercial-surface="learn"] .cv-learn-collection-head {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: var(--cv-space-4);
+  align-items: end;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-eyebrow {
+  display: block;
+  color: color-mix(in srgb, var(--cv-teal) 72%, var(--cv-text));
+  font-size: var(--cv-text-eyebrow);
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-head h2 {
+  margin: var(--cv-space-1) 0 0;
+  font-size: var(--cv-text-section);
+  line-height: 1.25;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-head p {
+  max-width: 52ch;
+  margin: var(--cv-space-1) 0 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-meta {
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+  font-weight: 700;
+  white-space: nowrap;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-steps {
+  margin: 0;
+  padding: 0 var(--cv-space-4);
+  list-style: none;
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-lg);
+  background: var(--cv-surface-elevated);
+}
+[data-commercial-surface="learn"] .cv-learn-collection-steps > li + li {
+  border-top: 1px solid var(--cv-border);
+}
+[data-commercial-surface="learn"] .cv-learn-collection-row {
+  display: grid;
+  grid-template-columns: auto minmax(0,1fr) auto;
+  align-items: center;
+  gap: var(--cv-space-3);
+  width: 100%;
+  min-height: 64px;
+  padding: var(--cv-space-3) 0;
+  border: 0;
+  background: transparent;
+  color: var(--cv-text);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-row:hover { background: var(--cv-surface-soft); }
+[data-commercial-surface="learn"] .cv-learn-collection-index {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--cv-surface-soft);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-copy {
+  display: grid;
+  min-width: 0;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-verb {
+  color: color-mix(in srgb, var(--cv-teal) 72%, var(--cv-text));
+  font-size: var(--cv-text-eyebrow);
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-copy strong {
+  margin-top: 1px;
+  font-size: var(--cv-text-body);
+  line-height: 1.35;
+}
+[data-commercial-surface="learn"] .cv-learn-collection-copy small {
+  margin-top: 2px;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+}
+@media (max-width:520px) {
+  [data-commercial-surface="learn"] .cv-learn-collection-head { grid-template-columns:1fr; align-items:start; }
+  [data-commercial-surface="learn"] .cv-learn-collection-meta { white-space:normal; }
+}

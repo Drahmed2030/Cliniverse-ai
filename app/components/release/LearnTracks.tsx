@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { CSSProperties, ReactNode } from 'react'
+import { CONTENT_COLLECTIONS, collectionNodes } from '../../lib/content/contentCollections'
 
 type Workspace = 'ward' | 'handover' | 'codelab' | 'cardiology' | 'nexus'
 type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace }
@@ -23,8 +24,19 @@ const SYSTEMS: Entry[] = [
   { id:'nexus', verb:'COLLABORATE', title:'Nexus Learning', description:'Practise a four-role cardiovascular huddle.', accent:'var(--cv-violet)', workspace:'nexus' },
 ]
 
+const CARDIOLOGY_COLLECTION = CONTENT_COLLECTIONS.find(collection => collection.id === 'cardiology-practice')!
+const CARDIOLOGY_NODES = collectionNodes(CARDIOLOGY_COLLECTION)
+
+const COLLECTION_DESTINATIONS: Record<string, { verb:string; href?:string; workspace?:Workspace }> = {
+  'ecg-record-10': { verb:'INTERPRET', href:'/learn/ecg' },
+  'echo-a4c-normal': { verb:'OBSERVE', href:'/learn/echo' },
+  'ward-current-set': { verb:'DECIDE', workspace:'ward' },
+  'pathway-replay': { verb:'REPLAY', href:'/labs/pathway-replay' },
+}
+
 export default function LearnTracks({ onOpenWorkspace }: { onOpenWorkspace:(workspace:Workspace)=>void }) {
   return <div data-commercial-surface="learn" data-commercial-learn-surface>
+    <ConnectedPractice onOpenWorkspace={onOpenWorkspace}/>
     <TrackGroup title="Core practice" description="Interpret signals, observe media and make decisions." entries={CORE} onOpenWorkspace={onOpenWorkspace}/>
     <TrackGroup title="Advanced practice" description="Build depth through simulation, curriculum and replay." entries={ADVANCED} onOpenWorkspace={onOpenWorkspace}/>
     <TrackGroup title="Clinical systems" description="Reference and operational practice when you need the wider context." entries={SYSTEMS} onOpenWorkspace={onOpenWorkspace}/>
@@ -42,4 +54,39 @@ function TrackEntry({entry,onOpenWorkspace}:{entry:Entry;onOpenWorkspace:(worksp
   const style={'--track-accent':entry.accent} as CSSProperties
   if(entry.href) return <Link className="cv-learn-track" href={entry.href} style={style}>{body}</Link>
   return <button type="button" className="cv-learn-track" onClick={()=>entry.workspace&&onOpenWorkspace(entry.workspace)} style={style}>{body}</button>
+}
+
+
+function ConnectedPractice({onOpenWorkspace}:{onOpenWorkspace:(workspace:Workspace)=>void}) {
+  const totalMinutes=CARDIOLOGY_NODES.reduce((sum,node)=>sum+(node.durationMinutes??0),0)
+  return <section className="cv-learn-collection" aria-labelledby="cardiology-practice-title">
+    <div className="cv-learn-collection-head">
+      <div>
+        <span className="cv-learn-collection-eyebrow">CONNECTED PRACTICE</span>
+        <h2 id="cardiology-practice-title">{CARDIOLOGY_COLLECTION.title}</h2>
+        <p>{CARDIOLOGY_COLLECTION.description}</p>
+      </div>
+      <span className="cv-learn-collection-meta">{CARDIOLOGY_NODES.length} steps · {totalMinutes} min</span>
+    </div>
+    <ol className="cv-learn-collection-steps">
+      {CARDIOLOGY_NODES.map((node,index)=>{
+        const destination=COLLECTION_DESTINATIONS[node.id]
+        if(!destination) return null
+        const body=<>
+          <span className="cv-learn-collection-index">{String(index+1).padStart(2,'0')}</span>
+          <span className="cv-learn-collection-copy">
+            <span className="cv-learn-collection-verb">{destination.verb}</span>
+            <strong>{node.title}</strong>
+            <small>{node.durationMinutes ? `${node.durationMinutes} min` : 'Open practice'}</small>
+          </span>
+          <span className="cv-learn-track-go" aria-hidden="true">→</span>
+        </>
+        return <li key={node.id}>
+          {destination.href
+            ? <Link className="cv-learn-collection-row" href={destination.href}>{body}</Link>
+            : <button type="button" className="cv-learn-collection-row" onClick={()=>destination.workspace&&onOpenWorkspace(destination.workspace)}>{body}</button>}
+        </li>
+      })}
+    </ol>
+  </section>
 }
