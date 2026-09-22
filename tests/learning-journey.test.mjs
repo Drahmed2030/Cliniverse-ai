@@ -69,8 +69,11 @@ test('existing Ward, Progress and premium Pathway callbacks remain intact', () =
   assert.deepEqual(calls, ['ward', 'progress', 'pathway'])
 })
 
-test('journey remains inside the existing reviewer-only shell gate', () => {
-  assert.match(read('app/components/ReleaseApp.tsx'), /tab === 'today' && showEcgReview && <PracticeShift/)
+test('journey review tooling remains available only behind the explicit internal review gate', () => {
+  const release = read('app/components/ReleaseApp.tsx')
+  assert.match(release, /internalReviewTools = showEcgReview/)
+  assert.match(release, /reviewTools/)
+  assert.match(release, /tab === 'today' && internalReviewTools && <PracticeShift/)
   const source = read('app/lib/ward/learningJourney.ts')
   assert.doesNotMatch(source, /fetch\(|localStorage|supabase|setEntitlement|awardXp/)
 })
