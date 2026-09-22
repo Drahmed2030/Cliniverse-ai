@@ -21,11 +21,14 @@ test('Explore v2 no longer lists Code Lab, and its only workspace entry opens Ca
   assert.deepEqual(destinations, [{ tab: 'care', workspace: 'cardiology' }])
 })
 
-test('Code Lab still opens through the shell entry that Today and Progress use, into the same workspace', () => {
+test('Code Lab remains reachable through unified Learn and Progress, but no longer crowds Today', () => {
   const app = read('app/components/ReleaseApp.tsx')
+  const learn = read('app/components/release/LearnTracks.tsx')
   assert.match(app, /const openCodeLab = \(\) => \{ setCareWorkspace\('codelab'\); setTab\('learn'\) \}/)
-  assert.match(app, /<TodaySurface onNavigate=\{goTab\} onOpenCodeLab=\{openCodeLab\} \/>/)
+  assert.match(app, /<TodaySurface onNavigate=\{goTab\} \/>/)
+  assert.doesNotMatch(app, /<TodaySurface[^>]*onOpenCodeLab/)
   assert.match(app, /<ProgressSurface [\s\S]*?onOpenCodeLab=\{openCodeLab\} \/>/)
-  // The Learn workspace switcher keeps Code Lab as a free workspace.
+  assert.match(learn, /title:'Code Lab'[\s\S]*?workspace:'codelab'/)
+  // The underlying Ward family workspace remains available and free; unified Learn controls its presentation.
   assert.match(read('app/components/ward/index.tsx'), /label: 'Code Lab',[\s\S]*?premium: false/)
 })
