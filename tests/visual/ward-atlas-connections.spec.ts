@@ -32,7 +32,7 @@ test('reviewer can move from unified Learn into Ward v2 and Explore without chan
 
   await page.goto('/?view=learn')
   await expect(page.getByRole('heading', { name: 'Core practice', exact: true })).toBeVisible({ timeout: 30_000 })
-  await page.getByRole('button', { name: /DECIDE.*Ward/s }).click()
+  await page.getByRole('region', { name: 'Core practice' }).getByRole('button', { name: /DECIDE.*Ward/s }).click()
 
   await expect(page.getByRole('heading', { name: 'Ward Simulation', exact: true })).toBeVisible()
   await expect(page.getByText('SIMULATED CASES (7)', { exact: true })).toBeVisible()
@@ -58,7 +58,7 @@ test('reviewer can move from unified Learn into Ward v2 and Explore without chan
   await page.screenshot({ path: info.outputPath('unified-learn-ward-explore.png'), fullPage: true })
 
   await page.getByRole('navigation', { name: 'Primary' }).getByRole('button', { name: 'Learn', exact: true }).click()
-  await page.getByRole('button', { name: /DECIDE.*Ward/s }).click()
+  await page.getByRole('region', { name: 'Core practice' }).getByRole('button', { name: /DECIDE.*Ward/s }).click()
   await expect(page.getByRole('heading', { name: 'Ward Simulation', exact: true })).toBeVisible()
 
   expect(writes).toEqual([])
