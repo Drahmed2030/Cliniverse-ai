@@ -16,7 +16,7 @@ const AccountCodeLab = dynamic(() => import('./AccountCodeLab'), {
   loading: () => <p role="status">Loading Code Lab…</p>,
 })
 
-export type CareWorkspace = 'ward' | 'cardiology' | 'nexus' | 'codelab'
+export type CareWorkspace = 'ward' | 'handover' | 'cardiology' | 'nexus' | 'codelab'
 
 interface Props {
   initialWorkspace?: CareWorkspace
@@ -45,6 +45,12 @@ const workspaces: Array<{
     premium: false,
   },
   {
+    id: 'handover',
+    label: 'Handover Practice',
+    description: 'Structured documentation and communication practice',
+    premium: false,
+  },
+  {
     id: 'cardiology',
     label: 'Cardiology Operations',
     description: 'Cardiac Pathway and coordination practice',
@@ -69,10 +75,9 @@ const C = {
 }
 
 export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, caseLibraryPreview = false, initialCardiologyModule = 'overview', showWorkspaceNav = true }: Props) {
-  const [workspace, setWorkspace] = useState<CareWorkspace>(initialWorkspace === 'codelab' ? 'codelab' : 'ward')
-  const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
-    initialWorkspace === 'ward' || initialWorkspace === 'codelab' ? null : initialWorkspace,
-  )
+  const initialIsPremium = initialWorkspace === 'cardiology' || initialWorkspace === 'nexus'
+  const [workspace, setWorkspace] = useState<CareWorkspace>(initialIsPremium ? 'ward' : initialWorkspace)
+  const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(initialIsPremium ? initialWorkspace : null)
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null)
   const [consultedPatientIds, setConsultedPatientIds] = useState<string[]>([])
   const { canAccessPremium, entitlementLoading, openPaywall } = useCliniverseSubscription()
@@ -169,8 +174,13 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
 
       {activeWorkspace === 'ward' ? (
         <ErrorBoundary section="Ward Simulation">
-          {reviewSessions && <WardHandoverSession caseLibraryPreview={caseLibraryPreview} />}
           <WardHome onSelectPatient={handleSelectPatient} isPro={isPro} onUpgrade={openPaywall} />
+        </ErrorBoundary>
+      ) : null}
+
+      {activeWorkspace === 'handover' ? (
+        <ErrorBoundary section="Handover Practice">
+          <WardHandoverSession caseLibraryPreview />
         </ErrorBoundary>
       ) : null}
 

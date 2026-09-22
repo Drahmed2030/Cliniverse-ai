@@ -58,7 +58,7 @@ function AccountSession({owner}:{owner:string}) {
     <p role="status" aria-live="polite">{saveStatus}</p>
     {!ready && !busy && <button type="button" style={button} onClick={()=>{setBusy(true);setRetry(value=>value+1)}}>Retry restoring practice</button>}
     <fieldset disabled={busy || !ready} style={{border:0,padding:0,margin:0,minWidth:0}}>
-    <p style={{ color: 'var(--cv-text-secondary)', marginTop: 0 }}>WARD · INTERACTIVE REVIEW</p>
+    <p style={{ color: 'var(--cv-text-secondary)', marginTop: 0 }}>WARD · HANDOVER PRACTICE</p>
     <h2 id="ward-handover-title">A clearer handover</h2>
     <p><strong>Scenario: {scenario.title}</strong> · Same fictional case, a different documentation task.</p>
     <p>Practise separating recorded facts from missing information in one fictional case. No treatment decisions or patient outcomes are generated.</p>
@@ -72,7 +72,7 @@ function AccountSession({owner}:{owner:string}) {
     {session.stage === 'complete' && <><h3>What you practised</h3><p>You reviewed the source, identified a documentation gap, and prepared a draft. {session.events.some(event => event.action === scenario.incorrect) ? 'You also reconsidered an unsupported assumption before completing the draft.' : scenario.debrief}</p><p>No score, certification, discharge or real handover was recorded.</p><button type="button" style={button} onClick={() => { setSession(createPractice(nextScenario(session))); sessionId.current=crypto.randomUUID();setConfirmed(false);setSaveStatus('New practice not saved. Save before leaving.') }}>Start next scenario</button></>}
     {session.events.length > 0 && <details><summary style={{ minHeight: 44, cursor: 'pointer', paddingTop: 12 }}>Your session timeline · {session.events.length} actions</summary><ol>{session.events.map((event, index) => <li key={index}>{event.label} · <time dateTime={event.at}>{new Date(event.at).toLocaleTimeString()}</time></li>)}</ol></details>}
     <button type="button" style={{...button, marginTop:16}} onClick={save}>Save practice to account</button>
-    <p style={{ color: 'var(--cv-text-secondary)', fontSize: '0.875rem' }}>Review preview · Saved checkpoints resume here on the same content version. Unsaved changes are lost when you leave. Your latest saved practice also appears in Progress, separately from competency scores.</p>
+    <p style={{ color: 'var(--cv-text-secondary)', fontSize: '0.875rem' }}>Saved checkpoints resume here on the same content version. Unsaved changes are lost when you leave. Your latest saved practice also appears in Progress, separately from competency scores.</p>
     </fieldset>
   </section>
 }

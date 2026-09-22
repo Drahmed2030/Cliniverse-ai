@@ -183,13 +183,13 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
                 >
                   ← Practice tracks
                 </button>
-                <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} showWorkspaceNav={false} reviewSessions={internalReviewTools} caseLibraryPreview={internalReviewTools && caseLibraryPreview} />
+                <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} showWorkspaceNav={false} reviewSessions={false} caseLibraryPreview={false} />
               </>
             )}
           </ErrorBoundary>
         )}
         {tab === 'progress' && <ProgressSurface showWardPractice onNavigate={goTab} onOpenWard={() => { setCareWorkspace('ward'); setTab('learn') }} onOpenCodeLab={openCodeLab} />}
-        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
+        {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} />}
         {tab === 'me' && <MeHub />}
       </div>
       <ReleaseNav active={tab} onChange={goTab} />

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import type { CSSProperties, ReactNode } from 'react'
 
-type Workspace = 'ward' | 'codelab' | 'cardiology' | 'nexus'
+type Workspace = 'ward' | 'handover' | 'codelab' | 'cardiology' | 'nexus'
 type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace }
 
 const CORE: Entry[] = [
@@ -13,6 +13,7 @@ const CORE: Entry[] = [
 ]
 const ADVANCED: Entry[] = [
   { id:'resuscitation', verb:'SIMULATE', title:'Resuscitation', description:'Move between foundations, practice, simulation, replay and progress.', accent:'var(--cv-blue)', href:'/labs/resuscitation-hub' },
+  { id:'handover', verb:'COMMUNICATE', title:'Handover Practice', description:'Separate known facts from gaps, draft a structured handover, and resume saved practice.', accent:'var(--cv-blue)', workspace:'handover' },
   { id:'codelab', verb:'BUILD', title:'Code Lab', description:'Work through BLS and ACLS lessons with knowledge checks.', accent:'var(--cv-teal)', workspace:'codelab' },
   { id:'pathway', verb:'REPLAY', title:'Pathway Replay', description:'Inspect a fictional pathway and the decisions that shaped it.', accent:'var(--cv-violet)', href:'/labs/pathway-replay' },
 ]

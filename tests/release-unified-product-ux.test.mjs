@@ -17,14 +17,14 @@ test('paywall does not invent a free trial and presents one connected product', 
   const source = read('app/components/PaywallSheet.tsx')
   assert.doesNotMatch(source, /7 days free|free for 7 days|Start my free trial/i)
   for (const label of ['Core practice','Advanced practice','Clinical systems','Progress and review']) assert.ok(source.includes(label))
-  for (const capability of ['ECG','Echo','Ward','Resuscitation','Code Lab','Pathway Replay','Clinical Reference','Cardiology Operations','Nexus Learning']) assert.ok(source.includes(capability))
+  for (const capability of ['ECG','Echo','Ward','Handover Practice','Resuscitation','Code Lab','Pathway Replay','Clinical Reference','Cardiology Operations','Nexus Learning']) assert.ok(source.includes(capability))
   assert.match(source, /offerCopy = trialLabel/)
 })
 
 test('Learn keeps every product capability reachable in a unified hierarchy', () => {
   const source = read('app/components/release/LearnTracks.tsx')
   for (const heading of ['Core practice','Advanced practice','Clinical systems']) assert.ok(source.includes(heading))
-  for (const capability of ['ECG','Echo','Ward','Resuscitation','Code Lab','Pathway Replay','Clinical Reference','Cardiology Operations','Nexus Learning']) assert.ok(source.includes(capability))
+  for (const capability of ['ECG','Echo','Ward','Handover Practice','Resuscitation','Code Lab','Pathway Replay','Clinical Reference','Cardiology Operations','Nexus Learning']) assert.ok(source.includes(capability))
 })
 
 test('Today is concise and reviewer tooling is not injected into normal reviewer experience', () => {
@@ -50,4 +50,15 @@ test('learner-facing Ward copy avoids internal human-review wording', () => {
   const ward = read('app/components/ward/WardHome.tsx')
   assert.match(ward, /Guided reasoning/)
   assert.doesNotMatch(ward, /Human review/)
+})
+
+
+test('Handover is a first-class Learn capability and does not float over Explore', () => {
+  const learn = read('app/components/release/LearnTracks.tsx')
+  const release = read('app/components/ReleaseApp.tsx')
+  const ward = read('app/components/ward/index.tsx')
+  assert.match(learn, /title:'Handover Practice'[\s\S]*?workspace:'handover'/)
+  assert.match(ward, /activeWorkspace === 'handover'/)
+  assert.match(ward, /<WardHandoverSession caseLibraryPreview \/>/)
+  assert.doesNotMatch(release, /<AtlasReleaseCatalog[^>]*caseLibraryPreview/)
 })
