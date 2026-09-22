@@ -114,6 +114,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
   const [careWorkspace, setCareWorkspace] = useState<CareWorkspace | null>(null)
   const [nativeHeaderTopPadding, setNativeHeaderTopPadding] = useState<number | null>(null)
   const { openPaywall, canAccessPremium } = useCliniverseSubscription()
+  const internalReviewTools = showEcgReview && typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('reviewTools') === '1'
 
   useEffect(() => {
     const syncNativeHeaderTopPadding = () => {
@@ -126,6 +127,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
   }, [])
 
   const openCodeLab = () => { setCareWorkspace('codelab'); setTab('learn') }
+  const openWorkspace = (workspace: CareWorkspace) => { setCareWorkspace(workspace); setCardiologyModule('overview'); setTab('learn') }
   // Plain navigation to Learn always shows the landing; explicit workspace deep links set careWorkspace first.
   const goTab = (next: ReleaseTab) => { if (next === 'learn') setCareWorkspace(null); setTab(next) }
 
@@ -159,11 +161,11 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
           paddingLeft: `max(16px, ${NATIVE_SAFE_AREA_LEFT})`,
         }}
       >
-        {tab === 'today' && showEcgReview && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!canAccessPremium) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
-        {tab === 'today' && <TodaySurface onNavigate={goTab} onOpenCodeLab={openCodeLab} />}
+        {tab === 'today' && internalReviewTools && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!canAccessPremium) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
+        {tab === 'today' && <TodaySurface onNavigate={goTab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
-            {showEcgReview && <section aria-labelledby="ecg-review-entry-title" style={{ padding: 20, marginBottom: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
+            {internalReviewTools && <section aria-labelledby="ecg-review-entry-title" style={{ padding: 20, marginBottom: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
               <p style={{ color: C.sub, margin: '0 0 8px' }}>ECG · REVIEW PREVIEW</p>
               <h2 id="ecg-review-entry-title" style={{ margin: '0 0 8px' }}>Record 10 · Rhythm recognition</h2>
               <p style={{ color: C.sub, lineHeight: 1.6 }}>Open the reviewed 12-lead tracing, answer the rhythm question, and find your saved result in Progress. Have your reviewed PDF ready to select.</p>
@@ -171,7 +173,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
             {careWorkspace === null ? (
-              <LearnTracks onOpenWard={() => setCareWorkspace('ward')} />
+              <LearnTracks onOpenWorkspace={openWorkspace} />
             ) : (
               <>
                 <button
@@ -181,12 +183,12 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
                 >
                   ← Practice tracks
                 </button>
-                <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} reviewSessions={showEcgReview} caseLibraryPreview={showEcgReview && caseLibraryPreview} />
+                <WardIndex initialCardiologyModule={cardiologyModule} initialWorkspace={careWorkspace} showWorkspaceNav={false} reviewSessions={internalReviewTools} caseLibraryPreview={internalReviewTools && caseLibraryPreview} />
               </>
             )}
           </ErrorBoundary>
         )}
-        {tab === 'progress' && <ProgressSurface showWardPractice={showEcgReview} onNavigate={goTab} onOpenWard={() => { setCareWorkspace('ward'); setTab('learn') }} onOpenCodeLab={openCodeLab} />}
+        {tab === 'progress' && <ProgressSurface showWardPractice onNavigate={goTab} onOpenWard={() => { setCareWorkspace('ward'); setTab('learn') }} onOpenCodeLab={openCodeLab} />}
         {tab === 'explore' && <AtlasReleaseCatalog onNavigate={handleAtlasNavigate} caseLibraryPreview={showEcgReview && caseLibraryPreview} />}
         {tab === 'me' && <MeHub />}
       </div>
@@ -198,7 +200,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
 function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding, onOpenAccount }: { active: ReleaseTab; nativeTopPadding: number | null; accountInitial: string | null; learnLanding: boolean; onOpenAccount: () => void }) {
   const titles: Record<ReleaseTab, { title: string; sub: string }> = {
     today: { title: 'Today', sub: '' },
-    learn: { title: 'Learn', sub: learnLanding ? 'Choose a practice track. Your progress stays connected.' : 'Governed cardiology learning and simulation' },
+    learn: { title: 'Learn', sub: learnLanding ? 'Practice, simulate and apply clinical reasoning.' : 'Clinical practice workspace' },
     progress: { title: 'Progress', sub: 'See what is strengthening, what needs another pass, and where to go next.' },
     explore: { title: 'Explore', sub: 'Reference, operations and advanced practice — when you need them.' },
     me: { title: 'Me', sub: 'Account, plan and preferences.' },
@@ -271,29 +273,25 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
 
 // Layout and control styling for this surface lives in commercial-visual-system.css
 // under [data-commercial-surface="today"] (UI-A3). Destinations and routes are unchanged.
-function TodaySurface({ onNavigate, onOpenCodeLab }: { onNavigate: (tab: ReleaseTab) => void; onOpenCodeLab: () => void }) {
+function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
   return (
     <section aria-labelledby="today-title" data-commercial-surface="today">
       <section className="cv-today-next" aria-labelledby="today-next-title">
-        <div className="cv-today-eyebrow">NEXT ACTION</div>
-        <h2 id="today-next-title">Continue learning</h2>
-        <p>Follow your learning record and return to the skills you want to strengthen.</p>
-        <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume learning →</button>
+        <div className="cv-today-eyebrow">NEXT</div>
+        <h2 id="today-next-title">Continue your practice</h2>
+        <p>Pick up where you left off.</p>
+        <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume →</button>
       </section>
-
-      {/* No review-scheduling data exists in this release, so this is a route to Progress, not a due count. */}
       <div className="cv-today-review" data-commercial-card-grid>
         <button type="button" className="cv-today-row" onClick={() => onNavigate('progress')} style={{ '--today-accent': C.violet } as CSSProperties}>
           <span>
             <span className="cv-today-row-eyebrow">REVIEW</span>
-            <span className="cv-today-row-title">Review your progress</span>
-            <span className="cv-today-row-text">Competency and review state, as governed evidence becomes available.</span>
+            <span className="cv-today-row-title">What needs another pass?</span>
+            <span className="cv-today-row-text">Open your learning record.</span>
           </span>
           <span className="cv-today-row-go" aria-hidden="true">→</span>
         </button>
       </div>
-
-      <AccountLearningSummary compact view="summary" isPro={false} onUpgrade={onOpenCodeLab} onBack={onOpenCodeLab} onOpen={onOpenCodeLab} />
     </section>
   )
 }

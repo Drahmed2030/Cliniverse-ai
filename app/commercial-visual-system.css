@@ -1008,3 +1008,13 @@
 @media (min-width: 700px) {
   [data-commercial-surface="me"] .cv-me-list { padding: 0 var(--cv-space-6); }
 }
+
+
+/* Unified Learn architecture: every existing learning, simulation, reference and operations surface remains reachable,
+ * grouped by learner intent rather than by implementation origin. */
+[data-commercial-surface="learn"] .cv-learn-group { display: grid; gap: var(--cv-space-3); min-width: 0; }
+[data-commercial-surface="learn"] .cv-learn-group + .cv-learn-group { margin-top: var(--cv-space-5); }
+[data-commercial-surface="learn"] .cv-learn-group-head h2 { margin: 0; font-size: var(--cv-text-section); font-weight: 800; }
+[data-commercial-surface="learn"] .cv-learn-group-head p { margin: var(--cv-space-1) 0 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+[data-commercial-surface="learn"] .cv-learn-list { display: grid; gap: var(--cv-space-3); margin: 0; padding: 0; list-style: none; }
+[data-commercial-surface="learn"] .cv-learn-list > li { min-width: 0; }

@@ -23,6 +23,7 @@ interface Props {
   reviewSessions?: boolean
   caseLibraryPreview?: boolean
   initialCardiologyModule?: 'overview' | 'pathway'
+  showWorkspaceNav?: boolean
 }
 
 const workspaces: Array<{
@@ -67,7 +68,7 @@ const C = {
   blue: 'var(--cv-blue)',
 }
 
-export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, caseLibraryPreview = false, initialCardiologyModule = 'overview' }: Props) {
+export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = false, caseLibraryPreview = false, initialCardiologyModule = 'overview', showWorkspaceNav = true }: Props) {
   const [workspace, setWorkspace] = useState<CareWorkspace>(initialWorkspace === 'codelab' ? 'codelab' : 'ward')
   const [pendingWorkspace, setPendingWorkspace] = useState<CareWorkspace | null>(
     initialWorkspace === 'ward' || initialWorkspace === 'codelab' ? null : initialWorkspace,
@@ -126,7 +127,7 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
         color: C.text,
       }}
     >
-      <nav aria-label="Care workspaces" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(165px,1fr))', gap: 8, marginBottom: 12 }}>
+      {showWorkspaceNav ? <nav aria-label="Care workspaces" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(165px,1fr))', gap: 8, marginBottom: 12 }}>
         {workspaces.map(item => {
           const selected = activeWorkspace === item.id
           const locked = item.premium && !isPro
@@ -158,7 +159,7 @@ export default function WardIndex({ initialWorkspace = 'ward', reviewSessions = 
             </button>
           )
         })}
-      </nav>
+      </nav> : null}
 
       {activeWorkspace === 'codelab' ? (
         <ErrorBoundary section="Code Lab">

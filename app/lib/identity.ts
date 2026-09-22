@@ -6,6 +6,14 @@ export async function signInWithPassword(email: string, password: string) {
   return supabase.auth.signInWithPassword({ email, password })
 }
 
+export async function signUpWithPassword(email: string, password: string, redirectTo?: string) {
+  return supabase.auth.signUp({
+    email,
+    password,
+    options: redirectTo ? { emailRedirectTo: redirectTo } : undefined,
+  })
+}
+
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   return supabase.auth.signInWithOtp({
     email,

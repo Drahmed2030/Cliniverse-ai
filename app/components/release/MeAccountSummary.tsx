@@ -17,6 +17,7 @@ export default function MeAccountSummary() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const {
+    reviewerAccess,
     entitlement,
     entitlementLoading,
     products,
@@ -110,8 +111,8 @@ export default function MeAccountSummary() {
         <ul className="cv-me-list">
           <li className="cv-me-item">
             <div className="cv-me-item-head">
-              <span className="cv-me-item-title cv-me-plan-tier">{entitlement ? entitlement.tier : 'Plan unavailable'}</span>
-              {entitlement ? <span className="cv-me-item-status">Status: {entitlement.status.replace('_', ' ')}</span> : null}
+              <span className="cv-me-item-title cv-me-plan-tier">{reviewerAccess ? 'Reviewer access' : entitlement ? entitlement.tier : 'Plan unavailable'}</span>
+              {reviewerAccess ? <span className="cv-me-item-status">PRO features enabled for review</span> : entitlement ? <span className="cv-me-item-status">Status: {entitlement.status.replace('_', ' ')}</span> : null}
             </div>
             {!entitlement ? <div className="cv-me-item-text">Your subscription status could not be confirmed.</div> : null}
             {entitlement?.expiresAt ? <div className="cv-me-item-text">Expires: {new Date(entitlement.expiresAt).toLocaleDateString()}</div> : null}
@@ -123,7 +124,7 @@ export default function MeAccountSummary() {
           </li>
           <li>
             <button type="button" className="cv-me-row" onClick={openPaywall}>
-              <span>{entitlement?.isPro ? 'View Cliniverse PRO plan' : 'Upgrade to Cliniverse PRO'}</span>
+              <span>{reviewerAccess ? 'View Cliniverse PRO plans' : entitlement?.isPro ? 'View Cliniverse PRO plan' : 'Upgrade to Cliniverse PRO'}</span>
               <span className="cv-me-row-go" aria-hidden="true">→</span>
             </button>
           </li>

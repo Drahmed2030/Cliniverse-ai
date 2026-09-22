@@ -1,62 +1,44 @@
 'use client'
 
 import Link from 'next/link'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 
-// Learn is PRACTICE: three tracks, each opening an existing learner-facing destination.
-// ECG opens the governed ECG workspace (/learn/ecg) and Echo its learner workspace (/learn/echo), a shell around the existing Echo engine. No new engine.
-// Ward opens the existing Ward workspace in place. No resume/review metadata is shown because
-// no per-track real state is available here; nothing user-specific is invented.
-const TRACKS = [
-  {
-    id: 'ecg',
-    verb: 'INTERPRET',
-    title: 'ECG',
-    description: 'Read the full tracing, commit an interpretation, then review the reasoning.',
-    accent: 'var(--cv-teal)',
-    href: '/learn/ecg',
-  },
-  {
-    id: 'echo',
-    verb: 'OBSERVE',
-    title: 'Echo',
-    description: 'Start with the cine, organize findings, then assign meaning.',
-    accent: 'var(--cv-violet)',
-    href: '/learn/echo',
-  },
-  {
-    id: 'ward',
-    verb: 'DECIDE',
-    title: 'Ward',
-    description: 'Follow a changing patient state and see the consequence of each decision.',
-    accent: 'var(--cv-blue)',
-    href: null,
-  },
-] as const
+type Workspace = 'ward' | 'codelab' | 'cardiology' | 'nexus'
+type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace }
 
-export default function LearnTracks({ onOpenWard }: { onOpenWard: () => void }) {
-  return (
-    <ul data-commercial-surface="learn" data-commercial-learn-surface aria-label="Practice tracks">
-      {TRACKS.map(track => {
-        const body = (
-          <>
-            <span>
-              <span className="cv-learn-track-verb">{track.verb}</span>
-              <span className="cv-learn-track-title">{track.title}</span>
-              <span className="cv-learn-track-text">{track.description}</span>
-            </span>
-            <span className="cv-learn-track-go" aria-hidden="true">→</span>
-          </>
-        )
-        const style = { '--track-accent': track.accent } as CSSProperties
-        return (
-          <li key={track.id}>
-            {track.href
-              ? <Link className="cv-learn-track" href={track.href} style={style}>{body}</Link>
-              : <button type="button" className="cv-learn-track" onClick={onOpenWard} style={style}>{body}</button>}
-          </li>
-        )
-      })}
-    </ul>
-  )
+const CORE: Entry[] = [
+  { id:'ecg', verb:'INTERPRET', title:'ECG', description:'Read the tracing, commit an interpretation, then review the reasoning.', accent:'var(--cv-teal)', href:'/learn/ecg' },
+  { id:'echo', verb:'OBSERVE', title:'Echo', description:'Start with the cine, organize findings, then assign meaning.', accent:'var(--cv-violet)', href:'/learn/echo' },
+  { id:'ward', verb:'DECIDE', title:'Ward', description:'Follow a changing patient state and work through the next clinical decision.', accent:'var(--cv-blue)', workspace:'ward' },
+]
+const ADVANCED: Entry[] = [
+  { id:'resuscitation', verb:'SIMULATE', title:'Resuscitation', description:'Move between foundations, practice, simulation, replay and progress.', accent:'var(--cv-blue)', href:'/labs/resuscitation-hub' },
+  { id:'codelab', verb:'BUILD', title:'Code Lab', description:'Work through BLS and ACLS lessons with knowledge checks.', accent:'var(--cv-teal)', workspace:'codelab' },
+  { id:'pathway', verb:'REPLAY', title:'Pathway Replay', description:'Inspect a fictional pathway and the decisions that shaped it.', accent:'var(--cv-violet)', href:'/labs/pathway-replay' },
+]
+const SYSTEMS: Entry[] = [
+  { id:'reference', verb:'REFERENCE', title:'Clinical Reference', description:'Use source-linked drug identity and label lookups.', accent:'var(--cv-blue)', href:'/labs/clinical-reference' },
+  { id:'cardiology', verb:'OPERATE', title:'Cardiology Operations', description:'Practise workflow, coordination, pathway and handover operations.', accent:'var(--cv-teal)', workspace:'cardiology' },
+  { id:'nexus', verb:'COLLABORATE', title:'Nexus Learning', description:'Practise a four-role cardiovascular huddle.', accent:'var(--cv-violet)', workspace:'nexus' },
+]
+
+export default function LearnTracks({ onOpenWorkspace }: { onOpenWorkspace:(workspace:Workspace)=>void }) {
+  return <div data-commercial-surface="learn" data-commercial-learn-surface>
+    <TrackGroup title="Core practice" description="Interpret signals, observe media and make decisions." entries={CORE} onOpenWorkspace={onOpenWorkspace}/>
+    <TrackGroup title="Advanced practice" description="Build depth through simulation, curriculum and replay." entries={ADVANCED} onOpenWorkspace={onOpenWorkspace}/>
+    <TrackGroup title="Clinical systems" description="Reference and operational practice when you need the wider context." entries={SYSTEMS} onOpenWorkspace={onOpenWorkspace}/>
+  </div>
+}
+function TrackGroup({title,description,entries,onOpenWorkspace}:{title:string;description:string;entries:Entry[];onOpenWorkspace:(workspace:Workspace)=>void}) {
+  const id='learn-'+title.toLowerCase().replace(/\s+/g,'-')
+  return <section className="cv-learn-group" aria-labelledby={id}>
+    <div className="cv-learn-group-head"><h2 id={id}>{title}</h2><p>{description}</p></div>
+    <ul className="cv-learn-list">{entries.map(entry=><li key={entry.id}><TrackEntry entry={entry} onOpenWorkspace={onOpenWorkspace}/></li>)}</ul>
+  </section>
+}
+function TrackEntry({entry,onOpenWorkspace}:{entry:Entry;onOpenWorkspace:(workspace:Workspace)=>void}) {
+  const body:ReactNode=<><span><span className="cv-learn-track-verb">{entry.verb}</span><span className="cv-learn-track-title">{entry.title}</span><span className="cv-learn-track-text">{entry.description}</span></span><span className="cv-learn-track-go" aria-hidden="true">→</span></>
+  const style={'--track-accent':entry.accent} as CSSProperties
+  if(entry.href) return <Link className="cv-learn-track" href={entry.href} style={style}>{body}</Link>
+  return <button type="button" className="cv-learn-track" onClick={()=>entry.workspace&&onOpenWorkspace(entry.workspace)} style={style}>{body}</button>
 }

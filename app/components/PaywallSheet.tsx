@@ -30,46 +30,38 @@ interface CapabilityGroup {
 
 const COPY = {
   en: {
-    title: "Try Cliniverse PRO free for 7 days",
-    subtitle: "Full access across every learning and reference surface. Cancel anytime.",
-    trialDefault: "7 days free, then",
+    title: "Unlock Cliniverse PRO",
+    subtitle: "Practice, simulation, reference and review in one connected clinical learning system.",
     groups: [
-      { icon: Stethoscope, title: "Learn & simulate", items: ["Ward Simulation — fictional care-flow cases", "Resuscitation Intelligence — scenario simulation with debrief", "Code Lab — 12 lessons (BLS + ACLS)"] },
-      { icon: HeartPulse, title: "Interpret", items: ["ECG Challenge — 7 real ECG cases with multi-image views", "Echo Studies — real cardiac ultrasound with guided assessment"] },
-      { icon: BookOpen, title: "Reference & operate", items: ["Clinical Reference — source-linked reference tools with capability-level review status", "Cardiology Operations — full console and Care Beam coordination practice"] },
-      { icon: RotateCcw, title: "Track & review", items: ["Pathway Replay — event-based case replay with an evidence trail", "Progress and mastery tracking across every case"] },
+      { icon: HeartPulse, title: "Core practice", items: ["ECG — structured interpretation and review", "Echo — licensed cine recognition and guided findings", "Ward — fictional cases from patient state to clinical decision"] },
+      { icon: Stethoscope, title: "Advanced practice", items: ["Resuscitation — curriculum, simulation and replay", "Code Lab — BLS and ACLS lessons with knowledge checks", "Pathway Replay — inspect decisions across a fictional clinical pathway"] },
+      { icon: BookOpen, title: "Clinical systems", items: ["Clinical Reference — source-linked drug and label lookups", "Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
+      { icon: RotateCcw, title: "Progress and review", items: ["Saved activity, learning history and review across your practice"] },
     ] as CapabilityGroup[],
-    monthly: "Monthly",
-    yearly: "Yearly",
-    best: "Best value",
-    startTrial: "Start my free trial",
-    unavailable: "Purchases are not available yet",
+    monthly: "Monthly", yearly: "Yearly", best: "Best value",
+    continueStore: "Continue with App Store",
+    unavailable: "App Store plans are not available right now",
     restore: "Restore purchases",
-    legal: "Terms · Privacy",
-    renew: "Auto-renewing. Cancel anytime in Settings. By continuing, you agree to our Terms and Privacy Policy.",
-    loadingPrice: "Loading from App Store…",
+    renew: "Price, billing period and any eligible offer are confirmed by the App Store before purchase. Auto-renewing unless cancelled in Settings.",
+    loadingPrice: "Loading plans from App Store…",
   },
   ar: {
-    title: "جرّب Cliniverse PRO مجانًا لمدة 7 أيام",
-    subtitle: "وصول كامل إلى كل واجهات التعلّم والمرجع. ألغِ في أي وقت.",
-    trialDefault: "7 أيام مجانية، ثم",
+    title: "افتح Cliniverse PRO",
+    subtitle: "التدريب والمحاكاة والمراجع والمراجعة في نظام تعلّم سريري واحد مترابط.",
     groups: [
-      { icon: Stethoscope, title: "تعلّم ومارس", items: ["محاكاة Ward — حالات افتراضية لمسار الرعاية", "ذكاء الإنعاش — محاكاة سيناريوهات مع مراجعة الأداء", "معمل الأكواد — 12 درسًا (BLS + ACLS)"] },
-      { icon: HeartPulse, title: "فسّر", items: ["تحدي تخطيط القلب — 7 حالات حقيقية بعرض متعدد الصور", "دراسات الإيكو — تصوير قلب حقيقي مع تقييم موجّه"] },
-      { icon: BookOpen, title: "مرجع وتشغيل", items: ["المرجع السريري — أدوات مرجعية مرتبطة بالمصادر مع حالة المراجعة لكل قدرة", "عمليات أمراض القلب — وحدة تحكم كاملة وتنسيق Care Beam"] },
-      { icon: RotateCcw, title: "تتبّع وراجع", items: ["إعادة تشغيل المسار — إعادة عرض الحالات مع سجل أدلة", "تتبع التقدم والإتقان عبر جميع الحالات"] },
+      { icon: HeartPulse, title: "الممارسة الأساسية", items: ["ECG — تفسير منظم ومراجعة", "Echo — تدريب على مقاطع مرخصة وملاحظات موجّهة", "Ward — حالات افتراضية من حالة المريض إلى القرار السريري"] },
+      { icon: Stethoscope, title: "الممارسة المتقدمة", items: ["الإنعاش — منهج ومحاكاة وإعادة مراجعة", "Code Lab — دروس BLS وACLS مع اختبارات معرفة", "Pathway Replay — مراجعة القرارات عبر مسار سريري افتراضي"] },
+      { icon: BookOpen, title: "الأنظمة السريرية", items: ["Clinical Reference — مراجع دوائية مرتبطة بالمصادر", "Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
+      { icon: RotateCcw, title: "التقدم والمراجعة", items: ["النشاط المحفوظ وسجل التعلم والمراجعة عبر ممارستك"] },
     ] as CapabilityGroup[],
-    monthly: "شهري",
-    yearly: "سنوي",
-    best: "أفضل قيمة",
-    startTrial: "ابدأ تجربتي المجانية",
-    unavailable: "المشتريات غير متاحة بعد",
+    monthly: "شهري", yearly: "سنوي", best: "أفضل قيمة",
+    continueStore: "المتابعة عبر App Store",
+    unavailable: "خطط App Store غير متاحة الآن",
     restore: "استعادة المشتريات",
-    legal: "الشروط · الخصوصية",
-    renew: "يتجدد تلقائيًا. يمكنك الإلغاء في أي وقت من الإعدادات. بالمتابعة، فإنك توافق على الشروط وسياسة الخصوصية.",
-    loadingPrice: "جارٍ تحميل السعر من App Store…",
+    renew: "يؤكد App Store السعر وفترة الفوترة وأي عرض مؤهل قبل الشراء. يتجدد الاشتراك تلقائيًا ما لم يتم إلغاؤه من الإعدادات.",
+    loadingPrice: "جارٍ تحميل الخطط من App Store…",
   },
-};
+}
 
 export default function PaywallSheet({
   open,
@@ -93,8 +85,8 @@ export default function PaywallSheet({
   const selectedProduct = products.find(product => product.plan === plan) || products[0]
   const selectedPlan = selectedProduct?.plan || plan
   const canPurchase = purchaseEnabled && !busy && Boolean(selectedProduct?.displayPrice)
-  const cta = busy ? "…" : canPurchase ? t.startTrial : t.unavailable;
-  const trialCopy = trialLabel ?? t.trialDefault
+  const cta = busy ? "…" : canPurchase ? t.continueStore : t.unavailable;
+  const offerCopy = trialLabel
 
   return (
     <div dir={dir} onClick={onClose} className="cv-paywall-scrim" data-commercial-shell data-appearance={appearance}>
@@ -149,7 +141,7 @@ export default function PaywallSheet({
 
         {statusLabel ? <div role="status" aria-live="polite" className="cv-paywall-status">{statusLabel}</div> : null}
 
-        {canPurchase && trialCopy ? <div className="cv-paywall-trial-copy">{trialCopy}</div> : null}
+        {canPurchase && offerCopy ? <div className="cv-paywall-trial-copy">{offerCopy}</div> : null}
 
         <button type="button" disabled={!canPurchase} onClick={() => { if (canPurchase) void onSubscribe(selectedPlan); }} className="cv-paywall-cta">
           {cta}

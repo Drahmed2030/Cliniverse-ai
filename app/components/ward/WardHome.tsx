@@ -41,7 +41,7 @@ export default function WardHome({ onSelectPatient, isPro = false, onUpgrade }: 
       <header>
         <p className="ward-eyebrow">CLINIVERSE AI · APPLY YOUR LEARNING</p>
         <h2 className="ward-title">Ward Simulation</h2>
-        <p className="ward-lead">Fictional cases · Human review · No real patient data</p>
+        <p className="ward-lead">Fictional cases · Guided reasoning · No real patient data</p>
       </header>
 
       <details className="ward-goal">

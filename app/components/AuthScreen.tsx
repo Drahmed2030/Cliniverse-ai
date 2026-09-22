@@ -5,6 +5,7 @@ import {
   signInWithMagicLink,
   signInWithOAuth,
   signInWithPassword,
+  signUpWithPassword,
   type CliniverseAuthProvider,
 } from "../lib/identity";
 import {
@@ -46,7 +47,7 @@ const COPY = {
     kicker: "CLINIVERSE AI · BY NEURAOPS",
     title: "Welcome back to Cliniverse.",
     subtitle: "Clinical intelligence, organized around you.",
-    releaseNote: "Sign in with an existing account to continue your workspace. Account creation is not enabled in this release.",
+    releaseNote: "Sign in or create an account to continue. Your learning record stays attached to your account.",
     apple: "Continue with Apple",
     google: "Continue with Google",
     email: "Continue with email",
@@ -56,6 +57,9 @@ const COPY = {
     magic: "Use a secure email link instead",
     password: "Use password instead",
     continueEmail: "Sign in",
+    createAccount: "Create account",
+    existingAccount: "Already have an account? Sign in",
+    signupSent: "Check your email to confirm your account, then return to Cliniverse.",
     back: "Back",
     guest: "Explore as guest",
     trust: "Human judgment leads · Privacy-conscious by design",
@@ -70,7 +74,7 @@ const COPY = {
     kicker: "CLINIVERSE AI · من NEURAOPS",
     title: "مرحبًا بعودتك إلى Cliniverse.",
     subtitle: "ذكاء سريري منظم حول احتياجاتك.",
-    releaseNote: "سجّل الدخول بحساب موجود لمتابعة مساحة عملك. إنشاء الحسابات غير مفعّل في هذا الإصدار.",
+    releaseNote: "سجّل الدخول أو أنشئ حسابًا للمتابعة. يبقى سجل تعلّمك مرتبطًا بحسابك.",
     apple: "المتابعة مع Apple",
     google: "المتابعة مع Google",
     email: "المتابعة بالبريد الإلكتروني",
@@ -80,6 +84,9 @@ const COPY = {
     magic: "استخدم رابط دخول آمن عبر البريد",
     password: "استخدم كلمة المرور",
     continueEmail: "تسجيل الدخول",
+    createAccount: "إنشاء حساب",
+    existingAccount: "لديك حساب؟ سجّل الدخول",
+    signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
     back: "رجوع",
     guest: "استكشف كزائر",
     trust: "الحكم السريري يقود · الخصوصية جزء من التصميم",
@@ -103,6 +110,7 @@ export default function AuthScreen({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [useMagic, setUseMagic] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -163,6 +171,21 @@ export default function AuthScreen({
         return;
       }
 
+      if (isSignUp) {
+        const redirectTo = typeof window !== "undefined" ? window.location.origin : undefined;
+        const { data, error: authError } = await signUpWithPassword(normalizedEmail, password, redirectTo);
+        if (authError) {
+          setError(authError.message || t.genericError);
+          return;
+        }
+        if (data.session && data.user) {
+          onComplete({ method: "email", email: normalizedEmail });
+          return;
+        }
+        setNotice(t.signupSent);
+        return;
+      }
+
       const { data, error: authError } = await signInWithPassword(normalizedEmail, password);
       if (authError || !data.session || !data.user) {
         setError(authError?.message || t.genericError);
@@ -210,18 +233,20 @@ export default function AuthScreen({
               {appleEnabled ? <AuthButton label={t.apple} bg={T.text} color="#0B1020" onClick={() => handleOAuth("apple")} disabled={loading} icon="" /> : null}
               {googleEnabled ? <AuthButton label={t.google} bg="rgba(255,255,255,.045)" color={T.text} border={`1px solid ${T.border}`} onClick={() => handleOAuth("google")} disabled={loading} icon="G" /> : null}
               {oauthEnabled ? <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "7px 0" }}><div style={{ flex: 1, height: 1, background: T.border }} /><div style={{ fontSize: 11, color: T.muted }}>{t.or}</div><div style={{ flex: 1, height: 1, background: T.border }} /></div> : null}
-              <AuthButton label={t.email} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={() => { setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
+              <AuthButton label={t.email} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={() => { setIsSignUp(false); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
+              <AuthButton label={t.createAccount} bg="rgba(255,255,255,.045)" color={T.text} border={`1px solid ${T.border}`} onClick={() => { setIsSignUp(true); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
               {allowGuest ? <button onClick={() => onComplete({ method: "guest" })} style={{ marginTop: 2, border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "11px 8px", cursor: "pointer" }}>{t.guest}</button> : null}
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <Field label={t.emailLabel} value={email} onChange={setEmail} type="email" autoComplete="email" />
-              {!magicLinkMode ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete="current-password" /> : null}
+              {!magicLinkMode ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete={isSignUp ? "new-password" : "current-password"} /> : null}
               {enableMagicLink ? <button onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, textAlign: dir === "rtl" ? "right" : "left", padding: 0, cursor: "pointer" }}>{magicLinkMode ? t.password : t.magic}</button> : null}
               {error ? <div role="alert" style={{ fontSize: 12, color: T.danger, fontWeight: 650 }}>{error}</div> : null}
               {notice ? <div role="status" style={{ fontSize: 12, color: T.success, fontWeight: 650 }}>{notice}</div> : null}
-              <AuthButton label={loading ? "…" : t.continueEmail} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={handleEmail} disabled={loading} />
-              <button onClick={() => { setMode("landing"); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "10px 8px", cursor: "pointer" }}>{t.back}</button>
+              <AuthButton label={loading ? "…" : isSignUp ? t.createAccount : t.continueEmail} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={handleEmail} disabled={loading} />
+              {isSignUp ? <button onClick={() => { setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, padding: "6px 8px", cursor: "pointer" }}>{t.existingAccount}</button> : null}
+              <button onClick={() => { setMode("landing"); setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "10px 8px", cursor: "pointer" }}>{t.back}</button>
             </div>
           )}
         </div>
