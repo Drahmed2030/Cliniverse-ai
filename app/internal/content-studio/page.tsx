@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation'
 import { RECOVERY_ASSETS, RECOVERY_SUMMARY } from '../../lib/content/recoveryInventory'
+import { CONTENT_NODES, CONTENT_EDGES } from '../../lib/content/contentGraph'
+import { CONTENT_COLLECTIONS } from '../../lib/content/contentCollections'
 import './content-studio.css'
 
 export const dynamic = 'force-dynamic'
@@ -24,6 +26,8 @@ export default function ContentStudioPage() {
           <div><dt>Assets mapped</dt><dd>{RECOVERY_SUMMARY.assets}</dd></div>
           <div><dt>Known structured units</dt><dd>{RECOVERY_SUMMARY.units}</dd></div>
           <div><dt>Recoverable systems</dt><dd>{RECOVERY_SUMMARY.byState.recoverable ?? 0}</dd></div>
+          <div><dt>Graph nodes</dt><dd>{CONTENT_NODES.length}</dd></div>
+          <div><dt>Connections</dt><dd>{CONTENT_EDGES.length}</dd></div>
         </dl>
       </header>
 
@@ -31,6 +35,26 @@ export default function ContentStudioPage() {
         {['Source / Legacy', 'Normalize', 'Validate', 'Connect', 'Publish', 'Measure'].map((step, index) => (
           <div key={step}><span>{String(index + 1).padStart(2, '0')}</span><strong>{step}</strong></div>
         ))}
+      </section>
+
+      <section>
+        <div className="cs-section-head">
+          <h2>Collections</h2>
+          <p>Cross-modality learning paths built from the same content graph.</p>
+        </div>
+        <div className="cs-grid">
+          {CONTENT_COLLECTIONS.map(collection => (
+            <article className="cs-card" key={collection.id}>
+              <div className="cs-card-top">
+                <span className="cs-layer">{collection.audience}</span>
+                <span className="cs-state cs-state-active">{collection.nodeIds.length} units</span>
+              </div>
+              <h3>{collection.title}</h3>
+              <p>{collection.description}</p>
+              <dl><div><dt>Nodes</dt><dd>{collection.nodeIds.join(' · ')}</dd></div></dl>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section>
