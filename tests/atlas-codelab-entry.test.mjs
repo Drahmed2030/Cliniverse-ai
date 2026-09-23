@@ -25,7 +25,7 @@ test('Code Lab remains reachable through unified Learn and Progress, but no long
   const app = read('app/components/ReleaseApp.tsx')
   const learn = read('app/components/release/LearnTracks.tsx')
   assert.match(app, /const openCodeLab = \(\) => \{ setCareWorkspace\('codelab'\); setTab\('learn'\) \}/)
-  assert.match(app, /<TodaySurface onNavigate=\{goTab\} \/>/)
+  assert.match(app, /<TodaySurface actorId=\{accountId\} onNavigate=\{goTab\} \/>/)
   assert.doesNotMatch(app, /<TodaySurface[^>]*onOpenCodeLab/)
   assert.match(app, /<ProgressSurface [\s\S]*?onOpenCodeLab=\{openCodeLab\} \/>/)
   assert.match(learn, /title:'Code Lab'[\s\S]*?workspace:'codelab'/)
