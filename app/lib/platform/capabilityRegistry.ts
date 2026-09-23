@@ -29,6 +29,7 @@ export const CAPABILITY_REGISTRY: CapabilityRecord[] = [
   { id:'megacode-v2', title:'Megacode v2', layer:'learner', state:'recoverable', owner:'cliniverse', surface:'Learn', dependencies:['resuscitation'], sourcePath:'app/components/ward/MegacodeRunner.tsx' },
   { id:'medical-calculators', title:'Medical Calculators', layer:'learner', state:'recoverable', owner:'cliniverse', surface:'Explore', dependencies:['clinical-reference'], sourcePath:'app/components/MedCalculators.tsx' },
   { id:'clinical-nexus', title:'Clinical Nexus', layer:'learner', state:'recoverable', owner:'cliniverse', surface:'Learn', dependencies:['content-graph'], sourcePath:'app/components/ClinicalNexus.tsx' },
+  { id:'institution-assignments', title:'Institution Assignments', layer:'institutional', state:'active', owner:'neuraops', surface:'Institution', dependencies:['content-graph','event-contract'], sourcePath:'app/lib/institution/assignmentContract.ts' },
   { id:'fhir-foundation', title:'FHIR Foundation', layer:'institutional', state:'internal', owner:'neuraops', surface:'Institution', dependencies:['content-graph'], sourcePath:'app/components/FHIRIntegration.tsx' },
   { id:'teleconsult-foundation', title:'Teleconsult Foundation', layer:'institutional', state:'internal', owner:'neuraops', surface:'Institution', dependencies:['fhir-foundation'], sourcePath:'app/components/TeleconsultModule.tsx' },
 ]

@@ -3,6 +3,7 @@ import { RECOVERY_ASSETS, RECOVERY_SUMMARY } from '../../lib/content/recoveryInv
 import { CONTENT_NODES, CONTENT_EDGES } from '../../lib/content/contentGraph'
 import { CONTENT_COLLECTIONS } from '../../lib/content/contentCollections'
 import { CAPABILITY_REGISTRY } from '../../lib/platform/capabilityRegistry'
+import { INSTITUTIONAL_COLLECTIONS } from '../../lib/institution/assignmentContract'
 import './content-studio.css'
 
 export const dynamic = 'force-dynamic'
@@ -54,6 +55,29 @@ export default function ContentStudioPage() {
               <h3>{collection.title}</h3>
               <p>{collection.description}</p>
               <dl><div><dt>Nodes</dt><dd>{collection.nodeIds.join(' · ')}</dd></div></dl>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="cs-section-head">
+          <h2>Institutional collections</h2>
+          <p>Cohort-ready paths remain separate from the individual learner surface.</p>
+        </div>
+        <div className="cs-grid">
+          {INSTITUTIONAL_COLLECTIONS.map(collection => (
+            <article className="cs-card" key={collection.id}>
+              <div className="cs-card-top">
+                <span className="cs-layer">institution</span>
+                <span className="cs-state cs-state-institutional">cohort-ready</span>
+              </div>
+              <h3>{collection.title}</h3>
+              <p>{collection.description}</p>
+              <dl>
+                <div><dt>Units</dt><dd>{collection.nodeIds.length}</dd></div>
+                <div><dt>Assignment boundary</dt><dd>Organization + cohort required</dd></div>
+              </dl>
             </article>
           ))}
         </div>
