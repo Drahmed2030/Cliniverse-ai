@@ -9,7 +9,7 @@ test('Learn renders multiple connected practice collections through one reusable
   assert.match(learn, /LEARN_COLLECTION_IDS/)
   assert.match(learn, /cardiology-practice/)
   assert.match(learn, /acute-care-foundations/)
-  assert.match(learn, /function ConnectedPractice\(\{collectionId,onOpenWorkspace\}/)
+  assert.match(learn, /function ConnectedPractice\(\{collectionId,actorId,onOpenWorkspace\}/)
   assert.match(learn, /CONTENT_COLLECTIONS\.find\(item=>item\.id===collectionId\)/)
 })
 
