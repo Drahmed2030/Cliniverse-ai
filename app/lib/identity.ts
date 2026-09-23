@@ -14,6 +14,10 @@ export async function signUpWithPassword(email: string, password: string, redire
   })
 }
 
+export async function confirmEmailToken(tokenHash: string) {
+  return supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'email' })
+}
+
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   return supabase.auth.signInWithOtp({
     email,
