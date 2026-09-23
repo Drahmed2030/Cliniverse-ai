@@ -35,21 +35,21 @@ const text = n => typeof n === 'string' ? n : Array.isArray(n) ? n.map(text).joi
 
 test('Explore lists exactly the four curated destinations, in the approved order', () => {
   assert.deepEqual(rows.map(row => row.title), ['Clinical Reference', 'Cardiology Operations', 'Resuscitation', 'Pathway Replay'])
-  assert.deepEqual(rows.map(row => row.status), ['Available', 'PRO', 'In review', 'Available'])
+  assert.deepEqual(rows.map(row => row.status), ['Available', 'PRO', 'Coming later', 'Available'])
   assert.equal(rows.length, 4)
 })
 
 test('every row is one interactive target routed through an existing destination', () => {
-  assert.deepEqual(rows.map(row => row.href), ['/labs/clinical-reference', null, '/labs/resuscitation-hub', '/labs/pathway-replay'])
+  assert.deepEqual(rows.map(row => row.href), ['/labs/clinical-reference', null, null, '/labs/pathway-replay'])
   const cardiology = rows.find(row => row.id === 'cardiology')
   assert.match(cardiology.destination, /tab: 'care', workspace: 'cardiology'/)
   for (const row of rows.filter(row => row.href)) assert.ok(existsSync(new URL(`../app${row.href}/page.tsx`, import.meta.url)), `${row.href} route exists`)
-  // Rendered: three links and one button, each the whole row; no nested controls, no per-row CTA.
+  // Rendered: two links, one button and one truthful non-interactive unavailable row.
   const destinations = []
   const tree = nodes(render({ onNavigate: destination => destinations.push(destination) }))
   const links = tree.filter(n => n.props?.className === 'cv-explore-row' && n.props.href)
   const buttons = tree.filter(n => n.type === 'button')
-  assert.deepEqual(links.map(link => link.props.href), ['/labs/clinical-reference', '/labs/resuscitation-hub', '/labs/pathway-replay'])
+  assert.deepEqual(links.map(link => link.props.href), ['/labs/clinical-reference', '/labs/pathway-replay'])
   assert.equal(buttons.length, 1)
   assert.match(text(buttons[0]), /^Cardiology Operations/)
   buttons[0].props.onClick()
@@ -76,7 +76,7 @@ test('every status claim equals what the content catalog says, so nothing is mar
     reference: ['rxnorm', 'dailymed'].some(key => isAvailable(byKey(key))) ? 'Available' : 'In review',
     cardiology: byKey('cardiology_operations').access_tier === 'pro' && isAvailable(byKey('cardiology_operations')) ? 'PRO' : 'In review',
     // Simulations and drills are the learner-facing content; the engine, debrief and map alone are not the curriculum.
-    resuscitation: catalog.filter(item => item.module === 'resuscitation' && ['scenario', 'drill'].includes(item.content_type)).every(isAvailable) ? 'Available' : 'In review',
+    resuscitation: catalog.filter(item => item.module === 'resuscitation' && ['scenario', 'drill'].includes(item.content_type)).every(isAvailable) ? 'Available' : 'Coming later',
     pathway: catalog.filter(item => item.module === 'pathway' && item.visibility === 'visible').every(isAvailable) ? 'Available' : 'In review',
   }
   assert.deepEqual(Object.fromEntries(rows.map(row => [row.id, row.status])), derived)
@@ -96,15 +96,20 @@ test('Clinical Reference describes only released capability and states the revie
   assert.match(workspace, /if \(!drugIdentityReady\) return \[\]/)
 })
 
-test('Resuscitation is presented as In review and its route still gates every unreviewed scenario', () => {
+test('Resuscitation stays in the product but Explore does not advertise unreleased scenarios as an available destination', () => {
   const resuscitation = rows.find(row => row.id === 'resuscitation')
-  assert.equal(resuscitation.status, 'In review')
-  assert.equal(resuscitation.description, 'Curriculum and simulations as reviewed content becomes available.')
+  assert.equal(resuscitation.status, 'Coming later')
+  assert.equal(resuscitation.href, null)
+  assert.equal(resuscitation.description, 'Resuscitation practice will appear here when learner-ready scenarios are released.')
   assert.doesNotMatch(resuscitation.description, /\bfree\b|certif|complete/i)
   const hub = read('app/labs/resuscitation-hub/ResuscitationHub.tsx')
   assert.match(hub, /catalogReviewStatusFor\(scenario\.scenarioId\) === 'reviewed'/)
   assert.match(hub, /disabled=\{!learnerReady\}/)
   assert.match(hub, /Under clinical review — not yet available/)
+  const rendered = nodes(render({ onNavigate() {} }))
+  const unavailable = rendered.find(n => n.props?.className === 'cv-explore-row' && n.props?.['aria-disabled'] === 'true')
+  assert.ok(unavailable)
+  assert.match(text(unavailable), /^ResuscitationComing later/)
 })
 
 test('Pathway Replay keeps its fictional framing and its single route', () => {

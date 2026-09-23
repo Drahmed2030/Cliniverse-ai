@@ -142,20 +142,18 @@ test('the held workspace shows an honest state: no tracing, no interactive quest
   assert.equal(main.props['aria-labelledby'], 'ecg-title')
   assert.equal(all.filter(n => n.type === 'h1').length, 1)
   const copy = text(tree)
-  for (const expected of ['Held for governed review', 'This tracing isn’t shown yet', 'Nothing is substituted in its place.', 'Approved question', 'What rhythm is shown?', 'Viewing this page does not record progress.', 'It does not cover this in-app viewer.', 'No governed source for the reviewed file is configured for learners.']) assert.ok(copy.includes(expected), `missing: ${expected}`)
+  for (const expected of ['Case temporarily unavailable', 'This tracing isn’t shown yet', 'temporarily unavailable while its display is being verified', 'Practice question', 'What rhythm is shown?', 'return to Learn and continue with another available activity']) assert.ok(copy.includes(expected), `missing: ${expected}`)
   assert.ok(all.some(n => n.type === 'p' && n.props.role === 'status'))
   // The answer is never revealed before there is anything to interpret.
   assert.doesNotMatch(copy, /sinus|flutter|fibrillation/i)
   assert.equal(all.find(n => n.type === 'Link').props.href, '/?view=learn')
 })
 
-test('the evidence and provenance are disclosed on demand, with the exact identities and the plain reasons for the hold', () => {
+test('learner presentation does not expose internal governance or provenance metadata', () => {
   const tree = renderHeld()
-  const details = nodes(tree).filter(n => n.type === 'details')
-  assert.equal(details.length, 1)
-  assert.equal(details[0].props.open, undefined)
-  const copy = text(details[0])
-  for (const expected of [RECORD10_REVIEW_PDF.sha256, '557,798', RECORD10_REVIEW_PDF.filename, 'ecg-governed-case-001', 'ptb-xl-record-10-500hz', 'Clinical attestation', 'Privacy attestation', 'Device baseline (user-reported)', 'Promotion decision', 'platform-family-mismatch', 'governed-artifact-source-unavailable', ECG_LEARNER_DELIVERY_ROUTE, ECG_RECORD10_RUBRIC_APPROVAL_SHA256, 'not an institutional clinical approval']) assert.ok(copy.includes(expected), `missing: ${expected}`)
+  const copy = text(tree)
+  assert.equal(nodes(tree).filter(n => n.type === 'details').length, 0)
+  for (const internal of ['SHA-256', 'Promotion decision', 'Display decision', 'Policy', 'platform-family-mismatch', 'governed-artifact-source-unavailable', ECG_LEARNER_DELIVERY_ROUTE, ECG_RECORD10_RUBRIC_APPROVAL_SHA256, RECORD10_REVIEW_PDF.sha256]) assert.ok(!copy.includes(internal), `learner UI leaks ${internal}`)
 })
 
 // ── the ready workspace (unreachable in production today; contracts only) ─────
@@ -166,7 +164,7 @@ test('the ready workspace verifies the reviewed file before anything is shown, a
   assert.match(workspace, /throw new Error\('mismatch'\)/)
   assert.match(workspace, /The reviewed file could not be verified/)
   // The status chip follows the real verification state, so a failed check never reads as a reviewed case.
-  assert.match(workspace, /tracing\.status === 'failed' \? 'Held: file not verified'/)
+  assert.match(workspace, /tracing\.status === 'failed' \? 'Case temporarily unavailable'/)
   assert.match(workspace, /Nothing is shown in its place, and the question stays closed\./)
   // The interactive stages only render once the tracing is verified.
   assert.match(workspace, /\{tracing\.status !== 'verified' \? null : stage === 0/)
@@ -196,6 +194,7 @@ test('nothing is saved, scored, recorded as progress or reused from the legacy q
   assert.doesNotMatch(workspace, /EcgChallenge|ecgWaveform|createSyntheticLead|SyntheticLead|<svg|<canvas|<img/)
   assert.doesNotMatch(workspace, /learnerReady|LEARNER_ELIGIBLE|HUMAN_REVIEWED|humanClinicalAttestationId|gateState/)
   assert.match(workspace, /Feedback only\. This answer is not saved and does not change your progress\./)
+  assert.doesNotMatch(workspace, /existing human review|Promotion decision|Display decision|SHA-256|decision\.policy|deliveryRoute/)
   assert.match(workspace, /Viewing this page does not record progress\./)
 })
 

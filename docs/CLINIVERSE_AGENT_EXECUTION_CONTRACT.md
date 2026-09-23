@@ -185,11 +185,19 @@ Every agent implementation report must include:
 
 ## Post-release R&D boundary
 
-The following item is recorded only as post-release R&D and must not enter current release scope:
+The following items are recorded only as post-release work and must not enter current release scope:
 
 **Cliniverse Agent Experience Layer — CopilotKit / AG-UI Evaluation**
 
-Its existence in documentation is not implementation authorization.
+**Audio Learning Layer v1 — Gemini TTS Evaluation**
+- evaluate provider-neutral speech synthesis behind a SpeechProvider adapter;
+- initial candidate experiences: Ward handover read-aloud and ECG/Echo reasoning playback;
+- reviewed Cliniverse transcript remains the source of clinical content;
+- TTS must never generate or decide clinical truth;
+- no PHI in provider requests;
+- no runtime dependency or API integration is authorized for the current release.
+
+Their existence in documentation is not implementation authorization.
 
 ## Final principle
 

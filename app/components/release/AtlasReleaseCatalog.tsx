@@ -44,9 +44,9 @@ const DESTINATIONS = [
   {
     id: 'resuscitation',
     title: 'Resuscitation',
-    status: 'In review',
-    description: 'Curriculum and simulations as reviewed content becomes available.',
-    href: '/labs/resuscitation-hub',
+    status: 'Coming later',
+    description: 'Resuscitation practice will appear here when learner-ready scenarios are released.',
+    href: null,
     destination: null,
   },
   {
@@ -84,7 +84,9 @@ export default function AtlasReleaseCatalog({ onNavigate, caseLibraryPreview = f
             <li key={item.id}>
               {item.href
                 ? <Link className="cv-explore-row" href={item.href}>{body}</Link>
-                : destination && <button type="button" className="cv-explore-row" onClick={() => onNavigate(destination)}>{body}</button>}
+                : destination
+                  ? <button type="button" className="cv-explore-row" onClick={() => onNavigate(destination)}>{body}</button>
+                  : <div className="cv-explore-row" aria-disabled="true">{body}</div>}
             </li>
           )
         })}

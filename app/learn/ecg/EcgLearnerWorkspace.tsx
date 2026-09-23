@@ -14,22 +14,6 @@ import { NATIVE_SAFE_AREA_BOTTOM, NATIVE_SAFE_AREA_TOP } from '../../lib/nativeS
 // reference answer. Ready shows the retained reviewed PDF after its exact size and SHA-256 are verified in the browser.
 // Nothing here is saved, scored or recorded as progress, and no synthetic tracing is ever drawn.
 
-const BLOCKER_TEXT: Record<string, string> = {
-  'platform-family-mismatch': 'The device evidence covers an external PDF viewer on one reported iPhone. It does not cover this in-app viewer.',
-  'governed-artifact-source-unavailable': 'No governed source for the reviewed file is configured for learners.',
-  'current-authorized-promotion-required': 'No current authorised promotion covers this display route.',
-  'device-ledger-binding-required': 'No device baseline is bound for this display route.',
-  'exact-renderer-evidence-required': 'No exact renderer evidence is bound for this display route.',
-}
-const EVIDENCE_LABEL: Record<string, string> = {
-  PROBED: 'Source recording checked',
-  CLINICAL_ATTESTED: 'Clinical attestation',
-  PRIVACY_ATTESTED: 'Privacy attestation',
-  TRANSFORMED: 'Rendering reconstruction verified',
-  DEVICE_BASELINE_BOUND: 'Device baseline (user-reported)',
-  PROMOTION_DECIDED: 'Promotion decision',
-}
-const OUTCOME_LABEL: Record<string, string> = { PASS: 'passed', HOLD: 'held', PROMOTE: 'promoted', REJECT: 'rejected', NOOP: 'no change' }
 const STAGES = ['Observe', 'Interpret', 'Review'] as const
 type Stage = 0 | 1 | 2
 
@@ -41,10 +25,10 @@ function Workspace({ availability }: { availability: EcgLearnerAvailability }) {
   const appearance = useAppearance()
   // Verification lives here so the status chip always reflects what is really on screen.
   const tracing = useVerifiedTracing(availability.state === 'ready' ? availability.artifact.url : null)
-  const chip = availability.state !== 'ready' ? 'Held for governed review'
-    : tracing.status === 'verified' ? 'Reviewed case'
-    : tracing.status === 'failed' ? 'Held: file not verified'
-    : 'Verifying the reviewed file'
+  const chip = availability.state !== 'ready' ? 'Case temporarily unavailable'
+    : tracing.status === 'verified' ? 'Educational case'
+    : tracing.status === 'failed' ? 'Case temporarily unavailable'
+    : 'Preparing case'
   return (
     <main
       data-commercial-shell
@@ -76,20 +60,17 @@ function HeldBody({ availability }: { availability: Extract<EcgLearnerAvailabili
       <section className="ecg-media ecg-media-held" aria-labelledby="ecg-held-title">
         <div className="ecg-media-state">
           <h2 id="ecg-held-title">This tracing isn’t shown yet</h2>
-          <p>Cliniverse shows this ECG only when its evidence covers the way it is displayed. Nothing is substituted in its place.</p>
-          <ul className="ecg-note" aria-label="Why the tracing is not shown">
-            {availability.blockers.map(code => <li key={code}>{BLOCKER_TEXT[code] ?? code}</li>)}
-          </ul>
-          <p role="status">Viewing this page does not record progress.</p>
+          <p>This ECG is temporarily unavailable while its display is being verified. Cliniverse will not substitute a different tracing.</p>
+          <p role="status">You can return to Learn and continue with another available activity.</p>
         </div>
       </section>
       <div className="ecg-side">
         <section className="ecg-panel" aria-labelledby="ecg-question-title">
-          <h2 id="ecg-question-title">Approved question</h2>
+          <h2 id="ecg-question-title">Practice question</h2>
           <p>{availability.question.prompt}</p>
-          <p className="ecg-note">Answering opens together with the tracing. One question, weight 1; it is not a measure of clinical competence.</p>
+          <p className="ecg-note">The question opens together with the tracing. It is a learning activity, not a measure of clinical competence.</p>
         </section>
-        <Evidence availability={availability} />
+
       </div>
     </div>
   )
@@ -161,8 +142,8 @@ function ReadyBody({ availability, tracing }: { availability: Extract<EcgLearner
           <section className="ecg-panel" aria-labelledby="ecg-stage-title">
             <h2 id="ecg-stage-title" ref={headingRef} tabIndex={-1}>Review</h2>
             <div className="ecg-result" role="status">
-              <p>Your answer: {chosen?.label}. {matches ? 'This matches the existing human review.' : 'This differs from the existing human review.'}</p>
-              <p>{availability.review.statement} Source: {availability.review.source}.</p>
+              <p>Your answer: {chosen?.label}. {matches ? 'This matches the approved reference answer.' : 'This differs from the approved reference answer.'}</p>
+              <p>{availability.review.statement}</p>
             </div>
             <p className="ecg-note">Feedback only. This answer is not saved and does not change your progress.</p>
             <Link className="ecg-cta" href="/?view=learn">Back to Learn</Link>
@@ -171,51 +152,6 @@ function ReadyBody({ availability, tracing }: { availability: Extract<EcgLearner
         <Evidence availability={availability} />
       </div>
     </div>
-  )
-}
-
-function Evidence({ availability }: { availability: EcgLearnerAvailability }) {
-  const { decision, evidence, source, reviewedFile, question, blockers } = availability
-  return (
-    <details className="ecg-evidence">
-      <summary>Evidence and review status</summary>
-      <div className="ecg-evidence-body">
-        <section aria-label="Case and source">
-          <h3>Identity</h3>
-          <dl>
-            <div><dt>Case</dt><dd className="ecg-mono">{availability.caseId}</dd></div>
-            <div><dt>Source recording</dt><dd><span className="ecg-mono">{source.artifactId}</span> · SHA-256 <span className="ecg-mono">{source.sha256}</span></dd></div>
-            <div><dt>Reviewed file</dt><dd><span className="ecg-mono">{reviewedFile.filename}</span> · {reviewedFile.bytes.toLocaleString('en-US')} bytes · SHA-256 <span className="ecg-mono">{reviewedFile.sha256}</span></dd></div>
-          </dl>
-        </section>
-        <section aria-label="Review record">
-          <h3>Review record</h3>
-          <ol>
-            {evidence.map((row, index) => (
-              <li key={`${row.kind}-${index}`}>{EVIDENCE_LABEL[row.kind] ?? row.kind}{row.decision ? `: ${OUTCOME_LABEL[row.decision] ?? row.decision}` : ''} · {row.actorType === 'HUMAN' ? 'human' : 'system'} · {row.occurredAt.slice(0, 10)}</li>
-            ))}
-          </ol>
-          <p className="ecg-note">Scope: educational rhythm interpretation of the reviewed file. The promotion is the project owner’s; it is not an institutional clinical approval.</p>
-        </section>
-        <section aria-label="Display decision">
-          <h3>Display decision</h3>
-          <dl>
-            <div><dt>This display route</dt><dd className="ecg-mono">{availability.deliveryRoute}</dd></div>
-            <div><dt>Outcome</dt><dd>{availability.state === 'ready' ? 'Cleared for learners' : 'Held'}</dd></div>
-            <div><dt>Policy</dt><dd className="ecg-mono">{decision.policy.id} {decision.policy.version}</dd></div>
-            <div><dt>Decision</dt><dd className="ecg-mono">{decision.id}</dd></div>
-          </dl>
-          {blockers.length > 0 ? <ul aria-label="Blockers">{blockers.map(code => <li key={code}>{BLOCKER_TEXT[code] ?? code} <span className="ecg-mono">({code})</span></li>)}</ul> : null}
-        </section>
-        <section aria-label="Approved question">
-          <h3>Approved question</h3>
-          <dl>
-            <div><dt>Question</dt><dd><span className="ecg-mono">{question.id}</span> · version {question.version}</dd></div>
-            <div><dt>Approved definition</dt><dd>SHA-256 <span className="ecg-mono">{question.approvalSha256}</span></dd></div>
-          </dl>
-        </section>
-      </div>
-    </details>
   )
 }
 
