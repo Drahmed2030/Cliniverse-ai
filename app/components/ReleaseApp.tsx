@@ -16,6 +16,7 @@ import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
 import OnboardingScreens from './release/OnboardingScreens'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
+import type { CollectionContinuation } from '../lib/content/collectionContinuation'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
@@ -273,14 +274,15 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
 
 // Layout and control styling for this surface lives in commercial-visual-system.css
 // under [data-commercial-surface="today"] (UI-A3). Destinations and routes are unchanged.
-function TodaySurface({ onNavigate }: { onNavigate: (tab: ReleaseTab) => void }) {
+function TodaySurface({ onNavigate, continuation = null }: { onNavigate: (tab: ReleaseTab) => void; continuation?: CollectionContinuation | null }) {
+  const resumeLabel = continuation ? `Continue ${continuation.title} →` : 'Resume →'
   return (
     <section aria-labelledby="today-title" data-commercial-surface="today">
       <section className="cv-today-next" aria-labelledby="today-next-title">
         <div className="cv-today-eyebrow">NEXT</div>
         <h2 id="today-next-title">Continue your practice</h2>
         <p>Pick up where you left off.</p>
-        <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>Resume →</button>
+        <button type="button" className="cv-today-cta" onClick={() => onNavigate('learn')}>{resumeLabel}</button>
       </section>
       <div className="cv-today-review" data-commercial-card-grid>
         <button type="button" className="cv-today-row" onClick={() => onNavigate('progress')} style={{ '--today-accent': C.violet } as CSSProperties}>

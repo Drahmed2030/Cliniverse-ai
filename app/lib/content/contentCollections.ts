@@ -1,5 +1,5 @@
-import type { ContentNode } from './contentGraph'
-import { CONTENT_NODES } from './contentGraph'
+import type { ContentNode } from './contentGraph.ts'
+import { CONTENT_NODES } from './contentGraph.ts'
 
 export interface ContentCollection {
   id: string

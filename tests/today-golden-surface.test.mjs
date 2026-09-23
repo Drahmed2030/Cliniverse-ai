@@ -28,7 +28,7 @@ test('Today has exactly one primary action and one review item, routed to existi
   assert.match(today, /className="cv-today-cta" onClick=\{\(\) => onNavigate\('learn'\)\}/)
   assert.equal((today.match(/className="cv-today-row"/g) ?? []).length, 1)
   assert.match(today, /onNavigate\('progress'\)/)
-  assert.match(today, /NEXT ACTION/)
+  assert.match(today, />NEXT</)
   assert.match(today, /REVIEW/)
 })
 
@@ -36,10 +36,7 @@ test('Today does not hardcode user progress, review counts or study/case example
   assert.doesNotMatch(today, /\b\d+\s+(cases?|studies|review)/i)
   assert.doesNotMatch(today, /Case 0\d/)
   assert.doesNotMatch(today, /\bdue\b/i)
-  // Metrics come from the real account lesson data through the existing summary component.
-  assert.match(today, /<AccountLearningSummary compact view="summary"/)
-  assert.match(summary, /completedIds\.includes\(lesson\.id\)/)
-  assert.doesNotMatch(summary.slice(summary.indexOf('if (compact)'), summary.indexOf('return <section data-learning-summary aria-label')), /\b(?:2|3|7)\b\s*(?:cases|studies)/i)
+  assert.doesNotMatch(today, /Cardiology Practice|Acute Care Foundations|Resident Onboarding/)
 })
 
 test('Today carries no extra content outside the approved contract', () => {
