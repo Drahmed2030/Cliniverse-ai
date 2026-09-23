@@ -149,7 +149,6 @@ function ReadyBody({ availability, tracing }: { availability: Extract<EcgLearner
             <Link className="ecg-cta" href="/?view=learn">Back to Learn</Link>
           </section>
         )}
-        <Evidence availability={availability} />
       </div>
     </div>
   )
