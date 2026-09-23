@@ -40,7 +40,7 @@ export const EVENT_CONSUMERS: Record<CliniverseEventName, readonly EventConsumer
   'review.completed': ['progress','today','review-scheduler','analytics','intelligence'],
   'content.opened': ['analytics'],
   'content.completed': ['progress','today','analytics','intelligence'],
-  'collection.started': ['analytics','institution'],
+  'collection.started': ['today','analytics','institution'],
   'collection.completed': ['progress','today','analytics','institution','intelligence'],
   'subscription.changed': ['analytics'],
   'institution.assignment.opened': ['analytics','institution'],

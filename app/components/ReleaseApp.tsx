@@ -16,7 +16,8 @@ import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
 import OnboardingScreens from './release/OnboardingScreens'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
-import type { CollectionContinuation } from '../lib/content/collectionContinuation'
+import { collectionContinuation, type CollectionContinuation } from '../lib/content/collectionContinuation'
+import { readCliniverseEvents } from '../lib/platform/eventStore'
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
@@ -71,14 +72,14 @@ export default function ReleaseApp({ reviewPreview = false, caseLibraryPreview =
     <AuthGate allowGuest={false}>
       {user => (
         <SubscriptionPurchaseProvider>
-          <OnboardingOrShell key={user.id} caseLibraryPreview={caseLibraryPreview} accountInitial={user.email?.trim().charAt(0).toUpperCase() || null} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
+          <OnboardingOrShell key={user.id} caseLibraryPreview={caseLibraryPreview} accountId={user.id} accountInitial={user.email?.trim().charAt(0).toUpperCase() || null} showEcgReview={reviewPreview && user.email?.toLowerCase() === 'reviewer@cliniverseai.com' && Boolean(user.email_confirmed_at)} />
         </SubscriptionPurchaseProvider>
       )}
     </AuthGate>
   )
 }
 
-function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean; accountInitial: string | null }) {
+function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: boolean; accountId: string; accountInitial: string | null }) {
   const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null)
   const { openPaywall } = useCliniverseSubscription()
 
@@ -103,7 +104,7 @@ function OnboardingOrShell(props: { showEcgReview: boolean; caseLibraryPreview: 
   return <ReleaseShell {...props} />
 }
 
-function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { showEcgReview: boolean; caseLibraryPreview: boolean; accountInitial: string | null }) {
+function ReleaseShell({ showEcgReview, caseLibraryPreview, accountId, accountInitial }: { showEcgReview: boolean; caseLibraryPreview: boolean; accountId: string; accountInitial: string | null }) {
   const appearance = useAppearance()
   const [tab, setTab] = useState<ReleaseTab>(() => {
     // AuthGate mounts this shell after restoring the client session.
@@ -163,7 +164,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
         }}
       >
         {tab === 'today' && internalReviewTools && <PracticeShift onWard={() => { setCareWorkspace('ward'); setTab('learn') }} onProgress={() => setTab('progress')} onPathway={() => { setCardiologyModule('pathway'); if (!canAccessPremium) { openPaywall(); return }; setCareWorkspace('cardiology'); setTab('learn') }} />}
-        {tab === 'today' && <TodaySurface onNavigate={goTab} />}
+        {tab === 'today' && <TodaySurface actorId={accountId} onNavigate={goTab} />}
         {tab === 'learn' && (
           <ErrorBoundary section="Learn">
             {internalReviewTools && <section aria-labelledby="ecg-review-entry-title" style={{ padding: 20, marginBottom: 20, borderRadius: 22, border: `1px solid ${C.border}`, background: C.panel }}>
@@ -174,7 +175,7 @@ function ReleaseShell({ showEcgReview, caseLibraryPreview, accountInitial }: { s
               <p style={{ color: C.sub, fontSize: '0.875rem' }}>Review-account access. This practice does not certify clinical competence.</p>
             </section>}
             {careWorkspace === null ? (
-              <LearnTracks onOpenWorkspace={openWorkspace} />
+              <LearnTracks actorId={accountId} onOpenWorkspace={openWorkspace} />
             ) : (
               <>
                 <button
@@ -274,7 +275,12 @@ function ReleaseHeader({ active, nativeTopPadding, accountInitial, learnLanding,
 
 // Layout and control styling for this surface lives in commercial-visual-system.css
 // under [data-commercial-surface="today"] (UI-A3). Destinations and routes are unchanged.
-function TodaySurface({ onNavigate, continuation = null }: { onNavigate: (tab: ReleaseTab) => void; continuation?: CollectionContinuation | null }) {
+function TodaySurface({ onNavigate, actorId, continuation: providedContinuation }: { onNavigate: (tab: ReleaseTab) => void; actorId:string; continuation?: CollectionContinuation | null }) {
+  const [persistedContinuation, setPersistedContinuation] = useState<CollectionContinuation | null>(null)
+  useEffect(() => {
+    setPersistedContinuation(collectionContinuation(readCliniverseEvents(window.localStorage, actorId)))
+  }, [actorId])
+  const continuation = providedContinuation === undefined ? persistedContinuation : providedContinuation
   const resumeLabel = continuation ? `Continue ${continuation.title} →` : 'Resume →'
   return (
     <section aria-labelledby="today-title" data-commercial-surface="today">
