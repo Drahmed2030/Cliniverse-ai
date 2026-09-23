@@ -1,5 +1,5 @@
 import type { ContentNode } from './contentGraph.ts'
-import { CONTENT_NODES } from './contentGraph.ts'
+import { CONTENT_NODES, contentNodeLearnerReady } from './contentGraph.ts'
 
 export interface ContentCollection {
   id: string
@@ -36,5 +36,5 @@ export const CONTENT_COLLECTIONS: ContentCollection[] = [
 export function collectionNodes(collection: ContentCollection): ContentNode[] {
   return collection.nodeIds
     .map(id => CONTENT_NODES.find(node => node.id === id))
-    .filter((node): node is ContentNode => Boolean(node))
+    .filter((node): node is ContentNode => Boolean(node) && contentNodeLearnerReady(node))
 }

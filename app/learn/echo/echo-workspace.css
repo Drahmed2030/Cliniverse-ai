@@ -22,22 +22,9 @@
 
 [data-echo-workspace] .echo-note { margin: 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
 
-/* Provenance is disclosed on demand and never competes with the task. Blue marks evidence. */
-[data-echo-workspace] .echo-evidence { border-top: 1px solid var(--cv-border); }
-[data-echo-workspace] .echo-evidence > summary { display: flex; align-items: center; justify-content: space-between; gap: var(--cv-space-4); min-height: 48px; cursor: pointer; list-style: none; color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-size: var(--cv-text-body); font-weight: 800; }
-[data-echo-workspace] .echo-evidence > summary::-webkit-details-marker { display: none; }
-[data-echo-workspace] .echo-evidence > summary::after { content: "+"; font-size: 1.25rem; }
-[data-echo-workspace] .echo-evidence[open] > summary::after { content: "\2212"; }
-[data-echo-workspace] .echo-evidence > summary:focus-visible { outline-offset: -3px; }
-[data-echo-workspace] .echo-evidence-body { display: grid; gap: var(--cv-space-5); max-width: 760px; padding-bottom: var(--cv-space-4); }
-[data-echo-workspace] .echo-evidence-body h2 { margin: 0; font-size: var(--cv-text-support); font-weight: 800; letter-spacing: 0.04em; }
-[data-echo-workspace] .echo-evidence-body section > * + * { margin-top: var(--cv-space-2); }
-[data-echo-workspace] .echo-evidence-body dl { display: grid; gap: var(--cv-space-2); margin: 0; }
-[data-echo-workspace] .echo-evidence-body dt { color: var(--cv-text-secondary); font-size: var(--cv-text-caption); font-weight: 700; }
-[data-echo-workspace] .echo-evidence-body dd { margin: 0; font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
-[data-echo-workspace] .echo-evidence-body dd a { display: inline-flex; align-items: center; min-height: 44px; color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-weight: 700; }
-[data-echo-workspace] .echo-evidence-body ul { display: grid; gap: var(--cv-space-2); margin: 0; padding-left: var(--cv-space-5); font-size: var(--cv-text-support); line-height: 1.5; overflow-wrap: anywhere; }
-[data-echo-workspace] .echo-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--cv-text-caption); }
+/* Learner-facing attribution keeps licence obligations visible without exposing internal governance metadata. */
+[data-echo-workspace] .echo-attribution { display: grid; gap: var(--cv-space-2); border-top: 1px solid var(--cv-border); padding-top: var(--cv-space-4); max-width: 760px; }
+[data-echo-workspace] .echo-attribution a { display: inline-flex; align-items: center; min-height: 44px; color: color-mix(in srgb, var(--cv-blue) 70%, var(--cv-text)); font-weight: 700; }
 
 @media (min-width: 700px) {
   [data-echo-workspace] .echo-frame { gap: var(--cv-space-7); }

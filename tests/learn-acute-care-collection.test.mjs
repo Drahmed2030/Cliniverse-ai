@@ -18,7 +18,9 @@ test('Acute Care Foundations maps to existing product destinations', () => {
   for (const id of ['ecg-record-10','resuscitation-hub','code-lab-bls','ward-current-set','handover-practice']) {
     assert.ok(learn.includes(id), id)
   }
-  assert.match(learn, /\/labs\/resuscitation-hub/)
+  assert.match(learn, /contentNodeLearnerReadyById\('resuscitation-hub'\)/)
+  assert.match(learn, /available:contentNodeLearnerReadyById\('resuscitation-hub'\)/)
+  assert.match(learn, /aria-disabled="true"/)
   assert.match(learn, /workspace:'codelab'/)
   assert.match(learn, /workspace:'handover'/)
 })
@@ -30,4 +32,11 @@ test('connected collections preserve the shared visual system', () => {
   assert.doesNotMatch(learn, /fontFamily/)
   assert.match(css, /\.cv-learn-collections/)
   assert.match(css, /\.cv-learn-collection/)
+})
+
+test('Acute Care Foundations preserves the resuscitation product definition but filters it from active steps while catalog scenarios are not ready', async () => {
+  const { CONTENT_COLLECTIONS, collectionNodes } = await import('../app/lib/content/contentCollections.ts')
+  const acute = CONTENT_COLLECTIONS.find(collection => collection.id === 'acute-care-foundations')
+  assert.ok(acute.nodeIds.includes('resuscitation-hub'))
+  assert.equal(collectionNodes(acute).some(node => node.id === 'resuscitation-hub'), false)
 })

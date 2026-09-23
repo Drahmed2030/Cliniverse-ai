@@ -53,7 +53,7 @@ test('the workspace reuses the existing engine: one player, no second media path
 
 test('every fact in the shell and the caption is read from the existing records: no identity, licence or review value is written out here', () => {
   assert.match(workspace, /from '\.\.\/\.\.\/lib\/clinicalMedia\/licensedEchoAsset'/)
-  assert.match(workspace, /from '\.\.\/\.\.\/lib\/clinicalMedia\/echoClinicalReviewAttestation'/)
+  assert.doesNotMatch(workspace, /echoClinicalReviewAttestation/)
   assert.match(caption, /from '\.\.\/\.\.\/lib\/clinicalMedia\/licensedEchoAsset'/)
   for (const literal of [ASSET.rights.derivativeSha256, ASSET.rights.originalSha1, ASSET.rights.vrtTicket, ASSET.rights.licenseId, ASSET.rights.creator, ASSET.rights.sourcePageUrl, REVIEW.date, REVIEW.scope, 'CC BY-SA', 'CardioNetworks']) {
     assert.equal((workspace + caption).includes(literal), false, `hard-coded record value: ${literal}`)
@@ -123,7 +123,7 @@ function renderShell() {
   return expand(gate.props.children())
 }
 
-test('the shell renders one h1, a way back to Learn, the credit chip, the existing engine in its learner layout, and the evidence record', () => {
+test('the shell renders one h1, a way back to Learn, the existing engine, and concise learner-facing attribution', () => {
   const tree = renderShell()
   const all = nodes(tree)
   const main = all.find(n => n.type === 'main')
@@ -136,12 +136,12 @@ test('the shell renders one h1, a way back to Learn, the credit chip, the existi
   assert.equal(engine[0].props.echoOnly, true)
   assert.equal(engine[0].props.variant, 'learner')
   const copy = text(tree).replace(/\s+/g, ' ')
-  for (const expected of [`Licensed real cine · ${ASSET.rights.licenseId}`, `ECHO · ${ASSET.cine.view}`, `source-labelled ${ASSET.cine.sourceLabel}`, 'view-recognition practice']) assert.ok(copy.includes(expected), `missing: ${expected}`)
-  const details = all.filter(n => n.type === 'details')
-  assert.equal(details.length, 1)
-  assert.equal(details[0].props.open, undefined)
-  const record = text(details[0]).replace(/\s+/g, ' ')
-  for (const expected of [ASSET.rights.derivativeSha256, ASSET.rights.originalSha1, ASSET.rights.vrtTicket, ASSET.rights.licenseId, 'share-alike required', 'Approved for learner use', REVIEW.date, REVIEW.scope, REVIEW.notes, ASSET.privacy.reviewMethod, ASSET.privacy.status, 'burned-in acquisition date and time', ASSET.disclaimer, ...ASSET.rights.changes]) assert.ok(record.includes(expected), `missing: ${expected}`)
+  for (const expected of [`Real cine · ${ASSET.cine.view}`, `ECHO · ${ASSET.cine.view}`, `source-labelled ${ASSET.cine.sourceLabel}`, 'view-recognition practice', ASSET.rights.creator, ASSET.rights.licenseId, ASSET.disclaimer]) assert.ok(copy.includes(expected), `missing: ${expected}`)
+  assert.equal(all.filter(n => n.type === 'details').length, 0)
+  for (const internal of [ASSET.rights.derivativeSha256, ASSET.rights.originalSha1, ASSET.rights.vrtTicket, REVIEW.date, REVIEW.scope, REVIEW.notes, ASSET.privacy.reviewMethod, ASSET.privacy.status, 'Approved for learner use']) assert.ok(!copy.includes(internal), `learner UI leaks ${internal}`)
+  const links = all.filter(n => n.type === 'a')
+  assert.ok(links.some(n => n.props.href === ASSET.rights.sourcePageUrl))
+  assert.ok(links.some(n => n.props.href === ASSET.rights.licenseUrl))
   assert.equal(all.some(n => n.type === 'button' || n.type === 'input' || n.type === 'video'), false)
 })
 
@@ -180,8 +180,8 @@ test('the workspace frame is scoped, token-only and in its own stacking context 
   assert.match(workspaceCss, /\[data-echo-workspace\]\[data-commercial-shell\] \{[^}]*isolation: isolate/)
   assert.match(workspaceRaw, /<main\s+data-commercial-shell\s+data-appearance=\{appearance\}\s+data-echo-workspace/)
   assert.match(workspaceCss, /\.echo-back \{[^}]*min-height: 44px/)
-  assert.match(workspaceCss, /\.echo-evidence > summary \{[^}]*min-height: 48px/)
-  assert.match(workspaceCss, /\.echo-evidence-body dd a \{[^}]*min-height: 44px/)
+  assert.doesNotMatch(workspaceCss, /echo-evidence/)
+  assert.match(workspaceCss, /\.echo-attribution a \{[^}]*min-height: 44px/)
 })
 
 test('the summary panel keeps its exact studio look: every colour and size is a variable whose fallback is the previous value', () => {

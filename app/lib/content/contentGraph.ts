@@ -1,3 +1,5 @@
+import { CLINICAL_CONTENT_CATALOG_SEED } from '../contentCatalogSeed.ts'
+
 export type ContentKind =
   | 'ecg'
   | 'echo'
@@ -21,6 +23,10 @@ export interface ContentNode {
   durationMinutes?: number
   tags: string[]
   sourcePath: string
+  catalogGate?: {
+    module: string
+    contentTypes: string[]
+  }
 }
 
 export interface ContentEdge {
@@ -33,7 +39,7 @@ export const CONTENT_NODES: ContentNode[] = [
   { id: 'ecg-record-10', title: 'ECG Record 10', kind: 'ecg', publicationState: 'learner', durationMinutes: 4, tags: ['cardiology','rhythm','signal'], sourcePath: 'app/learn/ecg' },
   { id: 'echo-a4c-normal', title: 'Normal A4C Echo', kind: 'echo', publicationState: 'learner', durationMinutes: 4, tags: ['cardiology','echo','a4c','media'], sourcePath: 'app/components/clinical-media' },
   { id: 'ward-current-set', title: 'Ward current case set', kind: 'ward', publicationState: 'learner', durationMinutes: 10, tags: ['clinical-reasoning','decisions','simulation'], sourcePath: 'app/lib/ward/wardData.ts' },
-  { id: 'resuscitation-hub', title: 'Resuscitation', kind: 'resuscitation', publicationState: 'learner', durationMinutes: 8, tags: ['resuscitation','simulation','acute-care'], sourcePath: 'app/labs/resuscitation-hub' },
+  { id: 'resuscitation-hub', title: 'Resuscitation', kind: 'resuscitation', publicationState: 'learner', durationMinutes: 8, tags: ['resuscitation','simulation','acute-care'], sourcePath: 'app/labs/resuscitation-hub', catalogGate: { module: 'resuscitation', contentTypes: ['scenario','drill'] } },
   { id: 'handover-practice', title: 'Handover Practice', kind: 'handover', publicationState: 'learner', durationMinutes: 5, tags: ['communication','handover','ward'], sourcePath: 'app/components/ward' },
   { id: 'code-lab-bls', title: 'BLS curriculum', kind: 'code-lab', publicationState: 'learner', durationMinutes: 8, tags: ['bls','resuscitation','curriculum'], sourcePath: 'app/lib/codelab/blsLessons.ts' },
   { id: 'code-lab-acls', title: 'ACLS curriculum', kind: 'code-lab', publicationState: 'learner', durationMinutes: 10, tags: ['acls','resuscitation','curriculum'], sourcePath: 'app/lib/codelab/aclsLessons.ts' },
@@ -66,6 +72,24 @@ export const CONTENT_EDGES: ContentEdge[] = [
 
 export function contentNode(id: string) {
   return CONTENT_NODES.find(node => node.id === id) ?? null
+}
+
+export function contentNodeLearnerReady(node: ContentNode): boolean {
+  if (node.publicationState !== 'learner') return false
+  if (!node.catalogGate) return true
+
+  const gated = CLINICAL_CONTENT_CATALOG_SEED.filter(item =>
+    item.module === node.catalogGate?.module
+    && node.catalogGate.contentTypes.includes(item.content_type)
+    && item.visibility === 'visible',
+  )
+
+  return gated.length > 0 && gated.every(item => item.readiness === 'ready')
+}
+
+export function contentNodeLearnerReadyById(id: string): boolean {
+  const node = contentNode(id)
+  return node ? contentNodeLearnerReady(node) : false
 }
 
 export function connectedContent(id: string) {

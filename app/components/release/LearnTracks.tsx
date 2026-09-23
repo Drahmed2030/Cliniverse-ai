@@ -3,11 +3,12 @@
 import Link from 'next/link'
 import type { CSSProperties, ReactNode } from 'react'
 import { CONTENT_COLLECTIONS, collectionNodes } from '../../lib/content/contentCollections'
+import { contentNodeLearnerReadyById } from '../../lib/content/contentGraph'
 import { makeCliniverseEvent } from '../../lib/platform/events'
 import { appendCliniverseEvent } from '../../lib/platform/eventStore'
 
 type Workspace = 'ward' | 'handover' | 'codelab' | 'cardiology' | 'nexus'
-type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace }
+type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace; available?:boolean }
 
 const CORE: Entry[] = [
   { id:'ecg', verb:'INTERPRET', title:'ECG', description:'Read the tracing, commit an interpretation, then review the reasoning.', accent:'var(--cv-teal)', href:'/learn/ecg' },
@@ -15,7 +16,7 @@ const CORE: Entry[] = [
   { id:'ward', verb:'DECIDE', title:'Ward', description:'Follow a changing patient state and work through the next clinical decision.', accent:'var(--cv-blue)', workspace:'ward' },
 ]
 const ADVANCED: Entry[] = [
-  { id:'resuscitation', verb:'SIMULATE', title:'Resuscitation', description:'Move between foundations, practice, simulation, replay and progress.', accent:'var(--cv-blue)', href:'/labs/resuscitation-hub' },
+  { id:'resuscitation', verb:'SIMULATE', title:'Resuscitation', description:'Scenario practice appears here when learner-ready cases are released.', accent:'var(--cv-blue)', href:'/labs/resuscitation-hub', available:contentNodeLearnerReadyById('resuscitation-hub') },
   { id:'handover', verb:'COMMUNICATE', title:'Handover Practice', description:'Separate known facts from gaps, draft a structured handover, and resume saved practice.', accent:'var(--cv-blue)', workspace:'handover' },
   { id:'codelab', verb:'BUILD', title:'Code Lab', description:'Work through BLS and ACLS lessons with knowledge checks.', accent:'var(--cv-teal)', workspace:'codelab' },
   { id:'pathway', verb:'REPLAY', title:'Pathway Replay', description:'Inspect a fictional pathway and the decisions that shaped it.', accent:'var(--cv-violet)', href:'/labs/pathway-replay' },
@@ -60,8 +61,10 @@ function TrackGroup({title,description,entries,onOpenWorkspace}:{title:string;de
   </section>
 }
 function TrackEntry({entry,onOpenWorkspace}:{entry:Entry;onOpenWorkspace:(workspace:Workspace)=>void}) {
-  const body:ReactNode=<><span><span className="cv-learn-track-verb">{entry.verb}</span><span className="cv-learn-track-title">{entry.title}</span><span className="cv-learn-track-text">{entry.description}</span></span><span className="cv-learn-track-go" aria-hidden="true">→</span></>
+  const available=entry.available!==false
+  const body:ReactNode=<><span><span className="cv-learn-track-verb">{entry.verb}</span><span className="cv-learn-track-title">{entry.title}</span><span className="cv-learn-track-text">{entry.description}</span></span><span className="cv-learn-track-go" aria-hidden="true">{available?'→':'Coming later'}</span></>
   const style={'--track-accent':entry.accent} as CSSProperties
+  if(!available) return <div className="cv-learn-track" aria-disabled="true" style={style}>{body}</div>
   if(entry.href) return <Link className="cv-learn-track" href={entry.href} style={style}>{body}</Link>
   return <button type="button" className="cv-learn-track" onClick={()=>entry.workspace&&onOpenWorkspace(entry.workspace)} style={style}>{body}</button>
 }

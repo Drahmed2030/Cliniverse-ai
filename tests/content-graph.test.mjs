@@ -1,6 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { contentNode, contentNodeLearnerReady } from '../app/lib/content/contentGraph.ts'
+import { CONTENT_COLLECTIONS, collectionNodes } from '../app/lib/content/contentCollections.ts'
 
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8')
 
@@ -19,4 +21,16 @@ test('collections combine modalities instead of reviving old module silos', () =
   for (const expected of ['Acute Care Foundations','Cardiology Practice','Resident Onboarding','ecg-record-10','echo-a4c-normal','ward-current-set','handover-practice']) {
     assert.ok(collections.includes(expected), expected)
   }
+})
+
+
+test('catalog-gated learner nodes fail closed when required content is not ready', () => {
+  const resuscitation = contentNode('resuscitation-hub')
+  assert.ok(resuscitation)
+  assert.equal(contentNodeLearnerReady(resuscitation), false)
+
+  const acute = CONTENT_COLLECTIONS.find(collection => collection.id === 'acute-care-foundations')
+  assert.ok(acute)
+  assert.ok(acute.nodeIds.includes('resuscitation-hub'), 'the product definition is preserved')
+  assert.equal(collectionNodes(acute).some(node => node.id === 'resuscitation-hub'), false, 'unready content is not projected as an active learner step')
 })
