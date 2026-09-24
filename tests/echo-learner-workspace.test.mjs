@@ -193,7 +193,7 @@ test('the summary panel keeps its exact studio look: every colour and size is a 
 // ── wiring ────────────────────────────────────────────────────────────────────
 
 test('Learn and Progress open the Echo workspace; the studio preview stays for QA and governance and is no longer any primary entry', () => {
-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'echo',[\s\S]*?href: '\/learn\/echo'/)
+  assert.match(read('app/components/release/LearnTracks.tsx'), /id:\s*'echo',[\s\S]*?href:\s*'\/learn\/echo'/)
   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /echo: \{ accent: 'var\(--cv-violet\)', href: '\/learn\/echo' \}/)
   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
     assert.equal(stripComments(read(file)).includes('/labs/echo-preview'), false, `${file} still links the studio preview`)
