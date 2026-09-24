@@ -206,7 +206,7 @@ test('no XP, emoji, streak, difficulty badge or prescriptive legacy copy', () =>
   assert.doesNotMatch(workspace, /reperfusion|thrombolys|anticoag|heparin|aspirin|clopidogrel|amiodarone|cardioversion|pacing|cath(eterization)? lab|activate|treatment|treat |administer|mg\b/i)
   assert.doesNotMatch(workspace, /Chest discomfort|54 years|anterior injury|1 of 4|Acute anterior/)
   assert.match(workspace, /The final 106 ms remain unchanged and must not be used as a target morphology feature\./)
-  assert.match(workspace, /it is not a measure of clinical competence/)
+  assert.match(workspace, /not a measure of clinical competence/i)
 })
 
 test('styling is scoped, token-only, restrained, and nothing is positioned over the tracing', () => {
