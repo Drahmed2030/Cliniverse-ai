@@ -231,7 +231,7 @@ test('styling is scoped, token-only, restrained, and nothing is positioned over 
 // ── wiring, the legacy route and the reviewer-only path ───────────────────────
 
 test('Learn and Progress open the governed workspace; the legacy quiz is no longer any primary entry', () => {
-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'ecg',[\s\S]*?href: '\/learn\/ecg'/)
+  assert.match(read('app/components/release/LearnTracks.tsx'), /id:\s*'ecg',[\s\S]*?href:\s*'\/learn\/ecg'/)
   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /ecg: \{ accent: 'var\(--cv-teal\)', href: '\/learn\/ecg' \}/)
   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
     assert.equal(stripComments(read(file)).includes('/labs/ecg-challenge'), false, `${file} still links the legacy quiz`)
