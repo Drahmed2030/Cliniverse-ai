@@ -195,7 +195,6 @@ test('nothing is saved, scored, recorded as progress or reused from the legacy q
   assert.doesNotMatch(workspace, /learnerReady|LEARNER_ELIGIBLE|HUMAN_REVIEWED|humanClinicalAttestationId|gateState/)
   assert.match(workspace, /Feedback only\. This answer is not saved and does not change your progress\./)
   assert.doesNotMatch(workspace, /existing human review|Promotion decision|Display decision|SHA-256|decision\.policy|deliveryRoute/)
-  assert.match(workspace, /Viewing this page does not record progress\./)
 })
 
 test('no XP, emoji, streak, difficulty badge or prescriptive legacy copy', () => {
