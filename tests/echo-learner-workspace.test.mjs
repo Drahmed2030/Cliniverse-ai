@@ -80,8 +80,8 @@ test('the default variant is the existing studio preview: every studio-only elem
   // The only behavioural difference is the initial state of the existing "expand cine" toggle.
   assert.match(preview, /useState\(learner\)/)
   assert.equal((preview.match(/useState\(learner\)/g) ?? []).length, 1)
-  assert.match(preview, /<EchoA4cLesson onAssessment=\{onAssessment\} reducedMotion=\{reducedMotion\}/)
-  assert.match(preview, /<EchoStudySummaryPanel summary=\{echoSummary\} recommendation=\{null\}\/>/)
+  assert.match(preview, /<EchoA4cLesson learner=\{learner\} onAssessment=\{onAssessment\} reducedMotion=\{reducedMotion\}/)
+  assert.match(preview, /\{learner\?null:<EchoStudySummaryPanel summary=\{echoSummary\} recommendation=\{null\}\/>\}/)
   // Grouping wrappers exist only in the learner layout.
   assert.match(preview, /function Region\(\{ learner, className, children \}[^]*?return learner \? <div className=\{className\}>\{children\}<\/div> : <>\{children\}<\/>/)
 })
@@ -190,6 +190,16 @@ test('the summary panel keeps its exact studio look: every colour and size is a 
   for (const fallback of ['rgba(148,163,184,.22)', 'rgba(15,23,42,.72)', '#e5e7eb', '#f8fafc', '#67e8f9', '#94a3b8', 'rgba(30,41,59,.62)', 'rgba(61,214,161,.07)']) assert.ok(summaryCss.includes(fallback), `fallback ${fallback} preserved`)
 })
 
+test('learner Echo hides internal competency, receipt and provenance identifiers while preserving assessment feedback', () => {
+  const lesson = read('app/components/clinical-media/EchoA4cLesson.tsx')
+  assert.match(lesson, /learner\?: boolean/)
+  assert.match(lesson, /!learner&&mastery/)
+  assert.match(lesson, /learner&&receipt\?<button/)
+  assert.match(lesson, /!learner&&receipt\?<section aria-label="Unified completion receipt"/)
+  assert.match(lesson, /\{!learner\?<details className=\{styles\.realEchoAttribution\}>/)
+  assert.match(lesson, /learner\?'The view signature, visible landmark set and learning boundary matched the reference answer\.'/)
+  assert.match(lesson, /learner\?'REAL ECHO · A4C NORMAL':'REAL ECHO · A4C NORMAL · PREVIEW'/)
+})
 // ── wiring ────────────────────────────────────────────────────────────────────
 
 test('Learn and Progress open the Echo workspace; the studio preview stays for QA and governance and is no longer any primary entry', () => {

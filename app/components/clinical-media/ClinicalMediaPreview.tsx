@@ -117,8 +117,8 @@ export default function ClinicalMediaPreview({ echoOnly = false, onAssessment, v
 
     <Region learner={learner} className={styles.learnerReasoning}>
     {capabilities.assessment&&!dcmReview&&program==='echo-a4c-normal'?<>
-      <EchoA4cLesson onAssessment={onAssessment} reducedMotion={reducedMotion} onCompetencySignal={({mastery,taskId,observedAt})=>setEchoCompetency(current=>recordEchoClipCompetency({state:current,study:ECHO_A4C_PREVIEW_STUDY,clipId:echoSession.activeClipId,mastery,taskId,updatedAt:observedAt}))}/>
-      <EchoStudySummaryPanel summary={echoSummary} recommendation={null}/>
+      <EchoA4cLesson learner={learner} onAssessment={onAssessment} reducedMotion={reducedMotion} onCompetencySignal={({mastery,taskId,observedAt})=>setEchoCompetency(current=>recordEchoClipCompetency({state:current,study:ECHO_A4C_PREVIEW_STUDY,clipId:echoSession.activeClipId,mastery,taskId,updatedAt:observedAt}))}/>
+      {learner?null:<EchoStudySummaryPanel summary={echoSummary} recommendation={null}/>}
       <EchoIntelligenceAtlasPanel/>
     </>:null}
     </Region>
