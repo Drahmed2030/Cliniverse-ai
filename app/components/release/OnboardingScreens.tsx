@@ -9,15 +9,6 @@ import {
   NATIVE_SAFE_AREA_TOP,
 } from '../../lib/nativeSafeArea'
 
-// Onboarding v4 · Golden Entry. One question — "What is Cliniverse, and how should I use it?" — answered in two
-// quiet steps: the entry (what it is, and the Observe → Commit → Refine loop) and a ready step (where to start).
-// Completion is unchanged: onComplete(false) enters the app, onComplete(true) enters it and opens the existing
-// paywall. Nothing here grants access, stores a preference or fabricates progress; the only persistence is the
-// "seen" flag that ReleaseApp writes in its own onComplete handler.
-//
-// The previous interest step is gone on purpose: it wrote 'cliniverse:onboarding:interests', which nothing reads.
-// The real, readable preference is "Topics I follow" in Me.
-
 const PROOF = [
   { number: '01', term: 'Observe', text: 'Start with the tracing, cine or case — before the label.' },
   { number: '02', term: 'Commit', text: 'Choose the interpretation or next clinical step.' },
@@ -37,7 +28,6 @@ export default function OnboardingScreens({ onComplete }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const changed = useRef(false)
 
-  // After a step change, move focus to the new heading so keyboard and screen-reader users land on the new content.
   useEffect(() => {
     if (!changed.current) return
     headingRef.current?.focus()
@@ -49,7 +39,6 @@ export default function OnboardingScreens({ onComplete }: Props) {
     setStep(next)
   }
 
-  // Skip and "Enter Cliniverse" both enter the app; neither changes entitlement or auth.
   const enter = () => onComplete(false)
   const openPlan = () => onComplete(true)
 
@@ -69,7 +58,6 @@ export default function OnboardingScreens({ onComplete }: Props) {
         overflowY: 'auto',
         background: 'var(--cv-bg)',
         boxSizing: 'border-box',
-        // The bottom safe area is applied by the action bar itself, so the pinned bar clears the home indicator.
         padding: `max(18px, ${NATIVE_SAFE_AREA_TOP}) max(20px, ${NATIVE_SAFE_AREA_RIGHT}) 0 max(20px, ${NATIVE_SAFE_AREA_LEFT})`,
       }}
     >
@@ -84,6 +72,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
         <div className="cv-onboarding-step" key={step} data-direction={direction}>
           {step === 0 ? (
             <>
+              <div className="cv-onboarding-mark" aria-hidden="true"><span /></div>
               <p className="cv-onboarding-eyebrow">CLINICAL LEARNING · ONE SYSTEM</p>
               <h1 id="onboarding-title" className="cv-onboarding-title" ref={headingRef} tabIndex={-1}>
                 <span>See the case.</span>
@@ -91,7 +80,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
                 <span>Make the decision.</span>
               </h1>
               <p className="cv-onboarding-body">
-                ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.
+                ECG, Echo and clinical reasoning in one focused practice system built for deliberate learning.
               </p>
               <ol className="cv-onboarding-proof" aria-label="How practice works">
                 {PROOF.map(item => (
@@ -112,7 +101,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
                 <span>Start with your next step.</span>
               </h1>
               <p className="cv-onboarding-body">
-                Today shows what to do next. Learn holds your ECG, Echo and Ward practice, and Progress shows what to revisit.
+                Today keeps the next action clear. Learn holds your ECG, Echo and Ward practice. Progress shows what to revisit.
               </p>
             </>
           )}
@@ -141,8 +130,6 @@ export default function OnboardingScreens({ onComplete }: Props) {
   )
 }
 
-// Semantic tokens only. No glow, glass, shadow or ambient animation; the one motion is the step transition,
-// which is switched off entirely under prefers-reduced-motion. State is carried by text, width and weight, not colour alone.
 const CSS = `
   .cv-onboarding-frame {
     flex: 1 0 auto;
@@ -175,7 +162,6 @@ const CSS = `
     font-weight: 700;
     cursor: pointer;
   }
-
   .cv-onboarding-step { min-width: 0; animation: cvOnboardingStepIn var(--cv-motion-base) ease-out both; }
   .cv-onboarding-step[data-direction="none"] { animation: none; }
   .cv-onboarding-step[data-direction="back"] { --cv-onboarding-shift: -16px; }
@@ -184,10 +170,45 @@ const CSS = `
     from { opacity: 0; transform: translateX(var(--cv-onboarding-shift, 16px)); }
     to { opacity: 1; transform: none; }
   }
-
+  .cv-onboarding-mark {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: var(--cv-space-5);
+    border-radius: var(--cv-radius-md);
+    background: #0b0f19;
+    border: 1px solid color-mix(in srgb, var(--cv-blue) 34%, var(--cv-border));
+  }
+  .cv-onboarding-mark::before {
+    content: "";
+    position: absolute;
+    inset: 13px 14px 13px 12px;
+    border: 5px solid var(--cv-blue);
+    border-right-color: transparent;
+    border-radius: 50%;
+  }
+  .cv-onboarding-mark::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    right: 12px;
+    bottom: 13px;
+    background: var(--cv-violet);
+  }
+  .cv-onboarding-mark > span {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    right: 11px;
+    top: 13px;
+    background: #fff;
+  }
   .cv-onboarding-eyebrow {
     margin: 0 0 var(--cv-space-4);
-    color: var(--cv-teal);
+    color: var(--cv-blue);
     font-size: var(--cv-text-caption);
     font-weight: 800;
     letter-spacing: 0.1em;
@@ -209,7 +230,6 @@ const CSS = `
     font-size: 1rem;
     line-height: 1.55;
   }
-
   .cv-onboarding-proof {
     margin: var(--cv-space-6) 0 0;
     padding: 0;
@@ -225,40 +245,25 @@ const CSS = `
   }
   .cv-onboarding-number {
     padding-top: 0.15rem;
-    color: var(--cv-teal);
+    color: color-mix(in srgb, var(--cv-teal) 74%, var(--cv-text));
     font-size: var(--cv-text-caption);
     font-weight: 800;
     letter-spacing: 0.06em;
     font-variant-numeric: tabular-nums;
   }
-  .cv-onboarding-term,
-  .cv-onboarding-text { display: block; overflow-wrap: break-word; }
+  .cv-onboarding-term,.cv-onboarding-text { display: block; overflow-wrap: break-word; }
   .cv-onboarding-term { font-size: var(--cv-text-body); font-weight: 800; line-height: 1.3; }
-  .cv-onboarding-text {
-    margin-top: var(--cv-space-1);
-    color: var(--cv-text-secondary);
-    font-size: var(--cv-text-body);
-    line-height: 1.5;
-  }
-
-  .cv-onboarding-foot {
-    display: grid;
-    gap: var(--cv-space-3);
-    margin-top: auto;
-    padding-top: var(--cv-space-4);
-  }
-  /* Keep the dominant action reachable at large text or short screens: the bar stays pinned while the copy scrolls. */
-  @media (min-height: 600px) {
-    .cv-onboarding-foot { position: sticky; bottom: 0; background: var(--cv-bg); }
-  }
+  .cv-onboarding-text { margin-top: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-body); line-height: 1.5; }
+  .cv-onboarding-foot { display: grid; gap: var(--cv-space-3); margin-top: auto; padding-top: var(--cv-space-4); }
+  @media (min-height: 600px) { .cv-onboarding-foot { position: sticky; bottom: 0; background: var(--cv-bg); } }
   .cv-onboarding-cta {
     width: 100%;
     min-height: 52px;
     padding: 14px var(--cv-space-5);
     border: 1px solid transparent;
-    border-radius: var(--cv-radius-md);
-    background: var(--cv-teal);
-    color: var(--cv-learning-on-teal);
+    border-radius: var(--cv-radius-sm);
+    background: var(--cv-blue);
+    color: #fff;
     font-size: var(--cv-text-body);
     font-weight: 800;
     cursor: pointer;
@@ -268,29 +273,17 @@ const CSS = `
     min-height: 44px;
     padding: var(--cv-space-2) var(--cv-space-4);
     border: 1px solid var(--cv-border);
-    border-radius: var(--cv-radius-md);
-    background: transparent;
+    border-radius: var(--cv-radius-sm);
+    background: var(--cv-surface-elevated);
     color: var(--cv-text);
     font-size: var(--cv-text-body);
     font-weight: 700;
     cursor: pointer;
   }
   .cv-onboarding-progress { display: flex; justify-content: center; gap: var(--cv-space-2); }
-  .cv-onboarding-progress > span {
-    width: 16px;
-    height: 4px;
-    border-radius: 999px;
-    background: var(--cv-border);
-  }
-  .cv-onboarding-progress > span[data-active="true"] { width: 40px; background: var(--cv-teal); }
-  .cv-onboarding-tagline {
-    margin: 0;
-    color: var(--cv-text-secondary);
-    font-size: var(--cv-text-support);
-    text-align: center;
-  }
-
-  /* Wide screens stay one editorial column, centred between the top bar and the bottom edge. */
+  .cv-onboarding-progress > span { width: 16px; height: 4px; border-radius: 999px; background: var(--cv-border); }
+  .cv-onboarding-progress > span[data-active="true"] { width: 40px; background: var(--cv-blue); }
+  .cv-onboarding-tagline { margin: 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); text-align: center; }
   @media (min-width: 700px) {
     .cv-onboarding-frame { gap: var(--cv-space-7); }
     .cv-onboarding-step { margin-top: auto; }
@@ -303,8 +296,5 @@ const CSS = `
     .cv-onboarding-proof { margin-top: var(--cv-space-5); }
     .cv-onboarding-proof > li { padding: var(--cv-space-3) 0; }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cv-onboarding-step { animation: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .cv-onboarding-step { animation: none; } }
 `

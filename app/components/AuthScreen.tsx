@@ -14,20 +14,7 @@ import {
   NATIVE_SAFE_AREA_RIGHT,
   NATIVE_SAFE_AREA_TOP,
 } from "../lib/nativeSafeArea";
-
-const T = {
-  bg: "#050814",
-  panel: "rgba(15,23,42,.72)",
-  text: "#F8FAFC",
-  sub: "#A7B0C0",
-  muted: "#6F7B91",
-  border: "rgba(148,163,184,.18)",
-  blue: "#4F7CFF",
-  violet: "#7567FF",
-  teal: "#2CC9C0",
-  danger: "#F87171",
-  success: "#34D399",
-};
+import { useAppearance } from "./release/AppearanceSettings";
 
 type Mode = "landing" | "email";
 
@@ -45,9 +32,9 @@ interface Props {
 const COPY = {
   en: {
     kicker: "CLINIVERSE AI · BY NEURAOPS",
-    title: "Welcome back to Cliniverse.",
-    subtitle: "Clinical intelligence, organized around you.",
-    releaseNote: "Sign in or create an account to continue. Your learning record stays attached to your account.",
+    title: "Continue your learning record.",
+    subtitle: "Sign in to sync progress and continue where you left off.",
+    releaseNote: "Your Cliniverse account stores learning progress. Do not enter real patient-identifiable information.",
     apple: "Continue with Apple",
     google: "Continue with Google",
     email: "Continue with email",
@@ -62,7 +49,7 @@ const COPY = {
     signupSent: "Check your email to confirm your account, then return to Cliniverse.",
     back: "Back",
     guest: "Explore as guest",
-    trust: "Human judgment leads · Privacy-conscious by design",
+    trust: "Private learning account · Human clinical judgment remains essential",
     terms: "Terms",
     privacy: "Privacy",
     emailError: "Enter a valid email",
@@ -72,9 +59,9 @@ const COPY = {
   },
   ar: {
     kicker: "CLINIVERSE AI · من NEURAOPS",
-    title: "مرحبًا بعودتك إلى Cliniverse.",
-    subtitle: "ذكاء سريري منظم حول احتياجاتك.",
-    releaseNote: "سجّل الدخول أو أنشئ حسابًا للمتابعة. يبقى سجل تعلّمك مرتبطًا بحسابك.",
+    title: "تابع سجل تعلّمك.",
+    subtitle: "سجّل الدخول لمزامنة التقدم والمتابعة من حيث توقفت.",
+    releaseNote: "يحفظ حساب Cliniverse تقدمك التعليمي. لا تدخل بيانات تعريفية حقيقية للمرضى.",
     apple: "المتابعة مع Apple",
     google: "المتابعة مع Google",
     email: "المتابعة بالبريد الإلكتروني",
@@ -89,7 +76,7 @@ const COPY = {
     signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
     back: "رجوع",
     guest: "استكشف كزائر",
-    trust: "الحكم السريري يقود · الخصوصية جزء من التصميم",
+    trust: "حساب تعليمي خاص · الحكم السريري البشري يظل أساسياً",
     terms: "الشروط",
     privacy: "الخصوصية",
     emailError: "أدخل بريدًا صالحًا",
@@ -106,6 +93,7 @@ export default function AuthScreen({
   enabledOAuthProviders = [],
   enableMagicLink = false,
 }: Props) {
+  const appearance = useAppearance();
   const [mode, setMode] = useState<Mode>("landing");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -200,71 +188,119 @@ export default function AuthScreen({
   }
 
   return (
-    <div
+    <main
       dir={dir}
+      data-commercial-shell
+      data-appearance={appearance}
+      data-auth-entry
+      aria-labelledby="cliniverse-auth-title"
+      className="cv-auth"
       style={{
-        minHeight: "100dvh",
-        background: `radial-gradient(circle at 18% 8%, rgba(79,124,255,.18), transparent 28%), radial-gradient(circle at 82% 32%, rgba(117,103,255,.12), transparent 26%), linear-gradient(180deg, ${T.bg} 0%, #080D1A 62%, #07121A 100%)`,
-        color: T.text,
-        display: "flex",
-        flexDirection: "column",
-        paddingTop: `calc(28px + ${NATIVE_SAFE_AREA_TOP})`,
+        paddingTop: `max(24px, ${NATIVE_SAFE_AREA_TOP})`,
         paddingRight: `max(20px, ${NATIVE_SAFE_AREA_RIGHT})`,
-        paddingBottom: `calc(24px + ${NATIVE_SAFE_AREA_BOTTOM})`,
+        paddingBottom: `max(24px, ${NATIVE_SAFE_AREA_BOTTOM})`,
         paddingLeft: `max(20px, ${NATIVE_SAFE_AREA_LEFT})`,
-        boxSizing: "border-box",
       }}
     >
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", maxWidth: 430, width: "100%", margin: "0 auto" }}>
-        <div aria-hidden="true" style={{ width: 58, height: 58, borderRadius: 18, display: "grid", placeItems: "center", marginBottom: 24, background: "linear-gradient(145deg, rgba(79,124,255,.18), rgba(117,103,255,.08))", border: `1px solid ${T.border}`, boxShadow: "0 20px 70px rgba(40,84,255,.14)" }}>
-          <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><path d="M34 12.5A16 16 0 1 0 34 35.5" stroke={T.blue} strokeWidth="5" strokeLinecap="round"/><circle cx="29" cy="24" r="3" fill={T.teal}/></svg>
+      <div className="cv-auth-frame">
+        <ProductMark />
+        <div className="cv-auth-intro">
+          <p className="cv-auth-kicker">{t.kicker}</p>
+          <h1 id="cliniverse-auth-title">{t.title}</h1>
+          <p className="cv-auth-subtitle">{t.subtitle}</p>
+          <p className="cv-auth-note">{t.releaseNote}</p>
         </div>
 
-        <div style={{ marginBottom: 26 }}>
-          <div style={{ fontSize: 10, fontWeight: 850, letterSpacing: 1.15, color: T.blue, marginBottom: 10 }}>{t.kicker}</div>
-          <div style={{ fontSize: "clamp(30px,8vw,38px)", fontWeight: 850, letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 10 }}>{t.title}</div>
-          <div style={{ fontSize: 15, color: T.sub, lineHeight: 1.55 }}>{t.subtitle}</div>
-          <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.5, marginTop: 8 }}>{t.releaseNote}</div>
-        </div>
-
-        <div style={{ border: `1px solid ${T.border}`, background: T.panel, backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)", borderRadius: 24, padding: 16, boxShadow: "0 24px 80px rgba(0,0,0,.24)" }}>
+        <section className="cv-auth-surface" aria-label={locale === "ar" ? "خيارات تسجيل الدخول" : "Sign-in options"}>
           {mode === "landing" ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {appleEnabled ? <AuthButton label={t.apple} bg={T.text} color="#0B1020" onClick={() => handleOAuth("apple")} disabled={loading} icon="" /> : null}
-              {googleEnabled ? <AuthButton label={t.google} bg="rgba(255,255,255,.045)" color={T.text} border={`1px solid ${T.border}`} onClick={() => handleOAuth("google")} disabled={loading} icon="G" /> : null}
-              {oauthEnabled ? <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "7px 0" }}><div style={{ flex: 1, height: 1, background: T.border }} /><div style={{ fontSize: 11, color: T.muted }}>{t.or}</div><div style={{ flex: 1, height: 1, background: T.border }} /></div> : null}
-              <AuthButton label={t.email} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={() => { setIsSignUp(false); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
-              <AuthButton label={t.createAccount} bg="rgba(255,255,255,.045)" color={T.text} border={`1px solid ${T.border}`} onClick={() => { setIsSignUp(true); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
-              {allowGuest ? <button onClick={() => onComplete({ method: "guest" })} style={{ marginTop: 2, border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "11px 8px", cursor: "pointer" }}>{t.guest}</button> : null}
+            <div className="cv-auth-stack">
+              {appleEnabled ? <AuthButton label={t.apple} kind="apple" onClick={() => handleOAuth("apple")} disabled={loading} icon="" /> : null}
+              {googleEnabled ? <AuthButton label={t.google} kind="secondary" onClick={() => handleOAuth("google")} disabled={loading} icon="G" /> : null}
+              {oauthEnabled ? <div className="cv-auth-divider"><span />{t.or}<span /></div> : null}
+              <AuthButton label={t.email} kind="primary" onClick={() => { setIsSignUp(false); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
+              <AuthButton label={t.createAccount} kind="secondary" onClick={() => { setIsSignUp(true); setMode("email"); setError(""); setNotice(""); }} disabled={loading} />
+              {allowGuest ? <button className="cv-auth-quiet" onClick={() => onComplete({ method: "guest" })}>{t.guest}</button> : null}
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div className="cv-auth-stack">
               <Field label={t.emailLabel} value={email} onChange={setEmail} type="email" autoComplete="email" />
               {!magicLinkMode ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete={isSignUp ? "new-password" : "current-password"} /> : null}
-              {enableMagicLink ? <button onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, textAlign: dir === "rtl" ? "right" : "left", padding: 0, cursor: "pointer" }}>{magicLinkMode ? t.password : t.magic}</button> : null}
-              {error ? <div role="alert" style={{ fontSize: 12, color: T.danger, fontWeight: 650 }}>{error}</div> : null}
-              {notice ? <div role="status" style={{ fontSize: 12, color: T.success, fontWeight: 650 }}>{notice}</div> : null}
-              <AuthButton label={loading ? "…" : isSignUp ? t.createAccount : t.continueEmail} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={handleEmail} disabled={loading} />
-              {isSignUp ? <button onClick={() => { setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, padding: "6px 8px", cursor: "pointer" }}>{t.existingAccount}</button> : null}
-              <button onClick={() => { setMode("landing"); setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "10px 8px", cursor: "pointer" }}>{t.back}</button>
+              {enableMagicLink ? <button className="cv-auth-link" onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }}>{magicLinkMode ? t.password : t.magic}</button> : null}
+              {error ? <div role="alert" className="cv-auth-error">{error}</div> : null}
+              {notice ? <div role="status" className="cv-auth-success">{notice}</div> : null}
+              <AuthButton label={loading ? "…" : isSignUp ? t.createAccount : t.continueEmail} kind="primary" onClick={handleEmail} disabled={loading} />
+              {isSignUp ? <button className="cv-auth-link cv-auth-link-center" onClick={() => { setIsSignUp(false); setError(""); setNotice(""); }}>{t.existingAccount}</button> : null}
+              <button className="cv-auth-quiet" onClick={() => { setMode("landing"); setIsSignUp(false); setError(""); setNotice(""); }}>{t.back}</button>
             </div>
           )}
-        </div>
+        </section>
+
+        <footer className="cv-auth-footer">
+          <p>{t.trust}</p>
+          <p><a href="/terms">{t.terms}</a><span aria-hidden="true"> · </span><a href="/privacy">{t.privacy}</a></p>
+        </footer>
       </div>
-      <div style={{ textAlign: "center", paddingTop: 18, maxWidth: 430, width: "100%", margin: "0 auto" }}>
-        <div style={{ fontSize: 11, color: T.muted, marginBottom: 8 }}>{t.trust}</div>
-        <div style={{ fontSize: 12, color: T.muted }}>
-          <a href="/terms" style={{ color: T.sub, fontWeight: 700, padding: "0 6px", textDecoration: "none" }}>{t.terms}</a> · <a href="/privacy" style={{ color: T.sub, fontWeight: 700, padding: "0 6px", textDecoration: "none" }}>{t.privacy}</a>
-        </div>
-      </div>
+      <style>{AUTH_CSS}</style>
+    </main>
+  );
+}
+
+function ProductMark() {
+  return (
+    <div className="cv-auth-mark" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
+        <path d="M35 14.5C31.8 10.8 27.3 8.8 22.5 8.8C14.7 8.8 8.5 15 8.5 22.8C8.5 30.6 14.7 36.8 22.5 36.8C27.3 36.8 31.8 34.8 35 31" stroke="var(--cv-blue)" strokeWidth="4.7" strokeLinecap="round" />
+        <path d="M17 23L22.5 29.2L35 16.6" stroke="var(--cv-teal)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="35" cy="14.5" r="2.8" fill="var(--cv-surface-elevated)" />
+        <circle cx="35" cy="31" r="2.7" fill="var(--cv-violet)" />
+      </svg>
     </div>
   );
 }
 
-function AuthButton(props: { label: string; bg: string; color: string; border?: string; onClick: () => void; disabled?: boolean; icon?: string; }) {
-  return <button onClick={props.onClick} disabled={props.disabled} style={{ width: "100%", border: props.border || "none", background: props.bg, color: props.color, borderRadius: 16, padding: "14px 16px", minHeight: 50, fontSize: 15, fontWeight: 800, opacity: props.disabled ? 0.55 : 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: props.disabled ? "default" : "pointer" }}>{props.icon ? <span aria-hidden="true" style={{ fontSize: 16 }}>{props.icon}</span> : null}<span>{props.label}</span></button>;
+function AuthButton(props: { label: string; kind: "primary" | "secondary" | "apple"; onClick: () => void; disabled?: boolean; icon?: string }) {
+  return <button type="button" onClick={props.onClick} disabled={props.disabled} className="cv-auth-button" data-kind={props.kind}>{props.icon ? <span aria-hidden="true">{props.icon}</span> : null}<span>{props.label}</span></button>;
 }
 
-function Field(props: { label: string; value: string; onChange: (v: string) => void; type?: string; autoComplete?: string; }) {
-  return <label style={{ display: "block" }}><div style={{ fontSize: 11, fontWeight: 800, color: T.muted, marginBottom: 6, letterSpacing: 0.35 }}>{props.label}</div><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} style={{ width: "100%", boxSizing: "border-box", borderRadius: 14, border: `1px solid ${T.border}`, background: "rgba(255,255,255,.035)", color: T.text, padding: "13px 14px", minHeight: 48, fontSize: 16, outline: "none" }} /></label>;
+function Field(props: { label: string; value: string; onChange: (v: string) => void; type?: string; autoComplete?: string }) {
+  return <label className="cv-auth-field"><span>{props.label}</span><input aria-label={props.label} value={props.value} type={props.type || "text"} autoComplete={props.autoComplete} onChange={(e) => props.onChange(e.target.value)} /></label>;
 }
+
+const AUTH_CSS = `
+.cv-auth {
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  background: var(--cv-bg);
+  color: var(--cv-text);
+}
+.cv-auth-frame { width: min(100%, 430px); display: grid; gap: var(--cv-space-5); }
+.cv-auth-mark { display: grid; place-items: center; width: 64px; height: 64px; border-radius: var(--cv-radius-md); background: #0b0f19; border: 1px solid color-mix(in srgb, var(--cv-blue) 32%, var(--cv-border)); }
+.cv-auth-intro { display: grid; gap: var(--cv-space-2); }
+.cv-auth-kicker { margin: 0; color: var(--cv-blue); font-size: var(--cv-text-eyebrow); font-weight: 800; letter-spacing: .1em; }
+.cv-auth-intro h1 { margin: 0; font-size: var(--cv-text-display); line-height: 1.1; letter-spacing: -.025em; }
+.cv-auth-subtitle { margin: 0; color: var(--cv-text-secondary); font-size: 1rem; line-height: 1.5; }
+.cv-auth-note { margin: 0; color: var(--cv-text-secondary); font-size: var(--cv-text-support); line-height: 1.5; }
+.cv-auth-surface { padding: var(--cv-space-4); border: 1px solid var(--cv-border); border-radius: var(--cv-radius-md); background: var(--cv-surface-elevated); }
+.cv-auth-stack { display: grid; gap: var(--cv-space-3); }
+.cv-auth-button { width: 100%; min-height: 50px; border-radius: var(--cv-radius-sm); padding: 12px 16px; font-size: var(--cv-text-body); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.cv-auth-button[data-kind="primary"] { border: 1px solid transparent; background: var(--cv-blue); color: #fff; }
+.cv-auth-button[data-kind="secondary"] { border: 1px solid var(--cv-border); background: var(--cv-surface-soft); color: var(--cv-text); }
+.cv-auth-button[data-kind="apple"] { border: 1px solid var(--cv-text); background: var(--cv-text); color: var(--cv-bg); }
+.cv-auth-button:disabled { opacity: .55; cursor: default; }
+.cv-auth-divider { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--cv-space-3); color: var(--cv-text-secondary); font-size: var(--cv-text-caption); }
+.cv-auth-divider span { height: 1px; background: var(--cv-border); }
+.cv-auth-field { display: grid; gap: var(--cv-space-1); color: var(--cv-text-secondary); font-size: var(--cv-text-support); font-weight: 700; }
+.cv-auth-field input { min-height: 48px; width: 100%; box-sizing: border-box; border: 1px solid var(--cv-border); border-radius: var(--cv-radius-sm); background: var(--cv-surface); color: var(--cv-text); padding: 12px 14px; font-size: 1rem; }
+.cv-auth-link,.cv-auth-quiet { min-height: 44px; border: 0; background: transparent; cursor: pointer; }
+.cv-auth-link { color: var(--cv-blue); font-size: var(--cv-text-support); font-weight: 800; text-align: start; padding: 0; }
+.cv-auth-link-center { text-align: center; }
+.cv-auth-quiet { color: var(--cv-text-secondary); font-size: var(--cv-text-support); font-weight: 700; }
+.cv-auth-error { color: var(--cv-learning-danger); font-size: var(--cv-text-support); font-weight: 700; }
+.cv-auth-success { color: color-mix(in srgb, var(--cv-teal) 72%, var(--cv-text)); font-size: var(--cv-text-support); font-weight: 700; }
+.cv-auth-footer { text-align: center; color: var(--cv-text-secondary); font-size: var(--cv-text-caption); line-height: 1.5; }
+.cv-auth-footer p { margin: 0 0 var(--cv-space-1); }
+.cv-auth-footer a { color: var(--cv-text-secondary); font-weight: 700; }
+@media (max-height: 700px) { .cv-auth { place-items: start center; } }
+`;
