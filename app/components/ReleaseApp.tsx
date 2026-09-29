@@ -16,6 +16,7 @@ import type { CareWorkspace } from './ward'
 import AuthGate from './auth/AuthGate'
 import OnboardingScreens from './release/OnboardingScreens'
 import SubscriptionPurchaseProvider, { useCliniverseSubscription } from './release/SubscriptionPurchaseProvider'
+import SurfaceState from './system/SurfaceState'
 import { collectionContinuation, type CollectionContinuation } from '../lib/content/collectionContinuation'
 import { readCliniverseEvents } from '../lib/platform/eventStore'
 import {
@@ -341,12 +342,11 @@ void ReleaseIntelligenceGate
 
 function SectionLoading({ label }: { label: string }) {
   return (
-    <div
-      style={{ padding: 16, borderRadius: 18, border: `1px solid ${C.border}`, background: C.panel, color: C.sub }}
-      role="status"
-      aria-live="polite"
-    >
-      {label}…
-    </div>
+    <SurfaceState
+      kind="loading"
+      title={label}
+      detail="Preparing this learning surface. No result or progress state is assumed until loading completes."
+      compact
+    />
   )
 }

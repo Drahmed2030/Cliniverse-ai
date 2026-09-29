@@ -820,10 +820,10 @@
   place-items: center;
   width: 3rem;
   height: 3rem;
-  border: 1px solid color-mix(in srgb, var(--cv-gold) 55%, var(--cv-border));
+  border: 1px solid color-mix(in srgb, var(--cv-blue) 45%, var(--cv-border));
   border-radius: 50%;
-  background: color-mix(in srgb, var(--cv-gold) 12%, var(--cv-surface-elevated));
-  color: var(--cv-gold);
+  background: color-mix(in srgb, var(--cv-blue) 10%, var(--cv-surface-elevated));
+  color: var(--cv-blue);
   font-size: 1.125rem;
   font-weight: 800;
 }
@@ -1259,4 +1259,71 @@
   margin: var(--cv-space-1) 0 0;
   font-size: var(--cv-text-section);
   line-height: 1.25;
+}
+
+
+/* Trusted system states — shared learner/account language. These mirror Health Cloud's
+ * fail-closed discipline without importing operational UI or connectivity. */
+[data-commercial-shell] .cv-system-state {
+  --cv-system-state-accent: var(--cv-blue);
+  display: grid;
+  gap: var(--cv-space-3);
+  min-width: 0;
+  padding: var(--cv-space-5);
+  border: 1px solid var(--cv-border);
+  border-radius: var(--cv-radius-lg);
+  background: var(--cv-surface-elevated);
+  color: var(--cv-text);
+}
+[data-commercial-shell] .cv-system-state[data-compact="true"] {
+  padding: var(--cv-space-4);
+  border-radius: var(--cv-radius-md);
+}
+[data-commercial-shell] .cv-system-state[data-state="stale"],
+[data-commercial-shell] .cv-system-state[data-state="unavailable"] { --cv-system-state-accent: var(--cv-gold); }
+[data-commercial-shell] .cv-system-state[data-state="permission-limited"] { --cv-system-state-accent: var(--cv-violet); }
+[data-commercial-shell] .cv-system-state[data-state="error"] { --cv-system-state-accent: var(--cv-learning-danger); }
+[data-commercial-shell] .cv-system-state[data-state="partial"] { --cv-system-state-accent: var(--cv-teal); }
+[data-commercial-shell] .cv-system-state[data-state="read-only"] { --cv-system-state-accent: var(--cv-blue); }
+[data-commercial-shell] .cv-system-state[data-state="empty"] { --cv-system-state-accent: var(--cv-text-secondary); }
+[data-commercial-shell] .cv-system-state-label {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: var(--cv-space-2);
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-caption);
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+[data-commercial-shell] .cv-system-state-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cv-system-state-accent);
+}
+[data-commercial-shell] .cv-system-state-copy h3 {
+  margin: 0;
+  font-size: var(--cv-text-body);
+  line-height: 1.35;
+}
+[data-commercial-shell] .cv-system-state-copy p {
+  max-width: 58ch;
+  margin: var(--cv-space-1) 0 0;
+  color: var(--cv-text-secondary);
+  font-size: var(--cv-text-support);
+  line-height: 1.5;
+}
+[data-commercial-shell] .cv-system-state-action :is(button,a) {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--cv-blue);
+  font-size: var(--cv-text-support);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
 }
