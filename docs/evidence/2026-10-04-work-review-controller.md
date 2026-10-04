@@ -72,3 +72,17 @@ IT configuration reuses Health Cloud ADR-023; no setup screen or persistence is 
 - No build, screenshot, visual acceptance, protected-route verification or browser cache-upgrade proof obtained.
 - Next dev regenerated AGENTS.md locally; unrelated generated change is not included. No dependency or lockfile changes.
 - Author review only. Draft remains unmerged. Tasks 3 and browser portion of 4 remain incomplete; task 5 remains gated.
+
+## Request-scope increment — 2026-10-04 UTC
+- User reports initial Apple approval for Cliniverse, with publication still pending. This is user-reported context, not an App Store Connect verification or release approval.
+- One bounded download diagnostic returned HTTP 200, Content-Type text/html, Content-Length 195 for the Chromium ZIP URL. Browser installation was not repeated; no dependency upgrade was attempted. Browser acceptance remains blocked.
+- Added requestScope.ts as the independently testable I/O boundary for Task 3. It is not yet wired to a React hook or screen. It accepts an already validated session; real authentication remains the caller/provider responsibility.
+- Closing a scope aborts outstanding requests and rejects late results. Expiry is checked before dispatch and after resolution. Timeouts are bounded and cancel observation; cancellation does not imply rollback of a server commit.
+- A synchronous pending-operation lock prevents overlapping review writes. Ambiguous failures retain a minimal in-memory operation/scope descriptor. Reconciliation requires the original organization and subject and checks every receipt identity/revision field. It never automatically resubmits a review.
+- Descriptor copies contain only scope/operation references, not source text or patient context. They must remain memory-only; opaque references are not asserted to be anonymous. Reload recovery is not implemented.
+- Explicit work_revision_conflict is treated as a no-commit response. Any future live adapter must prove that error mapping before this boundary is used with a real provider.
+- Tests written first: initial RED was missing module, not a behavioral mutation proof. Final 13 request-scope tests pass, including cancellation, double submit, expiry during a request, timeout after commit, late reply, malformed response, cross-scope recovery and unknown/not-recorded outcomes.
+- Current focused command: node --test tests/work-*.test.mjs tests/trusted-system-states.test.mjs — 63/63 pass, no skips. Project TypeScript check passed. No existing implementation file or dependency changed in this increment.
+- Full suite was not rerun for this isolated, unwired module. Last full-suite evidence remains the preceding increment's 986 total / 962 passed / 24 pre-existing failures; do not describe that result as a full-suite pass for this increment.
+- Author self-review only. No merge, deployment, production access, purchase, live clinical data, Apple publication or Health Cloud change.
+- Next: integrate the request boundary with the hook's generation handling, visibility/connection lifecycle and minimal pending-operation recovery, implement the protected synthetic screen, then obtain actual browser and cache-upgrade acceptance. Task 3 remains incomplete; no rendered preview is claimed.
