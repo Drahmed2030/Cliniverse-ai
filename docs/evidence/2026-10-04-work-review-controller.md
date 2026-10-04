@@ -58,3 +58,17 @@ IT configuration reuses Health Cloud ADR-023; no setup screen or persistence is 
 - the first screen is the Golden Entry: wordmark, Skip, hero, the Observe → Commit → Refine proof and one Continue
 - the step affordance is a text-labelled group whose active step differs by more than colour
 - untargeted Learn shows the landing; every explicit workspace deep link still works
+
+## Cache and telemetry increment — 2026-10-04
+- Task 3 browser setup blocked: locked Playwright Chromium shell download repeatedly received an invalid/truncated ZIP within one install command; browser not installed. The new-route browser test attempt also timed out waiting for the unimplemented preview endpoint. Neither result is a behavioral RED test for a UI. No UI implementation or browser pass is claimed.
+- Prepared local browser spec/config are unfinished and are not included in this commit/PR. No public preview route was added.
+- Ruling: proceed with independent Task 4 unit-verifiable work while leaving browser acceptance open; do not upgrade dependencies or repeat infrastructure setup to hide the block. Cost: visual and real service-worker upgrade acceptance remain outstanding.
+- Real service-worker source executed in Node VM against a controlled Cache API/fetch harness. Existing implementation failed protected GET, no-store, navigation/RSC, offline fallback and cache-ownership tests before change.
+- Revised worker caches only an explicit same-origin public static allowlist. API, WORK, navigation, cross-origin, query-bearing, RSC and Authorization requests bypass worker caching. Private/no-store/no-cache and redirected responses are not saved.
+- Activation removes only known unsafe cliniverse-v1/v2/v3 caches, preserves unrelated caches, then claims clients. No cache on a live user device was modified in this task.
+- Public offline behavior changes deliberately: previously fetched allowlisted static assets can fall back to their own cache; generic HTML/app-shell offline fallback and install-time root pre-caching are removed. Offline LEARN browser acceptance remains required before merge.
+- Closed telemetry key/value allowlists added, without wiring an exporter. Caller must generate random correlation UUIDs; UUID format validation is not proof that a value is non-identifying.
+- Final focused suite: 50/50 passed (12 added in this increment), zero skipped. Full suite: 986 total, 962 passed, same 24 baseline failures, zero new failing names. TypeScript check exited 0.
+- No build, screenshot, visual acceptance, protected-route verification or browser cache-upgrade proof obtained.
+- Next dev regenerated AGENTS.md locally; unrelated generated change is not included. No dependency or lockfile changes.
+- Author review only. Draft remains unmerged. Tasks 3 and browser portion of 4 remain incomplete; task 5 remains gated.
