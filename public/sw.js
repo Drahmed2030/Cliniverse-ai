@@ -1,47 +1,40 @@
-const CACHE = 'cliniverse-v3';
-const STATIC = [
-  '/',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-];
+// Public static assets only. WORK, APIs, navigation and cross-origin requests stay network-only.
+const CACHE = 'cliniverse-static-v4';
+const STATIC = new Set(['/manifest.json', '/icons/icon.svg', '/icons/icon-192.svg', '/icons/icon-512.svg']);
+const UNSAFE_LEGACY_CACHES = new Set(['cliniverse-v1', 'cliniverse-v2', 'cliniverse-v3']);
 
-// Install — cache static assets
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(STATIC))
-  );
-  self.skipWaiting();
-});
-
-// Activate — clean old caches
+self.addEventListener('install', () => { self.skipWaiting(); });
 self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
+  e.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => UNSAFE_LEGACY_CACHES.has(k)).map(k => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
-
-// Fetch — network first, fallback to cache
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  if (!e.request.url.startsWith('http')) return;
-
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        if (res && res.status === 200) {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
-        }
-        return res;
-      })
-      .catch(() => caches.match(e.request)
-        .then(cached => cached || caches.match('/'))
-      )
-  );
+  const request = e.request;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin || url.search
+    || !STATIC.has(url.pathname) || request.mode === 'navigate'
+    || request.headers.has('Authorization') || request.headers.has('RSC')
+    || request.headers.has('Next-Router-State-Tree')) return;
+  e.respondWith((async () => {
+    try {
+      const response = await fetch(request);
+      const cacheControl = response.headers.get('Cache-Control') || '';
+      if (response.status === 200 && !response.redirected
+        && !/no-store|private|no-cache/i.test(cacheControl)
+        && (!response.url || new URL(response.url).origin === self.location.origin)) {
+        try { await (await caches.open(CACHE)).put(request, response.clone()); }
+        catch { /* Cache quota failure must not discard a valid network response. */ }
+      }
+      return response;
+    } catch (error) {
+      const cached = await (await caches.open(CACHE)).match(request);
+      if (cached) return cached;
+      throw error;
+    }
+  })());
 });
 
 // Push notifications
