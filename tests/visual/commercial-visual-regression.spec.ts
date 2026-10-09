@@ -12,7 +12,10 @@ const scenarios = [
 const tabs = ['Today', 'Learn', 'Progress', 'Explore', 'Me'] as const
 
 async function ensureAuthenticated(page: Page) {
-  await page.goto('/', { waitUntil: 'networkidle' })
+  // When CLINIVERSE_VISUAL_BASE_URL is a protected Vercel share URL, navigating
+  // directly to that absolute URL preserves the _vercel_share bootstrap query.
+  const entryUrl = process.env.CLINIVERSE_VISUAL_BASE_URL?.trim() || '/'
+  await page.goto(entryUrl, { waitUntil: 'networkidle' })
 
   if (await page.locator('[data-commercial-shell]').isVisible().catch(() => false)) return
 
@@ -46,6 +49,13 @@ async function assertNavigationMode(page: Page, width: number) {
   }
 }
 
+async function assertWcag(page: Page) {
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze()
+  expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([])
+}
+
 for (const scenario of scenarios) {
   test(`${scenario.id} renders the commercial shell without responsive regressions`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width: scenario.width, height: scenario.height })
@@ -58,6 +68,8 @@ for (const scenario of scenarios) {
     await ensureAuthenticated(page)
 
     if (scenario.textScale > 1) {
+      // Browser-level rem scaling approximates large-text pressure for the web shell.
+      // Native iOS Dynamic Type still requires device validation before release.
       await page.addStyleTag({ content: `html { font-size: ${scenario.textScale * 100}% !important; }` })
     }
 
@@ -73,16 +85,17 @@ for (const scenario of scenarios) {
       await nav.getByRole('button', { name: tab }).click()
       await expect(nav.getByRole('button', { name: tab })).toHaveAttribute('aria-current', 'page')
       await assertNoHorizontalOverflow(page)
+      await assertWcag(page)
+      await page.screenshot({
+        path: testInfo.outputPath(`${scenario.id}-${tab.toLowerCase()}.png`),
+        fullPage: true,
+        animations: 'disabled',
+      })
     }
 
     await nav.getByRole('button', { name: 'Learn' }).click()
     await expect(page.locator('[data-commercial-learn-surface]')).toBeVisible()
     await expect(page.getByRole('button', { name: /^Ward Simulation/ })).toBeVisible()
-
-    const accessibility = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .analyze()
-    expect(accessibility.violations, JSON.stringify(accessibility.violations, null, 2)).toEqual([])
 
     await page.keyboard.press('Tab')
     const focusedOutline = await page.evaluate(() => {
@@ -93,7 +106,7 @@ for (const scenario of scenarios) {
     expect(focusedOutline).not.toBe('none')
 
     await page.screenshot({
-      path: testInfo.outputPath(`${scenario.id}.png`),
+      path: testInfo.outputPath(`${scenario.id}-focus.png`),
       fullPage: true,
       animations: 'disabled',
     })
