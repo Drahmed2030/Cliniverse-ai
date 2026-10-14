@@ -1,0 +1,12 @@
+{
+  "codespace": "laughing-halibut-777664gp4p49cw564",
+  "originalHead": "ce5c673323056eca2f1f62b27d22aa00035ea7c9",
+  "originalBranch": "qa/case-batch20-cloud",
+  "originalHeadPreservedByRemoteDescendant": "qa/case-batch20-cloud",
+  "files": {
+    "pnpm-lock.yaml": "a8bd8ff7434116097971f94ffcf6e573046f754a053ca44db21726271abef4cc",
+    "pnpm-workspace.yaml": "82bb5269991fd3d318c71a91f472571f8c5fd958c07c9a6c1222245554fbdfd0"
+  },
+  "purpose": "Historical archive only; not applied, tested or merged into the current product. The workspace allowBuilds values are unresolved text and must not be used as a runtime configuration.",
+  "excluded": "Ignored files, credentials, private runtime, databases and caches; no complete environment backup claimed."
+}
