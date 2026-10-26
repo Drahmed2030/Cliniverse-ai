@@ -9,6 +9,6 @@
 ## 2. Open questions for legal
 1. Is there a specific legal basis requiring any transaction record to be kept after deletion? If so, which minimum fields, and for how long (period to be set by legal, not assumed here)?
 2. How is the user told, accurately, what remains (without calling it anonymous)?
-3. Should deletion of an account with an **active** Apple subscription be blocked, warned, or allowed? (Deletion does not cancel an Apple subscription.)
+3. **Decided (Work 1, adopted by MASTER):** account deletion must remain available and must not be blocked because an Apple subscription is active. The deletion flow must tell the user that deleting the account does **not** cancel Apple subscription billing and direct them to manage or cancel it in their Apple subscription settings. Open for legal only: the exact wording of that notice.
 4. Deletion completion time and treatment of backups and logs.
 5. Jurisdiction-specific rights handling (GDPR / UK GDPR / PDPL etc.) and Apple's own record keeping.
