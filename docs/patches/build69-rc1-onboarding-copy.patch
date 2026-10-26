@@ -1,0 +1,94 @@
+From 9bf17282630cb525916cb412601478574aa5419c Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 16:12:43 +0000
+Subject: [PATCH] fix(copy): onboarding no longer offers ECG while learner ECG
+ is held (1.1 RC)
+
+Copy only; adds a test tying onboarding copy to evaluateEcgLearnerAvailability().
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NvuEKCqEak8vUZ3RsxZA4i
+---
+ app/components/release/OnboardingScreens.tsx |  6 +++---
+ tests/onboarding-v4.test.mjs                 | 16 ++++++++++++----
+ 2 files changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/app/components/release/OnboardingScreens.tsx b/app/components/release/OnboardingScreens.tsx
+index b85cd1e..57d0563 100644
+--- a/app/components/release/OnboardingScreens.tsx
++++ b/app/components/release/OnboardingScreens.tsx
+@@ -19,7 +19,7 @@ import {
+ // The real, readable preference is "Topics I follow" in Me.
+ 
+ const PROOF = [
+-  { number: '01', term: 'Observe', text: 'Start with the tracing, cine or case — before the label.' },
++  { number: '01', term: 'Observe', text: 'Start with the cine or case — before the label.' },
+   { number: '02', term: 'Commit', text: 'Choose the interpretation or next clinical step.' },
+   { number: '03', term: 'Refine', text: 'Use reasoning and evidence to sharpen the next attempt.' },
+ ]
+@@ -91,7 +91,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
+                 <span>Make the decision.</span>
+               </h1>
+               <p className="cv-onboarding-body">
+-                ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.
++                Echo, Ward cases and clinical reasoning — brought into one focused workflow built for deliberate practice.
+               </p>
+               <ol className="cv-onboarding-proof" aria-label="How practice works">
+                 {PROOF.map(item => (
+@@ -112,7 +112,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
+                 <span>Start with your next step.</span>
+               </h1>
+               <p className="cv-onboarding-body">
+-                Today shows what to do next. Learn holds your ECG, Echo and Ward practice, and Progress shows what to revisit.
++                Today shows what to do next. Learn holds your Echo and Ward practice (ECG practice is being prepared), and Progress shows what to revisit.
+               </p>
+             </>
+           )}
+diff --git a/tests/onboarding-v4.test.mjs b/tests/onboarding-v4.test.mjs
+index c2ccf34..744af68 100644
+--- a/tests/onboarding-v4.test.mjs
++++ b/tests/onboarding-v4.test.mjs
+@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs'
+ import vm from 'node:vm'
+ import { createRequire } from 'node:module'
+ import ts from 'typescript'
++import { evaluateEcgLearnerAvailability } from '../app/lib/competency/ecgLearnerAvailability.ts'
+ 
+ const require = createRequire(import.meta.url)
+ const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
+@@ -73,8 +74,8 @@ test('the first screen is the Golden Entry: wordmark, Skip, hero, the Observe 
+     'CLINIVERSE',
+     'CLINICAL LEARNING · ONE SYSTEM',
+     'See the case.', 'Read the signal.', 'Make the decision.',
+-    'ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.',
+-    '01', 'Observe', 'Start with the tracing, cine or case — before the label.',
++    'Echo, Ward cases and clinical reasoning — brought into one focused workflow built for deliberate practice.',
++    '01', 'Observe', 'Start with the cine or case — before the label.',
+     '02', 'Commit', 'Choose the interpretation or next clinical step.',
+     '03', 'Refine', 'Use reasoning and evidence to sharpen the next attempt.',
+     'Built for deliberate clinical practice.',
+@@ -155,8 +156,8 @@ test('no feature tour, promotional visual composition or unsupported claim remai
+   assert.doesNotMatch(source, /free trial|\d+[- ]day|\$\d|£\d|€\d|Start my free/i)
+   assert.match(source, /See Cliniverse PRO options/)
+   // Only the three approved product areas are named.
+-  assert.match(source, /ECG, Echo and clinical reasoning/)
+-  assert.match(source, /Learn holds your ECG, Echo and Ward practice/)
++  assert.match(source, /Echo, Ward cases and clinical reasoning/)
++  assert.match(source, /Learn holds your Echo and Ward practice \(ECG practice is being prepared\)/)
+   assert.equal(existsSync(new URL('../app/components/release/OnboardingVisuals.tsx', import.meta.url)), false)
+   assert.doesNotMatch(source, /OnboardingVisuals|FeatureFlow|CapabilityBeam|AnchorFrame|EditorialMark|SelectionSummary|framer-motion|lucide-react/)
+ })
+@@ -202,3 +203,10 @@ test('the surface keeps the shell tokens, safe areas, one h1 and focus on the ne
+   button(view.tree(), 'Back').props.onClick()
+   assert.equal(view.focusCalls(), 2)
+ })
++
++test('onboarding does not offer ECG while learner ECG is held', () => {
++  assert.equal(evaluateEcgLearnerAvailability().state, 'held', 'ECG availability changed — review every ECG sentence in onboarding copy')
++  const source = stripComments(raw)
++  const rest = source.split('ECG practice is being prepared').join('')
++  assert.doesNotMatch(rest, /\bECG\b|tracing/i)
++})
+-- 
+2.43.0
+
