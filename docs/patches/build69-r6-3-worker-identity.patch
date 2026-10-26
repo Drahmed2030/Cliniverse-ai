@@ -1,0 +1,560 @@
+From 0353066c38af3ca849e99f012af38920643d950d Mon Sep 17 00:00:00 2001
+From: Claude Code <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 13:11:39 +0000
+Subject: [PATCH] fix(auth): R6.3 - capture worker identities; re-enumerate
+ before use; unverifiable enumeration blocks
+
+Incremental after baseline + R4 + R5 + R6 + R6.1 + R6.2. Draft; not deployed.
+- staleWorkerGuard: each evaluation records the actual active-worker object of every
+  registration when it is enumerated and compares those recorded identities after a second
+  enumeration (registration.active is a live property); an in-place change discards the
+  evaluation. stillCurrent() re-reads each captured registration; new confirm() enumerates
+  again and requires every active worker to be one that was probed as current.
+- enumeration that rejects, throws, hangs, is not a list or has malformed entries is
+  UNVERIFIED: blocked (previously read as 'no workers')
+- recoveryRun: awaits confirm() then stillCurrent() immediately before the session is
+  used, cancellable across the awaits
+- tests: reproduction of the R6.2 failure, identity/enumeration/confirm suites, integrated
+  guard+run scenarios, mutation checks; Chromium D8 scenarios and R6.2 negative control
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NvuEKCqEak8vUZ3RsxZA4i
+---
+ app/lib/recoveryRun.ts                    |  16 +-
+ app/lib/staleWorkerGuard.ts               | 115 +++++++++++----
+ scripts/verify-service-worker-browser.cjs |  47 ++++--
+ tests/stale-worker-guard.test.mjs         | 170 ++++++++++++++++++++--
+ 4 files changed, 291 insertions(+), 57 deletions(-)
+
+diff --git a/app/lib/recoveryRun.ts b/app/lib/recoveryRun.ts
+index 0f822c1..08ae313 100644
+--- a/app/lib/recoveryRun.ts
++++ b/app/lib/recoveryRun.ts
+@@ -22,7 +22,7 @@ export type RecoveryView =
+ export interface LinkStore { link: RecoveryLink | null; stripped: boolean }
+ 
+ export interface RecoveryRunDeps {
+-  makeGuard: (isCancelled: () => boolean) => { check: () => Promise<GuardResult>; stillCurrent: () => boolean; dispose: () => void }
++  makeGuard: (isCancelled: () => boolean) => { check: () => Promise<GuardResult>; stillCurrent: () => boolean; confirm: () => Promise<boolean>; dispose: () => void }
+   linkStore: LinkStore
+   readHash: () => string
+   stripUrl: () => void
+@@ -46,11 +46,19 @@ export function createRecoveryRun(deps: RecoveryRunDeps) {
+ 
+   async function start(): Promise<void> {
+     let result = await guard.check()
+-    // A worker change between the check and the token use invalidates the result; look again (bounded).
+-    for (let attempt = 0; alive && result === 'clean' && !guard.stillCurrent() && attempt < 3; attempt++) result = await guard.check()
++    // Immediately before the recovery session is used: enumerate the workers AGAIN and re-validate their identities
++    // (asynchronous), then re-check synchronously after that await. A failed confirmation triggers a full re-check;
++    // bounded, and the run stays cancellable across every one of these awaits.
++    let confirmed = false
++    for (let attempt = 0; alive && result === 'clean' && attempt < 3; attempt++) {
++      const ok = await guard.confirm()
++      if (!alive) return
++      if (ok && guard.stillCurrent()) { confirmed = true; break }
++      result = await guard.check()
++    }
+     if (!alive) return
+     if (result === 'reloading' || result === 'cancelled') return
+-    if (result === 'blocked' || !guard.stillCurrent()) {
++    if (result === 'blocked' || !confirmed) {
+       stripOnce()
+       deps.setView({ name: 'blocked' })
+       return
+diff --git a/app/lib/staleWorkerGuard.ts b/app/lib/staleWorkerGuard.ts
+index ddf71ee..b6e7893 100644
+--- a/app/lib/staleWorkerGuard.ts
++++ b/app/lib/staleWorkerGuard.ts
+@@ -13,7 +13,15 @@
+ //  - The check is only trusted if nothing changed while it ran: a `controllerchange` event, a different
+ //    controller object or a different set of active workers between the start and the end of an evaluation
+ //    discards that evaluation and starts again (a bounded number of times, then 'blocked').
+-//  - After a 'clean' result the caller must confirm `stillCurrent()` immediately before using the tokens.
++//  - WORKER IDENTITY IS CAPTURED, NOT LOOKED UP LATER. `registration.active` is a live property: the same
++//    registration object can start pointing at a different worker. Each evaluation therefore records the actual
++//    active worker object of every registration at the moment it is enumerated, probes those objects, enumerates
++//    again and compares the recorded identities with what is there now.
++//  - After a 'clean' result the caller must confirm, immediately before using the tokens: `stillCurrent()` (synchronous:
++//    epoch, controller and each captured registration still point at the captured worker) and `confirm()`
++//    (asynchronous: enumerate again; every active worker must be one that was probed as current).
++//  - If the registrations cannot be enumerated (rejects, throws, hangs, or returns something that is not a list of
++//    registrations) the state is UNVERIFIED, never 'no workers': the result is 'blocked'.
+ //  - Cache cleanup must be VERIFIED: a delete that rejects or returns false, a cache listing that fails, or any
+ //    Cliniverse-owned legacy cache still present afterwards is NOT clean ('blocked'). The same check runs again on
+ //    the next load, so a deletion that did not survive the reload also blocks. Only Cliniverse-named caches
+@@ -49,6 +57,7 @@ export interface GuardEnv {
+   location: { pathname: string; search: string; hash: string; replace: (url: string) => void }
+   isCancelled?: () => boolean
+   maxAttempts?: number
++  enumerateTimeoutMs?: number
+   probeTimeoutMs?: number
+   createChannel?: () => { port1: { onmessage: ((event: { data?: { version?: string } }) => void) | null }; port2: unknown }
+   setTimer?: (fn: () => void, ms: number) => unknown
+@@ -80,58 +89,96 @@ async function inspectCaches(env: GuardEnv): Promise<CacheState> {
+   try { return { listable: true, leftovers: (await env.caches.keys()).filter(isOwnedLegacyCache) } } catch { return { listable: false } }
+ }
+ 
++type Worker = PostingWorker & object
++interface Entry { registration: RegistrationLike; worker: Worker | null }
++interface Snapshot { entries: Entry[]; controller: Worker | null }
+ type Evaluation =
+   | { stable: false }
+-  | { stable: true; needsWorkerCleanup: boolean; staleRegistrations: RegistrationLike[]; cache: CacheState }
++  | { stable: true; unverifiable: true }
++  | { stable: true; unverifiable: false; snapshot: Snapshot; currentWorkers: Set<Worker>; needsWorkerCleanup: boolean; staleRegistrations: RegistrationLike[]; cache: CacheState }
+ 
+ export function createWorkerGuard(env: GuardEnv) {
+   const container = env.serviceWorker
+   let epoch = 0
+-  let cleanEpoch = -1
+-  let cleanController: unknown = undefined
++  let clean: { epoch: number; snapshot: Snapshot; currentWorkers: Set<Worker> } | null = null
+   const onControllerChange = () => { epoch++ }
+   container?.addEventListener?.('controllerchange', onControllerChange)
+   const cancelled = () => env.isCancelled?.() === true
+ 
+-  async function listRegistrations(): Promise<readonly RegistrationLike[] | null> {
+-    if (!container) return []
+-    try { return await container.getRegistrations() } catch { return null } // null = unavailable
++  // Enumerate registrations and RECORD the identity of each active worker right now. null = unverifiable.
++  async function enumerate(): Promise<Snapshot | null> {
++    if (!container) return { entries: [], controller: null }
++    try {
++      const setTimer = env.setTimer ?? ((fn, ms) => setTimeout(fn, ms))
++      const clearTimer = env.clearTimer ?? (handle => clearTimeout(handle as ReturnType<typeof setTimeout>))
++      let timer: unknown
++      const timeout = new Promise<null>(resolve => { timer = setTimer(() => resolve(null), env.enumerateTimeoutMs ?? 3000) })
++      const list: unknown = await Promise.race([container.getRegistrations(), timeout]).finally(() => clearTimer(timer))
++      if (!Array.isArray(list)) return null // hung or not a list: unreliable
++      const entries: Entry[] = []
++      for (const registration of list as RegistrationLike[]) {
++        if (!registration || typeof registration !== 'object' || !('active' in registration)) return null
++        entries.push({ registration, worker: registration.active ?? null }) // identity captured at this instant
++      }
++      return { entries, controller: container.controller ?? null }
++    } catch {
++      return null
++    }
++  }
++
++  // Same controller and the same recorded workers (as a multiset); for a registration object present in both,
++  // the worker recorded the first time must be the one it points at now.
++  function sameSnapshot(a: Snapshot, b: Snapshot) {
++    if (a.controller !== b.controller || a.entries.length !== b.entries.length) return false
++    const remaining = b.entries.map(entry => entry.worker)
++    for (const entry of a.entries) {
++      const index = remaining.indexOf(entry.worker)
++      if (index < 0) return false
++      remaining.splice(index, 1)
++    }
++    for (const entry of a.entries) {
++      const twin = b.entries.find(other => other.registration === entry.registration)
++      if (twin && twin.worker !== entry.worker) return false
++    }
++    return true
+   }
+-  const sameActives = (a: readonly RegistrationLike[] | null, b: readonly RegistrationLike[] | null) =>
+-    a === null || b === null ? a === b : a.length === b.length && a.every((registration, index) => registration.active === b[index].active)
+ 
+   async function evaluate(): Promise<Evaluation> {
+     const startEpoch = epoch
+-    const controller = container ? container.controller : null
+-    const first = await listRegistrations()
++    const first = await enumerate()
++    if (!first) return { stable: true, unverifiable: true }
++    const controller = first.controller
++    const currentWorkers = new Set<Worker>()
+     const controllerStale = controller ? (await probe(controller, env)) !== EXPECTED_WORKER_VERSION : false
++    if (controller && !controllerStale) currentWorkers.add(controller)
+     const staleRegistrations: RegistrationLike[] = []
+-    for (const registration of first ?? []) {
+-      const worker = registration.active
+-      if (!worker) continue
+-      const version = worker === controller ? (controllerStale ? null : EXPECTED_WORKER_VERSION) : await probe(worker, env)
+-      if (version !== EXPECTED_WORKER_VERSION) staleRegistrations.push(registration)
++    for (const entry of first.entries) {
++      if (!entry.worker) continue // the identity captured at enumeration, not entry.registration.active read later
++      const version = entry.worker === controller ? (controllerStale ? null : EXPECTED_WORKER_VERSION) : await probe(entry.worker, env)
++      if (version === EXPECTED_WORKER_VERSION) currentWorkers.add(entry.worker)
++      else staleRegistrations.push(entry.registration)
+     }
+     const cache = await inspectCaches(env)
+-    // Trust the result only if nothing moved while it was being computed.
+-    const second = await listRegistrations()
+-    const unchanged = epoch === startEpoch && (container ? container.controller === controller : true) && sameActives(first, second)
+-    if (!unchanged) return { stable: false }
+-    return { stable: true, needsWorkerCleanup: controllerStale || staleRegistrations.length > 0, staleRegistrations, cache }
++    // Trust the result only if nothing moved while it was being computed: enumerate again and compare identities.
++    const second = await enumerate()
++    if (!second) return { stable: true, unverifiable: true }
++    if (epoch !== startEpoch || !sameSnapshot(first, second)) return { stable: false }
++    return { stable: true, unverifiable: false, snapshot: second, currentWorkers, needsWorkerCleanup: controllerStale || staleRegistrations.length > 0, staleRegistrations, cache }
+   }
+ 
+   async function check(): Promise<GuardResult> {
+     const attempts = env.maxAttempts ?? MAX_ATTEMPTS
++    clean = null
+     for (let attempt = 0; attempt < attempts; attempt++) {
+       if (cancelled()) return 'cancelled'
+       const evaluation = await evaluate()
+       if (cancelled()) return 'cancelled'
+       if (!evaluation.stable) continue // something changed mid-check: discard and look again
++      if (evaluation.unverifiable) return 'blocked' // cannot enumerate the workers: unverified is not "none"
+ 
+       const dirtyCache = !evaluation.cache.listable || evaluation.cache.leftovers.length > 0
+       if (!evaluation.needsWorkerCleanup && !dirtyCache) {
+-        cleanEpoch = epoch
+-        cleanController = container ? container.controller : null
++        clean = { epoch, snapshot: evaluation.snapshot, currentWorkers: evaluation.currentWorkers }
+         return 'clean'
+       }
+       if (new URLSearchParams(env.location.search).has(RELOAD_MARKER)) return 'blocked' // already tried once
+@@ -152,10 +199,28 @@ export function createWorkerGuard(env: GuardEnv) {
+     return 'blocked' // never stable
+   }
+ 
++  // Synchronous: nothing moved since the last 'clean' result — no controller change, and every registration that
++  // was captured still points at the worker that was captured (live property read, so an in-place change shows).
++  const stillCurrent = () => {
++    if (!clean || clean.epoch !== epoch || cancelled()) return false
++    if ((container ? container.controller ?? null : null) !== clean.snapshot.controller) return false
++    return clean.snapshot.entries.every(entry => (entry.registration.active ?? null) === entry.worker)
++  }
++
++  // Asynchronous, to be awaited immediately before the recovery session is used: enumerate AGAIN and require that
++  // every active worker is one that was probed as current. A worker identity not seen before means: not confirmed.
++  async function confirm(): Promise<boolean> {
++    if (!clean || cancelled() || !stillCurrent()) return false
++    const snapshot = await enumerate()
++    if (!snapshot || cancelled() || !clean || !stillCurrent()) return false
++    if (snapshot.controller !== clean.snapshot.controller) return false
++    return snapshot.entries.every(entry => entry.worker === null || clean!.currentWorkers.has(entry.worker))
++  }
++
+   return {
+     check,
+-    // True only if no worker change happened since the last 'clean' result. Call right before using the tokens.
+-    stillCurrent: () => cleanEpoch === epoch && cleanEpoch >= 0 && (container ? container.controller === cleanController : true),
++    stillCurrent,
++    confirm,
+     dispose: () => container?.removeEventListener?.('controllerchange', onControllerChange),
+   }
+ }
+diff --git a/scripts/verify-service-worker-browser.cjs b/scripts/verify-service-worker-browser.cjs
+index b32bae3..f21d596 100644
+--- a/scripts/verify-service-worker-browser.cjs
++++ b/scripts/verify-service-worker-browser.cjs
+@@ -2,7 +2,7 @@
+ // against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
+ //   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
+ //   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js [BASE_R6=http://localhost:3113] node scripts/verify-service-worker-browser.cjs
+-// BASE_R6 (optional) is a second server running the PREVIOUS (R6.1) build, used only as a negative control for section D.
++// BASE_R6 (optional) is a second server running the PREVIOUS (R6.2) build, used only as a negative control for section D.
+ // LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
+ const { chromium } = require('playwright')
+ const fs = require('fs')
+@@ -145,7 +145,7 @@ async function offlineProbe(page, ctx, label) {
+   // ───────── D. FIRST DIRECT VISIT TO /reset-password WHILE AN OLD WORKER STILL CONTROLS THE ORIGIN ─────────
+   const jwtFor = (sub, email) => { const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url'); return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600 })}.sig` }
+   const RECOVERY_HASH = `#access_token=${jwtFor('user-a', 'jane.doe@clinic.test')}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`
+-  async function oldWorkerContext(base, events, { blockUnregister = false, cacheDelete = 'ok', letUpdate = false } = {}) {
++  async function oldWorkerContext(base, events, { blockUnregister = false, cacheDelete = 'ok', letUpdate = false, enumeration = 'ok' } = {}) {
+     const ctx = await browser.newContext(); const page = await ctx.newPage()
+     await ctx.route(`${SUPA}/**`, route => {
+       const req = route.request(); const u = new URL(req.url()); const auth = req.headers()['authorization'] || ''
+@@ -165,13 +165,16 @@ async function offlineProbe(page, ctx, label) {
+     await pull(page); await sleep(400)                 // seed the legacy cache with auth / REST / API / recovery responses
+     events.length = 0
+     await page.exposeFunction('__report', d => events.push(['doc', d.path, d.controller]))
+-    await ctx.addInitScript(([blocked, mode]) => {
++    await ctx.addInitScript(([blocked, mode, enumeration]) => {
+       try { window.__report({ path: location.pathname + location.search, controller: !!(navigator.serviceWorker && navigator.serviceWorker.controller) }) } catch (e) {}
+       if (blocked) ServiceWorkerRegistration.prototype.unregister = () => Promise.resolve(false)
+       if (mode === 'false') CacheStorage.prototype.delete = () => Promise.resolve(false)       // delete reports failure
+       if (mode === 'reject') CacheStorage.prototype.delete = () => Promise.reject(new Error('denied'))
+       if (mode === 'lie') CacheStorage.prototype.delete = () => Promise.resolve(true)          // delete claims success but removes nothing
+-    }, [blockUnregister, cacheDelete])
++      if (enumeration === 'rejects') ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable'))
++      if (enumeration === 'hang') ServiceWorkerContainer.prototype.getRegistrations = () => new Promise(() => {})
++      if (enumeration === 'nonarray') ServiceWorkerContainer.prototype.getRegistrations = () => Promise.resolve({ length: 0 })
++    }, [blockUnregister, cacheDelete, enumeration])
+     if (letUpdate) await ctx.unroute(`${base}/sw.js`)   // from now on the server delivers the fixed worker: the update can land at any moment
+     return { ctx, page }
+   }
+@@ -214,6 +217,25 @@ async function offlineProbe(page, ctx, label) {
+     check(`D4 (${mode}): no Supabase request and no tokens left in the address bar`, events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
+     await ctx.close()
+   }
++
++  for (const enumeration of ['rejects', 'hang', 'nonarray']) {
++    // The worker registrations cannot be enumerated (or the answer is not a list): UNVERIFIED must never be read as "no workers".
++    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { enumeration })
++    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
++    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 25000 })
++    check(`D8 (registration enumeration ${enumeration}): blocked, "This page did not use your recovery session.", zero Supabase requests, no tokens in the address bar`, (await page.textContent('main')).includes('This page did not use your recovery session.') && events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
++    await ctx.close()
++  }
++  {
++    // A browser with NO worker at all but whose enumeration is broken (previously treated as clean).
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const supa = []
++    await ctx.route(`${SUPA}/**`, route => { supa.push(route.request().url()); route.fulfill({ status: 404, json: {} }) })
++    await ctx.addInitScript(() => { ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable')) })
++    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
++    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 20000 })
++    check('D8b (no worker installed, enumeration broken): R6.2 treated this as clean; now blocked, no Supabase request', supa.length === 0)
++    await ctx.close()
++  }
+   for (let i = 0; i < 3; i++) {
+     // the fixed worker is deliverable while the page is being checked; whichever interleaving happens the end state must be safe (a mid-probe controllerchange is NOT reliably reproducible in a real browser)
+     const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { letUpdate: true })
+@@ -225,17 +247,16 @@ async function offlineProbe(page, ctx, label) {
+     await ctx.close()
+   }
+   if (process.env.BASE_R6) {
+-    // Negative control: the PREVIOUS build (R6.1) with cache deletion failing. It ignored the failure, reloaded, found no stale
+-    // worker and used the recovery session while the legacy cache (with its auth entries) was still on disk.
+-    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events, { cacheDelete: 'false' })
++    // Negative control: the PREVIOUS build (R6.2). With the worker registrations unavailable it read "cannot list" as "no workers",
++    // reported clean and used the recovery session.
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const supa = []
++    await ctx.route(`${SUPA}/**`, route => { const r = route.request(); supa.push(r.method() + ' ' + new URL(r.url()).pathname); route.fulfill({ headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*' }, json: { id: 'user-a', email: 'jane.doe@clinic.test', aud: 'authenticated', role: 'authenticated', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } }) })
++    await ctx.addInitScript(() => { ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable')) })
+     await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
+-    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 25000 })
+-    const supa = events.filter(e => e[0] === 'supabase')
+-    const stillThere = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u) && !/localhost/.test(u))
+-    check('control D7 (previous R6.1 build, cache delete failing): it treated the failed cleanup as CLEAN and used the recovery session', supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docsOf(events)))
+-    check('control D7: the legacy cache with sensitive entries was still on disk at that point (what the verified cleanup now prevents)', Object.keys(await dump(page)).some(k => /^cliniverse-v/.test(k)), Object.keys(await dump(page)).join(','))
++    await sleep(3500)
++    check('control D9 (previous R6.2 build, registrations unavailable): it treated "unavailable" as clean and USED the recovery session', supa.some(r => r === 'GET /auth/v1/user'), JSON.stringify(supa))
+     await ctx.close()
+-  } else console.log('SKIP  control D7 (set BASE_R6 to a server running the previous build)')
++  } else console.log('SKIP  control D9 (set BASE_R6 to a server running the previous build)')
+ 
+   await browser.close()
+   const failed = results.filter(r => !r.ok).length
+diff --git a/tests/stale-worker-guard.test.mjs b/tests/stale-worker-guard.test.mjs
+index 1adb182..5125f33 100644
+--- a/tests/stale-worker-guard.test.mjs
++++ b/tests/stale-worker-guard.test.mjs
+@@ -19,17 +19,26 @@ const flush = async () => { for (let i = 0; i < 30; i++) await Promise.resolve()
+ 
+ // A fake browser: workers, registrations, caches, controllerchange events, a log of every side effect.
+ function world({ search = '', cacheNames = [], deleteMode = 'ok', keysMode = 'ok', unregisterMode = 'ok', listMode = 'ok', noCaches = false } = {}) {
+-  const log = []; const timers = []; const listeners = []
++  const log = []; const timers = []; const listeners = []; let listCalls = 0
+   const caches = new Set(cacheNames)
+   const container = {
+     controller: null, registrations: [],
+-    getRegistrations: async () => { if (listMode === 'throws') throw new Error('x'); log.push(['list']); return container.registrations },
++    getRegistrations: () => {
++      listCalls++
++      const mode = typeof listMode === 'function' ? listMode(listCalls) : listMode
++      if (mode === 'throws') throw new Error('x')
++      if (mode === 'rejects') return Promise.reject(new Error('x'))
++      if (mode === 'hang') return new Promise(() => {})
++      if (mode === 'nonarray') return Promise.resolve({ length: 0 })
++      if (mode === 'malformed') return Promise.resolve([null])
++      log.push(['list']); return Promise.resolve(container.registrations)
++    },
+     addEventListener: (type, fn) => { if (type === 'controllerchange') listeners.push(fn) },
+     removeEventListener: (type, fn) => { const i = listeners.indexOf(fn); if (i >= 0) listeners.splice(i, 1) },
+   }
+   const worker = (answers, label) => ({ label, answers, postMessage(message, ports) { log.push(['probe', label]); if (container.onProbe) container.onProbe(label); if (worker.current(answers, label)) ports[0].postMessage({ version: 'cliniverse-static-v4' }) } })
+   worker.current = answers => answers
+-  const reg = w => ({ active: w, unregister: async () => { log.push(['unregister', w ? w.label : 'none']); if (unregisterMode === 'throws') throw new Error('x'); if (unregisterMode === 'false') return false; container.registrations = container.registrations.filter(r => r.active !== w); if (container.controller === w) { /* a new navigation is no longer controlled */ } return true } })
++  const reg = w => { const registration = { active: w, unregister: async () => { log.push(['unregister', registration.active ? registration.active.label : 'none']); if (unregisterMode === 'throws') throw new Error('x'); if (unregisterMode === 'false') return false; container.registrations = container.registrations.filter(r => r !== registration); return true } }; return registration }
+   const location = { pathname: '/reset-password', search, hash: HASH, replace: url => log.push(['replace', url]) }
+   const env = {
+     serviceWorker: container,
+@@ -118,14 +127,26 @@ test('repeated changes that never settle fail closed (blocked), without side eff
+   assert.equal(result, 'blocked'); assert.deepEqual(noSideEffects(w), [])
+ })
+ 
+-test('unavailable registrations: a current controller is clean; a stale controller cannot be removed, so reload-then-blocked; no controller is clean', async () => {
+-  const w1 = world({ listMode: 'throws' }); const cur = w1.worker(true, 'cur'); w1.container.controller = cur
+-  assert.equal((await run(w1)).result, 'clean')
+-  const w2 = world({ listMode: 'throws' }); w2.container.controller = w2.worker(false, 'old')
+-  assert.equal((await run(w2)).result, 'reloading')
+-  const w3 = world({ listMode: 'throws', search: '?swclean=1' }); w3.container.controller = w3.worker(false, 'old')
+-  assert.equal((await run(w3)).result, 'blocked')
+-  assert.equal((await run(world({ listMode: 'throws' }))).result, 'clean')
++// ───────── R6.3: identity of the active worker is captured, not just the registration object ─────────
++// `registration.active` is a live property: the SAME registration object can start pointing at a different worker.
++test('REPRO (R6.2 passed this wrongly): registration.active is swapped IN PLACE to an old worker while the probe is pending — not clean', async () => {
++  const w = world(); const current = w.worker(true, 'current'); const old = w.worker(false, 'old')
++  const registration = w.reg(current); w.container.controller = null; w.container.registrations = [registration]
++  let swapped = false
++  w.container.onProbe = label => { if (label === 'current' && !swapped) { swapped = true; registration.active = old } }   // same object, new worker, no event
++  const { result } = await run(w)
++  assert.equal(swapped, true)
++  assert.notEqual(result, 'clean', 'an in-place change of registration.active must discard the evaluation')
++  assert.equal(result, 'reloading'); assert.ok(w.log.some(e => e[0] === 'unregister' && e[1] === 'old'))
++})
++
++test('REPRO (R6.2 passed this wrongly): registration.active swapped in place AFTER a clean result — stillCurrent() must turn false', async () => {
++  const w = world(); const current = w.worker(true, 'current'); const old = w.worker(false, 'old')
++  const registration = w.reg(current); w.container.registrations = [registration]
++  const { guard, result } = await run(w)
++  assert.equal(result, 'clean'); assert.equal(guard.stillCurrent(), true)
++  registration.active = old
++  assert.equal(guard.stillCurrent(), false, 'the captured worker identity no longer matches the live registration')
+ })
+ 
+ // ───────── R6.2 #3: cache deletion must be verified, also across the reload ─────────
+@@ -171,6 +192,125 @@ test('only Cliniverse-owned legacy caches are ever deleted (case-insensitive pre
+   assert.deepEqual([...w.caches].sort(), ['cv-cache', 'cliniverse-static-v4', 'my-app', 'workbox-precache'].sort())
+ })
+ 
++
++test('R6.3 identity capture: the probe verdict belongs to the captured worker OBJECT — swapping registration.active to another CURRENT worker mid-check is also discarded and re-probed', async () => {
++  const w = world(); const a = w.worker(true, 'a'); const b = w.worker(true, 'b')
++  const registration = w.reg(a); w.container.registrations = [registration]
++  let swapped = false
++  w.container.onProbe = label => { if (label === 'a' && !swapped) { swapped = true; registration.active = b } }
++  const { result } = await run(w)
++  assert.equal(result, 'clean'); assert.equal(w.log.filter(e => e[0] === 'probe' && e[1] === 'b').length >= 1, true, 'the new identity was probed before it was accepted')
++})
++
++test('ENUMERATION UNAVAILABLE or UNRELIABLE is unverified, never "no workers": blocked for every kind of failure and every controller state, no side effects', async () => {
++  for (const listMode of ['throws', 'rejects', 'hang', 'nonarray', 'malformed']) {
++    for (const controllerKind of ['none', 'current', 'old']) {
++      const w = world({ listMode, cacheNames: ['cliniverse-v3'] })
++      if (controllerKind === 'current') w.container.controller = w.worker(true, 'cur')
++      if (controllerKind === 'old') w.container.controller = w.worker(false, 'old')
++      const { result } = await run(w)
++      assert.equal(result, 'blocked', `${listMode} / ${controllerKind}`)
++      assert.deepEqual(noSideEffects(w), [], `${listMode} / ${controllerKind}`)
++    }
++  }
++})
++
++test('enumeration that works at first but fails when it is repeated to confirm stability: blocked', async () => {
++  const w = world({ listMode: n => (n >= 2 ? 'rejects' : 'ok') }); const cur = w.worker(true, 'cur'); w.container.registrations = [w.reg(cur)]
++  assert.equal((await run(w)).result, 'blocked')
++})
++
++test('no service-worker support at all is still clean (nothing can control the page)', async () => {
++  assert.equal(await G.ensureNoStaleWorker({ location: { pathname: '/reset-password', search: '', hash: HASH, replace() { throw new Error('no') } } }), 'clean')
++})
++
++test('confirm(): true when the same current workers are still there; false for a worker identity that was never probed, for an unavailable enumeration and after dispose/cancel', async () => {
++  const w = world(); const cur = w.worker(true, 'cur'); const registration = w.reg(cur); w.container.registrations = [registration]
++  const { guard, result } = await run(w); assert.equal(result, 'clean')
++  assert.equal(await guard.confirm(), true)
++  // a new registration with a never-probed worker appears
++  w.container.registrations = [registration, w.reg(w.worker(true, 'stranger'))]
++  assert.equal(await guard.confirm(), false)
++  w.container.registrations = [registration]
++  assert.equal(await guard.confirm(), true)
++  // unavailable now
++  const failing = world({ listMode: n => (n >= 3 ? 'rejects' : 'ok') }); const c2 = failing.worker(true, 'c'); failing.container.registrations = [failing.reg(c2)]
++  const run2 = await run(failing); assert.equal(run2.result, 'clean'); assert.equal(await run2.guard.confirm(), false)
++  // cancelled
++  let cancelled = false
++  const w3 = world(); const c3 = w3.worker(true, 'c'); w3.container.registrations = [w3.reg(c3)]
++  const run3 = await run(w3, { isCancelled: () => cancelled }); assert.equal(run3.result, 'clean'); cancelled = true
++  assert.equal(await run3.guard.confirm(), false); assert.equal(run3.guard.stillCurrent(), false)
++})
++
++// ───────── real guard + real run together: the in-place identity change between the check and the token use ─────────
++async function integrated({ prepare }) {
++  const w = world(); const log = w.log; const views = []
++  const store = { link: null, stripped: false }
++  const deps = {
++    makeGuard: isCancelled => G.createWorkerGuard({ ...w.env, isCancelled }),
++    linkStore: store, readHash: () => { log.push(['readHash']); return HASH }, stripUrl: () => log.push(['history.replaceState']),
++    createClient: () => { log.push(['createClient']); return {} },
++    startRecovery: async () => { log.push(['setSession']); return { status: 'ready', maskedEmail: 'j•@x' } },
++    completeRecovery: async () => ({ status: 'done', sessionsEnded: true }),
++    setView: v => views.push(v.name),
++  }
++  const ctx = prepare(w)
++  const runInstance = R.createRecoveryRun(deps)
++  const started = runInstance.start()
++  for (let i = 0; i < 40; i++) { await flush(); w.timeoutAll(); if (ctx && ctx.step) await ctx.step(i) }
++  await started
++  return { w, views, log, runInstance }
++}
++
++test('INTEGRATED: registration.active swapped in place to an OLD worker after the check but during the pre-use confirmation ⇒ the recovery session is NOT used', async () => {
++  const { views, log } = await integrated({ prepare: w => {
++    const current = w.worker(true, 'current'); const old = w.worker(false, 'old')
++    const registration = w.reg(current); w.container.registrations = [registration]
++    let lists = 0; const realList = w.container.getRegistrations
++    w.container.getRegistrations = () => { lists++; if (lists === 3) registration.active = old; return realList() }   // 1st+2nd = the check, 3rd = confirm
++    return {}
++  } })
++  assert.deepEqual(log.filter(e => ['setSession', 'createClient', 'readHash'].includes(e[0])), [], 'tokens never read or used')
++  assert.ok(['blocked', 'reloading'].includes(views[0] ?? 'reloading'))
++})
++
++test('INTEGRATED: enumeration becomes unavailable exactly at the pre-use confirmation ⇒ blocked, tokens untouched, fragment stripped', async () => {
++  const { views, log } = await integrated({ prepare: w => {
++    const current = w.worker(true, 'current'); w.container.registrations = [w.reg(current)]
++    let lists = 0; const realList = w.container.getRegistrations
++    w.container.getRegistrations = () => { lists++; return lists >= 3 ? Promise.reject(new Error('x')) : realList() }
++    return {}
++  } })
++  assert.deepEqual(views, ['blocked']); assert.deepEqual(log.filter(e => ['setSession', 'createClient', 'readHash'].includes(e[0])), [])
++  assert.ok(log.some(e => e[0] === 'history.replaceState'))
++})
++
++test('INTEGRATED: a different CURRENT worker appears before use ⇒ confirmation fails, a full re-check probes it, then the session is used exactly once', async () => {
++  const { views, log } = await integrated({ prepare: w => {
++    const a = w.worker(true, 'a'); const b = w.worker(true, 'b')
++    const registration = w.reg(a); w.container.registrations = [registration]
++    let lists = 0; const realList = w.container.getRegistrations
++    w.container.getRegistrations = () => { lists++; if (lists === 3) registration.active = b; return realList() }
++    return {}
++  } })
++  assert.deepEqual(views, ['form']); assert.equal(log.filter(e => e[0] === 'setSession').length, 1)
++  assert.ok(log.some(e => e[0] === 'probe' && e[1] === 'b'))
++})
++
++test('INTEGRATED: the page is left while the pre-use confirmation is pending ⇒ nothing is read, stripped, created, requested or shown', async () => {
++  const w = world(); const log = w.log; const views = []
++  const current = w.worker(true, 'current'); w.container.registrations = [w.reg(current)]
++  let lists = 0; let release; const held = new Promise(r => { release = r }); const realList = w.container.getRegistrations
++  w.container.getRegistrations = () => { lists++; return lists === 3 ? held.then(() => realList()) : realList() }
++  const deps = { makeGuard: isCancelled => G.createWorkerGuard({ ...w.env, isCancelled }), linkStore: { link: null, stripped: false }, readHash: () => { log.push(['readHash']); return HASH }, stripUrl: () => log.push(['history.replaceState']), createClient: () => { log.push(['createClient']); return {} }, startRecovery: async () => { log.push(['setSession']); return { status: 'ready', maskedEmail: 'x' } }, completeRecovery: async () => ({ status: 'done', sessionsEnded: true }), setView: v => views.push(v.name) }
++  const instance = R.createRecoveryRun(deps); const started = instance.start()
++  for (let i = 0; i < 10; i++) await flush()   // no timers fired: the confirmation enumeration stays pending
++  assert.equal(lists, 3, 'the confirmation enumeration is pending')
++  instance.cancel(); release(); await started
++  assert.deepEqual(log.filter(e => ['readHash', 'history.replaceState', 'createClient', 'setSession'].includes(e[0])), []); assert.deepEqual(views, [])
++})
++
+ // ───────── cancellation ─────────
+ test('cancelled while probing or before a side effect: no unregister, no cache delete, no reload', async () => {
+   let cancelled = false
+@@ -197,13 +337,13 @@ const R = load('app/lib/recoveryRun.ts', name => {
+   if (name === './passwordRecovery') return { parseRecoveryHash: hash => hash.includes('type=recovery') ? { kind: 'ready', accessToken: 'AT', refreshToken: 'RT' } : { kind: 'invalid', reason: 'missing' } }
+   throw new Error('unexpected ' + name)
+ })
+-function page({ guardResults = ['clean'], stillCurrent = () => true, startDelay = null, completeDelay = null } = {}) {
++function page({ guardResults = ['clean'], stillCurrent = () => true, startDelay = null, completeDelay = null, confirmResult = () => true } = {}) {
+   const log = []; const views = []
+-  let results = [...guardResults]; let guardGate = null
++  let results = [...guardResults]; let guardGate = null; let confirmGate = null
+   const store = { link: null, stripped: false }
+   const makeGuard = isCancelled => ({
+     check: async () => { log.push(['guard.check']); if (guardGate) await guardGate.promise; return results.length > 1 ? results.shift() : results[0] },
+-    stillCurrent: () => stillCurrent(), dispose: () => log.push(['guard.dispose']),
++    stillCurrent: () => stillCurrent(), confirm: async () => { log.push(['guard.confirm']); if (confirmGate) await confirmGate.promise; return confirmResult() }, dispose: () => log.push(['guard.dispose']),
+   })
+   const deps = {
+     makeGuard, linkStore: store,
+@@ -215,7 +355,7 @@ function page({ guardResults = ['clean'], stillCurrent = () => true, startDelay
+     setView: v => { log.push(['view', v.name]); views.push(v.name) },
+   }
+   const gate = () => { let resolve; const promise = new Promise(r => { resolve = r }); return { promise, resolve } }
+-  return { deps, log, views, store, hold: () => { guardGate = gate(); return guardGate }, gate, names: () => log.map(e => e.join(':')) }
++  return { deps, log, views, store, hold: () => { guardGate = gate(); return guardGate }, holdConfirm: () => { confirmGate = gate(); return confirmGate }, gate, names: () => log.map(e => e.join(':')) }
+ }
+ const TOKEN_USE = ['readHash', 'history.replaceState', 'createClient', 'setSession', 'view:form']
+ 
+-- 
+2.43.0
+

@@ -18,7 +18,7 @@ MASTER decision (Issue #36): every production deployment to www.cliniverseai.com
 **Consequence to confirm today:** if `qa/case-batch20-cloud` is (or behaves as) the Production Branch, **a plain `git push` to it would change the live app**. R4/R5 are descendants of that branch's commit `e4dab59`; they must **not** be pushed or merged there without the full gate below.
 
 ## Gate for any production web deployment
-1. **Candidate identified by exact SHA** (40 hex) and, when applying patches, the SHA-256 of each patch (R4 `80d3fdac…93f9`, R5 `020c0918…d5fb`, R6 `4f7dba1d…93ae`, R6.1 `00a37464…e11d`, R6.2 `c83c3a7e…78f2`) and their apply order. No "latest of branch".
+1. **Candidate identified by exact SHA** (40 hex) and, when applying patches, the SHA-256 of each patch (R4 `80d3fdac…93f9`, R5 `020c0918…d5fb`, R6 `4f7dba1d…93ae`, R6.1 `00a37464…e11d`, R6.2 `c83c3a7e…78f2`, R6.3 `6aa429dc…d6`) and their apply order. No "latest of branch".
 2. **Preview first:** deploy that exact SHA to a Vercel preview (never to production first). Record the preview deployment id.
 3. **Evidence package on that SHA:** `npm test`, `npx tsc --noEmit`, `next build`, browser check script(s), diff vs the current production SHA (file list), list of user-visible changes.
 4. **Independent review:** Work 1 sign-off on the exact SHA + digests.
