@@ -18,8 +18,8 @@ const trackEntries = [...tracks.matchAll(/\{ id:'([^']+)', verb:'([^']+)', title
 test('Learn landing lists the three core tracks first, then advanced practice and clinical systems, in order', () => {
   assert.deepEqual(trackEntries.map(entry => entry.id), ['ecg', 'echo', 'ward', 'resuscitation', 'handover', 'codelab', 'pathway', 'reference', 'cardiology', 'nexus'])
   assert.deepEqual(trackEntries.slice(0, 3), [
-    { id: 'ecg', verb: 'INTERPRET', title: 'ECG', description: 'Read the tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg', workspace: null },
-    { id: 'echo', verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo', workspace: null },
+    { id: 'ecg', verb: 'INTERPRET', title: 'ECG', description: 'ECG practice is being prepared.', accent: 'var(--cv-teal)', href: '/learn/ecg', workspace: null },
+    { id: 'echo', verb: 'OBSERVE', title: 'Echo', description: 'One introductory study: start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo', workspace: null },
     { id: 'ward', verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and work through the next clinical decision.', accent: 'var(--cv-blue)', href: null, workspace: 'ward' },
   ])
   assert.deepEqual([...tracks.matchAll(/<TrackGroup title="([^"]+)"/g)].map(match => match[1]), ['Core practice', 'Advanced practice', 'Clinical systems'])

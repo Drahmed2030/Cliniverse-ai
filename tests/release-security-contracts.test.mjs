@@ -11,7 +11,12 @@ test('release branch does not contain public Supabase diagnostics endpoint', () 
 })
 
 test('Supabase public client configuration is not accidentally truncated', () => {
-  const source = read('app/supabase.ts')
+  // The coordinates live in a client-free module so the password-recovery page can use them without
+  // instantiating the shared client; app/supabase.ts re-exports them and holds no literal key.
+  assert.match(read('app/supabase.ts'), /import \{ supabaseUrl, supabaseAnonKey \} from '\.\/lib\/supabaseConfig'/)
+  assert.doesNotMatch(read('app/supabase.ts'), /eyJ/)
+  assert.doesNotMatch(read('app/lib/supabaseConfig.ts'), /createClient/)
+  const source = read('app/lib/supabaseConfig.ts')
   const match = source.match(/const supabaseAnonKey = '([^']+)'/)
   assert.ok(match)
   assert.equal(match[1].includes('...'), false)

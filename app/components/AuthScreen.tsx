@@ -5,11 +5,13 @@ import {
   signInWithMagicLink,
   signInWithOAuth,
   isVerifiedUser,
+  requestPasswordReset,
   signInWithPassword,
   signOutSession,
   signUpWithPassword,
   type CliniverseAuthProvider,
 } from "../lib/identity";
+import { classifyResetRequest, RESET_REQUEST_COOLDOWN_MS, resetRequestAllowed } from "../lib/passwordRecovery";
 import {
   NATIVE_SAFE_AREA_BOTTOM,
   NATIVE_SAFE_AREA_LEFT,
@@ -62,6 +64,12 @@ const COPY = {
     createAccount: "Create account",
     existingAccount: "Already have an account? Sign in",
     signupSent: "Check your email to confirm your account, then return to Cliniverse.",
+    forgot: "Forgot password?",
+    resetSend: "Send reset link",
+    resetSent: "If an account exists for this email, we sent a link to reset the password. Open it in your browser, set a new password, then return here to sign in.",
+    resetWait: "Please wait a minute before requesting another link.",
+    resetFailed: "We could not send the email. Check your connection and try again.",
+    backToSignIn: "Back to sign in",
     verifyFirst: "Please confirm your email address before signing in. Check your inbox for the confirmation link.",
     back: "Back",
     guest: "Explore as guest",
@@ -90,6 +98,12 @@ const COPY = {
     createAccount: "إنشاء حساب",
     existingAccount: "لديك حساب؟ سجّل الدخول",
     signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
+    forgot: "نسيت كلمة المرور؟",
+    resetSend: "أرسل رابط الاستعادة",
+    resetSent: "إذا كان هناك حساب لهذا البريد فقد أرسلنا رابطًا لاستعادة كلمة المرور. افتحه في المتصفح، عيّن كلمة مرور جديدة، ثم ارجع هنا لتسجيل الدخول.",
+    resetWait: "انتظر دقيقة قبل طلب رابط آخر.",
+    resetFailed: "تعذر إرسال البريد. تحقق من الاتصال وحاول مجددًا.",
+    backToSignIn: "العودة لتسجيل الدخول",
     verifyFirst: "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول. تحقق من صندوق الوارد.",
     back: "رجوع",
     guest: "استكشف كزائر",
@@ -118,6 +132,8 @@ export default function AuthScreen({
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetMode, setResetMode] = useState(false);
+  const [resetNextAt, setResetNextAt] = useState(0);
 
   const t = COPY[locale] || COPY.en;
   const dir = locale === "ar" ? "rtl" : "ltr";
@@ -144,6 +160,34 @@ export default function AuthScreen({
       }
     } catch {
       setError(t.genericError);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleReset() {
+    setError("");
+    setNotice("");
+    const normalizedEmail = email.trim();
+    if (!validEmail(normalizedEmail)) {
+      setError(t.emailError);
+      return;
+    }
+    if (!resetRequestAllowed(Date.now(), resetNextAt)) {
+      setError(t.resetWait);
+      return;
+    }
+    setLoading(true);
+    try {
+      const outcome = classifyResetRequest((await requestPasswordReset(normalizedEmail)).error);
+      if (outcome !== "sent") {
+        setError(outcome === "rate_limited" ? t.resetWait : t.resetFailed);
+        return;
+      }
+      setResetNextAt(Date.now() + RESET_REQUEST_COOLDOWN_MS);
+      setNotice(t.resetSent);
+    } catch {
+      setError(t.resetFailed);
     } finally {
       setLoading(false);
     }
@@ -250,13 +294,17 @@ export default function AuthScreen({
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <Field label={t.emailLabel} value={email} onChange={setEmail} type="email" autoComplete="email" />
+              {resetMode ? null : <>
               {!magicLinkMode ? <Field label={t.passwordLabel} value={password} onChange={setPassword} type="password" autoComplete={isSignUp ? "new-password" : "current-password"} /> : null}
               {enableMagicLink ? <button onClick={() => { setUseMagic(!useMagic); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, textAlign: dir === "rtl" ? "right" : "left", padding: 0, cursor: "pointer" }}>{magicLinkMode ? t.password : t.magic}</button> : null}
+              {!isSignUp && !magicLinkMode ? <button onClick={() => { setResetMode(true); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, textAlign: dir === "rtl" ? "right" : "left", padding: 0, minHeight: 32, cursor: "pointer" }}>{t.forgot}</button> : null}
+              </>}
               {error ? <div role="alert" style={{ fontSize: 12, color: T.danger, fontWeight: 650 }}>{error}</div> : null}
               {notice ? <div role="status" style={{ fontSize: 12, color: T.success, fontWeight: 650 }}>{notice}</div> : null}
-              <AuthButton label={loading ? "…" : isSignUp ? t.createAccount : t.continueEmail} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={handleEmail} disabled={loading} />
+              <AuthButton label={loading ? "…" : resetMode ? t.resetSend : isSignUp ? t.createAccount : t.continueEmail} bg={`linear-gradient(135deg, ${T.blue}, ${T.violet})`} color={T.text} onClick={resetMode ? handleReset : handleEmail} disabled={loading} />
+              {resetMode ? <button onClick={() => { setResetMode(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, padding: "6px 8px", minHeight: 32, cursor: "pointer" }}>{t.backToSignIn}</button> : null}
               {isSignUp ? <button onClick={() => { setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.blue, fontSize: 12, fontWeight: 700, padding: "6px 8px", cursor: "pointer" }}>{t.existingAccount}</button> : null}
-              <button onClick={() => { setMode("landing"); setIsSignUp(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "10px 8px", cursor: "pointer" }}>{t.back}</button>
+              <button onClick={() => { setMode("landing"); setIsSignUp(false); setResetMode(false); setError(""); setNotice(""); }} style={{ border: "none", background: "transparent", color: T.sub, fontSize: 13, fontWeight: 700, padding: "10px 8px", cursor: "pointer" }}>{t.back}</button>
             </div>
           )}
         </div>

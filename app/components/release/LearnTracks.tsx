@@ -7,8 +7,8 @@ type Workspace = 'ward' | 'handover' | 'codelab' | 'cardiology' | 'nexus'
 type Entry = { id:string; verb:string; title:string; description:string; accent:string; href?:string; workspace?:Workspace }
 
 const CORE: Entry[] = [
-  { id:'ecg', verb:'INTERPRET', title:'ECG', description:'Read the tracing, commit an interpretation, then review the reasoning.', accent:'var(--cv-teal)', href:'/learn/ecg' },
-  { id:'echo', verb:'OBSERVE', title:'Echo', description:'Start with the cine, organize findings, then assign meaning.', accent:'var(--cv-violet)', href:'/learn/echo' },
+  { id:'ecg', verb:'INTERPRET', title:'ECG', description:'ECG practice is being prepared.', accent:'var(--cv-teal)', href:'/learn/ecg' },
+  { id:'echo', verb:'OBSERVE', title:'Echo', description:'One introductory study: start with the cine, organize findings, then assign meaning.', accent:'var(--cv-violet)', href:'/learn/echo' },
   { id:'ward', verb:'DECIDE', title:'Ward', description:'Follow a changing patient state and work through the next clinical decision.', accent:'var(--cv-blue)', workspace:'ward' },
 ]
 const ADVANCED: Entry[] = [

@@ -68,7 +68,7 @@ test('paywall benefits match the real access gates (source-level evidence); free
   assert.match(ward, /label: 'Handover Practice',[\s\S]*?premium: false/)
   assert.match(source, /<div className="cv-paywall-status">\{t\.freeNote\}<\/div>/)
   // The free allowances named in the PRO groups are exactly the ones the gates enforce (first case, lessons 1-2).
-  assert.ok(groups.includes('the first case is free') && groups.includes('lessons 1–2 are free'))
+  assert.ok(groups.includes('the first case is free') && groups.includes('the first two lessons of each track are free'))
 })
 
 test('Learn keeps every product capability reachable in a unified hierarchy', () => {

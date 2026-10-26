@@ -1,4 +1,5 @@
 import { supabase } from '../supabase'
+import { RESET_REDIRECT_URL } from './passwordRecovery'
 import { createAuthMutationQueue, createSessionScopedSignOut, isAuthMutationBusy } from './authMutationCoordinator'
 
 export type CliniverseAuthProvider = 'apple' | 'google'
@@ -32,6 +33,12 @@ export async function signUpWithPassword(email: string, password: string, redire
 }
 
 export { isVerifiedUser } from './emailVerification'
+
+// Sends the recovery email only; it does not create, change or end any session, so it is not queued.
+// The redirect is a fixed, allow-listed URL — never derived from the current page.
+export async function requestPasswordReset(email: string) {
+  return supabase.auth.resetPasswordForEmail(email, { redirectTo: RESET_REDIRECT_URL })
+}
 
 export async function signInWithMagicLink(email: string, redirectTo?: string) {
   return mutate(() => supabase.auth.signInWithOtp({

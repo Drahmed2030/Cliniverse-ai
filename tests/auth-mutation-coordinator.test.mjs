@@ -183,10 +183,14 @@ test('every auth mutation in the app goes through the coordinator (source guard)
     if (fs.statSync(full).isDirectory()) { walk(full); continue }
     if (!/\.(ts|tsx)$/.test(entry)) continue
     const source = fs.readFileSync(full, 'utf8')
-    if (/\.auth\.(signIn\w*|signUp|signOut|setSession|refreshSession|exchangeCodeForSession|verifyOtp|updateUser)\(/.test(source) && !full.endsWith('/lib/identity.ts')) offenders.push(full)
+    if (/\.auth\.(signIn\w*|signUp|signOut|setSession|refreshSession|exchangeCodeForSession|verifyOtp|updateUser)\(/.test(source) && !full.endsWith('/lib/identity.ts') && !full.endsWith('/lib/passwordRecovery.ts')) offenders.push(full)
   } }
   walk(root.replace(/\/$/, ''))
   assert.deepEqual(offenders, [])
+  // The one allowed exception drives an isolated, in-memory recovery client — never the app's session.
+  const recovery = fs.readFileSync(new URL('../app/lib/passwordRecovery.ts', import.meta.url), 'utf8')
+  assert.doesNotMatch(recovery, /from '\.\.?\/(\.\.\/)?supabase'|from '\.\/identity'/)
+  assert.match(recovery, /persistSession: false/)
   const identity = fs.readFileSync(new URL('../app/lib/identity.ts', import.meta.url), 'utf8')
   for (const call of ['signInWithPassword', 'signUp', 'signInWithOtp', 'signInWithOAuth', 'signOut']) {
     assert.match(identity, new RegExp(`mutate\\(\\(\\) => supabase\\.auth\\.${call}\\(`), call)
@@ -206,6 +210,7 @@ function loadIdentity(authImpl) {
     if (name === '../supabase') return { supabase: { auth: authImpl } }
     if (name === './authMutationCoordinator') return modules.coordinator
     if (name === './emailVerification') return modules.verification
+    if (name === './passwordRecovery') return { RESET_REDIRECT_URL: 'https://reset.example' }
     throw new Error(`unexpected import ${name}`)
   }
   const evaluate = (path, extra = {}) => { const exports = {}; vm.runInNewContext(compile(path), { exports, require: requireShim, setTimeout: fn => { timers.push(fn); return timers.length }, clearTimeout() {}, Promise, Error, ...extra }); return exports }
