@@ -1,11 +1,12 @@
 // Real-browser check of the password-recovery page against a locally started production build.
 //   npm run build && npx next start -p 3111   (any dummy NEXT_PUBLIC_SUPABASE_* values)
 //   node scripts/verify-password-recovery-browser.cjs        (needs Playwright + Chromium)
-// All Supabase traffic is intercepted in the browser; nothing reaches a real project.
+// All Supabase traffic is intercepted in the browser; nothing reaches a real project. Server behaviour (one-time link
+// consumption, token validation, revocation) is SIMULATED here and must be proven on a real test project.
 const { chromium } = require('playwright')
 const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url')
 const jwt = (sub, email) => `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600, session_id: 'sess' })}.sig`
-const BASE = 'http://localhost:3111/reset-password'
+const BASE = (process.env.BASE || 'http://localhost:3111') + '/reset-password'
 const SUPA = 'https://zbiujqxinvcxvuviuenx.supabase.co'
 const results = []
 const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  — ' + detail : ''}`) }
@@ -49,6 +50,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
     const put = calls.find(c => c.method === 'PUT'); const out = calls.find(c => c.path.startsWith('/auth/v1/logout'))
     check('submit: PUT /user carries the new password and nothing else (auth-js adds null PKCE fields)', !!put && JSON.parse(put.body).password === 'correct-horse-9' && Object.entries(JSON.parse(put.body)).filter(([k, v]) => k !== 'password' && v !== null).length === 0)
     check('submit: global sign-out requested after the update', !!out && out.path.includes('scope=global') && calls.indexOf(out) > calls.indexOf(put), out && out.path)
+    check('done: honest session wording (refresh tokens revoked; open sessions may last briefly) and no "all devices" claim', (await page.textContent('main')).includes('may keep working briefly') && !/all devices/i.test(await page.textContent('main')))
     check('done: tells the user to return to the app and sign in', (await page.textContent('main')).includes('Return to the Cliniverse app'))
     const stored = await page.evaluate(k => localStorage.getItem(k), keyA)
     check('isolation: the other signed-in account (A) in app storage is byte-for-byte unchanged', stored === sessionA)
@@ -74,7 +76,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
     await page.route(`${SUPA}/**`, route => route.fulfill({ status: 401, json: { msg: 'invalid JWT', code: 401 } }))
     await page.goto(BASE + goodHash)
     await page.getByText('not valid or was already used').waitFor()
-    check('replayed/invalid session: refused when the server rejects it', true)
+    check('SIMULATED server 401 on session validation: page shows the invalid-link state (this does NOT prove the live service enforces one-time links; see the preview plan)', true)
   })
   await run(goodHash, async (page) => {
     await page.getByLabel('New password', { exact: true }).waitFor()
@@ -82,7 +84,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
     await page.route(`${SUPA}/**`, route => route.request().method() === 'PUT' ? route.fulfill({ status: 422, json: { code: 'weak_password', msg: 'Password is known to be weak' } }) : route.fulfill({ status: 204, body: '' }))
     await page.getByLabel('New password', { exact: true }).fill('correct-horse-9'); await page.getByLabel('Confirm new password').fill('correct-horse-9'); await page.getByRole('button', { name: 'Update password' }).click()
     await page.locator('main [role=alert]').waitFor()
-    check('server rejects the password: error shown, success never claimed', (await page.textContent('main')).includes('could not be accepted') && !(await page.textContent('main')).includes('was updated'))
+    check('SIMULATED server 422 on updateUser: error shown, success never claimed', (await page.textContent('main')).includes('could not be accepted') && !(await page.textContent('main')).includes('was updated'))
   })
   await browser.close()
   const failed = results.filter(r => !r.ok).length

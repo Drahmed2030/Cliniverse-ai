@@ -9,7 +9,13 @@
 //     client, never persisted storage — so an existing signed-in account is not replaced or affected.
 //  3. updateUser({ password }) sets the new password, then a global sign-out ends every session of that account.
 //
-// Limit: a global sign-out revokes refresh tokens; access tokens already issued stay valid until they expire.
+// Limits (state them plainly, in code and in copy):
+//  - A global sign-out revokes refresh tokens. Access tokens already issued are not recalled: a device that holds
+//    one keeps working until it expires (Supabase default about an hour). Never claim "signed out on all devices".
+//  - The one-time part is the EMAIL LINK (the Supabase verify endpoint consumes it, which is also why an email
+//    scanner that opens the link can use it up). The session that link produces is separate: its tokens, delivered
+//    in the URL fragment, stay usable until they expire or are revoked, even after the link itself is consumed.
+//    That is why the page removes the fragment from the address bar immediately.
 
 import { createClient } from '@supabase/supabase-js'
 import { supabaseAnonKey, supabaseUrl } from './supabaseConfig'
@@ -46,7 +52,9 @@ export function parseRecoveryHash(hash: string): RecoveryLink {
   const accessToken = params.get('access_token')
   const refreshToken = params.get('refresh_token')
   if (!accessToken || !refreshToken) return { kind: 'invalid', reason: 'missing' }
-  // Only genuine recovery links may reach the password form; a sign-in or confirmation link must not.
+  // `type=recovery` is only a ROUTING HINT chosen by whoever built the URL; it is not proof of origin. It keeps
+  // sign-in and confirmation links away from the password form. The trust anchor is the server validating the
+  // tokens in setSession (a forged or invalid token is refused there).
   if (params.get('type') !== 'recovery') return { kind: 'invalid', reason: 'not_recovery' }
   return { kind: 'ready', accessToken, refreshToken }
 }

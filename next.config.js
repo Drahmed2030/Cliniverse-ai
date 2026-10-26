@@ -4,6 +4,11 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Workers must be re-fetched on every check so a security fix reaches installed browsers promptly.
+        source: '/:file(sw.js|register-sw.js)',
+        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
+      },
+      {
         // Password-recovery page: the URL carries one-time tokens, so never leak it via Referer and never cache it.
         source: '/reset-password',
         headers: [

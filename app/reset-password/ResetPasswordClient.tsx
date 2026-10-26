@@ -94,7 +94,9 @@ export default function ResetPasswordClient() {
             <div role="status">
               <p style={{ margin: '0 0 10px', fontWeight: 700, color: T.success }}>Your password was updated.</p>
               <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>
-                {view.sessionsEnded ? 'You were signed out on all devices. ' : 'We could not sign you out on other devices; you can sign out from Me. '}
+                {view.sessionsEnded
+                  ? 'We revoked the saved sign-in on your other devices, so they cannot renew it. A device that is open right now may keep working briefly (typically up to an hour) until its current access expires. '
+                  : 'We could not revoke your other sessions. If you think someone else may have access to your account, sign out from Me on each device and contact support. '}
                 Return to the Cliniverse app and sign in with your new password.
               </p>
             </div>

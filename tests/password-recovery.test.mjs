@@ -36,7 +36,7 @@ function fakeClient({ sessionUser = { email: 'jane.doe@clinic.test' }, setSessio
 
 const GOOD = '#access_token=AT&refresh_token=RT&expires_in=3600&token_type=bearer&type=recovery'
 
-test('hash parsing: only a genuine recovery link is accepted; every other shape is invalid', () => {
+test('hash parsing: type=recovery is a client routing hint (not proof of origin); every other shape is invalid', () => {
   assert.deepEqual({ ...R.parseRecoveryHash(GOOD) }, { kind: 'ready', accessToken: 'AT', refreshToken: 'RT' })
   assert.equal(R.parseRecoveryHash(GOOD.replace('type=recovery', 'type=signup')).reason, 'not_recovery')
   assert.equal(R.parseRecoveryHash(GOOD.replace('&type=recovery', '')).reason, 'not_recovery')
@@ -142,6 +142,19 @@ test('the reset page and the root layout can never create the shared Supabase cl
     for (const file of forbidden) assert.equal(graph.includes(file), false, `${entry} reaches ${file}`)
   }
   assert.ok(importGraph(path.join(root, 'app/reset-password/page.tsx')).includes('app/lib/passwordRecovery.ts'))
+})
+
+test('copy never claims every device was signed out: refresh-token revocation vs still-valid access tokens, and the failure case', () => {
+  const page = read('app/reset-password/ResetPasswordClient.tsx')
+  assert.doesNotMatch(page, /signed out on all devices|all devices|every device/i)
+  assert.match(page, /revoked the saved sign-in on your other devices/)
+  assert.match(page, /may keep working briefly \(typically up to an hour\) until its current access expires/)
+  assert.match(page, /could not revoke your other sessions/)
+  assert.match(page, /sign out from Me on each device and contact support/)
+  const lib = read('app/lib/passwordRecovery.ts')
+  assert.match(lib, /Access tokens already issued are not recalled/)
+  assert.match(lib, /ROUTING HINT/)
+  assert.match(lib, /session that link produces is separate/)
 })
 
 test('the reset page removes the tokens from the address bar before any network call, runs once, and never logs them', () => {
