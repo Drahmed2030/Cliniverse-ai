@@ -2,7 +2,7 @@
 // against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
 //   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
 //   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js [BASE_R6=http://localhost:3113] node scripts/verify-service-worker-browser.cjs
-// BASE_R6 (optional) is a second server running the PREVIOUS (R6) build, used only as a negative control for section D.
+// BASE_R6 (optional) is a second server running the PREVIOUS (R6.1) build, used only as a negative control for section D.
 // LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
 const { chromium } = require('playwright')
 const fs = require('fs')
@@ -145,7 +145,7 @@ async function offlineProbe(page, ctx, label) {
   // ───────── D. FIRST DIRECT VISIT TO /reset-password WHILE AN OLD WORKER STILL CONTROLS THE ORIGIN ─────────
   const jwtFor = (sub, email) => { const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url'); return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600 })}.sig` }
   const RECOVERY_HASH = `#access_token=${jwtFor('user-a', 'jane.doe@clinic.test')}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`
-  async function oldWorkerContext(base, events, { blockUnregister = false } = {}) {
+  async function oldWorkerContext(base, events, { blockUnregister = false, cacheDelete = 'ok', letUpdate = false } = {}) {
     const ctx = await browser.newContext(); const page = await ctx.newPage()
     await ctx.route(`${SUPA}/**`, route => {
       const req = route.request(); const u = new URL(req.url()); const auth = req.headers()['authorization'] || ''
@@ -157,17 +157,22 @@ async function offlineProbe(page, ctx, label) {
       if (u.pathname === '/auth/v1/logout') return route.fulfill({ status: 204, headers: cors, body: '' })
       return route.fulfill({ headers: cors, json: [] })
     })
-    await ctx.route(`${base}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))   // the old worker keeps being served: no update yet
+    if (!letUpdate) await ctx.route(`${base}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))   // the old worker keeps being served: no update yet
+    else await ctx.route(`${base}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))   // installed as legacy first; the route is lifted below
     await page.goto(`${base}/native-offline.html`)
     await page.evaluate(() => navigator.serviceWorker.register('/sw.js'))
     await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 25000)
     await pull(page); await sleep(400)                 // seed the legacy cache with auth / REST / API / recovery responses
     events.length = 0
     await page.exposeFunction('__report', d => events.push(['doc', d.path, d.controller]))
-    await ctx.addInitScript(blocked => {
+    await ctx.addInitScript(([blocked, mode]) => {
       try { window.__report({ path: location.pathname + location.search, controller: !!(navigator.serviceWorker && navigator.serviceWorker.controller) }) } catch (e) {}
       if (blocked) ServiceWorkerRegistration.prototype.unregister = () => Promise.resolve(false)
-    }, blockUnregister)
+      if (mode === 'false') CacheStorage.prototype.delete = () => Promise.resolve(false)       // delete reports failure
+      if (mode === 'reject') CacheStorage.prototype.delete = () => Promise.reject(new Error('denied'))
+      if (mode === 'lie') CacheStorage.prototype.delete = () => Promise.resolve(true)          // delete claims success but removes nothing
+    }, [blockUnregister, cacheDelete])
+    if (letUpdate) await ctx.unroute(`${base}/sw.js`)   // from now on the server delivers the fixed worker: the update can land at any moment
     return { ctx, page }
   }
   const docsOf = events => events.filter(e => e[0] === 'doc').map(e => ({ path: e[1], controller: e[2] }))
@@ -198,17 +203,39 @@ async function offlineProbe(page, ctx, label) {
     check('D2: no Supabase request at all, and the tokens are gone from the address bar', events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
     await ctx.close()
   }
-  if (process.env.BASE_R6) {
-    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events)
-    await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
-    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 20000 })
-    await sleep(500)
-    const docs = docsOf(events); const supa = events.filter(e => e[0] === 'supabase')
-    const cached = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u))
-    check('control D3 (previous R6 build, no guard): the page stays under the old worker and its recovery lookup goes through it', docs.length === 1 && docs[0].controller === true && supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docs))
-    check('control D3: the old worker STORES that recovery-session user lookup in its cache (the exposure the guard prevents)', cached.length > 0, cached.map(u => u.replace(SUPA, 'SUPA')).join(' | '))
+
+  for (const mode of ['false', 'reject', 'lie']) {
+    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { cacheDelete: mode })
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 20000 })
+    const docs = docsOf(events)
+    const stillThere = Object.keys(await dump(page)).some(k => /^cliniverse-v/.test(k))
+    check(`D4 (cache delete ${mode === 'lie' ? 'claims success but removes nothing' : mode === 'reject' ? 'rejects' : 'returns false'}): NOT clean — blocked, legacy cache really still present, link not used`, stillThere && (await page.textContent('main')).includes('This page did not use your recovery session.'), JSON.stringify(docs))
+    check(`D4 (${mode}): no Supabase request and no tokens left in the address bar`, events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
     await ctx.close()
-  } else console.log('SKIP  control D3 (set BASE_R6 to a server running the previous build)')
+  }
+  for (let i = 0; i < 3; i++) {
+    // the fixed worker is deliverable while the page is being checked; whichever interleaving happens the end state must be safe (a mid-probe controllerchange is NOT reliably reproducible in a real browser)
+    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { letUpdate: true })
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 25000 })
+    const state = await page.evaluate(async () => { const regs = await navigator.serviceWorker.getRegistrations(); const probes = []; for (const r of regs) { const w = r.active; if (!w) { probes.push('none'); continue } const v = await new Promise(res => { const c = new MessageChannel(); c.port1.onmessage = e => res(e.data && e.data.version); setTimeout(() => res(null), 800); w.postMessage({ type: 'cliniverse-sw-version' }, [c.port2]) }); probes.push(v) } return { controller: !!navigator.serviceWorker.controller, probes } })
+    const caches2 = await dump(page)
+    check(`D6 run ${i + 1} (updated worker is deliverable during the visit; NOTE the update did not land mid-probe in these runs, the mid-probe race is covered by the unit tests with controlled events): the flow ends only with no worker or the CURRENT worker, no legacy cache, no sensitive entry`, state.probes.every(v => v === 'cliniverse-static-v4') && !Object.keys(caches2).some(k => /^cliniverse-v/.test(k)) && flat(caches2).every(u => !SENSITIVE_URL.test(u)), JSON.stringify({ state, docs: docsOf(events) }))
+    await ctx.close()
+  }
+  if (process.env.BASE_R6) {
+    // Negative control: the PREVIOUS build (R6.1) with cache deletion failing. It ignored the failure, reloaded, found no stale
+    // worker and used the recovery session while the legacy cache (with its auth entries) was still on disk.
+    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events, { cacheDelete: 'false' })
+    await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
+    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 25000 })
+    const supa = events.filter(e => e[0] === 'supabase')
+    const stillThere = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u) && !/localhost/.test(u))
+    check('control D7 (previous R6.1 build, cache delete failing): it treated the failed cleanup as CLEAN and used the recovery session', supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docsOf(events)))
+    check('control D7: the legacy cache with sensitive entries was still on disk at that point (what the verified cleanup now prevents)', Object.keys(await dump(page)).some(k => /^cliniverse-v/.test(k)), Object.keys(await dump(page)).join(','))
+    await ctx.close()
+  } else console.log('SKIP  control D7 (set BASE_R6 to a server running the previous build)')
 
   await browser.close()
   const failed = results.filter(r => !r.ok).length

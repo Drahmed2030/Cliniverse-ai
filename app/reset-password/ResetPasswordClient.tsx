@@ -4,23 +4,10 @@
 // client would read the recovery tokens from the URL and replace any stored session. See lib/passwordRecovery.ts.
 
 import { useEffect, useRef, useState } from 'react'
-import {
-  completeRecovery,
-  createRecoveryClient,
-  MIN_PASSWORD_LENGTH,
-  parseRecoveryHash,
-  startRecovery,
-  type RecoveryClient,
-} from '../lib/passwordRecovery'
-import { ensureNoStaleWorker } from '../lib/staleWorkerGuard'
+import { completeRecovery, createRecoveryClient, MIN_PASSWORD_LENGTH, startRecovery } from '../lib/passwordRecovery'
+import { createRecoveryRun, type LinkStore, type RecoveryView } from '../lib/recoveryRun'
+import { createWorkerGuard } from '../lib/staleWorkerGuard'
 import { NATIVE_SAFE_AREA_BOTTOM, NATIVE_SAFE_AREA_TOP } from '../lib/nativeSafeArea'
-
-type View =
-  | { name: 'checking' }
-  | { name: 'invalid'; expired: boolean }
-  | { name: 'blocked' }
-  | { name: 'form'; maskedEmail: string }
-  | { name: 'done'; sessionsEnded: boolean }
 
 const T = { bg: '#050814', panel: 'rgba(15,23,42,.72)', text: '#F8FAFC', sub: '#A7B0C0', muted: '#6F7B91', border: 'rgba(148,163,184,.18)', blue: '#4F7CFF', violet: '#7567FF', danger: '#F87171', success: '#34D399' }
 
@@ -33,43 +20,47 @@ const MESSAGES = {
 }
 
 export default function ResetPasswordClient() {
-  const [view, setView] = useState<View>({ name: 'checking' })
+  const [view, setView] = useState<RecoveryView>({ name: 'checking' })
   const [password, setPassword] = useState('')
   const [confirmation, setConfirmation] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  const client = useRef<RecoveryClient | null>(null)
-  const started = useRef(false)
+  const run = useRef<ReturnType<typeof createRecoveryRun> | null>(null)
+  // Survives a remount (React StrictMode) so the one-shot URL fragment is read and removed exactly once.
+  const linkStore = useRef<LinkStore>({ link: null, stripped: false })
 
   useEffect(() => {
-    if (started.current) return
-    started.current = true
-    void (async () => {
-      // Before the tokens in the URL are read or used: make sure no older service worker controls this page.
-      const guard = await ensureNoStaleWorker({
+    // One run per mount. Cleanup cancels it: nothing new is started afterwards (see lib/recoveryRun.ts).
+    const current = createRecoveryRun({
+      makeGuard: isCancelled => createWorkerGuard({
         serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : undefined,
         caches: 'caches' in window ? window.caches : undefined,
         location: window.location,
-      })
-      if (guard === 'reloading') return
-      const link = parseRecoveryHash(window.location.hash)
-      // Remove tokens from the address bar and history before anything else happens.
-      window.history.replaceState(null, '', window.location.pathname)
-      if (guard === 'blocked') { setView({ name: 'blocked' }); return }
-      if (link.kind === 'invalid') { setView({ name: 'invalid', expired: link.reason === 'expired' }); return }
-      client.current = createRecoveryClient()
-      const result = await startRecovery(client.current, link)
-      setView(result.status === 'ready' ? { name: 'form', maskedEmail: result.maskedEmail } : { name: 'invalid', expired: false })
-    })()
+        isCancelled,
+      }),
+      linkStore: linkStore.current,
+      readHash: () => window.location.hash,
+      stripUrl: () => window.history.replaceState(null, '', window.location.pathname),
+      createClient: () => createRecoveryClient(),
+      startRecovery,
+      completeRecovery,
+      setView: next => { if (current.isAlive()) setView(next) },
+    })
+    run.current = current
+    void current.start()
+    return () => { current.cancel(); if (run.current === current) run.current = null }
   }, [])
 
   async function submit() {
-    if (busy || !client.current) return
+    const current = run.current
+    if (busy || !current) return
     setBusy(true)
     setError('')
-    const result = await completeRecovery(client.current, password, confirmation)
+    const result = await current.submit(password, confirmation)
+    if (!current.isAlive()) return // the page was left meanwhile: no UI update
     setBusy(false)
-    if (result.status === 'done') { client.current = null; setPassword(''); setConfirmation(''); setView({ name: 'done', sessionsEnded: result.sessionsEnded }); return }
+    if (result.status === 'done') { setPassword(''); setConfirmation(''); setView({ name: 'done', sessionsEnded: result.sessionsEnded }); return }
+    if (result.status === 'cancelled' || result.status === 'unavailable') return
     setError(result.status === 'invalid_password' ? MESSAGES[result.reason] : MESSAGES[result.status])
   }
 
@@ -89,7 +80,8 @@ export default function ResetPasswordClient() {
           {view.name === 'blocked' ? (
             <div role="alert">
               <p style={{ margin: '0 0 10px', fontWeight: 700 }}>We could not prepare this page safely.</p>
-              <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>An older version of this site is still running in your browser. Close this tab, then open the link from your email again. If it happens again, clear this site's data in your browser settings or request a new link from the Cliniverse sign-in screen. Your link was not used.</p>
+              <p style={{ margin: '0 0 10px', color: T.sub, lineHeight: 1.5 }}>This page did not use your recovery session. We could not confirm that your browser is free of an older copy of this site (its background worker or saved data), so we stopped before using it.</p>
+              <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>The link in your email may already have been used up, so you may need a new one: close this tab and request a new link from the Cliniverse sign-in screen. If it happens again, clear this site's data in your browser settings first. Your password was not changed.</p>
             </div>
           ) : null}
           {view.name === 'form' ? (

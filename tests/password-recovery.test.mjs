@@ -157,12 +157,17 @@ test('copy never claims every device was signed out: refresh-token revocation vs
   assert.match(lib, /session that link produces is separate/)
 })
 
-test('the reset page removes the tokens from the address bar before any network call, runs once, and never logs them', () => {
+test('the recovery run strips the tokens from the address bar before any network call, reads them once, and nothing logs or stores them', () => {
+  const run = read('app/lib/recoveryRun.ts')
   const page = read('app/reset-password/ResetPasswordClient.tsx')
-  assert.ok(page.indexOf('window.history.replaceState') < page.indexOf('createRecoveryClient()'))
-  assert.ok(page.indexOf('parseRecoveryHash(window.location.hash)') < page.indexOf('window.history.replaceState'))
-  assert.match(page, /if \(started\.current\) return/)
-  assert.doesNotMatch(page, /console\.|localStorage|sessionStorage|document\.cookie/)
+  // order inside the run: guard → parse → strip → create the recovery client → setSession
+  assert.ok(run.indexOf('guard.check()') < run.indexOf('parseRecoveryHash('))
+  assert.ok(run.indexOf('parseRecoveryHash(') < run.indexOf('stripOnce()', run.indexOf('parseRecoveryHash(')))
+  assert.ok(run.indexOf('stripOnce()', run.indexOf('parseRecoveryHash(')) < run.indexOf('deps.createClient()'))
+  assert.ok(run.indexOf('deps.createClient()') < run.indexOf('deps.startRecovery('))
+  // read once, even across a remount
+  assert.match(run, /if \(!deps\.linkStore\.link\) deps\.linkStore\.link = parseRecoveryHash\(deps\.readHash\(\)\)/)
+  for (const source of [run, page]) assert.doesNotMatch(source, /console\.|localStorage|sessionStorage|document\.cookie/)
   assert.match(read('app/reset-password/page.tsx'), /robots: \{ index: false, follow: false \}/)
 })
 
