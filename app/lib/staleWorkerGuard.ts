@@ -13,7 +13,15 @@
 //  - The check is only trusted if nothing changed while it ran: a `controllerchange` event, a different
 //    controller object or a different set of active workers between the start and the end of an evaluation
 //    discards that evaluation and starts again (a bounded number of times, then 'blocked').
-//  - After a 'clean' result the caller must confirm `stillCurrent()` immediately before using the tokens.
+//  - WORKER IDENTITY IS CAPTURED, NOT LOOKED UP LATER. `registration.active` is a live property: the same
+//    registration object can start pointing at a different worker. Each evaluation therefore records the actual
+//    active worker object of every registration at the moment it is enumerated, probes those objects, enumerates
+//    again and compares the recorded identities with what is there now.
+//  - After a 'clean' result the caller must confirm, immediately before using the tokens: `stillCurrent()` (synchronous:
+//    epoch, controller and each captured registration still point at the captured worker) and `confirm()`
+//    (asynchronous: enumerate again; every active worker must be one that was probed as current).
+//  - If the registrations cannot be enumerated (rejects, throws, hangs, or returns something that is not a list of
+//    registrations) the state is UNVERIFIED, never 'no workers': the result is 'blocked'.
 //  - Cache cleanup must be VERIFIED: a delete that rejects or returns false, a cache listing that fails, or any
 //    Cliniverse-owned legacy cache still present afterwards is NOT clean ('blocked'). The same check runs again on
 //    the next load, so a deletion that did not survive the reload also blocks. Only Cliniverse-named caches
@@ -49,6 +57,7 @@ export interface GuardEnv {
   location: { pathname: string; search: string; hash: string; replace: (url: string) => void }
   isCancelled?: () => boolean
   maxAttempts?: number
+  enumerateTimeoutMs?: number
   probeTimeoutMs?: number
   createChannel?: () => { port1: { onmessage: ((event: { data?: { version?: string } }) => void) | null }; port2: unknown }
   setTimer?: (fn: () => void, ms: number) => unknown
@@ -80,58 +89,96 @@ async function inspectCaches(env: GuardEnv): Promise<CacheState> {
   try { return { listable: true, leftovers: (await env.caches.keys()).filter(isOwnedLegacyCache) } } catch { return { listable: false } }
 }
 
+type Worker = PostingWorker & object
+interface Entry { registration: RegistrationLike; worker: Worker | null }
+interface Snapshot { entries: Entry[]; controller: Worker | null }
 type Evaluation =
   | { stable: false }
-  | { stable: true; needsWorkerCleanup: boolean; staleRegistrations: RegistrationLike[]; cache: CacheState }
+  | { stable: true; unverifiable: true }
+  | { stable: true; unverifiable: false; snapshot: Snapshot; currentWorkers: Set<Worker>; needsWorkerCleanup: boolean; staleRegistrations: RegistrationLike[]; cache: CacheState }
 
 export function createWorkerGuard(env: GuardEnv) {
   const container = env.serviceWorker
   let epoch = 0
-  let cleanEpoch = -1
-  let cleanController: unknown = undefined
+  let clean: { epoch: number; snapshot: Snapshot; currentWorkers: Set<Worker> } | null = null
   const onControllerChange = () => { epoch++ }
   container?.addEventListener?.('controllerchange', onControllerChange)
   const cancelled = () => env.isCancelled?.() === true
 
-  async function listRegistrations(): Promise<readonly RegistrationLike[] | null> {
-    if (!container) return []
-    try { return await container.getRegistrations() } catch { return null } // null = unavailable
+  // Enumerate registrations and RECORD the identity of each active worker right now. null = unverifiable.
+  async function enumerate(): Promise<Snapshot | null> {
+    if (!container) return { entries: [], controller: null }
+    try {
+      const setTimer = env.setTimer ?? ((fn, ms) => setTimeout(fn, ms))
+      const clearTimer = env.clearTimer ?? (handle => clearTimeout(handle as ReturnType<typeof setTimeout>))
+      let timer: unknown
+      const timeout = new Promise<null>(resolve => { timer = setTimer(() => resolve(null), env.enumerateTimeoutMs ?? 3000) })
+      const list: unknown = await Promise.race([container.getRegistrations(), timeout]).finally(() => clearTimer(timer))
+      if (!Array.isArray(list)) return null // hung or not a list: unreliable
+      const entries: Entry[] = []
+      for (const registration of list as RegistrationLike[]) {
+        if (!registration || typeof registration !== 'object' || !('active' in registration)) return null
+        entries.push({ registration, worker: registration.active ?? null }) // identity captured at this instant
+      }
+      return { entries, controller: container.controller ?? null }
+    } catch {
+      return null
+    }
   }
-  const sameActives = (a: readonly RegistrationLike[] | null, b: readonly RegistrationLike[] | null) =>
-    a === null || b === null ? a === b : a.length === b.length && a.every((registration, index) => registration.active === b[index].active)
+
+  // Same controller and the same recorded workers (as a multiset); for a registration object present in both,
+  // the worker recorded the first time must be the one it points at now.
+  function sameSnapshot(a: Snapshot, b: Snapshot) {
+    if (a.controller !== b.controller || a.entries.length !== b.entries.length) return false
+    const remaining = b.entries.map(entry => entry.worker)
+    for (const entry of a.entries) {
+      const index = remaining.indexOf(entry.worker)
+      if (index < 0) return false
+      remaining.splice(index, 1)
+    }
+    for (const entry of a.entries) {
+      const twin = b.entries.find(other => other.registration === entry.registration)
+      if (twin && twin.worker !== entry.worker) return false
+    }
+    return true
+  }
 
   async function evaluate(): Promise<Evaluation> {
     const startEpoch = epoch
-    const controller = container ? container.controller : null
-    const first = await listRegistrations()
+    const first = await enumerate()
+    if (!first) return { stable: true, unverifiable: true }
+    const controller = first.controller
+    const currentWorkers = new Set<Worker>()
     const controllerStale = controller ? (await probe(controller, env)) !== EXPECTED_WORKER_VERSION : false
+    if (controller && !controllerStale) currentWorkers.add(controller)
     const staleRegistrations: RegistrationLike[] = []
-    for (const registration of first ?? []) {
-      const worker = registration.active
-      if (!worker) continue
-      const version = worker === controller ? (controllerStale ? null : EXPECTED_WORKER_VERSION) : await probe(worker, env)
-      if (version !== EXPECTED_WORKER_VERSION) staleRegistrations.push(registration)
+    for (const entry of first.entries) {
+      if (!entry.worker) continue // the identity captured at enumeration, not entry.registration.active read later
+      const version = entry.worker === controller ? (controllerStale ? null : EXPECTED_WORKER_VERSION) : await probe(entry.worker, env)
+      if (version === EXPECTED_WORKER_VERSION) currentWorkers.add(entry.worker)
+      else staleRegistrations.push(entry.registration)
     }
     const cache = await inspectCaches(env)
-    // Trust the result only if nothing moved while it was being computed.
-    const second = await listRegistrations()
-    const unchanged = epoch === startEpoch && (container ? container.controller === controller : true) && sameActives(first, second)
-    if (!unchanged) return { stable: false }
-    return { stable: true, needsWorkerCleanup: controllerStale || staleRegistrations.length > 0, staleRegistrations, cache }
+    // Trust the result only if nothing moved while it was being computed: enumerate again and compare identities.
+    const second = await enumerate()
+    if (!second) return { stable: true, unverifiable: true }
+    if (epoch !== startEpoch || !sameSnapshot(first, second)) return { stable: false }
+    return { stable: true, unverifiable: false, snapshot: second, currentWorkers, needsWorkerCleanup: controllerStale || staleRegistrations.length > 0, staleRegistrations, cache }
   }
 
   async function check(): Promise<GuardResult> {
     const attempts = env.maxAttempts ?? MAX_ATTEMPTS
+    clean = null
     for (let attempt = 0; attempt < attempts; attempt++) {
       if (cancelled()) return 'cancelled'
       const evaluation = await evaluate()
       if (cancelled()) return 'cancelled'
       if (!evaluation.stable) continue // something changed mid-check: discard and look again
+      if (evaluation.unverifiable) return 'blocked' // cannot enumerate the workers: unverified is not "none"
 
       const dirtyCache = !evaluation.cache.listable || evaluation.cache.leftovers.length > 0
       if (!evaluation.needsWorkerCleanup && !dirtyCache) {
-        cleanEpoch = epoch
-        cleanController = container ? container.controller : null
+        clean = { epoch, snapshot: evaluation.snapshot, currentWorkers: evaluation.currentWorkers }
         return 'clean'
       }
       if (new URLSearchParams(env.location.search).has(RELOAD_MARKER)) return 'blocked' // already tried once
@@ -152,10 +199,28 @@ export function createWorkerGuard(env: GuardEnv) {
     return 'blocked' // never stable
   }
 
+  // Synchronous: nothing moved since the last 'clean' result — no controller change, and every registration that
+  // was captured still points at the worker that was captured (live property read, so an in-place change shows).
+  const stillCurrent = () => {
+    if (!clean || clean.epoch !== epoch || cancelled()) return false
+    if ((container ? container.controller ?? null : null) !== clean.snapshot.controller) return false
+    return clean.snapshot.entries.every(entry => (entry.registration.active ?? null) === entry.worker)
+  }
+
+  // Asynchronous, to be awaited immediately before the recovery session is used: enumerate AGAIN and require that
+  // every active worker is one that was probed as current. A worker identity not seen before means: not confirmed.
+  async function confirm(): Promise<boolean> {
+    if (!clean || cancelled() || !stillCurrent()) return false
+    const snapshot = await enumerate()
+    if (!snapshot || cancelled() || !clean || !stillCurrent()) return false
+    if (snapshot.controller !== clean.snapshot.controller) return false
+    return snapshot.entries.every(entry => entry.worker === null || clean!.currentWorkers.has(entry.worker))
+  }
+
   return {
     check,
-    // True only if no worker change happened since the last 'clean' result. Call right before using the tokens.
-    stillCurrent: () => cleanEpoch === epoch && cleanEpoch >= 0 && (container ? container.controller === cleanController : true),
+    stillCurrent,
+    confirm,
     dispose: () => container?.removeEventListener?.('controllerchange', onControllerChange),
   }
 }

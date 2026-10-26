@@ -22,7 +22,7 @@ export type RecoveryView =
 export interface LinkStore { link: RecoveryLink | null; stripped: boolean }
 
 export interface RecoveryRunDeps {
-  makeGuard: (isCancelled: () => boolean) => { check: () => Promise<GuardResult>; stillCurrent: () => boolean; dispose: () => void }
+  makeGuard: (isCancelled: () => boolean) => { check: () => Promise<GuardResult>; stillCurrent: () => boolean; confirm: () => Promise<boolean>; dispose: () => void }
   linkStore: LinkStore
   readHash: () => string
   stripUrl: () => void
@@ -46,11 +46,19 @@ export function createRecoveryRun(deps: RecoveryRunDeps) {
 
   async function start(): Promise<void> {
     let result = await guard.check()
-    // A worker change between the check and the token use invalidates the result; look again (bounded).
-    for (let attempt = 0; alive && result === 'clean' && !guard.stillCurrent() && attempt < 3; attempt++) result = await guard.check()
+    // Immediately before the recovery session is used: enumerate the workers AGAIN and re-validate their identities
+    // (asynchronous), then re-check synchronously after that await. A failed confirmation triggers a full re-check;
+    // bounded, and the run stays cancellable across every one of these awaits.
+    let confirmed = false
+    for (let attempt = 0; alive && result === 'clean' && attempt < 3; attempt++) {
+      const ok = await guard.confirm()
+      if (!alive) return
+      if (ok && guard.stillCurrent()) { confirmed = true; break }
+      result = await guard.check()
+    }
     if (!alive) return
     if (result === 'reloading' || result === 'cancelled') return
-    if (result === 'blocked' || !guard.stillCurrent()) {
+    if (result === 'blocked' || !confirmed) {
       stripOnce()
       deps.setView({ name: 'blocked' })
       return

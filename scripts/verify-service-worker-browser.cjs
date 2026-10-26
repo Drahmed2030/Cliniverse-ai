@@ -2,7 +2,7 @@
 // against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
 //   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
 //   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js [BASE_R6=http://localhost:3113] node scripts/verify-service-worker-browser.cjs
-// BASE_R6 (optional) is a second server running the PREVIOUS (R6.1) build, used only as a negative control for section D.
+// BASE_R6 (optional) is a second server running the PREVIOUS (R6.2) build, used only as a negative control for section D.
 // LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
 const { chromium } = require('playwright')
 const fs = require('fs')
@@ -145,7 +145,7 @@ async function offlineProbe(page, ctx, label) {
   // ───────── D. FIRST DIRECT VISIT TO /reset-password WHILE AN OLD WORKER STILL CONTROLS THE ORIGIN ─────────
   const jwtFor = (sub, email) => { const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url'); return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600 })}.sig` }
   const RECOVERY_HASH = `#access_token=${jwtFor('user-a', 'jane.doe@clinic.test')}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`
-  async function oldWorkerContext(base, events, { blockUnregister = false, cacheDelete = 'ok', letUpdate = false } = {}) {
+  async function oldWorkerContext(base, events, { blockUnregister = false, cacheDelete = 'ok', letUpdate = false, enumeration = 'ok' } = {}) {
     const ctx = await browser.newContext(); const page = await ctx.newPage()
     await ctx.route(`${SUPA}/**`, route => {
       const req = route.request(); const u = new URL(req.url()); const auth = req.headers()['authorization'] || ''
@@ -165,13 +165,16 @@ async function offlineProbe(page, ctx, label) {
     await pull(page); await sleep(400)                 // seed the legacy cache with auth / REST / API / recovery responses
     events.length = 0
     await page.exposeFunction('__report', d => events.push(['doc', d.path, d.controller]))
-    await ctx.addInitScript(([blocked, mode]) => {
+    await ctx.addInitScript(([blocked, mode, enumeration]) => {
       try { window.__report({ path: location.pathname + location.search, controller: !!(navigator.serviceWorker && navigator.serviceWorker.controller) }) } catch (e) {}
       if (blocked) ServiceWorkerRegistration.prototype.unregister = () => Promise.resolve(false)
       if (mode === 'false') CacheStorage.prototype.delete = () => Promise.resolve(false)       // delete reports failure
       if (mode === 'reject') CacheStorage.prototype.delete = () => Promise.reject(new Error('denied'))
       if (mode === 'lie') CacheStorage.prototype.delete = () => Promise.resolve(true)          // delete claims success but removes nothing
-    }, [blockUnregister, cacheDelete])
+      if (enumeration === 'rejects') ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable'))
+      if (enumeration === 'hang') ServiceWorkerContainer.prototype.getRegistrations = () => new Promise(() => {})
+      if (enumeration === 'nonarray') ServiceWorkerContainer.prototype.getRegistrations = () => Promise.resolve({ length: 0 })
+    }, [blockUnregister, cacheDelete, enumeration])
     if (letUpdate) await ctx.unroute(`${base}/sw.js`)   // from now on the server delivers the fixed worker: the update can land at any moment
     return { ctx, page }
   }
@@ -214,6 +217,25 @@ async function offlineProbe(page, ctx, label) {
     check(`D4 (${mode}): no Supabase request and no tokens left in the address bar`, events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
     await ctx.close()
   }
+
+  for (const enumeration of ['rejects', 'hang', 'nonarray']) {
+    // The worker registrations cannot be enumerated (or the answer is not a list): UNVERIFIED must never be read as "no workers".
+    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { enumeration })
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 25000 })
+    check(`D8 (registration enumeration ${enumeration}): blocked, "This page did not use your recovery session.", zero Supabase requests, no tokens in the address bar`, (await page.textContent('main')).includes('This page did not use your recovery session.') && events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
+    await ctx.close()
+  }
+  {
+    // A browser with NO worker at all but whose enumeration is broken (previously treated as clean).
+    const ctx = await browser.newContext(); const page = await ctx.newPage(); const supa = []
+    await ctx.route(`${SUPA}/**`, route => { supa.push(route.request().url()); route.fulfill({ status: 404, json: {} }) })
+    await ctx.addInitScript(() => { ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable')) })
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 20000 })
+    check('D8b (no worker installed, enumeration broken): R6.2 treated this as clean; now blocked, no Supabase request', supa.length === 0)
+    await ctx.close()
+  }
   for (let i = 0; i < 3; i++) {
     // the fixed worker is deliverable while the page is being checked; whichever interleaving happens the end state must be safe (a mid-probe controllerchange is NOT reliably reproducible in a real browser)
     const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { letUpdate: true })
@@ -225,17 +247,16 @@ async function offlineProbe(page, ctx, label) {
     await ctx.close()
   }
   if (process.env.BASE_R6) {
-    // Negative control: the PREVIOUS build (R6.1) with cache deletion failing. It ignored the failure, reloaded, found no stale
-    // worker and used the recovery session while the legacy cache (with its auth entries) was still on disk.
-    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events, { cacheDelete: 'false' })
+    // Negative control: the PREVIOUS build (R6.2). With the worker registrations unavailable it read "cannot list" as "no workers",
+    // reported clean and used the recovery session.
+    const ctx = await browser.newContext(); const page = await ctx.newPage(); const supa = []
+    await ctx.route(`${SUPA}/**`, route => { const r = route.request(); supa.push(r.method() + ' ' + new URL(r.url()).pathname); route.fulfill({ headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*' }, json: { id: 'user-a', email: 'jane.doe@clinic.test', aud: 'authenticated', role: 'authenticated', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } }) })
+    await ctx.addInitScript(() => { ServiceWorkerContainer.prototype.getRegistrations = () => Promise.reject(new Error('unavailable')) })
     await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
-    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 25000 })
-    const supa = events.filter(e => e[0] === 'supabase')
-    const stillThere = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u) && !/localhost/.test(u))
-    check('control D7 (previous R6.1 build, cache delete failing): it treated the failed cleanup as CLEAN and used the recovery session', supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docsOf(events)))
-    check('control D7: the legacy cache with sensitive entries was still on disk at that point (what the verified cleanup now prevents)', Object.keys(await dump(page)).some(k => /^cliniverse-v/.test(k)), Object.keys(await dump(page)).join(','))
+    await sleep(3500)
+    check('control D9 (previous R6.2 build, registrations unavailable): it treated "unavailable" as clean and USED the recovery session', supa.some(r => r === 'GET /auth/v1/user'), JSON.stringify(supa))
     await ctx.close()
-  } else console.log('SKIP  control D7 (set BASE_R6 to a server running the previous build)')
+  } else console.log('SKIP  control D9 (set BASE_R6 to a server running the previous build)')
 
   await browser.close()
   const failed = results.filter(r => !r.ok).length
