@@ -1,0 +1,746 @@
+From 8840ed16b85cfddf46a391dd5770df7cc3c8fd15 Mon Sep 17 00:00:00 2001
+From: Claude Code <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 11:28:29 +0000
+Subject: [PATCH] fix(pwa): fail-closed service worker; honest session wording
+ (R6)
+
+Incremental patch after Build 69 baseline + R4 + R5. Draft; not deployed.
+- sw.js: never intercepts auth/recovery/API/cross-origin/credentialed requests;
+  allow-listed public static assets only; offline page instead of cached '/'
+- activate removes legacy cliniverse-* caches; register-sw.js purges at launch,
+  registers reliably after hydration, never registers from /reset-password
+- /sw.js and /register-sw.js served no-store
+- reset page wording distinguishes revoked refresh tokens from live access tokens
+- type=recovery documented as a routing hint; simulated-vs-live evidence relabelled
+- tests: SW policy suite on the real worker file; real-Chromium controlling-SW script
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NvuEKCqEak8vUZ3RsxZA4i
+---
+ app/lib/passwordRecovery.ts                  |  12 +-
+ app/reset-password/ResetPasswordClient.tsx   |   4 +-
+ next.config.js                               |   5 +
+ public/register-sw.js                        |  36 ++-
+ public/sw.js                                 | 134 ++++++++---
+ scripts/verify-password-recovery-browser.cjs |  10 +-
+ scripts/verify-service-worker-browser.cjs    | 147 +++++++++++++
+ tests/password-recovery.test.mjs             |  15 +-
+ tests/service-worker-policy.test.mjs         | 220 +++++++++++++++++++
+ 9 files changed, 533 insertions(+), 50 deletions(-)
+ create mode 100644 scripts/verify-service-worker-browser.cjs
+ create mode 100644 tests/service-worker-policy.test.mjs
+
+diff --git a/app/lib/passwordRecovery.ts b/app/lib/passwordRecovery.ts
+index a017c70..637efd7 100644
+--- a/app/lib/passwordRecovery.ts
++++ b/app/lib/passwordRecovery.ts
+@@ -9,7 +9,13 @@
+ //     client, never persisted storage — so an existing signed-in account is not replaced or affected.
+ //  3. updateUser({ password }) sets the new password, then a global sign-out ends every session of that account.
+ //
+-// Limit: a global sign-out revokes refresh tokens; access tokens already issued stay valid until they expire.
++// Limits (state them plainly, in code and in copy):
++//  - A global sign-out revokes refresh tokens. Access tokens already issued are not recalled: a device that holds
++//    one keeps working until it expires (Supabase default about an hour). Never claim "signed out on all devices".
++//  - The one-time part is the EMAIL LINK (the Supabase verify endpoint consumes it, which is also why an email
++//    scanner that opens the link can use it up). The session that link produces is separate: its tokens, delivered
++//    in the URL fragment, stay usable until they expire or are revoked, even after the link itself is consumed.
++//    That is why the page removes the fragment from the address bar immediately.
+ 
+ import { createClient } from '@supabase/supabase-js'
+ import { supabaseAnonKey, supabaseUrl } from './supabaseConfig'
+@@ -46,7 +52,9 @@ export function parseRecoveryHash(hash: string): RecoveryLink {
+   const accessToken = params.get('access_token')
+   const refreshToken = params.get('refresh_token')
+   if (!accessToken || !refreshToken) return { kind: 'invalid', reason: 'missing' }
+-  // Only genuine recovery links may reach the password form; a sign-in or confirmation link must not.
++  // `type=recovery` is only a ROUTING HINT chosen by whoever built the URL; it is not proof of origin. It keeps
++  // sign-in and confirmation links away from the password form. The trust anchor is the server validating the
++  // tokens in setSession (a forged or invalid token is refused there).
+   if (params.get('type') !== 'recovery') return { kind: 'invalid', reason: 'not_recovery' }
+   return { kind: 'ready', accessToken, refreshToken }
+ }
+diff --git a/app/reset-password/ResetPasswordClient.tsx b/app/reset-password/ResetPasswordClient.tsx
+index 85ab0b9..7efb3f2 100644
+--- a/app/reset-password/ResetPasswordClient.tsx
++++ b/app/reset-password/ResetPasswordClient.tsx
+@@ -94,7 +94,9 @@ export default function ResetPasswordClient() {
+             <div role="status">
+               <p style={{ margin: '0 0 10px', fontWeight: 700, color: T.success }}>Your password was updated.</p>
+               <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>
+-                {view.sessionsEnded ? 'You were signed out on all devices. ' : 'We could not sign you out on other devices; you can sign out from Me. '}
++                {view.sessionsEnded
++                  ? 'We revoked the saved sign-in on your other devices, so they cannot renew it. A device that is open right now may keep working briefly (typically up to an hour) until its current access expires. '
++                  : 'We could not revoke your other sessions. If you think someone else may have access to your account, sign out from Me on each device and contact support. '}
+                 Return to the Cliniverse app and sign in with your new password.
+               </p>
+             </div>
+diff --git a/next.config.js b/next.config.js
+index 3be0808..b73df68 100644
+--- a/next.config.js
++++ b/next.config.js
+@@ -3,6 +3,11 @@ const nextConfig = {
+   images: { unoptimized: true },
+   async headers() {
+     return [
++      {
++        // Workers must be re-fetched on every check so a security fix reaches installed browsers promptly.
++        source: '/:file(sw.js|register-sw.js)',
++        headers: [{ key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }],
++      },
+       {
+         // Password-recovery page: the URL carries one-time tokens, so never leak it via Referer and never cache it.
+         source: '/reset-password',
+diff --git a/public/register-sw.js b/public/register-sw.js
+index 34df84b..c405de7 100644
+--- a/public/register-sw.js
++++ b/public/register-sw.js
+@@ -1,8 +1,28 @@
+-// Register Service Worker
+-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+-  window.addEventListener('load', () => {
+-    navigator.serviceWorker.register('/sw.js')
+-      .then(reg => console.log('SW registered:', reg.scope))
+-      .catch(err => console.log('SW error:', err));
+-  });
+-}
++// Register the service worker (see sw.js for what it does and never does).
++(function () {
++  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
++  var CURRENT_CACHE = 'cliniverse-static-v4';
++
++  // Remove caches left by earlier workers straight away, even before an updated worker takes control.
++  // Only Cliniverse-named caches other than the current one are touched.
++  function purgeLegacyCaches() {
++    if (!('caches' in window)) return;
++    caches.keys().then(function (names) {
++      names.filter(function (name) { return /^cliniverse/i.test(name) && name !== CURRENT_CACHE; })
++        .forEach(function (name) { caches.delete(name); });
++    }).catch(function () {});
++  }
++
++  purgeLegacyCaches();
++  // The password-recovery page carries one-time tokens: it never registers or updates a worker.
++  if (/^\/reset-password(\/|$)/i.test(window.location.pathname)) return;
++
++  function register() {
++    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
++      .then(function (registration) { registration.update().catch(function () {}); })
++      .catch(function () {});
++  }
++  // This script is loaded after hydration, which can be after the window "load" event has already fired.
++  if (document.readyState === 'complete') register();
++  else window.addEventListener('load', register);
++})();
+diff --git a/public/sw.js b/public/sw.js
+index bff442b..9697999 100644
+--- a/public/sw.js
++++ b/public/sw.js
+@@ -1,47 +1,113 @@
+-const CACHE = 'cliniverse-v3';
+-const STATIC = [
+-  '/',
+-  '/manifest.json',
+-  '/icons/icon-192.png',
+-  '/icons/icon-512.png',
++// Cliniverse service worker — deliberately minimal and fail-closed.
++//
++// What it does: keeps a tiny allow-list of PUBLIC static files (offline page, manifest, icons, hashed Next assets)
++// and shows the offline page when a page navigation fails.
++// What it never does: touch authentication, session, recovery or API traffic. Those requests are not intercepted
++// at all (no respondWith), so they are never read from or written to the Cache API and never answered with a
++// cached page. Earlier versions cached every successful GET (including Supabase responses) and answered any
++// failure with the cached "/" page; activation below removes those caches.
++
++const CACHE = 'cliniverse-static-v4';
++const CACHE_PREFIX = /^cliniverse/i; // every cache this worker family ever created
++const OFFLINE_URL = '/native-offline.html';
++const PRECACHE = [OFFLINE_URL, '/manifest.json', '/icons/icon-192.svg', '/icons/icon-512.svg'];
++const STATIC_EXACT = new Set(PRECACHE);
++const STATIC_PREFIXES = ['/icons/', '/_next/static/'];
++
++// Never intercepted, whatever the origin or method of the request.
++const SENSITIVE_PATH = /^\/(reset-password|auth|api|login|signin|signup|callback|account)(\/|$)/;
++const SENSITIVE_UPSTREAM_PATH = /\/(auth|rest|functions|storage|realtime|graphql)\/v1(\/|$)/;
++const SENSITIVE_QUERY_KEYS = [
++  'access_token', 'refresh_token', 'provider_token', 'token', 'token_hash', 'code', 'type', 'nonce',
++  'error', 'error_code', 'error_description', 'id_token', 'redirect_to',
+ ];
++const SENSITIVE_HEADERS = ['authorization', 'apikey', 'x-client-info', 'rsc', 'next-router-state-tree', 'next-action'];
+ 
+-// Install — cache static assets
+-self.addEventListener('install', e => {
+-  e.waitUntil(
+-    caches.open(CACHE).then(c => c.addAll(STATIC))
++// Normalises case, repeated slashes and percent-encoding so "/%72eset-password", "//Reset-Password/" etc. match too.
++function normalisePath(pathname) {
++  let decoded = pathname;
++  try { decoded = decodeURIComponent(pathname); } catch (error) { /* keep the raw path */ }
++  return decoded.toLowerCase().replace(/\/{2,}/g, '/');
++}
++
++function shouldBypass(request, url) {
++  if (url.origin !== self.location.origin) return true; // Supabase and every other third party
++  const path = normalisePath(url.pathname);
++  if (SENSITIVE_PATH.test(path) || SENSITIVE_UPSTREAM_PATH.test(path)) return true;
++  for (const key of SENSITIVE_QUERY_KEYS) if (url.searchParams.has(key)) return true;
++  if (/(^|[?&#])(access_token|refresh_token)=/i.test(url.search + url.hash)) return true;
++  for (const name of SENSITIVE_HEADERS) if (request.headers.has(name)) return true;
++  if (request.cache === 'no-store') return true;
++  return false;
++}
++
++function isStaticAsset(path) {
++  return STATIC_EXACT.has(path) || STATIC_PREFIXES.some(prefix => path.startsWith(prefix));
++}
++
++function isCacheable(response) {
++  if (!response || response.status !== 200) return false;
++  if (response.type !== 'basic' && response.type !== 'default') return false; // same-origin responses only; never opaque/cors
++  const cacheControl = response.headers.get('cache-control') || '';
++  if (/no-store|private|no-cache/i.test(cacheControl) && !/immutable/i.test(cacheControl)) return false;
++  if ((response.headers.get('vary') || '').includes('*')) return false;
++  return true;
++}
++
++self.addEventListener('install', event => {
++  // One missing file must never abort the install (the previous version listed PNG icons that do not exist).
++  event.waitUntil(
++    caches.open(CACHE).then(cache => Promise.all(PRECACHE.map(url => cache.add(url).catch(() => undefined))))
+   );
+   self.skipWaiting();
+ });
+ 
+-// Activate — clean old caches
+-self.addEventListener('activate', e => {
+-  e.waitUntil(
+-    caches.keys().then(keys =>
+-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+-    )
+-  );
+-  self.clients.claim();
++self.addEventListener('activate', event => {
++  event.waitUntil((async () => {
++    // Remove every earlier cache of this worker family (e.g. "cliniverse-v3"), which may hold auth or recovery
++    // responses. Caches that do not belong to Cliniverse are left alone.
++    const names = await caches.keys();
++    await Promise.all(names.filter(name => CACHE_PREFIX.test(name) && name !== CACHE).map(name => caches.delete(name)));
++    // Defence in depth: drop anything in the current cache that the policy would not store today.
++    const cache = await caches.open(CACHE);
++    for (const request of await cache.keys()) {
++      const url = new URL(request.url);
++      if (url.origin !== self.location.origin || !isStaticAsset(normalisePath(url.pathname)) || shouldBypass(request, url)) {
++        await cache.delete(request);
++      }
++    }
++    await self.clients.claim();
++  })());
+ });
+ 
+-// Fetch — network first, fallback to cache
+-self.addEventListener('fetch', e => {
+-  if (e.request.method !== 'GET') return;
+-  if (!e.request.url.startsWith('http')) return;
++self.addEventListener('fetch', event => {
++  const request = event.request;
++  if (request.method !== 'GET') return;
++  let url;
++  try { url = new URL(request.url); } catch (error) { return; }
++  if (url.protocol !== 'https:' && url.protocol !== 'http:') return;
++  if (shouldBypass(request, url)) return; // pure network: no cache read, no cache write, no fallback page
+ 
+-  e.respondWith(
+-    fetch(e.request)
+-      .then(res => {
+-        if (res && res.status === 200) {
+-          const copy = res.clone();
+-          caches.open(CACHE).then(c => c.put(e.request, copy));
++  if (isStaticAsset(normalisePath(url.pathname))) {
++    event.respondWith(
++      fetch(request).then(response => {
++        if (isCacheable(response)) {
++          const copy = response.clone();
++          caches.open(CACHE).then(cache => cache.put(request, copy)).catch(() => undefined);
+         }
+-        return res;
+-      })
+-      .catch(() => caches.match(e.request)
+-        .then(cached => cached || caches.match('/'))
+-      )
+-  );
++        return response;
++      }).catch(() => caches.open(CACHE).then(cache => cache.match(request)).then(cached => cached || Response.error()))
++    );
++    return;
++  }
++
++  if (request.mode === 'navigate') {
++    // Only the generic offline page is ever substituted — never a cached app or account page.
++    event.respondWith(
++      fetch(request).catch(() => caches.open(CACHE).then(cache => cache.match(OFFLINE_URL)).then(page => page || Response.error()))
++    );
++  }
++  // Anything else (API calls, data, RSC payloads): not intercepted.
+ });
+ 
+ // Push notifications
+diff --git a/scripts/verify-password-recovery-browser.cjs b/scripts/verify-password-recovery-browser.cjs
+index 47c9252..4e0f46f 100644
+--- a/scripts/verify-password-recovery-browser.cjs
++++ b/scripts/verify-password-recovery-browser.cjs
+@@ -1,11 +1,12 @@
+ // Real-browser check of the password-recovery page against a locally started production build.
+ //   npm run build && npx next start -p 3111   (any dummy NEXT_PUBLIC_SUPABASE_* values)
+ //   node scripts/verify-password-recovery-browser.cjs        (needs Playwright + Chromium)
+-// All Supabase traffic is intercepted in the browser; nothing reaches a real project.
++// All Supabase traffic is intercepted in the browser; nothing reaches a real project. Server behaviour (one-time link
++// consumption, token validation, revocation) is SIMULATED here and must be proven on a real test project.
+ const { chromium } = require('playwright')
+ const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url')
+ const jwt = (sub, email) => `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600, session_id: 'sess' })}.sig`
+-const BASE = 'http://localhost:3111/reset-password'
++const BASE = (process.env.BASE || 'http://localhost:3111') + '/reset-password'
+ const SUPA = 'https://zbiujqxinvcxvuviuenx.supabase.co'
+ const results = []
+ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  — ' + detail : ''}`) }
+@@ -49,6 +50,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
+     const put = calls.find(c => c.method === 'PUT'); const out = calls.find(c => c.path.startsWith('/auth/v1/logout'))
+     check('submit: PUT /user carries the new password and nothing else (auth-js adds null PKCE fields)', !!put && JSON.parse(put.body).password === 'correct-horse-9' && Object.entries(JSON.parse(put.body)).filter(([k, v]) => k !== 'password' && v !== null).length === 0)
+     check('submit: global sign-out requested after the update', !!out && out.path.includes('scope=global') && calls.indexOf(out) > calls.indexOf(put), out && out.path)
++    check('done: honest session wording (refresh tokens revoked; open sessions may last briefly) and no "all devices" claim', (await page.textContent('main')).includes('may keep working briefly') && !/all devices/i.test(await page.textContent('main')))
+     check('done: tells the user to return to the app and sign in', (await page.textContent('main')).includes('Return to the Cliniverse app'))
+     const stored = await page.evaluate(k => localStorage.getItem(k), keyA)
+     check('isolation: the other signed-in account (A) in app storage is byte-for-byte unchanged', stored === sessionA)
+@@ -74,7 +76,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
+     await page.route(`${SUPA}/**`, route => route.fulfill({ status: 401, json: { msg: 'invalid JWT', code: 401 } }))
+     await page.goto(BASE + goodHash)
+     await page.getByText('not valid or was already used').waitFor()
+-    check('replayed/invalid session: refused when the server rejects it', true)
++    check('SIMULATED server 401 on session validation: page shows the invalid-link state (this does NOT prove the live service enforces one-time links; see the preview plan)', true)
+   })
+   await run(goodHash, async (page) => {
+     await page.getByLabel('New password', { exact: true }).waitFor()
+@@ -82,7 +84,7 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
+     await page.route(`${SUPA}/**`, route => route.request().method() === 'PUT' ? route.fulfill({ status: 422, json: { code: 'weak_password', msg: 'Password is known to be weak' } }) : route.fulfill({ status: 204, body: '' }))
+     await page.getByLabel('New password', { exact: true }).fill('correct-horse-9'); await page.getByLabel('Confirm new password').fill('correct-horse-9'); await page.getByRole('button', { name: 'Update password' }).click()
+     await page.locator('main [role=alert]').waitFor()
+-    check('server rejects the password: error shown, success never claimed', (await page.textContent('main')).includes('could not be accepted') && !(await page.textContent('main')).includes('was updated'))
++    check('SIMULATED server 422 on updateUser: error shown, success never claimed', (await page.textContent('main')).includes('could not be accepted') && !(await page.textContent('main')).includes('was updated'))
+   })
+   await browser.close()
+   const failed = results.filter(r => !r.ok).length
+diff --git a/scripts/verify-service-worker-browser.cjs b/scripts/verify-service-worker-browser.cjs
+new file mode 100644
+index 0000000..00e5f4c
+--- /dev/null
++++ b/scripts/verify-service-worker-browser.cjs
+@@ -0,0 +1,147 @@
++// Real-browser check of the service worker with a genuinely CONTROLLING worker (navigator.serviceWorker.controller),
++// against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
++//   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
++//   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js node scripts/verify-service-worker-browser.cjs
++// LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
++const { chromium } = require('playwright')
++const fs = require('fs')
++const BASE = process.env.BASE || 'http://localhost:3112'
++const SUPA = 'https://zbiujqxinvcxvuviuenx.supabase.co'
++const LEGACY = fs.readFileSync(process.env.LEGACY_SW, 'utf8')
++// Earlier cliniverse-v* versions that DID install cached the same way; the shipped v3 lists PNG icons that 404,
++// so for the legacy simulation only the (non-existent) PNG precache entries are removed. Fetch logic is untouched.
++const LEGACY_INSTALLABLE = LEGACY.replace("'/icons/icon-192.png',\n  '/icons/icon-512.png',", '')
++const results = []
++const check = (name, ok, detail = '') => { results.push({ name, ok }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  — ' + detail : ''}`) }
++const sleep = ms => new Promise(r => setTimeout(r, ms))
++async function until(fn, ms = 15000) { const end = Date.now() + ms; for (;;) { try { const v = await fn(); if (v) return v } catch {} if (Date.now() > end) return false; await sleep(150) } }
++const dumpOnce = page => page.evaluate(async () => { const out = {}; for (const n of await caches.keys()) { const c = await caches.open(n); out[n] = (await c.keys()).map(r => r.url) } return out })
++// the offline page reloads itself on the browser 'online' event, so retry across that navigation
++const dump = async page => { let last; for (let i = 0; i < 20; i++) { try { await page.waitForLoadState('load'); return await dumpOnce(page) } catch (e) { last = e; await page.goto(`${BASE}/native-offline.html`).catch(() => {}); await sleep(250) } } throw new Error('dump failed: ' + last) }
++const flat = d => Object.values(d).flat()
++const SENSITIVE_URL = /supabase\.co|\/auth\/|\/rest\/v1|\/reset-password|\/api\/|access_token|refresh_token|\/\?code=/
++const ALLOWED_URL = /\/(icons\/|_next\/static\/|manifest\.json|native-offline\.html)/
++
++async function supabaseStub(ctx, counter) {
++  await ctx.route(`${SUPA}/**`, route => { counter.n++; const u = new URL(route.request().url()); return route.fulfill({ json: u.pathname.includes('/rest/') ? [{ id: 'user-a', name: 'Dr A' }] : { id: 'user-a', email: 'a@x.test', aud: 'authenticated' }, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*' } }) })
++}
++const pull = (page) => page.evaluate(async (S) => {
++  const get = (u, init) => fetch(u, init).then(r => r.status).catch(() => 'ERR')
++  return { authUser: await get(S + '/auth/v1/user', { headers: { Authorization: 'Bearer SYNTHETIC-A', apikey: 'anon' } }), rest: await get(S + '/rest/v1/profiles?id=eq.user-a', { headers: { Authorization: 'Bearer SYNTHETIC-A', apikey: 'anon' } }), reset: await get('/reset-password?probe=1'), resetPlain: await get('/reset-password'), api: await get('/api/release-contract'), icon: await get('/icons/icon-192.svg'), manifest: await get('/manifest.json') }
++}, SUPA)
++async function offlineProbe(page, ctx, label) {
++  // Remove the browser-level Supabase stub first: a stubbed response is not a network response and would be served even offline.
++  await ctx.unroute(`${SUPA}/**`).catch(() => {})
++  await ctx.setOffline(true)
++  const r = await page.evaluate(async (S) => {
++    const t = u => fetch(u, { headers: { Authorization: 'Bearer SYNTHETIC-B' } }).then(x => 'SERVED:' + x.status).catch(() => 'FAILED')
++    return { auth: await t(S + '/auth/v1/user'), rest: await t(S + '/rest/v1/profiles?id=eq.user-a'), reset: await t('/reset-password?probe=1'), resetPlain: await t('/reset-password'), api: await t('/api/release-contract') }
++  }, SUPA)
++  await ctx.setOffline(false)
++  await page.goto(`${BASE}/native-offline.html`).catch(() => {}) // the offline page reloads itself when the network returns; start from a stable page
++  return r
++}
++
++;(async () => {
++  const browser = await chromium.launch()
++
++  // ───────── A. NEGATIVE CONTROLS: the pre-fix worker ─────────
++  {
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const hits = { n: 0 }
++    await supabaseStub(ctx, hits)
++    await ctx.route(`${BASE}/sw.js`, r => r.fulfill({ body: LEGACY, contentType: 'text/javascript' }))
++    await page.goto(`${BASE}/native-offline.html`)
++    const outcome = await page.evaluate(async () => { try { const reg = await navigator.serviceWorker.register('/sw.js'); await new Promise(r => setTimeout(r, 3500)); return { active: !!reg.active, installing: !!reg.installing, waiting: !!reg.waiting } } catch (e) { return { error: String(e) } } })
++    check('control A1: the pre-fix worker AS SHIPPED never installs (its precache lists /icons/icon-*.png which return 404)', outcome.active === false, JSON.stringify(outcome))
++    await ctx.close()
++  }
++  {
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const hits = { n: 0 }
++    await supabaseStub(ctx, hits)
++    await ctx.route(`${BASE}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))
++    await page.goto(`${BASE}/native-offline.html`)
++    await page.evaluate(() => navigator.serviceWorker.register('/sw.js'))
++    const controlled = await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 20000)
++    check('control A2: legacy-logic worker installs and CONTROLS the page', !!controlled)
++    await pull(page); await sleep(500)
++    const d = await dump(page)
++    const leaked = flat(d).filter(u => SENSITIVE_URL.test(u))
++    check('control A2: the legacy logic DID cache Supabase auth/REST responses and /reset-password (the reported exposure is real)', leaked.some(u => /auth\/v1\/user/.test(u)) && leaked.some(u => /reset-password/.test(u)), leaked.map(u => u.replace(SUPA, 'SUPA')).join(' | '))
++    const off = await offlineProbe(page, ctx, 'legacy')
++    check('control A2: offline, the legacy worker answers an auth request from cache (another account\'s identity could be served)', off.auth.startsWith('SERVED') && off.reset.startsWith('SERVED'), JSON.stringify(off))
++
++    // ───────── B. UPGRADE from the legacy worker (same browser profile, cached sensitive entries present) ─────────
++    await ctx.unroute(`${BASE}/sw.js`)               // the server now delivers the fixed worker
++    const before = Object.keys(await dump(page))
++    await page.evaluate(async () => { const reg = await navigator.serviceWorker.getRegistration('/'); await reg.update() })
++    const cleaned = await until(async () => { const k = Object.keys(await dump(page)); return !k.includes('cliniverse-v3') && k.includes('cliniverse-static-v4') }, 20000)
++    const after = await dump(page)
++    check('upgrade: legacy cache "cliniverse-v3" existed before and is removed by the new worker\'s activation', before.includes('cliniverse-v3') && !!cleaned, `before=${before} after=${Object.keys(after)}`)
++    check('upgrade: no sensitive entry remains in any cache', flat(after).every(u => !SENSITIVE_URL.test(u)), flat(after).join(' | '))
++    check('upgrade: only allow-listed public assets remain', flat(after).every(u => ALLOWED_URL.test(u)))
++    const reg = await page.evaluate(async () => { const r = await navigator.serviceWorker.getRegistration('/'); return { active: r.active && r.active.state, waiting: !!r.waiting, controlled: !!navigator.serviceWorker.controller } })
++    check('upgrade: the new worker is ACTIVE with no waiting worker and still controls the open page (skipWaiting + claim)', reg.active === 'activated' && !reg.waiting && reg.controlled, JSON.stringify(reg))
++    const off2 = await offlineProbe(page, ctx, 'upgraded')
++    check('upgrade: offline, auth, REST and recovery requests now FAIL (nothing served from cache)', Object.values(off2).every(v => v === 'FAILED'), JSON.stringify(off2))
++    await ctx.close()
++  }
++  {
++    // B2: upgrade path where the user simply opens the app (new page script purges legacy caches immediately)
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const hits = { n: 0 }
++    await supabaseStub(ctx, hits)
++    await ctx.route(`${BASE}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))
++    await page.goto(`${BASE}/native-offline.html`)
++    await page.evaluate(() => navigator.serviceWorker.register('/sw.js'))
++    await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 20000)
++    await pull(page); await sleep(400)
++    const seeded = Object.keys(await dump(page)).includes('cliniverse-v3') && flat(await dump(page)).some(u => /auth\/v1\/user/.test(u))
++    await ctx.unroute(`${BASE}/sw.js`)
++    await page.goto(`${BASE}/`)
++    const gone = await until(async () => { const k = Object.keys(await dump(page)); return !k.includes('cliniverse-v3') }, 20000)
++    check('upgrade via normal app launch: legacy cache seeded with an auth response, then removed once the app loads', seeded && !!gone)
++    await ctx.close()
++  }
++
++  // ───────── C. FRESH INSTALL with the fixed worker ─────────
++  {
++    const ctx = await browser.newContext(); const page = await ctx.newPage(); const hits = { n: 0 }
++    await supabaseStub(ctx, hits)
++    await page.goto(`${BASE}/`)
++    const controlled = await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 25000)
++    const info = await page.evaluate(async () => { const r = await navigator.serviceWorker.getRegistration('/'); return { state: r && r.active && r.active.state, script: r && r.active && r.active.scriptURL, controller: navigator.serviceWorker.controller && navigator.serviceWorker.controller.scriptURL } })
++    check('fresh install: the page is CONTROLLED by the new worker (navigator.serviceWorker.controller set)', !!controlled && info.controller === info.script && /sw\.js$/.test(info.controller), JSON.stringify(info))
++    const status = await pull(page); await sleep(500)
++    check('fresh install: requests through the controlling worker still work (auth stub, API, icon, manifest)', status.authUser === 200 && status.api === 200 && status.icon === 200 && status.manifest === 200, JSON.stringify(status))
++    const d = await dump(page)
++    check('fresh install: caches hold only allow-listed public assets (no Supabase, no /reset-password, no /api, no pages)', flat(d).length > 0 && flat(d).every(u => ALLOWED_URL.test(u) && !SENSITIVE_URL.test(u)), flat(d).map(u => u.replace(BASE, '')).join(' | '))
++    check('fresh install: only the current cache name exists', JSON.stringify(Object.keys(d)) === JSON.stringify(['cliniverse-static-v4']))
++
++    // recovery page while controlled: tokens in the fragment, query probes, Supabase calls from the page
++    const jwt = 'x.y.z'
++    await page.goto(`${BASE}/reset-password?probe=2#access_token=${jwt}&refresh_token=RB&expires_in=3600&token_type=bearer&type=recovery`)
++    const ctrlOnReset = await page.evaluate(() => !!navigator.serviceWorker.controller)
++    await sleep(800)
++    const d2 = await dump(page)
++    check('recovery page: it is controlled by the worker, yet nothing about it (or its Supabase calls) is cached', ctrlOnReset && flat(d2).every(u => !SENSITIVE_URL.test(u)), flat(d2).filter(u => SENSITIVE_URL.test(u)).join(' | '))
++    check('recovery page: the worker did not register itself from this page', await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length === 1))
++    const off = await offlineProbe(page, ctx, 'fresh')
++    check('offline: auth, REST, API and recovery requests FAIL (never served from cache)', Object.values(off).every(v => v === 'FAILED'), JSON.stringify(off))
++    await ctx.setOffline(true)
++    let resetNav = 'LOADED'; try { await page.goto(`${BASE}/reset-password`, { timeout: 8000 }); resetNav = 'LOADED' } catch (e) { resetNav = 'NET_ERROR' }
++    const resetBody = resetNav === 'LOADED' ? await page.content() : ''
++    check('offline: navigating to /reset-password fails closed (browser network error, no cached page)', resetNav === 'NET_ERROR' && !/Reset your password/.test(resetBody), resetNav)
++    await page.goto(`${BASE}/`, { timeout: 8000 }).catch(() => {})   // may report an interrupted navigation; judge the resulting page instead
++    await until(async () => /Connection unavailable/.test(await page.title()), 10000)
++    const title = await page.title(); const html = await page.content()
++    check('offline: navigating to / shows only the generic offline page, never a cached app shell', /Connection unavailable/.test(title) && !/Today|Ward|Sign in/.test(html.replace(/<style[\s\S]*?<\/style>/g, '')), title)
++    await ctx.setOffline(false)
++    await page.goto(`${BASE}/native-offline.html`).catch(() => {})
++    const final = await dump(page)
++    check('no sensitive cache remnants after the whole session', flat(final).every(u => !SENSITIVE_URL.test(u)))
++    await ctx.close()
++  }
++  await browser.close()
++  const failed = results.filter(r => !r.ok).length
++  console.log(`\n${results.length - failed}/${results.length} browser checks passed`)
++  process.exit(failed ? 1 : 0)
++})().catch(e => { console.error(e); process.exit(2) })
+diff --git a/tests/password-recovery.test.mjs b/tests/password-recovery.test.mjs
+index f0de7ac..c102234 100644
+--- a/tests/password-recovery.test.mjs
++++ b/tests/password-recovery.test.mjs
+@@ -36,7 +36,7 @@ function fakeClient({ sessionUser = { email: 'jane.doe@clinic.test' }, setSessio
+ 
+ const GOOD = '#access_token=AT&refresh_token=RT&expires_in=3600&token_type=bearer&type=recovery'
+ 
+-test('hash parsing: only a genuine recovery link is accepted; every other shape is invalid', () => {
++test('hash parsing: type=recovery is a client routing hint (not proof of origin); every other shape is invalid', () => {
+   assert.deepEqual({ ...R.parseRecoveryHash(GOOD) }, { kind: 'ready', accessToken: 'AT', refreshToken: 'RT' })
+   assert.equal(R.parseRecoveryHash(GOOD.replace('type=recovery', 'type=signup')).reason, 'not_recovery')
+   assert.equal(R.parseRecoveryHash(GOOD.replace('&type=recovery', '')).reason, 'not_recovery')
+@@ -144,6 +144,19 @@ test('the reset page and the root layout can never create the shared Supabase cl
+   assert.ok(importGraph(path.join(root, 'app/reset-password/page.tsx')).includes('app/lib/passwordRecovery.ts'))
+ })
+ 
++test('copy never claims every device was signed out: refresh-token revocation vs still-valid access tokens, and the failure case', () => {
++  const page = read('app/reset-password/ResetPasswordClient.tsx')
++  assert.doesNotMatch(page, /signed out on all devices|all devices|every device/i)
++  assert.match(page, /revoked the saved sign-in on your other devices/)
++  assert.match(page, /may keep working briefly \(typically up to an hour\) until its current access expires/)
++  assert.match(page, /could not revoke your other sessions/)
++  assert.match(page, /sign out from Me on each device and contact support/)
++  const lib = read('app/lib/passwordRecovery.ts')
++  assert.match(lib, /Access tokens already issued are not recalled/)
++  assert.match(lib, /ROUTING HINT/)
++  assert.match(lib, /session that link produces is separate/)
++})
++
+ test('the reset page removes the tokens from the address bar before any network call, runs once, and never logs them', () => {
+   const page = read('app/reset-password/ResetPasswordClient.tsx')
+   assert.ok(page.indexOf('window.history.replaceState') < page.indexOf('createRecoveryClient()'))
+diff --git a/tests/service-worker-policy.test.mjs b/tests/service-worker-policy.test.mjs
+new file mode 100644
+index 0000000..45e21a6
+--- /dev/null
++++ b/tests/service-worker-policy.test.mjs
+@@ -0,0 +1,220 @@
++import test from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs'
++import vm from 'node:vm'
++
++// Runs the REAL public/sw.js and public/register-sw.js in a sandbox with an in-memory Cache API, so the
++// request policy is exercised through the same fetch/install/activate listeners the browser calls.
++// The real-Chromium test with a genuinely controlling worker is scripts/verify-service-worker-browser.cjs.
++const read = p => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8')
++const SW = read('public/sw.js')
++const REGISTER = read('public/register-sw.js')
++const ORIGIN = 'https://app.test'
++
++function makeCaches(initial = {}) {
++  const stores = new Map(Object.entries(initial).map(([name, urls]) => [name, new Map(urls.map(u => [u, new Response('cached:' + u, { status: 200 })]))]))
++  const log = []
++  const api = {
++    log,
++    stores,
++    async keys() { return [...stores.keys()] },
++    async delete(name) { log.push(['delete-cache', name]); return stores.delete(name) },
++    async open(name) {
++      if (!stores.has(name)) stores.set(name, new Map())
++      const store = stores.get(name)
++      return {
++        async add(url) { if (url.includes('missing')) throw new TypeError('404'); store.set(new URL(url, ORIGIN).href, new Response('precached:' + url)) },
++        async put(request, response) { log.push(['put', name, request.url]); store.set(request.url, response) },
++        async match(request) { const key = typeof request === 'string' ? new URL(request, ORIGIN).href : request.url; const hit = store.get(key); return hit ? hit.clone() : undefined },
++        async keys() { return [...store.keys()].map(url => ({ url, headers: new Headers(), cache: 'default' })) },
++        async delete(request) { log.push(['delete-entry', name, request.url]); return store.delete(request.url) },
++      }
++    },
++  }
++  return api
++}
++
++function loadWorker({ caches = makeCaches(), network = async () => new Response('net', { status: 200 }) } = {}) {
++  const listeners = {}
++  const flags = { skipWaiting: 0, claim: 0 }
++  const fetched = []
++  const self = {
++    location: { origin: ORIGIN },
++    addEventListener: (type, fn) => { listeners[type] = fn },
++    skipWaiting: () => { flags.skipWaiting++ },
++    clients: { claim: async () => { flags.claim++ }, matchAll: async () => [] },
++    registration: {},
++  }
++  const sandbox = { self, caches, URL, Response, Headers, Request, TypeError, Promise, fetch: async (request) => { fetched.push(request.url); return network(request) }, clients: self.clients }
++  vm.runInNewContext(SW, sandbox)
++  return { listeners, flags, caches, fetched, self }
++}
++
++const request = (url, { method = 'GET', mode = 'cors', headers = {}, cache = 'default' } = {}) => ({ url: new URL(url, ORIGIN).href, method, mode, cache, headers: new Headers(headers) })
++async function dispatch(worker, req) {
++  let responded = null
++  const event = { request: req, respondWith: p => { responded = Promise.resolve(p) } }
++  worker.listeners.fetch(event)
++  return responded ? { intercepted: true, response: await responded } : { intercepted: false }
++}
++const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve() }
++
++const SENSITIVE = [
++  ['Supabase auth user (cross-origin)', 'https://zbiujqxinvcxvuviuenx.supabase.co/auth/v1/user'],
++  ['Supabase token refresh', 'https://zbiujqxinvcxvuviuenx.supabase.co/auth/v1/token?grant_type=refresh_token'],
++  ['Supabase REST profile read', 'https://zbiujqxinvcxvuviuenx.supabase.co/rest/v1/profiles?select=*&id=eq.1'],
++  ['Supabase function', 'https://zbiujqxinvcxvuviuenx.supabase.co/functions/v1/delete-account'],
++  ['any third-party GET', 'https://example.org/data.json'],
++  ['recovery page', '/reset-password'],
++  ['recovery page with query', '/reset-password?x=1'],
++  ['recovery page trailing slash', '/reset-password/'],
++  ['recovery page upper case', '/Reset-Password'],
++  ['recovery page double slash', '//reset-password'],
++  ['recovery page percent-encoded', '/%72eset-password'],
++  ['recovery page with token query', '/reset-password?access_token=abc&refresh_token=def'],
++  ['auth callback with code', '/auth/callback?code=abc'],
++  ['root with code', '/?code=abc'],
++  ['root with recovery type', '/?type=recovery'],
++  ['root with error code', '/?error_code=otp_expired'],
++  ['private API', '/api/subscriptions/apple/verify'],
++  ['evidence API', '/api/ward/case-evidence?templateId=dka'],
++  ['release contract API', '/api/release-contract'],
++  ['account path', '/account/profile'],
++]
++
++test('sensitive requests are never intercepted: no respondWith, no cache read, no cache write', async () => {
++  for (const [label, url] of SENSITIVE) {
++    const caches = makeCaches()
++    const worker = loadWorker({ caches })
++    const result = await dispatch(worker, request(url, { mode: url.startsWith('/') && !url.includes('/api/') ? 'navigate' : 'cors' }))
++    assert.equal(result.intercepted, false, label)
++    assert.deepEqual(worker.fetched, [], `${label}: the worker did not even call fetch`)
++    assert.deepEqual(caches.log, [], `${label}: no cache writes or deletions`)
++  }
++})
++
++test('sensitive request headers disable interception even for otherwise allowed static paths', async () => {
++  for (const headers of [{ authorization: 'Bearer x' }, { apikey: 'anon' }, { 'x-client-info': 'supabase-js' }, { rsc: '1' }, { 'next-action': 'abc' }]) {
++    const result = await dispatch(loadWorker(), request('/icons/icon-192.svg', { headers }))
++    assert.equal(result.intercepted, false, JSON.stringify(headers))
++  }
++  assert.equal((await dispatch(loadWorker(), request('/icons/icon-192.svg', { cache: 'no-store' }))).intercepted, false)
++  assert.equal((await dispatch(loadWorker(), request('/icons/icon-192.svg', { method: 'POST' }))).intercepted, false)
++})
++
++test('public static assets are served network-first and cached only when cacheable', async () => {
++  for (const url of ['/icons/icon-192.svg', '/manifest.json', '/_next/static/chunks/app.js', '/native-offline.html']) {
++    const caches = makeCaches()
++    const worker = loadWorker({ caches })
++    const result = await dispatch(worker, request(url))
++    assert.equal(result.intercepted, true, url)
++    assert.equal(await result.response.text(), 'net')
++    await flush()
++    assert.ok(caches.log.some(entry => entry[0] === 'put' && entry[2].endsWith(url)), `${url} cached`)
++  }
++  // not cacheable: error status, no-store/private, wildcard Vary
++  for (const response of [new Response('x', { status: 404 }), new Response('x', { headers: { 'cache-control': 'no-store' } }), new Response('x', { headers: { 'cache-control': 'private, max-age=0' } }), new Response('x', { headers: { vary: '*' } })]) {
++    const caches = makeCaches()
++    await dispatch(loadWorker({ caches, network: async () => response }), request('/icons/icon-192.svg'))
++    await flush()
++    assert.equal(caches.log.filter(entry => entry[0] === 'put').length, 0)
++  }
++})
++
++test('offline: an allowed static asset falls back to its own cached copy, never to another page', async () => {
++  const caches = makeCaches({ 'cliniverse-static-v4': [`${ORIGIN}/icons/icon-192.svg`, `${ORIGIN}/native-offline.html`] })
++  const worker = loadWorker({ caches, network: async () => { throw new TypeError('offline') } })
++  const hit = await dispatch(worker, request('/icons/icon-192.svg'))
++  assert.equal(await hit.response.text(), `cached:${ORIGIN}/icons/icon-192.svg`)
++  const miss = await dispatch(worker, request('/icons/icon-512.svg'))
++  assert.equal(miss.response.type, 'error')
++})
++
++test('offline navigation shows only the generic offline page; account/recovery navigations get no fallback at all', async () => {
++  const caches = makeCaches({ 'cliniverse-static-v4': [`${ORIGIN}/native-offline.html`, `${ORIGIN}/`, `${ORIGIN}/reset-password`] })
++  const worker = loadWorker({ caches, network: async () => { throw new TypeError('offline') } })
++  const root = await dispatch(worker, request('/', { mode: 'navigate' }))
++  assert.equal(root.intercepted, true)
++  assert.equal(await root.response.text(), `cached:${ORIGIN}/native-offline.html`, 'never the cached app shell "/"')
++  const recovery = await dispatch(worker, request('/reset-password', { mode: 'navigate' }))
++  assert.equal(recovery.intercepted, false, 'the browser shows its own network error; the worker adds no page')
++})
++
++test('online navigations and ordinary data requests are never written to the cache', async () => {
++  const caches = makeCaches()
++  const worker = loadWorker({ caches })
++  await dispatch(worker, request('/', { mode: 'navigate' }))
++  const data = await dispatch(worker, request('/data/anything.json'))
++  assert.equal(data.intercepted, false)
++  await flush()
++  assert.deepEqual(caches.log.filter(entry => entry[0] === 'put'), [])
++})
++
++test('install survives a missing precache file (the old worker listed PNG icons that do not exist) and activates immediately', async () => {
++  const caches = makeCaches()
++  const worker = loadWorker({ caches })
++  let waited
++  worker.listeners.install({ waitUntil: p => { waited = p } })
++  await waited
++  assert.equal(worker.flags.skipWaiting, 1)
++  assert.ok(caches.stores.get('cliniverse-static-v4').has(`${ORIGIN}/native-offline.html`))
++  assert.match(SW, /const PRECACHE = \[[^\]]*\]/)
++  for (const file of SW.match(/const PRECACHE = \[([^\]]*)\]/)[1].match(/'[^']+'|OFFLINE_URL/g)) {
++    const path = file === 'OFFLINE_URL' ? '/native-offline.html' : file.slice(1, -1)
++    assert.ok(fs.existsSync(new URL(`../public${path}`, import.meta.url)), `${path} exists in public/`)
++  }
++})
++
++test('UPGRADE: activation removes every legacy Cliniverse cache (with synthetic auth and recovery entries) and scrubs the current one', async () => {
++  const sensitive = ['https://zbiujqxinvcxvuviuenx.supabase.co/auth/v1/user', 'https://zbiujqxinvcxvuviuenx.supabase.co/rest/v1/profiles?id=eq.1', `${ORIGIN}/reset-password`, `${ORIGIN}/api/subscriptions/apple/verify`, `${ORIGIN}/`]
++  const caches = makeCaches({
++    'cliniverse-v3': sensitive,
++    'cliniverse-v2': sensitive.slice(0, 2),
++    'Cliniverse-legacy': sensitive.slice(2),
++    'cliniverse-static-v4': [...sensitive, `${ORIGIN}/icons/icon-192.svg`, `${ORIGIN}/native-offline.html`],
++    'unrelated-tool-cache': [`${ORIGIN}/something`],
++  })
++  const worker = loadWorker({ caches })
++  let waited
++  worker.listeners.activate({ waitUntil: p => { waited = p } })
++  await waited
++  assert.deepEqual([...caches.stores.keys()].sort(), ['cliniverse-static-v4', 'unrelated-tool-cache'])
++  assert.deepEqual([...caches.stores.get('cliniverse-static-v4').keys()].sort(), [`${ORIGIN}/icons/icon-192.svg`, `${ORIGIN}/native-offline.html`])
++  assert.equal(caches.stores.get('unrelated-tool-cache').size, 1, 'unrelated caches are untouched')
++  assert.equal(worker.flags.claim, 1, 'the upgraded worker takes control of open pages')
++})
++
++function loadRegister({ pathname = '/', cacheNames = [], readyState = 'loading' } = {}) {
++  const calls = { register: [], deleted: [], listeners: [] }
++  const window = { location: { pathname }, addEventListener: (type, fn) => calls.listeners.push([type, fn]), caches: null }
++  const navigator = { serviceWorker: { register: (...args) => { calls.register.push(args); return Promise.resolve({ update: () => Promise.resolve() }) } } }
++  const caches = { keys: async () => cacheNames, delete: async name => { calls.deleted.push(name) } }
++  window.caches = caches; window.navigator = navigator
++  vm.runInNewContext(REGISTER, { window, navigator, caches, document: { readyState }, Promise, RegExp })
++  return calls
++}
++
++test('register-sw.js: purges legacy caches at once, registers with updateViaCache none, and never registers from /reset-password', async () => {
++  const names = ['cliniverse-v3', 'cliniverse-static-v4', 'other-cache', 'Cliniverse-old']
++  const home = loadRegister({ pathname: '/', cacheNames: names }); await flush()
++  assert.deepEqual(home.deleted.sort(), ['Cliniverse-old', 'cliniverse-v3'])
++  home.listeners.find(([type]) => type === 'load')[1](); await flush()
++  assert.deepEqual(JSON.parse(JSON.stringify(home.register)), [['/sw.js', { updateViaCache: 'none' }]])
++  // The script is loaded after hydration: if the window load event has already fired it must register at once.
++  const late = loadRegister({ pathname: '/', readyState: 'complete' }); await flush()
++  assert.equal(late.register.length, 1)
++  assert.equal(late.listeners.length, 0)
++  for (const pathname of ['/reset-password', '/reset-password/', '/Reset-Password']) {
++    const recovery = loadRegister({ pathname, cacheNames: names }); await flush()
++    assert.equal(recovery.listeners.length, 0, pathname)
++    assert.equal(recovery.register.length, 0, pathname)
++    assert.deepEqual(recovery.deleted.sort(), ['Cliniverse-old', 'cliniverse-v3'], 'legacy caches are still purged there')
++  }
++  assert.equal(REGISTER.match(/CURRENT_CACHE = '([^']+)'/)[1], SW.match(/const CACHE = '([^']+)'/)[1], 'both files name the same current cache')
++})
++
++test('workers are never HTTP-cached so a fix reaches installed browsers', async () => {
++  const config = (await import(new URL('../next.config.js', import.meta.url).pathname)).default
++  const rule = (await config.headers()).find(r => r.source.includes('sw.js'))
++  assert.match(rule.headers.find(h => h.key === 'Cache-Control').value, /no-store/)
++})
+-- 
+2.43.0
+

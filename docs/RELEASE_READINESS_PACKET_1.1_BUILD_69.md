@@ -9,7 +9,8 @@ Prepared by Claude Code (engineering & QA). Earlier versions of this packet are 
 | **Production web app today** | Vercel project `cliniverse-ai-u7gi`, deployment `dpl_CJC9unCgx4Xd7FeHNZkU8wER14Ya` = the baseline SHA, created 2026-09-22 | VERIFIED read-only (Vercel) |
 | Native shell | loads `https://www.cliniverseai.com` live; production deploys are app releases | `capacitor.config.json`; `docs/VERCEL_PRODUCTION_RELEASE_CONTROL.md` |
 | Security baseline | **R4** patch, SHA-256 `80d3fdac33011265720e1963c704721070fc6eeb256f97e3fb5d45d5eaff93f9`, Work 1 APPROVED, **not deployed** | Issue #36 |
-| Draft on top of R4 | **R5** patch (password recovery + honest copy), SHA-256 `020c09184a148f649537c4ce9910df63127d410e80620a5d5a46e62c239cd5fb`, awaiting Work 1 review | `docs/BUILD69_R5_RECOVERY_AND_COPY_REPORT.md` |
+| Draft on top of R4 | **R5** patch (password recovery + honest copy), SHA-256 `020c09184a148f649537c4ce9910df63127d410e80620a5d5a46e62c239cd5fb` — Work 1 REQUEST SMALL FIX | `docs/BUILD69_R5_RECOVERY_AND_COPY_REPORT.md` |
+| Draft on top of R4 + R5 | **R6** patch (fail-closed service worker, legacy-cache cleanup, session-wording and evidence corrections), SHA-256 `4f7dba1d16eff6f5441cbb70bb80eb8d30eebe90aa7a6d48c1eab1f6b9d793ae`, awaiting Work 1 review | `docs/BUILD69_R6_SERVICE_WORKER_REPORT.md` |
 | Codemagic run → SHA → IPA → ASC "1.1 (69)" | UNVERIFIED | Work 1 |
 
 ## 2. Verified database / backend findings (read-only, MASTER, Issue #36; not re-run by Claude)
@@ -23,7 +24,7 @@ Prepared by Claude Code (engineering & QA). Earlier versions of this packet are 
 | Lineage | Result |
 |---|---|
 | baseline + R4 | 917/917 tests, `tsc`, local build — Work 1 independently checked digest and five source behaviours |
-| baseline + R4 + R5 (clean checkout, `git am` in order) | **933/933** tests, `tsc` PASS, local `next build` PASS, real-browser recovery script 15/15 |
+| baseline + R4 + R5 + R6 (clean checkout, `git am` in order) | **944/944** tests, `tsc` PASS, local `next build` PASS from empty `.next`; real-Chromium recovery script 16/16 (server responses simulated); real-Chromium **controlling service-worker** script 20/20 incl. upgrade from a legacy worker and offline |
 | Known open test reliability item | `account-codelab` fixed 10 ms wait — flaky under CPU load (6/20), 0/25 idle; not fixed |
 No simulator, TestFlight or physical-device evidence exists for Build 69 in this repository.
 
@@ -31,7 +32,8 @@ No simulator, TestFlight or physical-device evidence exists for Build 69 in this
 | # | Gate | State | Owner |
 |---|---|---|---|
 | 1 | Supabase **Confirm email = ON**, providers, reviewer pre-confirmed, SMTP, password minimum 8, redirect allow-list incl. `/reset-password` | UNVERIFIED | Work 1 / operator |
-| 2 | Password recovery | R5 draft ready for review; real end-to-end test on a preview pending | Work 1 |
+| 2 | Password recovery | R5+R6 drafts under review; **real end-to-end test on a protected preview/TEST project is UNVERIFIED** (plan: `docs/PASSWORD_RECOVERY_PREVIEW_TEST_PLAN.md`, not authorised) | Work 1 / MASTER |
+| 2b | Service worker: baseline cached auth/recovery/API responses (and falls back to cached `/`); baseline as shipped does not install, so exposure is limited to browsers that kept an earlier installable version | R6 fix + browser evidence; Safari/WKWebView behaviour UNVERIFIED | Work 1 |
 | 3 | Honest copy (ECG prepared, Echo one study, Code Lab 2 free per track) | R5 draft; Onboarding/App Store ECG wording still to align | MASTER / Work 1 |
 | 4 | Account deletion retention policy (cascade deletes purchase records) | HOLD for legal/privacy decision | MASTER + legal |
 | 5 | Controlled Vercel releases (exact SHA, review, authorization, rollback) | procedure drafted; Production Branch setting unverified | MASTER / Work 1 |
