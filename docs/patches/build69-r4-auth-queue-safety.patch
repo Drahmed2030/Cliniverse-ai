@@ -1,0 +1,1494 @@
+From 28c423c22e7730fa097c7a4ab9cfed7371c4509b Mon Sep 17 00:00:00 2001
+From: Claude Code <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 09:12:09 +0000
+Subject: [PATCH] fix(auth): race-safe auth gate and fail-closed auth mutation
+ queue (R4)
+
+Complete replacement patch for Build 69 (e4dab59), Issue #36.
+- Queue timeout refuses waiters instead of releasing serialization: a started
+  Supabase auth mutation is never overlapped, even if it outlives the wait limit
+- Refused mutations surface as ordinary auth errors (no throw, no request)
+- Includes R3: stale-task guards, session-scoped sign-out, accurate paywall copy
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NvuEKCqEak8vUZ3RsxZA4i
+---
+ app/components/AuthScreen.tsx                 |  12 +-
+ app/components/PaywallSheet.tsx               |  19 +-
+ app/components/auth/AuthGate.tsx              |  40 +--
+ app/lib/authMutationCoordinator.ts            |  90 +++++++
+ app/lib/authSessionController.ts              | 124 ++++++++++
+ app/lib/emailVerification.ts                  |  10 +
+ app/lib/identity.ts                           |  48 +++-
+ tests/auth-identity-session-contract.test.mjs |  79 +++++-
+ tests/auth-mutation-coordinator.test.mjs      | 233 ++++++++++++++++++
+ tests/auth-session-controller.test.mjs        | 224 +++++++++++++++++
+ tests/ecg-learner-workspace.test.mjs          |   2 +-
+ ...cho-intelligence-atlas-live-route.test.mjs |   2 +-
+ tests/echo-learner-workspace.test.mjs         |   2 +-
+ tests/explore-curated-discovery.test.mjs      |   9 +-
+ tests/learn-practice-tracks.test.mjs          |  41 +--
+ tests/me-account-v2.test.mjs                  |   8 +-
+ tests/me-hub-actions.test.mjs                 |   4 +-
+ tests/paywall-release-contracts.test.mjs      |   2 +-
+ tests/progress-trajectory.test.mjs            |   4 +-
+ tests/release-interactions-contract.test.mjs  |   5 +-
+ tests/release-security-contracts.test.mjs     |   8 +-
+ tests/release-unified-product-ux.test.mjs     |  56 ++++-
+ tests/today-golden-surface.test.mjs           |   8 +-
+ 23 files changed, 930 insertions(+), 100 deletions(-)
+ create mode 100644 app/lib/authMutationCoordinator.ts
+ create mode 100644 app/lib/authSessionController.ts
+ create mode 100644 app/lib/emailVerification.ts
+ create mode 100644 tests/auth-mutation-coordinator.test.mjs
+ create mode 100644 tests/auth-session-controller.test.mjs
+
+diff --git a/app/components/AuthScreen.tsx b/app/components/AuthScreen.tsx
+index e267974..ad8006e 100644
+--- a/app/components/AuthScreen.tsx
++++ b/app/components/AuthScreen.tsx
+@@ -4,7 +4,9 @@ import { useState } from "react";
+ import {
+   signInWithMagicLink,
+   signInWithOAuth,
++  isVerifiedUser,
+   signInWithPassword,
++  signOutSession,
+   signUpWithPassword,
+   type CliniverseAuthProvider,
+ } from "../lib/identity";
+@@ -60,6 +62,7 @@ const COPY = {
+     createAccount: "Create account",
+     existingAccount: "Already have an account? Sign in",
+     signupSent: "Check your email to confirm your account, then return to Cliniverse.",
++    verifyFirst: "Please confirm your email address before signing in. Check your inbox for the confirmation link.",
+     back: "Back",
+     guest: "Explore as guest",
+     trust: "Human judgment leads · Privacy-conscious by design",
+@@ -87,6 +90,7 @@ const COPY = {
+     createAccount: "إنشاء حساب",
+     existingAccount: "لديك حساب؟ سجّل الدخول",
+     signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
++    verifyFirst: "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول. تحقق من صندوق الوارد.",
+     back: "رجوع",
+     guest: "استكشف كزائر",
+     trust: "الحكم السريري يقود · الخصوصية جزء من التصميم",
+@@ -178,10 +182,11 @@ export default function AuthScreen({
+           setError(authError.message || t.genericError);
+           return;
+         }
+-        if (data.session && data.user) {
++        if (data.session && data.user && isVerifiedUser(data.user)) {
+           onComplete({ method: "email", email: normalizedEmail });
+           return;
+         }
++        if (data.session && data.user) await signOutSession(data.user.id);
+         setNotice(t.signupSent);
+         return;
+       }
+@@ -191,6 +196,11 @@ export default function AuthScreen({
+         setError(authError?.message || t.genericError);
+         return;
+       }
++      if (!isVerifiedUser(data.user)) {
++        await signOutSession(data.user.id);
++        setError(t.verifyFirst);
++        return;
++      }
+       onComplete({ method: "email", email: normalizedEmail });
+     } catch {
+       setError(t.genericError);
+diff --git a/app/components/PaywallSheet.tsx b/app/components/PaywallSheet.tsx
+index e4e46d4..75102b2 100644
+--- a/app/components/PaywallSheet.tsx
++++ b/app/components/PaywallSheet.tsx
+@@ -1,7 +1,7 @@
+ 'use client'
+ 
+ import { useState } from 'react'
+-import { BookOpen, Check, HeartPulse, RotateCcw, Stethoscope, type LucideIcon } from 'lucide-react'
++import { BookOpen, Check, HeartPulse, Stethoscope, type LucideIcon } from 'lucide-react'
+ import type { StoreProduct } from '../lib/storekit-purchase-contract'
+ import { NATIVE_SAFE_AREA_BOTTOM } from '../lib/nativeSafeArea'
+ import { useAppearance } from './release/AppearanceSettings'
+@@ -33,11 +33,11 @@ const COPY = {
+     title: "Unlock Cliniverse PRO",
+     subtitle: "Practice, simulation, reference and review in one connected clinical learning system.",
+     groups: [
+-      { icon: HeartPulse, title: "Core practice", items: ["ECG — structured interpretation and review", "Echo — licensed cine recognition and guided findings", "Ward — fictional cases from patient state to clinical decision"] },
+-      { icon: Stethoscope, title: "Advanced practice", items: ["Resuscitation — curriculum, simulation and replay", "Code Lab — BLS and ACLS lessons with knowledge checks", "Pathway Replay — inspect decisions across a fictional clinical pathway"] },
+-      { icon: BookOpen, title: "Clinical systems", items: ["Clinical Reference — source-linked drug and label lookups", "Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
+-      { icon: RotateCcw, title: "Progress and review", items: ["Saved activity, learning history and review across your practice"] },
++      { icon: HeartPulse, title: "Ward", items: ["Ward — every simulated case (the first case is free)", "Source-linked evidence inside cases (PubMed · Guidelines)"] },
++      { icon: BookOpen, title: "Code Lab", items: ["Code Lab — all BLS and ACLS lessons (lessons 1–2 are free)"] },
++      { icon: Stethoscope, title: "Cardiology and team practice", items: ["Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
+     ] as CapabilityGroup[],
++    freeNote: "Included free: ECG, Echo, Resuscitation, Pathway Replay, Clinical Reference and Handover Practice, plus the first Ward case and Code Lab lessons 1–2.",
+     monthly: "Monthly", yearly: "Yearly", best: "Best value",
+     continueStore: "Continue with App Store",
+     unavailable: "App Store plans are not available right now",
+@@ -49,11 +49,11 @@ const COPY = {
+     title: "افتح Cliniverse PRO",
+     subtitle: "التدريب والمحاكاة والمراجع والمراجعة في نظام تعلّم سريري واحد مترابط.",
+     groups: [
+-      { icon: HeartPulse, title: "الممارسة الأساسية", items: ["ECG — تفسير منظم ومراجعة", "Echo — تدريب على مقاطع مرخصة وملاحظات موجّهة", "Ward — حالات افتراضية من حالة المريض إلى القرار السريري"] },
+-      { icon: Stethoscope, title: "الممارسة المتقدمة", items: ["الإنعاش — منهج ومحاكاة وإعادة مراجعة", "Code Lab — دروس BLS وACLS مع اختبارات معرفة", "Pathway Replay — مراجعة القرارات عبر مسار سريري افتراضي"] },
+-      { icon: BookOpen, title: "الأنظمة السريرية", items: ["Clinical Reference — مراجع دوائية مرتبطة بالمصادر", "Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
+-      { icon: RotateCcw, title: "التقدم والمراجعة", items: ["النشاط المحفوظ وسجل التعلم والمراجعة عبر ممارستك"] },
++      { icon: HeartPulse, title: "Ward", items: ["Ward — جميع الحالات المحاكاة (الحالة الأولى مجانية)", "أدلة مرتبطة بالمصادر داخل الحالات (PubMed · الإرشادات)"] },
++      { icon: BookOpen, title: "Code Lab", items: ["Code Lab — جميع دروس BLS وACLS (الدرسان 1–2 مجانيان)"] },
++      { icon: Stethoscope, title: "الممارسة القلبية والفريقية", items: ["Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
+     ] as CapabilityGroup[],
++    freeNote: "متاح مجانًا: ECG وEcho وResuscitation وPathway Replay وClinical Reference وHandover Practice، إضافةً إلى أول حالة في Ward والدرسين 1–2 في Code Lab.",
+     monthly: "شهري", yearly: "سنوي", best: "أفضل قيمة",
+     continueStore: "المتابعة عبر App Store",
+     unavailable: "خطط App Store غير متاحة الآن",
+@@ -117,6 +117,7 @@ export default function PaywallSheet({
+               </div>
+             )
+           })}
++          <div className="cv-paywall-status">{t.freeNote}</div>
+         </div>
+ 
+         {products.length > 0 ? (
+diff --git a/app/components/auth/AuthGate.tsx b/app/components/auth/AuthGate.tsx
+index 7f62f84..f68bc66 100644
+--- a/app/components/auth/AuthGate.tsx
++++ b/app/components/auth/AuthGate.tsx
+@@ -3,8 +3,9 @@
+ import { useEffect, useState, type ReactNode } from 'react'
+ import type { User } from '@supabase/supabase-js'
+ import AuthScreen from '../AuthScreen'
+-import { getCurrentSession, subscribeToAuthState } from '../../lib/identity'
++import { getCurrentSession, isVerifiedUser, signOutSession, subscribeToAuthState } from '../../lib/identity'
+ import { ensureOwnProfile } from '../../lib/profile'
++import { createAuthSessionController } from '../../lib/authSessionController'
+ 
+ type AuthState =
+   | { status: 'loading'; user: null }
+@@ -24,35 +25,16 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
+   const [state, setState] = useState<AuthState>({ status: 'loading', user: null })
+ 
+   useEffect(() => {
+-    let active = true
+-
+-    async function restore() {
+-      const { data, error } = await getCurrentSession()
+-      if (!active) return
+-      if (error) return setState({ status: 'error', user: null, message: 'Unable to restore your session.' })
+-      const user = data.session?.user ?? null
+-      if (!user) return setState({ status: 'signed_out', user: null })
+-      const profileResult = await ensureOwnProfile()
+-      if (!active) return
+-      if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
+-      setState({ status: 'signed_in', user })
+-    }
+-
+-    restore()
+-    const { data } = subscribeToAuthState(async (_event, session) => {
+-      if (!active) return
+-      const user = session?.user ?? null
+-      if (!user) return setState({ status: 'signed_out', user: null })
+-      const profileResult = await ensureOwnProfile()
+-      if (!active) return
+-      if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
+-      setState({ status: 'signed_in', user })
++    const controller = createAuthSessionController<User>({
++      getSession: getCurrentSession,
++      ensureProfile: ensureOwnProfile,
++      signOut: signOutSession,
++      isVerifiedUser,
++      subscribe: callback => subscribeToAuthState(async (event, session) => { callback(event, session) }).data.subscription,
++      onState: setState,
+     })
+-
+-    return () => {
+-      active = false
+-      data.subscription.unsubscribe()
+-    }
++    controller.start()
++    return () => controller.dispose()
+   }, [])
+ 
+   if (state.status === 'loading') return <GateStatus title="Restoring your session" detail="Preparing Cliniverse securely…" />
+diff --git a/app/lib/authMutationCoordinator.ts b/app/lib/authMutationCoordinator.ts
+new file mode 100644
+index 0000000..cc96721
+--- /dev/null
++++ b/app/lib/authMutationCoordinator.ts
+@@ -0,0 +1,90 @@
++// Central coordination of every auth MUTATION (sign-in, sign-up, sign-out) issued by this app.
++//
++// Why: supabase-js does not make a whole sign-in or sign-out atomic. `signOut()` reads the stored
++// session, calls the server, then removes whatever session is stored; `signInWithPassword()` performs
++// its token request outside that lock and saves the new session afterwards. A sign-out that is already
++// in flight can therefore remove a NEWER account's freshly saved session, and a generation counter in
++// the UI cannot cancel a request that has already started.
++//
++// What this guarantees: all mutations issued through this queue run strictly one after another (a waiter
++// that waits too long is refused, never run alongside the one ahead), and a
++// session-scoped sign-out re-reads the stored session inside the queue and does nothing unless it is
++// still the session it was meant to end. What it does NOT cover: a session changed by something other
++// than this app instance (e.g. another browser context sharing storage). The native iOS app is a
++// single web view, so no such second context exists there.
++
++export interface QueueOptions {
++  // How long a WAITING mutation may wait for the one ahead of it. When it elapses the waiter is refused
++  // (AuthMutationBusyError) and never runs. A mutation that has already started is never abandoned and
++  // never "timed out": the queue stays closed until it has really settled, because a started Supabase
++  // request cannot be cancelled and could otherwise complete after, and wipe, a newer account's session.
++  waitTimeoutMs?: number
++  setTimer?: (fn: () => void, ms: number) => unknown
++  clearTimer?: (handle: unknown) => void
++}
++
++export class AuthMutationBusyError extends Error {
++  constructor() {
++    super('Another sign-in or sign-out is still finishing. Please try again in a moment.')
++    this.name = 'AuthMutationBusyError'
++  }
++}
++
++export function isAuthMutationBusy(error: unknown): error is AuthMutationBusyError {
++  return typeof error === 'object' && error !== null && (error as { name?: unknown }).name === 'AuthMutationBusyError'
++}
++
++export function createAuthMutationQueue(options: QueueOptions = {}) {
++  const waitTimeoutMs = options.waitTimeoutMs ?? 20000
++  const setTimer = options.setTimer ?? ((fn, ms) => setTimeout(fn, ms))
++  const clearTimer = options.clearTimer ?? (handle => clearTimeout(handle as ReturnType<typeof setTimeout>))
++  // Settles only when the most recently queued mutation has really finished (or its refused slot has
++  // passed). It never rejects.
++  let tail: Promise<void> = Promise.resolve()
++
++  function run<T>(task: () => Promise<T>): Promise<T> {
++    const previous = tail
++    let release!: () => void
++    tail = new Promise<void>(resolve => { release = resolve })
++    return new Promise<T>((resolve, reject) => {
++      let started = false
++      let refused = false
++      const timer = setTimer(() => {
++        if (started) return
++        refused = true
++        reject(new AuthMutationBusyError())
++        // Keep this slot in line: whoever is behind us still waits for everything ahead of us.
++        previous.then(release)
++      }, waitTimeoutMs)
++      previous.then(() => {
++        if (refused) return
++        started = true
++        clearTimer(timer)
++        let running: Promise<T>
++        try { running = task() } catch (error) { running = Promise.reject(error) }
++        running.then(resolve, reject).then(release, release)
++      })
++    })
++  }
++
++  return { run }
++}
++
++export interface CoordinatedAuth {
++  getSession: () => Promise<{ data: { session: { user: { id: string } | null } | null }; error: unknown }>
++  signOut: () => Promise<{ error: unknown }>
++}
++
++// Ends the stored session only if it still belongs to `expectedUserId`.
++export function createSessionScopedSignOut(queue: ReturnType<typeof createAuthMutationQueue>, auth: CoordinatedAuth) {
++  return function signOutSession(expectedUserId: string) {
++    return queue.run(async () => {
++      const { data, error } = await auth.getSession()
++      // If the stored session cannot be read, do not guess: leave it (the gate already treats it as signed out).
++      if (error) return { skipped: true, error }
++      if (data.session?.user?.id !== expectedUserId) return { skipped: true, error: null }
++      const result = await auth.signOut()
++      return { skipped: false, error: result.error ?? null }
++    })
++  }
++}
+diff --git a/app/lib/authSessionController.ts b/app/lib/authSessionController.ts
+new file mode 100644
+index 0000000..b68ad67
+--- /dev/null
++++ b/app/lib/authSessionController.ts
+@@ -0,0 +1,124 @@
++// Framework-free session resolution for AuthGate. It owns every ordering rule that keeps a stale
++// asynchronous result (session restore, profile bootstrap, sign-out) from granting access:
++//  - each trigger (restore, auth event, dispose) takes a new monotonic generation;
++//  - a result is applied only if its generation is still the newest;
++//  - the auth-state callback itself is synchronous and calls no Supabase API — follow-up work is
++//    scheduled outside the callback;
++//  - a different user always passes through "loading" before they can reach "signed_in".
++
++export interface ControllerUser {
++  id: string
++  email?: string | null
++  email_confirmed_at?: string | null
++  app_metadata?: { provider?: string }
++}
++
++export interface ControllerSession<U extends ControllerUser = ControllerUser> {
++  user: U | null
++}
++
++export type ControllerState<U extends ControllerUser = ControllerUser> =
++  | { status: 'loading'; user: null }
++  | { status: 'signed_out'; user: null }
++  | { status: 'signed_in'; user: U }
++  | { status: 'error'; user: null; message: string }
++
++export interface ControllerDeps<U extends ControllerUser> {
++  getSession: () => Promise<{ data: { session: ControllerSession<U> | null }; error: unknown }>
++  ensureProfile: () => Promise<{ error: unknown }>
++  // Must end only the session of `userId` (see authMutationCoordinator); never a newer account's.
++  signOut: (userId: string) => Promise<unknown>
++  isVerifiedUser: (user: U) => boolean
++  subscribe: (callback: (event: string, session: ControllerSession<U> | null) => void) => { unsubscribe: () => void }
++  onState: (state: ControllerState<U>) => void
++  // Defers work out of the auth-state callback. Defaults to setTimeout(0).
++  schedule?: (task: () => void) => void
++}
++
++export function createAuthSessionController<U extends ControllerUser>(deps: ControllerDeps<U>) {
++  const schedule = deps.schedule ?? (task => { setTimeout(task, 0) })
++  let generation = 0
++  let disposed = false
++  let readyUserId: string | null = null
++  let started = false
++  let subscription: { unsubscribe: () => void } | null = null
++
++  const current = (mine: number) => !disposed && mine === generation
++
++  function emit(mine: number, state: ControllerState<U>) {
++    if (current(mine)) deps.onState(state)
++  }
++
++  async function resolve(mine: number, session: ControllerSession<U> | null) {
++    // A scheduled task that was invalidated before it ran (logout, account switch, dispose, newer event)
++    // must do nothing at all: no state change and, above all, no side effect.
++    if (!current(mine)) return
++    const user = session?.user ?? null
++    if (!user) {
++      readyUserId = null
++      emit(mine, { status: 'signed_out', user: null })
++      return
++    }
++    if (!deps.isVerifiedUser(user)) {
++      readyUserId = null
++      emit(mine, { status: 'signed_out', user: null })
++      if (!current(mine)) return
++      try { await deps.signOut(user.id) } catch { /* the state is already signed_out */ }
++      return
++    }
++    if (readyUserId === user.id) {
++      // Same verified user (token refresh / user update): nothing to bootstrap again.
++      emit(mine, { status: 'signed_in', user })
++      return
++    }
++    readyUserId = null
++    emit(mine, { status: 'loading', user: null })
++    if (!current(mine)) return
++    let profileError: unknown
++    try { profileError = (await deps.ensureProfile()).error } catch (error) { profileError = error || new Error('profile') }
++    // The request cannot be cancelled once started; its result is simply never allowed to grant access.
++    if (!current(mine)) return
++    if (profileError) {
++      emit(mine, { status: 'error', user: null, message: 'Unable to prepare your profile.' })
++      return
++    }
++    readyUserId = user.id
++    emit(mine, { status: 'signed_in', user })
++  }
++
++  async function restore() {
++    const mine = ++generation
++    let result: Awaited<ReturnType<ControllerDeps<U>['getSession']>>
++    try { result = await deps.getSession() } catch { result = { data: { session: null }, error: new Error('session') } }
++    if (!current(mine)) return
++    if (result.error) {
++      emit(mine, { status: 'error', user: null, message: 'Unable to restore your session.' })
++      return
++    }
++    await resolve(mine, result.data.session)
++  }
++
++  function start() {
++    if (started || disposed) return
++    started = true
++    // Synchronous on purpose: no await, no Supabase call. Supabase can deadlock when its own
++    // client is awaited inside this callback.
++    subscription = deps.subscribe((_event, session) => {
++      const mine = ++generation
++      const incomingId = session?.user?.id ?? null
++      if (!incomingId) { readyUserId = null; deps.onState({ status: 'signed_out', user: null }) }
++      else if (incomingId !== readyUserId) { readyUserId = null; deps.onState({ status: 'loading', user: null }) }
++      schedule(() => { void resolve(mine, session) })
++    })
++    void restore()
++  }
++
++  function dispose() {
++    disposed = true
++    generation++
++    subscription?.unsubscribe()
++    subscription = null
++  }
++
++  return { start, dispose }
++}
+diff --git a/app/lib/emailVerification.ts b/app/lib/emailVerification.ts
+new file mode 100644
+index 0000000..e36c0b0
+--- /dev/null
++++ b/app/lib/emailVerification.ts
+@@ -0,0 +1,10 @@
++// Client-side defense in depth only. `email_confirmed_at` is set by Supabase Auth; if the project's
++// "Confirm email" setting is OFF, Supabase marks new addresses confirmed implicitly, so this check
++// does NOT prove inbox ownership. Trusted enforcement is the Supabase Auth "Confirm email" setting
++// (to be verified ON by an authorized operator) plus server-side authorization. OAuth identities
++// (Apple/Google) are verified by their provider and are not held to the email check.
++export function isVerifiedUser(user: { email_confirmed_at?: string | null; app_metadata?: { provider?: string } }) {
++  const provider = user.app_metadata?.provider
++  if (provider && provider !== 'email') return true
++  return Boolean(user.email_confirmed_at)
++}
+diff --git a/app/lib/identity.ts b/app/lib/identity.ts
+index 817ceb5..43e2b8b 100644
+--- a/app/lib/identity.ts
++++ b/app/lib/identity.ts
+@@ -1,34 +1,53 @@
+ import { supabase } from '../supabase'
++import { createAuthMutationQueue, createSessionScopedSignOut, isAuthMutationBusy } from './authMutationCoordinator'
+ 
+ export type CliniverseAuthProvider = 'apple' | 'google'
+ 
++// Every sign-in, sign-up and sign-out in the app goes through this queue (guarded by a source test).
++const authMutations = createAuthMutationQueue()
++const signOutIfSession = createSessionScopedSignOut(authMutations, supabase.auth)
++
++// When another mutation is still unresolved past the wait limit, the request is refused as an ordinary
++// auth error (callers already surface `error`); it is never run alongside the pending one.
++async function mutate<T>(task: () => Promise<T>, refused: (error: Error) => T): Promise<T> {
++  try {
++    return await authMutations.run(task)
++  } catch (error) {
++    if (isAuthMutationBusy(error)) return refused(error)
++    throw error
++  }
++}
++const noSession = (error: Error) => ({ data: { user: null, session: null }, error }) as never
++
+ export async function signInWithPassword(email: string, password: string) {
+-  return supabase.auth.signInWithPassword({ email, password })
++  return mutate(() => supabase.auth.signInWithPassword({ email, password }), noSession)
+ }
+ 
+ export async function signUpWithPassword(email: string, password: string, redirectTo?: string) {
+-  return supabase.auth.signUp({
++  return mutate(() => supabase.auth.signUp({
+     email,
+     password,
+     options: redirectTo ? { emailRedirectTo: redirectTo } : undefined,
+-  })
++  }), noSession)
+ }
+ 
++export { isVerifiedUser } from './emailVerification'
++
+ export async function signInWithMagicLink(email: string, redirectTo?: string) {
+-  return supabase.auth.signInWithOtp({
++  return mutate(() => supabase.auth.signInWithOtp({
+     email,
+     options: {
+       shouldCreateUser: false,
+       ...(redirectTo ? { emailRedirectTo: redirectTo } : {}),
+     },
+-  })
++  }), noSession)
+ }
+ 
+ export async function signInWithOAuth(provider: CliniverseAuthProvider, redirectTo?: string) {
+-  return supabase.auth.signInWithOAuth({
++  return mutate(() => supabase.auth.signInWithOAuth({
+     provider,
+     options: redirectTo ? { redirectTo } : undefined,
+-  })
++  }), error => ({ data: { provider, url: null }, error }) as never)
+ }
+ 
+ export async function getCurrentSession() {
+@@ -58,6 +77,19 @@ export async function deleteCurrentAccount() {
+   })
+ }
+ 
++// Explicit user sign-out (Me, after account deletion): ends whatever session is current when it runs.
+ export async function signOut() {
+-  return supabase.auth.signOut()
++  return mutate(() => supabase.auth.signOut(), error => ({ error }) as never)
++}
++
++// Automated clean-up of a specific session (unverified email, stale gate decision): never ends a different,
++// newer account's session.
++export async function signOutSession(expectedUserId: string) {
++  // signOutIfSession already runs inside the mutation queue; do not queue it a second time.
++  try {
++    return await signOutIfSession(expectedUserId)
++  } catch (error) {
++    if (isAuthMutationBusy(error)) return { skipped: true, error }
++    throw error
++  }
+ }
+diff --git a/tests/auth-identity-session-contract.test.mjs b/tests/auth-identity-session-contract.test.mjs
+index f9be8ee..ba997e8 100644
+--- a/tests/auth-identity-session-contract.test.mjs
++++ b/tests/auth-identity-session-contract.test.mjs
+@@ -20,26 +20,74 @@ function walkAppFiles(dir, visit) {
+   }
+ }
+ 
++function signInSection() {
++  const screen = read('app/components/AuthScreen.tsx')
++  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
++  // Password sign-in is the code after the self-service sign-up branch.
++  return handler.slice(handler.indexOf('await signInWithPassword'))
++}
++
+ test('sign-in delegates to Supabase Auth and fails closed on any error, never marking a caller authenticated', () => {
+   const identity = read('app/lib/identity.ts')
+   assert.match(identity, /export async function signInWithPassword\(email: string, password: string\)/)
+-  assert.match(identity, /return supabase\.auth\.signInWithPassword\(\{ email, password \}\)/)
++  assert.match(identity, /return mutate\(\(\) => supabase\.auth\.signInWithPassword\(\{ email, password \}\), noSession\)/)
++  // A refused (busy) mutation becomes an ordinary auth error result, never a thrown error and never a started request.
++  assert.match(identity, /if \(isAuthMutationBusy\(error\)\) return refused\(error\)/)
+   assert.doesNotMatch(identity, /onComplete\(/)
+ 
+-  const screen = read('app/components/AuthScreen.tsx')
+-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
+-  assert.match(emailHandler, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
+-  assert.match(emailHandler, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
+-  // onComplete (which the gate treats as sign-in success) is called only after the
+-  // authError/session/user guard above — it does not appear before it in the handler.
+-  assert.ok(emailHandler.indexOf('if (authError || !data.session || !data.user)') < emailHandler.indexOf('onComplete({ method: "email"'))
++  const signIn = signInSection()
++  assert.match(signIn, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
++  assert.match(signIn, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
++  // onComplete is reached only after the error/session/user guard AND the email-verification guard.
++  const guard = signIn.indexOf('if (authError || !data.session || !data.user)')
++  const verified = signIn.indexOf('!isVerifiedUser(data.user)')
++  const complete = signIn.indexOf('onComplete({ method: "email"')
++  assert.ok(guard >= 0 && guard < verified && verified < complete)
+ })
+ 
+ test('invalid sign-in surfaces a controlled error and does not call onComplete', () => {
++  const signIn = signInSection()
++  assert.match(signIn, /setError\(authError\?\.message \|\| t\.genericError\);\s*return;/)
++  assert.match(signIn, /await signOutSession\(data\.user\.id\);\s*setError\(t\.verifyFirst\);\s*return;/)
++  assert.match(signIn, /catch \{\s*setError\(t\.genericError\)/)
++})
++
++test('self-service sign-up never signs a user in before their email is confirmed', () => {
+   const screen = read('app/components/AuthScreen.tsx')
+-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('async function handleEmail') + 1200)
+-  assert.match(emailHandler, /setError\(authError\?\.message \|\| t\.genericError\)/)
+-  assert.match(emailHandler, /return;\s*\n\s*\}/)
++  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
++  const signUp = handler.slice(handler.indexOf('if (isSignUp)'), handler.indexOf('await signInWithPassword'))
++  assert.match(signUp, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
++  assert.match(signUp, /if \(authError\) \{\s*setError\(authError\.message \|\| t\.genericError\);\s*return;/)
++  // A session returned without a confirmed address is discarded and the user is told to confirm.
++  assert.match(signUp, /if \(data\.session && data\.user && isVerifiedUser\(data\.user\)\) \{\s*onComplete/)
++  assert.match(signUp, /if \(data\.session && data\.user\) await signOutSession\(data\.user\.id\);\s*setNotice\(t\.signupSent\)/)
++  assert.ok(signUp.indexOf('isVerifiedUser') < signUp.indexOf('onComplete('))
++  assert.match(screen, /signupSent: "Check your email to confirm your account/)
++  // The password minimum applies to sign-up and sign-in alike.
++  assert.match(handler, /password\.trim\(\)\.length < 8/)
++})
++
++test('the auth gate delegates to the race-safe controller and keeps the verification rule as defense in depth', () => {
++  const identity = read('app/lib/identity.ts')
++  assert.match(identity, /export \{ isVerifiedUser \} from '\.\/emailVerification'/)
++  const rule = read('app/lib/emailVerification.ts')
++  assert.match(rule, /return Boolean\(user\.email_confirmed_at\)/)
++  // The comment must not claim the client check proves inbox ownership (it does not if Confirm email is OFF).
++  assert.match(rule, /does NOT prove inbox ownership/)
++  assert.doesNotMatch(rule, /backstop if/i)
++
++  const gate = read('app/components/auth/AuthGate.tsx')
++  assert.match(gate, /createAuthSessionController<User>\(/)
++  assert.match(gate, /isVerifiedUser,/)
++  assert.match(gate, /return \(\) => controller\.dispose\(\)/)
++  // No direct Supabase/profile/signOut call remains in the gate component itself (behaviour: tests/auth-session-controller.test.mjs).
++  const body = gate.slice(gate.indexOf('export default function AuthGate'), gate.indexOf("if (state.status === 'loading')"))
++  assert.doesNotMatch(body, /await |ensureOwnProfile\(\)|signOut\(\)/)
++
++  const controller = read('app/lib/authSessionController.ts')
++  assert.doesNotMatch(controller, /import .*supabase/i)
++  const callback = controller.slice(controller.indexOf('deps.subscribe('), controller.indexOf('void restore()'))
++  assert.doesNotMatch(callback, /await |deps\.(getSession|ensureProfile|signOut)/)
+ })
+ 
+ test('requireCurrentUser fails closed on a missing session or a Supabase error', () => {
+@@ -52,7 +100,7 @@ test('requireCurrentUser fails closed on a missing session or a Supabase error',
+ test('sign-out delegates to Supabase Auth and the UI surfaces failure without assuming success', () => {
+   const identity = read('app/lib/identity.ts')
+   assert.match(identity, /export async function signOut\(\)/)
+-  assert.match(identity, /return supabase\.auth\.signOut\(\)/)
++  assert.match(identity, /return mutate\(\(\) => supabase\.auth\.signOut\(\), error => \(\{ error \}\) as never\)/)
+ 
+   const actions = read('app/components/auth/AccountSessionActions.tsx')
+   assert.match(actions, /const \{ error: signOutError \} = await signOut\(\)/)
+@@ -88,9 +136,14 @@ test('reviewer preview access is derived from the verified authenticated email,
+   const release = read('app/components/ReleaseApp.tsx')
+   assert.match(release, /showEcgReview=\{reviewPreview\s*&&\s*user\.email\?\.toLowerCase\(\)\s*===\s*'reviewer@cliniverseai\.com'\s*&&\s*Boolean\(user\.email_confirmed_at\)\}/)
+ 
++  // Entitlement-adjacent reviewer access is decided server-side from the verified bearer token.
+   const provider = read('app/components/release/SubscriptionPurchaseProvider.tsx')
+   assert.match(provider, /fetch\('\/api\/reviewer-feature-access',\s*\{\s*cache:\s*'no-store',\s*headers:\s*\{\s*Authorization:\s*`Bearer \$\{data\.session\.access_token\}`/)
+-  assert.match(provider, /No administrator privileges/)
++  assert.match(provider, /Access remains denied on failure/)
++  const route = read('app/api/reviewer-feature-access/route.ts')
++  assert.match(route, /supabase\.auth\.getUser\(token\)/)
++  assert.match(route, /VERCEL_ENV !== 'preview' && process\.env\.VERCEL_ENV !== 'production'/)
++  assert.match(route, /allowed: false\s*\}, \{ status: 401/)
+ })
+ 
+ test('no PRO/premium/session access anywhere in the app is derived from a localStorage-read flag', () => {
+diff --git a/tests/auth-mutation-coordinator.test.mjs b/tests/auth-mutation-coordinator.test.mjs
+new file mode 100644
+index 0000000..76a0959
+--- /dev/null
++++ b/tests/auth-mutation-coordinator.test.mjs
+@@ -0,0 +1,233 @@
++import test from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs'
++import vm from 'node:vm'
++import ts from 'typescript'
++
++function load(path) {
++  const source = fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
++  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText
++  const exports = {}
++  vm.runInNewContext(code, { exports, setTimeout, clearTimeout, Promise })
++  return exports
++}
++const { createAuthMutationQueue, createSessionScopedSignOut } = load('app/lib/authMutationCoordinator.ts')
++const { createAuthSessionController } = load('app/lib/authSessionController.ts')
++const { isVerifiedUser } = load('app/lib/emailVerification.ts')
++
++const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r }); return { promise, resolve } }
++const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve() }
++const sess = (id, extra = {}) => ({ user: { id, email: `${id}@x.test`, email_confirmed_at: '2026-01-01', app_metadata: { provider: 'email' }, ...extra } })
++
++// Models the supabase-js behaviour that makes the race real (auth-js 2.109, GoTrueClient):
++//  - signOut() calls the server, then removes WHATEVER session is stored at that moment;
++//  - signInWithPassword() does its token request first and saves the session afterwards.
++// Network completion is controlled by the test through `release(name)`.
++function fakeAuth(initial = null) {
++  let stored = initial
++  const listeners = []
++  const log = []
++  const waiting = { signOut: [], signIn: [] }
++  const emit = (event, session) => listeners.forEach(listener => listener(event, session))
++  const auth = {
++    getSession: async () => ({ data: { session: stored }, error: null }),
++    async signOut() {
++      log.push('signOut:start'); const d = deferred(); waiting.signOut.push(d); await d.promise
++      stored = null; emit('SIGNED_OUT', null); log.push('signOut:end'); return { error: null }
++    },
++    async signInWithPassword(id, extra) {
++      log.push(`signIn:${id}:start`); const d = deferred(); waiting.signIn.push(d); await d.promise
++      stored = sess(id, extra); emit('SIGNED_IN', stored); log.push(`signIn:${id}:end`); return { data: { session: stored }, error: null }
++    },
++  }
++  return {
++    auth, log, stored: () => stored, listeners,
++    release: async name => { waiting[name].shift().resolve(); await flush() },
++    subscribe: cb => { listeners.push(cb); return { unsubscribe() {} } },
++  }
++}
++
++test('REPRODUCTION (model of unguarded supabase calls): an in-flight signOut removes a newer account\'s session', async () => {
++  const f = fakeAuth(sess('a'))
++  const out = f.auth.signOut(); await flush()                    // A signOut in flight
++  const inB = f.auth.signInWithPassword('b'); await flush()      // B signs in concurrently
++  await f.release('signIn')                                      // B's session is saved...
++  await f.release('signOut')                                     // ...then A's signOut completes and removes it
++  await Promise.all([out, inB])
++  assert.equal(f.stored(), null, 'B was signed out by A\'s sign-out — the hazard is real')
++})
++
++test('FIX: with the queue, A signOut → B sign-in are serialized and B keeps its session', async () => {
++  const f = fakeAuth(sess('a')); const queue = createAuthMutationQueue()
++  const out = queue.run(() => f.auth.signOut()); await flush()
++  const inB = queue.run(() => f.auth.signInWithPassword('b')); await flush()
++  assert.deepEqual(f.log, ['signOut:start'], 'B sign-in has not started while signOut is in flight')
++  await f.release('signOut')
++  assert.deepEqual(f.log.slice(-1), ['signIn:b:start'])
++  await f.release('signIn'); await Promise.all([out, inB])
++  assert.equal(f.stored().user.id, 'b')
++})
++
++test('FIX: a session-scoped signOut queued behind B\'s sign-in does nothing once B is stored', async () => {
++  const f = fakeAuth(sess('a')); const queue = createAuthMutationQueue()
++  const signOutSession = createSessionScopedSignOut(queue, f.auth)
++  const inB = queue.run(() => f.auth.signInWithPassword('b')); await flush()   // B in flight
++  const stale = signOutSession('a'); await flush()                            // controller decides to end A
++  await f.release('signIn'); const [, result] = await Promise.all([inB, stale])
++  assert.deepEqual([result.skipped, f.stored().user.id], [true, 'b'])
++  assert.equal(f.log.includes('signOut:start'), false, 'no signOut request was ever started')
++})
++
++test('a scoped signOut still ends the matching session, and never guesses when the session cannot be read', async () => {
++  const f = fakeAuth(sess('a')); const queue = createAuthMutationQueue()
++  const signOutSession = createSessionScopedSignOut(queue, f.auth)
++  const p = signOutSession('a'); await flush(); await f.release('signOut')
++  assert.deepEqual([(await p).skipped, f.stored()], [false, null])
++  const broken = createSessionScopedSignOut(queue, { getSession: async () => ({ data: { session: null }, error: new Error('x') }), signOut: async () => { throw new Error('must not run') } })
++  assert.equal((await broken('a')).skipped, true)
++})
++
++test('a failing task does not wedge the queue', async () => {
++  const queue = createAuthMutationQueue()
++  await assert.rejects(queue.run(async () => { throw new Error('boom') }))
++  assert.equal(await queue.run(async () => 'next'), 'next')
++})
++
++test('REGRESSION (R3 flaw): a pending signOut(A) that outlives the wait timeout must not let sign-in(B) overlap and be wiped by A\'s late completion', async () => {
++  const f = fakeAuth(sess('a')); const timers = []
++  const queue = createAuthMutationQueue({ waitTimeoutMs: 50, releaseAfterMs: 50, setTimer: fn => { timers.push(fn); return timers.length - 1 }, clearTimer: () => {} })
++  const out = queue.run(() => f.auth.signOut()); await flush()            // A signOut starts and stays pending
++  const inB = queue.run(() => f.auth.signInWithPassword('b')).then(() => 'ran', error => error)
++  await flush()
++  timers.splice(0).forEach(fire => fire()); await flush()                  // the timeout elapses while A is still pending
++  assert.equal(f.log.includes('signIn:b:start'), false, 'B must NOT start while A\'s signOut is unresolved')
++  await f.release('signOut'); await out                                    // A completes late
++  const outcome = await inB
++  assert.equal(outcome?.name, 'AuthMutationBusyError', 'B was refused (fail closed), not run')
++  assert.equal(f.stored(), null, 'A is signed out and B never signed in')
++  assert.equal(f.log.includes('signIn:b:start'), false)
++  // Once A has really finished, a retry of B works and keeps its session.
++  const retry = queue.run(() => f.auth.signInWithPassword('b')); await flush(); await f.release('signIn'); await retry
++  assert.equal(f.stored().user.id, 'b')
++})
++
++test('timeouts never reorder or drop waiters: three waiters behind a hung task all refuse, then run in order after it settles', async () => {
++  const f = fakeAuth(sess('a')); const timers = []
++  const queue = createAuthMutationQueue({ waitTimeoutMs: 50, setTimer: fn => { timers.push(fn); return timers.length - 1 }, clearTimer: () => {} })
++  const out = queue.run(() => f.auth.signOut()); await flush()
++  const results = [1, 2, 3].map(() => queue.run(async () => 'ran').then(v => v, e => e.name))
++  await flush(); timers.splice(0).forEach(fire => fire()); await flush()
++  assert.deepEqual(await Promise.all(results), ['AuthMutationBusyError', 'AuthMutationBusyError', 'AuthMutationBusyError'])
++  let lateRan = false
++  const late = queue.run(async () => { lateRan = true; return 'late' }); await flush()
++  assert.equal(lateRan, false, 'a new waiter still queues behind the unresolved task, even after earlier waiters were refused')
++  assert.equal(f.log.length, 1)                                           // still only A's signOut:start
++  await f.release('signOut'); await out
++  assert.equal(await late, 'late', 'after the real settlement the queue works again')
++})
++
++test('a scoped signOut refused as busy reports skipped, never a thrown error and never a started request', async () => {
++  const f = fakeAuth(sess('a')); const timers = []
++  const queue = createAuthMutationQueue({ waitTimeoutMs: 50, setTimer: fn => { timers.push(fn); return timers.length - 1 }, clearTimer: () => {} })
++  const hung = queue.run(() => new Promise(() => {})); void hung
++  const result = createSessionScopedSignOut(queue, f.auth)('a').then(r => r, e => e)
++  await flush(); timers.splice(0).forEach(fire => fire()); await flush()
++  const r = await result
++  assert.equal(r?.name, 'AuthMutationBusyError')
++  assert.equal(f.log.length, 0)
++})
++
++test('INTEGRATION: unverified A is being cleaned up while B signs in — B ends signed in, A\'s sign-out never runs', async () => {
++  const f = fakeAuth(sess('a', { email_confirmed_at: null })); const queue = createAuthMutationQueue()
++  const signOutSession = createSessionScopedSignOut(queue, f.auth)
++  const states = []; const tasks = []
++  const controller = createAuthSessionController({
++    getSession: () => new Promise(() => {}), ensureProfile: async () => ({ error: null }), signOut: signOutSession,
++    isVerifiedUser, subscribe: f.subscribe, onState: s => states.push(s), schedule: t => tasks.push(t),
++  })
++  controller.start()
++  f.listeners[0]('SIGNED_IN', f.stored())                     // A (unverified) event → task scheduled
++  const inB = queue.run(() => f.auth.signInWithPassword('b')); await flush()   // user signs in as B meanwhile
++  tasks.shift()(); await flush()                              // controller runs A's task → queues scoped signOut behind B
++  await f.release('signIn'); await inB                        // B saved → SIGNED_IN B
++  while (tasks.length) tasks.shift()(); await flush()
++  assert.deepEqual([states.at(-1).status, states.at(-1).user.id], ['signed_in', 'b'])
++  assert.equal(f.stored().user.id, 'b')
++  assert.equal(f.log.includes('signOut:start'), false)
++  assert.equal(states.some(s => s.status === 'signed_in' && s.user.id === 'a'), false)
++})
++
++test('INTEGRATION: user signs out of A, then B signs in before the sign-out finishes — the late SIGNED_OUT cannot hide B', async () => {
++  const f = fakeAuth(sess('a')); const queue = createAuthMutationQueue()
++  const states = []; const tasks = []
++  const controller = createAuthSessionController({
++    getSession: () => new Promise(() => {}), ensureProfile: async () => ({ error: null }), signOut: async () => {},
++    isVerifiedUser, subscribe: f.subscribe, onState: s => states.push(s), schedule: t => tasks.push(t),
++  })
++  controller.start()
++  const out = queue.run(() => f.auth.signOut()); await flush()
++  const inB = queue.run(() => f.auth.signInWithPassword('b')); await flush()
++  await f.release('signOut')        // SIGNED_OUT emitted
++  await f.release('signIn')         // SIGNED_IN b emitted
++  await Promise.all([out, inB])
++  while (tasks.length) { tasks.shift()(); await flush() }
++  assert.deepEqual([states.at(-1).status, states.at(-1).user.id], ['signed_in', 'b'])
++  assert.equal(f.stored().user.id, 'b')
++})
++
++test('every auth mutation in the app goes through the coordinator (source guard)', () => {
++  const root = new URL('../app/', import.meta.url).pathname
++  const offenders = []
++  const walk = dir => { for (const entry of fs.readdirSync(dir)) {
++    const full = `${dir}/${entry}`
++    if (fs.statSync(full).isDirectory()) { walk(full); continue }
++    if (!/\.(ts|tsx)$/.test(entry)) continue
++    const source = fs.readFileSync(full, 'utf8')
++    if (/\.auth\.(signIn\w*|signUp|signOut|setSession|refreshSession|exchangeCodeForSession|verifyOtp|updateUser)\(/.test(source) && !full.endsWith('/lib/identity.ts')) offenders.push(full)
++  } }
++  walk(root.replace(/\/$/, ''))
++  assert.deepEqual(offenders, [])
++  const identity = fs.readFileSync(new URL('../app/lib/identity.ts', import.meta.url), 'utf8')
++  for (const call of ['signInWithPassword', 'signUp', 'signInWithOtp', 'signInWithOAuth', 'signOut']) {
++    assert.match(identity, new RegExp(`mutate\\(\\(\\) => supabase\\.auth\\.${call}\\(`), call)
++  }
++  // The only direct queue use is the shared `mutate` helper; the scoped sign-out queues itself exactly once.
++  assert.equal((identity.match(/authMutations\.run\(/g) ?? []).length, 1)
++  assert.match(identity, /createSessionScopedSignOut\(authMutations, supabase\.auth\)/)
++})
++
++// Runs the REAL identity.ts (transpiled) against a fake supabase and the real coordinator, with controllable timers.
++function loadIdentity(authImpl) {
++  const read = path => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
++  const compile = path => ts.transpileModule(read(path), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText
++  const timers = []
++  const modules = {}
++  const requireShim = name => {
++    if (name === '../supabase') return { supabase: { auth: authImpl } }
++    if (name === './authMutationCoordinator') return modules.coordinator
++    if (name === './emailVerification') return modules.verification
++    throw new Error(`unexpected import ${name}`)
++  }
++  const evaluate = (path, extra = {}) => { const exports = {}; vm.runInNewContext(compile(path), { exports, require: requireShim, setTimeout: fn => { timers.push(fn); return timers.length }, clearTimeout() {}, Promise, Error, ...extra }); return exports }
++  modules.coordinator = evaluate('app/lib/authMutationCoordinator.ts')
++  modules.verification = evaluate('app/lib/emailVerification.ts')
++  const identity = evaluate('app/lib/identity.ts')
++  return { identity, fireTimers: () => timers.splice(0).forEach(fire => fire()) }
++}
++
++test('identity.ts: while A\'s signOut is unresolved past the wait limit, B\'s sign-in is refused as an auth error and never reaches Supabase', async () => {
++  const f = fakeAuth(sess('a'))
++  const { identity, fireTimers } = loadIdentity({ ...f.auth, signUp: async () => { throw new Error('unused') } })
++  const out = identity.signOut(); await flush()
++  const inB = identity.signInWithPassword('b', 'pw'); await flush()
++  fireTimers(); await flush()
++  const refused = await inB
++  assert.equal(refused.error.name, 'AuthMutationBusyError')
++  assert.deepEqual([refused.data.session, refused.data.user], [null, null])
++  assert.equal(f.log.includes('signIn:b:start'), false)
++  const scopedP = identity.signOutSession('a'); await flush(); fireTimers(); await flush()   // also refused, not thrown, not run
++  const scoped = await scopedP
++  assert.equal(scoped.skipped, true); assert.equal(scoped.error.name, 'AuthMutationBusyError')
++  await f.release('signOut'); await out
++  assert.equal(f.stored(), null)
++})
+diff --git a/tests/auth-session-controller.test.mjs b/tests/auth-session-controller.test.mjs
+new file mode 100644
+index 0000000..de310ac
+--- /dev/null
++++ b/tests/auth-session-controller.test.mjs
+@@ -0,0 +1,224 @@
++import test from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs'
++import vm from 'node:vm'
++import ts from 'typescript'
++
++// Real behaviour tests: the controller and the verification rule are transpiled from the app source
++// and run against controllable fakes (deferred Supabase results, manual scheduler).
++function load(path) {
++  const source = fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
++  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText
++  const exports = {}
++  vm.runInNewContext(code, { exports, setTimeout, Error, Promise })
++  return exports
++}
++const { createAuthSessionController } = load('app/lib/authSessionController.ts')
++const { isVerifiedUser } = load('app/lib/emailVerification.ts')
++
++const deferred = () => { let resolve; const promise = new Promise(r => { resolve = r }); return { promise, resolve } }
++const flush = async () => { for (let i = 0; i < 10; i++) await Promise.resolve() }
++const user = (id, extra = {}) => ({ id, email: `${id}@x.test`, email_confirmed_at: '2026-01-01', app_metadata: { provider: 'email' }, ...extra })
++const session = u => ({ user: u })
++
++function harness({ verified = isVerifiedUser } = {}) {
++  const states = []
++  const calls = { getSession: 0, ensureProfile: 0, signOut: 0, signOutIds: [] }
++  const profile = []      // pending ensureProfile deferreds, in call order
++  const restoreD = deferred()
++  const tasks = []
++  let listener = null
++  let unsubscribed = 0
++  const controller = createAuthSessionController({
++    getSession: () => { calls.getSession++; return restoreD.promise },
++    ensureProfile: () => { calls.ensureProfile++; const d = deferred(); profile.push(d); return d.promise },
++    signOut: async id => { calls.signOut++; calls.signOutIds.push(id) },
++    isVerifiedUser: verified,
++    subscribe: cb => { listener = cb; return { unsubscribe: () => { unsubscribed++ } } },
++    onState: s => states.push(s),
++    schedule: task => tasks.push(task),
++  })
++  const runTasks = async () => { while (tasks.length) tasks.shift()(); await flush() }
++  const last = () => states[states.length - 1]
++  const everSignedInAs = id => states.some(s => s.status === 'signed_in' && s.user.id === id)
++  return { controller, states, calls, profile, restoreD, tasks, runTasks, last, everSignedInAs, event: (name, s) => listener(name, s), unsubscribed: () => unsubscribed }
++}
++
++test('restore of a verified session bootstraps the profile once and signs in', async () => {
++  const h = harness(); h.controller.start()
++  h.restoreD.resolve({ data: { session: session(user('a')) }, error: null }); await flush()
++  assert.equal(h.last().status, 'loading')
++  h.profile[0].resolve({ error: null }); await flush()
++  assert.deepEqual([h.last().status, h.last().user.id], ['signed_in', 'a'])
++  assert.equal(h.calls.ensureProfile, 1)
++})
++
++test('logout while the profile is loading never ends in signed_in', async () => {
++  const h = harness(); h.controller.start()
++  h.restoreD.resolve({ data: { session: session(user('a')) }, error: null }); await flush()
++  h.event('SIGNED_OUT', null)                       // user signs out while the profile request is in flight
++  assert.equal(h.last().status, 'signed_out')       // applied synchronously
++  await h.runTasks()
++  h.profile[0].resolve({ error: null }); await flush()   // the stale profile result arrives late
++  assert.equal(h.last().status, 'signed_out')
++  assert.equal(h.everSignedInAs('a'), false)
++})
++
++test('switching account A to B: the late profile result for A cannot grant access, B ends signed in', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); await h.runTasks()
++  h.event('SIGNED_IN', session(user('b')))
++  assert.equal(h.last().status, 'loading', 'A is not shown while B is resolving')
++  await h.runTasks()
++  h.profile[1].resolve({ error: null }); await flush()
++  h.profile[0].resolve({ error: null }); await flush()   // A resolves last
++  assert.deepEqual([h.last().status, h.last().user.id], ['signed_in', 'b'])
++  assert.equal(h.everSignedInAs('a'), false)
++})
++
++test('a delayed restore result cannot override a newer auth event', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_OUT', null); await h.runTasks()
++  h.restoreD.resolve({ data: { session: session(user('a')) }, error: null }); await flush()
++  assert.equal(h.last().status, 'signed_out')
++  assert.equal(h.calls.ensureProfile, 0)
++})
++
++test('a delayed restore error cannot override a newer signed-in state', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); await h.runTasks(); h.profile[0].resolve({ error: null }); await flush()
++  h.restoreD.resolve({ data: { session: null }, error: new Error('late') }); await flush()
++  assert.deepEqual([h.last().status, h.last().user.id], ['signed_in', 'a'])
++})
++
++test('dispose (unmount) during restore or profile load emits nothing and unsubscribes', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); await h.runTasks()
++  const before = h.states.length
++  h.controller.dispose()
++  h.profile[0].resolve({ error: null }); h.restoreD.resolve({ data: { session: session(user('a')) }, error: null }); await flush()
++  assert.equal(h.states.length, before)
++  assert.equal(h.unsubscribed(), 1)
++})
++
++test('a scheduled task invalidated before it runs starts NO profile work (logout, switch, dispose, newer event)', async () => {
++  // logout between the event and its scheduled task
++  let h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); h.event('SIGNED_OUT', null)
++  await h.runTasks()
++  assert.deepEqual([h.calls.ensureProfile, h.calls.signOut], [0, 0])
++  assert.equal(h.last().status, 'signed_out')
++  // account switch: only B's task may start profile work
++  h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); h.event('SIGNED_IN', session(user('b')))
++  await h.runTasks()
++  assert.equal(h.calls.ensureProfile, 1)
++  h.profile[0].resolve({ error: null }); await flush()
++  assert.deepEqual([h.last().status, h.last().user.id], ['signed_in', 'b'])
++  // dispose before the task executes
++  h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); h.controller.dispose()
++  await h.runTasks()
++  assert.deepEqual([h.calls.ensureProfile, h.calls.signOut], [0, 0])
++  // a restore result that arrives after a newer event
++  h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('b'))); await h.runTasks()
++  h.restoreD.resolve({ data: { session: session(user('a')) }, error: null }); await flush()
++  assert.equal(h.calls.ensureProfile, 1, 'only B bootstraps')
++  // a stale unverified task starts no signOut either
++  h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('u', { email_confirmed_at: null }))); h.event('SIGNED_OUT', null)
++  await h.runTasks()
++  assert.equal(h.calls.signOut, 0)
++})
++
++test('a stale task touches nothing at entry: not even the verification rule is evaluated', async () => {
++  let evaluated = 0
++  const h = harness({ verified: u => { evaluated++; return isVerifiedUser(u) } }); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); h.event('SIGNED_IN', session(user('b'))); h.event('SIGNED_OUT', null)
++  const statesBefore = h.states.length
++  await h.runTasks()
++  assert.equal(evaluated, 0, 'the two invalidated tasks never evaluated their sessions (the newest is a logout, which needs no check)')
++  assert.deepEqual(h.states.slice(statesBefore).map(s => s.status), ['signed_out'], 'only the newest task acted')
++  assert.deepEqual([h.calls.ensureProfile, h.calls.signOut], [0, 0])
++})
++
++test('automated sign-out is always scoped to the user it decided about', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('u', { email_confirmed_at: null }))); await h.runTasks()
++  assert.deepEqual(h.calls.signOutIds, ['u'])
++})
++
++test('reviewer scenarios: a confirmed reviewer signs in; an unconfirmed one is denied before any profile call', async () => {
++  const ok = harness(); ok.controller.start()
++  ok.event('SIGNED_IN', session(user('reviewer', { email: 'reviewer@cliniverseai.com' }))); await ok.runTasks()
++  ok.profile[0].resolve({ error: null }); await flush()
++  assert.equal(ok.last().status, 'signed_in')
++  const denied = harness(); denied.controller.start()
++  denied.event('SIGNED_IN', session(user('reviewer', { email: 'reviewer@cliniverseai.com', email_confirmed_at: null }))); await denied.runTasks()
++  assert.deepEqual([denied.last().status, denied.calls.ensureProfile], ['signed_out', 0])
++})
++
++test('an unverified email/password session is signed out and never reaches the profile or access', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('u', { email_confirmed_at: null }))); await h.runTasks()
++  assert.equal(h.last().status, 'signed_out')
++  assert.equal(h.calls.ensureProfile, 0)
++  assert.equal(h.calls.signOut, 1)
++  assert.equal(h.states.some(s => s.status === 'signed_in'), false)
++})
++
++test('a stale unverified decision never signs out a newer verified login', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('u', { email_confirmed_at: null })))   // scheduled, not yet run
++  h.event('SIGNED_IN', session(user('a')))                                 // newer login
++  await h.runTasks()
++  assert.equal(h.calls.signOut, 0)
++  h.profile[0].resolve({ error: null }); await flush()
++  assert.deepEqual([h.last().status, h.last().user.id], ['signed_in', 'a'])
++})
++
++test('the auth-state callback is synchronous and calls no Supabase API until it is scheduled', async () => {
++  const h = harness(); h.controller.start()
++  const getSessionBefore = h.calls.getSession
++  const returned = h.event('SIGNED_IN', session(user('a')))
++  assert.equal(returned, undefined, 'callback returns nothing awaitable')
++  assert.deepEqual([h.calls.getSession - getSessionBefore, h.calls.ensureProfile, h.calls.signOut], [0, 0, 0])
++  assert.equal(h.tasks.length, 1, 'follow-up work is deferred out of the callback')
++  await h.runTasks()
++  assert.equal(h.calls.ensureProfile, 1)
++})
++
++test('event storm: refreshes of a ready user do not re-bootstrap; the last event wins', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); await h.runTasks(); h.profile[0].resolve({ error: null }); await flush()
++  for (let i = 0; i < 50; i++) h.event('TOKEN_REFRESHED', session(user('a')))
++  await h.runTasks()
++  assert.equal(h.calls.ensureProfile, 1)
++  assert.equal(h.last().status, 'signed_in')
++  for (let i = 0; i < 20; i++) h.event('SIGNED_IN', session(user(i % 2 ? 'a' : 'b')))   // ends on 'a'
++  h.event('SIGNED_OUT', null)
++  await h.runTasks()
++  for (const d of h.profile) d.resolve({ error: null })
++  await flush()
++  assert.equal(h.last().status, 'signed_out', 'the final event (logout) wins over every pending profile')
++})
++
++test('a profile failure is shown as an error, and a stale failure after logout is ignored', async () => {
++  const h = harness(); h.controller.start()
++  h.event('SIGNED_IN', session(user('a'))); await h.runTasks(); h.profile[0].resolve({ error: new Error('x') }); await flush()
++  assert.equal(h.last().status, 'error')
++  const g = harness(); g.controller.start()
++  g.event('SIGNED_IN', session(user('a'))); await g.runTasks()
++  g.event('SIGNED_OUT', null); await g.runTasks()
++  g.profile[0].resolve({ error: new Error('late') }); await flush()
++  assert.equal(g.last().status, 'signed_out')
++})
++
++test('isVerifiedUser: email accounts need email_confirmed_at, OAuth identities are provider-verified', () => {
++  assert.equal(isVerifiedUser(user('a')), true)
++  assert.equal(isVerifiedUser(user('a', { email_confirmed_at: null })), false)
++  assert.equal(isVerifiedUser({ id: 'a', email_confirmed_at: null }), false)
++  assert.equal(isVerifiedUser(user('a', { email_confirmed_at: null, app_metadata: { provider: 'apple' } })), true)
++  assert.equal(isVerifiedUser(user('a', { email_confirmed_at: null, app_metadata: { provider: 'google' } })), true)
++})
+diff --git a/tests/ecg-learner-workspace.test.mjs b/tests/ecg-learner-workspace.test.mjs
+index e271565..ec2f5e7 100644
+--- a/tests/ecg-learner-workspace.test.mjs
++++ b/tests/ecg-learner-workspace.test.mjs
+@@ -232,7 +232,7 @@ test('styling is scoped, token-only, restrained, and nothing is positioned over
+ // ── wiring, the legacy route and the reviewer-only path ───────────────────────
+ 
+ test('Learn and Progress open the governed workspace; the legacy quiz is no longer any primary entry', () => {
+-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'ecg',[\s\S]*?href: '\/learn\/ecg'/)
++  assert.match(read('app/components/release/LearnTracks.tsx'), /id:'ecg',[\s\S]*?href:'\/learn\/ecg'/)
+   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /ecg: \{ accent: 'var\(--cv-teal\)', href: '\/learn\/ecg' \}/)
+   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
+     assert.equal(stripComments(read(file)).includes('/labs/ecg-challenge'), false, `${file} still links the legacy quiz`)
+diff --git a/tests/echo-intelligence-atlas-live-route.test.mjs b/tests/echo-intelligence-atlas-live-route.test.mjs
+index 9986dfb..5295e1c 100644
+--- a/tests/echo-intelligence-atlas-live-route.test.mjs
++++ b/tests/echo-intelligence-atlas-live-route.test.mjs
+@@ -25,7 +25,7 @@ test('Echo is reachable from exactly one entry point (the Learn Echo track, now
+   // Explore v2 no longer lists Echo Preview; Learn owns the practice-track entry.
+   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
+   const learn = read('app/components/release/LearnTracks.tsx')
+-  assert.equal((learn.match(/href: '\/learn\/echo'/g) ?? []).length, 1)
++  assert.equal((learn.match(/href:'\/learn\/echo'/g) ?? []).length, 1)
+   assert.equal(learn.includes('/labs/echo-preview'), false)
+   assert.equal(atlas.includes('/labs/echo-preview'), false)
+   // No competing labs route for the Atlas was introduced
+diff --git a/tests/echo-learner-workspace.test.mjs b/tests/echo-learner-workspace.test.mjs
+index c5bc6c1..feebd70 100644
+--- a/tests/echo-learner-workspace.test.mjs
++++ b/tests/echo-learner-workspace.test.mjs
+@@ -193,7 +193,7 @@ test('the summary panel keeps its exact studio look: every colour and size is a
+ // ── wiring ────────────────────────────────────────────────────────────────────
+ 
+ test('Learn and Progress open the Echo workspace; the studio preview stays for QA and governance and is no longer any primary entry', () => {
+-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'echo',[\s\S]*?href: '\/learn\/echo'/)
++  assert.match(read('app/components/release/LearnTracks.tsx'), /id:'echo',[\s\S]*?href:'\/learn\/echo'/)
+   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /echo: \{ accent: 'var\(--cv-violet\)', href: '\/learn\/echo' \}/)
+   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
+     assert.equal(stripComments(read(file)).includes('/labs/echo-preview'), false, `${file} still links the studio preview`)
+diff --git a/tests/explore-curated-discovery.test.mjs b/tests/explore-curated-discovery.test.mjs
+index 2ca3ec2..eadd40e 100644
+--- a/tests/explore-curated-discovery.test.mjs
++++ b/tests/explore-curated-discovery.test.mjs
+@@ -135,9 +135,9 @@ test('the engines and routes that left Explore are all still present and reachab
+   }
+   // Learn owns ECG, Echo and Ward entry.
+   const learn = read('app/components/release/LearnTracks.tsx')
+-  assert.equal(learn.match(/href: '\/learn\/ecg'/g).length, 1)
+-  assert.equal(learn.match(/href: '\/learn\/echo'/g).length, 1)
+-  assert.match(learn, /onClick=\{onOpenWard\}/)
++  assert.equal(learn.match(/href:'\/learn\/ecg'/g).length, 1)
++  assert.equal(learn.match(/href:'\/learn\/echo'/g).length, 1)
++  assert.match(learn, /onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
+   // Code Lab and Nexus remain in the Learn workspace switcher, with their plan gates.
+   const ward = read('app/components/ward/index.tsx')
+   assert.match(ward, /label: 'Code Lab',[\s\S]*?premium: false/)
+@@ -159,7 +159,8 @@ test('Explore owns its page heading and support line in the shared header; navig
+   assert.match(header, /active === 'progress' \|\| active === 'explore' \|\| active === 'me' \? <h1 id=\{`\$\{active\}-title`\}/)
+   assert.match(explore, /<section aria-labelledby="explore-title" data-commercial-surface="explore" data-commercial-explore-surface>/)
+   assert.doesNotMatch(exploreSource, /<h1|<h2/)
+-  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=\{showEcgReview && caseLibraryPreview\} \/>/)
++  // The shell passes no reviewer case-library flag to Explore (the component still supports it, covered below).
++  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
+   const nav = read('app/components/ReleaseNav.tsx')
+   assert.deepEqual([...nav.matchAll(/label: '([^']+)'/g)].map(match => match[1]), ['Today', 'Learn', 'Progress', 'Explore', 'Me'])
+   assert.doesNotMatch(nav, /Intelligence/)
+diff --git a/tests/learn-practice-tracks.test.mjs b/tests/learn-practice-tracks.test.mjs
+index af797e5..1e251d2 100644
+--- a/tests/learn-practice-tracks.test.mjs
++++ b/tests/learn-practice-tracks.test.mjs
+@@ -12,15 +12,19 @@ const stripComments = source => source.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').repl
+ const trackSource = stripComments(tracks)
+ // The Learn block runs until the Progress block begins (Progress has its own scoping test).
+ const learnCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing')), css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory'))))
+-const trackEntries = [...tracks.matchAll(/verb: '([^']+)',\s*title: '([^']+)',\s*description: '([^']+)',\s*accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)]
+-  .map(([, verb, title, description, accent, href]) => ({ verb, title, description, accent, href: href ?? null }))
++const trackEntries = [...tracks.matchAll(/\{ id:'([^']+)', verb:'([^']+)', title:'([^']+)', description:'([^']+)', accent:'([^']+)', (?:href:'([^']+)'|workspace:'([^']+)') \}/g)]
++  .map(([, id, verb, title, description, accent, href, workspace]) => ({ id, verb, title, description, accent, href: href ?? null, workspace: workspace ?? null }))
+ 
+-test('Learn landing has exactly the three approved practice tracks, in order', () => {
+-  assert.deepEqual(trackEntries, [
+-    { verb: 'INTERPRET', title: 'ECG', description: 'Read the full tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg' },
+-    { verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo' },
+-    { verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and see the consequence of each decision.', accent: 'var(--cv-blue)', href: null },
++test('Learn landing lists the three core tracks first, then advanced practice and clinical systems, in order', () => {
++  assert.deepEqual(trackEntries.map(entry => entry.id), ['ecg', 'echo', 'ward', 'resuscitation', 'handover', 'codelab', 'pathway', 'reference', 'cardiology', 'nexus'])
++  assert.deepEqual(trackEntries.slice(0, 3), [
++    { id: 'ecg', verb: 'INTERPRET', title: 'ECG', description: 'Read the tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg', workspace: null },
++    { id: 'echo', verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo', workspace: null },
++    { id: 'ward', verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and work through the next clinical decision.', accent: 'var(--cv-blue)', href: null, workspace: 'ward' },
+   ])
++  assert.deepEqual([...tracks.matchAll(/<TrackGroup title="([^"]+)"/g)].map(match => match[1]), ['Core practice', 'Advanced practice', 'Clinical systems'])
++  // Every entry is either a route or an in-place workspace, never both.
++  for (const entry of trackEntries) assert.ok(Boolean(entry.href) !== Boolean(entry.workspace), entry.id)
+ })
+ 
+ test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn owns their entry); Ward opens in place', () => {
+@@ -31,21 +35,24 @@ test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn
+   assert.ok(existsSync(new URL('../app/learn/echo/page.tsx', import.meta.url)))
+   assert.ok(existsSync(new URL('../app/labs/echo-preview/page.tsx', import.meta.url)))
+   assert.ok(!tracks.includes('/labs/ecg-challenge') && !tracks.includes('/labs/echo-preview'))
++  for (const href of trackEntries.map(entry => entry.href).filter(Boolean)) {
++    const route = href.replace(/^\//, '')
++    assert.ok(existsSync(new URL(`../app/${route}/page.tsx`, import.meta.url)), `${href} has a page`)
++  }
+   // Explore v2 no longer lists them, so each has exactly one in-app entry: this track.
+   for (const href of ['/learn/ecg', '/learn/echo']) {
+-    assert.equal(tracks.split(`href: '${href}'`).length - 1, 1, `Learn lists ${href} once`)
++    assert.equal(tracks.split(`href:'${href}'`).length - 1, 1, `Learn lists ${href} once`)
+     assert.ok(!explore.includes(href), `Explore no longer lists ${href}`)
+   }
+-  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{onOpenWard\}/)
+-  assert.match(app, /<LearnTracks onOpenWard=\{\(\) => setCareWorkspace\('ward'\)\} \/>/)
++  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
++  assert.match(app, /<LearnTracks onOpenWorkspace=\{openWorkspace\} \/>/)
+   // The reviewer-only ECG account-review route is not a learner track destination.
+   assert.doesNotMatch(trackSource, /ecg-account-review|echo-account-review/)
+ })
+ 
+-test('legacy workspaces are not presented as Learn tracks, and no user data is invented', () => {
+-  assert.doesNotMatch(trackSource, /Code Lab|Cardiology|Nexus/)
+-  assert.doesNotMatch(trackSource, /\d/)
+-  assert.doesNotMatch(trackSource, /Resume|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
++test('Learn tracks are static catalogue entries and no user data is invented', () => {
++  for (const entry of trackEntries) assert.doesNotMatch(`${entry.verb} ${entry.title} ${entry.description}`, /\d/, `${entry.id} shows no invented counts`)
++  assert.doesNotMatch(trackSource, /Resume (your|where)|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
+   assert.deepEqual([...trackSource.matchAll(/^import .* from '([^']+)'/gm)].map(match => match[1]), ['next/link', 'react'])
+ })
+ 
+@@ -55,13 +62,13 @@ test('untargeted Learn shows the landing; every explicit workspace deep link sti
+   assert.match(app, /const goTab = \(next: ReleaseTab\) => \{ if \(next === 'learn'\) setCareWorkspace\(null\); setTab\(next\) \}/)
+   for (const wiring of [
+     /const openCodeLab = \(\) => \{ setCareWorkspace\('codelab'\); setTab\('learn'\) \}/,
++    /const openWorkspace = \(workspace: CareWorkspace\) => \{ setCareWorkspace\(workspace\); setCardiologyModule\('overview'\); setTab\('learn'\) \}/,
+     /if \(destination\.workspace\) \{ setCareWorkspace\(destination\.workspace\)/,
+-    /onWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
+-    /setCareWorkspace\('cardiology'\); setTab\('learn'\)/,
++    /onOpenWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
+   ]) assert.match(app, wiring)
+   assert.match(app, /<ReleaseNav active=\{tab\} onChange=\{goTab\} \/>/)
+   assert.match(app, /← Practice tracks/)
+-  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Choose a practice track\. Your progress stays connected\./)
++  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Practice, simulate and apply clinical reasoning\.'/)
+ })
+ 
+ test('legacy engines and PRO gating in WardIndex are untouched and still reachable', () => {
+diff --git a/tests/me-account-v2.test.mjs b/tests/me-account-v2.test.mjs
+index 98b134f..a0fdf92 100644
+--- a/tests/me-account-v2.test.mjs
++++ b/tests/me-account-v2.test.mjs
+@@ -11,7 +11,8 @@ const appearance = read('app/components/release/AppearanceSettings.tsx')
+ const topics = read('app/components/release/TopicsIFollow.tsx')
+ const session = read('app/components/auth/AccountSessionActions.tsx')
+ const css = read('app/commercial-visual-system.css')
+-const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))))
++// The Me block runs until the unified Learn architecture block that follows it.
++const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences')), css.lastIndexOf('/*', css.indexOf('Unified Learn architecture'))))
+ const header = app.slice(app.indexOf('function ReleaseHeader'), app.indexOf('function TodaySurface'))
+ 
+ // ── shell, heading, navigation ────────────────────────────────────────────────
+@@ -37,7 +38,10 @@ test('identity comes from the real profile and Supabase Auth email, with nothing
+   assert.match(account, /const displayName = name\?\.trim\(\) \|\| email/)
+   assert.doesNotMatch(account, /Cliniverse (learner|user)|Synced|Last sync|Signed in as/i)
+   // No identifiers, tokens or reviewer details reach the screen.
+-  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|reviewer|admin/i)
++  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|admin/i)
++  // The only reviewer detail is the server-granted plan label (reviewerAccess), never an email, id or token.
++  assert.deepEqual([...account.matchAll(/reviewer\w*/gi)].map(match => match[0]).filter(word => !/^reviewerAccess$/.test(word) && !/^Reviewer$/.test(word)), [])
++  assert.doesNotMatch(account, /reviewer@/i)
+ })
+ 
+ test('profile update still saves only the name, and the email has no input at all', () => {
+diff --git a/tests/me-hub-actions.test.mjs b/tests/me-hub-actions.test.mjs
+index 5f72600..b181e94 100644
+--- a/tests/me-hub-actions.test.mjs
++++ b/tests/me-hub-actions.test.mjs
+@@ -11,10 +11,10 @@ const exports={}
+ // Every relative import is a marker component, so the render shows exactly what MeHub composes.
+ vm.runInNewContext(code,{exports,require(name){return name.startsWith('.')?{default:Object.assign(()=>null,{displayName:name.split('/').pop()})}:require(name)}})
+ const nodes=n=>!n||typeof n!=='object'?[]:[n,...[n.props?.children].flat(Infinity).flatMap(nodes)]
+-test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action, in that order',()=>{
++test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action and the protected account-deletion action, in that order',()=>{
+  const rendered=nodes(exports.default());
+  const composed=rendered.filter(n=>typeof n.type==='function').map(n=>n.type.displayName);
+- assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions']);
++ assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions','DeleteAccountAction']);
+  const rows=rendered.filter(n=>n.type==='a');
+  assert.deepEqual(rows.map(n=>n.props.href),['/privacy','/terms','/support']);
+  for(const href of rows.map(n=>n.props.href))assert.ok(fs.existsSync(new URL(`../app${href}/page.tsx`,import.meta.url)));
+diff --git a/tests/paywall-release-contracts.test.mjs b/tests/paywall-release-contracts.test.mjs
+index 9a98a8c..83eae5a 100644
+--- a/tests/paywall-release-contracts.test.mjs
++++ b/tests/paywall-release-contracts.test.mjs
+@@ -87,5 +87,5 @@ test('Explore links only to active release paths; the StoreKit plan is owned by
+   assert.match(me, /onClick=\{openPaywall\}/)
+   assert.match(me, /primaryProduct\.displayPrice/)
+   assert.doesNotMatch(atlas, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
+-  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=/)
++  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
+ })
+diff --git a/tests/progress-trajectory.test.mjs b/tests/progress-trajectory.test.mjs
+index 82393ba..18228ef 100644
+--- a/tests/progress-trajectory.test.mjs
++++ b/tests/progress-trajectory.test.mjs
+@@ -159,14 +159,14 @@ test('the ECG history reader is a single shared function and keeps the learner-e
+ })
+ 
+ test('Progress shows ECG, Echo and Ward as the canonical tracks, with the same destinations and accents as Learn', () => {
+-  const learnEntries = Object.fromEntries([...learn.matchAll(/id: '([^']+)',[\s\S]*?accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
++  const learnEntries = Object.fromEntries([...learn.matchAll(/\{ id:'(ecg|echo|ward)',[^}]*?accent:'([^']+)'(?:, href:'([^']+)')?/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
+   const ui = Object.fromEntries([...component.matchAll(/(ecg|echo|ward): \{ accent: '([^']+)', href: (?:'([^']+)'|null) \}/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
+   assert.deepEqual(Object.keys(ui), ['ecg', 'echo', 'ward'])
+   assert.deepEqual(ui, learnEntries)
+   assert.deepEqual(ui.ecg, { accent: 'var(--cv-teal)', href: '/learn/ecg' })
+   assert.deepEqual(ui.echo, { accent: 'var(--cv-violet)', href: '/learn/echo' })
+   assert.deepEqual(ui.ward, { accent: 'var(--cv-blue)', href: null })
+-  for (const legacy of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(legacy), `${legacy} is not a Progress track`)
++  for (const other of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(other), `${other} is not a Progress track`)
+ })
+ 
+ test('Ward stage labels match the labels the saved-practice list already shows', () => {
+diff --git a/tests/release-interactions-contract.test.mjs b/tests/release-interactions-contract.test.mjs
+index 4f00c99..4e5711e 100644
+--- a/tests/release-interactions-contract.test.mjs
++++ b/tests/release-interactions-contract.test.mjs
+@@ -15,7 +15,10 @@ test('Explore is a curated discovery list limited to verified release surfaces',
+   assert.match(source, /workspace: 'cardiology'/)
+   assert.match(releaseApp, /setCareWorkspace\(destination\.workspace\)/)
+   assert.match(releaseApp, /<WardIndex[^>]*initialWorkspace=\{careWorkspace\}/)
+-  assert.match(ward, /initialWorkspace === 'ward' \|\| initialWorkspace === 'codelab' \? null : initialWorkspace/)
++  // Premium workspaces never open directly: they wait behind the paywall until PRO is confirmed.
++  assert.match(ward, /const initialIsPremium = initialWorkspace === 'cardiology' \|\| initialWorkspace === 'nexus'/)
++  assert.match(ward, /useState<CareWorkspace \| null>\(initialIsPremium \? initialWorkspace : null\)/)
++  assert.match(ward, /const activeWorkspace = isPro && pendingWorkspace \? pendingWorkspace : workspace/)
+   assert.doesNotMatch(source, /onOpenPlan/)
+   assert.match(releaseApp, /Reference, operations and advanced practice — when you need them\./)
+   assert.match(source, /Not for diagnosis, prescribing or managing real patient care/)
+diff --git a/tests/release-security-contracts.test.mjs b/tests/release-security-contracts.test.mjs
+index 60eeb7f..4780c53 100644
+--- a/tests/release-security-contracts.test.mjs
++++ b/tests/release-security-contracts.test.mjs
+@@ -309,13 +309,17 @@ test('native iOS release gate is documented before RC1', () => {
+   assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
+ })
+ 
+-test('magic-link sign-in stays disabled by default and cannot implicitly create accounts', () => {
++test('magic-link sign-in stays disabled by default and cannot implicitly create accounts; self-service sign-up requires email confirmation', () => {
+   const identity = read('app/lib/identity.ts')
+   const auth = read('app/components/AuthScreen.tsx')
+   assert.match(identity, /shouldCreateUser:\s*false/)
+   assert.match(auth, /enableMagicLink\s*=\s*false/)
+   assert.match(auth, /\{enableMagicLink\s*\?\s*<button/)
+-  assert.match(auth, /Account creation is not enabled in this release/)
++  // Self-service account creation is an approved 1.1 behaviour (MASTER decision): it goes through
++  // Supabase sign-up only, and no session is honoured until the email is confirmed.
++  assert.match(auth, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
++  assert.match(auth, /isVerifiedUser\(data\.user\)/)
++  assert.doesNotMatch(auth, /Account creation is not enabled in this release/)
+ })
+ 
+ test('third-party AI is gated out of the release shell until consent and claims review pass', () => {
+diff --git a/tests/release-unified-product-ux.test.mjs b/tests/release-unified-product-ux.test.mjs
+index dd28787..e0aea2d 100644
+--- a/tests/release-unified-product-ux.test.mjs
++++ b/tests/release-unified-product-ux.test.mjs
+@@ -1,6 +1,6 @@
+ import test from 'node:test'
+ import assert from 'node:assert/strict'
+-import { readFileSync } from 'node:fs'
++import fs, { readFileSync } from 'node:fs'
+ const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8')
+ 
+ test('account creation is available without changing magic-link create-user policy', () => {
+@@ -13,14 +13,64 @@ test('account creation is available without changing magic-link create-user poli
+   assert.doesNotMatch(auth, /Account creation is not enabled/)
+ })
+ 
++function sourceFiles(path) {
++  const root = new URL(`../${path}`, import.meta.url)
++  const out = []
++  const walk = url => {
++    for (const entry of fs.readdirSync(url, { withFileTypes: true })) {
++      const child = new URL(entry.name + (entry.isDirectory() ? '/' : ''), url)
++      if (entry.isDirectory()) walk(child)
++      else if (/\.(ts|tsx)$/.test(entry.name)) out.push([child.pathname, fs.readFileSync(child, 'utf8')])
++    }
++  }
++  const stat = fs.statSync(root)
++  if (stat.isDirectory()) walk(new URL(path.replace(/\/?$/, '/'), new URL('../', import.meta.url)))
++  else out.push([root.pathname, fs.readFileSync(root, 'utf8')])
++  return out
++}
++const GATE = /useCliniverseSubscription|canAccessPremium|entitlement|\bisPro\b|premium|paywall|openPaywall/i
++
+ test('paywall does not invent a free trial and presents one connected product', () => {
+   const source = read('app/components/PaywallSheet.tsx')
+   assert.doesNotMatch(source, /7 days free|free for 7 days|Start my free trial/i)
+-  for (const label of ['Core practice','Advanced practice','Clinical systems','Progress and review']) assert.ok(source.includes(label))
+-  for (const capability of ['ECG','Echo','Ward','Handover Practice','Resuscitation','Code Lab','Pathway Replay','Clinical Reference','Cardiology Operations','Nexus Learning']) assert.ok(source.includes(capability))
+   assert.match(source, /offerCopy = trialLabel/)
+ })
+ 
++test('paywall benefits match the real access gates (source-level evidence); free features are listed only as free', () => {
++  const source = read('app/components/PaywallSheet.tsx')
++  const groups = [...source.matchAll(/groups: \[([\s\S]*?)\] as CapabilityGroup\[\]/g)].map(match => match[1]).join('\n')
++  const freeNotes = [...source.matchAll(/freeNote: "([^"]+)"/g)].map(match => match[1])
++  assert.equal(freeNotes.length, 2, 'EN and AR')
++
++  // PRO benefits: each one has a gate in the code.
++  const ward = read('app/components/ward/index.tsx')
++  assert.match(read('app/components/ward/WardHome.tsx'), /const caseUnlocked = isPro \|\| patient\.id === 'w1'/)
++  assert.match(ward, /<WardHome onSelectPatient=\{handleSelectPatient\} isPro=\{isPro\}/)
++  assert.match(read('app/components/ward/RelatedEvidencePanel.tsx'), /if \(isPro\) \{\s*setExpanded\(true\)/)
++  assert.match(read('app/components/ward/CodeLabHub.tsx'), /if \(isPro\) return true;\s*return lessonOrder <= 2;/)
++  assert.match(ward, /label: 'Cardiology Operations',[\s\S]*?premium: true/)
++  assert.match(ward, /label: 'Nexus Learning',[\s\S]*?premium: true/)
++  assert.match(ward, /if \(premium && !isPro\) \{\s*setPendingWorkspace\(nextWorkspace\)\s*openPaywall\(\)/)
++  for (const benefit of ['every simulated case', 'PubMed', 'all BLS and ACLS lessons', 'Cardiology Operations', 'Nexus Learning']) assert.ok(groups.includes(benefit), benefit)
++  for (const arabic of ['جميع الحالات المحاكاة', 'جميع دروس BLS وACLS']) assert.ok(source.includes(arabic), arabic)
++
++  // Features with NO entitlement gate anywhere in their routes/components must never be listed as PRO benefits.
++  const free = {
++    'ECG': ['app/learn/ecg'], 'Echo': ['app/learn/echo'], 'Resuscitation': ['app/labs/resuscitation-hub'],
++    'Pathway Replay': ['app/labs/pathway-replay'], 'Clinical Reference': ['app/labs/clinical-reference'],
++    'Handover Practice': ['app/components/ward/WardHandoverSession.tsx'],
++  }
++  for (const [name, paths] of Object.entries(free)) {
++    for (const path of paths) for (const [file, text] of sourceFiles(path)) assert.doesNotMatch(text, GATE, `${name} has an access gate in ${file}`)
++    assert.ok(freeNotes.every(note => note.includes(name)), `${name} is declared free in EN and AR`)
++    assert.ok(!new RegExp(`${name} —`).test(groups), `${name} is not a PRO benefit`)
++  }
++  assert.match(ward, /label: 'Handover Practice',[\s\S]*?premium: false/)
++  assert.match(source, /<div className="cv-paywall-status">\{t\.freeNote\}<\/div>/)
++  // The free allowances named in the PRO groups are exactly the ones the gates enforce (first case, lessons 1-2).
++  assert.ok(groups.includes('the first case is free') && groups.includes('lessons 1–2 are free'))
++})
++
+ test('Learn keeps every product capability reachable in a unified hierarchy', () => {
+   const source = read('app/components/release/LearnTracks.tsx')
+   for (const heading of ['Core practice','Advanced practice','Clinical systems']) assert.ok(source.includes(heading))
+diff --git a/tests/today-golden-surface.test.mjs b/tests/today-golden-surface.test.mjs
+index 69df31a..9065b3b 100644
+--- a/tests/today-golden-surface.test.mjs
++++ b/tests/today-golden-surface.test.mjs
+@@ -28,7 +28,7 @@ test('Today has exactly one primary action and one review item, routed to existi
+   assert.match(today, /className="cv-today-cta" onClick=\{\(\) => onNavigate\('learn'\)\}/)
+   assert.equal((today.match(/className="cv-today-row"/g) ?? []).length, 1)
+   assert.match(today, /onNavigate\('progress'\)/)
+-  assert.match(today, /NEXT ACTION/)
++  assert.match(today, />NEXT</)
+   assert.match(today, /REVIEW/)
+ })
+ 
+@@ -36,8 +36,10 @@ test('Today does not hardcode user progress, review counts or study/case example
+   assert.doesNotMatch(today, /\b\d+\s+(cases?|studies|review)/i)
+   assert.doesNotMatch(today, /Case 0\d/)
+   assert.doesNotMatch(today, /\bdue\b/i)
+-  // Metrics come from the real account lesson data through the existing summary component.
+-  assert.match(today, /<AccountLearningSummary compact view="summary"/)
++  // Today is static navigation copy: it embeds no account data at all (the unified product UX keeps the lesson
++  // summary in Progress, where it is read from the real account lesson data).
++  assert.doesNotMatch(today, /AccountLearningSummary|supabase|localStorage|fetch\(/)
++  assert.match(app, /<AccountLearningSummary view="summary" isPro=\{false\}/)
+   assert.match(summary, /completedIds\.includes\(lesson\.id\)/)
+   assert.doesNotMatch(summary.slice(summary.indexOf('if (compact)'), summary.indexOf('return <section data-learning-summary aria-label')), /\b(?:2|3|7)\b\s*(?:cases|studies)/i)
+ })
+-- 
+2.43.0
+
