@@ -15,7 +15,10 @@ test('Explore is a curated discovery list limited to verified release surfaces',
   assert.match(source, /workspace: 'cardiology'/)
   assert.match(releaseApp, /setCareWorkspace\(destination\.workspace\)/)
   assert.match(releaseApp, /<WardIndex[^>]*initialWorkspace=\{careWorkspace\}/)
-  assert.match(ward, /initialWorkspace === 'ward' \|\| initialWorkspace === 'codelab' \? null : initialWorkspace/)
+  // Premium workspaces never open directly: they wait behind the paywall until PRO is confirmed.
+  assert.match(ward, /const initialIsPremium = initialWorkspace === 'cardiology' \|\| initialWorkspace === 'nexus'/)
+  assert.match(ward, /useState<CareWorkspace \| null>\(initialIsPremium \? initialWorkspace : null\)/)
+  assert.match(ward, /const activeWorkspace = isPro && pendingWorkspace \? pendingWorkspace : workspace/)
   assert.doesNotMatch(source, /onOpenPlan/)
   assert.match(releaseApp, /Reference, operations and advanced practice — when you need them\./)
   assert.match(source, /Not for diagnosis, prescribing or managing real patient care/)

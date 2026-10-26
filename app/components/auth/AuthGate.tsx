@@ -3,8 +3,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import type { User } from '@supabase/supabase-js'
 import AuthScreen from '../AuthScreen'
-import { getCurrentSession, subscribeToAuthState } from '../../lib/identity'
+import { getCurrentSession, isVerifiedUser, signOutSession, subscribeToAuthState } from '../../lib/identity'
 import { ensureOwnProfile } from '../../lib/profile'
+import { createAuthSessionController } from '../../lib/authSessionController'
 
 type AuthState =
   | { status: 'loading'; user: null }
@@ -24,35 +25,16 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
   const [state, setState] = useState<AuthState>({ status: 'loading', user: null })
 
   useEffect(() => {
-    let active = true
-
-    async function restore() {
-      const { data, error } = await getCurrentSession()
-      if (!active) return
-      if (error) return setState({ status: 'error', user: null, message: 'Unable to restore your session.' })
-      const user = data.session?.user ?? null
-      if (!user) return setState({ status: 'signed_out', user: null })
-      const profileResult = await ensureOwnProfile()
-      if (!active) return
-      if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
-      setState({ status: 'signed_in', user })
-    }
-
-    restore()
-    const { data } = subscribeToAuthState(async (_event, session) => {
-      if (!active) return
-      const user = session?.user ?? null
-      if (!user) return setState({ status: 'signed_out', user: null })
-      const profileResult = await ensureOwnProfile()
-      if (!active) return
-      if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
-      setState({ status: 'signed_in', user })
+    const controller = createAuthSessionController<User>({
+      getSession: getCurrentSession,
+      ensureProfile: ensureOwnProfile,
+      signOut: signOutSession,
+      isVerifiedUser,
+      subscribe: callback => subscribeToAuthState(async (event, session) => { callback(event, session) }).data.subscription,
+      onState: setState,
     })
-
-    return () => {
-      active = false
-      data.subscription.unsubscribe()
-    }
+    controller.start()
+    return () => controller.dispose()
   }, [])
 
   if (state.status === 'loading') return <GateStatus title="Restoring your session" detail="Preparing Cliniverse securely…" />

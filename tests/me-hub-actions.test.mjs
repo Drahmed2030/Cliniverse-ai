@@ -11,10 +11,10 @@ const exports={}
 // Every relative import is a marker component, so the render shows exactly what MeHub composes.
 vm.runInNewContext(code,{exports,require(name){return name.startsWith('.')?{default:Object.assign(()=>null,{displayName:name.split('/').pop()})}:require(name)}})
 const nodes=n=>!n||typeof n!=='object'?[]:[n,...[n.props?.children].flat(Infinity).flatMap(nodes)]
-test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action, in that order',()=>{
+test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action and the protected account-deletion action, in that order',()=>{
  const rendered=nodes(exports.default());
  const composed=rendered.filter(n=>typeof n.type==='function').map(n=>n.type.displayName);
- assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions']);
+ assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions','DeleteAccountAction']);
  const rows=rendered.filter(n=>n.type==='a');
  assert.deepEqual(rows.map(n=>n.props.href),['/privacy','/terms','/support']);
  for(const href of rows.map(n=>n.props.href))assert.ok(fs.existsSync(new URL(`../app${href}/page.tsx`,import.meta.url)));

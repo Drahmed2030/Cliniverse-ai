@@ -4,7 +4,9 @@ import { useState } from "react";
 import {
   signInWithMagicLink,
   signInWithOAuth,
+  isVerifiedUser,
   signInWithPassword,
+  signOutSession,
   signUpWithPassword,
   type CliniverseAuthProvider,
 } from "../lib/identity";
@@ -60,6 +62,7 @@ const COPY = {
     createAccount: "Create account",
     existingAccount: "Already have an account? Sign in",
     signupSent: "Check your email to confirm your account, then return to Cliniverse.",
+    verifyFirst: "Please confirm your email address before signing in. Check your inbox for the confirmation link.",
     back: "Back",
     guest: "Explore as guest",
     trust: "Human judgment leads · Privacy-conscious by design",
@@ -87,6 +90,7 @@ const COPY = {
     createAccount: "إنشاء حساب",
     existingAccount: "لديك حساب؟ سجّل الدخول",
     signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
+    verifyFirst: "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول. تحقق من صندوق الوارد.",
     back: "رجوع",
     guest: "استكشف كزائر",
     trust: "الحكم السريري يقود · الخصوصية جزء من التصميم",
@@ -178,10 +182,11 @@ export default function AuthScreen({
           setError(authError.message || t.genericError);
           return;
         }
-        if (data.session && data.user) {
+        if (data.session && data.user && isVerifiedUser(data.user)) {
           onComplete({ method: "email", email: normalizedEmail });
           return;
         }
+        if (data.session && data.user) await signOutSession(data.user.id);
         setNotice(t.signupSent);
         return;
       }
@@ -189,6 +194,11 @@ export default function AuthScreen({
       const { data, error: authError } = await signInWithPassword(normalizedEmail, password);
       if (authError || !data.session || !data.user) {
         setError(authError?.message || t.genericError);
+        return;
+      }
+      if (!isVerifiedUser(data.user)) {
+        await signOutSession(data.user.id);
+        setError(t.verifyFirst);
         return;
       }
       onComplete({ method: "email", email: normalizedEmail });

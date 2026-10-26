@@ -87,5 +87,5 @@ test('Explore links only to active release paths; the StoreKit plan is owned by 
   assert.match(me, /onClick=\{openPaywall\}/)
   assert.match(me, /primaryProduct\.displayPrice/)
   assert.doesNotMatch(atlas, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
-  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=/)
+  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
 })

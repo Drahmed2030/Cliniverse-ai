@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { BookOpen, Check, HeartPulse, RotateCcw, Stethoscope, type LucideIcon } from 'lucide-react'
+import { BookOpen, Check, HeartPulse, Stethoscope, type LucideIcon } from 'lucide-react'
 import type { StoreProduct } from '../lib/storekit-purchase-contract'
 import { NATIVE_SAFE_AREA_BOTTOM } from '../lib/nativeSafeArea'
 import { useAppearance } from './release/AppearanceSettings'
@@ -33,11 +33,11 @@ const COPY = {
     title: "Unlock Cliniverse PRO",
     subtitle: "Practice, simulation, reference and review in one connected clinical learning system.",
     groups: [
-      { icon: HeartPulse, title: "Core practice", items: ["ECG — structured interpretation and review", "Echo — licensed cine recognition and guided findings", "Ward — fictional cases from patient state to clinical decision"] },
-      { icon: Stethoscope, title: "Advanced practice", items: ["Resuscitation — curriculum, simulation and replay", "Code Lab — BLS and ACLS lessons with knowledge checks", "Pathway Replay — inspect decisions across a fictional clinical pathway"] },
-      { icon: BookOpen, title: "Clinical systems", items: ["Clinical Reference — source-linked drug and label lookups", "Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
-      { icon: RotateCcw, title: "Progress and review", items: ["Saved activity, learning history and review across your practice"] },
+      { icon: HeartPulse, title: "Ward", items: ["Ward — every simulated case (the first case is free)", "Source-linked evidence inside cases (PubMed · Guidelines)"] },
+      { icon: BookOpen, title: "Code Lab", items: ["Code Lab — all BLS and ACLS lessons (lessons 1–2 are free)"] },
+      { icon: Stethoscope, title: "Cardiology and team practice", items: ["Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
     ] as CapabilityGroup[],
+    freeNote: "Included free: ECG, Echo, Resuscitation, Pathway Replay, Clinical Reference and Handover Practice, plus the first Ward case and Code Lab lessons 1–2.",
     monthly: "Monthly", yearly: "Yearly", best: "Best value",
     continueStore: "Continue with App Store",
     unavailable: "App Store plans are not available right now",
@@ -49,11 +49,11 @@ const COPY = {
     title: "افتح Cliniverse PRO",
     subtitle: "التدريب والمحاكاة والمراجع والمراجعة في نظام تعلّم سريري واحد مترابط.",
     groups: [
-      { icon: HeartPulse, title: "الممارسة الأساسية", items: ["ECG — تفسير منظم ومراجعة", "Echo — تدريب على مقاطع مرخصة وملاحظات موجّهة", "Ward — حالات افتراضية من حالة المريض إلى القرار السريري"] },
-      { icon: Stethoscope, title: "الممارسة المتقدمة", items: ["الإنعاش — منهج ومحاكاة وإعادة مراجعة", "Code Lab — دروس BLS وACLS مع اختبارات معرفة", "Pathway Replay — مراجعة القرارات عبر مسار سريري افتراضي"] },
-      { icon: BookOpen, title: "الأنظمة السريرية", items: ["Clinical Reference — مراجع دوائية مرتبطة بالمصادر", "Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
-      { icon: RotateCcw, title: "التقدم والمراجعة", items: ["النشاط المحفوظ وسجل التعلم والمراجعة عبر ممارستك"] },
+      { icon: HeartPulse, title: "Ward", items: ["Ward — جميع الحالات المحاكاة (الحالة الأولى مجانية)", "أدلة مرتبطة بالمصادر داخل الحالات (PubMed · الإرشادات)"] },
+      { icon: BookOpen, title: "Code Lab", items: ["Code Lab — جميع دروس BLS وACLS (الدرسان 1–2 مجانيان)"] },
+      { icon: Stethoscope, title: "الممارسة القلبية والفريقية", items: ["Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
     ] as CapabilityGroup[],
+    freeNote: "متاح مجانًا: ECG وEcho وResuscitation وPathway Replay وClinical Reference وHandover Practice، إضافةً إلى أول حالة في Ward والدرسين 1–2 في Code Lab.",
     monthly: "شهري", yearly: "سنوي", best: "أفضل قيمة",
     continueStore: "المتابعة عبر App Store",
     unavailable: "خطط App Store غير متاحة الآن",
@@ -117,6 +117,7 @@ export default function PaywallSheet({
               </div>
             )
           })}
+          <div className="cv-paywall-status">{t.freeNote}</div>
         </div>
 
         {products.length > 0 ? (

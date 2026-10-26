@@ -20,26 +20,74 @@ function walkAppFiles(dir, visit) {
   }
 }
 
+function signInSection() {
+  const screen = read('app/components/AuthScreen.tsx')
+  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
+  // Password sign-in is the code after the self-service sign-up branch.
+  return handler.slice(handler.indexOf('await signInWithPassword'))
+}
+
 test('sign-in delegates to Supabase Auth and fails closed on any error, never marking a caller authenticated', () => {
   const identity = read('app/lib/identity.ts')
   assert.match(identity, /export async function signInWithPassword\(email: string, password: string\)/)
-  assert.match(identity, /return supabase\.auth\.signInWithPassword\(\{ email, password \}\)/)
+  assert.match(identity, /return mutate\(\(\) => supabase\.auth\.signInWithPassword\(\{ email, password \}\), noSession\)/)
+  // A refused (busy) mutation becomes an ordinary auth error result, never a thrown error and never a started request.
+  assert.match(identity, /if \(isAuthMutationBusy\(error\)\) return refused\(error\)/)
   assert.doesNotMatch(identity, /onComplete\(/)
 
-  const screen = read('app/components/AuthScreen.tsx')
-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
-  assert.match(emailHandler, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
-  assert.match(emailHandler, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
-  // onComplete (which the gate treats as sign-in success) is called only after the
-  // authError/session/user guard above — it does not appear before it in the handler.
-  assert.ok(emailHandler.indexOf('if (authError || !data.session || !data.user)') < emailHandler.indexOf('onComplete({ method: "email"'))
+  const signIn = signInSection()
+  assert.match(signIn, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
+  assert.match(signIn, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
+  // onComplete is reached only after the error/session/user guard AND the email-verification guard.
+  const guard = signIn.indexOf('if (authError || !data.session || !data.user)')
+  const verified = signIn.indexOf('!isVerifiedUser(data.user)')
+  const complete = signIn.indexOf('onComplete({ method: "email"')
+  assert.ok(guard >= 0 && guard < verified && verified < complete)
 })
 
 test('invalid sign-in surfaces a controlled error and does not call onComplete', () => {
+  const signIn = signInSection()
+  assert.match(signIn, /setError\(authError\?\.message \|\| t\.genericError\);\s*return;/)
+  assert.match(signIn, /await signOutSession\(data\.user\.id\);\s*setError\(t\.verifyFirst\);\s*return;/)
+  assert.match(signIn, /catch \{\s*setError\(t\.genericError\)/)
+})
+
+test('self-service sign-up never signs a user in before their email is confirmed', () => {
   const screen = read('app/components/AuthScreen.tsx')
-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('async function handleEmail') + 1200)
-  assert.match(emailHandler, /setError\(authError\?\.message \|\| t\.genericError\)/)
-  assert.match(emailHandler, /return;\s*\n\s*\}/)
+  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
+  const signUp = handler.slice(handler.indexOf('if (isSignUp)'), handler.indexOf('await signInWithPassword'))
+  assert.match(signUp, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
+  assert.match(signUp, /if \(authError\) \{\s*setError\(authError\.message \|\| t\.genericError\);\s*return;/)
+  // A session returned without a confirmed address is discarded and the user is told to confirm.
+  assert.match(signUp, /if \(data\.session && data\.user && isVerifiedUser\(data\.user\)\) \{\s*onComplete/)
+  assert.match(signUp, /if \(data\.session && data\.user\) await signOutSession\(data\.user\.id\);\s*setNotice\(t\.signupSent\)/)
+  assert.ok(signUp.indexOf('isVerifiedUser') < signUp.indexOf('onComplete('))
+  assert.match(screen, /signupSent: "Check your email to confirm your account/)
+  // The password minimum applies to sign-up and sign-in alike.
+  assert.match(handler, /password\.trim\(\)\.length < 8/)
+})
+
+test('the auth gate delegates to the race-safe controller and keeps the verification rule as defense in depth', () => {
+  const identity = read('app/lib/identity.ts')
+  assert.match(identity, /export \{ isVerifiedUser \} from '\.\/emailVerification'/)
+  const rule = read('app/lib/emailVerification.ts')
+  assert.match(rule, /return Boolean\(user\.email_confirmed_at\)/)
+  // The comment must not claim the client check proves inbox ownership (it does not if Confirm email is OFF).
+  assert.match(rule, /does NOT prove inbox ownership/)
+  assert.doesNotMatch(rule, /backstop if/i)
+
+  const gate = read('app/components/auth/AuthGate.tsx')
+  assert.match(gate, /createAuthSessionController<User>\(/)
+  assert.match(gate, /isVerifiedUser,/)
+  assert.match(gate, /return \(\) => controller\.dispose\(\)/)
+  // No direct Supabase/profile/signOut call remains in the gate component itself (behaviour: tests/auth-session-controller.test.mjs).
+  const body = gate.slice(gate.indexOf('export default function AuthGate'), gate.indexOf("if (state.status === 'loading')"))
+  assert.doesNotMatch(body, /await |ensureOwnProfile\(\)|signOut\(\)/)
+
+  const controller = read('app/lib/authSessionController.ts')
+  assert.doesNotMatch(controller, /import .*supabase/i)
+  const callback = controller.slice(controller.indexOf('deps.subscribe('), controller.indexOf('void restore()'))
+  assert.doesNotMatch(callback, /await |deps\.(getSession|ensureProfile|signOut)/)
 })
 
 test('requireCurrentUser fails closed on a missing session or a Supabase error', () => {
@@ -52,7 +100,7 @@ test('requireCurrentUser fails closed on a missing session or a Supabase error',
 test('sign-out delegates to Supabase Auth and the UI surfaces failure without assuming success', () => {
   const identity = read('app/lib/identity.ts')
   assert.match(identity, /export async function signOut\(\)/)
-  assert.match(identity, /return supabase\.auth\.signOut\(\)/)
+  assert.match(identity, /return mutate\(\(\) => supabase\.auth\.signOut\(\), error => \(\{ error \}\) as never\)/)
 
   const actions = read('app/components/auth/AccountSessionActions.tsx')
   assert.match(actions, /const \{ error: signOutError \} = await signOut\(\)/)
@@ -88,9 +136,14 @@ test('reviewer preview access is derived from the verified authenticated email, 
   const release = read('app/components/ReleaseApp.tsx')
   assert.match(release, /showEcgReview=\{reviewPreview\s*&&\s*user\.email\?\.toLowerCase\(\)\s*===\s*'reviewer@cliniverseai\.com'\s*&&\s*Boolean\(user\.email_confirmed_at\)\}/)
 
+  // Entitlement-adjacent reviewer access is decided server-side from the verified bearer token.
   const provider = read('app/components/release/SubscriptionPurchaseProvider.tsx')
   assert.match(provider, /fetch\('\/api\/reviewer-feature-access',\s*\{\s*cache:\s*'no-store',\s*headers:\s*\{\s*Authorization:\s*`Bearer \$\{data\.session\.access_token\}`/)
-  assert.match(provider, /No administrator privileges/)
+  assert.match(provider, /Access remains denied on failure/)
+  const route = read('app/api/reviewer-feature-access/route.ts')
+  assert.match(route, /supabase\.auth\.getUser\(token\)/)
+  assert.match(route, /VERCEL_ENV !== 'preview' && process\.env\.VERCEL_ENV !== 'production'/)
+  assert.match(route, /allowed: false\s*\}, \{ status: 401/)
 })
 
 test('no PRO/premium/session access anywhere in the app is derived from a localStorage-read flag', () => {

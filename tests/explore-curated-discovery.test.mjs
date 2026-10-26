@@ -135,9 +135,9 @@ test('the engines and routes that left Explore are all still present and reachab
   }
   // Learn owns ECG, Echo and Ward entry.
   const learn = read('app/components/release/LearnTracks.tsx')
-  assert.equal(learn.match(/href: '\/learn\/ecg'/g).length, 1)
-  assert.equal(learn.match(/href: '\/learn\/echo'/g).length, 1)
-  assert.match(learn, /onClick=\{onOpenWard\}/)
+  assert.equal(learn.match(/href:'\/learn\/ecg'/g).length, 1)
+  assert.equal(learn.match(/href:'\/learn\/echo'/g).length, 1)
+  assert.match(learn, /onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
   // Code Lab and Nexus remain in the Learn workspace switcher, with their plan gates.
   const ward = read('app/components/ward/index.tsx')
   assert.match(ward, /label: 'Code Lab',[\s\S]*?premium: false/)
@@ -159,7 +159,8 @@ test('Explore owns its page heading and support line in the shared header; navig
   assert.match(header, /active === 'progress' \|\| active === 'explore' \|\| active === 'me' \? <h1 id=\{`\$\{active\}-title`\}/)
   assert.match(explore, /<section aria-labelledby="explore-title" data-commercial-surface="explore" data-commercial-explore-surface>/)
   assert.doesNotMatch(exploreSource, /<h1|<h2/)
-  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=\{showEcgReview && caseLibraryPreview\} \/>/)
+  // The shell passes no reviewer case-library flag to Explore (the component still supports it, covered below).
+  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
   const nav = read('app/components/ReleaseNav.tsx')
   assert.deepEqual([...nav.matchAll(/label: '([^']+)'/g)].map(match => match[1]), ['Today', 'Learn', 'Progress', 'Explore', 'Me'])
   assert.doesNotMatch(nav, /Intelligence/)

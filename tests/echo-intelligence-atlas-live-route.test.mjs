@@ -25,7 +25,7 @@ test('Echo is reachable from exactly one entry point (the Learn Echo track, now 
   // Explore v2 no longer lists Echo Preview; Learn owns the practice-track entry.
   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
   const learn = read('app/components/release/LearnTracks.tsx')
-  assert.equal((learn.match(/href: '\/learn\/echo'/g) ?? []).length, 1)
+  assert.equal((learn.match(/href:'\/learn\/echo'/g) ?? []).length, 1)
   assert.equal(learn.includes('/labs/echo-preview'), false)
   assert.equal(atlas.includes('/labs/echo-preview'), false)
   // No competing labs route for the Atlas was introduced

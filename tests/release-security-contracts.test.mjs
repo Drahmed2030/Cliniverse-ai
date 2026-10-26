@@ -309,13 +309,17 @@ test('native iOS release gate is documented before RC1', () => {
   assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
 })
 
-test('magic-link sign-in stays disabled by default and cannot implicitly create accounts', () => {
+test('magic-link sign-in stays disabled by default and cannot implicitly create accounts; self-service sign-up requires email confirmation', () => {
   const identity = read('app/lib/identity.ts')
   const auth = read('app/components/AuthScreen.tsx')
   assert.match(identity, /shouldCreateUser:\s*false/)
   assert.match(auth, /enableMagicLink\s*=\s*false/)
   assert.match(auth, /\{enableMagicLink\s*\?\s*<button/)
-  assert.match(auth, /Account creation is not enabled in this release/)
+  // Self-service account creation is an approved 1.1 behaviour (MASTER decision): it goes through
+  // Supabase sign-up only, and no session is honoured until the email is confirmed.
+  assert.match(auth, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
+  assert.match(auth, /isVerifiedUser\(data\.user\)/)
+  assert.doesNotMatch(auth, /Account creation is not enabled in this release/)
 })
 
 test('third-party AI is gated out of the release shell until consent and claims review pass', () => {

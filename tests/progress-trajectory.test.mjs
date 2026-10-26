@@ -159,14 +159,14 @@ test('the ECG history reader is a single shared function and keeps the learner-e
 })
 
 test('Progress shows ECG, Echo and Ward as the canonical tracks, with the same destinations and accents as Learn', () => {
-  const learnEntries = Object.fromEntries([...learn.matchAll(/id: '([^']+)',[\s\S]*?accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
+  const learnEntries = Object.fromEntries([...learn.matchAll(/\{ id:'(ecg|echo|ward)',[^}]*?accent:'([^']+)'(?:, href:'([^']+)')?/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
   const ui = Object.fromEntries([...component.matchAll(/(ecg|echo|ward): \{ accent: '([^']+)', href: (?:'([^']+)'|null) \}/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
   assert.deepEqual(Object.keys(ui), ['ecg', 'echo', 'ward'])
   assert.deepEqual(ui, learnEntries)
   assert.deepEqual(ui.ecg, { accent: 'var(--cv-teal)', href: '/learn/ecg' })
   assert.deepEqual(ui.echo, { accent: 'var(--cv-violet)', href: '/learn/echo' })
   assert.deepEqual(ui.ward, { accent: 'var(--cv-blue)', href: null })
-  for (const legacy of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(legacy), `${legacy} is not a Progress track`)
+  for (const other of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(other), `${other} is not a Progress track`)
 })
 
 test('Ward stage labels match the labels the saved-practice list already shows', () => {

@@ -12,15 +12,19 @@ const stripComments = source => source.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').repl
 const trackSource = stripComments(tracks)
 // The Learn block runs until the Progress block begins (Progress has its own scoping test).
 const learnCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing')), css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory'))))
-const trackEntries = [...tracks.matchAll(/verb: '([^']+)',\s*title: '([^']+)',\s*description: '([^']+)',\s*accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)]
-  .map(([, verb, title, description, accent, href]) => ({ verb, title, description, accent, href: href ?? null }))
+const trackEntries = [...tracks.matchAll(/\{ id:'([^']+)', verb:'([^']+)', title:'([^']+)', description:'([^']+)', accent:'([^']+)', (?:href:'([^']+)'|workspace:'([^']+)') \}/g)]
+  .map(([, id, verb, title, description, accent, href, workspace]) => ({ id, verb, title, description, accent, href: href ?? null, workspace: workspace ?? null }))
 
-test('Learn landing has exactly the three approved practice tracks, in order', () => {
-  assert.deepEqual(trackEntries, [
-    { verb: 'INTERPRET', title: 'ECG', description: 'Read the full tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg' },
-    { verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo' },
-    { verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and see the consequence of each decision.', accent: 'var(--cv-blue)', href: null },
+test('Learn landing lists the three core tracks first, then advanced practice and clinical systems, in order', () => {
+  assert.deepEqual(trackEntries.map(entry => entry.id), ['ecg', 'echo', 'ward', 'resuscitation', 'handover', 'codelab', 'pathway', 'reference', 'cardiology', 'nexus'])
+  assert.deepEqual(trackEntries.slice(0, 3), [
+    { id: 'ecg', verb: 'INTERPRET', title: 'ECG', description: 'Read the tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg', workspace: null },
+    { id: 'echo', verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo', workspace: null },
+    { id: 'ward', verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and work through the next clinical decision.', accent: 'var(--cv-blue)', href: null, workspace: 'ward' },
   ])
+  assert.deepEqual([...tracks.matchAll(/<TrackGroup title="([^"]+)"/g)].map(match => match[1]), ['Core practice', 'Advanced practice', 'Clinical systems'])
+  // Every entry is either a route or an in-place workspace, never both.
+  for (const entry of trackEntries) assert.ok(Boolean(entry.href) !== Boolean(entry.workspace), entry.id)
 })
 
 test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn owns their entry); Ward opens in place', () => {
@@ -31,21 +35,24 @@ test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn
   assert.ok(existsSync(new URL('../app/learn/echo/page.tsx', import.meta.url)))
   assert.ok(existsSync(new URL('../app/labs/echo-preview/page.tsx', import.meta.url)))
   assert.ok(!tracks.includes('/labs/ecg-challenge') && !tracks.includes('/labs/echo-preview'))
+  for (const href of trackEntries.map(entry => entry.href).filter(Boolean)) {
+    const route = href.replace(/^\//, '')
+    assert.ok(existsSync(new URL(`../app/${route}/page.tsx`, import.meta.url)), `${href} has a page`)
+  }
   // Explore v2 no longer lists them, so each has exactly one in-app entry: this track.
   for (const href of ['/learn/ecg', '/learn/echo']) {
-    assert.equal(tracks.split(`href: '${href}'`).length - 1, 1, `Learn lists ${href} once`)
+    assert.equal(tracks.split(`href:'${href}'`).length - 1, 1, `Learn lists ${href} once`)
     assert.ok(!explore.includes(href), `Explore no longer lists ${href}`)
   }
-  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{onOpenWard\}/)
-  assert.match(app, /<LearnTracks onOpenWard=\{\(\) => setCareWorkspace\('ward'\)\} \/>/)
+  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
+  assert.match(app, /<LearnTracks onOpenWorkspace=\{openWorkspace\} \/>/)
   // The reviewer-only ECG account-review route is not a learner track destination.
   assert.doesNotMatch(trackSource, /ecg-account-review|echo-account-review/)
 })
 
-test('legacy workspaces are not presented as Learn tracks, and no user data is invented', () => {
-  assert.doesNotMatch(trackSource, /Code Lab|Cardiology|Nexus/)
-  assert.doesNotMatch(trackSource, /\d/)
-  assert.doesNotMatch(trackSource, /Resume|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
+test('Learn tracks are static catalogue entries and no user data is invented', () => {
+  for (const entry of trackEntries) assert.doesNotMatch(`${entry.verb} ${entry.title} ${entry.description}`, /\d/, `${entry.id} shows no invented counts`)
+  assert.doesNotMatch(trackSource, /Resume (your|where)|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
   assert.deepEqual([...trackSource.matchAll(/^import .* from '([^']+)'/gm)].map(match => match[1]), ['next/link', 'react'])
 })
 
@@ -55,13 +62,13 @@ test('untargeted Learn shows the landing; every explicit workspace deep link sti
   assert.match(app, /const goTab = \(next: ReleaseTab\) => \{ if \(next === 'learn'\) setCareWorkspace\(null\); setTab\(next\) \}/)
   for (const wiring of [
     /const openCodeLab = \(\) => \{ setCareWorkspace\('codelab'\); setTab\('learn'\) \}/,
+    /const openWorkspace = \(workspace: CareWorkspace\) => \{ setCareWorkspace\(workspace\); setCardiologyModule\('overview'\); setTab\('learn'\) \}/,
     /if \(destination\.workspace\) \{ setCareWorkspace\(destination\.workspace\)/,
-    /onWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
-    /setCareWorkspace\('cardiology'\); setTab\('learn'\)/,
+    /onOpenWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
   ]) assert.match(app, wiring)
   assert.match(app, /<ReleaseNav active=\{tab\} onChange=\{goTab\} \/>/)
   assert.match(app, /← Practice tracks/)
-  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Choose a practice track\. Your progress stays connected\./)
+  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Practice, simulate and apply clinical reasoning\.'/)
 })
 
 test('legacy engines and PRO gating in WardIndex are untouched and still reachable', () => {

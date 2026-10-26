@@ -11,7 +11,8 @@ const appearance = read('app/components/release/AppearanceSettings.tsx')
 const topics = read('app/components/release/TopicsIFollow.tsx')
 const session = read('app/components/auth/AccountSessionActions.tsx')
 const css = read('app/commercial-visual-system.css')
-const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))))
+// The Me block runs until the unified Learn architecture block that follows it.
+const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences')), css.lastIndexOf('/*', css.indexOf('Unified Learn architecture'))))
 const header = app.slice(app.indexOf('function ReleaseHeader'), app.indexOf('function TodaySurface'))
 
 // ── shell, heading, navigation ────────────────────────────────────────────────
@@ -37,7 +38,10 @@ test('identity comes from the real profile and Supabase Auth email, with nothing
   assert.match(account, /const displayName = name\?\.trim\(\) \|\| email/)
   assert.doesNotMatch(account, /Cliniverse (learner|user)|Synced|Last sync|Signed in as/i)
   // No identifiers, tokens or reviewer details reach the screen.
-  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|reviewer|admin/i)
+  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|admin/i)
+  // The only reviewer detail is the server-granted plan label (reviewerAccess), never an email, id or token.
+  assert.deepEqual([...account.matchAll(/reviewer\w*/gi)].map(match => match[0]).filter(word => !/^reviewerAccess$/.test(word) && !/^Reviewer$/.test(word)), [])
+  assert.doesNotMatch(account, /reviewer@/i)
 })
 
 test('profile update still saves only the name, and the email has no input at all', () => {
