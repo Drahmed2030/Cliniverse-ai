@@ -40,13 +40,13 @@ No simulator, TestFlight or physical-device evidence exists for Build 69 in this
 | 2 | Password recovery | R5+R6 drafts under review; **real end-to-end test on a protected preview/TEST project is UNVERIFIED** (plan: `docs/PASSWORD_RECOVERY_PREVIEW_TEST_PLAN.md`, not authorised) | Work 1 / MASTER |
 | 2b | Service worker: baseline cached auth/recovery/API responses (and falls back to cached `/`); baseline as shipped does not install, so exposure is limited to browsers that kept an earlier installable version | R6 fix + browser evidence; Safari/WKWebView behaviour UNVERIFIED | Work 1 |
 | 3 | Honest copy (ECG prepared, Echo one study, Code Lab 2 free per track) | R5 applied to Learn/Paywall; Onboarding lines 22/94/115 corrected in RC1 (`build69-rc1-onboarding-copy.patch`), pending review; App Store/reviewer text stale — see `docs/RELEASE_COPY_AND_EVIDENCE_AUDIT_2026-10-26.md`; copy-only fix proposed, not authorized | MASTER / Claude |
-| 4 | Account deletion retention policy (cascade deletes purchase records) | HOLD; draft for legal in `docs/ACCOUNT_DELETION_RETENTION_POLICY_DRAFT.md` | MASTER + legal |
+| 4 | Account deletion retention policy (cascade deletes purchase records) | HOLD; legal review pending on Work 1's minimum-retention proposal (Claude draft in `docs/ACCOUNT_DELETION_RETENTION_POLICY_DRAFT.md` partly superseded) | MASTER + legal |
 | 5 | Controlled Vercel releases (exact SHA, review, authorization, rollback) | procedure drafted; Production Branch setting unverified | MASTER / Work 1 |
 | 6 | Codemagic provenance and a new RC after explicit build GO | not started | Work 1 |
 | 7 | TestFlight device QA: sign-up → email confirmation → login, logout/restore (incl. 20 s busy UX), reviewer, StoreKit purchase/restore, Ward/Echo, recovery, deletion (after policy) | not started | MASTER / tester |
 | 8 | Privacy labels and screenshots vs the final IPA/web state | pending | Work 1 |
 | 10 | Operational readiness (Supabase, Codemagic, Safari, StoreKit, reviewer, retention) | **HOLD** — item-by-item list in `docs/RELEASE_GATE_CHECKLIST_1.1_BUILD_69.md` | Work 1 (one combined review) / MASTER |
-| 11 | P1 subscription ownership/entitlement audit | separate HOLD track, not a 1.1 patch | MASTER |
+| 11 | P1 subscription ownership/entitlement (incl. restore of A's purchase by B, server enforcement) | separate HOLD, not a 1.1 patch; no store text may imply it is accepted | MASTER |
 | 12 | `account-codelab` 10 ms tick flake | OPEN | MASTER |
 | 9 | Free Core + PRO Advanced (Issue #37) | design/doc only; no gating in 1.1 | MASTER |
 

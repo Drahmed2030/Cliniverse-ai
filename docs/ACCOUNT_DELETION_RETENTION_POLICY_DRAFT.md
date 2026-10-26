@@ -1,5 +1,8 @@
 # Account deletion — preliminary retention policy (DRAFT for legal/privacy review)
 
+> **Superseded in part (MASTER decision, after review of Work 1's later proposal):** the provisional position is to **delete account data and retain only the minimum transaction records where a specific legal basis exists**. Identifiers and hashes of transactions can stay personal data, so §3 Option B ("de-identified ledger"), the hashing idea, the `[N] months` wording in §5 and the recommendation are **withdrawn** and must not be used. No retention period and no new table is approved before the legal review. Work 1's file is the controlling text; this draft is retained only for the verified facts (§1) and the decision list (§2).
+
+
 **Status: proposal, not legal advice, not approved.** No deletion has been run; no production database, Edge Function or Supabase setting was changed or exercised. Account-deletion behaviour stays HOLD (Issue #36 decision) until MASTER and legal decide.
 
 ## 1. Verified facts (read-only, MASTER, Issue #36)
@@ -18,7 +21,7 @@
 | B. De-identified ledger | Before delete, copy to a ledger table: Apple `original_transaction_id` (hashed or kept as legal basis permits), product id, period dates, environment, no user id/email; retain N months | Supports disputes, sticky-ownership checks, finance | Needs schema change, policy text, legal basis; hash of a stable id may still be personal data |
 | C. Retain account tombstone | Keep `user_id` pseudonym + subscription row, drop profile/content | Easy reconciliation | Weakest privacy position; likely conflicts with user expectation of deletion |
 
-**Recommendation (for legal to confirm): Option B**, retention period chosen by legal (commonly the applicable tax/dispute limitation period), with an explicit privacy-policy sentence and a pre-delete warning when a subscription is active ("Deleting your account does not cancel your subscription; cancel it in Apple Settings").
+**[WITHDRAWN — see note at top] Former recommendation: Option B**, retention period chosen by legal (commonly the applicable tax/dispute limitation period), with an explicit privacy-policy sentence and a pre-delete warning when a subscription is active ("Deleting your account does not cancel your subscription; cancel it in Apple Settings").
 
 ## 4. Required if B is chosen (future, separate authorization)
 Migration adding the ledger table with the four-policy RLS pattern from `CLAUDE.md`; changing the cascade path or adding a pre-delete function; `delete-account` update; tests against a TEST project; privacy policy, App Privacy answers and App Review notes aligned; no test deletion on production accounts.
