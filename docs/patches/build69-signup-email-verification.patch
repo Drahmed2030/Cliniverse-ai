@@ -1,0 +1,533 @@
+From f5977c854d2329fbc35875dee6f2d4ec1eb25c44 Mon Sep 17 00:00:00 2001
+From: claude <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 08:07:22 +0000
+Subject: [PATCH] wip
+
+---
+ app/components/AuthScreen.tsx                 | 12 +++-
+ app/components/PaywallSheet.tsx               |  4 +-
+ app/components/auth/AuthGate.tsx              |  4 +-
+ app/lib/identity.ts                           |  9 +++
+ tests/auth-identity-session-contract.test.mjs | 62 +++++++++++++++----
+ tests/ecg-learner-workspace.test.mjs          |  2 +-
+ ...cho-intelligence-atlas-live-route.test.mjs |  2 +-
+ tests/echo-learner-workspace.test.mjs         |  2 +-
+ tests/explore-curated-discovery.test.mjs      |  9 +--
+ tests/learn-practice-tracks.test.mjs          | 41 +++++++-----
+ tests/me-account-v2.test.mjs                  |  8 ++-
+ tests/me-hub-actions.test.mjs                 |  4 +-
+ tests/paywall-release-contracts.test.mjs      |  2 +-
+ tests/progress-trajectory.test.mjs            |  4 +-
+ tests/release-interactions-contract.test.mjs  |  5 +-
+ tests/release-security-contracts.test.mjs     |  8 ++-
+ tests/today-golden-surface.test.mjs           |  8 ++-
+ 17 files changed, 134 insertions(+), 52 deletions(-)
+
+diff --git a/app/components/AuthScreen.tsx b/app/components/AuthScreen.tsx
+index e267974..666dbc5 100644
+--- a/app/components/AuthScreen.tsx
++++ b/app/components/AuthScreen.tsx
+@@ -4,7 +4,9 @@ import { useState } from "react";
+ import {
+   signInWithMagicLink,
+   signInWithOAuth,
++  isVerifiedUser,
+   signInWithPassword,
++  signOut,
+   signUpWithPassword,
+   type CliniverseAuthProvider,
+ } from "../lib/identity";
+@@ -60,6 +62,7 @@ const COPY = {
+     createAccount: "Create account",
+     existingAccount: "Already have an account? Sign in",
+     signupSent: "Check your email to confirm your account, then return to Cliniverse.",
++    verifyFirst: "Please confirm your email address before signing in. Check your inbox for the confirmation link.",
+     back: "Back",
+     guest: "Explore as guest",
+     trust: "Human judgment leads · Privacy-conscious by design",
+@@ -87,6 +90,7 @@ const COPY = {
+     createAccount: "إنشاء حساب",
+     existingAccount: "لديك حساب؟ سجّل الدخول",
+     signupSent: "تحقق من بريدك لتأكيد الحساب، ثم ارجع إلى Cliniverse.",
++    verifyFirst: "يرجى تأكيد بريدك الإلكتروني قبل تسجيل الدخول. تحقق من صندوق الوارد.",
+     back: "رجوع",
+     guest: "استكشف كزائر",
+     trust: "الحكم السريري يقود · الخصوصية جزء من التصميم",
+@@ -178,10 +182,11 @@ export default function AuthScreen({
+           setError(authError.message || t.genericError);
+           return;
+         }
+-        if (data.session && data.user) {
++        if (data.session && data.user && isVerifiedUser(data.user)) {
+           onComplete({ method: "email", email: normalizedEmail });
+           return;
+         }
++        if (data.session) await signOut();
+         setNotice(t.signupSent);
+         return;
+       }
+@@ -191,6 +196,11 @@ export default function AuthScreen({
+         setError(authError?.message || t.genericError);
+         return;
+       }
++      if (!isVerifiedUser(data.user)) {
++        await signOut();
++        setError(t.verifyFirst);
++        return;
++      }
+       onComplete({ method: "email", email: normalizedEmail });
+     } catch {
+       setError(t.genericError);
+diff --git a/app/components/PaywallSheet.tsx b/app/components/PaywallSheet.tsx
+index e4e46d4..e90c530 100644
+--- a/app/components/PaywallSheet.tsx
++++ b/app/components/PaywallSheet.tsx
+@@ -34,7 +34,7 @@ const COPY = {
+     subtitle: "Practice, simulation, reference and review in one connected clinical learning system.",
+     groups: [
+       { icon: HeartPulse, title: "Core practice", items: ["ECG — structured interpretation and review", "Echo — licensed cine recognition and guided findings", "Ward — fictional cases from patient state to clinical decision"] },
+-      { icon: Stethoscope, title: "Advanced practice", items: ["Resuscitation — curriculum, simulation and replay", "Code Lab — BLS and ACLS lessons with knowledge checks", "Pathway Replay — inspect decisions across a fictional clinical pathway"] },
++      { icon: Stethoscope, title: "Advanced practice", items: ["Handover Practice — structured clinical handover drafting and review", "Resuscitation — curriculum, simulation and replay", "Code Lab — BLS and ACLS lessons with knowledge checks", "Pathway Replay — inspect decisions across a fictional clinical pathway"] },
+       { icon: BookOpen, title: "Clinical systems", items: ["Clinical Reference — source-linked drug and label lookups", "Cardiology Operations — workflow and coordination practice", "Nexus Learning — multidisciplinary cardiovascular huddles"] },
+       { icon: RotateCcw, title: "Progress and review", items: ["Saved activity, learning history and review across your practice"] },
+     ] as CapabilityGroup[],
+@@ -50,7 +50,7 @@ const COPY = {
+     subtitle: "التدريب والمحاكاة والمراجع والمراجعة في نظام تعلّم سريري واحد مترابط.",
+     groups: [
+       { icon: HeartPulse, title: "الممارسة الأساسية", items: ["ECG — تفسير منظم ومراجعة", "Echo — تدريب على مقاطع مرخصة وملاحظات موجّهة", "Ward — حالات افتراضية من حالة المريض إلى القرار السريري"] },
+-      { icon: Stethoscope, title: "الممارسة المتقدمة", items: ["الإنعاش — منهج ومحاكاة وإعادة مراجعة", "Code Lab — دروس BLS وACLS مع اختبارات معرفة", "Pathway Replay — مراجعة القرارات عبر مسار سريري افتراضي"] },
++      { icon: Stethoscope, title: "الممارسة المتقدمة", items: ["Handover Practice — صياغة ومراجعة التسليم السريري المنظم", "الإنعاش — منهج ومحاكاة وإعادة مراجعة", "Code Lab — دروس BLS وACLS مع اختبارات معرفة", "Pathway Replay — مراجعة القرارات عبر مسار سريري افتراضي"] },
+       { icon: BookOpen, title: "الأنظمة السريرية", items: ["Clinical Reference — مراجع دوائية مرتبطة بالمصادر", "Cardiology Operations — تدريب على سير العمل والتنسيق", "Nexus Learning — تدريب جماعي متعدد الأدوار للقلب"] },
+       { icon: RotateCcw, title: "التقدم والمراجعة", items: ["النشاط المحفوظ وسجل التعلم والمراجعة عبر ممارستك"] },
+     ] as CapabilityGroup[],
+diff --git a/app/components/auth/AuthGate.tsx b/app/components/auth/AuthGate.tsx
+index 7f62f84..d09f67e 100644
+--- a/app/components/auth/AuthGate.tsx
++++ b/app/components/auth/AuthGate.tsx
+@@ -3,7 +3,7 @@
+ import { useEffect, useState, type ReactNode } from 'react'
+ import type { User } from '@supabase/supabase-js'
+ import AuthScreen from '../AuthScreen'
+-import { getCurrentSession, subscribeToAuthState } from '../../lib/identity'
++import { getCurrentSession, isVerifiedUser, signOut, subscribeToAuthState } from '../../lib/identity'
+ import { ensureOwnProfile } from '../../lib/profile'
+ 
+ type AuthState =
+@@ -32,6 +32,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
+       if (error) return setState({ status: 'error', user: null, message: 'Unable to restore your session.' })
+       const user = data.session?.user ?? null
+       if (!user) return setState({ status: 'signed_out', user: null })
++      if (!isVerifiedUser(user)) { void signOut(); return setState({ status: 'signed_out', user: null }) }
+       const profileResult = await ensureOwnProfile()
+       if (!active) return
+       if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
+@@ -43,6 +44,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
+       if (!active) return
+       const user = session?.user ?? null
+       if (!user) return setState({ status: 'signed_out', user: null })
++      if (!isVerifiedUser(user)) { setTimeout(() => { void signOut() }, 0); return setState({ status: 'signed_out', user: null }) }
+       const profileResult = await ensureOwnProfile()
+       if (!active) return
+       if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
+diff --git a/app/lib/identity.ts b/app/lib/identity.ts
+index 817ceb5..7628199 100644
+--- a/app/lib/identity.ts
++++ b/app/lib/identity.ts
+@@ -14,6 +14,15 @@ export async function signUpWithPassword(email: string, password: string, redire
+   })
+ }
+ 
++// Email/password accounts are usable only once Supabase has confirmed the address.
++// Supabase withholds the session until then when "Confirm email" is on; this is the
++// client-side backstop if that setting is ever turned off.
++export function isVerifiedUser(user: { email_confirmed_at?: string | null; app_metadata?: { provider?: string } }) {
++  const provider = user.app_metadata?.provider
++  if (provider && provider !== 'email') return true
++  return Boolean(user.email_confirmed_at)
++}
++
+ export async function signInWithMagicLink(email: string, redirectTo?: string) {
+   return supabase.auth.signInWithOtp({
+     email,
+diff --git a/tests/auth-identity-session-contract.test.mjs b/tests/auth-identity-session-contract.test.mjs
+index f9be8ee..3d356be 100644
+--- a/tests/auth-identity-session-contract.test.mjs
++++ b/tests/auth-identity-session-contract.test.mjs
+@@ -20,26 +20,61 @@ function walkAppFiles(dir, visit) {
+   }
+ }
+ 
++function signInSection() {
++  const screen = read('app/components/AuthScreen.tsx')
++  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
++  // Password sign-in is the code after the self-service sign-up branch.
++  return handler.slice(handler.indexOf('await signInWithPassword'))
++}
++
+ test('sign-in delegates to Supabase Auth and fails closed on any error, never marking a caller authenticated', () => {
+   const identity = read('app/lib/identity.ts')
+   assert.match(identity, /export async function signInWithPassword\(email: string, password: string\)/)
+   assert.match(identity, /return supabase\.auth\.signInWithPassword\(\{ email, password \}\)/)
+   assert.doesNotMatch(identity, /onComplete\(/)
+ 
+-  const screen = read('app/components/AuthScreen.tsx')
+-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
+-  assert.match(emailHandler, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
+-  assert.match(emailHandler, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
+-  // onComplete (which the gate treats as sign-in success) is called only after the
+-  // authError/session/user guard above — it does not appear before it in the handler.
+-  assert.ok(emailHandler.indexOf('if (authError || !data.session || !data.user)') < emailHandler.indexOf('onComplete({ method: "email"'))
++  const signIn = signInSection()
++  assert.match(signIn, /if \(authError \|\| !data\.session \|\| !data\.user\)/)
++  assert.match(signIn, /onComplete\(\{ method: "email", email: normalizedEmail \}\)/)
++  // onComplete is reached only after the error/session/user guard AND the email-verification guard.
++  const guard = signIn.indexOf('if (authError || !data.session || !data.user)')
++  const verified = signIn.indexOf('!isVerifiedUser(data.user)')
++  const complete = signIn.indexOf('onComplete({ method: "email"')
++  assert.ok(guard >= 0 && guard < verified && verified < complete)
+ })
+ 
+ test('invalid sign-in surfaces a controlled error and does not call onComplete', () => {
++  const signIn = signInSection()
++  assert.match(signIn, /setError\(authError\?\.message \|\| t\.genericError\);\s*return;/)
++  assert.match(signIn, /await signOut\(\);\s*setError\(t\.verifyFirst\);\s*return;/)
++  assert.match(signIn, /catch \{\s*setError\(t\.genericError\)/)
++})
++
++test('self-service sign-up never signs a user in before their email is confirmed', () => {
+   const screen = read('app/components/AuthScreen.tsx')
+-  const emailHandler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('async function handleEmail') + 1200)
+-  assert.match(emailHandler, /setError\(authError\?\.message \|\| t\.genericError\)/)
+-  assert.match(emailHandler, /return;\s*\n\s*\}/)
++  const handler = screen.slice(screen.indexOf('async function handleEmail'), screen.indexOf('return (', screen.indexOf('async function handleEmail')))
++  const signUp = handler.slice(handler.indexOf('if (isSignUp)'), handler.indexOf('await signInWithPassword'))
++  assert.match(signUp, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
++  assert.match(signUp, /if \(authError\) \{\s*setError\(authError\.message \|\| t\.genericError\);\s*return;/)
++  // A session returned without a confirmed address is discarded and the user is told to confirm.
++  assert.match(signUp, /if \(data\.session && data\.user && isVerifiedUser\(data\.user\)\) \{\s*onComplete/)
++  assert.match(signUp, /if \(data\.session\) await signOut\(\);\s*setNotice\(t\.signupSent\)/)
++  assert.ok(signUp.indexOf('isVerifiedUser') < signUp.indexOf('onComplete('))
++  assert.match(screen, /signupSent: "Check your email to confirm your account/)
++  // The password minimum applies to sign-up and sign-in alike.
++  assert.match(handler, /password\.trim\(\)\.length < 8/)
++})
++
++test('the auth gate rejects any session whose email is not verified, even if Supabase issues one', () => {
++  const identity = read('app/lib/identity.ts')
++  assert.match(identity, /export function isVerifiedUser/)
++  assert.match(identity, /return Boolean\(user\.email_confirmed_at\)/)
++  const gate = read('app/components/auth/AuthGate.tsx')
++  assert.equal(gate.split('!isVerifiedUser(user)').length - 1, 2, 'restore and auth-state listener both check')
++  // The profile is created only after the verification check.
++  for (const chunk of gate.split('!isVerifiedUser(user)').slice(1)) {
++    assert.ok(chunk.indexOf('signOut()') < chunk.indexOf('ensureOwnProfile()'))
++  }
+ })
+ 
+ test('requireCurrentUser fails closed on a missing session or a Supabase error', () => {
+@@ -88,9 +123,14 @@ test('reviewer preview access is derived from the verified authenticated email,
+   const release = read('app/components/ReleaseApp.tsx')
+   assert.match(release, /showEcgReview=\{reviewPreview\s*&&\s*user\.email\?\.toLowerCase\(\)\s*===\s*'reviewer@cliniverseai\.com'\s*&&\s*Boolean\(user\.email_confirmed_at\)\}/)
+ 
++  // Entitlement-adjacent reviewer access is decided server-side from the verified bearer token.
+   const provider = read('app/components/release/SubscriptionPurchaseProvider.tsx')
+   assert.match(provider, /fetch\('\/api\/reviewer-feature-access',\s*\{\s*cache:\s*'no-store',\s*headers:\s*\{\s*Authorization:\s*`Bearer \$\{data\.session\.access_token\}`/)
+-  assert.match(provider, /No administrator privileges/)
++  assert.match(provider, /Access remains denied on failure/)
++  const route = read('app/api/reviewer-feature-access/route.ts')
++  assert.match(route, /supabase\.auth\.getUser\(token\)/)
++  assert.match(route, /VERCEL_ENV !== 'preview' && process\.env\.VERCEL_ENV !== 'production'/)
++  assert.match(route, /allowed: false\s*\}, \{ status: 401/)
+ })
+ 
+ test('no PRO/premium/session access anywhere in the app is derived from a localStorage-read flag', () => {
+diff --git a/tests/ecg-learner-workspace.test.mjs b/tests/ecg-learner-workspace.test.mjs
+index e271565..ec2f5e7 100644
+--- a/tests/ecg-learner-workspace.test.mjs
++++ b/tests/ecg-learner-workspace.test.mjs
+@@ -232,7 +232,7 @@ test('styling is scoped, token-only, restrained, and nothing is positioned over
+ // ── wiring, the legacy route and the reviewer-only path ───────────────────────
+ 
+ test('Learn and Progress open the governed workspace; the legacy quiz is no longer any primary entry', () => {
+-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'ecg',[\s\S]*?href: '\/learn\/ecg'/)
++  assert.match(read('app/components/release/LearnTracks.tsx'), /id:'ecg',[\s\S]*?href:'\/learn\/ecg'/)
+   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /ecg: \{ accent: 'var\(--cv-teal\)', href: '\/learn\/ecg' \}/)
+   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
+     assert.equal(stripComments(read(file)).includes('/labs/ecg-challenge'), false, `${file} still links the legacy quiz`)
+diff --git a/tests/echo-intelligence-atlas-live-route.test.mjs b/tests/echo-intelligence-atlas-live-route.test.mjs
+index 9986dfb..5295e1c 100644
+--- a/tests/echo-intelligence-atlas-live-route.test.mjs
++++ b/tests/echo-intelligence-atlas-live-route.test.mjs
+@@ -25,7 +25,7 @@ test('Echo is reachable from exactly one entry point (the Learn Echo track, now
+   // Explore v2 no longer lists Echo Preview; Learn owns the practice-track entry.
+   const atlas = read('app/components/release/AtlasReleaseCatalog.tsx')
+   const learn = read('app/components/release/LearnTracks.tsx')
+-  assert.equal((learn.match(/href: '\/learn\/echo'/g) ?? []).length, 1)
++  assert.equal((learn.match(/href:'\/learn\/echo'/g) ?? []).length, 1)
+   assert.equal(learn.includes('/labs/echo-preview'), false)
+   assert.equal(atlas.includes('/labs/echo-preview'), false)
+   // No competing labs route for the Atlas was introduced
+diff --git a/tests/echo-learner-workspace.test.mjs b/tests/echo-learner-workspace.test.mjs
+index c5bc6c1..feebd70 100644
+--- a/tests/echo-learner-workspace.test.mjs
++++ b/tests/echo-learner-workspace.test.mjs
+@@ -193,7 +193,7 @@ test('the summary panel keeps its exact studio look: every colour and size is a
+ // ── wiring ────────────────────────────────────────────────────────────────────
+ 
+ test('Learn and Progress open the Echo workspace; the studio preview stays for QA and governance and is no longer any primary entry', () => {
+-  assert.match(read('app/components/release/LearnTracks.tsx'), /id: 'echo',[\s\S]*?href: '\/learn\/echo'/)
++  assert.match(read('app/components/release/LearnTracks.tsx'), /id:'echo',[\s\S]*?href:'\/learn\/echo'/)
+   assert.match(read('app/components/release/ProgressTrajectory.tsx'), /echo: \{ accent: 'var\(--cv-violet\)', href: '\/learn\/echo' \}/)
+   for (const file of ['app/components/release/LearnTracks.tsx', 'app/components/release/ProgressTrajectory.tsx', 'app/components/release/AtlasReleaseCatalog.tsx', 'app/components/ReleaseApp.tsx', 'app/components/release/MeHub.tsx', 'app/components/release/OnboardingScreens.tsx']) {
+     assert.equal(stripComments(read(file)).includes('/labs/echo-preview'), false, `${file} still links the studio preview`)
+diff --git a/tests/explore-curated-discovery.test.mjs b/tests/explore-curated-discovery.test.mjs
+index 2ca3ec2..eadd40e 100644
+--- a/tests/explore-curated-discovery.test.mjs
++++ b/tests/explore-curated-discovery.test.mjs
+@@ -135,9 +135,9 @@ test('the engines and routes that left Explore are all still present and reachab
+   }
+   // Learn owns ECG, Echo and Ward entry.
+   const learn = read('app/components/release/LearnTracks.tsx')
+-  assert.equal(learn.match(/href: '\/learn\/ecg'/g).length, 1)
+-  assert.equal(learn.match(/href: '\/learn\/echo'/g).length, 1)
+-  assert.match(learn, /onClick=\{onOpenWard\}/)
++  assert.equal(learn.match(/href:'\/learn\/ecg'/g).length, 1)
++  assert.equal(learn.match(/href:'\/learn\/echo'/g).length, 1)
++  assert.match(learn, /onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
+   // Code Lab and Nexus remain in the Learn workspace switcher, with their plan gates.
+   const ward = read('app/components/ward/index.tsx')
+   assert.match(ward, /label: 'Code Lab',[\s\S]*?premium: false/)
+@@ -159,7 +159,8 @@ test('Explore owns its page heading and support line in the shared header; navig
+   assert.match(header, /active === 'progress' \|\| active === 'explore' \|\| active === 'me' \? <h1 id=\{`\$\{active\}-title`\}/)
+   assert.match(explore, /<section aria-labelledby="explore-title" data-commercial-surface="explore" data-commercial-explore-surface>/)
+   assert.doesNotMatch(exploreSource, /<h1|<h2/)
+-  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=\{showEcgReview && caseLibraryPreview\} \/>/)
++  // The shell passes no reviewer case-library flag to Explore (the component still supports it, covered below).
++  assert.match(app, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
+   const nav = read('app/components/ReleaseNav.tsx')
+   assert.deepEqual([...nav.matchAll(/label: '([^']+)'/g)].map(match => match[1]), ['Today', 'Learn', 'Progress', 'Explore', 'Me'])
+   assert.doesNotMatch(nav, /Intelligence/)
+diff --git a/tests/learn-practice-tracks.test.mjs b/tests/learn-practice-tracks.test.mjs
+index af797e5..1e251d2 100644
+--- a/tests/learn-practice-tracks.test.mjs
++++ b/tests/learn-practice-tracks.test.mjs
+@@ -12,15 +12,19 @@ const stripComments = source => source.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').repl
+ const trackSource = stripComments(tracks)
+ // The Learn block runs until the Progress block begins (Progress has its own scoping test).
+ const learnCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Learn — practice-track landing')), css.lastIndexOf('/*', css.indexOf('Progress — evidence-led trajectory'))))
+-const trackEntries = [...tracks.matchAll(/verb: '([^']+)',\s*title: '([^']+)',\s*description: '([^']+)',\s*accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)]
+-  .map(([, verb, title, description, accent, href]) => ({ verb, title, description, accent, href: href ?? null }))
++const trackEntries = [...tracks.matchAll(/\{ id:'([^']+)', verb:'([^']+)', title:'([^']+)', description:'([^']+)', accent:'([^']+)', (?:href:'([^']+)'|workspace:'([^']+)') \}/g)]
++  .map(([, id, verb, title, description, accent, href, workspace]) => ({ id, verb, title, description, accent, href: href ?? null, workspace: workspace ?? null }))
+ 
+-test('Learn landing has exactly the three approved practice tracks, in order', () => {
+-  assert.deepEqual(trackEntries, [
+-    { verb: 'INTERPRET', title: 'ECG', description: 'Read the full tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg' },
+-    { verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo' },
+-    { verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and see the consequence of each decision.', accent: 'var(--cv-blue)', href: null },
++test('Learn landing lists the three core tracks first, then advanced practice and clinical systems, in order', () => {
++  assert.deepEqual(trackEntries.map(entry => entry.id), ['ecg', 'echo', 'ward', 'resuscitation', 'handover', 'codelab', 'pathway', 'reference', 'cardiology', 'nexus'])
++  assert.deepEqual(trackEntries.slice(0, 3), [
++    { id: 'ecg', verb: 'INTERPRET', title: 'ECG', description: 'Read the tracing, commit an interpretation, then review the reasoning.', accent: 'var(--cv-teal)', href: '/learn/ecg', workspace: null },
++    { id: 'echo', verb: 'OBSERVE', title: 'Echo', description: 'Start with the cine, organize findings, then assign meaning.', accent: 'var(--cv-violet)', href: '/learn/echo', workspace: null },
++    { id: 'ward', verb: 'DECIDE', title: 'Ward', description: 'Follow a changing patient state and work through the next clinical decision.', accent: 'var(--cv-blue)', href: null, workspace: 'ward' },
+   ])
++  assert.deepEqual([...tracks.matchAll(/<TrackGroup title="([^"]+)"/g)].map(match => match[1]), ['Core practice', 'Advanced practice', 'Clinical systems'])
++  // Every entry is either a route or an in-place workspace, never both.
++  for (const entry of trackEntries) assert.ok(Boolean(entry.href) !== Boolean(entry.workspace), entry.id)
+ })
+ 
+ test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn owns their entry); Ward opens in place', () => {
+@@ -31,21 +35,24 @@ test('ECG opens the governed ECG workspace and Echo its learner workspace (Learn
+   assert.ok(existsSync(new URL('../app/learn/echo/page.tsx', import.meta.url)))
+   assert.ok(existsSync(new URL('../app/labs/echo-preview/page.tsx', import.meta.url)))
+   assert.ok(!tracks.includes('/labs/ecg-challenge') && !tracks.includes('/labs/echo-preview'))
++  for (const href of trackEntries.map(entry => entry.href).filter(Boolean)) {
++    const route = href.replace(/^\//, '')
++    assert.ok(existsSync(new URL(`../app/${route}/page.tsx`, import.meta.url)), `${href} has a page`)
++  }
+   // Explore v2 no longer lists them, so each has exactly one in-app entry: this track.
+   for (const href of ['/learn/ecg', '/learn/echo']) {
+-    assert.equal(tracks.split(`href: '${href}'`).length - 1, 1, `Learn lists ${href} once`)
++    assert.equal(tracks.split(`href:'${href}'`).length - 1, 1, `Learn lists ${href} once`)
+     assert.ok(!explore.includes(href), `Explore no longer lists ${href}`)
+   }
+-  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{onOpenWard\}/)
+-  assert.match(app, /<LearnTracks onOpenWard=\{\(\) => setCareWorkspace\('ward'\)\} \/>/)
++  assert.match(trackSource, /<button type="button" className="cv-learn-track" onClick=\{\(\)=>entry\.workspace&&onOpenWorkspace\(entry\.workspace\)\}/)
++  assert.match(app, /<LearnTracks onOpenWorkspace=\{openWorkspace\} \/>/)
+   // The reviewer-only ECG account-review route is not a learner track destination.
+   assert.doesNotMatch(trackSource, /ecg-account-review|echo-account-review/)
+ })
+ 
+-test('legacy workspaces are not presented as Learn tracks, and no user data is invented', () => {
+-  assert.doesNotMatch(trackSource, /Code Lab|Cardiology|Nexus/)
+-  assert.doesNotMatch(trackSource, /\d/)
+-  assert.doesNotMatch(trackSource, /Resume|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
++test('Learn tracks are static catalogue entries and no user data is invented', () => {
++  for (const entry of trackEntries) assert.doesNotMatch(`${entry.verb} ${entry.title} ${entry.description}`, /\d/, `${entry.id} shows no invented counts`)
++  assert.doesNotMatch(trackSource, /Resume (your|where)|review due|cases?\b.*\b\d|localStorage|sessionStorage|supabase|fetch\(|useEffect|useState/i)
+   assert.deepEqual([...trackSource.matchAll(/^import .* from '([^']+)'/gm)].map(match => match[1]), ['next/link', 'react'])
+ })
+ 
+@@ -55,13 +62,13 @@ test('untargeted Learn shows the landing; every explicit workspace deep link sti
+   assert.match(app, /const goTab = \(next: ReleaseTab\) => \{ if \(next === 'learn'\) setCareWorkspace\(null\); setTab\(next\) \}/)
+   for (const wiring of [
+     /const openCodeLab = \(\) => \{ setCareWorkspace\('codelab'\); setTab\('learn'\) \}/,
++    /const openWorkspace = \(workspace: CareWorkspace\) => \{ setCareWorkspace\(workspace\); setCardiologyModule\('overview'\); setTab\('learn'\) \}/,
+     /if \(destination\.workspace\) \{ setCareWorkspace\(destination\.workspace\)/,
+-    /onWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
+-    /setCareWorkspace\('cardiology'\); setTab\('learn'\)/,
++    /onOpenWard=\{\(\) => \{ setCareWorkspace\('ward'\); setTab\('learn'\) \}/,
+   ]) assert.match(app, wiring)
+   assert.match(app, /<ReleaseNav active=\{tab\} onChange=\{goTab\} \/>/)
+   assert.match(app, /← Practice tracks/)
+-  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Choose a practice track\. Your progress stays connected\./)
++  assert.match(app, /learn: \{ title: 'Learn', sub: learnLanding \? 'Practice, simulate and apply clinical reasoning\.'/)
+ })
+ 
+ test('legacy engines and PRO gating in WardIndex are untouched and still reachable', () => {
+diff --git a/tests/me-account-v2.test.mjs b/tests/me-account-v2.test.mjs
+index 98b134f..a0fdf92 100644
+--- a/tests/me-account-v2.test.mjs
++++ b/tests/me-account-v2.test.mjs
+@@ -11,7 +11,8 @@ const appearance = read('app/components/release/AppearanceSettings.tsx')
+ const topics = read('app/components/release/TopicsIFollow.tsx')
+ const session = read('app/components/auth/AccountSessionActions.tsx')
+ const css = read('app/commercial-visual-system.css')
+-const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences'))))
++// The Me block runs until the unified Learn architecture block that follows it.
++const meCss = stripComments(css.slice(css.lastIndexOf('/*', css.indexOf('Me — account, plan and preferences')), css.lastIndexOf('/*', css.indexOf('Unified Learn architecture'))))
+ const header = app.slice(app.indexOf('function ReleaseHeader'), app.indexOf('function TodaySurface'))
+ 
+ // ── shell, heading, navigation ────────────────────────────────────────────────
+@@ -37,7 +38,10 @@ test('identity comes from the real profile and Supabase Auth email, with nothing
+   assert.match(account, /const displayName = name\?\.trim\(\) \|\| email/)
+   assert.doesNotMatch(account, /Cliniverse (learner|user)|Synced|Last sync|Signed in as/i)
+   // No identifiers, tokens or reviewer details reach the screen.
+-  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|reviewer|admin/i)
++  assert.doesNotMatch(account, /user\.id|\.id\}|access_token|refresh_token|session|admin/i)
++  // The only reviewer detail is the server-granted plan label (reviewerAccess), never an email, id or token.
++  assert.deepEqual([...account.matchAll(/reviewer\w*/gi)].map(match => match[0]).filter(word => !/^reviewerAccess$/.test(word) && !/^Reviewer$/.test(word)), [])
++  assert.doesNotMatch(account, /reviewer@/i)
+ })
+ 
+ test('profile update still saves only the name, and the email has no input at all', () => {
+diff --git a/tests/me-hub-actions.test.mjs b/tests/me-hub-actions.test.mjs
+index 5f72600..b181e94 100644
+--- a/tests/me-hub-actions.test.mjs
++++ b/tests/me-hub-actions.test.mjs
+@@ -11,10 +11,10 @@ const exports={}
+ // Every relative import is a marker component, so the render shows exactly what MeHub composes.
+ vm.runInNewContext(code,{exports,require(name){return name.startsWith('.')?{default:Object.assign(()=>null,{displayName:name.split('/').pop()})}:require(name)}})
+ const nodes=n=>!n||typeof n!=='object'?[]:[n,...[n.props?.children].flat(Infinity).flatMap(nodes)]
+-test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action, in that order',()=>{
++test('Me composes identity/plan, preferences, real support routes and the one existing sign-out action and the protected account-deletion action, in that order',()=>{
+  const rendered=nodes(exports.default());
+  const composed=rendered.filter(n=>typeof n.type==='function').map(n=>n.type.displayName);
+- assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions']);
++ assert.deepEqual(composed,['MeAccountSummary','AppearanceSettings','TopicsIFollow','AccountSessionActions','DeleteAccountAction']);
+  const rows=rendered.filter(n=>n.type==='a');
+  assert.deepEqual(rows.map(n=>n.props.href),['/privacy','/terms','/support']);
+  for(const href of rows.map(n=>n.props.href))assert.ok(fs.existsSync(new URL(`../app${href}/page.tsx`,import.meta.url)));
+diff --git a/tests/paywall-release-contracts.test.mjs b/tests/paywall-release-contracts.test.mjs
+index 9a98a8c..83eae5a 100644
+--- a/tests/paywall-release-contracts.test.mjs
++++ b/tests/paywall-release-contracts.test.mjs
+@@ -87,5 +87,5 @@ test('Explore links only to active release paths; the StoreKit plan is owned by
+   assert.match(me, /onClick=\{openPaywall\}/)
+   assert.match(me, /primaryProduct\.displayPrice/)
+   assert.doesNotMatch(atlas, /Imaging analysis|Symptom interpretation|Prescription \/ dosing AI/)
+-  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} caseLibraryPreview=/)
++  assert.match(release, /<AtlasReleaseCatalog onNavigate=\{handleAtlasNavigate\} \/>/)
+ })
+diff --git a/tests/progress-trajectory.test.mjs b/tests/progress-trajectory.test.mjs
+index 82393ba..18228ef 100644
+--- a/tests/progress-trajectory.test.mjs
++++ b/tests/progress-trajectory.test.mjs
+@@ -159,14 +159,14 @@ test('the ECG history reader is a single shared function and keeps the learner-e
+ })
+ 
+ test('Progress shows ECG, Echo and Ward as the canonical tracks, with the same destinations and accents as Learn', () => {
+-  const learnEntries = Object.fromEntries([...learn.matchAll(/id: '([^']+)',[\s\S]*?accent: '([^']+)',\s*href: (?:'([^']+)'|null)/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
++  const learnEntries = Object.fromEntries([...learn.matchAll(/\{ id:'(ecg|echo|ward)',[^}]*?accent:'([^']+)'(?:, href:'([^']+)')?/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
+   const ui = Object.fromEntries([...component.matchAll(/(ecg|echo|ward): \{ accent: '([^']+)', href: (?:'([^']+)'|null) \}/g)].map(([, id, accent, href]) => [id, { accent, href: href ?? null }]))
+   assert.deepEqual(Object.keys(ui), ['ecg', 'echo', 'ward'])
+   assert.deepEqual(ui, learnEntries)
+   assert.deepEqual(ui.ecg, { accent: 'var(--cv-teal)', href: '/learn/ecg' })
+   assert.deepEqual(ui.echo, { accent: 'var(--cv-violet)', href: '/learn/echo' })
+   assert.deepEqual(ui.ward, { accent: 'var(--cv-blue)', href: null })
+-  for (const legacy of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(legacy), `${legacy} is not a Progress track`)
++  for (const other of ['Code Lab', 'Cardiology Operations', 'Nexus']) assert.ok(!componentSource.includes(other), `${other} is not a Progress track`)
+ })
+ 
+ test('Ward stage labels match the labels the saved-practice list already shows', () => {
+diff --git a/tests/release-interactions-contract.test.mjs b/tests/release-interactions-contract.test.mjs
+index 4f00c99..4e5711e 100644
+--- a/tests/release-interactions-contract.test.mjs
++++ b/tests/release-interactions-contract.test.mjs
+@@ -15,7 +15,10 @@ test('Explore is a curated discovery list limited to verified release surfaces',
+   assert.match(source, /workspace: 'cardiology'/)
+   assert.match(releaseApp, /setCareWorkspace\(destination\.workspace\)/)
+   assert.match(releaseApp, /<WardIndex[^>]*initialWorkspace=\{careWorkspace\}/)
+-  assert.match(ward, /initialWorkspace === 'ward' \|\| initialWorkspace === 'codelab' \? null : initialWorkspace/)
++  // Premium workspaces never open directly: they wait behind the paywall until PRO is confirmed.
++  assert.match(ward, /const initialIsPremium = initialWorkspace === 'cardiology' \|\| initialWorkspace === 'nexus'/)
++  assert.match(ward, /useState<CareWorkspace \| null>\(initialIsPremium \? initialWorkspace : null\)/)
++  assert.match(ward, /const activeWorkspace = isPro && pendingWorkspace \? pendingWorkspace : workspace/)
+   assert.doesNotMatch(source, /onOpenPlan/)
+   assert.match(releaseApp, /Reference, operations and advanced practice — when you need them\./)
+   assert.match(source, /Not for diagnosis, prescribing or managing real patient care/)
+diff --git a/tests/release-security-contracts.test.mjs b/tests/release-security-contracts.test.mjs
+index 60eeb7f..4780c53 100644
+--- a/tests/release-security-contracts.test.mjs
++++ b/tests/release-security-contracts.test.mjs
+@@ -309,13 +309,17 @@ test('native iOS release gate is documented before RC1', () => {
+   assert.match(gate, /HOLD \/ NO APP STORE SUBMISSION/)
+ })
+ 
+-test('magic-link sign-in stays disabled by default and cannot implicitly create accounts', () => {
++test('magic-link sign-in stays disabled by default and cannot implicitly create accounts; self-service sign-up requires email confirmation', () => {
+   const identity = read('app/lib/identity.ts')
+   const auth = read('app/components/AuthScreen.tsx')
+   assert.match(identity, /shouldCreateUser:\s*false/)
+   assert.match(auth, /enableMagicLink\s*=\s*false/)
+   assert.match(auth, /\{enableMagicLink\s*\?\s*<button/)
+-  assert.match(auth, /Account creation is not enabled in this release/)
++  // Self-service account creation is an approved 1.1 behaviour (MASTER decision): it goes through
++  // Supabase sign-up only, and no session is honoured until the email is confirmed.
++  assert.match(auth, /signUpWithPassword\(normalizedEmail, password, redirectTo\)/)
++  assert.match(auth, /isVerifiedUser\(data\.user\)/)
++  assert.doesNotMatch(auth, /Account creation is not enabled in this release/)
+ })
+ 
+ test('third-party AI is gated out of the release shell until consent and claims review pass', () => {
+diff --git a/tests/today-golden-surface.test.mjs b/tests/today-golden-surface.test.mjs
+index 69df31a..9065b3b 100644
+--- a/tests/today-golden-surface.test.mjs
++++ b/tests/today-golden-surface.test.mjs
+@@ -28,7 +28,7 @@ test('Today has exactly one primary action and one review item, routed to existi
+   assert.match(today, /className="cv-today-cta" onClick=\{\(\) => onNavigate\('learn'\)\}/)
+   assert.equal((today.match(/className="cv-today-row"/g) ?? []).length, 1)
+   assert.match(today, /onNavigate\('progress'\)/)
+-  assert.match(today, /NEXT ACTION/)
++  assert.match(today, />NEXT</)
+   assert.match(today, /REVIEW/)
+ })
+ 
+@@ -36,8 +36,10 @@ test('Today does not hardcode user progress, review counts or study/case example
+   assert.doesNotMatch(today, /\b\d+\s+(cases?|studies|review)/i)
+   assert.doesNotMatch(today, /Case 0\d/)
+   assert.doesNotMatch(today, /\bdue\b/i)
+-  // Metrics come from the real account lesson data through the existing summary component.
+-  assert.match(today, /<AccountLearningSummary compact view="summary"/)
++  // Today is static navigation copy: it embeds no account data at all (the unified product UX keeps the lesson
++  // summary in Progress, where it is read from the real account lesson data).
++  assert.doesNotMatch(today, /AccountLearningSummary|supabase|localStorage|fetch\(/)
++  assert.match(app, /<AccountLearningSummary view="summary" isPro=\{false\}/)
+   assert.match(summary, /completedIds\.includes\(lesson\.id\)/)
+   assert.doesNotMatch(summary.slice(summary.indexOf('if (compact)'), summary.indexOf('return <section data-learning-summary aria-label')), /\b(?:2|3|7)\b\s*(?:cases|studies)/i)
+ })
+-- 
+2.43.0
+
