@@ -1,0 +1,625 @@
+From 2076e95096ea8acb781e24b0c29677a0ddf21530 Mon Sep 17 00:00:00 2001
+From: Claude Code <noreply@anthropic.com>
+Date: Mon, 26 Oct 2026 11:52:22 +0000
+Subject: [PATCH] fix(pwa): R6.1 small fix - cache-control precedence,
+ case-insensitive query names, stale-worker first visit
+
+Incremental after baseline + R4 + R5 + R6. Draft; not deployed.
+- sw.js: no-store/private/no-cache can never be overridden by immutable; sensitive query
+  parameter names matched case-insensitively (write prevention and cache scrub);
+  version handshake so the recovery page can tell the current worker from an older one
+- register-sw.js: purge legacy caches again on controllerchange
+- staleWorkerGuard: before the recovery tokens are used, unregister an old controlling
+  worker, delete legacy caches and reload once with the fragment intact; fail closed
+  (blocked) if a stale worker survives
+- tests: focused SW/guard suites; Chromium scenarios for first direct visit under an old
+  worker (fixed build and previous-build negative control) and account A recovery while
+  account B's session is stored
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NvuEKCqEak8vUZ3RsxZA4i
+---
+ app/lib/staleWorkerGuard.ts                  |  90 +++++++++++++++
+ app/reset-password/ResetPasswordClient.tsx   |  31 ++++--
+ public/register-sw.js                        |   3 +
+ public/sw.js                                 |  22 +++-
+ scripts/verify-password-recovery-browser.cjs |  49 ++++++++
+ scripts/verify-service-worker-browser.cjs    |  72 +++++++++++-
+ tests/service-worker-policy.test.mjs         |  75 ++++++++++++-
+ tests/stale-worker-guard.test.mjs            | 111 +++++++++++++++++++
+ 8 files changed, 438 insertions(+), 15 deletions(-)
+ create mode 100644 app/lib/staleWorkerGuard.ts
+ create mode 100644 tests/stale-worker-guard.test.mjs
+
+diff --git a/app/lib/staleWorkerGuard.ts b/app/lib/staleWorkerGuard.ts
+new file mode 100644
+index 0000000..aceaae1
+--- /dev/null
++++ b/app/lib/staleWorkerGuard.ts
+@@ -0,0 +1,90 @@
++// Runs on the password-recovery page BEFORE it reads or uses the recovery tokens in the URL fragment.
++//
++// Problem: an older Cliniverse service worker (it cached every GET, including Supabase responses) may still be
++// controlling this origin when the user opens the reset link for the first time. Cleaning its caches is not
++// enough — while it controls the page it would see, store and replay the page's own requests. A page cannot opt
++// out of its controlling worker, but a NEW navigation is not controlled once the registration is removed.
++//
++// So: ask every active worker for its version (current workers answer, older ones never do); if any answers wrong
++// or not at all, unregister it, delete the Cliniverse caches, and reload this page once with its fragment intact.
++// No request that carries the tokens is made before that. If an unrecognised worker is still present after the
++// reload, the page fails closed ('blocked') and never uses the tokens.
++//
++// Limits: this needs the page's own scripts to run. If an old worker serves an old cached shell for this URL while
++// the network is down, those scripts are not ours and nothing here can help; the worker upgrade itself covers that.
++
++export const EXPECTED_WORKER_VERSION = 'cliniverse-static-v4' // must equal CACHE in public/sw.js
++export const RELOAD_MARKER = 'swclean'
++
++export type GuardResult = 'clean' | 'reloading' | 'blocked'
++
++interface PostingWorker {
++  postMessage: (message: unknown, transfer: Transferable[]) => void
++}
++interface RegistrationLike {
++  active: (PostingWorker & object) | null
++  unregister: () => Promise<boolean>
++}
++export interface GuardEnv {
++  serviceWorker?: {
++    controller: (PostingWorker & object) | null
++    getRegistrations: () => Promise<readonly RegistrationLike[]>
++  }
++  caches?: { keys: () => Promise<string[]>; delete: (name: string) => Promise<boolean> }
++  location: { pathname: string; search: string; hash: string; replace: (url: string) => void }
++  probeTimeoutMs?: number
++  createChannel?: () => { port1: { onmessage: ((event: { data?: { version?: string } }) => void) | null }; port2: unknown }
++  setTimer?: (fn: () => void, ms: number) => unknown
++  clearTimer?: (handle: unknown) => void
++}
++
++function probe(worker: PostingWorker, env: GuardEnv): Promise<string | null> {
++  return new Promise(resolve => {
++    const setTimer = env.setTimer ?? ((fn, ms) => setTimeout(fn, ms))
++    const clearTimer = env.clearTimer ?? (handle => clearTimeout(handle as ReturnType<typeof setTimeout>))
++    let settled = false
++    const finish = (value: string | null) => { if (!settled) { settled = true; clearTimer(timer); resolve(value) } }
++    const timer = setTimer(() => finish(null), env.probeTimeoutMs ?? 600)
++    try {
++      const channel = (env.createChannel ?? (() => new MessageChannel() as never))()
++      channel.port1.onmessage = event => finish(typeof event.data?.version === 'string' ? event.data.version : null)
++      worker.postMessage({ type: 'cliniverse-sw-version' }, [channel.port2 as Transferable])
++    } catch {
++      finish(null)
++    }
++  })
++}
++
++export async function ensureNoStaleWorker(env: GuardEnv): Promise<GuardResult> {
++  const container = env.serviceWorker
++  if (!container) return 'clean'
++
++  // If registrations cannot be listed, only the controlling worker (which is probed directly) can be judged.
++  let registrations: readonly RegistrationLike[] = []
++  try { registrations = await container.getRegistrations() } catch { registrations = [] }
++
++  const controller = container.controller
++  const controllerStale = controller ? (await probe(controller, env)) !== EXPECTED_WORKER_VERSION : false
++  const staleRegistrations: RegistrationLike[] = []
++  for (const registration of registrations) {
++    const worker = registration.active
++    if (!worker) continue
++    const version = worker === controller ? (controllerStale ? null : EXPECTED_WORKER_VERSION) : await probe(worker, env)
++    if (version !== EXPECTED_WORKER_VERSION) staleRegistrations.push(registration)
++  }
++
++  if (!controllerStale && staleRegistrations.length === 0) return 'clean'
++
++  if (new URLSearchParams(env.location.search).has(RELOAD_MARKER)) return 'blocked' // already tried once
++
++  await Promise.all(staleRegistrations.map(registration => registration.unregister().catch(() => false)))
++  if (env.caches) {
++    try {
++      const names = await env.caches.keys()
++      await Promise.all(names.filter(name => /^cliniverse/i.test(name) && name !== EXPECTED_WORKER_VERSION).map(name => env.caches!.delete(name).catch(() => false)))
++    } catch { /* best effort; the next load re-checks */ }
++  }
++  // Same path, a non-sensitive marker, and the fragment untouched (it is never sent to a server).
++  env.location.replace(`${env.location.pathname}?${RELOAD_MARKER}=1${env.location.hash}`)
++  return 'reloading'
++}
+diff --git a/app/reset-password/ResetPasswordClient.tsx b/app/reset-password/ResetPasswordClient.tsx
+index 7efb3f2..a26ecdb 100644
+--- a/app/reset-password/ResetPasswordClient.tsx
++++ b/app/reset-password/ResetPasswordClient.tsx
+@@ -12,11 +12,13 @@ import {
+   startRecovery,
+   type RecoveryClient,
+ } from '../lib/passwordRecovery'
++import { ensureNoStaleWorker } from '../lib/staleWorkerGuard'
+ import { NATIVE_SAFE_AREA_BOTTOM, NATIVE_SAFE_AREA_TOP } from '../lib/nativeSafeArea'
+ 
+ type View =
+   | { name: 'checking' }
+   | { name: 'invalid'; expired: boolean }
++  | { name: 'blocked' }
+   | { name: 'form'; maskedEmail: string }
+   | { name: 'done'; sessionsEnded: boolean }
+ 
+@@ -42,14 +44,23 @@ export default function ResetPasswordClient() {
+   useEffect(() => {
+     if (started.current) return
+     started.current = true
+-    const link = parseRecoveryHash(window.location.hash)
+-    // Remove tokens from the address bar and history before anything else happens.
+-    window.history.replaceState(null, '', window.location.pathname)
+-    if (link.kind === 'invalid') { setView({ name: 'invalid', expired: link.reason === 'expired' }); return }
+-    client.current = createRecoveryClient()
+-    void startRecovery(client.current, link).then(result => {
++    void (async () => {
++      // Before the tokens in the URL are read or used: make sure no older service worker controls this page.
++      const guard = await ensureNoStaleWorker({
++        serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : undefined,
++        caches: 'caches' in window ? window.caches : undefined,
++        location: window.location,
++      })
++      if (guard === 'reloading') return
++      const link = parseRecoveryHash(window.location.hash)
++      // Remove tokens from the address bar and history before anything else happens.
++      window.history.replaceState(null, '', window.location.pathname)
++      if (guard === 'blocked') { setView({ name: 'blocked' }); return }
++      if (link.kind === 'invalid') { setView({ name: 'invalid', expired: link.reason === 'expired' }); return }
++      client.current = createRecoveryClient()
++      const result = await startRecovery(client.current, link)
+       setView(result.status === 'ready' ? { name: 'form', maskedEmail: result.maskedEmail } : { name: 'invalid', expired: false })
+-    })
++    })()
+   }, [])
+ 
+   async function submit() {
+@@ -75,6 +86,12 @@ export default function ResetPasswordClient() {
+               <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>Open Cliniverse, choose Sign in, then “Forgot password?” to get a new link. Some email apps open links automatically, which can use them up.</p>
+             </div>
+           ) : null}
++          {view.name === 'blocked' ? (
++            <div role="alert">
++              <p style={{ margin: '0 0 10px', fontWeight: 700 }}>We could not prepare this page safely.</p>
++              <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>An older version of this site is still running in your browser. Close this tab, then open the link from your email again. If it happens again, clear this site's data in your browser settings or request a new link from the Cliniverse sign-in screen. Your link was not used.</p>
++            </div>
++          ) : null}
+           {view.name === 'form' ? (
+             <form onSubmit={event => { event.preventDefault(); void submit() }} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+               <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>Set a new password for <strong style={{ color: T.text }}>{view.maskedEmail}</strong>. If this is not your account, close this page.</p>
+diff --git a/public/register-sw.js b/public/register-sw.js
+index c405de7..9d90eb8 100644
+--- a/public/register-sw.js
++++ b/public/register-sw.js
+@@ -14,6 +14,9 @@
+   }
+ 
+   purgeLegacyCaches();
++  // An older worker that is still running can re-create its cache after the purge above; purge again whenever a
++  // different worker takes control (the new worker's own activation also removes them).
++  navigator.serviceWorker.addEventListener('controllerchange', purgeLegacyCaches);
+   // The password-recovery page carries one-time tokens: it never registers or updates a worker.
+   if (/^\/reset-password(\/|$)/i.test(window.location.pathname)) return;
+ 
+diff --git a/public/sw.js b/public/sw.js
+index 9697999..291f0fb 100644
+--- a/public/sw.js
++++ b/public/sw.js
+@@ -17,10 +17,10 @@ const STATIC_PREFIXES = ['/icons/', '/_next/static/'];
+ // Never intercepted, whatever the origin or method of the request.
+ const SENSITIVE_PATH = /^\/(reset-password|auth|api|login|signin|signup|callback|account)(\/|$)/;
+ const SENSITIVE_UPSTREAM_PATH = /\/(auth|rest|functions|storage|realtime|graphql)\/v1(\/|$)/;
+-const SENSITIVE_QUERY_KEYS = [
++const SENSITIVE_QUERY_KEYS = new Set([
+   'access_token', 'refresh_token', 'provider_token', 'token', 'token_hash', 'code', 'type', 'nonce',
+   'error', 'error_code', 'error_description', 'id_token', 'redirect_to',
+-];
++]);
+ const SENSITIVE_HEADERS = ['authorization', 'apikey', 'x-client-info', 'rsc', 'next-router-state-tree', 'next-action'];
+ 
+ // Normalises case, repeated slashes and percent-encoding so "/%72eset-password", "//Reset-Password/" etc. match too.
+@@ -34,7 +34,8 @@ function shouldBypass(request, url) {
+   if (url.origin !== self.location.origin) return true; // Supabase and every other third party
+   const path = normalisePath(url.pathname);
+   if (SENSITIVE_PATH.test(path) || SENSITIVE_UPSTREAM_PATH.test(path)) return true;
+-  for (const key of SENSITIVE_QUERY_KEYS) if (url.searchParams.has(key)) return true;
++  // Parameter names are matched case-insensitively (URLSearchParams already percent-decodes them).
++  for (const name of url.searchParams.keys()) if (SENSITIVE_QUERY_KEYS.has(name.toLowerCase())) return true;
+   if (/(^|[?&#])(access_token|refresh_token)=/i.test(url.search + url.hash)) return true;
+   for (const name of SENSITIVE_HEADERS) if (request.headers.has(name)) return true;
+   if (request.cache === 'no-store') return true;
+@@ -45,11 +46,14 @@ function isStaticAsset(path) {
+   return STATIC_EXACT.has(path) || STATIC_PREFIXES.some(prefix => path.startsWith(prefix));
+ }
+ 
++// Storage-prohibiting directives always win: "no-store", "private" or "no-cache" can never be overridden by an
++// accompanying "immutable" (or anything else). Directives are matched as whole tokens.
++const PROHIBITING_DIRECTIVE = /(?:^|[\s,])(?:no-store|private|no-cache)(?=$|[\s,=])/i;
++
+ function isCacheable(response) {
+   if (!response || response.status !== 200) return false;
+   if (response.type !== 'basic' && response.type !== 'default') return false; // same-origin responses only; never opaque/cors
+-  const cacheControl = response.headers.get('cache-control') || '';
+-  if (/no-store|private|no-cache/i.test(cacheControl) && !/immutable/i.test(cacheControl)) return false;
++  if (PROHIBITING_DIRECTIVE.test(response.headers.get('cache-control') || '')) return false;
+   if ((response.headers.get('vary') || '').includes('*')) return false;
+   return true;
+ }
+@@ -80,6 +84,14 @@ self.addEventListener('activate', event => {
+   })());
+ });
+ 
++// Version handshake used by the password-recovery page to tell this worker from an older one (older workers
++// never answer). Only same-origin pages can reach this worker.
++self.addEventListener('message', event => {
++  if (event.data && event.data.type === 'cliniverse-sw-version' && event.ports && event.ports[0]) {
++    event.ports[0].postMessage({ version: CACHE });
++  }
++});
++
+ self.addEventListener('fetch', event => {
+   const request = event.request;
+   if (request.method !== 'GET') return;
+diff --git a/scripts/verify-password-recovery-browser.cjs b/scripts/verify-password-recovery-browser.cjs
+index 4e0f46f..efbbded 100644
+--- a/scripts/verify-password-recovery-browser.cjs
++++ b/scripts/verify-password-recovery-browser.cjs
+@@ -86,6 +86,55 @@ const check = (name, ok, detail = '') => { results.push({ name, ok }); console.l
+     await page.locator('main [role=alert]').waitFor()
+     check('SIMULATED server 422 on updateUser: error shown, success never claimed', (await page.textContent('main')).includes('could not be accepted') && !(await page.textContent('main')).includes('was updated'))
+   })
++
++  // ───────── ACCOUNT ISOLATION: recover account A in a browser profile that already holds account B's session ─────────
++  {
++    const ctx = await browser.newContext(); const page = await ctx.newPage()
++    const requests = []
++    const subOf = auth => { try { return JSON.parse(Buffer.from(auth.replace('Bearer ', '').split('.')[1], 'base64url').toString()).sub } catch { return null } }
++    await ctx.route(`${SUPA}/**`, route => {
++      const req = route.request(); const u = new URL(req.url()); const sub = subOf(req.headers()['authorization'] || '')
++      requests.push({ method: req.method(), path: u.pathname + u.search, sub })
++      const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' }
++      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors })
++      if (u.pathname === '/auth/v1/user' && req.method() === 'GET') return route.fulfill({ headers: cors, json: { id: sub, email: `${sub}@clinic.test`, aud: 'authenticated', role: 'authenticated', app_metadata: { provider: 'email' }, user_metadata: {}, email_confirmed_at: '2026-01-01T00:00:00Z', created_at: '2026-01-01T00:00:00Z' } })
++      if (u.pathname === '/auth/v1/user') return route.fulfill({ headers: cors, json: { id: sub } })
++      if (u.pathname === '/auth/v1/logout') return route.fulfill({ status: 204, headers: cors, body: '' })
++      if (u.pathname.startsWith('/rest/v1/profiles')) return route.fulfill({ headers: cors, json: { id: sub, name: 'Test' } })
++      return route.fulfill({ headers: cors, json: [] })
++    })
++    const key = 'sb-zbiujqxinvcxvuviuenx-auth-token'
++    const sessionB = JSON.stringify({ access_token: jwt('user-b', 'user-b@clinic.test'), refresh_token: 'RB', expires_at: Math.floor(Date.now() / 1000) + 3600, expires_in: 3600, token_type: 'bearer', user: { id: 'user-b', email: 'user-b@clinic.test', email_confirmed_at: '2026-01-01T00:00:00Z', app_metadata: { provider: 'email' }, aud: 'authenticated' } })
++    await page.addInitScript(([k, v]) => { try { if (!localStorage.getItem(k)) localStorage.setItem(k, v) } catch {} }, [key, sessionB])
++    const appRecognisesB = async () => { await page.goto(BASE.replace('/reset-password', '/')); await page.waitForTimeout(2500); const text = await page.textContent('body'); return !/Welcome back to Cliniverse/.test(text) }
++    const before = await appRecognisesB()
++    {   // control: without B's session the very same check reports the sign-in screen, so "recognised" is meaningful
++      const c2 = await browser.newContext(); const p2 = await c2.newPage()
++      await c2.route(`${SUPA}/**`, route => route.fulfill({ status: 404, json: {} }))
++      await p2.goto(BASE.replace('/reset-password', '/')); await p2.waitForTimeout(2000)
++      check('isolation control: with no stored session the same page shows the sign-in screen', /Welcome back to Cliniverse/.test(await p2.textContent('body')))
++      await c2.close()
++    }
++    check('isolation: before the recovery, the app recognises the signed-in account B (no sign-in screen)', before)
++    const storedBefore = await page.evaluate(k => localStorage.getItem(k), key)
++    requests.length = 0
++    const jwtA = jwt('user-a', 'user-a@clinic.test')
++    await page.goto(`${BASE}#access_token=${jwtA}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`)
++    await page.getByLabel('New password', { exact: true }).waitFor()
++    check('isolation: recovery of account A shows A\'s masked email, not B\'s', (await page.textContent('main')).includes('u•••••@clinic.test') && !(await page.textContent('main')).includes('user-b'))
++    await page.getByLabel('New password', { exact: true }).fill('correct-horse-9'); await page.getByLabel('Confirm new password').fill('correct-horse-9'); await page.getByRole('button', { name: 'Update password' }).click()
++    await page.getByText('Your password was updated.').waitFor()
++    check('isolation: every Supabase request of the recovery carried A\'s token; none carried B\'s', requests.length >= 3 && requests.every(r => r.sub === 'user-a'), JSON.stringify(requests.map(r => r.method + ' ' + r.path.split('?')[0] + ' ' + r.sub)))
++    const logout = requests.find(r => r.path.startsWith('/auth/v1/logout'))
++    check('isolation: the global sign-out was issued for A\'s session only', !!logout && logout.sub === 'user-a' && logout.path.includes('scope=global'))
++    const storedAfter = await page.evaluate(k => localStorage.getItem(k), key)
++    check('isolation: B\'s stored session is byte-for-byte unchanged after A\'s recovery', storedAfter === storedBefore && !!storedBefore)
++    requests.length = 0
++    const after = await appRecognisesB()
++    check('isolation: afterwards the app still recognises account B and uses B\'s token (not A\'s)', after && requests.some(r => r.sub === 'user-b') && requests.every(r => r.sub !== 'user-a'), JSON.stringify(requests.map(r => r.sub)))
++    check('isolation: B\'s session is still stored unchanged after the app reloaded it', (await page.evaluate(k => localStorage.getItem(k), key)) === storedBefore)
++    await ctx.close()
++  }
+   await browser.close()
+   const failed = results.filter(r => !r.ok).length
+   console.log(`\n${results.length - failed}/${results.length} browser checks passed`)
+diff --git a/scripts/verify-service-worker-browser.cjs b/scripts/verify-service-worker-browser.cjs
+index 00e5f4c..19605dd 100644
+--- a/scripts/verify-service-worker-browser.cjs
++++ b/scripts/verify-service-worker-browser.cjs
+@@ -1,7 +1,8 @@
+ // Real-browser check of the service worker with a genuinely CONTROLLING worker (navigator.serviceWorker.controller),
+ // against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
+ //   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
+-//   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js node scripts/verify-service-worker-browser.cjs
++//   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js [BASE_R6=http://localhost:3113] node scripts/verify-service-worker-browser.cjs
++// BASE_R6 (optional) is a second server running the PREVIOUS (R6) build, used only as a negative control for section D.
+ // LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
+ const { chromium } = require('playwright')
+ const fs = require('fs')
+@@ -140,6 +141,75 @@ async function offlineProbe(page, ctx, label) {
+     check('no sensitive cache remnants after the whole session', flat(final).every(u => !SENSITIVE_URL.test(u)))
+     await ctx.close()
+   }
++
++  // ───────── D. FIRST DIRECT VISIT TO /reset-password WHILE AN OLD WORKER STILL CONTROLS THE ORIGIN ─────────
++  const jwtFor = (sub, email) => { const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url'); return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600 })}.sig` }
++  const RECOVERY_HASH = `#access_token=${jwtFor('user-a', 'jane.doe@clinic.test')}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`
++  async function oldWorkerContext(base, events, { blockUnregister = false } = {}) {
++    const ctx = await browser.newContext(); const page = await ctx.newPage()
++    await ctx.route(`${SUPA}/**`, route => {
++      const req = route.request(); const u = new URL(req.url()); const auth = req.headers()['authorization'] || ''
++      events.push(['supabase', req.method(), u.pathname, auth.slice(0, 12)])
++      const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' }
++      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors })
++      if (u.pathname === '/auth/v1/user' && req.method() === 'GET') return route.fulfill({ headers: cors, json: { id: 'user-a', email: 'jane.doe@clinic.test', aud: 'authenticated', role: 'authenticated', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } })
++      if (u.pathname === '/auth/v1/user') return route.fulfill({ headers: cors, json: { id: 'user-a', email: 'jane.doe@clinic.test' } })
++      if (u.pathname === '/auth/v1/logout') return route.fulfill({ status: 204, headers: cors, body: '' })
++      return route.fulfill({ headers: cors, json: [] })
++    })
++    await ctx.route(`${base}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))   // the old worker keeps being served: no update yet
++    await page.goto(`${base}/native-offline.html`)
++    await page.evaluate(() => navigator.serviceWorker.register('/sw.js'))
++    await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 25000)
++    await pull(page); await sleep(400)                 // seed the legacy cache with auth / REST / API / recovery responses
++    events.length = 0
++    await page.exposeFunction('__report', d => events.push(['doc', d.path, d.controller]))
++    await ctx.addInitScript(blocked => {
++      try { window.__report({ path: location.pathname + location.search, controller: !!(navigator.serviceWorker && navigator.serviceWorker.controller) }) } catch (e) {}
++      if (blocked) ServiceWorkerRegistration.prototype.unregister = () => Promise.resolve(false)
++    }, blockUnregister)
++    return { ctx, page }
++  }
++  const docsOf = events => events.filter(e => e[0] === 'doc').map(e => ({ path: e[1], controller: e[2] }))
++
++  {
++    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events)
++    const seeded = flat(await dump(page)).some(u => /auth\/v1\/user/.test(u))
++    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
++    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 20000 })
++    const docs = docsOf(events); const firstSupabase = events.findIndex(e => e[0] === 'supabase'); const lastOldDoc = events.map((e, i) => e[0] === 'doc' && e[2] ? i : -1).reduce((a, b) => Math.max(a, b), -1)
++    check('D1 (fixed build): the legacy cache was seeded with an auth response, and the FIRST document of the visit was controlled by the old worker', seeded && docs[0] && docs[0].controller === true, JSON.stringify(docs))
++    check('D1: the page removed the old worker and reloaded itself once (marker query, fragment kept) into an UNcontrolled document', docs.length === 2 && docs[1].path === '/reset-password?swclean=1' && docs[1].controller === false, JSON.stringify(docs))
++    check('D1: no Supabase request was made while the old worker controlled the page (the tokens were first used after the reload)', firstSupabase > lastOldDoc && firstSupabase > -1, JSON.stringify(events.map(e => e.slice(0, 3).join(' '))))
++    check('D1: the recovery form appears for the right (masked) account and the address bar no longer carries tokens', (await page.textContent('main')).includes('j••••••@clinic.test') && !page.url().includes('access_token') && !page.url().includes('swclean'), page.url())
++    await page.getByLabel('New password', { exact: true }).fill('correct-horse-9'); await page.getByLabel('Confirm new password').fill('correct-horse-9'); await page.getByRole('button', { name: 'Update password' }).click()
++    await page.getByText('Your password was updated.').waitFor({ timeout: 15000 })
++    const regs = await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)
++    const caches1 = await dump(page)
++    check('D1: the old worker is unregistered and no legacy cache or sensitive entry remains', regs === 0 && !Object.keys(caches1).some(k => /^cliniverse-v/.test(k)) && flat(caches1).every(u => !SENSITIVE_URL.test(u)), `registrations=${regs} caches=${Object.keys(caches1)}`)
++    await ctx.close()
++  }
++  {
++    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { blockUnregister: true })
++    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
++    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 20000 })
++    const docs = docsOf(events)
++    check('D2 (old worker cannot be removed): the page fails CLOSED — blocked message, the link is not used', docs.length === 2 && docs[1].controller === true, JSON.stringify(docs))
++    check('D2: no Supabase request at all, and the tokens are gone from the address bar', events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
++    await ctx.close()
++  }
++  if (process.env.BASE_R6) {
++    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events)
++    await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
++    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 20000 })
++    await sleep(500)
++    const docs = docsOf(events); const supa = events.filter(e => e[0] === 'supabase')
++    const cached = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u))
++    check('control D3 (previous R6 build, no guard): the page stays under the old worker and its recovery lookup goes through it', docs.length === 1 && docs[0].controller === true && supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docs))
++    check('control D3: the old worker STORES that recovery-session user lookup in its cache (the exposure the guard prevents)', cached.length > 0, cached.map(u => u.replace(SUPA, 'SUPA')).join(' | '))
++    await ctx.close()
++  } else console.log('SKIP  control D3 (set BASE_R6 to a server running the previous build)')
++
+   await browser.close()
+   const failed = results.filter(r => !r.ok).length
+   console.log(`\n${results.length - failed}/${results.length} browser checks passed`)
+diff --git a/tests/service-worker-policy.test.mjs b/tests/service-worker-policy.test.mjs
+index 45e21a6..9df003c 100644
+--- a/tests/service-worker-policy.test.mjs
++++ b/tests/service-worker-policy.test.mjs
+@@ -185,9 +185,9 @@ test('UPGRADE: activation removes every legacy Cliniverse cache (with synthetic
+ })
+ 
+ function loadRegister({ pathname = '/', cacheNames = [], readyState = 'loading' } = {}) {
+-  const calls = { register: [], deleted: [], listeners: [] }
++  const calls = { register: [], deleted: [], listeners: [], swListeners: [] }
+   const window = { location: { pathname }, addEventListener: (type, fn) => calls.listeners.push([type, fn]), caches: null }
+-  const navigator = { serviceWorker: { register: (...args) => { calls.register.push(args); return Promise.resolve({ update: () => Promise.resolve() }) } } }
++  const navigator = { serviceWorker: { addEventListener: (type, fn) => calls.swListeners.push([type, fn]), register: (...args) => { calls.register.push(args); return Promise.resolve({ update: () => Promise.resolve() }) } } }
+   const caches = { keys: async () => cacheNames, delete: async name => { calls.deleted.push(name) } }
+   window.caches = caches; window.navigator = navigator
+   vm.runInNewContext(REGISTER, { window, navigator, caches, document: { readyState }, Promise, RegExp })
+@@ -218,3 +218,74 @@ test('workers are never HTTP-cached so a fix reaches installed browsers', async
+   const rule = (await config.headers()).find(r => r.source.includes('sw.js'))
+   assert.match(rule.headers.find(h => h.key === 'Cache-Control').value, /no-store/)
+ })
++
++// ───────── R6.1: Cache-Control precedence, case-insensitive query names, version handshake, controllerchange ─────────
++
++test('Cache-Control: no-store / private / no-cache are NEVER overridden by immutable or anything else', async () => {
++  const never = ['no-store, immutable', 'private, immutable', 'immutable, no-store', 'immutable, private', 'no-cache, immutable', 'public, max-age=31536000, immutable, no-store', 'NO-STORE', 'Private, Immutable', 'private="x-user"', 'max-age=0, private', 'no-store']
++  for (const value of never) {
++    const caches = makeCaches()
++    await dispatch(loadWorker({ caches, network: async () => new Response('x', { headers: { 'cache-control': value } }) }), request('/icons/icon-192.svg'))
++    await flush()
++    assert.equal(caches.log.filter(entry => entry[0] === 'put').length, 0, value)
++  }
++  for (const value of ['public, max-age=31536000, immutable', 'public, max-age=0', 'max-age=3600', '']) {
++    const caches = makeCaches()
++    const headers = value ? { 'cache-control': value } : {}
++    await dispatch(loadWorker({ caches, network: async () => new Response('x', { headers }) }), request('/icons/icon-192.svg'))
++    await flush()
++    assert.equal(caches.log.filter(entry => entry[0] === 'put').length, 1, `cacheable: "${value}"`)
++  }
++})
++
++const CASE_VARIANTS = ['CODE=1', 'Code=1', 'Token_Hash=x', 'TOKEN_HASH=x', 'ACCESS_TOKEN=a', 'Refresh_Token=r', 'Type=recovery', 'ERROR_CODE=otp_expired', 'Id_Token=x', 'cOdE=', '%63ode=1', '%43ODE=1', 'a=1&Token=x']
++
++test('sensitive query parameter NAMES are matched case-insensitively: never intercepted, never cached', async () => {
++  for (const query of CASE_VARIANTS) {
++    for (const base of ['/icons/icon-192.svg', '/manifest.json', '/_next/static/chunks/a.js', '/native-offline.html', '/']) {
++      const caches = makeCaches()
++      const worker = loadWorker({ caches })
++      const result = await dispatch(worker, request(`${base}?${query}`))
++      assert.equal(result.intercepted, false, `${base}?${query}`)
++      assert.deepEqual(worker.fetched, [], `${base}?${query}: no fetch by the worker`)
++      assert.deepEqual(caches.log.filter(entry => entry[0] === 'put'), [], `${base}?${query}`)
++    }
++  }
++  // an ordinary version parameter is still fine
++  const worker = loadWorker()
++  assert.equal((await dispatch(worker, request('/icons/icon-192.svg?v=3'))).intercepted, true)
++})
++
++test('activation removes existing cache entries whose query names match case-insensitively', async () => {
++  const bad = CASE_VARIANTS.map(query => `${ORIGIN}/icons/icon-192.svg?${query}`)
++  const good = [`${ORIGIN}/icons/icon-192.svg`, `${ORIGIN}/icons/icon-512.svg?v=3`, `${ORIGIN}/native-offline.html`]
++  const caches = makeCaches({ 'cliniverse-static-v4': [...bad, ...good] })
++  const worker = loadWorker({ caches })
++  let waited
++  worker.listeners.activate({ waitUntil: p => { waited = p } })
++  await waited
++  assert.deepEqual([...caches.stores.get('cliniverse-static-v4').keys()].sort(), [...good].sort())
++})
++
++test('version handshake: the current worker answers on the supplied port; other messages are ignored', async () => {
++  const worker = loadWorker()
++  const posted = []
++  worker.listeners.message({ data: { type: 'cliniverse-sw-version' }, ports: [{ postMessage: m => posted.push(m) }] })
++  worker.listeners.message({ data: { type: 'other' }, ports: [{ postMessage: m => posted.push(m) }] })
++  worker.listeners.message({ data: { type: 'cliniverse-sw-version' }, ports: [] })
++  worker.listeners.message({ data: null })
++  assert.deepEqual(JSON.parse(JSON.stringify(posted)), [{ version: 'cliniverse-static-v4' }])
++  assert.equal(SW.match(/const CACHE = '([^']+)'/)[1], 'cliniverse-static-v4')
++})
++
++test('register-sw.js purges legacy caches again whenever another worker takes control (an old worker can re-create its cache)', async () => {
++  const calls = loadRegister({ pathname: '/', cacheNames: ['cliniverse-v3', 'cliniverse-static-v4'] }); await flush()
++  assert.deepEqual(calls.deleted, ['cliniverse-v3'])
++  calls.deleted.length = 0
++  const handler = calls.swListeners.find(([type]) => type === 'controllerchange')
++  assert.ok(handler, 'controllerchange listener registered')
++  handler[1](); await flush()
++  assert.deepEqual(calls.deleted, ['cliniverse-v3'])
++  const recovery = loadRegister({ pathname: '/reset-password', cacheNames: ['cliniverse-v3'] }); await flush()
++  assert.ok(recovery.swListeners.find(([type]) => type === 'controllerchange'), 'also on the recovery page')
++})
+diff --git a/tests/stale-worker-guard.test.mjs b/tests/stale-worker-guard.test.mjs
+new file mode 100644
+index 0000000..7a766aa
+--- /dev/null
++++ b/tests/stale-worker-guard.test.mjs
+@@ -0,0 +1,111 @@
++import test from 'node:test'
++import assert from 'node:assert/strict'
++import fs from 'node:fs'
++import vm from 'node:vm'
++import ts from 'typescript'
++
++// Real staleWorkerGuard.ts run against fakes: "current" workers answer the version probe, older ones never do.
++const read = p => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8')
++const code = ts.transpileModule(read('app/lib/staleWorkerGuard.ts'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText
++const G = {}
++vm.runInNewContext(code, { exports: G, URLSearchParams, Promise, MessageChannel, setTimeout, clearTimeout })
++
++const HASH = '#access_token=SYNTHETIC.AT&refresh_token=SYNTHETIC-RT&expires_in=3600&token_type=bearer&type=recovery'
++const flush = async () => { for (let i = 0; i < 20; i++) await Promise.resolve() }
++
++function world({ controller = null, registrations = [], cacheNames = [], search = '', getRegistrationsThrows = false, unregisterThrows = false } = {}) {
++  const log = []
++  const timers = []
++  const location = { pathname: '/reset-password', search, hash: HASH, replace: url => log.push(['replace', url]) }
++  const worker = (answers, label) => ({ label, postMessage(message, ports) { log.push(['probe', label]); if (answers) ports[0].postMessage({ version: 'cliniverse-static-v4' }) } })
++  const channel = () => { const port1 = { onmessage: null }; const port2 = { postMessage: data => port1.onmessage && port1.onmessage({ data }) }; return { port1, port2 } }
++  const reg = (w) => ({ active: w, unregister: async () => { log.push(['unregister', w ? w.label : 'none']); if (unregisterThrows) throw new Error('x'); return true } })
++  const env = {
++    serviceWorker: { controller, getRegistrations: async () => { if (getRegistrationsThrows) throw new Error('x'); return registrations } },
++    caches: { keys: async () => cacheNames, delete: async name => { log.push(['delete-cache', name]); return true } },
++    location, createChannel: channel,
++    setTimer: fn => { timers.push(fn); return timers.length }, clearTimer: () => {},
++  }
++  return { env, log, timers, worker, reg }
++}
++const settle = async (promise, timers) => { await flush(); timers.splice(0).forEach(fire => fire()); return promise }
++
++test('no service-worker support, or nothing registered and nothing controlling: clean, no side effects', async () => {
++  assert.equal(await G.ensureNoStaleWorker({ location: { pathname: '/reset-password', search: '', hash: HASH, replace() { throw new Error('no') } } }), 'clean')
++  const w = world()
++  assert.equal(await G.ensureNoStaleWorker(w.env), 'clean')
++  assert.deepEqual(w.log, [])
++})
++
++test('the CURRENT worker (answers the probe) is left alone: no unregister, no cache deletion, no reload', async () => {
++  const w = world(); const current = w.worker(true, 'current')
++  const env = { ...w.env, serviceWorker: { controller: current, getRegistrations: async () => [w.reg(current)] } }
++  assert.equal(await G.ensureNoStaleWorker(env), 'clean')
++  assert.deepEqual(w.log.filter(e => e[0] !== 'probe'), [])
++})
++
++test('OLD controlling worker on the first direct visit: unregistered, legacy caches deleted, one reload that keeps the fragment, no token use', async () => {
++  const w = world({ cacheNames: ['cliniverse-v3', 'cliniverse-static-v4', 'unrelated'] })
++  const old = w.worker(false, 'old')
++  const env = { ...w.env, serviceWorker: { controller: old, getRegistrations: async () => [w.reg(old)] } }
++  const result = await settle(G.ensureNoStaleWorker(env), w.timers)
++  await flush()
++  assert.equal(result, 'reloading')
++  const events = w.log.map(e => e.join(':'))
++  assert.ok(events.includes('unregister:old'))
++  assert.deepEqual(w.log.filter(e => e[0] === 'delete-cache').map(e => e[1]), ['cliniverse-v3'], 'only legacy Cliniverse caches')
++  assert.deepEqual(w.log.filter(e => e[0] === 'replace'), [['replace', '/reset-password?swclean=1' + HASH]], 'same path, marker, fragment byte-for-byte')
++  assert.ok(events.indexOf('unregister:old') < events.findIndex(e => e.startsWith('replace')), 'unregister before reload')
++})
++
++test('an old ACTIVE registration that does not control this page yet is also removed', async () => {
++  const w = world()
++  const old = w.worker(false, 'old-active')
++  const env = { ...w.env, serviceWorker: { controller: null, getRegistrations: async () => [w.reg(old)] } }
++  assert.equal(await settle(G.ensureNoStaleWorker(env), w.timers), 'reloading')
++  assert.ok(w.log.some(e => e[0] === 'unregister' && e[1] === 'old-active'))
++})
++
++test('after the one reload a stale worker is still present: BLOCKED (fail closed), nothing else is touched', async () => {
++  const w = world({ search: '?swclean=1' })
++  const old = w.worker(false, 'old')
++  const env = { ...w.env, serviceWorker: { controller: old, getRegistrations: async () => [w.reg(old)] } }
++  assert.equal(await settle(G.ensureNoStaleWorker(env), w.timers), 'blocked')
++  assert.deepEqual(w.log.filter(e => e[0] !== 'probe'), [])
++})
++
++test('after the reload with nothing stale left the page proceeds (marker present, clean)', async () => {
++  const w = world({ search: '?swclean=1' })
++  assert.equal(await G.ensureNoStaleWorker(w.env), 'clean')
++})
++
++test('unregister failures and unreadable registrations still end in reload-then-block, never in using the tokens', async () => {
++  const w = world({ unregisterThrows: true })
++  const old = w.worker(false, 'old')
++  const env = { ...w.env, serviceWorker: { controller: old, getRegistrations: async () => [w.reg(old)] } }
++  assert.equal(await settle(G.ensureNoStaleWorker(env), w.timers), 'reloading')
++  const w2 = world({ getRegistrationsThrows: true })
++  const env2 = { ...w2.env, serviceWorker: { controller: w2.worker(true, 'maybe'), getRegistrations: async () => { throw new Error('x') } } }
++  assert.equal(await settle(G.ensureNoStaleWorker(env2), w2.timers), 'clean', 'a controller that answers the probe is the current worker')
++  const w3 = world({ getRegistrationsThrows: true })
++  const env3 = { ...w3.env, serviceWorker: { controller: w3.worker(false, 'old'), getRegistrations: async () => { throw new Error('x') } } }
++  assert.equal(await settle(G.ensureNoStaleWorker(env3), w3.timers), 'reloading')
++})
++
++test('the version expected by the guard, the worker and the registration script is one and the same', () => {
++  const guard = read('app/lib/staleWorkerGuard.ts').match(/EXPECTED_WORKER_VERSION = '([^']+)'/)[1]
++  assert.equal(guard, read('public/sw.js').match(/const CACHE = '([^']+)'/)[1])
++  assert.equal(guard, read('public/register-sw.js').match(/CURRENT_CACHE = '([^']+)'/)[1])
++})
++
++test('the recovery page runs the guard BEFORE it reads the tokens or creates the recovery client, and blocked never uses the link', () => {
++  const page = read('app/reset-password/ResetPasswordClient.tsx')
++  const guard = page.indexOf('await ensureNoStaleWorker(')
++  assert.ok(guard > 0)
++  assert.ok(guard < page.indexOf('parseRecoveryHash(window.location.hash)'))
++  assert.ok(guard < page.indexOf('createRecoveryClient()'))
++  assert.match(page, /if \(guard === 'reloading'\) return/)
++  const blocked = page.slice(page.indexOf("if (guard === 'blocked')"), page.indexOf("if (link.kind === 'invalid')"))
++  assert.match(blocked, /setView\(\{ name: 'blocked' \}\); return/)
++  assert.ok(page.indexOf('window.history.replaceState') < page.indexOf("if (guard === 'blocked')"), 'the fragment is stripped even when blocked')
++})
+-- 
+2.43.0
+
