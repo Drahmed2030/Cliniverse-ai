@@ -1,76 +1,47 @@
-# Release-Readiness Packet — Cliniverse 1.1 / Build 69 (Engineering → Work 1)
+# Release-Readiness Packet — Cliniverse 1.1 / Build 69 (current as of 2026-10-26, after R4 approval and R5 draft)
 
-Prepared by: Claude Code (Engineering & QA). Scope: source audit + source tests only. No build, deployment, submission, secret, entitlement or feature change was made.
+Prepared by Claude Code (engineering & QA). Earlier versions of this packet are in git history. **Decision: HOLD — BUILD / APPLE SUBMISSION / RELEASE.** Nothing here authorises a build, deployment or submission.
 
-## Decision: **HOLD** (not "READY FOR WORK 1 REVIEW" yet)
-
-Reasons, in priority order:
-
-1. **SHA/branch mismatch.** `e4dab595d96c1d7e2583a28b15f2bb2497b4e65b` ("feat(account): add protected in-app account deletion", 2026-09-22) exists on `origin/agent/today-collection-v1`, `origin/feature/work-review-controller-20261004`, `origin/qa/case-batch20-cloud`. It is **not on `main`** and **not an ancestor** of the session branch `claude/cliniverse-1-1-build-69-tpzp5p` (which equals `main` @ `4ee8850`). It is 311 commits ahead of that base. Audit below was done on a detached worktree of the exact SHA.
-2. **22 of 886 source tests FAIL on the Build 69 SHA** (864 pass). `tsc --noEmit` is clean.
-3. **Scope drift in login:** the SHA allows self-service account creation (`signUpWithPassword` in `AuthScreen.tsx`), while the accepted RC contract test requires the text "Account creation is not enabled in this release".
-
-## Verified identity
-
-| Item | Value | Status |
+## 1. Identity
+| Item | Value | Evidence |
 |---|---|---|
-| Source SHA | e4dab595d96c1d7e2583a28b15f2bb2497b4e65b | VERIFIED exists (repo) |
-| Marketing version | 1.1 (`CFBundleShortVersionString`, set in codemagic.yaml) | VERIFIED in source |
-| Build number 69 | injected from Codemagic `BUILD_NUMBER`; not stored in repo | **UNVERIFIED** — Work 1 must confirm Codemagic run → SHA → ASC build |
-| codemagic.yaml | on the SHA it differs from `main` (e.g. `xcode: 26.6` vs `latest`) | noted |
-| `ios/` Info.plist | not committed (generated at CI) → native packaging not locally verifiable | UNVERIFIED |
+| Build 69 baseline source | `e4dab595d96c1d7e2583a28b15f2bb2497b4e65b` (branch `qa/case-batch20-cloud`; not on `main`) | repo; Vercel production metadata |
+| **Production web app today** | Vercel project `cliniverse-ai-u7gi`, deployment `dpl_CJC9unCgx4Xd7FeHNZkU8wER14Ya` = the baseline SHA, created 2026-09-22 | VERIFIED read-only (Vercel) |
+| Native shell | loads `https://www.cliniverseai.com` live; production deploys are app releases | `capacitor.config.json`; `docs/VERCEL_PRODUCTION_RELEASE_CONTROL.md` |
+| Security baseline | **R4** patch, SHA-256 `80d3fdac33011265720e1963c704721070fc6eeb256f97e3fb5d45d5eaff93f9`, Work 1 APPROVED, **not deployed** | Issue #36 |
+| Draft on top of R4 | **R5** patch (password recovery + honest copy), SHA-256 `020c09184a148f649537c4ce9910df63127d410e80620a5d5a46e62c239cd5fb`, awaiting Work 1 review | `docs/BUILD69_R5_RECOVERY_AND_COPY_REPORT.md` |
+| Codemagic run → SHA → IPA → ASC "1.1 (69)" | UNVERIFIED | Work 1 |
 
-## Tests run (source level, Node 22 on Linux, SHA worktree)
+## 2. Verified database / backend findings (read-only, MASTER, Issue #36; not re-run by Claude)
+`subscriptions.user_id → auth.users` is **ON DELETE CASCADE**; `apple_subscription_events.subscription_id → subscriptions` is **ON DELETE CASCADE**; `persist_verified_apple_subscription` **exists** in production; Edge Function `delete-account` is **ACTIVE, version 1**. Consequence: deleting a user deletes their subscription and Apple event records. This closes the FK question but does **not** approve deletion or prove retention compliance → account-deletion changes and live deletion tests are **HOLD** pending a privacy/legal retention decision. The existence of the persistence function does not prove that every purchase/restore scenario works.
 
-| Check | Result |
+## 3. Source findings that shape the release (Claude, from source)
+- Learner **ECG is HELD** (governed artifact missing; the page shows "This tracing isn't shown yet"). **Echo** is one introductory study. Ward: 1 free case + 6 client-gated; Code Lab: first two lessons of each BLS and ACLS track free (4 free / 8 gated). Resuscitation, Pathway Replay, Clinical Reference, Handover Practice are open and **stay free in 1.1** (MASTER D2). Cardiology Operations and Nexus are client-gated PRO. All PRO gates are client-side; most premium content is bundled in the client.
+- Apple subscription authority is server-written (verified transactions, replay-safe RPC); no App Store Server Notifications endpoint yet; the verify route accepts a yearly product although only monthly is approved. These are future-monetization items (Issue #37), not 1.1 changes.
+
+## 4. Tests (source level only — not iOS/device acceptance)
+| Lineage | Result |
 |---|---|
-| `npx tsc --noEmit` | PASS (0 errors) |
-| `npm test` | **864 pass / 22 FAIL** of 886 |
-| StoreKit contract, Apple verification client/boundary/persistence/verifier-runtime | PASS |
-| account-deletion-release, reviewer-feature-access | PASS |
-| native-release-gates, ios-screenshot-evidence-contract | PASS |
-| Ward (v2 journey, checkpoint), ECG (answer, account attempt), Echo (attempt, history) | PASS |
-| `next build` | NOT RUN here |
+| baseline + R4 | 917/917 tests, `tsc`, local build — Work 1 independently checked digest and five source behaviours |
+| baseline + R4 + R5 (clean checkout, `git am` in order) | **933/933** tests, `tsc` PASS, local `next build` PASS, real-browser recovery script 15/15 |
+| Known open test reliability item | `account-codelab` fixed 10 ms wait — flaky under CPU load (6/20), 0/25 idle; not fixed |
+No simulator, TestFlight or physical-device evidence exists for Build 69 in this repository.
 
-### The 22 failures (14 files)
-- `auth-identity-session-contract` (3): handler order check `authError || !data.session || !data.user` before `onComplete`; error text `authError?.message || t.genericError`; missing "No administrator privileges" in SubscriptionPurchaseProvider.
-- `release-security-contracts` (1): "Account creation is not enabled in this release" absent from AuthScreen.
-- `paywall-release-contracts`, `explore-curated-discovery` (2), `learn-practice-tracks` (4), `me-account-v2` (2), `me-hub-actions`, `today-golden-surface` (2), `progress-trajectory`, `ecg-learner-workspace`, `echo-learner-workspace`, `echo-intelligence-atlas-live-route`, `release-interactions-contract`, `release-unified-product-ux`: UI-structure contracts (Explore/Learn/Me/Today/Progress shell wiring, e.g. `<AtlasReleaseCatalog onNavigate=… caseLibraryPreview=`).
+## 5. Gates and owners
+| # | Gate | State | Owner |
+|---|---|---|---|
+| 1 | Supabase **Confirm email = ON**, providers, reviewer pre-confirmed, SMTP, password minimum 8, redirect allow-list incl. `/reset-password` | UNVERIFIED | Work 1 / operator |
+| 2 | Password recovery | R5 draft ready for review; real end-to-end test on a preview pending | Work 1 |
+| 3 | Honest copy (ECG prepared, Echo one study, Code Lab 2 free per track) | R5 draft; Onboarding/App Store ECG wording still to align | MASTER / Work 1 |
+| 4 | Account deletion retention policy (cascade deletes purchase records) | HOLD for legal/privacy decision | MASTER + legal |
+| 5 | Controlled Vercel releases (exact SHA, review, authorization, rollback) | procedure drafted; Production Branch setting unverified | MASTER / Work 1 |
+| 6 | Codemagic provenance and a new RC after explicit build GO | not started | Work 1 |
+| 7 | TestFlight device QA: sign-up → email confirmation → login, logout/restore (incl. 20 s busy UX), reviewer, StoreKit purchase/restore, Ward/Echo, recovery, deletion (after policy) | not started | MASTER / tester |
+| 8 | Privacy labels and screenshots vs the final IPA/web state | pending | Work 1 |
+| 9 | Free Core + PRO Advanced (Issue #37) | design/doc only; no gating in 1.1 | MASTER |
 
-**Diagnosis (smallest cause):** these are source-pattern assertions. Most look like tests lagging the post-RC1 UI/auth refactors (sign-up + magic-link flow added in `AuthScreen.tsx`, Learn/Explore/Me restructuring), not runtime crashes — but that is an inference, not proven. Not fixed: modifying tests or code would change the accepted baseline. Needs MASTER decision: update contracts to the intended 1.1 scope, or revert the drifted code.
+## 6. App Review Notes (draft, English; update credentials in the protected field)
+Cliniverse AI is a clinical education and workflow-simulation app for healthcare professionals; it does not diagnose or give patient-specific advice. Sign in with the reviewer account in App Review Information (pre-confirmed email). New users can create an account (email confirmation) and reset a forgotten password from the sign-in screen. PRO (`com.cliniverse.ai.pro.monthly`, auto-renewing monthly) unlocks additional Ward cases, further Code Lab lessons, Cardiology Operations and Nexus Learning; Restore Purchases is in Me → Plan. Echo (one introductory study), Resuscitation, Pathway Replay, Clinical Reference and Handover Practice are free; ECG practice is being prepared. Account deletion is in Me. Third-party AI features are disabled in this release. The app loads its content from www.cliniverseai.com. Support, Privacy and Terms are linked in the app.
 
-## Evidence by area
-
-- **Login/onboarding:** email+password sign-in fails closed on error/no session (code reads correctly); sign-up and magic-link branches exist (magic-link default off per `enableMagicLink = false`, `shouldCreateUser:false`). Reviewer access is server-gated via `/api/reviewer-feature-access` with bearer token and email-confirmed check. Runtime login: **UNVERIFIED** (no device/simulator).
-- **StoreKit:** product `com.cliniverse.ai.pro.monthly` consistent across `CliniverseStoreKitPlugin.swift`, `storekit-purchase-contract.ts`, `entitlements.ts`, server verification. Restore Purchases implemented (`SubscriptionPurchaseProvider.restorePurchases`, handles none/failed/restored). Sandbox purchase and restore on Build 69: **UNVERIFIED** (no TestFlight evidence available to me).
-- **Account deletion:** implemented in the SHA (in-app, protected route); contract tests PASS. Not exercised live.
-- **Ward / ECG / Echo:** contract tests PASS; offline/error-state behaviour not runtime-tested. **UNVERIFIED on device.**
-- **Privacy:** `native/privacy/PrivacyInfo.xcprivacy` declares Email, Name, UserID, PurchaseHistory, OtherDiagnosticData; tracking false. Must be reconciled with App Store privacy answers (Work 1). Analytics-related code present in several components (`engagement/provider.ts`, `operationalPulse.ts`) — confirm nothing is third-party/tracking.
-- **Permissions:** no UsageDescription keys found in repo (Info.plist generated at CI) — verify in the built IPA.
-- **Medical wording:** release-security test for "Clinical Intelligence is not enabled in this release build" / third-party AI disclaimer passes.
-
-## Evidence classes (do not conflate)
-
-| Class | Build 69 status |
-|---|---|
-| Source tests | 864/886 pass, 22 fail (above) |
-| Simulator tests | NONE seen |
-| Codemagic / TestFlight | NONE accessible from this sandbox (no network/credentials). Only prior record: `APPLE_BUILD_67_OUTCOME` (Build 67, externally reported) |
-| Physical device | NONE for Build 69 |
-
-## Draft App Review Notes
-
-> Cliniverse AI is a clinical education and workflow-simulation app for healthcare professionals; it does not diagnose or provide patient-specific medical advice. Sign in with the reviewer account supplied in App Review Information. PRO (`com.cliniverse.ai.pro.monthly`, auto-renewable monthly) unlocks the full Ward, ECG and Echo workspaces; Restore Purchases is in Me → Plan. Account deletion is in Me. Third-party AI features are disabled in this release. Support/Privacy/Terms: cliniverseai.com. [credentials: to be entered by Work 1 in protected fields]
-
-## Blockers and owners
-
-| # | Blocker | Owner |
-|---|---|---|
-| 1 | Confirm which branch/commit Codemagic actually built as Build 69 (SHA is off-main, not on the assigned branch) | Work 1 |
-| 2 | Decide on 22 failing contracts: update tests vs revert drift (incl. sign-up/account-creation scope) | MASTER |
-| 3 | Sandbox purchase + restore on Build 69 TestFlight | Work 1 / MASTER (device) |
-| 4 | Login, Ward, ECG, Echo, offline states on physical device | MASTER / tester |
-| 5 | Privacy answers vs PrivacyInfo.xcprivacy; screenshots vs final UI; product attached to version | Work 1 |
-| 6 | Support mailbox, Support/Privacy/Terms HTTP 200 | Work 1 |
-
-No new build is requested. Final submission and manual release remain MASTER-controlled.
+## 7. Recommendation
+R4 stays the security baseline. Next independent steps: Work 1 reviews R5 and performs the operator checks (gates 1, 2, 5, 6); MASTER decides deletion retention and the onboarding/App Store copy pass; then a single controlled production web deployment of the exact approved SHA, followed by a new Codemagic RC and TestFlight QA. **HOLD** until then.
