@@ -109,6 +109,8 @@ All three need an explicit retention decision. Other weaknesses: no atomicity (a
 Also: `\d public.subscriptions`, whether `persist_verified_apple_subscription` exists, and the deployed `delete-account` version/`verify_jwt`.
 
 ### 4.5 Proposed small future PR (after policy approval)
+> **ARCHIVED — WITHDRAWN — DO NOT PUBLISH (item 1 and the ledger step of item 2):** the "de-identified / hashed ledger" recommendation is withdrawn by MASTER; transaction identifiers and hashes can remain personal data. Controlling position: Work 1's legally conditional minimum-retention proposal; no ledger, period or schema is approved. Kept for history only. See `docs/archive/ARCHIVED_WITHDRAWN_deletion_retention_options_2026-10-26.md`.
+
 1. Policy (MASTER + legal): what purchase evidence is retained, for how long, and in what form (recommended: retain a **de-identified** ledger — hashed original-transaction id, product, dates, status — and delete the identified rows; disclose it in the privacy policy).
 2. Edge Function: one transaction via a `security definer` RPC `delete_user_account(p_user)` that (a) writes the de-identified ledger row, (b) deletes user rows from a table list generated from the catalog check, (c) deletes `subscriptions`/events per policy, then calls `deleteUser`; idempotent and safe to retry; optional recent-sign-in check.
 3. Tests with a fake admin client for ordering/partial-failure/retry; a DB test on a **non-production** project only.
