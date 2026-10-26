@@ -19,7 +19,7 @@ import {
 // The real, readable preference is "Topics I follow" in Me.
 
 const PROOF = [
-  { number: '01', term: 'Observe', text: 'Start with the tracing, cine or case — before the label.' },
+  { number: '01', term: 'Observe', text: 'Start with the cine or case — before the label.' },
   { number: '02', term: 'Commit', text: 'Choose the interpretation or next clinical step.' },
   { number: '03', term: 'Refine', text: 'Use reasoning and evidence to sharpen the next attempt.' },
 ]
@@ -91,7 +91,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
                 <span>Make the decision.</span>
               </h1>
               <p className="cv-onboarding-body">
-                ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.
+                Echo, Ward cases and clinical reasoning — brought into one focused workflow built for deliberate practice.
               </p>
               <ol className="cv-onboarding-proof" aria-label="How practice works">
                 {PROOF.map(item => (
@@ -112,7 +112,7 @@ export default function OnboardingScreens({ onComplete }: Props) {
                 <span>Start with your next step.</span>
               </h1>
               <p className="cv-onboarding-body">
-                Today shows what to do next. Learn holds your ECG, Echo and Ward practice, and Progress shows what to revisit.
+                Today shows what to do next. Learn holds your Echo and Ward practice (ECG practice is being prepared), and Progress shows what to revisit.
               </p>
             </>
           )}

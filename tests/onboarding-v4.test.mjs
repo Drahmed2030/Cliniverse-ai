@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import vm from 'node:vm'
 import { createRequire } from 'node:module'
 import ts from 'typescript'
+import { evaluateEcgLearnerAvailability } from '../app/lib/competency/ecgLearnerAvailability.ts'
 
 const require = createRequire(import.meta.url)
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8')
@@ -73,8 +74,8 @@ test('the first screen is the Golden Entry: wordmark, Skip, hero, the Observe �
     'CLINIVERSE',
     'CLINICAL LEARNING · ONE SYSTEM',
     'See the case.', 'Read the signal.', 'Make the decision.',
-    'ECG, Echo and clinical reasoning — brought into one focused workflow built for deliberate practice.',
-    '01', 'Observe', 'Start with the tracing, cine or case — before the label.',
+    'Echo, Ward cases and clinical reasoning — brought into one focused workflow built for deliberate practice.',
+    '01', 'Observe', 'Start with the cine or case — before the label.',
     '02', 'Commit', 'Choose the interpretation or next clinical step.',
     '03', 'Refine', 'Use reasoning and evidence to sharpen the next attempt.',
     'Built for deliberate clinical practice.',
@@ -155,8 +156,8 @@ test('no feature tour, promotional visual composition or unsupported claim remai
   assert.doesNotMatch(source, /free trial|\d+[- ]day|\$\d|£\d|€\d|Start my free/i)
   assert.match(source, /See Cliniverse PRO options/)
   // Only the three approved product areas are named.
-  assert.match(source, /ECG, Echo and clinical reasoning/)
-  assert.match(source, /Learn holds your ECG, Echo and Ward practice/)
+  assert.match(source, /Echo, Ward cases and clinical reasoning/)
+  assert.match(source, /Learn holds your Echo and Ward practice \(ECG practice is being prepared\)/)
   assert.equal(existsSync(new URL('../app/components/release/OnboardingVisuals.tsx', import.meta.url)), false)
   assert.doesNotMatch(source, /OnboardingVisuals|FeatureFlow|CapabilityBeam|AnchorFrame|EditorialMark|SelectionSummary|framer-motion|lucide-react/)
 })
@@ -201,4 +202,11 @@ test('the surface keeps the shell tokens, safe areas, one h1 and focus on the ne
   assert.equal(view.focusCalls(), 1)
   button(view.tree(), 'Back').props.onClick()
   assert.equal(view.focusCalls(), 2)
+})
+
+test('onboarding does not offer ECG while learner ECG is held', () => {
+  assert.equal(evaluateEcgLearnerAvailability().state, 'held', 'ECG availability changed — review every ECG sentence in onboarding copy')
+  const source = stripComments(raw)
+  const rest = source.split('ECG practice is being prepared').join('')
+  assert.doesNotMatch(rest, /\bECG\b|tracing/i)
 })
