@@ -185,9 +185,9 @@ test('UPGRADE: activation removes every legacy Cliniverse cache (with synthetic 
 })
 
 function loadRegister({ pathname = '/', cacheNames = [], readyState = 'loading' } = {}) {
-  const calls = { register: [], deleted: [], listeners: [] }
+  const calls = { register: [], deleted: [], listeners: [], swListeners: [] }
   const window = { location: { pathname }, addEventListener: (type, fn) => calls.listeners.push([type, fn]), caches: null }
-  const navigator = { serviceWorker: { register: (...args) => { calls.register.push(args); return Promise.resolve({ update: () => Promise.resolve() }) } } }
+  const navigator = { serviceWorker: { addEventListener: (type, fn) => calls.swListeners.push([type, fn]), register: (...args) => { calls.register.push(args); return Promise.resolve({ update: () => Promise.resolve() }) } } }
   const caches = { keys: async () => cacheNames, delete: async name => { calls.deleted.push(name) } }
   window.caches = caches; window.navigator = navigator
   vm.runInNewContext(REGISTER, { window, navigator, caches, document: { readyState }, Promise, RegExp })
@@ -217,4 +217,75 @@ test('workers are never HTTP-cached so a fix reaches installed browsers', async 
   const config = (await import(new URL('../next.config.js', import.meta.url).pathname)).default
   const rule = (await config.headers()).find(r => r.source.includes('sw.js'))
   assert.match(rule.headers.find(h => h.key === 'Cache-Control').value, /no-store/)
+})
+
+// ───────── R6.1: Cache-Control precedence, case-insensitive query names, version handshake, controllerchange ─────────
+
+test('Cache-Control: no-store / private / no-cache are NEVER overridden by immutable or anything else', async () => {
+  const never = ['no-store, immutable', 'private, immutable', 'immutable, no-store', 'immutable, private', 'no-cache, immutable', 'public, max-age=31536000, immutable, no-store', 'NO-STORE', 'Private, Immutable', 'private="x-user"', 'max-age=0, private', 'no-store']
+  for (const value of never) {
+    const caches = makeCaches()
+    await dispatch(loadWorker({ caches, network: async () => new Response('x', { headers: { 'cache-control': value } }) }), request('/icons/icon-192.svg'))
+    await flush()
+    assert.equal(caches.log.filter(entry => entry[0] === 'put').length, 0, value)
+  }
+  for (const value of ['public, max-age=31536000, immutable', 'public, max-age=0', 'max-age=3600', '']) {
+    const caches = makeCaches()
+    const headers = value ? { 'cache-control': value } : {}
+    await dispatch(loadWorker({ caches, network: async () => new Response('x', { headers }) }), request('/icons/icon-192.svg'))
+    await flush()
+    assert.equal(caches.log.filter(entry => entry[0] === 'put').length, 1, `cacheable: "${value}"`)
+  }
+})
+
+const CASE_VARIANTS = ['CODE=1', 'Code=1', 'Token_Hash=x', 'TOKEN_HASH=x', 'ACCESS_TOKEN=a', 'Refresh_Token=r', 'Type=recovery', 'ERROR_CODE=otp_expired', 'Id_Token=x', 'cOdE=', '%63ode=1', '%43ODE=1', 'a=1&Token=x']
+
+test('sensitive query parameter NAMES are matched case-insensitively: never intercepted, never cached', async () => {
+  for (const query of CASE_VARIANTS) {
+    for (const base of ['/icons/icon-192.svg', '/manifest.json', '/_next/static/chunks/a.js', '/native-offline.html', '/']) {
+      const caches = makeCaches()
+      const worker = loadWorker({ caches })
+      const result = await dispatch(worker, request(`${base}?${query}`))
+      assert.equal(result.intercepted, false, `${base}?${query}`)
+      assert.deepEqual(worker.fetched, [], `${base}?${query}: no fetch by the worker`)
+      assert.deepEqual(caches.log.filter(entry => entry[0] === 'put'), [], `${base}?${query}`)
+    }
+  }
+  // an ordinary version parameter is still fine
+  const worker = loadWorker()
+  assert.equal((await dispatch(worker, request('/icons/icon-192.svg?v=3'))).intercepted, true)
+})
+
+test('activation removes existing cache entries whose query names match case-insensitively', async () => {
+  const bad = CASE_VARIANTS.map(query => `${ORIGIN}/icons/icon-192.svg?${query}`)
+  const good = [`${ORIGIN}/icons/icon-192.svg`, `${ORIGIN}/icons/icon-512.svg?v=3`, `${ORIGIN}/native-offline.html`]
+  const caches = makeCaches({ 'cliniverse-static-v4': [...bad, ...good] })
+  const worker = loadWorker({ caches })
+  let waited
+  worker.listeners.activate({ waitUntil: p => { waited = p } })
+  await waited
+  assert.deepEqual([...caches.stores.get('cliniverse-static-v4').keys()].sort(), [...good].sort())
+})
+
+test('version handshake: the current worker answers on the supplied port; other messages are ignored', async () => {
+  const worker = loadWorker()
+  const posted = []
+  worker.listeners.message({ data: { type: 'cliniverse-sw-version' }, ports: [{ postMessage: m => posted.push(m) }] })
+  worker.listeners.message({ data: { type: 'other' }, ports: [{ postMessage: m => posted.push(m) }] })
+  worker.listeners.message({ data: { type: 'cliniverse-sw-version' }, ports: [] })
+  worker.listeners.message({ data: null })
+  assert.deepEqual(JSON.parse(JSON.stringify(posted)), [{ version: 'cliniverse-static-v4' }])
+  assert.equal(SW.match(/const CACHE = '([^']+)'/)[1], 'cliniverse-static-v4')
+})
+
+test('register-sw.js purges legacy caches again whenever another worker takes control (an old worker can re-create its cache)', async () => {
+  const calls = loadRegister({ pathname: '/', cacheNames: ['cliniverse-v3', 'cliniverse-static-v4'] }); await flush()
+  assert.deepEqual(calls.deleted, ['cliniverse-v3'])
+  calls.deleted.length = 0
+  const handler = calls.swListeners.find(([type]) => type === 'controllerchange')
+  assert.ok(handler, 'controllerchange listener registered')
+  handler[1](); await flush()
+  assert.deepEqual(calls.deleted, ['cliniverse-v3'])
+  const recovery = loadRegister({ pathname: '/reset-password', cacheNames: ['cliniverse-v3'] }); await flush()
+  assert.ok(recovery.swListeners.find(([type]) => type === 'controllerchange'), 'also on the recovery page')
 })

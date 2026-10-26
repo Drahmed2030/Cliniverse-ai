@@ -1,7 +1,8 @@
 // Real-browser check of the service worker with a genuinely CONTROLLING worker (navigator.serviceWorker.controller),
 // against a locally started production build. Supabase traffic is intercepted in the browser; nothing reaches a real project.
 //   npm run build && npx next start -p 3112          (any dummy NEXT_PUBLIC_SUPABASE_* values)
-//   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js node scripts/verify-service-worker-browser.cjs
+//   BASE=http://localhost:3112 LEGACY_SW=/path/to/baseline/sw.js [BASE_R6=http://localhost:3113] node scripts/verify-service-worker-browser.cjs
+// BASE_R6 (optional) is a second server running the PREVIOUS (R6) build, used only as a negative control for section D.
 // LEGACY_SW is the pre-R6 public/sw.js (git show e4dab59:public/sw.js). Needs Playwright + Chromium.
 const { chromium } = require('playwright')
 const fs = require('fs')
@@ -140,6 +141,75 @@ async function offlineProbe(page, ctx, label) {
     check('no sensitive cache remnants after the whole session', flat(final).every(u => !SENSITIVE_URL.test(u)))
     await ctx.close()
   }
+
+  // ───────── D. FIRST DIRECT VISIT TO /reset-password WHILE AN OLD WORKER STILL CONTROLS THE ORIGIN ─────────
+  const jwtFor = (sub, email) => { const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url'); return `${b64({ alg: 'HS256', typ: 'JWT' })}.${b64({ sub, email, aud: 'authenticated', role: 'authenticated', exp: Math.floor(Date.now() / 1000) + 3600 })}.sig` }
+  const RECOVERY_HASH = `#access_token=${jwtFor('user-a', 'jane.doe@clinic.test')}&refresh_token=RA&expires_in=3600&token_type=bearer&type=recovery`
+  async function oldWorkerContext(base, events, { blockUnregister = false } = {}) {
+    const ctx = await browser.newContext(); const page = await ctx.newPage()
+    await ctx.route(`${SUPA}/**`, route => {
+      const req = route.request(); const u = new URL(req.url()); const auth = req.headers()['authorization'] || ''
+      events.push(['supabase', req.method(), u.pathname, auth.slice(0, 12)])
+      const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' }
+      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors })
+      if (u.pathname === '/auth/v1/user' && req.method() === 'GET') return route.fulfill({ headers: cors, json: { id: 'user-a', email: 'jane.doe@clinic.test', aud: 'authenticated', role: 'authenticated', app_metadata: {}, user_metadata: {}, created_at: '2026-01-01T00:00:00Z' } })
+      if (u.pathname === '/auth/v1/user') return route.fulfill({ headers: cors, json: { id: 'user-a', email: 'jane.doe@clinic.test' } })
+      if (u.pathname === '/auth/v1/logout') return route.fulfill({ status: 204, headers: cors, body: '' })
+      return route.fulfill({ headers: cors, json: [] })
+    })
+    await ctx.route(`${base}/sw.js`, r => r.fulfill({ body: LEGACY_INSTALLABLE, contentType: 'text/javascript' }))   // the old worker keeps being served: no update yet
+    await page.goto(`${base}/native-offline.html`)
+    await page.evaluate(() => navigator.serviceWorker.register('/sw.js'))
+    await until(async () => { await page.reload(); return page.evaluate(() => !!navigator.serviceWorker.controller) }, 25000)
+    await pull(page); await sleep(400)                 // seed the legacy cache with auth / REST / API / recovery responses
+    events.length = 0
+    await page.exposeFunction('__report', d => events.push(['doc', d.path, d.controller]))
+    await ctx.addInitScript(blocked => {
+      try { window.__report({ path: location.pathname + location.search, controller: !!(navigator.serviceWorker && navigator.serviceWorker.controller) }) } catch (e) {}
+      if (blocked) ServiceWorkerRegistration.prototype.unregister = () => Promise.resolve(false)
+    }, blockUnregister)
+    return { ctx, page }
+  }
+  const docsOf = events => events.filter(e => e[0] === 'doc').map(e => ({ path: e[1], controller: e[2] }))
+
+  {
+    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events)
+    const seeded = flat(await dump(page)).some(u => /auth\/v1\/user/.test(u))
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 20000 })
+    const docs = docsOf(events); const firstSupabase = events.findIndex(e => e[0] === 'supabase'); const lastOldDoc = events.map((e, i) => e[0] === 'doc' && e[2] ? i : -1).reduce((a, b) => Math.max(a, b), -1)
+    check('D1 (fixed build): the legacy cache was seeded with an auth response, and the FIRST document of the visit was controlled by the old worker', seeded && docs[0] && docs[0].controller === true, JSON.stringify(docs))
+    check('D1: the page removed the old worker and reloaded itself once (marker query, fragment kept) into an UNcontrolled document', docs.length === 2 && docs[1].path === '/reset-password?swclean=1' && docs[1].controller === false, JSON.stringify(docs))
+    check('D1: no Supabase request was made while the old worker controlled the page (the tokens were first used after the reload)', firstSupabase > lastOldDoc && firstSupabase > -1, JSON.stringify(events.map(e => e.slice(0, 3).join(' '))))
+    check('D1: the recovery form appears for the right (masked) account and the address bar no longer carries tokens', (await page.textContent('main')).includes('j••••••@clinic.test') && !page.url().includes('access_token') && !page.url().includes('swclean'), page.url())
+    await page.getByLabel('New password', { exact: true }).fill('correct-horse-9'); await page.getByLabel('Confirm new password').fill('correct-horse-9'); await page.getByRole('button', { name: 'Update password' }).click()
+    await page.getByText('Your password was updated.').waitFor({ timeout: 15000 })
+    const regs = await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length)
+    const caches1 = await dump(page)
+    check('D1: the old worker is unregistered and no legacy cache or sensitive entry remains', regs === 0 && !Object.keys(caches1).some(k => /^cliniverse-v/.test(k)) && flat(caches1).every(u => !SENSITIVE_URL.test(u)), `registrations=${regs} caches=${Object.keys(caches1)}`)
+    await ctx.close()
+  }
+  {
+    const events = []; const { ctx, page } = await oldWorkerContext(BASE, events, { blockUnregister: true })
+    await page.goto(`${BASE}/reset-password${RECOVERY_HASH}`)
+    await page.getByText('We could not prepare this page safely.').waitFor({ timeout: 20000 })
+    const docs = docsOf(events)
+    check('D2 (old worker cannot be removed): the page fails CLOSED — blocked message, the link is not used', docs.length === 2 && docs[1].controller === true, JSON.stringify(docs))
+    check('D2: no Supabase request at all, and the tokens are gone from the address bar', events.every(e => e[0] !== 'supabase') && !page.url().includes('access_token') && !page.url().includes('#'), page.url())
+    await ctx.close()
+  }
+  if (process.env.BASE_R6) {
+    const events = []; const { ctx, page } = await oldWorkerContext(process.env.BASE_R6, events)
+    await page.goto(`${process.env.BASE_R6}/reset-password${RECOVERY_HASH}`)
+    await page.getByLabel('New password', { exact: true }).waitFor({ timeout: 20000 })
+    await sleep(500)
+    const docs = docsOf(events); const supa = events.filter(e => e[0] === 'supabase')
+    const cached = flat(await dump(page)).filter(u => /auth\/v1\/user/.test(u))
+    check('control D3 (previous R6 build, no guard): the page stays under the old worker and its recovery lookup goes through it', docs.length === 1 && docs[0].controller === true && supa.some(e => e[2] === '/auth/v1/user'), JSON.stringify(docs))
+    check('control D3: the old worker STORES that recovery-session user lookup in its cache (the exposure the guard prevents)', cached.length > 0, cached.map(u => u.replace(SUPA, 'SUPA')).join(' | '))
+    await ctx.close()
+  } else console.log('SKIP  control D3 (set BASE_R6 to a server running the previous build)')
+
   await browser.close()
   const failed = results.filter(r => !r.ok).length
   console.log(`\n${results.length - failed}/${results.length} browser checks passed`)

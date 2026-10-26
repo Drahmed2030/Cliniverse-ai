@@ -14,6 +14,9 @@
   }
 
   purgeLegacyCaches();
+  // An older worker that is still running can re-create its cache after the purge above; purge again whenever a
+  // different worker takes control (the new worker's own activation also removes them).
+  navigator.serviceWorker.addEventListener('controllerchange', purgeLegacyCaches);
   // The password-recovery page carries one-time tokens: it never registers or updates a worker.
   if (/^\/reset-password(\/|$)/i.test(window.location.pathname)) return;
 

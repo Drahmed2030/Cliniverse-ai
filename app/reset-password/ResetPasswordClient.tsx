@@ -12,11 +12,13 @@ import {
   startRecovery,
   type RecoveryClient,
 } from '../lib/passwordRecovery'
+import { ensureNoStaleWorker } from '../lib/staleWorkerGuard'
 import { NATIVE_SAFE_AREA_BOTTOM, NATIVE_SAFE_AREA_TOP } from '../lib/nativeSafeArea'
 
 type View =
   | { name: 'checking' }
   | { name: 'invalid'; expired: boolean }
+  | { name: 'blocked' }
   | { name: 'form'; maskedEmail: string }
   | { name: 'done'; sessionsEnded: boolean }
 
@@ -42,14 +44,23 @@ export default function ResetPasswordClient() {
   useEffect(() => {
     if (started.current) return
     started.current = true
-    const link = parseRecoveryHash(window.location.hash)
-    // Remove tokens from the address bar and history before anything else happens.
-    window.history.replaceState(null, '', window.location.pathname)
-    if (link.kind === 'invalid') { setView({ name: 'invalid', expired: link.reason === 'expired' }); return }
-    client.current = createRecoveryClient()
-    void startRecovery(client.current, link).then(result => {
+    void (async () => {
+      // Before the tokens in the URL are read or used: make sure no older service worker controls this page.
+      const guard = await ensureNoStaleWorker({
+        serviceWorker: 'serviceWorker' in navigator ? navigator.serviceWorker : undefined,
+        caches: 'caches' in window ? window.caches : undefined,
+        location: window.location,
+      })
+      if (guard === 'reloading') return
+      const link = parseRecoveryHash(window.location.hash)
+      // Remove tokens from the address bar and history before anything else happens.
+      window.history.replaceState(null, '', window.location.pathname)
+      if (guard === 'blocked') { setView({ name: 'blocked' }); return }
+      if (link.kind === 'invalid') { setView({ name: 'invalid', expired: link.reason === 'expired' }); return }
+      client.current = createRecoveryClient()
+      const result = await startRecovery(client.current, link)
       setView(result.status === 'ready' ? { name: 'form', maskedEmail: result.maskedEmail } : { name: 'invalid', expired: false })
-    })
+    })()
   }, [])
 
   async function submit() {
@@ -73,6 +84,12 @@ export default function ResetPasswordClient() {
             <div role="alert">
               <p style={{ margin: '0 0 10px', fontWeight: 700 }}>{view.expired ? 'This link has expired.' : 'This reset link is not valid or was already used.'}</p>
               <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>Open Cliniverse, choose Sign in, then “Forgot password?” to get a new link. Some email apps open links automatically, which can use them up.</p>
+            </div>
+          ) : null}
+          {view.name === 'blocked' ? (
+            <div role="alert">
+              <p style={{ margin: '0 0 10px', fontWeight: 700 }}>We could not prepare this page safely.</p>
+              <p style={{ margin: 0, color: T.sub, lineHeight: 1.5 }}>An older version of this site is still running in your browser. Close this tab, then open the link from your email again. If it happens again, clear this site's data in your browser settings or request a new link from the Cliniverse sign-in screen. Your link was not used.</p>
             </div>
           ) : null}
           {view.name === 'form' ? (

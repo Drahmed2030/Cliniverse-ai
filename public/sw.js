@@ -17,10 +17,10 @@ const STATIC_PREFIXES = ['/icons/', '/_next/static/'];
 // Never intercepted, whatever the origin or method of the request.
 const SENSITIVE_PATH = /^\/(reset-password|auth|api|login|signin|signup|callback|account)(\/|$)/;
 const SENSITIVE_UPSTREAM_PATH = /\/(auth|rest|functions|storage|realtime|graphql)\/v1(\/|$)/;
-const SENSITIVE_QUERY_KEYS = [
+const SENSITIVE_QUERY_KEYS = new Set([
   'access_token', 'refresh_token', 'provider_token', 'token', 'token_hash', 'code', 'type', 'nonce',
   'error', 'error_code', 'error_description', 'id_token', 'redirect_to',
-];
+]);
 const SENSITIVE_HEADERS = ['authorization', 'apikey', 'x-client-info', 'rsc', 'next-router-state-tree', 'next-action'];
 
 // Normalises case, repeated slashes and percent-encoding so "/%72eset-password", "//Reset-Password/" etc. match too.
@@ -34,7 +34,8 @@ function shouldBypass(request, url) {
   if (url.origin !== self.location.origin) return true; // Supabase and every other third party
   const path = normalisePath(url.pathname);
   if (SENSITIVE_PATH.test(path) || SENSITIVE_UPSTREAM_PATH.test(path)) return true;
-  for (const key of SENSITIVE_QUERY_KEYS) if (url.searchParams.has(key)) return true;
+  // Parameter names are matched case-insensitively (URLSearchParams already percent-decodes them).
+  for (const name of url.searchParams.keys()) if (SENSITIVE_QUERY_KEYS.has(name.toLowerCase())) return true;
   if (/(^|[?&#])(access_token|refresh_token)=/i.test(url.search + url.hash)) return true;
   for (const name of SENSITIVE_HEADERS) if (request.headers.has(name)) return true;
   if (request.cache === 'no-store') return true;
@@ -45,11 +46,14 @@ function isStaticAsset(path) {
   return STATIC_EXACT.has(path) || STATIC_PREFIXES.some(prefix => path.startsWith(prefix));
 }
 
+// Storage-prohibiting directives always win: "no-store", "private" or "no-cache" can never be overridden by an
+// accompanying "immutable" (or anything else). Directives are matched as whole tokens.
+const PROHIBITING_DIRECTIVE = /(?:^|[\s,])(?:no-store|private|no-cache)(?=$|[\s,=])/i;
+
 function isCacheable(response) {
   if (!response || response.status !== 200) return false;
   if (response.type !== 'basic' && response.type !== 'default') return false; // same-origin responses only; never opaque/cors
-  const cacheControl = response.headers.get('cache-control') || '';
-  if (/no-store|private|no-cache/i.test(cacheControl) && !/immutable/i.test(cacheControl)) return false;
+  if (PROHIBITING_DIRECTIVE.test(response.headers.get('cache-control') || '')) return false;
   if ((response.headers.get('vary') || '').includes('*')) return false;
   return true;
 }
@@ -78,6 +82,14 @@ self.addEventListener('activate', event => {
     }
     await self.clients.claim();
   })());
+});
+
+// Version handshake used by the password-recovery page to tell this worker from an older one (older workers
+// never answer). Only same-origin pages can reach this worker.
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'cliniverse-sw-version' && event.ports && event.ports[0]) {
+    event.ports[0].postMessage({ version: CACHE });
+  }
 });
 
 self.addEventListener('fetch', event => {
