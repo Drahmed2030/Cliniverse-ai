@@ -1,33 +1,14 @@
-# Account deletion — preliminary retention policy (DRAFT for legal/privacy review)
+# Account deletion — retention policy: active questions (for legal/privacy review)
 
-> **Superseded in part (MASTER decision, after review of Work 1's later proposal):** the provisional position is to **delete account data and retain only the minimum transaction records where a specific legal basis exists**. Identifiers and hashes of transactions can stay personal data, so §3 Option B ("de-identified ledger"), the hashing idea, the `[N] months` wording in §5 and the recommendation are **withdrawn** and must not be used. No retention period and no new table is approved before the legal review. Work 1's file is the controlling text; this draft is retained only for the verified facts (§1) and the decision list (§2).
-
-
-**Status: proposal, not legal advice, not approved.** No deletion has been run; no production database, Edge Function or Supabase setting was changed or exercised. Account-deletion behaviour stays HOLD (Issue #36 decision) until MASTER and legal decide.
+**Status: not approved; not legal advice.** No deletion has been run; no production database, Edge Function or Supabase setting was changed or exercised. Account-deletion behaviour stays HOLD until MASTER and legal decide.
+**Controlling position:** Work 1's legally conditional minimum-retention proposal — delete account data; retain only the minimum transaction records, and only where a specific legal basis is identified. This file holds only verified facts and open questions. Earlier Claude proposals (de-identified ledger, hashing, a retention period, a new table, "[N] months" wording) are **ARCHIVED — WITHDRAWN — DO NOT PUBLISH**: `docs/archive/ARCHIVED_WITHDRAWN_deletion_retention_options_2026-10-26.md`.
 
 ## 1. Verified facts (read-only, MASTER, Issue #36)
-`subscriptions.user_id → auth.users` ON DELETE CASCADE; `apple_subscription_events.subscription_id → subscriptions` ON DELETE CASCADE; `persist_verified_apple_subscription` exists; Edge Function `delete-account` ACTIVE v1. **Consequence:** deleting the auth user erases the subscription row and all stored Apple event rows for that user. Not verified: what else `delete-account` removes, backups/log retention, whether Apple original-transaction ownership (sticky) can be re-claimed by a new account after deletion.
+`subscriptions.user_id → auth.users` ON DELETE CASCADE; `apple_subscription_events.subscription_id → subscriptions` ON DELETE CASCADE; `persist_verified_apple_subscription` exists; Edge Function `delete-account` ACTIVE v1. **Consequence:** deleting the auth user erases that user's subscription row and stored Apple event rows. Not verified: what else `delete-account` removes, backups/log retention, and what happens to Apple original-transaction ownership after deletion (see P1 in `APPLE_PACKAGE_RC1_1.1.md` §5).
 
-## 2. Decisions needed
-1. Is any purchase/transaction record kept after account deletion (tax, fraud, dispute, Apple reconciliation)?
-2. If yes: which fields, for how long, and how de-identified?
-3. Should deletion of an account with an **active** Apple subscription be blocked, warned, or allowed (Apple subscriptions continue until cancelled in Apple settings; deletion does not cancel them)?
-4. How soon must deletion complete, and what happens to backups?
-
-## 3. Options
-| Option | Behaviour | Pros | Cons |
-|---|---|---|---|
-| A. Full erase (current cascade) | All user rows incl. purchase events removed | Simplest; strongest privacy | Loses reconciliation/fraud evidence; re-subscribing on a new account cannot be linked to the prior ownership; any tax-record duty must be met elsewhere (Apple/finance records) |
-| B. De-identified ledger | Before delete, copy to a ledger table: Apple `original_transaction_id` (hashed or kept as legal basis permits), product id, period dates, environment, no user id/email; retain N months | Supports disputes, sticky-ownership checks, finance | Needs schema change, policy text, legal basis; hash of a stable id may still be personal data |
-| C. Retain account tombstone | Keep `user_id` pseudonym + subscription row, drop profile/content | Easy reconciliation | Weakest privacy position; likely conflicts with user expectation of deletion |
-
-**[WITHDRAWN — see note at top] Former recommendation: Option B**, retention period chosen by legal (commonly the applicable tax/dispute limitation period), with an explicit privacy-policy sentence and a pre-delete warning when a subscription is active ("Deleting your account does not cancel your subscription; cancel it in Apple Settings").
-
-## 4. Required if B is chosen (future, separate authorization)
-Migration adding the ledger table with the four-policy RLS pattern from `CLAUDE.md`; changing the cascade path or adding a pre-delete function; `delete-account` update; tests against a TEST project; privacy policy, App Privacy answers and App Review notes aligned; no test deletion on production accounts.
-
-## 5. Draft user-facing wording (for legal edit)
-"When you delete your account we permanently remove your profile, progress and sign-in. We keep a limited, de-identified record of your Apple subscription transaction (product, dates, transaction reference) for [N] months for payment reconciliation and legal obligations. Deleting your account does not cancel an active subscription — manage it in your Apple ID settings."
-
-## 6. Not covered
-Backups, log retention, analytics, third-party AI providers (disabled in this release), jurisdiction-specific rights handling (GDPR/UK GDPR/PDPL etc.), Apple's own record keeping.
+## 2. Open questions for legal
+1. Is there a specific legal basis requiring any transaction record to be kept after deletion? If so, which minimum fields, and for how long (period to be set by legal, not assumed here)?
+2. How is the user told, accurately, what remains (without calling it anonymous)?
+3. Should deletion of an account with an **active** Apple subscription be blocked, warned, or allowed? (Deletion does not cancel an Apple subscription.)
+4. Deletion completion time and treatment of backups and logs.
+5. Jurisdiction-specific rights handling (GDPR / UK GDPR / PDPL etc.) and Apple's own record keeping.

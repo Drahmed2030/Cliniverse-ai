@@ -5,7 +5,7 @@ Suggested: Work 1 collects Supabase + Codemagic + Apple evidence in **one review
 
 | # | Gate | What to check (read-only) | Pass criteria / evidence | Owner | State |
 |---|---|---|---|---|---|
-| A1 | Supabase Confirm email | Dashboard → Auth → Providers → Email: screenshot | "Confirm email" ON; unconfirmed user cannot obtain a session | Work 1 + dashboard operator | UNVERIFIED |
+| A1 | Supabase Confirm email | Dashboard → Auth → Providers → Email: screenshot; then a real test sign-up | Setting ON (**reported enabled by Work 1**); delivery + sign-up → confirm → login + unconfirmed user denied a session **UNVERIFIED** | Work 1 + dashboard operator | setting reported; flow UNVERIFIED |
 | A2 | SMTP / sender | Auth → SMTP settings; send a test to a mailbox the team owns | Custom SMTP or accepted default limits; email arrives, not spam, correct sender/branding | Operator | UNVERIFIED |
 | A3 | Redirect allow-list | Auth → URL configuration | Site URL `https://www.cliniverseai.com`; allow-list contains `/reset-password` and the sign-up confirmation target; no wildcard to unrelated hosts | Work 1 | UNVERIFIED |
 | A4 | Password policy | Auth → Policies | Min length ≥ 8 (matches client); leaked-password protection ON (reviewer package says enabled 2026-08-27 — re-confirm) | Work 1 | partly claimed |
@@ -22,10 +22,10 @@ Suggested: Work 1 collects Supabase + Codemagic + Apple evidence in **one review
 | G2 | Support / URLs | HTTP 200 on Support, Privacy, Terms; support mailbox receives a test | All 200; mailbox monitored | Operator | UNVERIFIED |
 | G3 | ASC metadata & review notes | Compare with `RELEASE_COPY_AND_EVIDENCE_AUDIT_2026-10-26.md` §5 | No stale navigation/"sign-up disabled"/ECG claim; build-57 notes replaced | Work 1 | stale |
 | G4 | Screenshots | Re-derive from five tabs; no ECG | Final set matches shipped UI (current native contract is stale — separate authorization) | Work 1 | stale |
-| H1 | Deletion retention | `ACCOUNT_DELETION_RETENTION_POLICY_DRAFT.md` | Legal/privacy decision recorded; privacy text matches; **no live deletion test before decision** | MASTER + legal | HOLD |
+| H1 | Deletion retention | `ACCOUNT_DELETION_RETENTION_POLICY_DRAFT.md` (active questions; withdrawn text archived) | Legal/privacy decision recorded; privacy text matches; **no live deletion test before decision** | MASTER + legal | HOLD |
 | H2 | Onboarding copy | Audit §4 | Copy-only fix authorized, applied, test updated | MASTER / Claude | proposed |
 | I1 | TestFlight device QA | Packet gate 7 | Sign-up → confirm → login, logout/restore, StoreKit, recovery, deletion (after H1) | Tester | not started |
 | J1 | Open test reliability | `account-codelab` 10 ms tick flake | Fix authorized or accepted as known | MASTER | OPEN |
-| J2 | P1 entitlement ownership audit | separate track | Not a 1.1 patch; stays HOLD | MASTER | separate HOLD |
+| J2 | P1 cross-account Apple purchase ownership (existing / missing / conflicting / post-deletion scenarios) | `APPLE_PACKAGE_RC1_1.1.md` §5 | Each scenario verified on TEST/sandbox | MASTER / Work 1 | **BLOCKS paid-subscription launch** |
 
 Read-only query suggestions for Work 1 (no writes): Auth settings screenshots (A1–A4); `select count(*) from auth.users where email_confirmed_at is null` is **not** to be run against production data without MASTER approval — prefer dashboard screenshots; Vercel `get_project` / `list_deployments` for C1/C2; Codemagic build page + artifact metadata for B1.
