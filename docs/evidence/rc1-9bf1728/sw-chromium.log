@@ -1,0 +1,44 @@
+PASS  control A1: the pre-fix worker AS SHIPPED never installs (its precache lists /icons/icon-*.png which return 404)  — {"active":false,"installing":false,"waiting":false}
+PASS  control A2: legacy-logic worker installs and CONTROLS the page
+PASS  control A2: the legacy logic DID cache Supabase auth/REST responses and /reset-password (the reported exposure is real)  — SUPA/auth/v1/user | SUPA/rest/v1/profiles?id=eq.user-a | http://localhost:3470/reset-password?probe=1 | http://localhost:3470/reset-password | http://localhost:3470/api/release-contract
+PASS  control A2: offline, the legacy worker answers an auth request from cache (another account's identity could be served)  — {"auth":"SERVED:200","rest":"SERVED:200","reset":"SERVED:200","resetPlain":"SERVED:200","api":"SERVED:200"}
+PASS  upgrade: legacy cache "cliniverse-v3" existed before and is removed by the new worker's activation  — before=cliniverse-v3 after=cliniverse-static-v4
+PASS  upgrade: no sensitive entry remains in any cache  — http://localhost:3470/native-offline.html | http://localhost:3470/manifest.json | http://localhost:3470/icons/icon-192.svg | http://localhost:3470/icons/icon-512.svg
+PASS  upgrade: only allow-listed public assets remain
+PASS  upgrade: the new worker is ACTIVE with no waiting worker and still controls the open page (skipWaiting + claim)  — {"active":"activated","waiting":false,"controlled":true}
+PASS  upgrade: offline, auth, REST and recovery requests now FAIL (nothing served from cache)  — {"auth":"FAILED","rest":"FAILED","reset":"FAILED","resetPlain":"FAILED","api":"FAILED"}
+PASS  upgrade via normal app launch: legacy cache seeded with an auth response, then removed once the app loads
+PASS  fresh install: the page is CONTROLLED by the new worker (navigator.serviceWorker.controller set)  — {"state":"activated","script":"http://localhost:3470/sw.js","controller":"http://localhost:3470/sw.js"}
+PASS  fresh install: requests through the controlling worker still work (auth stub, API, icon, manifest)  — {"authUser":200,"rest":200,"reset":200,"resetPlain":200,"api":200,"icon":200,"manifest":200}
+PASS  fresh install: caches hold only allow-listed public assets (no Supabase, no /reset-password, no /api, no pages)  — /native-offline.html | /icons/icon-512.svg | /_next/static/chunks/214dzgfkfmshd.css | /_next/static/chunks/066_9qs-fr7km.js | /_next/static/chunks/41shqbag6wu_r.js | /_next/static/chunks/turbopack-2ye40r2_az4la.js | /_next/static/chunks/00hkvk78oto8e.js | /_next/static/chunks/2q38qnyskw21k.js | /_next/static/chunks/38komc9v947p2.js | /_next/static/chunks/2e_32g43rjawq.js | /_next/static/chunks/2_ck_j_mbj0ln.js | /_next/static/chunks/296_xu7_rf1c7.js | /_next/static/chunks/12_klrswvucgr.js | /_next/static/chunks/3c_zx-u5ojf73.js | /_next/static/chunks/26h-mqra6xba1.js | /_next/static/chunks/3_jus2nulkkt3.js | /icons/icon-192.svg | /manifest.json
+PASS  fresh install: only the current cache name exists
+PASS  recovery page: it is controlled by the worker, yet nothing about it (or its Supabase calls) is cached
+PASS  recovery page: the worker did not register itself from this page
+PASS  offline: auth, REST, API and recovery requests FAIL (never served from cache)  — {"auth":"FAILED","rest":"FAILED","reset":"FAILED","resetPlain":"FAILED","api":"FAILED"}
+PASS  offline: navigating to /reset-password fails closed (browser network error, no cached page)  — NET_ERROR
+PASS  offline: navigating to / shows only the generic offline page, never a cached app shell  — Cliniverse AI — Connection unavailable
+PASS  no sensitive cache remnants after the whole session
+PASS  D1 (fixed build): the legacy cache was seeded with an auth response, and the FIRST document of the visit was controlled by the old worker  — [{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":false}]
+PASS  D1: the page removed the old worker and reloaded itself once (marker query, fragment kept) into an UNcontrolled document  — [{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":false}]
+PASS  D1: no Supabase request was made while the old worker controlled the page (the tokens were first used after the reload)  — ["doc /reset-password true","doc /reset-password?swclean=1 false","supabase GET /auth/v1/user"]
+PASS  D1: the recovery form appears for the right (masked) account and the address bar no longer carries tokens  — http://localhost:3470/reset-password
+PASS  D1: the old worker is unregistered and no legacy cache or sensitive entry remains  — registrations=0 caches=
+PASS  D2 (old worker cannot be removed): the page fails CLOSED — blocked message, the link is not used  — [{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":true}]
+PASS  D2: no Supabase request at all, and the tokens are gone from the address bar  — http://localhost:3470/reset-password
+PASS  D4 (cache delete returns false): NOT clean — blocked, legacy cache really still present, link not used  — [{"path":"/reset-password","controller":true}]
+PASS  D4 (false): no Supabase request and no tokens left in the address bar  — http://localhost:3470/reset-password
+PASS  D4 (cache delete rejects): NOT clean — blocked, legacy cache really still present, link not used  — [{"path":"/reset-password","controller":true}]
+PASS  D4 (reject): no Supabase request and no tokens left in the address bar  — http://localhost:3470/reset-password
+PASS  D4 (cache delete claims success but removes nothing): NOT clean — blocked, legacy cache really still present, link not used  — [{"path":"/reset-password","controller":true}]
+PASS  D4 (lie): no Supabase request and no tokens left in the address bar  — http://localhost:3470/reset-password
+PASS  D8 (registration enumeration rejects): blocked, "This page did not use your recovery session.", zero Supabase requests, no tokens in the address bar  — http://localhost:3470/reset-password
+PASS  D8 (registration enumeration hang): blocked, "This page did not use your recovery session.", zero Supabase requests, no tokens in the address bar  — http://localhost:3470/reset-password
+PASS  D8 (registration enumeration nonarray): blocked, "This page did not use your recovery session.", zero Supabase requests, no tokens in the address bar  — http://localhost:3470/reset-password
+PASS  D8b (no worker installed, enumeration broken): R6.2 treated this as clean; now blocked, no Supabase request
+PASS  D6 run 1 (updated worker is deliverable during the visit; NOTE the update did not land mid-probe in these runs, the mid-probe race is covered by the unit tests with controlled events): the flow ends only with no worker or the CURRENT worker, no legacy cache, no sensitive entry  — {"state":{"controller":false,"probes":[]},"docs":[{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":false}]}
+PASS  D6 run 2 (updated worker is deliverable during the visit; NOTE the update did not land mid-probe in these runs, the mid-probe race is covered by the unit tests with controlled events): the flow ends only with no worker or the CURRENT worker, no legacy cache, no sensitive entry  — {"state":{"controller":false,"probes":[]},"docs":[{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":false}]}
+PASS  D6 run 3 (updated worker is deliverable during the visit; NOTE the update did not land mid-probe in these runs, the mid-probe race is covered by the unit tests with controlled events): the flow ends only with no worker or the CURRENT worker, no legacy cache, no sensitive entry  — {"state":{"controller":false,"probes":[]},"docs":[{"path":"/reset-password","controller":true},{"path":"/reset-password?swclean=1","controller":false}]}
+SKIP  control D9 (set BASE_R6 to a server running the previous build)
+
+40/40 browser checks passed
+exit=0

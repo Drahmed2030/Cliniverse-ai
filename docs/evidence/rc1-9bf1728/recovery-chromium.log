@@ -1,0 +1,27 @@
+PASS  valid link: form shows the masked account email
+PASS  valid link: tokens removed from the address bar  — http://localhost:3470/reset-password
+PASS  valid link: only GET /auth/v1/user used to validate before submit  — ["GET /auth/v1/user"]
+PASS  short password: rejected locally, no request sent
+PASS  mismatch: rejected locally, no request sent
+PASS  submit: PUT /user carries the new password and nothing else (auth-js adds null PKCE fields)
+PASS  submit: global sign-out requested after the update  — /auth/v1/logout?scope=global
+PASS  done: honest session wording (refresh tokens revoked; open sessions may last briefly) and no "all devices" claim
+PASS  done: tells the user to return to the app and sign in
+PASS  isolation: the other signed-in account (A) in app storage is byte-for-byte unchanged
+PASS  isolation: the recovery flow wrote nothing to localStorage  — sb-zbiujqxinvcxvuviuenx-auth-token
+PASS  expired link: clear message, no Supabase request, no form
+PASS  no hash: invalid message, no request
+PASS  non-recovery link type: refused, no request
+PASS  SIMULATED server 401 on session validation: page shows the invalid-link state (this does NOT prove the live service enforces one-time links; see the preview plan)
+PASS  SIMULATED server 422 on updateUser: error shown, success never claimed
+PASS  isolation control: with no stored session the same page shows the sign-in screen
+PASS  isolation: before the recovery, the app recognises the signed-in account B (no sign-in screen)
+PASS  isolation: recovery of account A shows A's masked email, not B's
+PASS  isolation: every Supabase request of the recovery carried A's token; none carried B's  — ["GET /auth/v1/user user-a","PUT /auth/v1/user user-a","POST /auth/v1/logout user-a"]
+PASS  isolation: the global sign-out was issued for A's session only
+PASS  isolation: B's stored session is byte-for-byte unchanged after A's recovery
+PASS  isolation: afterwards the app still recognises account B and uses B's token (not A's)  — ["user-b","user-b","user-b","user-b"]
+PASS  isolation: B's session is still stored unchanged after the app reloaded it
+
+24/24 browser checks passed
+exit=0

@@ -2,16 +2,26 @@
 
 Prepared by Claude Code, 2026-10-26, under "MASTER GO — RELEASE CANDIDATE PREPARATION" (SOURCE PREPARATION ONLY; production / build / Apple / Supabase / DNS = HOLD). Nothing was pushed to a production branch, deployed, built for iOS, or submitted.
 
+## 0. Status (updated after Work 1 review)
+**RC1 SOURCE APPROVED** — Work 1 independently VERIFIED the candidate identity and tree, the R4–R6.3 chain and the onboarding copy change; MASTER decision: APPROVE RC1 SOURCE. **Published** (with MASTER permission) at branch `candidate/cliniverse-1.1-build69-rc`, head `9bf17282630cb525916cb412601478574aa5419c` (confirmed with `git ls-remote`). Vercel Preview reported READY (Work 1); **GitHub Actions: none ran on the candidate**; Vercel Production Branch **UNVERIFIED**. BUILD / APPLE / RELEASE remain **HOLD**. Reference for later phases: **CLINIVERSE 1.1 — APPROVED SOURCE CANDIDATE** = commit `9bf1728…`, tree `14888df…`.
+
+| Evidence | Provenance |
+|---|---|
+| Candidate identity, tree, patch chain, copy change | independently verified (Work 1) |
+| 990/990 tests, `tsc`, `next build`, Chromium 40/40 and 24/24 | **Claude-reported, not independently re-run**; logs in `docs/evidence/rc1-9bf1728/` |
+| Vercel Preview READY | reported by Work 1/MASTER; not re-checked by Claude |
+| `account-codelab` intermittent failure (10 ms tick) | **OPEN** — not fixed; did not appear in the logged run |
+
 ## 1. Candidate identity
 | Item | Value |
 |---|---|
 | Baseline | `e4dab595d96c1d7e2583a28b15f2bb2497b4e65b` |
-| **Candidate commit (local, not yet published)** | `9bf17282630cb525916cb412601478574aa5419c` on local branch `candidate/cliniverse-1.1-build69-rc` |
+| **Candidate commit** (published on `candidate/cliniverse-1.1-build69-rc`) | `9bf17282630cb525916cb412601478574aa5419c` on local branch `candidate/cliniverse-1.1-build69-rc` |
 | **Candidate tree (reproducible identity)** | `14888df202bb3bda6e2988452a52bd67cc1926d0` |
 | Tree before the copy commit (baseline + R4…R6.3) | `428fc23b992e06490414012b8e3a1a8a76c4aa5d` (commit `565441a`) |
 | Diff vs baseline | 42 files, +3161 / −157 |
 
-Commit SHAs of `git am` results change with committer date; the **tree hash is the reproducible identity**. A Work 1 review can recompute it by applying the patches below to the baseline and comparing `git rev-parse HEAD^{tree}`. The candidate commit must be **published to a reviewable branch** (needs MASTER permission — see §7) before any deployment, because Codemagic and Vercel identify builds by a pushed commit SHA.
+Commit SHAs of `git am` results change with committer date; the **tree hash is the reproducible identity**. Work 1 recomputed it by applying the patches below to the baseline and comparing `git rev-parse HEAD^{tree}`. The commit is now published, as Codemagic and Vercel identify builds by a pushed commit SHA.
 
 ## 2. Patch sequence (all in `docs/patches/` on `claude/cliniverse-1-1-build-69-tpzp5p`)
 `git am --3way` in this order on the baseline; each SHA-256 matched its approved digest when applied:
@@ -31,7 +41,7 @@ Commit SHAs of `git am` results change with committer date; the **tree hash is t
 
 Changed files vs baseline (R4…R6.3 content): auth queue/coordinator/gate and tests, `/reset-password` page and recovery modules, `public/sw.js` and its guard modules, `next.config` headers, Paywall/Learn copy, evidence scripts and tests — see `git diff --stat e4dab59..9bf1728` (42 files).
 
-## 4. Source QA (clean checkout of the candidate, `npm ci`)
+## 4. Source QA (clean checkout of the candidate, `npm ci`; Claude-reported; logs: `docs/evidence/rc1-9bf1728/`)
 | Check | Result |
 |---|---|
 | Focused: `onboarding-v4` + `release-copy-honesty` | 15/15 |
@@ -63,8 +73,8 @@ Production equivalents (UNVERIFIED until a deployment exists): same checks again
 ## 7. Remaining blockers
 | # | Blocker | Owner |
 |---|---|---|
-| 1 | Candidate commit is local only; publishing it to a reviewable branch needs permission (the session's designated push branch cannot take baseline-rooted history) | MASTER |
-| 2 | Work 1 independent review of the tree/digests and RC1 copy patch | Work 1 |
+| 1 | ~~Candidate unpublished~~ — closed: published and Work 1-approved | — |
+| 2 | Optional independent re-run of the 990 tests / Chromium scripts (not required by MASTER) | Work 1 |
 | 3 | Deletion retention policy (draft ready for legal) | MASTER + legal |
 | 4 | Supabase/SMTP/provider/Vercel setting verification (all unverified) and real recovery + Safari tests | Work 1 + test team |
 | 5 | App Store text/screenshot refresh and stale native screenshot contract (separate authorization) | MASTER / Claude |

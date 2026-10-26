@@ -1,0 +1,90 @@
+▲ Next.js 16.3.3 (Turbopack)
+✓ Running next.config.js took 26ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 18.8s
+  Running TypeScript ...
+  Finished TypeScript in 3.5s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/59) ...
+  Generating static pages using 3 workers (14/59) 
+  Generating static pages using 3 workers (29/59) 
+Note: Some companies are required to obtain a license to use Remotion. See: https://remotion.dev/license
+Pass the `acknowledgeRemotionLicense` prop to `<Player />` function to make this message disappear.
+  Generating static pages using 3 workers (44/59) 
+✓ Generating static pages using 3 workers (59/59) in 1038ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/analyze-doc
+├ ƒ /api/cache
+├ ƒ /api/clinical-trials
+├ ƒ /api/cron-case
+├ ƒ /api/cron-nexus
+├ ƒ /api/cron-pubmed
+├ ƒ /api/cron-pulse
+├ ƒ /api/dailymed
+├ ƒ /api/ecg-review-attempt
+├ ƒ /api/echo-review-access
+├ ƒ /api/exam
+├ ƒ /api/fda
+├ ƒ /api/generate-case
+├ ƒ /api/ingest/questions
+├ ƒ /api/intelligence
+├ ƒ /api/knowledge-graph/match
+├ ƒ /api/knowledge-graph/seed
+├ ƒ /api/learning-export
+├ ƒ /api/life-insight
+├ ƒ /api/medfeed
+├ ƒ /api/medfeed/ai-signal
+├ ƒ /api/medical-ai
+├ ƒ /api/monitor
+├ ƒ /api/mood
+├ ƒ /api/neuraops/respond
+├ ƒ /api/og
+├ ƒ /api/oracle
+├ ƒ /api/pubmed
+├ ƒ /api/release-contract
+├ ƒ /api/reviewer-feature-access
+├ ƒ /api/rxnorm
+├ ƒ /api/storage
+├ ƒ /api/subscriptions/apple/verify
+├ ƒ /api/symptom-check
+├ ƒ /api/tts
+├ ƒ /api/ward/case-evidence
+├ ƒ /api/who
+├ ƒ /api/who-meds
+├ ƒ /evidence/[id]
+├ ○ /labs/case-batch-preview
+├ ○ /labs/clinical-orbit
+├ ○ /labs/clinical-reference
+├ ○ /labs/ecg-account-review
+├ ○ /labs/ecg-challenge
+├ ○ /labs/echo-account-review
+├ ○ /labs/echo-preview
+├ ○ /labs/onboarding-preview
+├ ○ /labs/pathway-replay
+├ ○ /labs/paywall-preview
+├ ○ /labs/resuscitation-hub
+├ ƒ /learn/ecg
+├ ƒ /learn/ecg/[caseId]
+├ ○ /learn/echo
+├ ƒ /learn/echo/[studyId]
+├ ƒ /learn/ward/[caseId]
+├ ○ /neuraops-demo
+├ ○ /neuraops-demo-en
+├ ○ /privacy
+├ ƒ /reference/[id]
+├ ○ /reset-password
+├ ○ /support
+└ ○ /terms
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+exit=0
