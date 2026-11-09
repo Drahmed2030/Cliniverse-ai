@@ -5,6 +5,7 @@ import type { User } from '@supabase/supabase-js'
 import AuthScreen from '../AuthScreen'
 import { getCurrentSession, subscribeToAuthState } from '../../lib/identity'
 import { ensureOwnProfile } from '../../lib/profile'
+import { ACCOUNT_DELETED_NOTICE } from '../../lib/account-deletion-notice'
 
 type AuthState =
   | { status: 'loading'; user: null }
@@ -23,6 +24,8 @@ interface AuthGateProps {
 export default function AuthGate({ children, guest = null, allowGuest = true, locale = 'en' }: AuthGateProps) {
   const [state, setState] = useState<AuthState>({ status: 'loading', user: null })
 
+  const [accountDeleted, setAccountDeleted] = useState(false)
+
   useEffect(() => {
     let active = true
 
@@ -31,7 +34,16 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
       if (!active) return
       if (error) return setState({ status: 'error', user: null, message: 'Unable to restore your session.' })
       const user = data.session?.user ?? null
-      if (!user) return setState({ status: 'signed_out', user: null })
+      if (!user) {
+        try {
+          setAccountDeleted(window.sessionStorage.getItem(ACCOUNT_DELETED_NOTICE) === '1')
+          window.sessionStorage.removeItem(ACCOUNT_DELETED_NOTICE)
+        } catch {
+          // Storage can be unavailable in private or embedded browsing contexts.
+        }
+        return setState({ status: 'signed_out', user: null })
+      }
+      setAccountDeleted(false)
       const profileResult = await ensureOwnProfile()
       if (!active) return
       if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
@@ -43,6 +55,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
       if (!active) return
       const user = session?.user ?? null
       if (!user) return setState({ status: 'signed_out', user: null })
+      setAccountDeleted(false)
       const profileResult = await ensureOwnProfile()
       if (!active) return
       if (profileResult.error) return setState({ status: 'error', user: null, message: 'Unable to prepare your profile.' })
@@ -60,7 +73,10 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
   if (state.status === 'guest') return <>{guest}</>
   if (state.status === 'signed_in') return <>{children(state.user)}</>
 
-  return <AuthScreen locale={locale} allowGuest={allowGuest} onComplete={(payload) => { if (payload?.method === 'guest') setState({ status: 'guest', user: null }) }} />
+  return <>
+    {accountDeleted ? <div role="status" style={{ padding: 12, background: '#111827', color: '#F8FAFC', textAlign: 'center' }}>Your Cliniverse account was deleted.</div> : null}
+    <AuthScreen locale={locale} allowGuest={allowGuest} onComplete={(payload) => { if (payload?.method === 'guest') setState({ status: 'guest', user: null }) }} />
+  </>
 }
 
 function GateStatus({ title, detail }: { title: string; detail: string }) {

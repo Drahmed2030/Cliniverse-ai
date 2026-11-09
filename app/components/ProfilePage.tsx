@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import DeleteAccountAction from './auth/DeleteAccountAction'
 import dynamic from 'next/dynamic'
 
 const CertificateGenerator = dynamic(() => import('./CertificateGenerator'), { ssr: false })
@@ -270,11 +271,7 @@ function PrivacyScreen({ onBack, onReset }: { onBack:()=>void; onReset:()=>void 
         border:'1px solid rgba(255,107,107,0.30)', background:'rgba(255,107,107,0.07)',
         color:'#C0392B', fontSize:14, fontWeight:700, cursor:'pointer', marginBottom:10,
       }}>🔄 Reset All Progress</button>
-      <button style={{
-        width:'100%', padding:14, borderRadius:16,
-        border:'1px solid rgba(255,107,107,0.30)', background:'rgba(255,107,107,0.07)',
-        color:'#C0392B', fontSize:14, fontWeight:700, cursor:'pointer',
-      }}>🗑 Delete Account</button>
+      <DeleteAccountAction />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { signOut } from '../../lib/identity'
+import DeleteAccountAction from './DeleteAccountAction'
 
 export default function AccountSessionActions() {
   const [busy, setBusy] = useState(false)
@@ -25,6 +26,7 @@ export default function AccountSessionActions() {
       <button type="button" onClick={handleSignOut} disabled={busy} style={{ width: '100%', minHeight: 44, borderRadius: 14, border: '1px solid rgba(248,113,113,0.28)', background: 'rgba(248,113,113,0.08)', color: '#FCA5A5', fontWeight: 800, cursor: busy ? 'default' : 'pointer', opacity: busy ? 0.7 : 1 }}>
         {busy ? 'Signing out…' : 'Sign out'}
       </button>
+      <DeleteAccountAction />
       {error ? <div role="alert" style={{ marginTop: 8, color: '#FCA5A5', fontSize: 12 }}>{error}</div> : null}
     </div>
   )
