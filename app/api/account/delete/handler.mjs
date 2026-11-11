@@ -11,6 +11,7 @@ function failure(status, error) {
  *   verify: (token: string) => Promise<string | null>,
  *   cleanupReady: () => Promise<boolean>,
  *   deleteUser: (id: string) => Promise<void>,
+ *   onFailure?: (error: unknown) => void,
  * }} dependencies
  */
 export async function handleAccountDeletion(request, dependencies) {
@@ -37,12 +38,13 @@ export async function handleAccountDeletion(request, dependencies) {
     }
 
     if (!(await dependencies.cleanupReady())) {
-      return failure(500, 'Account deletion is temporarily unavailable.')
+      return failure(503, 'Account deletion is temporarily unavailable.')
     }
 
     await dependencies.deleteUser(userId)
     return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } })
-  } catch {
+  } catch (error) {
+    dependencies.onFailure?.(error)
     return failure(500, 'Unable to delete your account. Please try again.')
   }
 }

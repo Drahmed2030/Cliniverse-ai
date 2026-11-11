@@ -53,6 +53,7 @@ const BADGES = [
 ]
 
 interface ProfileProps {
+  locale?: 'en' | 'ar'
   xp: number
   streak: number
   casesCompleted: number
@@ -237,7 +238,7 @@ function NotificationsScreen({ onBack }: { onBack:()=>void }) {
 }
 
 // ── Privacy & Security ────────────────────────────────────────────
-function PrivacyScreen({ onBack, onReset }: { onBack:()=>void; onReset:()=>void }) {
+function PrivacyScreen({ onBack, onReset, locale }: { onBack:()=>void; onReset:()=>void; locale: 'en' | 'ar' }) {
   const [biometric, setBiometric] = useState(false)
   const [analytics, setAnalytics] = useState(true)
   return (
@@ -271,7 +272,7 @@ function PrivacyScreen({ onBack, onReset }: { onBack:()=>void; onReset:()=>void 
         border:'1px solid rgba(255,107,107,0.30)', background:'rgba(255,107,107,0.07)',
         color:'#C0392B', fontSize:14, fontWeight:700, cursor:'pointer', marginBottom:10,
       }}>🔄 Reset All Progress</button>
-      <DeleteAccountAction />
+      <DeleteAccountAction locale={locale} />
     </div>
   )
 }
@@ -356,7 +357,7 @@ function FeedbackScreen({ onBack }: { onBack:()=>void }) {
 }
 
 // ── MAIN ──────────────────────────────────────────────────────────
-export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, name, onUpgrade, onReset }: ProfileProps) {
+export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, isPro, name, onUpgrade, onReset, locale = 'en' }: ProfileProps) {
   const [activeTab, setActiveTab] = useState<'profile'|'stats'|'settings'>('profile')
   const [subScreen, setSubScreen] = useState<string|null>(null)
   const [showCert, setShowCert]   = useState(false)
@@ -373,7 +374,7 @@ export default function ProfilePage({ xp, streak, casesCompleted, mcqCorrect, is
 
   if (subScreen==='edit')     return <EditProfileScreen name={name} onBack={()=>setSubScreen(null)} />
   if (subScreen==='notif')    return <NotificationsScreen onBack={()=>setSubScreen(null)} />
-  if (subScreen==='privacy')  return <PrivacyScreen onBack={()=>setSubScreen(null)} onReset={onReset} />
+  if (subScreen==='privacy')  return <PrivacyScreen locale={locale} onBack={()=>setSubScreen(null)} onReset={onReset} />
   if (subScreen==='install')  return <InstallScreen onBack={()=>setSubScreen(null)} />
   if (subScreen==='feedback') return <FeedbackScreen onBack={()=>setSubScreen(null)} />
 

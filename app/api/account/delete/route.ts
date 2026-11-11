@@ -14,7 +14,17 @@ export function POST(request: Request) {
   let client: ReturnType<typeof getClient> | undefined
   const admin = () => (client ??= getClient())
 
+  // Only allowlisted provider codes and numeric HTTP statuses reach logs.
+  const reportFailure = (error: unknown) => {
+    const source = error && typeof error === 'object' ? error as { code?: unknown; status?: unknown } : {}
+    const allowed = ['bad_jwt', 'user_not_found', '23503', '42501', 'PGRST202']
+    const code = typeof source.code === 'string' && allowed.includes(source.code) ? source.code : 'UNKNOWN'
+    const status = typeof source.status === 'number' && Number.isInteger(source.status) && source.status >= 400 && source.status <= 599 ? source.status : 500
+    console.error('account_deletion_failed', { code, status })
+  }
+
   return handleAccountDeletion(request, {
+    onFailure: reportFailure,
     async verify(token) {
       const { data, error } = await admin().auth.getUser(token)
       if (error) {
@@ -27,6 +37,7 @@ export function POST(request: Request) {
     },
     async cleanupReady() {
       const { data, error } = await admin().rpc('cliniverse_account_cleanup_ready')
+      if (error) reportFailure(error)
       return !error && data === true
     },
     async deleteUser(id) {

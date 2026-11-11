@@ -25,6 +25,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
   const [state, setState] = useState<AuthState>({ status: 'loading', user: null })
 
   const [accountDeleted, setAccountDeleted] = useState(false)
+  const [deletionLocale, setDeletionLocale] = useState(locale)
 
   useEffect(() => {
     let active = true
@@ -36,7 +37,9 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
       const user = data.session?.user ?? null
       if (!user) {
         try {
-          setAccountDeleted(window.sessionStorage.getItem(ACCOUNT_DELETED_NOTICE) === '1')
+          const notice = window.sessionStorage.getItem(ACCOUNT_DELETED_NOTICE)
+          setAccountDeleted(notice === '1' || notice === 'en' || notice === 'ar')
+          setDeletionLocale(notice === 'ar' ? 'ar' : locale)
           window.sessionStorage.removeItem(ACCOUNT_DELETED_NOTICE)
         } catch {
           // Storage can be unavailable in private or embedded browsing contexts.
@@ -66,7 +69,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
       active = false
       data.subscription.unsubscribe()
     }
-  }, [])
+  }, [locale])
 
   if (state.status === 'loading') return <GateStatus title="Restoring your session" detail="Preparing Cliniverse securely…" />
   if (state.status === 'error') return <GateStatus title="Account unavailable" detail={state.message} />
@@ -74,7 +77,7 @@ export default function AuthGate({ children, guest = null, allowGuest = true, lo
   if (state.status === 'signed_in') return <>{children(state.user)}</>
 
   return <>
-    {accountDeleted ? <div role="status" style={{ padding: 12, background: '#111827', color: '#F8FAFC', textAlign: 'center' }}>Your Cliniverse account was deleted.</div> : null}
+    {accountDeleted ? <div role="status" lang={deletionLocale} dir={deletionLocale === 'ar' ? 'rtl' : 'ltr'} style={{ padding: 12, background: '#111827', color: '#F8FAFC', textAlign: 'center' }}>{deletionLocale === 'ar' ? 'تم حذف حسابك في Cliniverse.' : 'Your Cliniverse account was deleted.'}</div> : null}
     <AuthScreen locale={locale} allowGuest={allowGuest} onComplete={(payload) => { if (payload?.method === 'guest') setState({ status: 'guest', user: null }) }} />
   </>
 }
